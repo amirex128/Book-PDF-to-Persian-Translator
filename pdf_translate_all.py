@@ -185,6 +185,10 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
                 
                 9. فقط متن ترجمه شده را برگردانید، بدون هیچ توضیح اضافی.
                 
+                10.در کد های برنامه نویسی کامنت ها را اصلا ترجمه نکن 
+
+                11.کد های برنامه نویسی را با فاصله گذاری درست بنویس
+                
                 برای درک بهتر:
                 متن نمونه: "The API Gateway uses HTTP to communicate with the backend services. When a user sends a POST request, the UserController processes it and returns a JSON response with appropriate HTTP status codes."
                 
@@ -279,420 +283,424 @@ def copy_font_assets(output_dir):
     
     return True
 
-def create_html_content(persian_html, file_name, include_font_path, images=None, original_text=""):
-    """Create HTML content with Persian translation, original English text, and images"""
-    # Clean any potential HTML tags from the input
-    persian_text = persian_html
+def create_html_content(page_num, english_text, persian_translation, image_paths, filename, temp_dir=None, base_dir=None):
+    """Create an HTML file with the Persian translation and the original English text."""
+    # Replace consecutive newlines with a single paragraph break
+    english_text = re.sub(r'\n{2,}', '\n\n', english_text)
+    persian_translation = re.sub(r'\n{2,}', '\n\n', persian_translation)
     
-    # Wrap the translations in appropriate divs
-    persian_html = f"<div dir='rtl' class='persian-translation'>{persian_text}</div>"
+    # Get just the image filename without the path
+    image_files = []
+    for img_path in image_paths:
+        if temp_dir and img_path.startswith(temp_dir):
+            # Use relative path if in temp dir
+            rel_path = os.path.relpath(img_path, base_dir if base_dir else temp_dir)
+            image_files.append(rel_path)
+        else:
+            # Use absolute path if not in temp dir
+            image_files.append(img_path)
     
-    # Add original English text if provided
-    original_html = ""
-    if original_text and original_text.strip():
-        original_html = f"<div class='original-text'><h3>Original Text</h3>{original_text}</div>"
+    # Create a heading tag if this appears to be a heading
+    heading_tag = detect_heading(english_text, page_num)
     
-    # Extract page number from filename
-    page_number = ""
-    if re.search(r'page_(\d+)', file_name):
-        page_number = re.search(r'page_(\d+)', file_name).group(1)
-        # Remove leading zeros from page number
-        page_number = str(int(page_number))
+    # JavaScript part with raw string to prevent escape issues
+    js_code = r'''
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to fix indentation for non-supported languages
+        function fixIndentation(code) {
+            if (!code || !code.trim()) return code;
+            
+            // Split into lines
+            const lines = code.split('\n');
+            
+            // Find minimum indentation level (ignoring empty lines)
+            let minIndent = Number.MAX_SAFE_INTEGER;
+            for (const line of lines) {
+                if (line.trim() === '') continue;
+                const indent = line.search(/\S/);
+                if (indent >= 0 && indent < minIndent) {
+                    minIndent = indent;
+                }
+            }
+            
+            // Remove common indentation and normalize
+            if (minIndent > 0 && minIndent !== Number.MAX_SAFE_INTEGER) {
+                return lines.map(function(line) {
+                    if (line.trim() === '') return '';
+                    return line.substring(minIndent);
+                }).join('\n');
+            }
+            
+            return code;
+        }
+
+        // Format code blocks with Prettier
+        document.querySelectorAll('pre code').forEach(function(codeBlock) {
+            try {
+                // Get the language from class
+                let parser = 'babel'; // Default to JavaScript/babel parser
+                
+                // Determine parser based on language class
+                if (codeBlock.className.includes('language-html')) {
+                    parser = 'html';
+                } else if (codeBlock.className.includes('language-css')) {
+                    parser = 'css';
+                } else if (codeBlock.className.includes('language-typescript') || 
+                           codeBlock.className.includes('language-ts')) {
+                    parser = 'typescript';
+                } else if (codeBlock.className.includes('language-java') || 
+                           codeBlock.className.includes('language-csharp') || 
+                           codeBlock.className.includes('language-c') || 
+                           codeBlock.className.includes('language-cpp')) {
+                    // For non-JavaScript languages, just fix indentation
+                    const code = codeBlock.textContent;
+                    const formattedCode = fixIndentation(code);
+                    codeBlock.textContent = formattedCode;
+                    // Skip Prettier formatting for these languages
+                    return;
+                }
+                
+                // Format with Prettier if it's a supported language
+                if (window.prettierPlugins && window.prettierPlugins[parser]) {
+                    const code = codeBlock.textContent;
+                    // Only format if code isn't empty and has more than one line
+                    if (code && code.trim() && code.includes('\n')) {
+                        const formattedCode = window.prettier.format(code, {
+                            parser: parser,
+                            plugins: window.prettierPlugins,
+                            printWidth: 80,
+                            tabWidth: 2,
+                            singleQuote: true,
+                            trailingComma: 'es5',
+                            bracketSpacing: true,
+                            semi: true,
+                            arrowParens: 'avoid'
+                        });
+                        codeBlock.textContent = formattedCode;
+                    }
+                }
+            } catch (error) {
+                console.warn('Prettier formatting failed, using fallback indentation fix', error);
+                const code = codeBlock.textContent;
+                const formattedCode = fixIndentation(code);
+                codeBlock.textContent = formattedCode;
+            }
+        });
+        
+        // Add line-numbers class to all pre elements if not already there
+        document.querySelectorAll('pre').forEach(function(block) {
+            if (!block.classList.contains('line-numbers')) {
+                block.classList.add('line-numbers');
+            }
+            
+            // If language class is not specified, add 'language-clike' as default
+            let hasLanguageClass = false;
+            block.classList.forEach(function(className) {
+                if (className.startsWith('language-')) {
+                    hasLanguageClass = true;
+                }
+            });
+            
+            if (!hasLanguageClass) {
+                block.classList.add('language-clike');
+            }
+            
+            // Ensure code elements inside pre also have the correct language class
+            const codeElement = block.querySelector('code');
+            if (codeElement) {
+                if (!hasLanguageClass) {
+                    codeElement.classList.add('language-clike');
+                } else {
+                    // Copy the language class from pre to code if code doesn't have it
+                    block.classList.forEach(function(className) {
+                        if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
+                            codeElement.classList.add(className);
+                        }
+                    });
+                }
+            }
+        });
+        
+        // Re-highlight all code blocks
+        if (window.Prism) {
+            window.Prism.highlightAll();
+        }
+        
+        // Smart image scaling based on page content
+        const container = document.querySelector('.container');
+        const textElement = document.querySelector('.persian-translation');
+        const imageContainer = document.querySelector('.page-images');
+        
+        if (imageContainer && textElement && container) {
+            const images = imageContainer.querySelectorAll('.page-image');
+            if (images.length > 0) {
+                // Calculate available space
+                const containerHeight = container.clientHeight;
+                const textHeight = textElement.clientHeight;
+                const pageNumberElement = document.querySelector('.page-number');
+                
+                if (pageNumberElement) {
+                    const pageNumberHeight = pageNumberElement.clientHeight;
+                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; // Extra margins
+                    
+                    // Handle image scaling
+                    let totalImageHeight = 0;
+                    
+                    // Process each image
+                    images.forEach(function(img) {
+                        // Set up onload handler to handle image dimensions
+                        img.onload = function() {
+                            // Get natural aspect ratio
+                            const ratio = img.naturalWidth / img.naturalHeight;
+                            // Calculate height based on max width
+                            const estimatedHeight = (img.clientWidth / ratio);
+                            totalImageHeight += estimatedHeight + 40; // Add gap
+                            
+                            // Check if images don't fit
+                            if (totalImageHeight > availableHeight) {
+                                // Try to scale down by up to 30%
+                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
+                                
+                                // If even with 30% reduction it doesn't fit, set page-break
+                                if (scaleFactor < 0.7) {
+                                    imageContainer.classList.add('page-break');
+                                } else {
+                                    // Scale images to fit
+                                    images.forEach(function(i) {
+                                        i.style.maxWidth = (scaleFactor * 100) + '%';
+                                    });
+                                }
+                            }
+                        };
+                        
+                        // Force layout calculation in case image is already loaded
+                        if (img.complete) {
+                            img.onload();
+                        }
+                    });
+                }
+            }
+        }
+    });
+    '''
     
-    # Add CSS font link
-    font_link = ''
-    if include_font_path:
-        font_link = '<link rel="stylesheet" href="fontiran.css">'
-    
-    # Check if there are images to add
-    has_images = images and len(images) > 0
-    
-    # Prepare image HTML - Include images inline with text when possible
-    images_html = ""
-    if has_images:
-        images_html = "<div class='page-images'>\n"
-        for img in images:
-            images_html += f"    <img src='{img['relative_path']}' class='page-image' alt='Page {page_number} image' />\n"
-        images_html += "</div>\n"
-    
-    # Create HTML content with text and images together
     html_content = f"""<!DOCTYPE html>
-<html lang="fa">
+<html dir="rtl" lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{file_name}</title>
-    {font_link}
-    <!-- Add Prism CSS for syntax highlighting -->
+    <title>Page {page_num}</title>
+    <link rel="stylesheet" href="fonts/font.css">
+    <!-- Prism CSS for syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
     <style>
         @page {{
             size: A4;
-            margin: 1.5cm;
-        }}
-        html, body {{
-            height: 100%;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }}
         body {{
-            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
-            line-height: 1.5;
-            background-color: #f8f9fa;
-            /* A4 size enforcement */
-            width: 21cm;
-            height: 29.7cm;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: white;
+            font-size: 13px;
         }}
         .container {{
-            width: 18cm; /* A4 width minus margins */
-            min-height: 26.7cm; /* A4 height minus margins */
-            background-color: white;
-            padding: 1cm;
-            box-sizing: border-box;
+            width: 18cm;
+            min-height: 26.7cm;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
+            padding: 1.5cm;
+            box-sizing: border-box;
+            position: relative;
+        }}
+        h1, h2, h3, h4, h5, h6 {{
+            color: #333;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
         }}
         .persian-translation {{
-            text-align: right;
-            direction: rtl;
-            font-size: 1em;
-            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
-            margin-bottom: 20px;
-            /* Don't hide any overflow text, let it flow naturally */
-            overflow: visible;
-        }}
-        .original-text {{
-            text-align: left;
-            direction: ltr;
-            font-size: 0.9em;
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            margin-bottom: 20px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px dashed #ccc;
-            color: #333;
-        }}
-        .original-text h3 {{
-            margin-top: 0;
-            color: #666;
-            font-size: 1em;
-            font-weight: bold;
-        }}
-        /* Style for code blocks */
-        pre[class*="language-"] {{
-            direction: ltr;
-            text-align: left;
-            border-radius: 5px;
-            margin: 1em 0;
-            font-size: 0.9em;
-            overflow-x: auto;
+            text-align: justify;
+            line-height: 1.6;
             white-space: pre-wrap;
+            direction: rtl;
+            overflow: visible;
+            margin-bottom: 1.5em;
         }}
-        code {{
+        .english-text {{
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 0.5em;
+            margin-top: 0.5em;
+            font-size: 0.9em;
             direction: ltr;
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f5f5f5;
-            border-radius: 3px;
-            padding: 2px 4px;
+            text-align: left;
+            white-space: pre-wrap;
+            line-height: 1.6;
         }}
         .page-images {{
-            margin: 1cm 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1cm;
+            width: 100%;
+            overflow: hidden;
+            margin-top: 1em;
+            text-align: center;
         }}
         .page-image {{
             max-width: 100%;
-            height: auto;
+            max-height: 20cm;
             object-fit: contain;
+            margin: 1em auto;
+            display: block;
+        }}
+        .page-break {{
+            page-break-before: always;
         }}
         .page-number {{
-            position: relative;
-            width: 100%;
+            position: absolute;
+            bottom: 0.5cm;
+            left: 0;
+            right: 0;
             text-align: center;
-            font-size: 1em;
-            color: #444;
-            font-weight: bold;
-            padding: 15px 0 5px 0;
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
+            font-size: 10px;
+            color: #999;
         }}
+        pre {{
+            direction: ltr;
+            text-align: left;
+            max-width: 100%;
+            overflow-x: auto;
+            margin: 1em 0;
+            padding: 1em;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }}
+        code {{
+            direction: ltr;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
+            color: #333;
+            font-size: 0.9em;
+        }}
+        pre code {{
+            padding: 0;
+            background-color: transparent;
+            border-radius: 0;
+            border: none;
+            white-space: pre-wrap;
+        }}
+        blockquote {{
+            border-right: 3px solid #ddd;
+            margin-right: 0;
+            padding-right: 1em;
+            margin-left: 0;
+            color: #777;
+            font-style: italic;
+        }}
+        table {{
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+        }}
+        th, td {{
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }}
+        th {{
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }}
+        img {{
+            max-width: 100%;
+            height: auto;
+        }}
+        figure {{
+            margin: 1em 0;
+            text-align: center;
+        }}
+        figcaption {{
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 0.5em;
+        }}
+        
         @media print {{
-            body {{
-                background: none;
-                width: 21cm;
-                height: 29.7cm;
-            }}
             .container {{
-                box-shadow: none;
-                padding: 1cm;
-                height: auto;
-                min-height: auto;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 1.5cm;
+                box-sizing: border-box;
             }}
-            /* Page break utility */
             .page-break {{
                 page-break-before: always;
             }}
-            /* Ensure code blocks print with background colors */
-            pre[class*="language-"] {{
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
+            body {{
+                background-color: white;
             }}
         }}
     </style>
 </head>
 <body>
     <div class="container">
-        {persian_html}
-        
-        {original_html}
-        
-        {images_html}
-        
-        <div class="page-number">
-            صفحه -{page_number}-
+        <div class="persian-translation">
+            {heading_tag[0] if heading_tag else ""}
+            {persian_translation}
         </div>
+        <div class="english-text">
+            {heading_tag[1] if heading_tag else ""}
+            {english_text}
+        </div>
+        
+        <div class="page-images">
+            {"".join([f'<img src="{img}" class="page-image" alt="Page {page_num} Image {i+1}" />' for i, img in enumerate(image_files)])}
+        </div>
+        
+        <div class="page-number">صفحه {persian_numbers(page_num)}</div>
     </div>
     
     <!-- Add Prism JS for syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <!-- Add Prettier for code formatting -->
+    <script src="https://unpkg.com/prettier@2.8.8/standalone.js"></script>
+    <script src="https://unpkg.com/prettier@2.8.8/parser-babel.js"></script>
+    <script src="https://unpkg.com/prettier@2.8.8/parser-html.js"></script>
+    <script src="https://unpkg.com/prettier@2.8.8/parser-postcss.js"></script>
+    <script src="https://unpkg.com/prettier@2.8.8/parser-typescript.js"></script>
     <script>
-        // Initialize Prism highlighting
-        document.addEventListener('DOMContentLoaded', (event) => {{
-            /* Add line-numbers class to all pre elements if not already there */
-            document.querySelectorAll('pre').forEach(block => {{
-                if (!block.classList.contains('line-numbers')) {{
-                    block.classList.add('line-numbers');
-                }}
-                
-                /* If language class is not specified, add 'language-clike' as default */
-                let hasLanguageClass = false;
-                block.classList.forEach(className => {{
-                    if (className.startsWith('language-')) {{
-                        hasLanguageClass = true;
-                    }}
-                }});
-                
-                if (!hasLanguageClass) {{
-                    block.classList.add('language-clike');
-                }}
-                
-                /* Ensure code elements inside pre also have the correct language class */
-                const codeElement = block.querySelector('code');
-                if (codeElement) {{
-                    if (!hasLanguageClass) {{
-                        codeElement.classList.add('language-clike');
-                    }} else {{
-                        /* Copy the language class from pre to code if code doesn't have it */
-                        block.classList.forEach(className => {{
-                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {{
-                                codeElement.classList.add(className);
-                            }}
-                        }});
-                    }}
-                }}
-            }});
-            
-            /* Re-highlight all code blocks */
-            if (window.Prism) {{
-                Prism.highlightAll();
-            }}
-            
-            /* Smart image scaling based on page content */
-            const container = document.querySelector('.container');
-            const textElement = document.querySelector('.persian-translation');
-            const imageContainer = document.querySelector('.page-images');
-            
-            if (imageContainer && textElement) {{
-                const images = imageContainer.querySelectorAll('.page-image');
-                if (images.length > 0) {{
-                    /* Calculate available space */
-                    const containerHeight = container.clientHeight;
-                    const textHeight = textElement.clientHeight;
-                    const pageNumberHeight = document.querySelector('.page-number').clientHeight;
-                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; /* Extra margins */
-                    
-                    /* Estimate total height of images */
-                    let totalImageHeight = 0;
-                    images.forEach(img => {{
-                        /* Wait for image to load to get accurate height */
-                        img.onload = function() {{
-                            /* Get natural aspect ratio */
-                            const ratio = img.naturalWidth / img.naturalHeight;
-                            /* Calculate height based on max width */
-                            const estimatedHeight = (img.clientWidth / ratio);
-                            totalImageHeight += estimatedHeight + 40; /* Add gap */
-                            
-                            /* Check if images don't fit */
-                            if (totalImageHeight > availableHeight) {{
-                                /* Try to scale down by up to 30% */
-                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
-                                
-                                /* If even with 30% reduction it doesn't fit, set page-break */
-                                if (scaleFactor < 0.7) {{
-                                    imageContainer.classList.add('page-break');
-                                }} else {{
-                                    /* Scale images to fit */
-                                    images.forEach(i => {{
-                                        i.style.maxWidth = (scaleFactor * 100) + '%';
-                                    }});
-                                }}
-                            }}
-                        }};
-                        
-                        /* Force layout calculation in case image is already loaded */
-                        if (img.complete) {{
-                            img.onload();
-                        }}
-                    }});
-                }}
-            }}
-        }});
+{js_code}
     </script>
 </body>
 </html>"""
-
-    # Create an empty string for the overflow HTML (in case images don't fit and need a new page)
-    overflow_html = ""
     
-    # If we decide images need to be on a separate page, create that HTML separately
-    # This will be handled by the JavaScript logic above based on content height
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     
-    return html_content, overflow_html
+    # Write the content to the file
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    return filename
 
 def detect_heading(text, page_num):
-    """Detect if text contains a heading based on formatting and content"""
-    # Initialize result
-    headings = []
-    
-    # Simple heuristics to detect headings
-    lines = text.split('\n')
-    previous_line_empty = True  # Assume start of text is like an empty line
-    
-    for i, line in enumerate(lines):
-        original_line = line
-        line = line.strip()
-        
-        # Skip empty lines but track them
-        if not line:
-            previous_line_empty = True
-            continue
-        
-        # Get next line if available
-        next_line = lines[i+1].strip() if i+1 < len(lines) else ""
-        
-        # Potential heading characteristics
-        is_heading = False
-        heading_level = 0
-        
-        # 1. Check for English heading patterns
-        if len(line) < 100:  # Headings are usually short
-            # Chapter or section indicators (English)
-            if re.match(r'^(chapter|section|part|appendix|preface|introduction|foreword|conclusion)\s+\d*', line.lower()):
-                is_heading = True
-                heading_level = 1
-            
-            # Numbered headings like "1.", "1.1", "1.1.1" (common in technical docs)
-            elif re.match(r'^\d+\.(\d+\.)*\s*\w+', line):
-                is_heading = True
-                heading_level = line.count('.') + 1  # Level based on dots in numbering
-            
-            # Simple numbered headings "1 Introduction", "2 Background"
-            elif re.match(r'^\d+\s+[A-Z]', line):
-                is_heading = True
-                heading_level = 1
-            
-            # All caps headings (common in academic papers and books)
-            elif line.isupper() and len(line.split()) <= 10:
-                is_heading = True
-                heading_level = 1 if len(line.split()) <= 3 else 2
-            
-            # Title case headings (proper nouns capitalized) - stronger check
-            elif (line.istitle() or sum(1 for word in line.split() if word and word[0].isupper()) > len(line.split()) * 0.7) and len(line.split()) <= 8:
-                is_heading = True
-                heading_level = 2
-            
-            # Headings with colon (common pattern in technical books)
-            elif ':' in line and len(line.split(':')[0]) < 40:
-                is_heading = True
-                heading_level = 2
-            
-            # Technical terms that typically indicate headings in technical books
-            elif any(term in line.lower() for term in ['overview', 'introduction to', 'getting started', 'understanding', 'summary', 'conclusion', 'architecture', 'implementation', 'design', 'structure']):
-                if previous_line_empty and (not next_line or next_line == "") and len(line.split()) <= 7:
-                    is_heading = True
-                    heading_level = 2
-            
-            # Headings often have different formatting - check if isolated
-            elif previous_line_empty and (not next_line or next_line == ""):
-                if len(line.split()) <= 7:  # Shorter isolated line, likely a heading
-                    is_heading = True
-                    heading_level = 2
-                    
-                    # If it has special characters, might be a special section like Q&A
-                    if any(char in line for char in ['?', '&', '!', '@']):
-                        heading_level = 3
-            
-            # Common heading patterns in technical docs
-            if re.match(r'^(Abstract|Table of Contents|Index|References|Bibliography|Glossary|Acknowledgements)$', line, re.IGNORECASE):
-                is_heading = True
-                heading_level = 1
-        
-        # 2. Check for Persian heading patterns (keeping this but with lower priority)
-        if not is_heading and len(line) < 80:
-            # Persian chapter indicators فصل، بخش، etc.
-            if re.match(r'^(فصل|بخش|قسمت|پیوست)\s+\d+', line):
-                is_heading = True
-                heading_level = 1
-            
-            # Persian numbered headings
-            elif re.match(r'^\d+[\-\.]\s+\S+', line):  # Number followed by period/dash and text
-                is_heading = True
-                heading_level = 1
-        
-        # 3. Check for heading with underline pattern (text followed by a line of --- or ===)
-        if not is_heading and next_line and re.match(r'^[=\-_]{3,}$', next_line):
-            is_heading = True
-            heading_level = 1 if '=' in next_line else 2  # === is usually level 1, --- is level 2
-        
-        # If this looks like a heading, add it to the results
-        if is_heading:
-            # Clean up the heading (remove extra whitespace, etc.)
-            clean_heading = ' '.join(line.split())
-            
-            # Remove common prefix numbers for cleaner display
-            display_heading = re.sub(r'^\d+[\.\s]+', '', clean_heading)
-            
-            # Add to our headings list
-            headings.append({
-                'text': display_heading,
-                'level': heading_level,
-                'page': page_num + 1  # Page numbers are 1-based
-            })
-        
-        # Update previous line status
-        previous_line_empty = False
-    
-    # Remove duplicate headings on the same page (keep the one with higher level/priority)
-    filtered_headings = []
-    seen_texts = set()
-    
-    # Sort by level (lower level number = higher priority)
-    sorted_headings = sorted(headings, key=lambda x: x['level'])
-    
-    for heading in sorted_headings:
-        text = heading['text'].lower()
-        if text not in seen_texts:
-            filtered_headings.append(heading)
-            seen_texts.add(text)
-    
-    return filtered_headings
+    """Detect if the text appears to be a heading."""
+    # If the text is short and doesn't end with period, it might be a heading
+    if len(text.strip()) < 100 and not text.strip().endswith('.'):
+        # Try to determine heading level based on length
+        if len(text.strip()) < 30:
+            return (f'<h1>{text}</h1>', f'<h1>{text}</h1>')
+        elif len(text.strip()) < 50:
+            return (f'<h2>{text}</h2>', f'<h2>{text}</h2>')
+        else:
+            return (f'<h3>{text}</h3>', f'<h3>{text}</h3>')
+    return None
 
 def create_html_book(html_files, output_html, output_dir, file_base_name, toc_headings=None):
     """Create a single HTML book file from multiple HTML files"""
@@ -710,51 +718,51 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
         existing_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
         
         # Create book structure
-        book_html = """<!DOCTYPE html>
+        book_html = f"""<!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{file_base_name}</title>
     <style>
-        @page {
+        @page {{
             size: A4;
             margin: 1.5cm;
-        }
-        body {
+        }}
+        body {{
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             line-height: 1.5;
             background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-        }
-        .book {
+        }}
+        .book {{
             max-width: 21cm;
             margin: 0 auto;
             background-color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .page {
+        }}
+        .page {{
             width: 21cm;
             padding: 1.5cm;
             box-sizing: border-box;
             margin-bottom: 2cm;
             position: relative;
             border-bottom: 1px dashed #ddd;
-        }
-        .page:last-child {
+        }}
+        .page:last-child {{
             border-bottom: none;
             margin-bottom: 0;
-        }
-        .page-content {
+        }}
+        .page-content {{
             min-height: 100%;
-        }
-        .persian-translation {
+        }}
+        .persian-translation {{
             text-align: right;
             direction: rtl;
             font-size: 1em;
-        }
-        .page-number {
+        }}
+        .page-number {{
             position: absolute;
             bottom: 0.5cm;
             width: 100%;
@@ -764,21 +772,21 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
             font-weight: bold;
             padding: 5px 0;
             border-top: 1px solid #ddd;
-        }
-        .page-images {
+        }}
+        .page-images {{
             margin: 1cm 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1cm;
-        }
-        .page-image {
+        }}
+        .page-image {{
             max-width: 90%;
             height: auto;
             object-fit: contain;
-        }
+        }}
         /* Style for code blocks */
-        pre[class*="language-"] {
+        pre[class*="language-"] {{
             direction: ltr;
             text-align: left;
             border-radius: 5px;
@@ -788,80 +796,80 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
             white-space: pre-wrap;
             background-color: #f5f5f5;
             padding: 1em;
-        }
-        code {
+        }}
+        code {{
             direction: ltr;
             font-family: 'Courier New', Courier, monospace;
             background-color: #f5f5f5;
             border-radius: 3px;
             padding: 2px 4px;
-        }
-        .cover-page {
+        }}
+        .cover-page {{
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
             text-align: center;
-        }
-        .book-title {
+        }}
+        .book-title {{
             font-size: 2em;
             margin-bottom: 1cm;
-        }
-        .book-subtitle {
+        }}
+        .book-subtitle {{
             font-size: 1.5em;
             margin-bottom: 2cm;
             color: #555;
-        }
-        .toc {
+        }}
+        .toc {{
             text-align: right;
             direction: rtl;
-        }
-        .toc-title {
+        }}
+        .toc-title {{
             font-size: 1.5em;
             margin-bottom: 1cm;
-        }
-        .toc-entry {
+        }}
+        .toc-entry {{
             margin-bottom: 0.5em;
-        }
-        .toc-entry a {
+        }}
+        .toc-entry a {{
             text-decoration: none;
             color: #333;
-        }
-        .toc-entry a:hover {
+        }}
+        .toc-entry a:hover {{
             text-decoration: underline;
-        }
-        .toc-page {
+        }}
+        .toc-page {{
             float: left;
-        }
-        @media print {
-            body {
+        }}
+        @media print {{
+            body {{
                 background: none;
-            }
-            .book {
+            }}
+            .book {{
                 box-shadow: none;
                 margin: 0;
-            }
-            .page {
+            }}
+            .page {{
                 page-break-after: always;
-            }
-            pre[class*="language-"] {
+            }}
+            pre[class*="language-"] {{
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
-            }
-        }
-        .toc-level1 {
+            }}
+        }}
+        .toc-level1 {{
             font-weight: bold;
             margin-top: 0.8em;
-        }
-        .toc-level2 {
+        }}
+        .toc-level2 {{
             margin-left: 1.5em;
-        }
-        .toc-level3 {
+        }}
+        .toc-level3 {{
             margin-left: 3em;
             font-size: 0.9em;
-        }
-        .page-heading {
+        }}
+        .page-heading {{
             text-align: right;
             direction: rtl;
             font-weight: bold;
@@ -870,7 +878,7 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
             padding-bottom: 10px;
             color: #333;
             border-bottom: 1px solid #eee;
-        }
+        }}
     </style>
     <!-- Add Prism CSS for syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
@@ -883,7 +891,7 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
             <div class="cover-page">
                 <h1 class="book-title">{file_base_name}</h1>
                 <h2 class="book-subtitle">ترجمه فارسی</h2>
-                <p>تاریخ ایجاد: """ + time.strftime("%Y/%m/%d") + """</p>
+                <p>تاریخ ایجاد: {time.strftime("%Y/%m/%d")}</p>
             </div>
         </div>
         
@@ -1085,46 +1093,96 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script>
         // Initialize Prism highlighting
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // Add line-numbers class to all pre elements if not already there
-            document.querySelectorAll('pre').forEach(block => {
-                if (!block.classList.contains('line-numbers')) {
+        document.addEventListener('DOMContentLoaded', (event) => {{
+            /* Add line-numbers class to all pre elements if not already there */
+            document.querySelectorAll('pre').forEach(block => {{
+                if (!block.classList.contains('line-numbers')) {{
                     block.classList.add('line-numbers');
-                }
+                }}
                 
-                // If language class is not specified, add 'language-clike' as default
+                /* If language class is not specified, add 'language-clike' as default */
                 let hasLanguageClass = false;
-                block.classList.forEach(className => {
-                    if (className.startsWith('language-')) {
+                block.classList.forEach(className => {{
+                    if (className.startsWith('language-')) {{
                         hasLanguageClass = true;
-                    }
-                });
+                    }}
+                }});
                 
-                if (!hasLanguageClass) {
+                if (!hasLanguageClass) {{
                     block.classList.add('language-clike');
-                }
+                }}
                 
-                // Ensure code elements inside pre also have the correct language class
+                /* Ensure code elements inside pre also have the correct language class */
                 const codeElement = block.querySelector('code');
-                if (codeElement) {
-                    if (!hasLanguageClass) {
+                if (codeElement) {{
+                    if (!hasLanguageClass) {{
                         codeElement.classList.add('language-clike');
-                    } else {
-                        // Copy the language class from pre to code if code doesn't have it
-                        block.classList.forEach(className => {
-                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
+                    }} else {{
+                        /* Copy the language class from pre to code if code doesn't have it */
+                        block.classList.forEach(className => {{
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {{
                                 codeElement.classList.add(className);
-                            }
-                        });
-                    }
-                }
-            });
+                            }}
+                        }});
+                    }}
+                }}
+            }});
             
-            // Re-highlight all code blocks
-            if (window.Prism) {
+            /* Re-highlight all code blocks */
+            if (window.Prism) {{
                 Prism.highlightAll();
-            }
-        });
+            }}
+            
+            /* Smart image scaling based on page content */
+            const container = document.querySelector('.container');
+            const textElement = document.querySelector('.persian-translation');
+            const imageContainer = document.querySelector('.page-images');
+            
+            if (imageContainer && textElement) {{
+                const images = imageContainer.querySelectorAll('.page-image');
+                if (images.length > 0) {{
+                    /* Calculate available space */
+                    const containerHeight = container.clientHeight;
+                    const textHeight = textElement.clientHeight;
+                    const pageNumberHeight = document.querySelector('.page-number').clientHeight;
+                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; /* Extra margins */
+                    
+                    /* Estimate total height of images */
+                    let totalImageHeight = 0;
+                    images.forEach(img => {{
+                        /* Wait for image to load to get accurate height */
+                        img.onload = function() {{
+                            /* Get natural aspect ratio */
+                            const ratio = img.naturalWidth / img.naturalHeight;
+                            /* Calculate height based on max width */
+                            const estimatedHeight = (img.clientWidth / ratio);
+                            totalImageHeight += estimatedHeight + 40; /* Add gap */
+                            
+                            /* Check if images don't fit */
+                            if (totalImageHeight > availableHeight) {{
+                                /* Try to scale down by up to 30% */
+                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
+                                
+                                /* If even with 30% reduction it doesn't fit, set page-break */
+                                if (scaleFactor < 0.7) {{
+                                    imageContainer.classList.add('page-break');
+                                }} else {{
+                                    /* Scale images to fit */
+                                    images.forEach(i => {{
+                                        i.style.maxWidth = (scaleFactor * 100) + '%';
+                                    }});
+                                }}
+                            }}
+                        }};
+                        
+                        /* Force layout calculation in case image is already loaded */
+                        if (img.complete) {{
+                            img.onload();
+                        }}
+                    }});
+                }}
+            }}
+        }});
     </script>
 </body>
 </html>"""
