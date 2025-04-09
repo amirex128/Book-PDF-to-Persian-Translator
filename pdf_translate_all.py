@@ -3,7 +3,6 @@ import glob
 import re
 import shutil
 import time
-import argparse
 from tqdm import tqdm
 import PyPDF2
 import google.generativeai as genai
@@ -81,50 +80,165 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
     if not text.strip():
         return "", "Empty text"
     
-    try:
-        # Configure the Gemini API
-        genai.configure(api_key=api_key)
-        
-        # Set up the model - using gemini-1.5-flash-8b as specified
-        model = genai.GenerativeModel("models/gemini-1.5-flash-8b")
-        
-        # Create or continue a conversation
-        if conversation_history is None:
-            conversation = model.start_chat(history=[])
-        else:
-            conversation = conversation_history
-        
-        # Prompt for translation with context awareness
-        prompt = """
-        لطفا متن زیر را به فارسی ترجمه کنید. این متن بخشی از یک کتاب فنی است. 
-        لطفا از ترجمه‌های قبلی در این گفتگو استفاده کنید تا سبک و اصطلاحات یکسان باشند.
-        متن را با دقت و روان ترجمه کنید و اصطلاحات تخصصی را به درستی برگردانید.
-        کلمات و اصطلاحات فنی مهندسی نرم افزار و معماری نباید به فارسی ترجمه شود
-        مثلا اسم افراد یا اسم کتاب ها یا اسم سیستم ها یا اسم معماری ها یا اسم متد ها یا اسم متغیر های برنامه نویسی یا موارد از این قبیل نباید ترجمه شوند
-        فقط متن ترجمه شده را برگردانید، بدون هیچ توضیح اضافی.
-
-        در نهایت متن را با یک فاصله گذاری هوشمند و مرتب بر اساس انتخاب خودت تنظیم کن
-        برای این مرتب سازی فاصله ها از html استفاده کن
-
-        اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید. 
-        برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
-        زبان برنامه‌نویسی را براساس نوع کد تشخیص دهید. اگر زبان مشخص نیست، از language-clike استفاده کنید.
-        
-        متن برای ترجمه:
-        
-        """ + text
-        
-        # Get the response from Gemini
-        response = conversation.send_message(prompt)
-        translated_text = response.text
-        
-        # Return the translated text and the conversation for future use
-        return translated_text, conversation
+    # Maximum number of retries for rate limit errors
+    max_retries = 3
+    current_retry = 0
+    wait_time = 60  # Wait time in seconds before retrying
     
-    except Exception as e:
-        error_message = str(e)
-        print(f"Translation error: {error_message}")
-        return "", error_message
+    while current_retry <= max_retries:
+        try:
+            # Configure the Gemini API
+            genai.configure(api_key=api_key)
+            
+            # Set up the model - using gemini-1.5-flash-8b as specified
+            model = genai.GenerativeModel("models/gemini-1.5-flash-8b")
+            
+            # Create or continue a conversation
+            if conversation_history is None:
+                # Initialize a new conversation with detailed instructions
+                conversation = model.start_chat(history=[])
+                
+                # Send initial instructions prompt
+                initial_prompt = """
+                من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. این متن‌ها از یک کتاب فنی هستند.
+                لطفاً به دستورالعمل‌های زیر دقت کنید و همیشه آن‌ها را در ترجمه‌های خود رعایت کنید:
+                
+                قوانین بسیار مهم برای ترجمه (این قوانین از هر چیزی مهم‌تر هستند):
+                
+                1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید.
+                
+                2. اولویت اصلی: حفظ اصطلاحات فنی به زبان اصلی (انگلیسی) است، نه ترجمه روان. اگر شک دارید، همیشه به انگلیسی نگه دارید.
+                
+                3. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید:
+                
+                   الف) اصطلاحات فنی مهندسی نرم‌افزار:
+                   - مفاهیم معماری: API, HTTP, REST, SOAP, MVC, MVVM, Microservices, Monolith, Service, Controller, Middleware, Backend, Frontend
+                   - فرمت‌های داده: JSON, XML, YAML, CSV, Protobuf, Schema
+                   - پروتکل‌ها: TCP/IP, HTTP, WebSocket, gRPC, SSL, HTTPS
+                   - تکنولوژی‌های وب: HTML, CSS, DOM, AJAX, WebAssembly, SPA
+                   - مفاهیم امنیت: JWT, OAuth, CORS, XSS, Authentication, Authorization
+                   - ابزارها و محیط‌ها: IDE, Repository, VCS, CI/CD, Pipeline
+                   
+                   ب) نام‌های کلاس‌ها، متدها و سرویس‌ها:
+                   - نام‌های کلاس: UserService, InvoiceController, PaymentProcessor, DataContext, Repository
+                   - نام‌های متد: getBalance(), processPayment(), validateUser(), findById(), execute()
+                   - نام‌های سرویس‌ها: AuthService, Invoicing, PaymentGateway, EventBus, MessageQueue
+                   
+                   ج) اسامی متغیرها، پارامترها و فیلدها:
+                   - متغیرها: userId, accountBalance, isActive, counter, index, temp
+                   - پارامترها: customerId, amount, transactionDate, options, config
+                   - فیلدها: firstName, lastName, email, createdAt, updatedAt
+                   - ثابت‌ها: MAX_RETRY_COUNT, DEFAULT_TIMEOUT, API_VERSION
+                   
+                   د) الگوهای طراحی و معماری:
+                   - الگوهای طراحی: Singleton, Factory, Observer, Strategy, Adapter, Facade
+                   - الگوهای معماری: Saga, CQRS, Event Sourcing, Domain-Driven Design, Microservices
+                   - اصول: SOLID, DRY, KISS, Separation of Concerns, Dependency Injection
+                   - معماری‌های لایه‌ای: n-tier, Clean Architecture, Hexagonal Architecture
+                   
+                   ه) زبان‌های برنامه‌نویسی، فریم‌ورک‌ها و کتابخانه‌ها:
+                   - زبان‌ها: Java, Python, C#, JavaScript, TypeScript, Go, Rust, Swift
+                   - فریم‌ورک‌ها: Spring, .NET, React, Angular, Django, Express, Flask
+                   - کتابخانه‌ها: JUnit, NumPy, Redux, Axios, Hibernate, Entity Framework
+                   - پلتفرم‌ها: Node.js, JVM, .NET Core, WebAssembly
+                   
+                   و) اسامی خاص محصولات، ابزارها و شرکت‌ها:
+                   - محصولات: Docker, Kubernetes, AWS, Azure, Kafka, RabbitMQ, Redis
+                   - ابزارها: Git, Jenkins, Travis CI, GitHub Actions, Terraform, Ansible
+                   - شرکت‌ها: Microsoft, Google, IBM, Oracle, Amazon, Atlassian
+                   - سرویس‌های ابری: S3, EC2, Lambda, Azure Functions, Firestore
+                   
+                   ز) نام افراد، کتاب‌ها و مراجع:
+                   - نویسندگان: Martin Fowler, Robert Martin, Eric Evans, Kent Beck
+                   - مراجع: Gang of Four, Reactive Manifesto, Agile Manifesto
+                   - کتاب‌ها: "Clean Code", "Domain-Driven Design", "Refactoring"
+                
+                4. قانون‌های کلیدی برای تشخیص اصطلاحات فنی:
+                   - هر کلمه‌ای که حتی یک حرف بزرگ انگلیسی دارد، یک اصطلاح فنی است و نباید ترجمه شود.
+                   - هر کلمه‌ای که با حروف بزرگ نوشته شده یا اختصار است، نباید ترجمه شود.
+                   - هر عبارتی که با حروف مخفف (acronym) نوشته شده مانند API، REST، SOAP، نباید ترجمه شود.
+                   - هر عبارتی که با خط تیره یا زیرخط جدا شده (مانند client-side یا snake_case)، احتمالاً اصطلاح فنی است.
+                   - اصطلاحات شناخته شده مهندسی نرم‌افزار مانند endpoint، service، handler، را ترجمه نکنید.
+                
+                5. مثال‌های بیشتر از آنچه ترجمه نشود (به تفاوت‌ها توجه کنید):
+                   - "Invoicing displays the view models to its actors" -> "Invoicing، view models را به actors خود نمایش می‌دهد"
+                   - "Customers can get a JSON representation of invoices" -> "مشتریان می‌توانند یک representation از نوع JSON برای invoices دریافت کنند"
+                   - "The code uses the Factory pattern to create Order objects" -> "کد از pattern به نام Factory برای ایجاد objects از نوع Order استفاده می‌کند"
+                   - "InvoiceController calls PaymentService to process transactions" -> "InvoiceController، PaymentService را برای پردازش transactions فراخوانی می‌کند"
+                   - "The app implements CQRS with event sourcing" -> "این app، CQRS را همراه با event sourcing پیاده‌سازی می‌کند"
+                   - "REST APIs should use proper HTTP status codes" -> "REST APIs باید از HTTP status codes مناسب استفاده کنند"
+                   - "The system has a PostgreSQL database with indexes on frequently queried fields" -> "این system دارای یک database از نوع PostgreSQL با indexes روی fields که مرتباً query می‌شوند، است"
+                   - "The authentication middleware validates JWT tokens" -> "middleware مربوط به authentication، JWT tokens را اعتبارسنجی می‌کند"
+                   - "React components should be stateless when possible" -> "components در React باید تا حد ممکن stateless باشند"
+                   - "Dependency Injection helps with unit testing the service layer" -> "Dependency Injection به unit testing لایه service کمک می‌کند"
+                   - "Apache Kafka is used for event streaming between microservices" -> "از Apache Kafka برای event streaming بین microservices استفاده می‌شود"
+                   - "Redis provides in-memory caching for frequently accessed data" -> "Redis قابلیت caching درون حافظه را برای data‌هایی که مکرراً به آنها دسترسی می‌شود، فراهم می‌کند"
+                   - "The backend exposes endpoints to process client requests" -> "backend، endpoints را برای پردازش client requests در معرض دید قرار می‌دهد"
+                   - "Cloud-native applications often use container orchestration" -> "applications از نوع cloud-native اغلب از container orchestration استفاده می‌کنند"
+                
+                6. مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید.
+                
+                7. اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید.
+                   برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
+                
+                8. متن را با فاصله‌گذاری مناسب مرتب کنید.
+                
+                9. فقط متن ترجمه شده را برگردانید، بدون هیچ توضیح اضافی.
+                
+                برای درک بهتر:
+                متن نمونه: "The API Gateway uses HTTP to communicate with the backend services. When a user sends a POST request, the UserController processes it and returns a JSON response with appropriate HTTP status codes."
+                
+                ترجمه صحیح: "API Gateway از HTTP برای ارتباط با backend services استفاده می‌کند. وقتی یک user یک request از نوع POST ارسال می‌کند، UserController آن را پردازش کرده و یک response از نوع JSON با HTTP status codes مناسب برمی‌گرداند."
+                
+                ترجمه نادرست: "دروازه رابط برنامه‌نویسی از پروتکل انتقال ابرمتن برای ارتباط با سرویس‌های پشتی استفاده می‌کند. وقتی کاربر یک درخواست ارسال می‌کند، کنترل‌کننده کاربر آن را پردازش کرده و یک پاسخ جی‌سان با کدهای وضعیت مناسب برمی‌گرداند."
+                
+                متن های ترجمه شده باید به زبان فارسی روان و قابل فهم و گرامر درست نوشته شو
+                """
+                
+                # Send initial instructions
+                initial_response = conversation.send_message(initial_prompt)
+                
+                # Check if model acknowledges the instructions
+                # Now send the actual text to translate with a simpler prompt
+                translate_prompt = f"""
+                لطفاً متن زیر را با توجه به دستورالعمل‌های قبلی ترجمه کنید:
+                
+                {text}
+                """
+                response = conversation.send_message(translate_prompt)
+                translated_text = response.text
+            else:
+                # Continue existing conversation - only send the text to translate
+                conversation = conversation_history
+                response = conversation.send_message(f"""متن برای ترجمه:
+                
+                {text}
+                """)
+                translated_text = response.text
+            
+            # Return the translated text and the conversation for future use
+            return translated_text, conversation
+        
+        except Exception as e:
+            error_message = str(e)
+            print(f"Translation error: {error_message}")
+            
+            # Check if the error is related to rate limits
+            if "429" in error_message or "rate" in error_message.lower() or "quota" in error_message.lower() or "limit" in error_message.lower():
+                current_retry += 1
+                if current_retry <= max_retries:
+                    retry_wait = wait_time * current_retry  # Increase wait time with each retry
+                    print(f"Rate limit detected. Retry {current_retry}/{max_retries} - Waiting for {retry_wait} seconds before retrying...")
+                    time.sleep(retry_wait)
+                else:
+                    print(f"Maximum retries ({max_retries}) reached. Giving up on this translation.")
+                    return "", error_message
+            else:
+                # For other types of errors, don't retry
+                return "", error_message
+    
+    # This should not be reached, but just in case
+    return "", "Maximum retries exceeded. Unable to translate."
 
 def copy_font_assets(output_dir):
     """Copy font files to output directory"""
@@ -165,13 +279,18 @@ def copy_font_assets(output_dir):
     
     return True
 
-def create_html_content(persian_html, file_name, include_font_path, images=None):
-    """Create HTML content with Persian translation and images"""
+def create_html_content(persian_html, file_name, include_font_path, images=None, original_text=""):
+    """Create HTML content with Persian translation, original English text, and images"""
     # Clean any potential HTML tags from the input
     persian_text = persian_html
     
-    # Wrap the clean text in Persian translation div
+    # Wrap the translations in appropriate divs
     persian_html = f"<div dir='rtl' class='persian-translation'>{persian_text}</div>"
+    
+    # Add original English text if provided
+    original_html = ""
+    if original_text and original_text.strip():
+        original_html = f"<div class='original-text'><h3>Original Text</h3>{original_text}</div>"
     
     # Extract page number from filename
     page_number = ""
@@ -245,6 +364,23 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             /* Don't hide any overflow text, let it flow naturally */
             overflow: visible;
         }}
+        .original-text {{
+            text-align: left;
+            direction: ltr;
+            font-size: 0.9em;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+            color: #333;
+        }}
+        .original-text h3 {{
+            margin-top: 0;
+            color: #666;
+            font-size: 1em;
+            font-weight: bold;
+        }}
         /* Style for code blocks */
         pre[class*="language-"] {{
             direction: ltr;
@@ -275,10 +411,15 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             object-fit: contain;
         }}
         .page-number {{
+            position: relative;
+            width: 100%;
             text-align: center;
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #777;
+            font-size: 1em;
+            color: #444;
+            font-weight: bold;
+            padding: 15px 0 5px 0;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
         }}
         @media print {{
             body {{
@@ -308,10 +449,12 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
     <div class="container">
         {persian_html}
         
+        {original_html}
+        
         {images_html}
         
         <div class="page-number">
-            {page_number}
+            صفحه -{page_number}-
         </div>
     </div>
     
@@ -423,73 +566,614 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
     
     return html_content, overflow_html
 
-def create_pdf_from_html_files(html_files, output_pdf, output_dir):
-    """Create PDF from HTML files using pdfkit"""
-    if not PDFKIT_AVAILABLE:
-        print("pdfkit is not available. Cannot create PDF.")
-        return False
+def detect_heading(text, page_num):
+    """Detect if text contains a heading based on formatting and content"""
+    # Initialize result
+    headings = []
     
-    try:
-        print(f"\nConverting HTML files to PDF: {output_pdf}")
-        print(f"  Converting {len(html_files)} HTML files to PDF...")
+    # Simple heuristics to detect headings
+    lines = text.split('\n')
+    previous_line_empty = True  # Assume start of text is like an empty line
+    
+    for i, line in enumerate(lines):
+        original_line = line
+        line = line.strip()
         
-        # Sort files - first prioritize order (text files before image files)
-        # and within each type, sort by page number
+        # Skip empty lines but track them
+        if not line:
+            previous_line_empty = True
+            continue
+        
+        # Get next line if available
+        next_line = lines[i+1].strip() if i+1 < len(lines) else ""
+        
+        # Potential heading characteristics
+        is_heading = False
+        heading_level = 0
+        
+        # 1. Check for English heading patterns
+        if len(line) < 100:  # Headings are usually short
+            # Chapter or section indicators (English)
+            if re.match(r'^(chapter|section|part|appendix|preface|introduction|foreword|conclusion)\s+\d*', line.lower()):
+                is_heading = True
+                heading_level = 1
+            
+            # Numbered headings like "1.", "1.1", "1.1.1" (common in technical docs)
+            elif re.match(r'^\d+\.(\d+\.)*\s*\w+', line):
+                is_heading = True
+                heading_level = line.count('.') + 1  # Level based on dots in numbering
+            
+            # Simple numbered headings "1 Introduction", "2 Background"
+            elif re.match(r'^\d+\s+[A-Z]', line):
+                is_heading = True
+                heading_level = 1
+            
+            # All caps headings (common in academic papers and books)
+            elif line.isupper() and len(line.split()) <= 10:
+                is_heading = True
+                heading_level = 1 if len(line.split()) <= 3 else 2
+            
+            # Title case headings (proper nouns capitalized) - stronger check
+            elif (line.istitle() or sum(1 for word in line.split() if word and word[0].isupper()) > len(line.split()) * 0.7) and len(line.split()) <= 8:
+                is_heading = True
+                heading_level = 2
+            
+            # Headings with colon (common pattern in technical books)
+            elif ':' in line and len(line.split(':')[0]) < 40:
+                is_heading = True
+                heading_level = 2
+            
+            # Technical terms that typically indicate headings in technical books
+            elif any(term in line.lower() for term in ['overview', 'introduction to', 'getting started', 'understanding', 'summary', 'conclusion', 'architecture', 'implementation', 'design', 'structure']):
+                if previous_line_empty and (not next_line or next_line == "") and len(line.split()) <= 7:
+                    is_heading = True
+                    heading_level = 2
+            
+            # Headings often have different formatting - check if isolated
+            elif previous_line_empty and (not next_line or next_line == ""):
+                if len(line.split()) <= 7:  # Shorter isolated line, likely a heading
+                    is_heading = True
+                    heading_level = 2
+                    
+                    # If it has special characters, might be a special section like Q&A
+                    if any(char in line for char in ['?', '&', '!', '@']):
+                        heading_level = 3
+            
+            # Common heading patterns in technical docs
+            if re.match(r'^(Abstract|Table of Contents|Index|References|Bibliography|Glossary|Acknowledgements)$', line, re.IGNORECASE):
+                is_heading = True
+                heading_level = 1
+        
+        # 2. Check for Persian heading patterns (keeping this but with lower priority)
+        if not is_heading and len(line) < 80:
+            # Persian chapter indicators فصل، بخش، etc.
+            if re.match(r'^(فصل|بخش|قسمت|پیوست)\s+\d+', line):
+                is_heading = True
+                heading_level = 1
+            
+            # Persian numbered headings
+            elif re.match(r'^\d+[\-\.]\s+\S+', line):  # Number followed by period/dash and text
+                is_heading = True
+                heading_level = 1
+        
+        # 3. Check for heading with underline pattern (text followed by a line of --- or ===)
+        if not is_heading and next_line and re.match(r'^[=\-_]{3,}$', next_line):
+            is_heading = True
+            heading_level = 1 if '=' in next_line else 2  # === is usually level 1, --- is level 2
+        
+        # If this looks like a heading, add it to the results
+        if is_heading:
+            # Clean up the heading (remove extra whitespace, etc.)
+            clean_heading = ' '.join(line.split())
+            
+            # Remove common prefix numbers for cleaner display
+            display_heading = re.sub(r'^\d+[\.\s]+', '', clean_heading)
+            
+            # Add to our headings list
+            headings.append({
+                'text': display_heading,
+                'level': heading_level,
+                'page': page_num + 1  # Page numbers are 1-based
+            })
+        
+        # Update previous line status
+        previous_line_empty = False
+    
+    # Remove duplicate headings on the same page (keep the one with higher level/priority)
+    filtered_headings = []
+    seen_texts = set()
+    
+    # Sort by level (lower level number = higher priority)
+    sorted_headings = sorted(headings, key=lambda x: x['level'])
+    
+    for heading in sorted_headings:
+        text = heading['text'].lower()
+        if text not in seen_texts:
+            filtered_headings.append(heading)
+            seen_texts.add(text)
+    
+    return filtered_headings
+
+def create_html_book(html_files, output_html, output_dir, file_base_name, toc_headings=None):
+    """Create a single HTML book file from multiple HTML files"""
+    try:
+        print(f"\nCreating HTML book: {output_html}")
+        print(f"  Combining {len(html_files)} HTML pages into a single book...")
         
         # Filter out non-existent files
         existing_files = [f for f in html_files if os.path.exists(f)]
         if not existing_files:
-            print("No HTML files found for conversion.")
+            print("No HTML files found for combining.")
             return False
-            
-        # pdfkit options for better Persian text support
-        options = {
-            'page-size': 'A4',
-            'margin-top': '1.5cm',
-            'margin-right': '1.5cm',
-            'margin-bottom': '1.5cm',
-            'margin-left': '1.5cm',
-            'encoding': 'UTF-8',
-            'enable-local-file-access': None,  # Allow access to local files
-            'print-media-type': None,  # Use print media CSS
-            'quiet': None  # Reduce console output
+        
+        # Sort files by page number
+        existing_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
+        
+        # Create book structure
+        book_html = """<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{file_base_name}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
         }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .book {
+            max-width: 21cm;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .page {
+            width: 21cm;
+            padding: 1.5cm;
+            box-sizing: border-box;
+            margin-bottom: 2cm;
+            position: relative;
+            border-bottom: 1px dashed #ddd;
+        }
+        .page:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .page-content {
+            min-height: 100%;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 0.5cm;
+            width: 100%;
+            text-align: center;
+            font-size: 1em;
+            color: #444;
+            font-weight: bold;
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+        }
+        .page-images {
+            margin: 1cm 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1cm;
+        }
+        .page-image {
+            max-width: 90%;
+            height: auto;
+            object-fit: contain;
+        }
+        /* Style for code blocks */
+        pre[class*="language-"] {
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            padding: 1em;
+        }
+        code {
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+        .book-title {
+            font-size: 2em;
+            margin-bottom: 1cm;
+        }
+        .book-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 2cm;
+            color: #555;
+        }
+        .toc {
+            text-align: right;
+            direction: rtl;
+        }
+        .toc-title {
+            font-size: 1.5em;
+            margin-bottom: 1cm;
+        }
+        .toc-entry {
+            margin-bottom: 0.5em;
+        }
+        .toc-entry a {
+            text-decoration: none;
+            color: #333;
+        }
+        .toc-entry a:hover {
+            text-decoration: underline;
+        }
+        .toc-page {
+            float: left;
+        }
+        @media print {
+            body {
+                background: none;
+            }
+            .book {
+                box-shadow: none;
+                margin: 0;
+            }
+            .page {
+                page-break-after: always;
+            }
+            pre[class*="language-"] {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+        .toc-level1 {
+            font-weight: bold;
+            margin-top: 0.8em;
+        }
+        .toc-level2 {
+            margin-left: 1.5em;
+        }
+        .toc-level3 {
+            margin-left: 3em;
+            font-size: 0.9em;
+        }
+        .page-heading {
+            text-align: right;
+            direction: rtl;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+</head>
+<body>
+    <div class="book">
+        <!-- Cover Page -->
+        <div class="page">
+            <div class="cover-page">
+                <h1 class="book-title">{file_base_name}</h1>
+                <h2 class="book-subtitle">ترجمه فارسی</h2>
+                <p>تاریخ ایجاد: """ + time.strftime("%Y/%m/%d") + """</p>
+            </div>
+        </div>
         
-        # Use the specific wkhtmltopdf path
-        wkhtmltopdf_path = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+        <!-- Table of Contents -->
+        <div class="page">
+            <div class="toc">
+                <h2 class="toc-title">فهرست مطالب</h2>
+"""
         
-        if os.path.exists(wkhtmltopdf_path):
-            print(f"  Using wkhtmltopdf from: {wkhtmltopdf_path}")
-            config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+        # Use extracted headings if available, otherwise create basic TOC from page numbers
+        if toc_headings and len(toc_headings) > 0:
+            # Sort headings by page number
+            toc_headings.sort(key=lambda x: (x['page'], x['level']))
+            
+            # Remove duplicate headings on the same page (keep all but at different levels)
+            filtered_headings = []
+            seen_entries = set()
+            
+            for heading in toc_headings:
+                # Create a key for this entry that combines title and page
+                entry_key = f"{heading['text']}_{heading['page']}"
+                if entry_key not in seen_entries:
+                    filtered_headings.append(heading)
+                    seen_entries.add(entry_key)
+            
+            # Group headings by level for hierarchical display
+            current_level1 = None
+            current_level2 = None
+            
+            # Variables to track section count for better numbering
+            section_count = 0
+            subsection_counts = {}
+            
+            for heading in filtered_headings:
+                level = heading['level']
+                heading_text = heading['text']
+                heading_page = heading['page']
+                
+                # Calculate the book page number (offset by 2 for cover and TOC)
+                book_page = heading_page + 2
+                
+                # First level headings
+                if level == 1:
+                    section_count += 1
+                    subsection_counts[section_count] = 0
+                    current_level1 = heading_text
+                    current_level2 = None
+                    
+                    # Add numbering to first level headings
+                    numbered_heading = f"{section_count}. {heading_text}"
+                    book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
+                
+                # Second level headings
+                elif level == 2:
+                    if current_level1:
+                        subsection_counts[section_count] += 1
+                        current_level2 = heading_text
+                        
+                        # Add hierarchical numbering
+                        numbered_heading = f"{section_count}.{subsection_counts[section_count]} {heading_text}"
+                        book_html += f'                <div class="toc-entry toc-level2"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
+                    else:
+                        # If no parent heading, treat as level 1
+                        section_count += 1
+                        subsection_counts[section_count] = 0
+                        current_level1 = heading_text
+                        
+                        # Add numbering
+                        numbered_heading = f"{section_count}. {heading_text}"
+                        book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
+                
+                # Third level headings
+                elif level >= 3:
+                    if current_level2:
+                        # Add deeper hierarchical numbering for level 3
+                        subsubsection = subsection_counts.get(section_count, 0)
+                        numbered_heading = f"{section_count}.{subsubsection}.{1} {heading_text}"
+                        book_html += f'                <div class="toc-entry toc-level3"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
+                    elif current_level1:
+                        # If no direct parent but has a grandparent, treat as level 2
+                        subsection_counts[section_count] += 1
+                        numbered_heading = f"{section_count}.{subsection_counts[section_count]} {heading_text}"
+                        book_html += f'                <div class="toc-entry toc-level2"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
+                    else:
+                        # No parents at all, treat as level 1
+                        section_count += 1
+                        numbered_heading = f"{section_count}. {heading_text}"
+                        book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
+        else:
+            # Default to page-based TOC if no headings detected
+            for i, html_file in enumerate(existing_files):
+                page_match = re.search(r'page_(\d+)_fa', html_file)
+                if page_match:
+                    original_page = int(page_match.group(1))
+                    book_html += f'                <div class="toc-entry"><a href="#page-{i+3}">صفحه {original_page}<span class="toc-page">{page_number}</span></a></div>\n'
+                    page_number += 1
+        
+        # Close TOC section
+        book_html += """            </div>
+        </div>
+"""
+        
+        # Process and integrate each HTML file content
+        for i, html_file in enumerate(existing_files):
+            print(f"  Processing page {i+3}/{len(existing_files)}: {os.path.basename(html_file)}")
             
             try:
-                # Create PDF with the specified configuration
-                pdfkit.from_file(existing_files, output_pdf, options=options, configuration=config)
+                with open(html_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
                 
-                # Verify PDF was created
-                if os.path.exists(output_pdf):
-                    print(f"  PDF created successfully: {output_pdf}")
-                    return True
-                else:
-                    print("  Failed to create PDF")
-                    return False
+                # Get original page number
+                page_match = re.search(r'page_(\d+)_fa', html_file)
+                original_page = page_match.group(1) if page_match else str(i+1)
+                
+                # Extract content from the individual HTML
+                # Find the persian-translation div content
+                translation_match = re.search(r'<div\s+dir=[\'"]rtl[\'"]\s+class=[\'"]persian-translation[\'"]>(.*?)</div>', content, re.DOTALL)
+                text_content = ""
+                if translation_match:
+                    text_content = translation_match.group(1).strip()
+                
+                # Find original English text
+                original_text_match = re.search(r'<div\s+class=[\'"]original-text[\'"]><h3>Original Text</h3>(.*?)</div>', content, re.DOTALL)
+                original_text_content = ""
+                if original_text_match:
+                    original_text_content = original_text_match.group(1).strip()
+                
+                # Find image tags
+                image_match = re.search(r'<div\s+class=[\'"]page-images[\'"]>(.*?)</div>', content, re.DOTALL)
+                images_content = ""
+                if image_match:
+                    # Update image paths to be relative to the output directory
+                    images_content = image_match.group(0)
                     
-            except Exception as pdf_error:
-                print(f"  Error creating PDF: {str(pdf_error)}")
-                print("\nTo create PDF manually:")
-                print("1. Make sure wkhtmltopdf is installed correctly")
-                print(f"2. Run: \"{wkhtmltopdf_path}\" --enable-local-file-access {' '.join(existing_files)} {output_pdf}")
-                return False
-        else:
-            print(f"  Error: wkhtmltopdf not found at {wkhtmltopdf_path}")
-            print("  Please make sure wkhtmltopdf is installed in the correct location")
-            return False
+                    # Copy any images referenced into the output directory
+                    img_tags = re.findall(r'<img\s+src=[\'"]([^\'"]+)[\'"]', images_content)
+                    for img_src in img_tags:
+                        source_path = os.path.join(os.path.dirname(html_file), img_src)
+                        target_dir = os.path.join(output_dir, os.path.dirname(img_src))
+                        target_path = os.path.join(output_dir, img_src)
+                        
+                        # Create directories if they don't exist
+                        if not os.path.exists(target_dir):
+                            os.makedirs(target_dir)
+                        
+                        # Copy image file
+                        if os.path.exists(source_path):
+                            shutil.copy2(source_path, target_path)
+                
+                # Add page to book
+                book_html += f'        <!-- Page {i+3} -->\n'
+                book_html += f'        <div class="page" id="page-{i+3}">\n'
+                book_html += f'            <div class="page-content">\n'
+
+                # Find the current heading for this page
+                page_heading = ""
+                if toc_headings:
+                    # Get the original page number for this file
+                    orig_page_num = int(page_match.group(1)) if page_match else i+1
+                    
+                    # Find the most recent heading for this page
+                    current_heading = None
+                    current_level = 999  # Start with high number to catch any level
+                    
+                    # Sort headings by page and then level (to get most specific/nested heading)
+                    sorted_headings = sorted(toc_headings, key=lambda x: (x['page'], x['level']))
+                    
+                    for heading in sorted_headings:
+                        if heading['page'] <= orig_page_num and heading['level'] < current_level:
+                            current_heading = heading
+                            current_level = heading['level']
+                    
+                    # Add the heading as a breadcrumb/title if found
+                    if current_heading:
+                        clean_title = current_heading['text']
+                        page_heading = f'<div class="page-heading">{clean_title}</div>\n'
+
+                book_html += f'                {page_heading}'
+                book_html += f'                <div dir="rtl" class="persian-translation">{text_content}</div>\n'
+                
+                # Add original English text if available
+                if original_text_content:
+                    book_html += f'                <div class="original-text"><h3>Original Text</h3>{original_text_content}</div>\n'
+                
+                book_html += f'                {images_content}\n'
+                book_html += f'                <div class="page-number">صفحه -{i+3}-</div>\n'
+                book_html += f'            </div>\n'
+                book_html += f'        </div>\n'
+                
+            except Exception as e:
+                print(f"  Error processing {html_file}: {str(e)}")
+        
+        # Close HTML structure
+        book_html += """    </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Add line-numbers class to all pre elements if not already there
+            document.querySelectorAll('pre').forEach(block => {
+                if (!block.classList.contains('line-numbers')) {
+                    block.classList.add('line-numbers');
+                }
+                
+                // If language class is not specified, add 'language-clike' as default
+                let hasLanguageClass = false;
+                block.classList.forEach(className => {
+                    if (className.startsWith('language-')) {
+                        hasLanguageClass = true;
+                    }
+                });
+                
+                if (!hasLanguageClass) {
+                    block.classList.add('language-clike');
+                }
+                
+                // Ensure code elements inside pre also have the correct language class
+                const codeElement = block.querySelector('code');
+                if (codeElement) {
+                    if (!hasLanguageClass) {
+                        codeElement.classList.add('language-clike');
+                    } else {
+                        // Copy the language class from pre to code if code doesn't have it
+                        block.classList.forEach(className => {
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
+                                codeElement.classList.add(className);
+                            }
+                        });
+                    }
+                }
+            });
             
+            // Re-highlight all code blocks
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>"""
+        
+        # Save the combined book HTML
+        with open(output_html, 'w', encoding='utf-8') as f:
+            f.write(book_html)
+        
+        print(f"  HTML book created successfully: {output_html}")
+        return True
+    
     except Exception as e:
-        print(f"Error during PDF creation: {str(e)}")
+        print(f"Error during HTML book creation: {str(e)}")
         return False
 
-def extract_and_translate_pdf(pdf_path, api_key, limit=None):
+def extract_pdf_toc(pdf_path):
+    """Extract table of contents from PDF if available"""
+    try:
+        toc_entries = []
+        # Open PDF file with PyMuPDF (fitz)
+        doc = fitz.open(pdf_path)
+        
+        # Try to get the table of contents (outline)
+        toc = doc.get_toc()
+        
+        # Process each TOC item
+        for item in toc:
+            level, title, page = item
+            # Convert from PDF page count (0-based) to our page count (1-based)
+            page_number = page + 1
+            
+            # Clean up the title
+            clean_title = title.strip()
+            
+            # Add to our list of headings
+            toc_entries.append({
+                'text': clean_title,
+                'level': level,
+                'page': page_number
+            })
+        
+        doc.close()
+        return toc_entries
+    
+    except Exception as e:
+        print(f"Error extracting TOC from PDF: {str(e)}")
+        return None
+
+def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
     """Extract and translate a PDF file"""
     
     pdf_dir = os.path.dirname(pdf_path)
@@ -502,31 +1186,59 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     if not os.path.exists(output_dir_base):
         os.makedirs(output_dir_base)
     
-    # Define output PDF path in the output directory
-    output_pdf = os.path.join(output_dir_base, f"{file_base_name}_Farsi.pdf")
-    
-    # Create or rebuild directory for this book
-    temp_dir = os.path.join(pdf_dir, sanitized_name)
-    if os.path.exists(temp_dir):
-        print(f"Removing existing directory: {temp_dir}")
-        shutil.rmtree(temp_dir)
-    
-    os.makedirs(temp_dir)
-    print(f"Created directory: {temp_dir}")
-    
-    # Copy font files to output directory
-    fonts_copied = copy_font_assets(temp_dir)
-    if fonts_copied:
-        print("Font files copied successfully.")
+    # Create a subdirectory for this specific book
+    book_output_dir = os.path.join(output_dir_base, file_base_name)
+    if not os.path.exists(book_output_dir):
+        os.makedirs(book_output_dir)
+        print(f"Created output directory: {book_output_dir}")
     else:
-        print("Font file copying encountered issues.")
+        print(f"Using existing output directory: {book_output_dir}")
+    
+    # Define output HTML path in the book-specific output directory
+    output_html = os.path.join(book_output_dir, f"{file_base_name}_Farsi.html")
+    
+    # Create directory for this book if it doesn't exist, or keep existing one
+    temp_dir = os.path.join(pdf_dir, sanitized_name)
+    temp_dir_exists = os.path.exists(temp_dir)
+    
+    if not temp_dir_exists:
+        os.makedirs(temp_dir)
+        print(f"Created directory: {temp_dir}")
+    else:
+        print(f"Using existing directory: {temp_dir}")
+    
+    # Copy font files to output directory if needed
+    fonts_path = os.path.join(temp_dir, "fontiran.css")
+    fonts_copied = os.path.exists(fonts_path)
+    
+    if not fonts_copied:
+        fonts_copied = copy_font_assets(temp_dir)
+        if fonts_copied:
+            print("Font files copied successfully.")
+        else:
+            print("Font file copying encountered issues.")
+    
+    # Find existing translated HTML files to determine the last processed page
+    existing_html_files = glob.glob(os.path.join(temp_dir, "page_*_fa.html"))
+    processed_page_numbers = []
+    
+    for html_file in existing_html_files:
+        page_match = re.search(r'page_(\d+)_fa\.html', html_file)
+        if page_match:
+            processed_page_numbers.append(int(page_match.group(1)))
     
     # Initialize the lists of HTML files
     html_files = []
+    # Add existing HTML files to the list
+    html_files.extend(existing_html_files)
     
-    # 1. Extract text and images from PDF
-    extracted_pages = []
-    page_images = {}  # Dictionary to store images for each page
+    # Lists to store headings for table of contents
+    toc_headings = []
+    
+    # If we have TOC data from the PDF, use it
+    if pdf_toc:
+        toc_headings = pdf_toc
+        print(f"Using {len(toc_headings)} headings from PDF's table of contents")
     
     try:
         with open(pdf_path, 'rb') as pdf_file:
@@ -541,13 +1253,61 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                 pages_to_process = limit
                 print(f"Limited to {pages_to_process} pages out of {num_pages} pages")
             
-            # Extract text and images from each page and save to file
-            for page_num in tqdm(range(pages_to_process), desc="Extracting text and images", unit="page"):
+            # Check if all pages have been processed
+            if processed_page_numbers and len(processed_page_numbers) > 0:
+                # Sort HTML files by page number
+                html_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
+                
+                # Count the number of expected pages vs. processed pages
+                expected_pages = min(pages_to_process, num_pages)
+                processed_pages_in_range = sum(1 for p in processed_page_numbers if p <= expected_pages)
+                
+                # If all pages are processed but HTML book doesn't exist or failed to create
+                if processed_pages_in_range >= expected_pages:
+                    print(f"All {expected_pages} pages have already been translated.")
+                    
+                    if os.path.exists(output_html):
+                        print(f"HTML book already exists: {output_html}")
+                        return True
+                    else:
+                        print("Previous HTML book creation may have failed. Attempting to create HTML book from existing translations...")
+                        if create_html_book(html_files, output_html, book_output_dir, file_base_name, toc_headings):
+                            print(f"HTML book created: {output_html}")
+                            return True
+                        else:
+                            print("Failed to create HTML book from existing translations.")
+                            return False
+                else:
+                    # Continue from where we left off
+                    last_processed_page = max(processed_page_numbers) if processed_page_numbers else 0
+                    start_page = last_processed_page
+                    print(f"Resuming from page {start_page + 1} (found {len(processed_page_numbers)} processed pages out of {expected_pages})")
+            else:
+                # Start from the beginning
+                start_page = 0
+            
+            # 1. Extract text and images from PDF for unprocessed pages
+            extracted_pages = []
+            page_images = {}  # Dictionary to store images for each page
+            
+            # Extract text and images from each unprocessed page and save to file
+            for page_num in tqdm(range(start_page, pages_to_process), desc="Extracting text and images", unit="page"):
+                # Skip already processed pages
+                if page_num + 1 in processed_page_numbers:
+                    continue
+                
                 # Get page
                 page = pdf_reader.pages[page_num]
                 
                 # Extract text
                 text = page.extract_text()
+                
+                # Detect headings in the text only if we don't have TOC data from the PDF
+                if text and text.strip() and not pdf_toc:
+                    headings = detect_heading(text, page_num)
+                    if headings:
+                        # Add headings to the table of contents list
+                        toc_headings.extend(headings)
                 
                 # Output file path (numbered from 1)
                 output_file = os.path.join(temp_dir, f"page_{page_num + 1:04d}.txt")
@@ -574,12 +1334,19 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                         base_name = f"page_{page_num + 1:04d}"
                         html_file = os.path.join(temp_dir, f"{base_name}_fa.html")
                         
-                        # Create HTML contents
+                        # Skip if this file already exists
+                        if os.path.exists(html_file):
+                            if html_file not in html_files:
+                                html_files.append(html_file)
+                            continue
+                        
+                        # Create HTML with just images
                         page_html, _ = create_html_content(
                             "این صفحه فقط شامل تصاویر است.", # "This page contains only images"
                             base_name,
                             fonts_copied,
-                            images=images
+                            images=images,
+                            original_text="This page contains only images"
                         )
                         
                         # Save HTML file
@@ -605,6 +1372,13 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
         # Path for translated HTML file
         html_file = os.path.join(temp_dir, f"{base_name}_fa.html")
         
+        # Skip if this file is already translated
+        if html_file in existing_html_files or os.path.exists(html_file):
+            print(f"  Page {base_name} already translated, skipping")
+            if html_file not in html_files and os.path.exists(html_file):
+                html_files.append(html_file)
+            continue
+        
         try:
             # Read original text
             with open(txt_file, 'r', encoding='utf-8') as f:
@@ -627,7 +1401,8 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                     translated_text, 
                     base_name, 
                     fonts_copied,
-                    images=page_images_list
+                    images=page_images_list,
+                    original_text=original_text
                 )
                 
                 # Save HTML file
@@ -637,16 +1412,11 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                 html_files.append(html_file)
                 translated_files += 1
                 
-                # Prevent API rate limits
+                # Prevent API rate limits with a small pause between requests
                 time.sleep(1)
             else:
-                print(f"\n  Error translating {file_name}: {conversation}")
+                print(f"\n  Error translating {file_name}")
                 failed_files += 1
-                
-                # Handle rate limits
-                if "rate" in str(conversation).lower() or "quota" in str(conversation).lower():
-                    print("  Rate limit detected. Pausing for 60 seconds...")
-                    time.sleep(60)
         
         except Exception as e:
             print(f"\n  Error processing {file_name}: {str(e)}")
@@ -657,8 +1427,14 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
         base_name = f"page_{page_num + 1:04d}"
         html_file = os.path.join(temp_dir, f"{base_name}_fa.html")
         
+        # Skip if this file is already created
+        if html_file in html_files or os.path.exists(html_file):
+            if html_file not in html_files and os.path.exists(html_file):
+                html_files.append(html_file)
+            continue
+            
         # If this page has images but no text file was processed for it
-        if base_name in page_images and html_file not in html_files:
+        if base_name in page_images:
             images = page_images[base_name]
             
             # Create HTML with just images
@@ -666,7 +1442,8 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                 "این صفحه فقط شامل تصاویر است.", # "This page contains only images"
                 base_name,
                 fonts_copied,
-                images=images
+                images=images,
+                original_text="This page contains only images"
             )
             
             # Save HTML file
@@ -680,23 +1457,23 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     
     # Display translation summary
     print("\nTranslation Summary:")
-    print(f"  Total pages: {len(extracted_pages)}")
-    print(f"  Translated: {translated_files}")
-    print(f"  Errors: {failed_files}")
+    print(f"  Previously processed pages: {len(processed_page_numbers)}")
+    print(f"  Newly translated pages: {translated_files}")
+    print(f"  Translation errors: {failed_files}")
     print(f"  Pages with images: {len(page_images)}")
     
-    # After translation is complete, create PDF from HTML files
+    # Save the headings to a JSON file for later use
+    headings_file = os.path.join(temp_dir, "headings.json")
+    with open(headings_file, 'w', encoding='utf-8') as f:
+        json.dump(toc_headings, f, ensure_ascii=False, indent=2)
+    
+    # After translation is complete, create HTML book from HTML files
     if html_files:
-        # Create PDF from HTML files
-        if create_pdf_from_html_files(html_files, output_pdf, temp_dir):
-            print(f"Persian PDF created: {output_pdf}")
-            # Clean up temporary directory
-            print(f"Removing temporary files directory: {temp_dir}")
-            shutil.rmtree(temp_dir)
-            print("Only the translated PDF file remains in the output directory.")
+        if create_html_book(html_files, output_html, book_output_dir, file_base_name, toc_headings):
+            print(f"HTML book created: {output_html}")
             return True
         else:
-            print("Failed to create PDF. Keeping HTML files for manual review.")
+            print("Failed to create HTML book. Individual HTML files are preserved for manual review.")
             return False
     else:
         print("No HTML files were created. Translation failed.")
@@ -727,7 +1504,14 @@ def process_all_pdfs(books_dir, api_key, limit=None):
         print(f"Processing file: {os.path.basename(pdf_path)}")
         print(f"{'='*50}")
         
-        result = extract_and_translate_pdf(pdf_path, api_key, limit)
+        # First extract TOC/headings data from the PDF if possible
+        pdf_toc = extract_pdf_toc(pdf_path)
+        if pdf_toc:
+            print(f"Extracted {len(pdf_toc)} table of contents entries from PDF")
+        else:
+            print("No table of contents found in PDF, will use heading detection")
+        
+        result = extract_and_translate_pdf(pdf_path, api_key, limit, pdf_toc)
         
         if result:
             successful += 1
@@ -743,17 +1527,17 @@ def process_all_pdfs(books_dir, api_key, limit=None):
     print("="*30)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Extract, translate and convert PDF files to Persian')
-    parser.add_argument('--api-key', default="AIzaSyD1HS27l8i8N5jBnSCixhGH3sRiH81i9HQ", help='Gemini API key')
-    parser.add_argument('--books-dir', default=os.path.join(os.getcwd(), "books"), help='Directory containing PDF files')
-    parser.add_argument('--limit', type=int, help='Maximum number of pages to process from each book')
+    # Fixed configuration values
+    api_key = "AIzaSyD1HS27l8i8N5jBnSCixhGH3sRiH81i9HQ"
+    books_dir = os.path.join(os.getcwd(), "books")
     
-    args = parser.parse_args()
+    print(f"Using books directory: {books_dir}")
     
+    # Process all PDFs without any page limit
     process_all_pdfs(
-        books_dir=args.books_dir,
-        api_key=args.api_key,
-        limit=args.limit
+        books_dir=books_dir,
+        api_key=api_key,
+        limit=None
     )
     
     print("Processing completed.") 
