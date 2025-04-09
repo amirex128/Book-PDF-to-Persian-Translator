@@ -1,0 +1,30 @@
+2. The domain model
+$this ->container ->get('session' )->set(
+'currentOrderId' ,
+$orderId ->asString ()
+);
+2.8. Active Record versus Data Mapper
+So far, without mentioning it, we followed the Data Mapper design pattern14
+for storing entities. This means that we have an object, and when we want to
+store it, we give it to a repository, which then takes out the data and stores it in
+the database. A common alternative for storing entities is the Active Record
+design pattern15. If you use this pattern, the entity will be able to load itself
+from the database, and it can save and delete itself as well. Bringing in this
+extra functionality is usually achieved by extending the entity class from a
+class provided by the framework (see Listing 2.29).
+Listing 2.29. An Active Record entity fulfills repository tasks as well.
+final class Order extends ActiveRecordEntity
+{
+// ...
+}
+// We can create an order
+$order1 =new Order();
+// Save it to the database
+$order1 ->save ();
+// Delete it, if we like
+$order1 ->delete ();
+14Martin Fowler, “Patterns of Enterprise Application Architecture”, Addison-Wesley Profes-
+sional (2003).
+15Martin Fowler, “Patterns of Enterprise Application Architecture”, Addison-Wesley Profes-
+sional (2003).
+44

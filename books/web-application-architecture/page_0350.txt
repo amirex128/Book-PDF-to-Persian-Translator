@@ -1,0 +1,35 @@
+14. A testing strategy for decoupled applications
+incoming port adapter? Such an adapter process incoming communication,
+like HTTP requests, or invocations from the command line. In the case of an
+HTTP request, there is a lot of code involved in processing it, from the web
+server itself, to the PHP SAPI, to the web framework you use in your project,
+to the controller that the framework invokes. What makes all of this code
+pass the test is whether the port adapter eventually makes the correct call to
+the application core. As an example, take a look at the createOrderAction in
+Listing 14.5. This controller action processes the incoming HTTP request by
+copying the data from the request body into a DTO. It then passes the DTO to
+thecreateOrder() method of the ApplicationInterface (see Section 13.5).
+Listing 14.5. orderEbookAction() invokes ApplicationInterface::createOrder() .
+final class OrderController
+{
+private ApplicationInterface $application ;
+public function __construct (ApplicationInterface $application )
+{
+$this ->application =$application
+}
+public function orderEbookAction (Request $request ):Response
+{
+$orderId =$this ->application ->createOrder (
+CreateOrder ::fromRequestData (
+$request ->request ->all()
+)
+);
+// ...
+}
+}
+An adapter test for this code wouldn’t have to test the actual logic of creating
+the order. We only have to show that this code, provided an HTTP request,
+will make the right call to createOrder() , providing a CreateOrder object
+containing the expected data. This is a perfect case for a mock object. In-
+side a test we can create a mock for ApplicationInterface and define some
+330

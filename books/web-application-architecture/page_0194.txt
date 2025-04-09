@@ -1,0 +1,37 @@
+7. Time and randomness
+OrderId is a simple class which only offers methods that we actually need in
+our domain code, as opposed to the Uuid class. For now, it’s only a wrapper
+for the UUID string.
+For the creation date we can do the same thing: accept a date string in a given
+format. Behind the scenes we can still rely on DateTimeImmutable to deter-
+mine if the given date string represents an actual date and doesn’t just look
+like one (e.g. 2019-02-29 ). Listing 7.11 shows how Date uses DateTimeImmutable
+in its constructor.
+Listing 7.11. Date uses DateTimeImmutable to validate its constructor argu-
+ment.
+final class Date
+{
+private const DATE_FORMAT ='Y-m-d' ;
+private string $date ;
+private function __construct (string $date )
+{
+if(!DateTimeImmutable ::createFromFormat (
+self ::DATE_FORMAT ,
+$date
+)) {
+throw new InvalidArgumentException(
+sprintf (
+'Invalid date provided: %s. Expected format: %s' ,
+$date ,
+self ::DATE_FORMAT
+)
+);
+}
+$this ->date =$date ;
+}
+public static function fromString (string $date ):self
+{
+return new self( $date );
+}
+}
+174

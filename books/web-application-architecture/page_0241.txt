@@ -1,0 +1,35 @@
+8. Validation
+array $data ,
+string $key
+):?string {
+if(!isset ($data [$key ])) {
+return null ;
+}
+if(isset ($data [$key ])&&$data [$key ]=== '') {
+return null ;
+}
+return (string) $data [$key ];
+}
+}
+final class OrderEbook
+{
+use Mapping;
+// ...
+public static function fromRequestData (array $data ):self
+{
+return new self(
+self ::getString ($data ,'email' ),
+self ::getInt ($data ,'ebook_id' ),
+self ::getInt ($data ,'quantity' ),
+self ::getNonEmptyStringOrNull ($data ,'buyer_name' )
+);
+}
+}
+Should we write a unit test for fromRequestData() ? I think we don’t have to
+do that; fromRequestData() is a very simple method with a single execution
+path. The complexity has been moved to the helper functions and those defi-
+nitely should be unit-tested. Because many classes are going to rely on these
+helper functions, they should be safe to use and work in all possible cases.
+Summarizing the approach in this section: we started out with shapeless re-
+quest data, or at least, request data with an unclear shape. We defined a
+221

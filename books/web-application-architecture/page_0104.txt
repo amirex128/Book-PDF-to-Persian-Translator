@@ -1,0 +1,25 @@
+4. Application services
+This chapter covers:
+•Extracting an application service from a web con-
+troller
+•Making a use case independent from its surround-
+ing infrastructure
+•Introducing a parameter object to present the in-
+put data for the application service
+•Separating use case scenario steps into multiple
+services
+After all the work we’ve done in the first two chapters, the OrderController ’s
+orderEbookAction() is already in a great shape (see Listing 4.1).
+Listing 4.1. The current state of orderEbookAction() .
+public function orderEbookAction (Request $request ):Response
+{
+$ebook =$this ->container ->get('ebook_repository' )
+->getById ((int) $request ->get('ebook_id' ));
+$orderAmount =$ebook ->price ()->multipliedBy (
+(int) $request ->get('quantity' )
+);
+$orderRepository =$this ->container ->get('order_repository' );
+$orderId =$orderRepository ->nextIdentity ();
+$order =new Order(
+$orderId ,
+84

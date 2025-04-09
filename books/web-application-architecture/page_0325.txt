@@ -1,0 +1,36 @@
+13. Ports and adapters
+public function __construct (EbookOrderService $ebookOrderService )
+{
+$this ->ebookOrderService =$ebookOrderService ;
+}
+protected function execute (
+InputInterface $input ,
+OutputInterface $output
+):int {
+$orderId =$this ->ebookOrderService ->createOrder (
+new CreateOrder(
+(int) $input ->getArgument ('ebook_id' ),
+(int) $input ->getArgument ('quantity' ),
+$input ->getArgument ('email_address' )
+)
+);
+$output ->writeln (
+sprintf (
+'<success>Created a new order with ID %s' ,
+$orderId ->asString ()
+)
+);
+return 0;
+}
+}
+This level of decoupling guarantees that invoking an application service from
+a test scenario isn’t substantially different from invoking it from a web con-
+troller. In fact, the test code itself should be considered an adapter since it
+communicates directly with the port.
+Figure 13.3 shows the hexagon with several adapters of the port “for creating
+an order”.
+Incoming ports represent the intention of an actor to change something about
+the application’s state or to produce some other kind of effect with it. An-
+other intention could be to retrieve some information from the application.
+Actors may need a list of already created orders, or they want to know which
+305

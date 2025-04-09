@@ -1,0 +1,38 @@
+7. Time and randomness
+which uses mt_rand()e. This function produces numbers from a prede-
+fined sequence. If you don’t “seed” the function using mt_srand()f, it will
+produce seemingly random numbers. If you do seed it, it will always pro-
+duce the same sequence though. What do you think, should this code by
+considered infrastructure code too?g
+final class PseudoRandomNumber
+{
+private int $number ;
+private function __construct (int $number )
+{
+$this ->number =$number ;
+}
+public static function create (int $seed ):self
+{
+mt_srand ($seed );
+return new self(
+mt_rand ()
+);
+}
+}
+aCorrect answer: 1 (because it fetches the current time from the system clock)
+and 2 (for the same reason). When you provide a specific value for the second
+argument of date() , it will use that value instead of the return value of time() .
+checkdate() also doesn’t need the current time to determine if a given date is
+correct.
+bhttps://advwebapparch.com/php-time-function
+chttps://advwebapparch.com/php-date-function
+dhttps://advwebapparch.com/php-checkdate-function
+ehttps://advwebapparch.com/php-mt_rand-function
+fhttps://advwebapparch.com/php-mt_srand-function
+gAdmitted, this is a bit of a grey area. I would say it isn’t infrastructure code, since
+it doesn’t require a special context to run in, nor does it rely on external depen-
+dencies. One issue is that the code modifies global state by calling mt_srand() ,
+which will influence other calls to mt_rand() . However, the object itself behaves
+in a completely predictable way, because the seeding is explicit here. Given the
+seed is the same, it will also produce the same object.
+188

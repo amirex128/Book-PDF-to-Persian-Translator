@@ -1,0 +1,34 @@
+8. Validation
+numberOfAvailableBooks() gives a useful answer in 99.9999% of all cases
+and it doesn’t get in your way. If your system deals with many customers
+using the system at the same time, ordering the same thing from it, it may
+become a problem though. If that’s the case, then exact comparison between
+two quantities like we have been doing so far is not be the right approach.
+There are better options though. Some systems implement a fuzzy compari-
+son; they don’t assume that a query function like numberOfAvailableBooks()
+will be able to provide an exact answer. Other systems accept any order that
+comes in and process it later. This of course influences the user experience.
+The user only gets a preliminary answer: “Yes, we’re going to process your
+order, please wait until we have the definitive answer for you.” If the odds
+are very small that an order fails because people order the same thing at the
+same time, the system might also give the customer a “yes” anyway, just to
+keep them happy. In the unlikely case that the product can’t be delivered af-
+ter all, they will talk to the customer and find out how to proceed. Maybe the
+customer gets a discount on their next purchase, maybe they find an alter-
+native product, and so on. In these cases it’s better to be friendly and help-
+ful towards your users than to throw errors when the user wasn’t expecting
+them.
+Given that using impure query functions may not work very well in a valida-
+tion process, I think a good rule of thumb would be: when validating input
+data, only use pure functions. It means that validation itself, if seen as a
+function, becomes a pure function itself. If you validate the data now and
+it’s valid, it should still be valid when you validate it again. Likewise, if it’s
+invalid, the next time you validate the data, it should also be invalid.
+In all other situations, you may either stick with validation and remain con-
+scious of the fact that it’s not ideal. Or you could redesign the system to deal
+with issues in other ways. Your strategy could be that instead of preventing
+certain situations, you aim to recover from them.
+8.6. Creating and validating command objects
+In the beginning of this chapter we’ve looked at various ways to validate in-
+put data by looking at it. We didn’t yet consider the question: what if the data
+215

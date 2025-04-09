@@ -1,0 +1,34 @@
+8. Validation
+);
+}
+}
+final class OrderPhysicalBookService
+{
+private StockRepository $stockRepository ;
+public function order (
+string $bookId ,
+int $quantity
+/* ... */
+):OrderId {
+// ...
+if($quantityAvailable <$quantity ) {
+throw CouldNotOrderPhysicalBook
+::becauseInsufficientStockLevels ();
+}
+// ...
+}
+}
+Finally we’d want to show the error message to the user. In order to do that
+we’d have to catch it in a place where we know who the user is and how we
+want to talk to them. This means we should catch the exception inside the
+controller and turn the error message into a form error. Listing 8.16 shows
+how to do that.
+Listing 8.16. Turning the exception into a form error.
+public function orderPhysicalBookAction (Request $request ):Response
+{
+$formErrors =[];
+// ...
+try {
+$this ->orderPhysicalBook ->order (
+$request ->get('book_id' ),
+212

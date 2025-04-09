@@ -1,0 +1,34 @@
+7. Time and randomness
+involved, and the APIs they offer to their clients.3These value objects will
+attract useful behaviors that are specific to the domain of your application.4
+7.4. Improving the factories
+The result of introducing value objects with named constructors that accept
+a string and won’t need IO is that the unit test and the subject-under-test both
+are no longer using IO, as shown in Listing 7.12.
+Listing 7.12. Now that we have custom value objects, OrderTest no longer
+needs IO.
+/**
+* @test
+*/
+public function it_can_be_created ():void
+{
+$order =new Order(
+OrderId ::fromString ('77d69702-e3b4-4af5-b40a-c9981d483880' ),
+Date ::fromString ('2019-07-09' )
+);
+// ...
+}
+However, when the Order entity is going to be used in production, the ap-
+plication service that creates it needs to provide a truly unique ID, and the
+actual current time. Since, again, determining the current time or produc-
+ing randomness are service responsibilities, we need to have some services
+that can create OrderId and Date objects for the application service. In Chap-
+ter2we already saw how this can be solved for the OrderId : by adding a
+nextIdentity() method to the OrderRepository interface. Listing 7.13 shows
+once more how it’s done.
+3Read more about object design techniques, like using named constructors, in my book “Ob-
+ject Design Style Guide”, Manning, 2019.
+4Ross Tuck provides some more suggestions regarding the use of value objects for dates
+and times in “Precision Through Imprecision: Improving Time Objects”, https://
+advwebapparch.com/precision-through-imprecision .
+176

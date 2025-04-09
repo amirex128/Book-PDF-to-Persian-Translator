@@ -1,0 +1,38 @@
+14. A testing strategy for decoupled applications
+rely on specific behavior of one of the implementations. The test methods
+should only call methods that are defined on the interface. This guarantees
+that the implementations follow the Liskov Substitution Principle, i.e. they
+can seemingly act as replacements for each other.
+For repositories a contract test is the right kind of test to write. For other ser-
+vices, like the VatRateProvider , it may not work very well. The difference is
+that this service just needs to provide some kind of answer, but we can’t really
+define in a contract what a good answer is, other than that it should be an an-
+swer of the right type, in this case VatRate . But this is already guaranteed at
+the language level so it doesn’t make sense to write a test to verify that imple-
+mentations of VatRateProvider return an instance of VatRate . If they don’t,
+the “compiler” will complain. What would actually be useful is to test that a
+specific implementation like VatRate -ProviderUsingVatApiDotCom is able to
+communicate correctly and effectively with the remote API of vatapi.com .
+We already talked about testing this class in Section 6.4but Listing 14.4 re-
+peats the (slightly modified) example we discussed there.
+Listing 14.4. Integration tests for VatRateProviderUsingVatApiDotCom .
+final class VatRateProviderUsingVatApiDotComTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_provides_the_dutch_vat_rate ():void
+{
+$provider =new VatRateProviderUsingVatApiDotCom(
+new VatApi(
+'TEST_API_KEY' ,
+new HttpClient(
+'https://vatapi.com'
+)
+)
+);
+self ::assertEquals (
+VatRate ::fromInt (21),
+$provider ->vatRateForSellingEbooksInCountry ('NL' )
+);
+327

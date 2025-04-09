@@ -1,0 +1,32 @@
+11. Key design patterns
+11.2.5. Record domain events
+Keep an internal record of Domain events that have happened to the entity,
+like “Order was created”, “Order was cancelled”, etc. Domain events are sim-
+ple immutable objects which are named after the event they represent, e.g.
+OrderWasCreated ,OrderWasCancelled , etc. After saving the entity, it should
+be possible to retrieve a collection of these event objects so you can dispatch
+them and let other parts of the application respond to them. Listing 11.4
+shows a simple setup for recording events and releasing them.
+Listing 11.4. Keeping track of internally recorded domain events in a private
+array .
+final class OrderWasCancelled
+{
+private OrderId $orderId ;
+public function __construct (OrderId $orderId )
+{
+$this ->orderId =$orderId ;
+}
+}
+final class Order
+{
+private array $events =[];
+// ...
+public function cancel ():void
+{
+// ...
+$this ->events []=new OrderWasCancelled( $this ->id);
+}
+public function releaseEvents ():array
+{
+$events =$this ->events ;
+251

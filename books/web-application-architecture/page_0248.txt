@@ -1,0 +1,29 @@
+9. Conclusion
+with. That’s because the code still contains many infrastructural details. A
+use case may be inseparable from the web controller that invokes it. The use
+of service locators and the likes prevents code from running in isolation, or
+in a different context. Calls to external services require the external service
+to be available when we want to locally test our code. And so on…
+Figure 9.2. Core code is not strictly separated from infrastructure code.
+If that’s the case, user code consists of a mix of infrastructure code and core
+code. Figure 9.2shows what this looks like. When I look at this diagram, I
+immediately feel the urge to push the bits of infrastructure code to the sides.
+Where they belong, I’d say, because infrastructure code is the code that con-
+nects core code to the outside world so it might as well live as close the outside
+world as possible.
+Figure 9.3. After defragmenting the user code, we can push even more in-
+frastructure code to the sides, and keep only core code in the mid-
+dle.
+What remains in the middle, after “defragmenting” the user code is only core
+code (Figure 9.3). This is code that can be executed without relying on any
+actual infrastructure, and without making any connection to the world sur-
+rounding the application. No network, no database, no file system, etc. As
+we’ve seen in the previous chapters, this is great for testing (see also Chap-
+ter14).
+Completely isolated core code allows you to test the use cases of your appli-
+cation in a very early stage of development. You can prove that the applica-
+tion correctly implements its use case scenarios, without setting up routing
+for your web application, and without running schema migrations on any
+database. This is great because it allows you to work on your use cases from
+the start of the project, and collect design feedback, improve user stories, etc.
+228

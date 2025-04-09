@@ -1,0 +1,27 @@
+8. Validation
+This chapter covers:
+•Addressing validation concerns in code that sep-
+arates core from infrastructure
+•Making a distinction between user-oriented val-
+idation and entity-level data protection
+•Using exceptions instead of validating up-front
+•Reducing the amount of validation code
+I had been separating core from infrastructure code for quite some time. Yet,
+there was one thing that didn’t have an obvious place in this new structure:
+validation. I first tried to decide if validation logic is something that should
+survive changes in the infrastructure. Doing the same thought experiment
+we did earlier: if I would migrate from a web application to a CLI application,
+would input data still have to be validated? Well, of course. There needs to
+be some kind of protective mechanism to ensure that the application doesn’t
+accept bad or inconsistent data. Also, if I change the technical solution I use
+for saving my data (e.g. when I switch to a document database), would I still
+be able to protect the consistency of this data? Imagine not being able to rely
+on foreign key constraints or unique indexes; then there has to be some other
+way in which the application core can guarantee data consistency.
+Then again, if my web application would become a CLI application, I guess
+the user interactions would become quite different. Instead of showing an
+HTML form with error messages for every bad input, it would probably be
+sufficient to show only the first error, let the user fix the command-line ar-
+guments and try again. If instead I would rewrite my web controllers to
+become API endpoints, I’d accept a JSON request, and return a list of JSON-
+191

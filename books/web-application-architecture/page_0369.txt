@@ -1,0 +1,30 @@
+14. A testing strategy for decoupled applications
+Feature: Ordering an e-book
+Scenario: the customer receives an order confirmation email
+When a customer creates an order for an e-book
+Then they should receive an order confirmation email
+Of course, the scenario itself doesn’t test anything. It’s mainly useful to estab-
+lish a shared understanding between domain experts and software develop-
+ers.
+“Seems interesting, where can I learn more?”
+The practice of describing application features using high-level scenarios
+that don’t zoom in on technology, is known as Specification by Example, Ac-
+ceptance Test-Driven Development, or Behavior-Driven Development. I’m
+sure there are good reasons to make a distinction between each of these
+approaches, but I just wanted to provide a few names that might help you
+find more information about it. I can recommend the following books on
+the topic:
+1.The BDD Books series by Gáspár Nagy and Seb Rosea
+2.Gojko Adzic, “Specification by Example”, Manning Publications (2011)
+ahttps://advwebapparch.com/bdd-books
+In order to use the scenario as an automated test, we have to write some code
+for every step in the scenario. This code is called a step definition, and the
+test runner will match each step with a step definition in a so-called Context
+class. Listing 14.21 shows an example that uses Behat as test runner.
+Listing 14.21. Step definitions in the OrderContext class.
+use Behat\Behat\Context\Context;
+use PHPUnit\Framework\Assert;
+final class OrderContext implements Context
+{
+private TestServiceContainer $container ;
+349

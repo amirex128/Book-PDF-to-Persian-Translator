@@ -1,0 +1,33 @@
+2. The domain model
+{
+$this ->entityManager ->persist ($order );
+$this ->entityManager ->flush ();
+}
+}
+As you can see in these code samples, it doesn’t take a lot of work to install and
+use an ORM to save an entity to the database. And yes, it might save you some
+time, and potentially many lines of code, but it may also get you into trouble.
+Personally I’ve spent a lot of time trying to figure out how or why something
+didn’t work, or why Doctrine suddenly had to do so many queries. It also
+happened more than once that I found out something was broken when it
+was already running in production. The problem is not Doctrine ORM itself,
+but using generic abstractions. Hiding away so many implementation de-
+tails and so much “magic” behind a single abstract EntityManagerInterface
+means you’ll run into trouble sooner or later. Having said that, there are also
+several advantages to using a popular ORM, like:
+1.Extensive documentation, online examples, blog posts, questions and
+answers on Stack Overflow, etc.
+2.Automated solutions for common problems like database migrations,
+fixture loading, etc.
+In my experience, it’s okay to use an ORM if you can stick to the following
+rules:
+1.Only use simple mapping configuration; no table inheritance, “embed-
+dables”, custom types, etc.7
+2.Stick to one-to-many associations.
+3.Reference entities by their ID.
+4.Don’t jump from entity to entity using association fields.
+It’s not a coincidence that these rules have much in common with the rules
+for “effective aggregate design” as described by Vaughn Vernon8. We’ll get
+7https://advwebapparch.com/doctrine-orm-and-ddd-aggregates
+8https://advwebapparch.com/effective-aggregate-design
+29

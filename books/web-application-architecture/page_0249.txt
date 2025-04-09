@@ -1,0 +1,30 @@
+9. Conclusion
+You won’t have to spend an entire Sprint Zero on choosing and setting up all
+the infrastructure. You won’t have to find out that you’ve built the wrong
+thing when most of the development budget has already been spent. You
+won’t regret that you chose MongoDB instead of MySQL because you don’t
+have to decide on day 1 of the project.
+9.2. A summary of the strategy
+What does it mean to push infrastructure code to the sides ? In the previ-
+ous chapters we’ve already seen many refactoring steps that helped us do
+it. All those “tactical” refactoring techniques can be summarized by a simple
+strategy. Separating core code from infrastructure code can be achieved by
+applying the following principles:
+•Use dependency injection everywhere, let services depend on abstrac-
+tions only
+•Make use cases independent of the delivery mechanism of their input
+The result will be that none of the core code depends on infrastructure code
+on either side. At the same time, any infrastructure code would be able to
+call core code. There are no special requirements for doing so. Both ingredi-
+ents combined result in code that is completely portable . It provides a clear
+view on the application’s use cases, without any distortions caused by infras-
+tructural concerns. It can be easily tested, in complete isolation, without any
+special setup.
+9.2.1. Use dependency injection and inversion everywhere
+Dependency injection means that services will get everything they depend on
+(other services, as well as configuration values) injected as constructor argu-
+ments. Dependency inversion means that services depend on abstractions,
+instead of concrete classes1.
+1Robert C. Martin, “Agile Software Development, Principles, Patterns, and Practices”, Pren-
+tice Hall (2003).
+229

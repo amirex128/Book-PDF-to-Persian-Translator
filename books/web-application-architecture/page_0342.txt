@@ -1,0 +1,32 @@
+14. A testing strategy for decoupled applications
+{
+// ...
+/**
+* @test
+*/
+public function it_cant_be_cancelled_if_it_has_already_been_paid ():void
+{
+$order =$this ->aPaidOrder ();
+$this ->expectException (CouldNotCancelOrder ::class );
+$order ->cancel ();
+}
+// ...
+/**
+* @test
+*/
+public function you_can_modify_the_external_reference ():void
+{
+$order =$this ->aNewOrder ();
+$order ->setPaymentReference ('ABC123' );
+self ::assertArrayContainsObjectOfType (
+ExternalReferenceWasModified ::class ,
+$order ->releaseEvents ()
+);
+}
+// ...
+}
+Value objects are also good candidates for unit-testing. By definition they are
+immutable objects without side-effects. Listing 14.2 shows some examples.
+Listing 14.2. Unit-testing a value object
+use PHPUnit\Framework\TestCase;
+322

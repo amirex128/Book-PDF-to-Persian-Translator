@@ -1,0 +1,33 @@
+4. Application services
+easy to recognize distinct steps in these methods, and you’ll have to rearrange
+and rewrite parts of the code to make the steps more clear.
+In the case of the orderEbookAction() the steps are fairly recognizable. We’ve
+extracted the first step (saving the order), now let’s take a look at the second
+step: sending an order confirmation email (see Listing 4.11).
+Listing 4.11. After creating a new order, we also send a confirmation email.
+public function orderEbookAction (Request $request ):Response
+{
+// ...
+$orderId =$this ->container ->get('ebook_order_service' )
+->create ($createOrder );
+$this ->container ->get('session' )->set(
+'currentOrderId' ,
+$orderId ->asString ()
+);
+$message =(new Swift_Message( 'Your Order' ))
+->setFrom ($this ->container ->getParameter ('system_email_address' ))
+->setTo ($request ->request ->get('email_address' ))
+->setBody (
+$this ->container ->get('twig' )
+->render ('email/order_confirmation.html.twig' )
+);
+$this ->container ->get('mailer' )->send ($message );
+return new Response( /* ... */ );
+}
+Should we keep this code in the controller? No, because whenever somebody
+creates an order, they should receive a confirmation email too. The one and
+only way to create an order is by calling EbookOrderService::create() . But
+the code for sending the email is in orderEbookAction() . So if there will ever
+be a second place where EbookOrderService::create() gets called, the cus-
+tomer won’t receive that email.
+98

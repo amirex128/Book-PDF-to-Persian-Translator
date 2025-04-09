@@ -1,0 +1,24 @@
+9. Conclusion
+The “inversion” part of dependency inversion indicates that the normal de-
+pendency direction gets inverted . Figure 9.4illustrates the normal depen-
+dency direction, before applying dependency inversion. The EbookOrderService
+depends on OrderRepositoryUsingSql . This is a concrete class which knows
+how to store orders in a relational database. The dependency arrow points
+from left to right, since the service depends on the repository.
+Figure 9.4. EbookOrderService uses OrderRepositoryUsesSql as a depen-
+dency, and gets it injected as a constructor argument.
+Figure 9.5shows what happens when we introduce a proper abstraction for
+the concrete OrderRepositoryUsingSql class. The abstraction is called
+OrderRepository and it’s an interface. If the OrderRepositoryUsingSql is up-
+dated to implement the OrderRepository interface the EbookOrderService
+can start depending on the interface instead of the concrete class. In the dia-
+gram you can see that there’s no longer an arrow pointing from EbookOrderService
+to
+OrderRepositoryUsingSql . We have successfully inverted this dependency.
+Figure 9.5. After applying Dependency inversion ,EbookOrderService no
+longer depends on OrderRepositoryUsingSql .
+This gives us great flexibility. We can change the implementation of the
+OrderRepository without getting in the way of the EbookOrderService . As
+long as the modified implementation correctly implements the contract de-
+fined by the interface, everything will be fine. In fact, we can even completely
+230

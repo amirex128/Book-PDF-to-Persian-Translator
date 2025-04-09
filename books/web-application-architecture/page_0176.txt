@@ -1,0 +1,35 @@
+6. External services
+/**
+* @test
+*/
+public function it_does_a_vat_check_for_TBE_sold_in_NL ():void
+{
+$vatApi =new VatApi( 'TEST_API_KEY' );
+$result =$vatApi ->vatRateCheck (
+RateType ::tbe(),
+'NL' ,
+null
+);
+self ::assertEquals (
+VatRate ::fromInt (21),
+$result ->rate ('telecom' )
+);
+}
+}
+The integration test for VatApi is more low-level, since it’s closer to the actual
+API call itself. This allows you to test more and different variations. For in-
+stance, here you can try different arguments for $countryCode , or$rateType .
+You can test the mechanism for the “fallback rate type”. And you can make
+VatApi more robust, by preventing invalid arguments, like an unknown coun-
+try code, or a bad API key.
+“Won’t these tests be slow, and brittle?”
+The problem with integration tests is that they fail for reasons that are
+beyond your control. The network may not be reliable, the vatapi.com
+servers will be offline sometimes, someone may one day deploy a broken
+version of the API, and so on. Once again this proves the need for as many
+stable (unit) tests as possible. But you still have to have these integration
+tests that sometimes fail. There are different options, some of which may
+be to replace the actual external service with a look-alike service that runs
+locally and more reliably. Another option would be to automatically retry
+these tests, or allow them to fail without failing the entire build. You can ac-
+156

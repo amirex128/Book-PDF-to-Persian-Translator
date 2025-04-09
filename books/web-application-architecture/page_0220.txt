@@ -1,0 +1,34 @@
+8. Validation
+{
+$this ->emailAddress =$emailAddress ;
+}
+public function addLine (EbookId $ebookId , Quantity $quantity ):void
+{
+$this ->lines []=new Line( $ebookId ,$quantity );
+}
+}
+final class Line
+{
+private EbookId $ebookId ;
+private Quantity $quantity ;
+public function __construct (EbookId $ebookId , Quantity $quantity )
+{
+$this ->ebookId =$ebookId ;
+$this ->quantity =$quantity ;
+}
+}
+There’s a lot more to say about objects and how they should protect their own
+state. I’ve written about it in another book called Object Design Style Guide
+(Manning, 2019). For now let’s summarize it as: an object should ensure that
+its data is never incomplete, invalid, or inconsistent.
+•Incomplete means that data is missing that really should be there to per-
+form even the most basic tasks. For instance data would be incomplete
+if we’d have an amount, but no currency.
+•Invalid means that the data is of the right type, but its value does not
+have the desired qualities. For example: we have a currency ( string ),
+but it isn’t a known currency (valid ones are 'EUR' ,'USD' , etc.).
+•Inconsistent means there are two or more pieces of data that can’t co-
+exist. For instance, the order is marked for payment by bank transfer,
+yet it also has a value for the credit card holder.
+Besides protecting its current state, an object also has a responsibility to pre-
+200

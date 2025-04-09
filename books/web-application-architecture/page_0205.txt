@@ -1,0 +1,33 @@
+7. Time and randomness
+happens if we do write a test for ClockUsingSystemClock . Listing 7.21 shows
+a first try:
+Listing 7.21. A test for ClockUsingSystemClockTest .
+final class ClockUsingSystemClockTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_returns_the_current_time ():void
+{
+$clock =new ClockUsingSystemClock();
+$actualCurrentTime =new DateTimeImmutable( 'now' );
+self ::assertEquals (
+$actualCurrentTime ,
+$clock ->currentTime ()
+);
+}
+}
+Unfortunately, this test will never pass. That’s because part of the timestamp
+created by DateTimeImmutable instance is the number of microseconds that
+have passed within the current second. And between creating an instance
+inside the test and creating another instance in the ClockUsingSystemClock
+class there will always be a small difference. So these two instances will
+never be equal. However, for the usefulness of the class it doesn’t really mat-
+ter what the microseconds part is. So instead of doing a full comparison, we
+might just “round” the timestamp to seconds, as is shown in Listing 7.22.
+Listing 7.22. Comparing timestamps rounded to seconds
+$clock =new ClockUsingSystemClock();
+$actualCurrentTime =new DateTimeImmutable( 'now' );
+self ::assertEquals (
+$actualCurrentTime ->format ('U'),
+185

@@ -1,0 +1,35 @@
+14. A testing strategy for decoupled applications
+interface Mailer
+{
+public function sendOrderConfirmationEmail (
+OrderId $orderId
+):void;
+}
+final class SendOrderConfirmationEmail
+{
+private Mailer $mailer ;
+public function __construct (Mailer $mailer )
+{
+$this ->mailer =$mailer ;
+}
+public function whenOrderWasCreated (
+OrderWasCreated $event
+):void {
+$this ->mailer ->sendOrderConfirmationEmail (
+$event ->orderId ()
+);
+}
+}
+Eventually that sendOrderConfirmationEmail() method may need more in-
+put, but an OrderId should be fine for now.
+In the test we’d like to make some kind of assertion to check that the Mailer
+was called. We could do that by making a mock object for the Mailer service
+and inject it into the service container (see Listing 14.16 ).
+Listing 14.16. Injecting a mock Mailer .
+final class TestServiceContainer
+{
+private ?Mailer $mailer =null ;
+public function setMailer (Mailer $mailer ):void
+{
+$this ->mailer =$mailer ;
+345

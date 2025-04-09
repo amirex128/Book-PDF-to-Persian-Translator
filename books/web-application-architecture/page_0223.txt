@@ -1,0 +1,31 @@
+8. Validation
+method now demonstrates where these values come from and that they be-
+long together (Listing 8.8).
+Listing 8.8. Passing the Ebook read model to the Order entity.
+// ...
+$order ->addLine ($ebook ,$quantity );
+// inside the `Order` class:
+public function addLine (Ebook $ebook , int $quantity ):void
+{
+$this ->lines []=new Line(
+$ebook ->ebookId (),
+$ebook ->price (),
+$quantity
+);
+}
+However, we should be aware that by doing so we may let Order in on too
+many details about Ebook s. This depends on how much data the Ebook read
+model exposes. If the read model is designed for this specific use case only,
+there’s no real danger. In that case the read model only exposes what this
+particular client needs. If the read model is also used in other places, it may
+expose too much irrelevant information. That may still not be a big problem,
+but keep in mind that the fewer methods you expose to a client, the more
+flexible your design will be.
+One thing you shouldn’t do is pass an entire entity to another object. Rela-
+tions should be established by ID, not by object reference. Sharing an entity
+exposes all the entity’s modifier methods to clients that don’t intend to (or
+shouldn’t intend to) make changes to it.
+8.3. Form validation
+So far we’ve been looking at ways to prevent bad data from entering our do-
+main objects. By now we can be pretty sure that all the data that we keep in-
+203

@@ -1,0 +1,32 @@
+3. Read models and view models
+repository from the read model repository implementations.
+3.6. Using view models for APIs
+In the previous section we’ve been discussing the use of view models in HTML
+templates. In that case there will be some code looping over and echo -ing the
+return values of some of the view model’s getters. This assumes that your
+application’s end user is an actual person using a web browser to visit your
+web application’s pages. Other types of users need the data to be in differ-
+ent forms. A command-line user needs plain text information, some remote
+system might want to speak SOAP with your application.
+Let’s find out how that works in our application. Say we want to expose the
+list of available ebooks as a JSON-encoded array of e-book objects. Inside the
+controller we could loop over the array of Ebook view model objects returned
+bylistAvailableEbooks() and turn it into a JSON-serializable data structure,
+like an array of associative arrays (see Listing 3.18).
+Listing 3.18. Returning a list of available e-books as JSON.
+final class EbookApiController
+{
+private Ebooks $ebooks ;
+public function __construct (Ebooks $ebooks )
+{
+$this ->ebooks =$ebooks ;
+}
+public function listAvailableEbooksAction ():Response
+{
+$data =[];
+foreach ($this ->ebooks ->listAvailableEbooks ()as$ebook ) {
+$data []=[
+'ebookId' =>$ebook ->ebookId (),
+'title' =>$ebook ->title (),
+// ...
+79

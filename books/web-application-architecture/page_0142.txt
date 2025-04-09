@@ -1,0 +1,38 @@
+5. Service locators
+public function it_sends_an_ip_confirmation_email ():void
+{
+$user =new User( /* ... */ );
+$ip ='123.234.123.234' ;
+$sender ='info@mycompany.com' ;
+$mailer =$this ->createMock (Mailer ::class );
+$mailer ->expects ($this ->once ())
+->method ('send' )
+->willReturn (
+function (Message $message )use ($user ,$ip,$sender ) {
+$this ->assertEquals (
+$user ->emailAddress (),
+$message ->to()
+);
+$this ->assertEquals ($sender ,$message ->from ());
+$this ->assertContains ($message ->text (), $ip);
+}
+);
+$translator =$this ->createMock (Translator ::class );
+$translator ->expects ($this ->once ())
+->method ('trans' )
+->willReturn (
+function ($message ,$replacements ,$locale )use ($user ) {
+$this ->assertEquals ($locale ,$user ->locale ());
+return $message .' (translated)' ;
+}
+);
+$service =new SendIpConfirmationEmail(
+$mailer ,
+$sender ,
+$translator
+);
+$service ->send ($user ,$ip);
+}
+The number of lines of code is roughly the same in both tests. But the latter
+has a few advantages.
+122

@@ -1,0 +1,30 @@
+11. Key design patterns
+$order ->changeDeliveryAddress (
+$command ->deliveryAddress ()
+);
+// ...
+}
+}
+This approach has several advantages:
+1.There’s less noise inside the application service because it doesn’t have
+to deal with all the type conversions itself.
+2.The getters on the command DTO can be called multiple times inside
+the application service. There’s no need to duplicate the instantiation
+logic.
+A possible downside is that you could accidentally trigger a domain-level ex-
+ception inside the controller by calling one of those getters. In practice I find
+that this doesn’t get in the way and is just something to be aware of.
+11.4.5. Add contextual information as extra arguments
+Contextual data like the current user’s ID, data from the current HTTP re-
+quest, etc. should not be fetched when needed, nor should it be injected as
+constructor arguments of the application service. Instead, contextual infor-
+mation should always be provided as method arguments (as discussed in Sec-
+tion 5.5). If you want to store the current user’s ID on the Order entity, make
+sure to pass it as an argument to the CreateOrderService (see Listing 11.15 ).
+Listing 11.15. Passing contextual information as part of the command DTO.
+final class OrderService
+{
+// ...
+public function changeDeliveryAddress (
+ChangeDeliveryAddress $command
+263

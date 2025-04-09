@@ -1,0 +1,35 @@
+6. External services
+private const TBE ='TBE' ;
+private string $rateType ;
+private function __construct (string $rateType )
+{
+$this ->rateType =$rateType ;
+}
+public static function goods ():self
+{
+return new self(self ::GOODS );
+}
+/**
+* TBE stands for "Telecommunications, broadcasting,
+* and electronic services"
+*/
+public static function tbe():self
+{
+return new self(self ::TBE);
+}
+}
+But before we accidentally develop an entire SDK for vatapi.com , we should
+take a step back and look at the overall design as it is now. We have created a
+VatApi class which provides a more-or-less object-oriented wrapper for the
+remote vatapi.com . Indeed, we could now use VatApi as a dependency in
+EbookOrderService and leave most of the low-level details to the VatApi class
+(see Listing 6.6).
+Listing 6.6. The EbookOrderService could use the VatApi service.
+final class EbookOrderService
+{
+// ...
+private VatApi $vatApi ;
+public function __construct (
+// ...
+VatApi $vatApi
+142

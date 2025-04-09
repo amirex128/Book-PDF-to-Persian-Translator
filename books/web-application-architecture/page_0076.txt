@@ -1,0 +1,37 @@
+3. Read models and view models
+intention to manipulate it and save it. But now we’ve started using Ebook in
+thecreateOrderAction() where we don’t want to change anything about it
+at all. We just want to get a bit of information from it, and for this reason
+we had to add the getPrice() method. However, by retrieving the full Ebook
+object, we gain access to all these methods that can change the object’s state,
+likechangePrice() and hide() . It’s generally a smart idea to limit the num-
+ber of methods that a client of an object has access to. Even more so, if those
+methods have side-effects like state changes. In this situation too, we should
+probably not use the Ebook entity when we only need information but never
+want to change it.
+The other issue is related to reusing objects in general, not just entities. If you
+start reusing an object in different locations and for different reasons, the
+object starts to play too many roles at the same time. The more roles an object
+has to play, the more methods and therefore lines of code it will contain. Soon
+it becomes too big to read the code and understand what it does, let alone
+to make changes to it. When the methods are calling each other, or when
+they rely on the same object properties, it will be really difficult to change
+anything about it. Since many clients are now using the object, they rely on
+its behavior to stay the same. It will be difficult to assess whether a change
+is safe to make, or if it will break one of its clients which is still relying on
+some undocumented existing behavior. Such an object becomes resistant to
+change, which is a bad quality for objects in general. You probably recognize
+this chain of events: it’s how legacy code is created.
+Of course, without any reuse, it would be really hard to accomplish anything
+at all as a software developer. But at least keep track of the intended use of
+objects, and watch for tension in the design. When two clients use an object,
+soon it will attract behavior that’s only relevant to one its clients. Or a client
+may gain access to knowledge it shouldn’t have. In my experience, you can
+prevent a lot of this design tension by introducing separate objects for chang-
+ing information and retrieving information. Or as this is traditionally called:
+separating your write model from your read model. A client that needs an
+object for getting information from (reading) should not retrieve the same
+object as clients that want to make changes to it (writing).
+Although the current version of our controller isn’t in big trouble yet, we are
+now combining writing and reading in the same object, so we might as well
+56

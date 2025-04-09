@@ -1,0 +1,36 @@
+7. Time and randomness
+/**
+* @test
+*/
+public function it_can_be_created ():void
+{
+$id =Uuid ::fromString ('77d69702-e3b4-4af5-b40a-c9981d483880' );
+$orderDate =new DateTimeImmutable( '2020-06-03 09:53' );
+// ...
+}
+Yes, I think this is the way forward. The advantage is that now the test itself
+doesn’t use IO anymore. This gives us a small performance improvement,
+which in the long run will keep your test suite fast. We also gain full control
+over the state of Order by doing this. Its state will always be the same, and
+therefore the object will always behave in the same way.
+We treat the Uuid and DateTimeImmutable classes as value objects instead of
+factory services. Their behavior will now be determined by the input argu-
+ments only. Or, maybe not... It turns out that DateTimeImmutable has some
+interesting behavior when you instantiate it with a string argument. If you
+don’t provide some date parts it will copy the respective values from the
+actual current time . In our case, we don’t provide seconds and microsec-
+onds, so the DateTimeImmutable instance will have the number of seconds
+and the number of microseconds from the current time. As a consequence,
+we still don’t have full control over all the state involved in running our test.
+And that means the test isn’t fully deterministic, and it can’t be called a unit
+test.
+Besides the fact that these objects aren’t real value objects, and that they can
+behave in undeterministic ways that we might not know about, there’s an-
+other design issue. Third-party classes like DateTimeImmutable and Uuid are
+designed to be useful in many projects and many different situations. They
+therefore have an API that is not designed with your specific use case in mind,
+but with anyuse case in mind. For instance, DateTimeImmutable isn’t just a
+way to represent a timestamp as an object, it also has methods like sub() ,
+setDate() ,getTimezone() , etc. These methods may be totally irrelevant in
+your use case, but still, by introducing the class to your domain model, its be-
+171

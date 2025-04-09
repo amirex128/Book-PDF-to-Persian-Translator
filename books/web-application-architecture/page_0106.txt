@@ -1,0 +1,36 @@
+4. Application services
+line. Would our application still need to implement this use case? If so, and
+I’m sure this is the case, it should be decoupled from the infrastructure, so it
+would survive such a change.
+Now let’s find out what would be needed to make the “order an e-book”
+use case work in a command-line application. Listing 4.2shows the basic
+structure of the command class that could be used to order e-books from
+the command-line instead of a web browser. As you can see, the code sam-
+ple uses the Symfony Console component1, but other tools have similar base
+classes or interfaces, so I’m sure you can translate the example to a frame-
+work you’re familiar with.
+Listing 4.2. The basic structure of a Symfony console command.
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+final class CreateOrderCommand extends Command
+{
+protected function configure ():void
+{
+$this
+->setName ('create-order' )
+->addArgument ('ebook_id' , InputArgument ::REQUIRED )
+->addArgument ('quantity' , InputArgument ::REQUIRED )
+->addArgument ('email_address' , InputArgument ::REQUIRED );
+}
+protected function execute (
+InputInterface $input ,
+OutputInterface $output
+):int {
+// How to create an order?
+return 0;// success
+}
+1https://advwebapparch.com/symfony-console-component
+86

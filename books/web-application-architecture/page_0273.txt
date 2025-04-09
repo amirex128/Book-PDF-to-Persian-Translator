@@ -1,0 +1,33 @@
+11. Key design patterns
+the exact same instance, or an object that behaves in an identical way to the
+one you saved.
+ForOrderRepository implementations that save Order instances to an actual
+database, implementing this contract can take some effort. But creating a test
+double for this contract is actually really simple (see Listing 11.6).
+Listing 11.6. A test double for OrderRepository
+final class InMemoryOrderRepository
+implements OrderRepository
+{
+/**
+* @var array<string,Order>
+*/
+private array $orders =[];
+public function save (Order $order ):void
+{
+$this ->orders [$order ->orderId ()->asString ()] =$order ;
+}
+public function getById (OrderId $orderId ):Order
+{
+if(!isset ($this ->orders [$orderId ->asString ])) {
+throw CouldNotFindOrder ::withId ($orderId );
+}
+return $this ->orders [$orderId ->asString ()];
+}
+}
+“That’s too easy!”
+Yes, the in-memory repository implementation is really simple. Things will
+be more complicated when you implement the repository that will save the
+entity to the real database. As we discussed in Chapter 2there are different
+options. You can still use an ORM and delegate some of the logic at the cost
+of loosing some explicitness as well as control. If you decide to write your
+253

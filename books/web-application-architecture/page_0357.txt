@@ -1,0 +1,35 @@
+14. A testing strategy for decoupled applications
+private function __construct ()
+{
+}
+public static function create ():self
+{
+return new self();
+}
+public function withTitle (string $title ):self
+{
+$this ->title =$title ;
+return $this ;
+}
+public function build ():Ebook
+{
+return new Ebook(
+EbookId ::fromString ($this ->id),
+new Money( $this ->price ,new Currency( 'EUR' )),
+$this ->title
+);
+}
+}
+Figure 14.4 shows what elements are involved in the adapter test for the
+Ebook -Controller .
+If all the ways in which your application communicates with the outside
+world have been divided into ports (interfaces) and adapters (supporting im-
+plementations), you can repeat the process described here and test all of your
+port adapters. You then know that incoming requests will be processed cor-
+rectly and result in the right calls to the application core. You’ll also know that
+return values from the application core will be transformed into the correct
+response. On the other side of the application, where outgoing communica-
+tion happens, you know that the code correctly implements the interfaces
+from the core. Figure 14.5 depicts which areas of the application we have
+covered with tests so far.
+337

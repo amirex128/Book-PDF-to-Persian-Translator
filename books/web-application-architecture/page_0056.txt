@@ -1,0 +1,32 @@
+2. The domain model
+public function __construct (
+int $id
+/* ... */
+) {
+$this ->id=$id;
+// ...
+}
+}
+Clients will then have to supply an ID upfront when they want to create a new
+Order . But how could a client find out what the next available ID is? Given
+that the OrderRepository is close to the source of this knowledge, namely the
+orders table itself, let’s give it a new method which can answer this question,
+and call it nextIdentity() (see Listing 2.18).
+Listing 2.18. nextIdentity() returns the next available ID.
+interface OrderRepository
+{
+public function nextIdentity ():int;
+// ...
+}
+A possible implementation of the nextIdentity() method could be the one
+shown in Listing 2.19. It selects the highest ID currently in use, and returns
+the next number, which will therefore be the next available ID.
+Listing 2.19. A naive implementation of nextIdentity() .
+final class SqlOrderRepository implements OrderRepository
+{
+// ...
+public function nextIdentity ():int
+{
+return (int) $this ->connection ->execute (
+'SELECT MAX(id) AS highestId FROM orders'
+36

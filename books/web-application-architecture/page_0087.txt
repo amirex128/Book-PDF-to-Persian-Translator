@@ -1,0 +1,33 @@
+3. Read models and view models
+3.4. Using value objects with internal read models
+A read model is often designed to support a specific use case for one of its
+clients. That’s why it’s important to look at how the data from the read model
+is used by each specific client. In our example, the Ebook read model is used
+to get the e-book’s price from. When creating the order we calculate the order
+amount based on the quantity ordered and the price per unit of the e-book:
+$ebookPrice =$ebook ->price ();
+$orderAmountInCents =(int) $request ->get('quantity' )*$ebookPrice ;
+The assumption that the client is making here, is that both quantity and price
+are integers. Indeed, it makes sense to assume that the ordered quantity will
+always be a whole number because you can’t order half a book. But what
+does it mean for the price to be an integer as well? The client correctly as-
+sumes that the price is provided in cents. We have already briefly considered
+what happens if the underlying data type changes from cents (integer, e.g.
+150 cents equals 1.50 euro) to euros (using a string with decimal notation,
+e.g.'1.50' ). What happens if $ebook->price() returns a string instead of an
+integer?
+Surely, changing the underlying data type of a read model’s property will
+affect the clients of that read model. And this is where we should use an
+old trick again. The one we also used in Section 2.7of the previous chap-
+ter, where we wanted to hide the underlying type of an entity identifier: we
+introduce a value object . By using a value object we can ensure that clients
+won’t rely on raw data, nor on the particular primitive type of that data.
+A first refactoring step would be to introduce a simple wrapper object for
+the e-book price; let’s call it Price . Since the underlying type of the price is
+currently an integer, we need to add a way to get the integer into the object.
+We also need a way to get the integer out again, because that’s what the client
+is currently able to work with. Listing 3.10 shows the basic setup we need. I
+wouldn’t say this improves the design a lot, but it’s a great starting point.
+Listing 3.10. Introducing a very basic Price value object.
+final class Price
+67

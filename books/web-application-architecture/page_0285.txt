@@ -1,0 +1,26 @@
+11. Key design patterns
+Figure 11.2. A client sends an event object to the event dispatcher. The dis-
+patcher forwards the event to any subscriber that is known to
+be interested in events of that type.
+service as one of its dependencies (see Listing 11.16 ). It should be injected by
+its interface.
+Listing 11.16. Dispatching domain events recorded inside the entity.
+final class OrderService
+{
+private OrderRepository $orderRepository ;
+private EventDispatcher $eventDispatcher ;
+public function __construct (
+OrderRepository $orderRepository ,
+EventDispatcher $eventDispatcher
+) {
+$this ->orderRepository =$orderRepository ;
+$this ->eventDispatcher =$eventDispatcher ;
+}
+public function changeDeliveryAddress (
+OrderId $orderId ,
+ChangeDeliveryAddress $command
+):void {
+// ...
+$order ->changeDeliveryAddress (
+DeliveryAddress ::fromScalars (
+265

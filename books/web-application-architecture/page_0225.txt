@@ -1,0 +1,36 @@
+8. Validation
+$formErrors ['email' ][] ='create_order.invalid_email_address' ;
+}
+// More validation...
+if(count ($formErrors )=== 0) {
+/*
+* Call the application service that creates the `Order`
+*
+* Redirect to "thank you" page
+*/
+}else {
+/*
+* Render the form again including the validation errors
+*/
+}
+}
+It makes sense to validate input data inside the controller. The validation
+errors should be linked to the corresponding form fields, and this knowledge
+is available inside or close to the controller (actually, inside the template). At
+the same time, this approach of validating form data inside the controller
+doesn’t fully make sense, because we are duplicating validation logic. We’ve
+seen that exact same call to filter_var() several times now. It’s the same
+as the one in the EmailAddress value object we introduced in Section 8.2.
+To prevent duplication and keep the knowledge about what a valid email
+address is in one place, we should reuse the value object while validating the
+form input. Removing duplication and keeping the knowledge in one place
+has an important benefit. Whenever something changes about the validation
+logic, we don’t have to update the code in two places.
+Listing 8.10 shows how you can reuse a value object when doing form vali-
+dation. You try to create the value object in the normal way, and when this
+produces an exception, you know something was wrong.
+Listing 8.10. Reusing the EmailAddress class for validation
+public function createOrderAction (Request $request ):Response
+{
+$formErrors =[];
+205

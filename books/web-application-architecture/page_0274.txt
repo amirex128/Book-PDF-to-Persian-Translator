@@ -1,0 +1,33 @@
+11. Key design patterns
+own mapping implementation keep the following requirements in mind.
+When you save an entity you need to know if it’s a new entity or an existing
+one that’s being updated. Based on this knowledge you should do either an
+INSERT or an UPDATE query. You can create something known as an iden-
+tity map where you keep track of entities that have been loaded from the
+database. The next time the application tries to save() an entity you look it
+up in the identity map. If it’s there, it needs to be updated, if it isn’t there it
+needs to be inserted. After the insert you add the entity to the identity map
+so saving it once more will trigger an update. An alternative (something
+I’ve used in TalisORMa) is to let the entity itself keep track of whether or
+not it’s “new”.
+If the entity has child entities, you need to do the same kind of change track-
+ing for these entities as well. Child entities can often be deleted too so there
+should be a way to find out when a DELETE query is needed. And before you
+know it you’ll be implementing your own ORM so it’s good to keep an eye
+on the cost/benefit ratio. In the past few years I personally have experi-
+enced some great benefits from writing my own mapping code, but make
+sure to fully consider your own context before taking this route.
+ahttps://advwebapparch.com/talis-orm
+11.4. Application services
+The Order entity can be created, you can change its delivery address, can-
+cel it, etc. These behaviors are represented by command methods, with an
+intention-revealing name. Only Application services should have access to
+these methods. An application service coordinates the requested change. For
+instance, it creates the Order and saves it to the OrderRepository . Or it loads
+anOrder entity by its ID, calls one or more methods on it, and saves it again
+(see Listing 11.7 for some examples).
+Listing 11.7. Some application services.
+final class CreateOrderService
+{
+private OrderRepository $orderRepository ;
+254

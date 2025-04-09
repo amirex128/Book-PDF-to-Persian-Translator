@@ -1,0 +1,36 @@
+4. Application services
+Knowing that the code can’t stay inside the controller, should we move it to
+theEbookOrderService instead? That way, the service could create the order
+first, and then send the email. Listing 4.12 shows the result of moving the
+code to the application service.
+Listing 4.12. Sending the email inside the application service.
+final class EbookOrderService
+{
+private EbookRepository $ebookRepository ;
+private OrderRepository $orderRepository ;
+private string $systemEmailAddress ;
+private Environment $twig ;
+private Swift_Mailer $mailer ;
+public function __construct (
+EbookRepository $ebookRepository ,
+OrderRepository $orderRepository ,
+string $systemEmailAddress ,
+Environment $twig ,
+Swift_Mailer $mailer
+) {
+$this ->ebookRepository =$ebookRepository ;
+$this ->orderRepository =$orderRepository ;
+$this ->systemEmailAddress =$systemEmailAddress ;
+$this ->twig =$twig ;
+$this ->mailer =$mailer ;
+}
+public function create (CreateOrder $createOrder ):OrderId
+{
+// Step 1: Create the Order entity, save it
+// ...
+// Step 2: Send the confirmation email
+$message =(new Swift_Message( 'Order ' .$orderId ->asString ()))
+->setFrom ($this ->systemEmailAddress )
+->setTo ($createOrder ->emailAddress ())
+->setBody (
+99

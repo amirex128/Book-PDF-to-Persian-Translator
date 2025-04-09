@@ -1,0 +1,28 @@
+2. The domain model
+1.The Order entity and OrderRepository interface don’t reveal anything
+about the client that’s going to call or use it.
+2.The OrderRepository interface is itself an abstraction, using which we
+can later run other core code without actual databases, or other exter-
+nal dependencies.
+3.TheOrder entity can indeed be used without an actual web server, database,
+etc. It’s a plain old PHP class that you can run without any special setup.
+We started with mixed code and extracted an entity and a repository inter-
+face, including a default implementation. In Chapter 4, we’ll extract even
+more core code from the controller and fix the remaining problems:
+1.Scenario steps for creating an e-book order are still pretty unclear and
+mixed with low-level implementation details
+2.The controller action is only useful in a web application where input is
+provided by filling in a web form.
+First, let’s take a look at read models.
+Exercises
+1. What’s wrong about the following abstraction for saving Order entities?a
+interface OrderRepository
+{
+public function insert (string $tableName ,array $data ):void;
+}
+2. Is the following class an entity or a value object?b
+final class OrderId
+{
+// ...
+public static function fromString (string $orderId ):self
+48

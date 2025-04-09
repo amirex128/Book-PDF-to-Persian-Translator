@@ -1,0 +1,32 @@
+5. Service locators
+An added advantage of promoting the Mailer service to a constructor argu-
+ment, is that it makes this dependency explicit. I like to read a service’s con-
+structor as a list of things that the service needs. In this case: “The SendIp -
+ConfirmationEmail service needs the Mailer service to send an IP confirma-
+tion email to the currently logged in user.” Compare this to having to read the
+entire method just to find out which dependencies will be fetched at runtime.
+5.4. Injecting configuration values
+Besides dependencies that are themselves services, a service sometimes needs
+configuration values too. In the case of the SendIpConfirmationEmail ser-
+vice, it needs to know what the default sender of system emails is. Configu-
+ration values should also be injected as constructor arguments, as shown in
+Listing 5.3. I’m adding an assertion as well, because one day that will save us
+some debugging time.
+Listing 5.3. Injecting a configuration value as a constructor argument.
+use Assert\Assertion;
+final class SendIpConfirmationEmail
+{
+private Mailer $mailer ;
+private string $defaultSender ;
+public function __construct (
+Mailer $mailer ,
+string $defaultSender
+) {
+Assertion ::email ($defaultSender );
+$this ->mailer =$mailer ;
+$this ->defaultSender =$defaultSender ;
+}
+public function send ():void
+{
+$message =EmailMessage ::create ()
+114

@@ -1,0 +1,36 @@
+4. Application services
+4.4. Introducing a parameter object
+We’ve decoupled a nice chunk of core code from the infrastructure code it
+was originally mixed with, but there’s one thing left to do. The number of
+method parameters of a service like the one we extracted earlier, may get
+quickly out of hand. Besides an email address, you may also want to record
+the name of the buyer, or you may want to take orders in a different cur-
+rency. To keep the method signature of an application service as simple as
+possible, there’s another nice refactoring we can do, called Introduce Param-
+eter Object5. The result will be an object that holds all the input data for this
+use case as a single value. It makes sense to name this object after its inten-
+tion. You want to “create an order” with it, so let’s call it CreateOrder (see
+Listing 4.8). Such an object is often called a Command object. This has noth-
+ing to do with command-line applications. It’s called a command because the
+object represents a user intention: something the user wants the application
+to do.
+Listing 4.8. The CreateOrder object holds all the data needed to create an
+order.
+final class CreateOrder
+{
+private int $ebookId ;
+private int $orderQuantity ;
+private string $emailAddress ;
+public function __construct (
+int $ebookId ,
+int $orderQuantity ,
+string $emailAddress
+) {
+$this ->ebookId =$ebookId ;
+$this ->orderQuantity =$orderQuantity ;
+$this ->emailAddress =$emailAddress ;
+}
+public function ebookId ():int
+{
+5https://advwebapparch.com/introduce-parameter-object
+95

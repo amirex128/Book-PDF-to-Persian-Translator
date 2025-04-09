@@ -1,0 +1,32 @@
+2. The domain model
+$orderRepository =$this ->container ->get('order_repository' );
+$lastInsertedId =$orderRepository ->save ($order );
+// ...
+}
+2.5. Mapping entity data to table columns
+So far we’ve been working with the OrderRepository interface, which cur-
+rently has no implementation. Writing an implementation that actually saves
+anOrder to the database may not be as straightforward as we’d hope. As you
+can see in Listing 2.10, at some point we’ll still need that array of columns =>
+values that we no longer have.
+Listing 2.10. SqlOrderRepository needs a map of columns and values.
+final class SqlOrderRepository implements OrderRepository
+{
+private Connection $connection ;
+public function __construct (Connection $connection )
+{
+$this ->connection =$connection ;
+}
+public function save (Order $order ):int
+{
+$data =[
+// Again, we need an array of columns => values
+];
+$columns =array_keys ($data );
+$values =array_map (
+fn ( $value )=>$this ->connection ->escape ($value ),
+array_values ($data )
+);
+$sql ='INSERT INTO orders ('
+.implode (', ' ,$columns )
+26

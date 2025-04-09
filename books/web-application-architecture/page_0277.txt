@@ -1,0 +1,32 @@
+11. Key design patterns
+11.4.1. Return the identifier of a new entity
+Application service methods are command methods: they change entity state
+and shouldn’t return anything. However, when an application service cre-
+ates a new entity (like the createOrder() method does in Listing 11.7), you
+may still return the ID of the new entity. One thing an application service
+definitely should not return is the complete entity. As explained before, an
+entity is a write model with built-in behaviors for changing its state. It should
+not be available to clients that don’t want to change its state. Clients of appli-
+cation services are usually controllers and they certainly shouldn’t change
+entity state.
+What if you want to return some information about the entity in the re-
+sponse? In that case use the ID that was returned by the application service
+to fetch a view model from its view model repository (Listing 11.9).
+Listing 11.9. Fetching a view model inside the controller.
+final class OrderController
+{
+// ...
+public function createOrderAction (Request $request ):Response
+{
+$orderId =$this ->orderService ->createOrder (/* ... */ );
+$order =$this ->orderDetailsRepository ->getById ($orderId );
+return $this ->templateRenderer ->render (
+'order-details.html.twig' ,
+[
+'order' =>$order
+]
+);
+}
+}
+See Section 3.5for more information about view models.
+257

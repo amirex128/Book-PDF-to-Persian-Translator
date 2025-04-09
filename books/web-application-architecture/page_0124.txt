@@ -1,0 +1,36 @@
+4. Application services
+public function emailAddress ():string
+{
+return $this ->emailAddress ;
+}
+}
+final class Order
+{
+/**
+* @var object[]
+*/
+private array $events ;
+public function __construct (
+OrderId $orderId ,
+string $emailAddress
+// ...
+) {
+// ...
+// When we create an order, a domain event will be "recorded"
+$this ->events []=new OrderWasCreated( $orderId ,$emailAddress );
+}
+public function releaseEvents ():array
+{
+return $this ->events ;
+}
+}
+final class EbookOrderService
+{
+// ...
+private EventDispatcher $eventDispatcher ;
+public function __construct (
+// ...
+EventDispatcher $eventDispatcher
+) {
+// ...
+104

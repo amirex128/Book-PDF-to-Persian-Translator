@@ -1,0 +1,21 @@
+11. Key design patterns
+doesn’t have to be explicitly told to create an invoice; it will respond to the
+fact that an order was fully delivered. Figure 11.4 shows how moving the
+CreateInvoice subscriber to the invoicing module establishes the desired de-
+pendencies between these modules.
+Figure 11.4. Moving the CreateInvoice subscriber to the Invoicing module,
+establishes the correct dependency direction: the Invoicing now
+depends on Orders instead of the other way around.
+11.5.2. Delegate to an application service
+The job of some event subscribers may be to respond to changes in one entity
+with an update of another entity. This would be a classic case of Eventual con-
+sistency : the system’s state will be consistent only after all event subscribers
+are finished. Instead of making the change inside the event subscriber, del-
+egate the call to an application service. This application service should then
+follow the standard pattern of retrieving an entity, making a change to it, and
+saving it again.
+Most event subscribers should be independent from infrastructure and only
+contain core code because they are a crucial part of the use case. But there
+may be infrastructure-specific event subscribers in your application too. For
+instance, subscribers that log domain events, send them to a queue, store
+270

@@ -1,0 +1,33 @@
+4. Application services
+$request =new Request([], [
+'ebook_id' =>$input ->getArgument ('ebook_id' ),
+'quantity' =>$input ->getArgument ('quantity' ),
+'email_address' =>$input ->getArgument ('email_address' )
+]);
+$response =$this ->container ->get('order_controller' )
+->orderEbookAction ($request );
+// Somehow extract the order ID from the Response...
+return 0;
+}
+}
+Of course, this is an ugly workaround; I think most people would consider it
+a hack.
+Let’s take a step back. We are introducing hacks to make a web application
+work from the command line. Maybe this is getting out of hand; maybe the
+whole exercise is too far-fetched? It doesn’t even make sense to order e-books
+from the command-line.
+Well, I know people who are building a web application but don’t want to
+wait until the user interface and user interactions have been designed before
+they can use it. They just want to exercise the application’s use cases without
+the web frontend that the application will eventually have. They are familiar
+with the command-line so why not build a few commands that lets them do
+some exploratory testing?
+But there are more compelling cases where it’s important that a single use
+case can be used by different types of clients. Here are a few not so far-
+fetched examples:
+1.The application has to offer an API endpoint for an external system that
+accepts e-book orders through their own frontend and sends them to us
+as a JSON string.
+2.The application should have an import function, where an adminis-
+trator could upload a CSV file with manually entered orders from cus-
+88

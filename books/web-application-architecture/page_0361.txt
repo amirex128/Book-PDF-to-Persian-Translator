@@ -1,0 +1,32 @@
+14. A testing strategy for decoupled applications
+private function subscribersForEvent (object $event ):array
+{
+return $this ->subscribers [get_class ($event )]??[];
+}
+}
+“Can’t we use the framework’s event dispatcher?”
+Technically you can. However, I find that third-party event dispatchers
+often don’t provide the kind of API that I’d like to use. For instance, they
+don’t have a dispatchAll() method, they require a base class for every
+domain event, or their event objects are mutable. Also, event dispatchers
+often allow listeners to break the chain and stop propagation of the event to
+other subscribers. All of this is undesirable, and since an event subscriber
+is a really simple piece of code, you could just write your own and it would
+not become a maintenance burden. Unless of course you find a good event
+dispatcher library that does the trick for you.
+Since we’ll soon have several services (the application service for creating
+the order, an OrderRepository , aMailer , etc.), we should create a composi-
+tion root also known as a service container that manages service instances
+and creates them when they’re needed. This container isn’t the same as the
+container that the framework offers. While an event dispatcher could in the-
+ory be third-party code, our container will be a hand-written one4. It only
+contains services needed by the core of our application, so you won’t find a
+router there, or a template renderer.
+Listing 14.12 shows the container that we’ll use in the first scenario test.
+Listing 14.12. A hand-written service container for testing
+final class TestServiceContainer
+{
+private ?EventDispatcher $eventDispatcher =null ;
+4See also Matthias Noback (2019), “Hand-written service containers“: https://
+advwebapparch.com/hand-written-service-containers
+341

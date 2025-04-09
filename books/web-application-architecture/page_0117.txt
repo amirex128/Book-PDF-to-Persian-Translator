@@ -1,0 +1,32 @@
+4. Application services
+$ebook ->price (),
+$orderAmount
+);
+// ...
+}
+}
+Finally, any client that uses the EbookOrderService has to be updated too.
+From now on, they need to prepare a CreateOrder instance and pass it to the
+service. See Listing 4.10 for what this looks like in the controller action.
+Listing 4.10. orderEbookAction() instantiates and populates a CreateOrder
+object and passes it to EbookOrderService .
+public function orderEbookAction (Request $request ):Response
+{
+$createOrder =new CreateOrder(
+(int) $request ->get('ebook_id' ),
+(int) $request ->get('quantity' ),
+$request ->get('email_address' )
+);
+$orderId =$this ->container ->get('ebook_order_service' )
+->create ($createOrder );
+// ...
+}
+4.5. Dealing with multiple steps
+We’ve successfully moved a chunk of decoupled code from the controller to
+its own application service. But usually it’s not so easy to do this. In legacy
+projects you’ll find controller actions that consist of several hundreds (if not
+thousands) of lines. If you’re lucky, these methods read like scripts: first do
+this, then do that, then do this other thing, and so on. If that’s the case then
+you might be able to extract these steps and put them in their own classes
+so they become maintainable and maybe even testable. Sometimes it’s not so
+97

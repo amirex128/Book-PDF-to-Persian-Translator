@@ -1,0 +1,36 @@
+6. External services
+tual network connection from being created while testing the behavior of
+EbookOrderService .
+Listing 6.13. When testing EbookOrderService we can easily define a test
+double for VatRateProvider .
+final class EbookOrderServiceTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_creates_an_ebook_order ():void
+{
+$vatRateProvider =$this ->createMock (VatRateProvider ::class );
+$vatRateProvider
+->expects ($this ->any())
+->method ('vatRateForSellingEbooksInCountry' )
+->with ('NL' )
+->willReturn (VatRate ::fromInt (21));
+$service =new EbookOrderService(
+/* ... */
+$vatRateProvider
+);
+$service ->create (/* ... */ );
+// ...
+}
+}
+That’s great, but now all the code in the VatRateProviderUsingVatApiDotCom
+and the VatApi classes remains untested (Figure 6.4).
+This is a bad situation, because we can no longer be sure that the code is
+correct, and cooperates nicely with the vatapi.com ’s actual API endpoint.
+We can’t write a unit test for the vatapi.com integration though, because
+we need the internet, which means, the test uses IO and can therefore no
+longer be called a unit test. Let’s call the kind of test we’d write for the
+VatRateProviderUsingVatApiDotCom class an integration test . Such an inte-
+gration test can prove that we’ve written code that:
+152

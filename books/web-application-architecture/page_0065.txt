@@ -1,0 +1,33 @@
+2. The domain model
+// Or load one from the database
+$order2 =Order ::getById (2);
+This may look very convenient, but there are downsides to it from a design
+perspective:
+•By inheriting a lot of infrastructure code, we loose the isolation we need
+for proper unit testing an Order .
+•Active Record frameworks usually require a lot of custom code inside
+your entities to make everything work well. This code is specific to the
+framework, making your domain model directly coupled to, and only
+functional in the presence of that framework.
+•Clients of Order can do many more things with the object than they most
+likely should be allowed to do.
+We don’t have any of these downsides when we apply the data mapper pat-
+tern, like we have done earlier in this chapter.
+The biggest downside I can think of when using an entity and a repository
+is that you have several extra elements: the repository interface and at least
+one repository implementation. In the context of this book, that shouldn’t
+be considered a downside; by introducing an abstraction you achieve decou-
+pling from surrounding infrastructure. We have seen one other downside
+in this chapter already, when we realized that we had to make a decision:
+should we do the mapping to database columns inside or outside the entity?
+Although we’d rather not make this kind of decision, it does not compare to
+the issues that Active Record has. Comparing these design patterns, it’s clear
+that data mapper allows for a better separation between core and infrastruc-
+ture code.
+If Active Record is omnipresent in your project and the team is very effective
+with it, you may still want to stick to your framework’s Active Record (AR)
+approach. In that case, my advice is to mitigate some of the downsides by
+keeping yourself to the following rules:
+•Design your AR entities like real entities. Take a look at Section 11.2 to
+learn more about this topic.
+45

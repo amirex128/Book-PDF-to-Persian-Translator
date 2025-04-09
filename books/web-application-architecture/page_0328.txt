@@ -1,0 +1,34 @@
+13. Ports and adapters
+public function listAvailableEbooksAction ():Response
+{
+$ebooks =$this ->ebooksRepository ->listAll ();
+return new JsonResponse(
+array_map (
+fn (Ebook $ebook )=>[
+'title' =>$ebook ->title ()
+],
+$ebooks
+)
+);
+}
+}
+Besides offering a JSON response the application may also provide a regu-
+lar HTML page rendering a nice list of e-books. It could just as well provide
+an RSS feed of e-books, if that would be a desirable feature for some actors.
+Each example would require a separate adapter of the same port “for listing
+available e-books”.
+13.5. The application as an interface
+Earlier I said that ports are interfaces. For outgoing ports like the one “for
+saving an order” this immediately makes sense. When you want to save an
+Order you need to reach outside the application and connect to a database,
+so you can’t depend on a class there; you need an abstraction. The use case
+itself will rely on the port as an interface so that it isn’t tied to any imple-
+mentation detail of the adapter. To test the port adapter we don’t have to
+invoke the entire use case. We only have to call the save() method on the
+OrderRepository implementation.
+For an incoming port like the one “for creating an order” it may not be imme-
+diately clear that it needs to be an interface. And so far it wasn’t an interface
+either. In both the web controller and the console command we depended
+directly on the concrete class EbookOrderService . This means that when we
+invoke the port adapter (e.g. in the OrderController ) in order to test it, we’ll
+308

@@ -1,0 +1,34 @@
+6. External services
+// ...
+}
+It’s a lot of code, and the code itself doesn’t look great, but it works. This is
+fine, as long you’re just “spiking” – fiddling with the code and the design, until
+you know what to do. But it would be really bad for the long term maintain-
+ability of the code to leave it like this. One design issue is that we have pol-
+luted the service with all kinds of low-level details. The EbookOrderService
+was supposed to give a high-level overview of the use case scenario it imple-
+ments. Now it’s mostly about connecting to an external service. All this code
+really represents one step in the process: “Determine the VAT rate that should
+be applied to the order”. We should do our best in this chapter to simplify the
+code until you can clearly recognize this step by reading the code.
+Another issue is that by making a call to an external service, we now have
+extremely limited testing options for the EbookOrderService class. We can
+no longer write an isolated test for it, since running the code will produce
+an actual network call. We also don’t have a way to test only the call to the
+external service, meaning that our integration with vatapi.com is tied to the
+use case of creating an order. This implies that we can’t switch to a different
+service, or upgrade the code in case the API response format changes, without
+touching the EbookOrderService as well.
+In the following sections we’ll gradually improve the situation until we’ve
+reached the following objectives:
+•EbookOrderService should be concerned with the use case of ordering
+an e-book, and should only have code for the high-level steps of that use
+case. Every step that makes a connection to some external system, like
+the database, or the VAT API, should be replaceable to make the service
+testable in isolation.
+•The low-level implementation details of connecting to an external ser-
+vice for determining a VAT rate should be extracted to a different class,
+which the EbookOrderService can use. We can test this class separately,
+so we know that it works correctly with the actual VAT API remote ser-
+vice.
+137

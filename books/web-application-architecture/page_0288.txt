@@ -1,0 +1,35 @@
+11. Key design patterns
+}
+Listing 11.19 shows how you’d register an event subscriber for the
+OrderFullyDelivered event.
+Listing 11.19. CreateInvoice is an event subscriber which gets registered to
+theEventDispatcher service.
+final class CreateInvoice
+{
+private InvoicingService $invoicingService ;
+public function __construct (
+InvoicingService $invoicingService
+) {
+$this ->invoicingService =$invoicingService ;
+}
+public function whenOrderFullyDelivered (
+OrderFullyDelivered $event
+):void {
+$this ->invoicingService ->createInvoiceFromOrder (
+$event ->orderId (),
+/* ... */
+);
+}
+}
+$eventSubscriber =new CreateInvoice( /* ... */ );
+$eventDispatcher =new SimpleEventDispatcher(
+[
+OrderFullyDelivered ::class =>[
+[$eventSubscriber ,'whenOrderFullyDelivered' ]
+]
+]
+);
+Instantiating services and injecting them as dependencies is something a de-
+pendency injection container should do for you. The example just shows
+what the logic inside the container would look like.
+268

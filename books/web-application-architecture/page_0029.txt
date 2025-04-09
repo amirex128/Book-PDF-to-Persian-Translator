@@ -1,0 +1,36 @@
+1. Introduction
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+final class OrderController
+{
+public function createOrderAction (
+RequestInterface $request
+):ResponseInterface {
+// ...
+}
+}
+Only if code doesn’t require a special context, and also hasn’t been designed
+to run in a special context or has dependencies for which this is the case, can
+it be considered core code.
+Listing 1.6shows several examples of core code. These classes can be instan-
+tiated anywhere, and any client should be able to call any of the available
+methods. None of these methods depend on anything outside the applica-
+tion itself.
+Listing 1.6. Some examples of core code.
+/*
+* This is a proper abstraction for an object that talks to the database:
+*/
+interface MemberRepository
+{
+public function save (Member $member ):void;
+}
+final class MemberService
+{
+private MemberRepository $memberRepository ;
+public function requestAccess (
+string $emailAddress ,
+string $purchaseId
+):void {
+$member =Member ::requestAccess (
+EmailAddress ::fromString ($emailAddress ),
+9

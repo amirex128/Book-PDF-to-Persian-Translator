@@ -1,0 +1,34 @@
+7. Time and randomness
+final class Order
+{
+private Date $orderDate ;
+public function __construct (
+// ...
+Date $orderDate ,
+// ...
+) {
+// ...
+$this ->orderDate =$orderDate ;
+}
+}
+To validate the provided date string we could’ve also used
+Assertion::date(self::FORMAT, $date) . However, I wanted to point out
+in this example that you can still use supporting objects from third-party
+libraries to do the heavy lifting for you. It’s perfectly fine to rely on other
+people’s classes inside your value object, as long as they don’t reintroduce
+some of the problems we’ve been trying to evade:
+1.Value objects shouldn’t contain infrastructure code. In other words:
+2.Value objects should have no service responsibilities.
+3.Value objects should offer no behavior that hasn’t been explicitly en-
+abled and designed for your use case.
+This means you can use value objects from other libraries if they offer the
+(more or less) exact behaviors you need. If they don’t, then you should adapt
+them by wrapping them inside your own value objects. Just a quick note:
+when using third-party tools like DateTimeImmutable you still have to check
+your own assumptions. An elaborate unit test would be useful for that. As
+an example, I was quite surprised to find out that instantiating an obviously
+meaningless date like 2019-02-29 doesn’t produce an exception. DateTimeImmutable ’s
+constructor simply turns it into 2019-03-01 …
+Date/time quirks aside, introducing your own value objects for dates and
+times is a way of gaining design ownership over the types of objects that are
+175

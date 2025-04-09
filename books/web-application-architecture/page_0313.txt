@@ -1,0 +1,35 @@
+12. Architectural layers
+12.4.3. Automated verification of design decisions
+Once you’ve placed each class in a specific namespace, you can start verifying
+that the code actually follows the layering conventions we’ve established. For
+example, if you find an entity in the Infrastructure layer, it’s in the wrong
+place. It belongs in the Domain layer. If the Application layer contains a class
+that makes an HTTP connection, you know that it should be moved to the
+Infrastructure layer instead. Also, looking at the source code dependencies
+between different classes, you can verify that all classes follow the Depen-
+dency rule . For instance, if you find a class in the Domain layer which uses a
+class from the Infrastructure layer, you know that the Domain layer depends
+on the Infrastructure layer. This is a violation of the Dependency rule (see
+Listing 12.1).
+Listing 12.1. Based on the namespace and usestatements of a class we can
+check if the code follows the layer conventions.
+namespace Infrastructure\Entity;
+/*
+* An entity doesn't belong in the Infrastructure layer
+*/
+final class Order
+{
+// ...
+}
+namespace Application\RegisterUser;
+final class WelcomeEmail
+{
+public function __construct (Client $httpClient )
+{
+/*
+* An HTTP client doesn't belong inside the
+* Application layer
+*/
+$this ->httpClient =$httpClient ;
+}
+293

@@ -1,0 +1,35 @@
+11. Key design patterns
+// ...
+}
+}
+final class Line
+{
+// ...
+public function productDescription ():string
+{
+// ...
+}
+public function quantity ():int
+{
+// ...
+}
+public function tariff ():Money
+{
+// ...
+}
+}
+Note that the Order read model is part of the Invoicing module. That way,
+Invoicing is the owner of the object’s API so it can be easily modified to meet
+future needs of the InvoicingService .
+The InvoicingService should be able to retrieve an instance of the Order
+read model from a Repository , which should also be owned by the Invoicing
+module. To separate the what from the how of retrieving a read model object,
+first create a repository interface on which InvoicingService can depend
+(see Listing 11.22 ).
+Listing 11.22. The InvoicingService gets an Order object from the
+OrderRepository interface.
+interface OrderRepository
+{
+public function getById (OrderId $orderId ):Order;
+}
+273

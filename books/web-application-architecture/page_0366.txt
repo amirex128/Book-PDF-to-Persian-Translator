@@ -1,0 +1,31 @@
+14. A testing strategy for decoupled applications
+}
+private function mailer ():Mailer
+{
+Assert ::that ($this ->mailer )->instanceOf (Mailer ::class );
+return $this ->mailer ;
+}
+}
+// inside the test:
+// ...
+$mailer =$this ->createMock (Mailer ::class );
+$mailer ->expects ($this ->once ())
+->method ('sendOrderConfirmationEmail' );
+$container ->setMailer ($mailer );
+// ...
+The downside is that we can’t verify that the right argument (the OrderId
+from the created order) has been provided. Another downside is that this
+approach to creating mock objects is tied to PHPUnit as a test framework.
+We’ll later look at a different test runner for use case tests, so it’s smart to
+stay decoupled from PHPUnit.
+The solution is to create a test double of a specific type, a so-called Spyob-
+ject. It will keep a record of what has happened to it, so you can later make
+assertions about that. Listing 14.17 shows an example of a Mailer spy.
+Listing 14.17. A spy implementation for Mailer .
+final class MailerSpy implements Mailer
+{
+/**
+* @var array<OrderId>
+*/
+private array $emailsSentFor =[];
+346

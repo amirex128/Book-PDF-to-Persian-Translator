@@ -1,0 +1,32 @@
+11. Key design patterns
+But since several uses cases may share the same set of dependencies you may
+also create a single class with multiple methods (see Listing 11.8).
+Listing 11.8. An application service with multiple methods (use cases).
+final class OrderService
+{
+private OrderRepository $orderRepository ;
+public function __construct (
+OrderRepository $orderRepository
+) {
+$this ->orderRepository =$orderRepository ;
+}
+public function createOrder (/* ... */ ):OrderId
+{
+$orderId =$this ->orderRepository ->nextIdentity ();
+// ...
+return $orderId ;
+}
+public function changeDeliveryAddress (/* ... */ ):void
+{
+// ...
+}
+public function markAsDelivered (/* ... */ ):void
+{
+// ...
+}
+public function cancel (/* ... */ ):void
+{
+// ...
+}
+}
+256

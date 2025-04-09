@@ -1,0 +1,21 @@
+11. Key design patterns
+Figure 11.6. In this example, Orders has been completely replaced by a
+third-party system. Invoicing ’sOrderRepository implementa-
+tion now uses that system’s API to fetch order information.
+11.6.3. For view models, prepare the data for rendering
+Besides internal read models there are also outward-facing models which
+expose data to primary actors. In our example, Invoicing may have an HTTP
+API too, allowing clients to fetch a JSON representation of an invoice. In that
+case, Invoicing manages the invoice data because it owns the Invoice entity
+but it also provides a view on that data. In fact, it provides multiple views
+because it also provides a list of unpaid invoices on the website, and allows
+users to download an invoice as a PDF file. Figure 11.7 shows these different
+view models that Invoicing offers to its actors.
+The view models themselves need to be fully prepared for the view that ren-
+ders them to the user. For instance, if the view model is going to be used
+to render an HTML template, make sure that the template renderer doesn’t
+need to do much more than just echo a couple of properties, loop over some
+property, echo some more properties, etc. If the view model is going to be
+rendered as a JSON object, make sure that the object can be encoded to JSON
+in a single step.
+276

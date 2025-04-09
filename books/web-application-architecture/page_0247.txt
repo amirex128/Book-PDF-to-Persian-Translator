@@ -1,0 +1,33 @@
+9. Conclusion
+to send an HTTP POST request to our application. A supporting actor could
+be the relational database that our application sends an SQL INSERT query
+to. Communicating with both actors requires many infrastructural elements
+to be in place. The web server should be up an running, and it should be
+accessible from the internet. The server needs to pass incoming requests
+to the application, which likely uses a web framework to process the HTTP
+messages and dispatch them to the right controllers. On the other end of the
+application some data may have to be stored in the database. PHP needs to
+have a PDO driver installed before it can connect to and communicate with
+the database. Most likely you’ll need a lot of supporting code as well to do the
+mapping from domain objects to database records. All of the code involved in
+this process, including a lot of third-party libraries and frameworks, as well
+as software that isn’t maintained by yourself (like the web server), should be
+considered infrastructure code.
+Most of the time between the primary actor sending an HTTP request to your
+server, and the database storing the modified data, will be spent by running
+infrastructure code and most of this code can be found in PHP extensions,
+frameworks, and libraries. But somewhere between ingoing and outgoing
+communication the server will call some of your own code, the so-called user
+code .
+User code is what makes your application special: what things can you do with
+your application? You can order an e-book. You can pay for it. What kind of
+things can you learn from your application? You can see what e-books are
+available. And once you’ve bought one, you can download it. Frameworks,
+libraries, and PHP extensions could never help you with this kind of code,
+because it’s domain-specific: it’s your business logic.
+Figure 9.1. User code is in the middle, with infrastructure code to the left and
+right.
+Figure 9.1shows that user code is in the middle of a lot of infrastructure code.
+Even if we try to ignore most of the surrounding infrastructure while work-
+ing on and testing user code, we’ll often find that this code is hard to work
+227

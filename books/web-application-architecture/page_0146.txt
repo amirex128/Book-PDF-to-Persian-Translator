@@ -1,0 +1,30 @@
+5. Service locators
+even an official constructor), but once you start calling send() to verify cor-
+rect behavior, you’ll be in trouble (Listing 5.11).
+Listing 5.11. With implicit dependencies, instantiation is easy, usage is not.
+new SendIpConfirmationEmail();
+// OK
+$service ->send ();
+// Error: No logged in user
+// Or maybe: Fatal error: Call to a member function email() on null
+// Or maybe: Error: Undefined config key "mail.default_sender"
+In order to fix the problems you have to take a closer look at the code of
+thesend() method. You’ll have to set up all its implicit dependencies first.
+Unfortunately, you won’t even know when you’re done. Even if you look
+carefully through the code to find out what it needs, there’s still a chance
+that you missed something. For instance, the trans() call secretly relies on
+a locale to be provided by a call to App::setLocale() . The code in send()
+doesn’t reveal this information; you have to know it . Figure 5.2shows how
+the prerequisites of calling send() are disconnected from the structure of the
+class (its constructor and method arguments).
+5.8. Effective testing
+Is it bad that you have to read the code of an object, in order to write a unit
+test for it? Well, I think it is. You’ll have to go back and forth between the pro-
+duction code and the test code, and redo all the work that the framework nor-
+mally does for you. This makes you feel like you’re doing twice the amount
+of work that you would do without writing a test. At the same time, if you
+change the production code in such a way that an extra setup step is required,
+you’ll certainly break another test which doesn’t have that extra step yet.
+The problem here is that this kind of test is too close to the production code.
+It doesn’t help you to work faster, or be more effective. After a few of these
+126

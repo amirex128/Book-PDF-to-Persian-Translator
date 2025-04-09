@@ -1,0 +1,32 @@
+13. Ports and adapters
+“for creating an order”, and “for saving an order”. Some developers who use
+hexagonal architecture also use these intentions as actual class or method
+names in their code, but personally I think it makes more sense to use imper-
+ative sentences like “list available e-books”, “create order” and “save order”.
+A hexagon with ports alone is not enough to build a working application.
+A port is only an intention , now we need an implementation . In Cockburn’s
+terminology the implementation of a port is called an Adapter .
+13.3. Adapters for outgoing ports
+In the case of the outgoing port “for saving an order”, the adapter has to pro-
+vide an implementation for the OrderRepository interface, which reaches
+out to some kind of database server to persist the Order entity. In Chapter 2
+we already saw an example of such an implementation: the OrderRepository -
+UsingSql class (Listing 13.2). It connects to a relational database and stores
+theOrder entity in an orders table, mapping the entity ’s properties to table
+columns.
+Listing 13.2. TheOrderRepositoryUsingSql provides an implementation for
+the port “for saving an order”.
+final class OrderRepositoryUsingSql implements OrderRepository
+{
+private Connection $connection ;
+public function __construct (Connection $connection )
+{
+$this ->connection =$connection ;
+}
+public function save (Order $order ):void
+{
+// ...
+}
+// ...
+}
+301

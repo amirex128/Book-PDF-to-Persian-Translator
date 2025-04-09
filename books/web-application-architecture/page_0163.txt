@@ -1,0 +1,31 @@
+6. External services
+) {
+// ...
+$this ->vatApi =$vatApi ;
+}
+public function create (/* ... */ ):OrderId
+{
+// ...
+$rateCheckResult =$this ->vatApi ->vatRateCheck (
+RateType ::tbe(),
+'NL' ,
+'ebooks'
+);
+$vatRate =VatRate ::fromInt (
+$rateCheckResult ->rate ('electronics' )
+);
+// ...
+}
+}
+We no longer see curl_*() calls littered around the code. But we still have
+words like vatRateCheck() ,rateCheckResult and a string constant 'electronics'
+in our code, which are alien to our own business domain. All we actually care
+about is a VAT rate for our e-book order. So the current version of the code
+doesn’t communicate in the clearest way possible that what we’re doing here
+is determine the correct VAT rate for the order.
+Furthermore, the EbookOrderService depends directly on the VatApi class
+(Figure 6.1).
+Figure 6.1. EbookOrderService depends on VatApi .
+Even though we’ve hidden most implementation details behind this class,
+theVatApi class itself is still very specific to the particular remote service
+143

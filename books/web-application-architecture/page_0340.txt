@@ -1,0 +1,33 @@
+14. A testing strategy for decoupled applications
+be. A unit could be a function or a method, maybe a single class, or a class
+and all of the classes it directly relies on. I don’t think a unit test should focus
+on any of these things. I want a unit test to test the behaviors of an object . I
+don’t worry about which classes are involved in testing the behavior of this
+object. So I don’t annotate my unit tests with @covers annotations either. For
+me it’s about how the object behaves, which classes are involved is somewhat
+irrelevant.
+Writing a unit test is a way to zoom in on the behavior of some of the sys-
+tem’s smaller elements. These tests support development by allowing the de-
+veloper to specify the behavior of the smaller elements, allowing them to ig-
+nore some of those behaviors when the larger elements are being tested (see
+Section 14.5). Writing unit tests can therefore give you a steadily increasing
+sense of security. If the building blocks are safe to use, then you don’t have to
+worry about all the details once you start using the blocks to build the bigger
+structures.
+In most of the projects I’ve encountered so far there is a problem with the
+unit test suite. The tests in it are not all unit tests. Not because the unit is too
+large, but because the tests aren’t isolated enough. What this means is nicely
+described by Michael Feathers in his definition of a unit test1:
+A test is not a unit test if:
+1.It talks to the database
+2.It communicates across the network
+3.It touches the file system
+4.It can’t run at the same time as any of your other unit tests
+5.You have to do special things to your environment (such as
+editing config files) to run it.
+If you’ve read Part Iyou know that the first three points reflect only part of
+what could be considered “infrastructure” concerns. Additionally, we have
+also considered code that communicates with the system clock or the sys-
+1Michael Feathers, “A Set of Unit Testing Rules” (2005): https://advwebapparch.com/
+unit-test-definition
+320

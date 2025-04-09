@@ -1,0 +1,34 @@
+4. Application services
+Listing 4.14. The application service depends on an abstraction.
+final class EbookOrderService
+{
+// ...
+private SendOrderConfirmationEmail $sendConfirmationEmail ;
+public function __construct (
+// ...
+SendOrderConfirmationEmail $sendConfirmationEmail
+) {
+// ...
+$this ->sendConfirmationEmail =$sendConfirmationEmail ;
+}
+public function create (CreateOrder $createOrder ):OrderId
+{
+// Create the Order entity, save it
+$this ->sendConfirmationEmail ->send (
+$orderId ,
+$createOrder ->emailAddress ()
+);
+// ...
+}
+}
+Often when I introduce an interface to move lower-level implementation de-
+tails out of sight, I forget to provide an actual implementation of that inter-
+face. Knowing that the SendOrderConfirmationEmail interface exists, I trust
+it can be used. For me this is really stress-reducing. I can postpone all my
+worries about the correct usage of the mailer API, and I can move these messy
+details out of sight. I know everything will be fine the moment this code runs
+in production.
+However, at some point you do have to send actual emails, so you can’t post-
+pone this work indefinitely. Let’s get it over with and provide an implemen-
+tation for the interface (see Listing 4.15).
+101

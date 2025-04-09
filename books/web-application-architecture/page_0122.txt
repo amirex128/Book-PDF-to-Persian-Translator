@@ -1,0 +1,37 @@
+4. Application services
+Listing 4.15. An implementation for the SendOrderConfirmationEmail inter-
+face.
+final class SendOrderConfirmationEmailWithSwiftMailer
+implements SendOrderConfirmationEmail
+{
+private string $systemEmailAddress ;
+private Environment $twig ;
+private Swift_Mailer $mailer ;
+public function __construct (
+string $systemEmailAddress ,
+Environment $twig ,
+Swift_Mailer $mailer
+) {
+$this ->systemEmailAddress =$systemEmailAddress ;
+$this ->twig =$twig ;
+$this ->mailer =$mailer ;
+}
+public function send (OrderId $orderId , string $emailAddress ):void
+{
+$message =(new Swift_Message( 'Order ' .$orderId ->asString ()))
+->setFrom ($this ->systemEmailAddress )
+->setTo ($emailAddress )
+->setBody (
+$this ->twig ->render ('email/order_confirmation.html.twig' )
+);
+$this ->mailer ->send ($message );
+}
+}
+In practice most services that send emails will need more information than
+just an ID and the recipient email address. In that case you should introduce
+a read model that fetches the required information in one go. The read model
+should prepare the data in a format that will be useful when rendering the
+email body. Given that such a read model is going to be used for presentation
+purposes, it’s actually a view model.
+Now we have two steps inside the application service:
+102

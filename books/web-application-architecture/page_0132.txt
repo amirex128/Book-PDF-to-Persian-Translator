@@ -1,0 +1,37 @@
+5. Service locators
+resolve(Mailer ::class )->send ($message );
+}
+}
+Before you can run this code, you have to make sure that the resolve() func-
+tion can in fact resolve, i.e. instantiate, a Mailer service. You also need to set
+up a configuration value for mail.default_sender , or else the call to config()
+will fail. A bigger problem may be that this code assumes there’s a session
+with a logged in user, and that this code runs as part of an HTTP request
+which has a known client IP address. Normally, the framework will take care
+of all of this by preparing the service container and loading the configuration
+before the SendIpConfirmationEmail service is used. But the fact that these
+preparations have to happen before that moment, means that this code isn’t
+as portable as we would like it to be. We can’t just instantiate this service and
+start calling its methods. Besides a temporal dependency on the framework,
+the code itself is also coupled to global functions provided by the framework.
+resolve() and config() are functions defined by Laravel, so we need this
+particular framework to run this code.2
+Laravel isn’t the only framework that offers this kind of tooling. Most of the
+frameworks I’ve worked with so far provided some global method which you
+could use to retrieve a service or configuration value. Famous examples are
+symfony 1’s sfContext3and Zend Framework 1’s Zend_Registry4. You could
+useZend_Registry to store any value or object and make it globally accessible
+using its static get() method. sfContext allowed you to retrieve configura-
+tion values or built-in services, so you could basically send emails from your
+domain model if you wanted.
+If you write reusable code like a library that you publish on Packagist5, frame-
+work coupling is generally a bad thing. It limits the potential audience for
+your library to the people who use the same framework as you do. But your
+application code is not intended for reuse outside your current project, so do
+you still have to worry about framework coupling? In short: yes. There are
+2I’ve written in more detail about Laravel and its service container on my blog: https:
+//advwebapparch.com/laravel-observations .
+3https://advwebapparch.com/sfcontext
+4https://advwebapparch.com/zend-registry
+5https://advwebapparch.com/packagist
+112

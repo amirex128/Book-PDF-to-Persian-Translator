@@ -1,0 +1,34 @@
+14. A testing strategy for decoupled applications
+EbookController::listAvailableEbooksAction() calls the method listAvailable -
+Ebooks() on the ApplicationInterface and passes the return value to the
+template (see Listing 14.8).
+Listing 14.8. listAvailableEbooksAction() calls listAvailableEbooks() .
+final class EbookController
+{
+private ApplicationInterface $application ;
+private TemplateRenderer $templateRenderer ;
+public function __construct (
+ApplicationInterface $application ,
+TemplateRenderer $templateRenderer
+) {
+$this ->application =$application ;
+$this ->templateRenderer =$templateRenderer ;
+}
+public function listAvailableEbooksAction ():Response
+{
+$ebooks =$this ->application ->listAvailableEbooks ();
+return $this ->templateRenderer ->render (/* ... */ );
+}
+}
+We could write a similar controller test for it like we’ve done before (see List-
+ing14.9). But here we need to do a bit more work to prepare a set of fake
+Ebook objects that will be returned by the test double.
+Listing 14.9. A test for the EbookController .
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+final class EbookControllerTest extends WebTestCase
+{
+public function it_renders_a_list_of_ebooks ():void
+{
+$ebooks =[
+EbookBuilder ::create ()
+335

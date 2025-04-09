@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page_0005</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            /* Strict A4 size enforcement */
+            width: 21cm;
+            height: 29.7cm;
+            overflow: hidden; /* Critical: prevents content overflow */
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            background-color: white;
+            padding: 1.5cm;
+            box-sizing: border-box;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            margin-bottom: 20px;
+            /* Dynamic text size adjustment */
+            max-height: 40%;
+            overflow: hidden;
+            /* Text will shrink if there are large images */
+            flex: 0 1 auto;
+        }
+        .page-images {
+            text-align: center;
+            margin: 10px auto;
+            /* Images area takes remaining space */
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .page-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            /* Dynamic height - will shrink if there are multiple images */
+            max-height: calc((100% - 20px) / var(--image-count, 1));
+            margin: 5px auto;
+            object-fit: contain;
+        }
+        .page-number {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #777;
+            flex: 0 0 auto;
+        }
+        @media print {
+            body {
+                background: none;
+                width: 21cm;
+                height: 29.7cm;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                height: 100%;
+            }
+            .persian-translation {
+                /* Ensure text doesn't overflow in print */
+                overflow: hidden;
+            }
+            .page-images {
+                /* Ensure images don't cause page breaks */
+                page-break-inside: avoid;
+                overflow: hidden;
+            }
+            .page-image {
+                /* Ensure images are scaled properly for print */
+                max-height: calc((100% - 20px) / var(--image-count, 1));
+            }
+        }
+    </style>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageContainer = document.querySelector('.page-images');
+            if (imageContainer) {
+                const images = imageContainer.querySelectorAll('.page-image');
+                document.documentElement.style.setProperty('--image-count', images.length);
+                
+                // Further adjust if text is large
+                const textElement = document.querySelector('.persian-translation');
+                const textHeight = textElement.offsetHeight;
+                const containerHeight = document.querySelector('.container').offsetHeight;
+                
+                // If text takes more than 40% of container, reduce image max-height
+                if (textHeight > containerHeight * 0.4) {
+                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
+                    const imageMaxHeight = remainingHeight / images.length;
+                    images.forEach(img => {
+                        img.style.maxHeight = imageMaxHeight + 'px';
+                    });
+                }
+            }
+        });
+    
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div dir='rtl' class='persian-translation'>فهرست مطالب
+مقدمه x
+۱. پیشگفتار . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . x
+۲. چرا جداسازی از زیرساخت بسیار مهم است؟ . . . . . . . xi
+۳. این کتاب برای چه کسانی است؟ . . . . . . . . . . . . . . . . . . . . . . xii
+۴. مروری بر محتوای کتاب . . . . . . . . . . . . . . . . . . . . . . . . . . xii
+۵. پروژه دمو همراه . . . . . . . . . . . . . . . . . . . . . . . . . . . . xiii
+۶. درباره نویسنده . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xiv
+۷. قدردانی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xiv
+۸. تغییرات . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xv
+۸.۱. ۱۵ آوریل ۲۰۲۰ (نسخه اولیه) . . . . . . . . . . . . . . . . . . xv
+۸.۲. ۲۳ آوریل ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . . xv
+۸.۳. ۱ مه ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . . . xvi
+۸.۴. ۶ مه ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . . . xvi
+۸.۵. ۲۹ مه ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . . xvi
+۸.۶. ۴ ژوئن ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . . xvii
+۸.۷. ۱۲ ژوئن ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . xvii
+۸.۸. ۱۷ ژوئن ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . xvii
+۸.۹. ۲۲ ژوئن ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . xviii
+۸.۱۰. ۲۶ ژوئن ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . xviii
+۸.۱۱. ۱ ژوئیه ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . xviii
+۸.۱۲. ۶ ژوئیه ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . xviii
+۸.۱۳. ۸ ژوئیه ۲۰۲۰ . . . . . . . . . . . . . . . . . . . . . . . . . . xviii
+۱. جداسازی از زیرساخت ۱
+۱. مقدمه ۲
+۱.۱. قانون اول: وابستگی به سیستم‌های خارجی وجود ندارد . . . . . . . . . ۳
+۱.۲. انتزاع . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۵
+iv
+
+
+</div>
+        
+        
+        
+        <div class="page-number">
+            5
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+1. Introduction
+PurchaseId ::fromString ($purchaseId )
+);
+$this ->memberRepository ->save ($member );
+}
+}
+final class EmailAddress
+{
+private string $emailAddress ;
+private function __construct (string $emailAddress )
+{
+if(!filter_var ($emailAddress , FILTER_VALIDATE_EMAIL)) {
+throw new InvalidArgumentException( '...' );
+}
+$this ->emailAddress =$emailAddress ;
+}
+public static function fromString (string $emailAddress ):self
+{
+return new self( $emailAddress );
+}
+}
+final class Member
+{
+public static function requestAccess (
+EmailAddress $emailAddress ,
+PurchaseId $purchaseId
+):self {
+// ...
+}
+}
+Not having to create a special context for code to run in is, again, great for
+testability. The only thing you have to do in a test scenario is instantiate the
+class and call a method on it. But following the rules for core code isn’t just
+great for testing. It also helps keeping your core code protected against all
+10

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page_0006</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            /* Strict A4 size enforcement */
+            width: 21cm;
+            height: 29.7cm;
+            overflow: hidden; /* Critical: prevents content overflow */
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            background-color: white;
+            padding: 1.5cm;
+            box-sizing: border-box;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            margin-bottom: 20px;
+            /* Dynamic text size adjustment */
+            max-height: 40%;
+            overflow: hidden;
+            /* Text will shrink if there are large images */
+            flex: 0 1 auto;
+        }
+        .page-images {
+            text-align: center;
+            margin: 10px auto;
+            /* Images area takes remaining space */
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .page-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            /* Dynamic height - will shrink if there are multiple images */
+            max-height: calc((100% - 20px) / var(--image-count, 1));
+            margin: 5px auto;
+            object-fit: contain;
+        }
+        .page-number {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #777;
+            flex: 0 0 auto;
+        }
+        @media print {
+            body {
+                background: none;
+                width: 21cm;
+                height: 29.7cm;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                height: 100%;
+            }
+            .persian-translation {
+                /* Ensure text doesn't overflow in print */
+                overflow: hidden;
+            }
+            .page-images {
+                /* Ensure images don't cause page breaks */
+                page-break-inside: avoid;
+                overflow: hidden;
+            }
+            .page-image {
+                /* Ensure images are scaled properly for print */
+                max-height: calc((100% - 20px) / var(--image-count, 1));
+            }
+        }
+    </style>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageContainer = document.querySelector('.page-images');
+            if (imageContainer) {
+                const images = imageContainer.querySelectorAll('.page-image');
+                document.documentElement.style.setProperty('--image-count', images.length);
+                
+                // Further adjust if text is large
+                const textElement = document.querySelector('.persian-translation');
+                const textHeight = textElement.offsetHeight;
+                const containerHeight = document.querySelector('.container').offsetHeight;
+                
+                // If text takes more than 40% of container, reduce image max-height
+                if (textHeight > containerHeight * 0.4) {
+                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
+                    const imageMaxHeight = remainingHeight / images.length;
+                    images.forEach(img => {
+                        img.style.maxHeight = imageMaxHeight + 'px';
+                    });
+                }
+            }
+        });
+    
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div dir='rtl' class='persian-translation'>۱.۳. قانون دوم: نیازی به زمینه خاص نیست . . . . . . . . . . . . . . . . . . . ۷
+۱.۴. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۱۲
+۲. مدل دامنه ۱۵
+۲.۱. دستورات SQL در همه جا . . . . . . . . . . . . . . . . . . . . . . . . . ۱۵
+۲.۲. تلاش برای رفع آن با دروازه داده‌های جدول . . . . . . . . . . . . . . . . ۱۸
+۲.۳. طراحی یک موجودیت . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۱۹
+۲.۴. معرفی یک انبار . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۳
+۲.۵. نگاشت داده‌های موجودیت به ستون‌های جدول . . . . . . . . . . . . . . . . ۲۶
+۲.۵.۱. استفاده از ORM . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۷
+۲.۵.۲. نگاشت دستی . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰
+۲.۶. تولید شناسه زودتر . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۴
+۲.۶.۱. استفاده از UUID به جای شناسه‌های عدد صحیح (خودکار) افزایش‌یافته . . . . . . ۳۹
+۲.۷. استفاده از یک شیء مقدار برای شناسه . . . . . . . . . . . . . . . . . . . ۴۱
+۲.۸. رکورد فعال در مقابل نقشه داده‌ها . . . . . . . . . . . . . . . . . . . . . ۴۴
+۲.۹. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۴۷
+۳. مدل‌های خواندن و مدل‌های نمایش ۴۸
+۳.۱. استفاده مجدد از مدل نوشتن . . . . . . . . . . . . . . . . . . . . . . . . . ۵۳
+۳.۲. ایجاد یک مدل خواندن جداگانه . . . . . . . . . . . . . . . . . . . . . . ۵۸
+۳.۳. پیاده‌سازی انبار مدل خواندن . . . . . . . . . . . . . . . . . . . . . ۶۰
+۳.۳.۱. اشتراک منبع داده زیربنایی . . . . . . . . . . . . . . . . . . ۶۰
+۳.۳.۲. استفاده از رویدادهای دامنه مدل نوشتن . . . . . . . . . . . . . . . ۶۲
+۳.۴. استفاده از اشیاء مقدار با مدل‌های خواندن داخلی . . . . . . . . . . . . ۶۷
+۳.۵. یک نوع خاص از مدل خواندن: مدل نمایش . . . . . . . . . . . . . . . . . . ۷۰
+۳.۶. استفاده از مدل‌های نمایش برای API . . . . . . . . . . . . . . . . . . . . . ۷۹
+۳.۷. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۸۱
+۴. سرویس‌های کاربردی ۸۴
+۴.۱. در نظر گرفتن زیرساخت‌های دیگر . . . . . . . . . . . . . . . . . . . . . ۸۵
+۴.۲. طراحی یک مورد استفاده قابل بازیافت . . . . . . . . . . . . . . . . . . . . ۸۹
+۴.۳. استخراج یک سرویس کاربردی . . . . . . . . . . . . . . . . . . . . . . . ۹۱
+۴.۴. معرفی یک شیء پارامتر . . . . . . . . . . . . . . . . . . . . . . . . . . ۹۵
+۴.۵. برخورد با مراحل متعدد . . . . . . . . . . . . . . . . . . . . . . . . . ۹۷
+۴.۶. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۱۰۶
+v
+
+</div>
+        
+        
+        
+        <div class="page-number">
+            6
+        </div>
+    </div>
+</body>
+</html>

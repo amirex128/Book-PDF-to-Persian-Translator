@@ -1,0 +1,32 @@
+11. Key design patterns
+$this ->events =[];
+return $events ;
+}
+}
+11.3. Repositories
+Every entity needs a repository. Because a repository crosses the application
+boundary to save and load entities it should be a service abstraction. This
+means the repository should be defined as an interface (e.g. OrderRepository ).
+It also needs a standard implementation that implements the interface and
+the contract described by it. There are several alternative designs for repos-
+itories, but I prefer the simplest one. It doesn’t make a distinction between
+adding and updating entities (see Listing 11.5).
+Listing 11.5. A repository interface has a save() and a getById() method.
+interface OrderRepository
+{
+/**
+* @throws CouldNotSaveOrder
+*/
+public function save (Order $order ):void;
+/**
+* @throws CouldNotFindOrder
+*/
+public function getById (OrderId $orderId ):Order;
+}
+The contract that this interface represents is that when you have saved an
+Order with a certain OrderId you can at any time retrieve a copy of it by
+providing that same OrderId as an argument to getById() . After making a
+change to Order (in fact, after changing it in any of the ways that it allows),
+the object can be saved again using save() . And it can also be retrieved by
+calling getById() . The object you get back from OrderRepository could be
+252

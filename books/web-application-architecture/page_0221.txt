@@ -1,0 +1,36 @@
+8. Validation
+vent bad state transitions to happen. If an order has been paid and delivered,
+it can’t be cancelled anymore. Only a pending order can be cancelled. In
+other situations you may first have to request a refund, or return the deliv-
+ery somehow.
+Once you’ve added all these measures to let objects protect their own state,
+they will be completely fool-proof. Any client could instantiate the object,
+call any method on it, and if they provide the wrong data, or the requested
+state transition is not allowed, it will fail and tell the client about what they
+did wrong. Compare this to the original example where we used a valida-
+tor to validate the object. In that example we received a list of errors from
+the validator, but the entity would be in a bad state nonetheless. Now that
+the entity fails loudly at the first sign that something is wrong, we’ve accom-
+plished what we wanted. We can now be sure that any data that is assigned
+to a property of the entity is correct and consistent. So if we (accidentally or
+on purpose) save it to the database, we won’t end up with corrupt data.
+Well, there’s one scenario we didn’t cover that might still give us corrupt
+data. An entity can validate most data that gets passed to it as constructor
+or method arguments. But it can’t validate everything, because it can’t look
+beyond itself and the data provided to it. An example is the EbookId param-
+eter of the addLine() method (Listing 8.6):Order can’t figure out all by itself
+if a given EbookId refers to an actual e-book in our catalog.
+Listing 8.6. Does the provided EbookId refer to an actual e-book?
+final class Order
+{
+// ...
+public function addLine (EbookId $ebookId , int $quantity ):void
+{
+/*
+* There's no way to verify that the provided ID refers to
+* an actual e-book from our catalog...
+*/
+}
+}
+Even the fact that we use a value object to represent the e-book identifier
+201

@@ -1,0 +1,37 @@
+14. A testing strategy for decoupled applications
+the order confirmation email. Again, this needs to be an abstraction, e.g. our
+own Mailer interface with a method sendOrderConfirmationMail() .
+We’ll also need an EventDispatcher service. We’ve seen an example of it
+in Section 11.5, including an implementation. Listing 14.11 shows the same
+interface with a similar implementation.
+Listing 14.11. The EventDispatcher interface and an implementation.
+interface EventDispatcher
+{
+/**
+* @param array<object> $events
+*/
+public function dispatchAll (array $events ):void;
+}
+final class ConfigurableEventDispatcher implements EventDispatcher
+{
+private array $subscribers =[];
+public function __construct ()
+{
+}
+public function addSubscriber (
+string $eventType ,
+callable $subscriber
+):void {
+$this ->subscribers [$eventType ][] =$subscriber ;
+}
+public function dispatchAll (array $events ):void
+{
+foreach ($events as$event ) {
+foreach (
+$this ->subscribersForEvent ($event )as$subscriber
+) {
+$subscriber ($event );
+}
+}
+}
+340

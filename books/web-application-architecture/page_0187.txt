@@ -1,0 +1,23 @@
+7. Time and randomness
+ues will be helpful in making the subject-under-test (SUT) more predictable.
+Order itself no longer relies on the actual current time or actually random
+data. Figure 7.2shows the new dependency relations.
+Figure 7.2. Order explicitly depends on Uuid and DateTimeImmutable , which
+still have implicit external dependencies.
+7.2. Introducing factories
+There are some remaining design issues with this code. One issue is that
+producing the current time or a random value are actually service respon-
+sibilities. Even though Uuid and DateTimeImmutable look like value objects,
+they really aren’t. They could never come up with random data or the cur-
+rent time on their own. Imagine that you’d have to write the constructor of
+DateTimeImmutable , or the named constructor Uuid::uuid4() . What should
+go in there? At some point you’d have to “reach out” and ask the host system
+for some input. Your code can never come up with true randomness, or with
+the actual current time. This doesn’t correspond with the nature of a value
+object, which is supposed to be a pure object, whose behavior is determined
+solely by the input provided it, and its own logic.
+When an object talks to external systems this object should be a service so it
+can communicate this clearly. And when we create a service class for some-
+thing that talks to the outside world, we should always provide an interface
+for it. This allows us to properly inject the service as a constructor depen-
+167

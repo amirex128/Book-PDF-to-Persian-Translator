@@ -1,0 +1,33 @@
+2. The domain model
+There are two implementation options: either you let the entity prepare the
+columns => values array, or you let it expose its internal data as an array
+and do the mapping inside the repository. Listing 2.14 shows an example of
+the first option.
+Listing 2.14. save() retrieves the mapped data from the Order entity.
+final class Order
+{
+// ...
+public function mappedData ():array
+{
+return [
+'email' =>$this ->emailAddress ,
+'quantity' =>$this ->quantityOrdered ,
+// ...
+];
+}
+}
+final class SqlOrderRepository implements OrderRepository
+{
+// ...
+public function save (Order $order ):int
+{
+// ...
+$data =$order ->mappedData ();
+// $data is an array of columns => values
+// ...
+}
+}
+The downside of this approach is that the Order entity has knowledge about
+the names and types of the database columns. Whenever a column gets re-
+named, you would also have to update the Order class.
+31

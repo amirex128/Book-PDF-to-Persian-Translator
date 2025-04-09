@@ -1,0 +1,35 @@
+8. Validation
+// ...
+/**
+* @return array<string,array<string>>
+*/
+public function validate (Order $order ):array
+{
+$errors =[];
+if(!filter_var ($order ->getEmail (), FILTER_VALIDATE_EMAIL)) {
+$errors ['email' ][] ='create_order.invalid_email_address' ;
+}
+foreach ($order ->getLines ()as$line ) {
+try {
+$this ->ebookRepository ->getById ($line ->getEbookId ());
+}catch (CouldNotFindEbook $exception ) {
+$errors ['ebook_id' ][] ='create_order.could_not_find_ebook'
+.$line ->getEbookId ();
+}
+}
+// ...
+return $errors ;
+}
+}
+I don’t like this code at all, because all those getters on the Order object are
+only there for the validator to get the data out again. We had already con-
+cluded in Chapter 3that this is undesirable. A bigger problem is the fact
+that our Order object also has setters that you can use to set each value sep-
+arately. The setter itself can only enforce the type of the data provided by
+adding types to its parameters. But the setter doesn’t look any closer at the
+value provided; it doesn’t validate the value, it doesn’t throw an exception if
+somebody provides a bad email address. This means that bad data can end
+up inside the Order entity. And if nobody calls OrderValidator::validate()
+to validate the Order , its invalid data could be saved directly to the database.
+The relationship between these two objects, the validator and the entity, is
+195

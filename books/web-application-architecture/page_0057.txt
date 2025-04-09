@@ -1,0 +1,35 @@
+2. The domain model
+)->fetchColumn (0)+1;
+}
+}
+You may have already spotted the problem: if the application has many con-
+current users, chances are that two clients end up trying to insert a record
+with the same ID. If concurrency is usually not an issue for you, the naive
+implementation can be the right implementation. If you start having concur-
+rency issues or if you already have them, you could switch to a more robust
+implementation, for example one that uses a sequence at database-level. If
+your database doesn’t support sequences, it wouldn’t be a lot of work to write
+the code yourself. See Listing 2.20 for a sample implementation.
+Listing 2.20. This version of nextIdentity() uses a sequence table.
+public function nextIdentity ():int
+{
+return $this ->connection ->transactional (function () {
+$nextId =(int) $this ->connection ->execute (
+'SELECT last_id FROM order_id_sequence'
+)->fetchColumn (0)+1;
+$this ->connection ->execute (
+'UPDATE order_id_sequence SET last_id = :last_id' ,
+[
+'last_id' =>$nextId
+]
+);
+return $nextId ;
+});
+}
+Once we have added a suitable implementation of nextIdentity() we no
+longer have to wait for the database to return the auto-incremented ID value
+to us. Instead, now that the Order entity already contains its ID from the start,
+we should use that ID when mapping the entity’s data to the columns in the
+database (see Listing 2.21).
+Listing 2.21. mappedData() also returns a value for the idcolumn.
+37

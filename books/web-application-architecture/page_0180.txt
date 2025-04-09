@@ -1,0 +1,30 @@
+6. External services
+EbookOrderService made it work, but left us with a bad design. We moved
+the low-level communication details to a separate service class. This left us
+with an API client, or Façade , called VatApi , which could be injected as a de-
+pendency, but could not be replaced with anything else. Directly depending
+on a class endangers the future of the service, but also degrades its testabil-
+ity. We introduced a proper abstraction to overcome these problems, leaving
+us with a VatRateProvider interface and a standard implementation, which
+uses the VatApi client that we already had. The testing situation is much bet-
+ter, since clients of the VatRateProvider can now easily set up a test double
+for it. This means that the EbookOrderService is once more testable in isola-
+tion. Any implementation of the interface still needs its own integration test .
+As part of running such a test, the implementation makes an actual call to the
+remote service to verify that its assumptions about the external service are
+correct, and that the class is a correct implementation of the interface.
+Exercises
+1. What is the right way to abstract calls to external services?a
+1.Use an HTTP client abstraction instead of curl_* functions.
+2.Introduce an abstract class that you can depend on. The subclass can
+do the real work.
+3.Introduce an interface and an implementation which makes the ac-
+tual call.
+2. What’s a good test to find out if you have achieved the right level of
+abstraction for a service dependency?b
+1.It’s a good abstraction if you can create a test double for it.
+2.It’s a good abstraction if it is still useful when the implementation
+details change radically.
+3. If an object communicates with an external service, what type of test
+should you write for it?c
+160

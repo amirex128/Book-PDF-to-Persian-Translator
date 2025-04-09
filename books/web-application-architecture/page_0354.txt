@@ -1,0 +1,34 @@
+14. A testing strategy for decoupled applications
+test we wrote, the one where we only tested the OrderController itself, could
+be considered a stable test. There aren’t many elements involved, so there
+aren’t many unrelated problems that could cause this test to fail. However,
+we decided it left too many assumptions unverified. Using the WebTestCase
+increases the confidence we have in our code, but there are many more steps
+involved. Such a test could fail for many unrelated reasons, and because it
+involves calling more code, it will be much slower too. Starting a web server
+and making actual HTTP requests will make the test even slower, and more
+likely to fail for hard-to-debug reasons.
+In my experience, keeping the test suite fast and stable is very important. It
+makes my work much more fun, and I feel very confident about the quality of
+my work. So I think the majority of the tests for incoming adapters shouldn’t
+make actual HTTP requests. They can invoke the framework programmati-
+cally and verify 80% of the assumptions. Still, it would be smart to have at
+least a few tests that mimic a production setting, just so we know that all the
+real infrastructure elements work well together. For this we write so-called
+End-to-end tests (see Section 14.6).
+“Why is it important to mock the application in an adapter
+test?
+The reason we’re mocking the ApplicationInterface is that we shouldn’t
+use integration tests to test core code. Core code allows itself to be tested
+with unit tests or use case tests, which both run very quickly and are also
+very stable because they are completely deterministic and don’t involve
+more elements than strictly needed. Adapter tests are integration tests and
+are by definition slower and less stable than isolated tests. So although we
+could test core logic using an adapter test, it’s better to leave that to more
+isolated tests, and replace the entry point to the core (the ApplicationInterface
+in our example) with a test double.
+createService() is a command method which produces a side-effect. This
+is why the request method is POST . Our web application also has controllers
+that don’t produce a side-effect but only return some information. For exam-
+ple, the /list-available-ebooks page renders a list of e-books in HTML. The
+334

@@ -1,0 +1,34 @@
+2. The domain model
+{
+return new self( $orderId );
+}
+}
+3. Is the following class an entity or a value object?c
+final class Order
+{
+// ...
+public static function create (OrderId $orderId ):self
+{
+return new self( $orderId );
+}
+}
+4. Why should we generate an identity value for an entity before instanti-
+ating it for the first time?d
+1.Because the entity wouldn’t be complete, nor behave consistently,
+without an identity.
+2.Because otherwise the same identity might be used in another pro-
+cess.
+3.Because by letting the database determine it, we are implicitly re-
+lying on its ability to do so, which might not be true for alternative
+persistence mechanisms.
+5. Should the following code be considered mixed code (combining core
+and infrastructure code)?e
+use Doctrine\ORM\Mapping asORM;
+/**
+* @Entity
+* @Table(name="todo_items")
+*/
+final class ToDoItem
+{
+/**
+49

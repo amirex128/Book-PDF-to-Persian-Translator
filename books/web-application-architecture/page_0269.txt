@@ -1,0 +1,36 @@
+11. Key design patterns
+throw new LogicException(
+sprintf (
+'Order %s was already cancelled' ,
+$this ->id->asString ()
+)
+);
+}
+}
+}
+11.2.3. Model state changes as actions with state transitions
+When an update to a particular field actually represents an action performed
+on the object, define a method for it. The job of this method, again, is to
+validate the arguments provided to it. It also has to verify that the action is
+allowed, given the current state of the object. As an example, an order may be
+cancelled, but only if it hasn’t been delivered yet. Instead of a setCancelled()
+method, an Order entity would have a cancel() method, which performs the
+required checks (see Listing 11.3).
+Listing 11.3. The cancel() action is only available when the object is in a
+certain state.
+final class Order
+{
+// ...
+private bool $wasCancelled ;
+private bool $wasDelivered ;
+public function cancel ():void
+{
+if($this ->wasDelivered ) {
+throw new LogicException(
+sprintf (
+'Order %s has already been delivered' ,
+$this ->id->asString ()
+)
+);
+}
+249

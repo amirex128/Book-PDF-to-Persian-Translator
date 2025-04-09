@@ -1,0 +1,35 @@
+5. Service locators
+final class SendIpConfirmationEmail
+{
+// ...
+private Translator $translator ;
+public function __construct (
+/* ... */
+Translator $translator
+) {
+// ...
+$this ->translator =$translator ;
+}
+public function send (/* ... */ ):void {
+$message =EmailMessage ::create ()
+// ...
+->text (
+$this ->translator ->trans (
+'Add your :ip to the whitelist' ,
+[
+'ip' =>$ipAddress
+],
+$user ->locale ()
+)
+);
+// ...
+}
+}
+5.6. Clients of reusable services
+Adding more required constructor arguments to a service requires some changes
+to the place where services are instantiated. If you use auto-wiring for ser-
+vices it’ll be no effort, but if you have a hand-written service container7or
+one based on configuration files, you need to make some manual changes.
+Clients that use the send() method also have to be updated. They can no
+7https://advwebapparch.com/hand-written-service-containers
+117

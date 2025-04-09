@@ -1,0 +1,32 @@
+2. The domain model
+for a thing that can save an Order to the database, just imagine that the thing
+already exists, and start using it (see Listing 2.6).
+Listing 2.6. An imagined object for saving orders.
+$order =new Order( /* ... */ );
+$lastInsertedId =$orderSaver ->save ($order );
+To be useful for us in this spot, the thing that can save an order only needs
+asave() method with a single parameter of type Order . Since the database
+determines the ID of a new order using an auto-incremented integer column,
+we could give this method an intreturn type, so a client of the method can
+later use the newly assigned ID. Let’s formalize all of this by defining an
+interface for our “order saver” (see Listing 2.7).
+Listing 2.7. The OrderSaver interface.
+interface OrderSaver
+{
+/**
+* @return int The ID of the saved `Order`
+*/
+public function save (Order $order ):int;
+}
+“Object savers” are usually called repositories . Repository is the name of a
+design pattern which provides a solution to a common problem: the need
+to save a domain object, and later reconstitute it. To make it clear that we
+intend to use the repository design pattern5here, let’s rename OrderSaver to
+OrderRepository (see Listing 2.8).
+Listing 2.8. The OrderRepository interface.
+interface OrderRepository
+{
+public function save (Order $order ):int;
+}
+5Eric Evans, “Domain-Driven Design”, Addison-Wesley Professional (2003).
+24

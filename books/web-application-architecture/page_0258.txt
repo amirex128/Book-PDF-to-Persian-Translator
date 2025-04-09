@@ -1,0 +1,37 @@
+9. Conclusion
+Listing 9.5. One way of making secondsPassed() pure.
+final class Stopwatch
+{
+public function secondsPassed (
+int $currentTimestamp ,
+int $previousTimestamp
+):int {
+return $currentTime -$previousTimestamp ;
+}
+}
+There is another option, which is unique to objects. We could inject a depen-
+dency that the secondsPassed() method can use to retrieve the current time.
+Listing 9.6shows how you could inject some kind of Timer object. The Timer
+has a time() method that can be used to replace calls to time() .
+Listing 9.6. Another way of making secondsPassed() pure.
+final class Timer
+{
+public function currentTimestamp ():int
+{
+return time ();
+}
+}
+final class Stopwatch
+{
+private Timer $timer ;
+public function __construct (Timer $timer )
+{
+$this ->timer =$timer ;
+}
+public function secondsPassed (int $previousTimestamp ):int
+{
+return $this ->timer ->currentTimestamp ()
+-$previousTimestamp ;
+}
+}
+238
