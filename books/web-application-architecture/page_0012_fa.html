@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page_0012</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            /* Strict A4 size enforcement */
+            width: 21cm;
+            height: 29.7cm;
+            overflow: hidden; /* Critical: prevents content overflow */
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            background-color: white;
+            padding: 1.5cm;
+            box-sizing: border-box;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            margin-bottom: 20px;
+            /* Dynamic text size adjustment */
+            max-height: 40%;
+            overflow: hidden;
+            /* Text will shrink if there are large images */
+            flex: 0 1 auto;
+        }
+        .page-images {
+            text-align: center;
+            margin: 10px auto;
+            /* Images area takes remaining space */
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .page-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            /* Dynamic height - will shrink if there are multiple images */
+            max-height: calc((100% - 20px) / var(--image-count, 1));
+            margin: 5px auto;
+            object-fit: contain;
+        }
+        .page-number {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #777;
+            flex: 0 0 auto;
+        }
+        @media print {
+            body {
+                background: none;
+                width: 21cm;
+                height: 29.7cm;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                height: 100%;
+            }
+            .persian-translation {
+                /* Ensure text doesn't overflow in print */
+                overflow: hidden;
+            }
+            .page-images {
+                /* Ensure images don't cause page breaks */
+                page-break-inside: avoid;
+                overflow: hidden;
+            }
+            .page-image {
+                /* Ensure images are scaled properly for print */
+                max-height: calc((100% - 20px) / var(--image-count, 1));
+            }
+        }
+    </style>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageContainer = document.querySelector('.page-images');
+            if (imageContainer) {
+                const images = imageContainer.querySelectorAll('.page-image');
+                document.documentElement.style.setProperty('--image-count', images.length);
+                
+                // Further adjust if text is large
+                const textElement = document.querySelector('.persian-translation');
+                const textHeight = textElement.offsetHeight;
+                const containerHeight = document.querySelector('.container').offsetHeight;
+                
+                // If text takes more than 40% of container, reduce image max-height
+                if (textHeight > containerHeight * 0.4) {
+                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
+                    const imageMaxHeight = remainingHeight / images.length;
+                    images.forEach(img => {
+                        img.style.maxHeight = imageMaxHeight + 'px';
+                    });
+                }
+            }
+        });
+    
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div dir='rtl' class='persian-translation'>مقدمه
+۲. چرا جداسازی از زیرساخت بسیار مهم است؟
+جدا کردن نگرانی‌های زیرساختی از منطق اصلی برنامه، منجر به مدل دامنه‌ای می‌شود که می‌تواند به شیوه‌ای مبتنی بر دامنه توسعه یابد. همچنین منجر به کد برنامه‌ای می‌شود که بسیار آسان برای تست و توسعه به شیوه‌ای مبتنی بر تست است. در نهایت، تست‌ها تمایل به ثبات بیشتر و اجرا با سرعت بالاتر نسبت به تست‌های عملکردی معمولی الهام گرفته از چارچوب دارند.
+حمایت از هم‌زمان طراحی مبتنی بر دامنه (DDD) و توسعه مبتنی بر تست (TDD) از قبل ویژگی فوق‌العاده هر سیستم نرم‌افزاری است. اما جداسازی زیرساخت از نگرانی‌های دامنه با استفاده از این الگوهای طراحی، دو مزیت دیگر به شما می‌دهد. بدون کار اضافی زیادی، می‌توانید شروع به استفاده از مجموعه‌ای استاندارد از لایه‌ها (که به لایه‌های دامنه، کاربرد و زیرساخت معروف هستند) کنید. علاوه بر این، می‌توانید موارد استفاده‌ای که جدا کرده‌اید را به عنوان درگاه و کد پیاده‌سازی پشتیبان را به عنوان سازگارکننده علامت‌گذاری کنید.
+استفاده از لایه‌ها، درگاه‌ها و سازگارکننده‌ها روشی عالی برای استانداردسازی معماری سطح بالا شماست، که فهم، نگهداری و توسعه بیشتر کد را برای همه آسان‌تر می‌کند. و شگفتی بزرگی که من اکنون برایتان فاش می‌کنم این است که با جدا کردن کد هسته‌ای از کد زیرساخت، تمام این مزایا به طور رایگان به دست می‌آیند.
+اگر برنامه شما قرار است بیش از مثلاً دو سال زنده بماند، جداسازی از زیرساخت یک شرط مطمئن است. زیرساخت‌های اطراف مانند چارچوب‌ها، سرویس‌های وب از راه دور، سیستم‌های ذخیره‌سازی و غیره، احتمالاً با نرخی متفاوت از مدل دامنه و موارد استفاده شما تغییر خواهند کرد. هر اتفاقی که در دنیای فناوری پیرامون برنامه شما بیفتد، کد اصلی ارزشمند شما تحت تأثیر قرار نخواهد گرفت. هر دو می‌توانند با سرعت خود تکامل یابند. ارتقاء به نسخه بعدی چارچوب شما، مهاجرت به بَک‌اند ذخیره‌سازی متفاوت یا تغییر به ارائه دهنده پرداخت متفاوت، هزینه چندانی نخواهد داشت، اگر کدهای هسته‌ای و زیرساخت همچنان با هم مخلوط باشند. وابستگی‌های کد یا سیستم‌های خارجی همیشه جدا خواهند بود و اگر باید تغییری ایجاد شود، بلافاصله خواهید دانست که باید آن را کجا اعمال کنید.
+از سوی دیگر، اگر قرار است برنامه شما بیش از دو سال زنده نباشد، این می‌تواند دلیلی خوب برای بی‌توجهی به رویکرد ارائه شده در این کتاب باشد. با این حال، من فقط یک یا دو بار در طول زندگی‌ام چنین برنامه‌ای را دیدهه‌ام.
+xi
+
+
+</div>
+        
+        
+        
+        <div class="page-number">
+            12
+        </div>
+    </div>
+</body>
+</html>

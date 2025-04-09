@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page_0009</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            /* Strict A4 size enforcement */
+            width: 21cm;
+            height: 29.7cm;
+            overflow: hidden; /* Critical: prevents content overflow */
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            background-color: white;
+            padding: 1.5cm;
+            box-sizing: border-box;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            margin-bottom: 20px;
+            /* Dynamic text size adjustment */
+            max-height: 40%;
+            overflow: hidden;
+            /* Text will shrink if there are large images */
+            flex: 0 1 auto;
+        }
+        .page-images {
+            text-align: center;
+            margin: 10px auto;
+            /* Images area takes remaining space */
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .page-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            /* Dynamic height - will shrink if there are multiple images */
+            max-height: calc((100% - 20px) / var(--image-count, 1));
+            margin: 5px auto;
+            object-fit: contain;
+        }
+        .page-number {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #777;
+            flex: 0 0 auto;
+        }
+        @media print {
+            body {
+                background: none;
+                width: 21cm;
+                height: 29.7cm;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                height: 100%;
+            }
+            .persian-translation {
+                /* Ensure text doesn't overflow in print */
+                overflow: hidden;
+            }
+            .page-images {
+                /* Ensure images don't cause page breaks */
+                page-break-inside: avoid;
+                overflow: hidden;
+            }
+            .page-image {
+                /* Ensure images are scaled properly for print */
+                max-height: calc((100% - 20px) / var(--image-count, 1));
+            }
+        }
+    </style>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageContainer = document.querySelector('.page-images');
+            if (imageContainer) {
+                const images = imageContainer.querySelectorAll('.page-image');
+                document.documentElement.style.setProperty('--image-count', images.length);
+                
+                // Further adjust if text is large
+                const textElement = document.querySelector('.persian-translation');
+                const textHeight = textElement.offsetHeight;
+                const containerHeight = document.querySelector('.container').offsetHeight;
+                
+                // If text takes more than 40% of container, reduce image max-height
+                if (textHeight > containerHeight * 0.4) {
+                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
+                    const imageMaxHeight = remainingHeight / images.length;
+                    images.forEach(img => {
+                        img.style.maxHeight = imageMaxHeight + 'px';
+                    });
+                }
+            }
+        });
+    
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div dir='rtl' class='persian-translation'>۱۱.۶. مدل‌های خواندن . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۷۱
+۱۱.۶.۱. استفاده از مدل‌های خواندن داخلی در صورت نیاز به اطلاعات . . ۲۷۱
+۱۱.۶.۲. انتخاب یک پیاده‌سازی استاندارد برای انبار . . . . . . . . . . . ۲۷۴
+۱۱.۶.۳. برای مدل‌های نمایش، آماده‌سازی داده‌ها برای رندرینگ . . . . . . ۲۷۶
+۱۱.۷. مدل‌سازی فرایند . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۷۷
+۱۱.۸. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۰
+۱۲. لایه‌های معماری ۲۸۱
+۱۲.۱. MVC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۱
+۱۲.۲. مجموعه استاندارد لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۳
+۱۲.۲.۱. لایه زیرساخت . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۴
+۱۲.۲.۲. لایه کاربرد . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۵
+۱۲.۲.۳. لایه دامنه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۶
+۱۲.۲.۴. بالا و پایین سلسله‌مراتب لایه‌ها . . . . . . . . . . . . . . . . . . ۲۸۷
+۱۲.۳. قانون وابستگی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۸
+۱۲.۴. قابل لمس کردن لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۰
+۱۲.۴.۱. مستندسازی معماری . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۰
+۱۲.۴.۲. استفاده از فضاهای نام برای لایه‌ها . . . . . . . . . . . . . . . . . ۲۹۱
+۱۲.۴.۳. تایید خودکار تصمیمات طراحی . . . . . . . . . . . . . . . . . ۲۹۳
+۱۲.۵. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۶
+۱۳. درگاه‌ها و سازگارکننده‌ها ۲۹۸
+۱۳.۱. معماری شش ضلعی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۸
+۱۳.۲. درگاه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۹
+۱۳.۳. سازگارکننده‌ها برای درگاه‌های خروجی . . . . . . . . . . . . . . . . . . . . . . . ۳۰۱
+۱۳.۴. سازگارکننده‌ها برای درگاه‌های ورودی . . . . . . . . . . . . . . . . . . . . . ۳۰۳
+۱۳.۵. کاربرد به عنوان رابط . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰۸
+۱۳.۶. ترکیب درگاه‌ها و سازگارکننده‌ها با لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰۸
+۱۳.۷. ساختار دادن به لایه زیرساخت . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰۹
+۱۳.۸. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۱۷
+۱۴. استراتژی تست برای کاربردهای جدا شده ۳۱۹
+۱۴.۱. تست‌های واحد . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۱۹
+۱۴.۲. تست‌های سازگارکننده . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۲۲
+۱۴.۳. تست‌های قرارداد برای سازگارکننده‌های درگاه خروجی . . . . . . . . . . . . . . . . . . . ۳۲۴
+۱۴.۴. تست‌های هدایت‌شده برای سازگارکننده‌های درگاه ورودی . . . . . . . . . . . . . . . . . . . . . . . ۳۲۹
+۱۴.۵. تست‌های مورد استفاده . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۳۸
+viii
+</div>
+        
+        
+        
+        <div class="page-number">
+            9
+        </div>
+    </div>
+</body>
+</html>
