@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>page_0009</title>
     <link rel="stylesheet" href="fontiran.css">
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
     <style>
         @page {
             size: A4;
@@ -20,23 +23,19 @@
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             line-height: 1.5;
             background-color: #f8f9fa;
-            /* Strict A4 size enforcement */
+            /* A4 size enforcement */
             width: 21cm;
             height: 29.7cm;
-            overflow: hidden; /* Critical: prevents content overflow */
         }
         .container {
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
+            width: 18cm; /* A4 width minus margins */
+            min-height: 26.7cm; /* A4 height minus margins */
             background-color: white;
-            padding: 1.5cm;
+            padding: 1cm;
             box-sizing: border-box;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
         .persian-translation {
             text-align: right;
@@ -44,31 +43,36 @@
             font-size: 1em;
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             margin-bottom: 20px;
-            /* Dynamic text size adjustment */
-            max-height: 40%;
-            overflow: hidden;
-            /* Text will shrink if there are large images */
-            flex: 0 1 auto;
+            /* Don't hide any overflow text, let it flow naturally */
+            overflow: visible;
+        }
+        /* Style for code blocks */
+        pre[class*="language-"] {
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        code {
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
         }
         .page-images {
-            text-align: center;
-            margin: 10px auto;
-            /* Images area takes remaining space */
-            flex: 1 1 auto;
+            margin: 1cm 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            gap: 1cm;
         }
         .page-image {
-            display: block;
-            width: auto;
-            height: auto;
             max-width: 100%;
-            /* Dynamic height - will shrink if there are multiple images */
-            max-height: calc((100% - 20px) / var(--image-count, 1));
-            margin: 5px auto;
+            height: auto;
             object-fit: contain;
         }
         .page-number {
@@ -76,7 +80,6 @@
             margin-top: 10px;
             font-size: 0.9em;
             color: #777;
-            flex: 0 0 auto;
         }
         @media print {
             body {
@@ -86,87 +89,60 @@
             }
             .container {
                 box-shadow: none;
-                padding: 0;
-                height: 100%;
+                padding: 1cm;
+                height: auto;
+                min-height: auto;
             }
-            .persian-translation {
-                /* Ensure text doesn't overflow in print */
-                overflow: hidden;
+            /* Page break utility */
+            .page-break {
+                page-break-before: always;
             }
-            .page-images {
-                /* Ensure images don't cause page breaks */
-                page-break-inside: avoid;
-                overflow: hidden;
-            }
-            .page-image {
-                /* Ensure images are scaled properly for print */
-                max-height: calc((100% - 20px) / var(--image-count, 1));
+            /* Ensure code blocks print with background colors */
+            pre[class*="language-"] {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }
         }
     </style>
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageContainer = document.querySelector('.page-images');
-            if (imageContainer) {
-                const images = imageContainer.querySelectorAll('.page-image');
-                document.documentElement.style.setProperty('--image-count', images.length);
-                
-                // Further adjust if text is large
-                const textElement = document.querySelector('.persian-translation');
-                const textHeight = textElement.offsetHeight;
-                const containerHeight = document.querySelector('.container').offsetHeight;
-                
-                // If text takes more than 40% of container, reduce image max-height
-                if (textHeight > containerHeight * 0.4) {
-                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
-                    const imageMaxHeight = remainingHeight / images.length;
-                    images.forEach(img => {
-                        img.style.maxHeight = imageMaxHeight + 'px';
-                    });
-                }
-            }
-        });
-    
-    </script>
 </head>
 <body>
     <div class="container">
-        <div dir='rtl' class='persian-translation'>۱۱.۶. مدل‌های خواندن . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۷۱
-۱۱.۶.۱. استفاده از مدل‌های خواندن داخلی در صورت نیاز به اطلاعات . . ۲۷۱
-۱۱.۶.۲. انتخاب یک پیاده‌سازی استاندارد برای انبار . . . . . . . . . . . ۲۷۴
-۱۱.۶.۳. برای مدل‌های نمایش، آماده‌سازی داده‌ها برای رندرینگ . . . . . . ۲۷۶
-۱۱.۷. مدل‌سازی فرایند . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۷۷
-۱۱.۸. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۰
-۱۲. لایه‌های معماری ۲۸۱
-۱۲.۱. MVC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۱
-۱۲.۲. مجموعه استاندارد لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۳
-۱۲.۲.۱. لایه زیرساخت . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۴
-۱۲.۲.۲. لایه کاربرد . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۵
-۱۲.۲.۳. لایه دامنه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۶
-۱۲.۲.۴. بالا و پایین سلسله‌مراتب لایه‌ها . . . . . . . . . . . . . . . . . . ۲۸۷
-۱۲.۳. قانون وابستگی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۸۸
-۱۲.۴. قابل لمس کردن لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۰
-۱۲.۴.۱. مستندسازی معماری . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۰
-۱۲.۴.۲. استفاده از فضاهای نام برای لایه‌ها . . . . . . . . . . . . . . . . . ۲۹۱
-۱۲.۴.۳. تایید خودکار تصمیمات طراحی . . . . . . . . . . . . . . . . . ۲۹۳
-۱۲.۵. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۶
-۱۳. درگاه‌ها و سازگارکننده‌ها ۲۹۸
-۱۳.۱. معماری شش ضلعی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۸
-۱۳.۲. درگاه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۹۹
-۱۳.۳. سازگارکننده‌ها برای درگاه‌های خروجی . . . . . . . . . . . . . . . . . . . . . . . ۳۰۱
-۱۳.۴. سازگارکننده‌ها برای درگاه‌های ورودی . . . . . . . . . . . . . . . . . . . . . ۳۰۳
-۱۳.۵. کاربرد به عنوان رابط . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰۸
-۱۳.۶. ترکیب درگاه‌ها و سازگارکننده‌ها با لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰۸
-۱۳.۷. ساختار دادن به لایه زیرساخت . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰۹
-۱۳.۸. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۱۷
-۱۴. استراتژی تست برای کاربردهای جدا شده ۳۱۹
-۱۴.۱. تست‌های واحد . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۱۹
-۱۴.۲. تست‌های سازگارکننده . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۲۲
-۱۴.۳. تست‌های قرارداد برای سازگارکننده‌های درگاه خروجی . . . . . . . . . . . . . . . . . . . ۳۲۴
-۱۴.۴. تست‌های هدایت‌شده برای سازگارکننده‌های درگاه ورودی . . . . . . . . . . . . . . . . . . . . . . . ۳۲۹
-۱۴.۵. تست‌های مورد استفاده . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۳۸
-viii
+        <div dir='rtl' class='persian-translation'><p><b>فهرست</b></p>
+<p>11.6.مدل‌های خواندن . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 271</p>
+<p>11.6.1. از مدل‌های خواندن داخلی در زمان نیاز به اطلاعات استفاده کنید . . 271</p>
+<p>11.6.2. یک پیاده‌سازی استاندارد برای انبار انتخاب کنید . . . . . . . . . 274</p>
+<p>11.6.3. برای مدل‌های نمایش، داده‌ها را برای رندر آماده کنید . . . . . . . 276</p>
+<p>11.7.مدل‌سازی فرآیند . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 277</p>
+<p>11.8.خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 280</p>
+<p>12.لایه‌های معماری 281</p>
+<p>12.1.MVC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 281</p>
+<p>12.2.مجموعه‌ای استاندارد از لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . 283</p>
+<p>12.2.1. لایه زیرساخت . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 284</p>
+<p>12.2.2. لایه کاربرد . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 285</p>
+<p>12.2.3. لایه دامنه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 286</p>
+<p>12.2.4. بالا و پایین لایه سلسله مراتب . . . . . . . . . . . . . . . . . . . 287</p>
+<p>12.3.قانون وابستگی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 288</p>
+<p>12.4.ملموس کردن لایه‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 290</p>
+<p>12.4.1. مستندسازی معماری . . . . . . . . . . . . . . . . . . . . . . . . . . 290</p>
+<p>12.4.2. استفاده از فضاهای نام برای لایه‌ها . . . . . . . . . . . . . . . . . 291</p>
+<p>12.4.3. تأیید خودکار تصمیمات طراحی . . . . . . . . . . . . . . . . . . 293</p>
+<p>12.5.خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 296</p>
+<p>13.پورت‌ها و آداپتورها 298</p>
+<p>13.1.معماری شش ضلعی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 298</p>
+<p>13.2.پورت‌ها . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 299</p>
+<p>13.3.آداپتورها برای پورت‌های خروجی . . . . . . . . . . . . . . . . . . . . . . . 301</p>
+<p>13.4.آداپتورها برای پورت‌های ورودی . . . . . . . . . . . . . . . . . . . . . . . 303</p>
+<p>13.5.کاربرد به عنوان رابط . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 308</p>
+<p>13.6.ترکیب پورت‌ها و آداپتورها با لایه‌ها . . . . . . . . . . . . . . . . . . . 314</p>
+<p>13.7.ساختار لایه زیرساخت . . . . . . . . . . . . . . . . . . . . . . . . . . . . 315</p>
+<p>13.8.خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 317</p>
+<p>14.استراتژی آزمون برای برنامه‌های جدا شده 319</p>
+<p>14.1.آزمون‌های واحد . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 319</p>
+<p>14.2.آزمون‌های آداپتور . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 323</p>
+<p>14.3.آزمون‌های قرارداد برای آداپتورهای پورت خروجی . . . . . . . . . . . . . 324</p>
+<p>14.4.آزمون‌های هدایت‌شده برای آداپتورهای پورت ورودی . . . . . . . . . . . . 329</p>
+<p>14.5.آزمون‌های مورد استفاده . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 338</p>
+<p>viii</p>
 </div>
         
         
@@ -175,5 +151,103 @@ viii
             9
         </div>
     </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {
+            /* Add line-numbers class to all pre elements if not already there */
+            document.querySelectorAll('pre').forEach(block => {
+                if (!block.classList.contains('line-numbers')) {
+                    block.classList.add('line-numbers');
+                }
+                
+                /* If language class is not specified, add 'language-clike' as default */
+                let hasLanguageClass = false;
+                block.classList.forEach(className => {
+                    if (className.startsWith('language-')) {
+                        hasLanguageClass = true;
+                    }
+                });
+                
+                if (!hasLanguageClass) {
+                    block.classList.add('language-clike');
+                }
+                
+                /* Ensure code elements inside pre also have the correct language class */
+                const codeElement = block.querySelector('code');
+                if (codeElement) {
+                    if (!hasLanguageClass) {
+                        codeElement.classList.add('language-clike');
+                    } else {
+                        /* Copy the language class from pre to code if code doesn't have it */
+                        block.classList.forEach(className => {
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
+                                codeElement.classList.add(className);
+                            }
+                        });
+                    }
+                }
+            });
+            
+            /* Re-highlight all code blocks */
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+            
+            /* Smart image scaling based on page content */
+            const container = document.querySelector('.container');
+            const textElement = document.querySelector('.persian-translation');
+            const imageContainer = document.querySelector('.page-images');
+            
+            if (imageContainer && textElement) {
+                const images = imageContainer.querySelectorAll('.page-image');
+                if (images.length > 0) {
+                    /* Calculate available space */
+                    const containerHeight = container.clientHeight;
+                    const textHeight = textElement.clientHeight;
+                    const pageNumberHeight = document.querySelector('.page-number').clientHeight;
+                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; /* Extra margins */
+                    
+                    /* Estimate total height of images */
+                    let totalImageHeight = 0;
+                    images.forEach(img => {
+                        /* Wait for image to load to get accurate height */
+                        img.onload = function() {
+                            /* Get natural aspect ratio */
+                            const ratio = img.naturalWidth / img.naturalHeight;
+                            /* Calculate height based on max width */
+                            const estimatedHeight = (img.clientWidth / ratio);
+                            totalImageHeight += estimatedHeight + 40; /* Add gap */
+                            
+                            /* Check if images don't fit */
+                            if (totalImageHeight > availableHeight) {
+                                /* Try to scale down by up to 30% */
+                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
+                                
+                                /* If even with 30% reduction it doesn't fit, set page-break */
+                                if (scaleFactor < 0.7) {
+                                    imageContainer.classList.add('page-break');
+                                } else {
+                                    /* Scale images to fit */
+                                    images.forEach(i => {
+                                        i.style.maxWidth = (scaleFactor * 100) + '%';
+                                    });
+                                }
+                            }
+                        };
+                        
+                        /* Force layout calculation in case image is already loaded */
+                        if (img.complete) {
+                            img.onload();
+                        }
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>

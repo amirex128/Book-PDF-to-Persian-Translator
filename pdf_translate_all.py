@@ -100,8 +100,16 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
         لطفا از ترجمه‌های قبلی در این گفتگو استفاده کنید تا سبک و اصطلاحات یکسان باشند.
         متن را با دقت و روان ترجمه کنید و اصطلاحات تخصصی را به درستی برگردانید.
         کلمات و اصطلاحات فنی مهندسی نرم افزار و معماری نباید به فارسی ترجمه شود
+        مثلا اسم افراد یا اسم کتاب ها یا اسم سیستم ها یا اسم معماری ها یا اسم متد ها یا اسم متغیر های برنامه نویسی یا موارد از این قبیل نباید ترجمه شوند
         فقط متن ترجمه شده را برگردانید، بدون هیچ توضیح اضافی.
+
         در نهایت متن را با یک فاصله گذاری هوشمند و مرتب بر اساس انتخاب خودت تنظیم کن
+        برای این مرتب سازی فاصله ها از html استفاده کن
+
+        اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید. 
+        برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
+        زبان برنامه‌نویسی را براساس نوع کد تشخیص دهید. اگر زبان مشخص نیست، از language-clike استفاده کنید.
+        
         متن برای ترجمه:
         
         """ + text
@@ -162,9 +170,6 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
     # Clean any potential HTML tags from the input
     persian_text = persian_html
     
-    # Remove any existing HTML tags
-    persian_text = re.sub(r'<[^>]+>', '', persian_text)
-    
     # Wrap the clean text in Persian translation div
     persian_html = f"<div dir='rtl' class='persian-translation'>{persian_text}</div>"
     
@@ -180,39 +185,18 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
     if include_font_path:
         font_link = '<link rel="stylesheet" href="fontiran.css">'
     
-    # Add HTML code for images
+    # Check if there are images to add
+    has_images = images and len(images) > 0
+    
+    # Prepare image HTML - Include images inline with text when possible
     images_html = ""
-    if images and len(images) > 0:
+    if has_images:
         images_html = "<div class='page-images'>\n"
         for img in images:
             images_html += f"    <img src='{img['relative_path']}' class='page-image' alt='Page {page_number} image' />\n"
         images_html += "</div>\n"
     
-    # JavaScript code as a properly formatted string in the HTML template
-    js_code = """
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageContainer = document.querySelector('.page-images');
-            if (imageContainer) {
-                const images = imageContainer.querySelectorAll('.page-image');
-                document.documentElement.style.setProperty('--image-count', images.length);
-                
-                // Further adjust if text is large
-                const textElement = document.querySelector('.persian-translation');
-                const textHeight = textElement.offsetHeight;
-                const containerHeight = document.querySelector('.container').offsetHeight;
-                
-                // If text takes more than 40% of container, reduce image max-height
-                if (textHeight > containerHeight * 0.4) {
-                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
-                    const imageMaxHeight = remainingHeight / images.length;
-                    images.forEach(img => {
-                        img.style.maxHeight = imageMaxHeight + 'px';
-                    });
-                }
-            }
-        });
-    """
-    
+    # Create HTML content with text and images together
     html_content = f"""<!DOCTYPE html>
 <html lang="fa">
 <head>
@@ -220,6 +204,9 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{file_name}</title>
     {font_link}
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
     <style>
         @page {{
             size: A4;
@@ -235,23 +222,19 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             line-height: 1.5;
             background-color: #f8f9fa;
-            /* Strict A4 size enforcement */
+            /* A4 size enforcement */
             width: 21cm;
             height: 29.7cm;
-            overflow: hidden; /* Critical: prevents content overflow */
         }}
         .container {{
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
+            width: 18cm; /* A4 width minus margins */
+            min-height: 26.7cm; /* A4 height minus margins */
             background-color: white;
-            padding: 1.5cm;
+            padding: 1cm;
             box-sizing: border-box;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }}
         .persian-translation {{
             text-align: right;
@@ -259,31 +242,36 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             font-size: 1em;
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             margin-bottom: 20px;
-            /* Dynamic text size adjustment */
-            max-height: 40%;
-            overflow: hidden;
-            /* Text will shrink if there are large images */
-            flex: 0 1 auto;
+            /* Don't hide any overflow text, let it flow naturally */
+            overflow: visible;
+        }}
+        /* Style for code blocks */
+        pre[class*="language-"] {{
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }}
+        code {{
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
         }}
         .page-images {{
-            text-align: center;
-            margin: 10px auto;
-            /* Images area takes remaining space */
-            flex: 1 1 auto;
+            margin: 1cm 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            gap: 1cm;
         }}
         .page-image {{
-            display: block;
-            width: auto;
-            height: auto;
             max-width: 100%;
-            /* Dynamic height - will shrink if there are multiple images */
-            max-height: calc((100% - 20px) / var(--image-count, 1));
-            margin: 5px auto;
+            height: auto;
             object-fit: contain;
         }}
         .page-number {{
@@ -291,7 +279,6 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             margin-top: 10px;
             font-size: 0.9em;
             color: #777;
-            flex: 0 0 auto;
         }}
         @media print {{
             body {{
@@ -301,27 +288,21 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             }}
             .container {{
                 box-shadow: none;
-                padding: 0;
-                height: 100%;
+                padding: 1cm;
+                height: auto;
+                min-height: auto;
             }}
-            .persian-translation {{
-                /* Ensure text doesn't overflow in print */
-                overflow: hidden;
+            /* Page break utility */
+            .page-break {{
+                page-break-before: always;
             }}
-            .page-images {{
-                /* Ensure images don't cause page breaks */
-                page-break-inside: avoid;
-                overflow: hidden;
-            }}
-            .page-image {{
-                /* Ensure images are scaled properly for print */
-                max-height: calc((100% - 20px) / var(--image-count, 1));
+            /* Ensure code blocks print with background colors */
+            pre[class*="language-"] {{
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }}
         }}
     </style>
-    <script>
-{js_code}
-    </script>
 </head>
 <body>
     <div class="container">
@@ -333,9 +314,114 @@ def create_html_content(persian_html, file_name, include_font_path, images=None)
             {page_number}
         </div>
     </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {{
+            /* Add line-numbers class to all pre elements if not already there */
+            document.querySelectorAll('pre').forEach(block => {{
+                if (!block.classList.contains('line-numbers')) {{
+                    block.classList.add('line-numbers');
+                }}
+                
+                /* If language class is not specified, add 'language-clike' as default */
+                let hasLanguageClass = false;
+                block.classList.forEach(className => {{
+                    if (className.startsWith('language-')) {{
+                        hasLanguageClass = true;
+                    }}
+                }});
+                
+                if (!hasLanguageClass) {{
+                    block.classList.add('language-clike');
+                }}
+                
+                /* Ensure code elements inside pre also have the correct language class */
+                const codeElement = block.querySelector('code');
+                if (codeElement) {{
+                    if (!hasLanguageClass) {{
+                        codeElement.classList.add('language-clike');
+                    }} else {{
+                        /* Copy the language class from pre to code if code doesn't have it */
+                        block.classList.forEach(className => {{
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {{
+                                codeElement.classList.add(className);
+                            }}
+                        }});
+                    }}
+                }}
+            }});
+            
+            /* Re-highlight all code blocks */
+            if (window.Prism) {{
+                Prism.highlightAll();
+            }}
+            
+            /* Smart image scaling based on page content */
+            const container = document.querySelector('.container');
+            const textElement = document.querySelector('.persian-translation');
+            const imageContainer = document.querySelector('.page-images');
+            
+            if (imageContainer && textElement) {{
+                const images = imageContainer.querySelectorAll('.page-image');
+                if (images.length > 0) {{
+                    /* Calculate available space */
+                    const containerHeight = container.clientHeight;
+                    const textHeight = textElement.clientHeight;
+                    const pageNumberHeight = document.querySelector('.page-number').clientHeight;
+                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; /* Extra margins */
+                    
+                    /* Estimate total height of images */
+                    let totalImageHeight = 0;
+                    images.forEach(img => {{
+                        /* Wait for image to load to get accurate height */
+                        img.onload = function() {{
+                            /* Get natural aspect ratio */
+                            const ratio = img.naturalWidth / img.naturalHeight;
+                            /* Calculate height based on max width */
+                            const estimatedHeight = (img.clientWidth / ratio);
+                            totalImageHeight += estimatedHeight + 40; /* Add gap */
+                            
+                            /* Check if images don't fit */
+                            if (totalImageHeight > availableHeight) {{
+                                /* Try to scale down by up to 30% */
+                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
+                                
+                                /* If even with 30% reduction it doesn't fit, set page-break */
+                                if (scaleFactor < 0.7) {{
+                                    imageContainer.classList.add('page-break');
+                                }} else {{
+                                    /* Scale images to fit */
+                                    images.forEach(i => {{
+                                        i.style.maxWidth = (scaleFactor * 100) + '%';
+                                    }});
+                                }}
+                            }}
+                        }};
+                        
+                        /* Force layout calculation in case image is already loaded */
+                        if (img.complete) {{
+                            img.onload();
+                        }}
+                    }});
+                }}
+            }}
+        }});
+    </script>
 </body>
 </html>"""
-    return html_content
+
+    # Create an empty string for the overflow HTML (in case images don't fit and need a new page)
+    overflow_html = ""
+    
+    # If we decide images need to be on a separate page, create that HTML separately
+    # This will be handled by the JavaScript logic above based on content height
+    
+    return html_content, overflow_html
 
 def create_pdf_from_html_files(html_files, output_pdf, output_dir):
     """Create PDF from HTML files using pdfkit"""
@@ -347,8 +433,8 @@ def create_pdf_from_html_files(html_files, output_pdf, output_dir):
         print(f"\nConverting HTML files to PDF: {output_pdf}")
         print(f"  Converting {len(html_files)} HTML files to PDF...")
         
-        # Sort files by page number
-        html_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
+        # Sort files - first prioritize order (text files before image files)
+        # and within each type, sort by page number
         
         # Filter out non-existent files
         existing_files = [f for f in html_files if os.path.exists(f)]
@@ -435,7 +521,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     else:
         print("Font file copying encountered issues.")
     
-    # Initialize the list of HTML files
+    # Initialize the lists of HTML files
     html_files = []
     
     # 1. Extract text and images from PDF
@@ -488,19 +574,17 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                         base_name = f"page_{page_num + 1:04d}"
                         html_file = os.path.join(temp_dir, f"{base_name}_fa.html")
                         
-                        # Create HTML with just images (no translation needed)
-                        html_content = create_html_content(
+                        # Create HTML contents
+                        page_html, _ = create_html_content(
                             "این صفحه فقط شامل تصاویر است.", # "This page contains only images"
                             base_name,
                             fonts_copied,
                             images=images
                         )
                         
-                        # Save as HTML file
+                        # Save HTML file
                         with open(html_file, 'w', encoding='utf-8') as f:
-                            f.write(html_content)
-                            
-                        # Add to list of HTML files
+                            f.write(page_html)
                         html_files.append(html_file)
     
     except Exception as e:
@@ -520,7 +604,6 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
         
         # Path for translated HTML file
         html_file = os.path.join(temp_dir, f"{base_name}_fa.html")
-        html_files.append(html_file)
         
         try:
             # Read original text
@@ -540,17 +623,18 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                 page_images_list = page_images.get(base_name, [])
                 
                 # Create HTML content with translation and images
-                html_content = create_html_content(
+                page_html, _ = create_html_content(
                     translated_text, 
                     base_name, 
                     fonts_copied,
                     images=page_images_list
                 )
                 
-                # Save as HTML file
+                # Save HTML file
                 with open(html_file, 'w', encoding='utf-8') as f:
-                    f.write(html_content)
+                    f.write(page_html)
                 
+                html_files.append(html_file)
                 translated_files += 1
                 
                 # Prevent API rate limits
@@ -578,19 +662,21 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
             images = page_images[base_name]
             
             # Create HTML with just images
-            html_content = create_html_content(
+            page_html, _ = create_html_content(
                 "این صفحه فقط شامل تصاویر است.", # "This page contains only images"
                 base_name,
                 fonts_copied,
                 images=images
             )
             
-            # Save as HTML file
+            # Save HTML file
             with open(html_file, 'w', encoding='utf-8') as f:
-                f.write(html_content)
+                f.write(page_html)
             
-            # Add to list of HTML files
             html_files.append(html_file)
+    
+    # Sort files by page number
+    html_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
     
     # Display translation summary
     print("\nTranslation Summary:")

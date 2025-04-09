@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>page_0006</title>
     <link rel="stylesheet" href="fontiran.css">
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
     <style>
         @page {
             size: A4;
@@ -20,23 +23,19 @@
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             line-height: 1.5;
             background-color: #f8f9fa;
-            /* Strict A4 size enforcement */
+            /* A4 size enforcement */
             width: 21cm;
             height: 29.7cm;
-            overflow: hidden; /* Critical: prevents content overflow */
         }
         .container {
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
+            width: 18cm; /* A4 width minus margins */
+            min-height: 26.7cm; /* A4 height minus margins */
             background-color: white;
-            padding: 1.5cm;
+            padding: 1cm;
             box-sizing: border-box;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
         .persian-translation {
             text-align: right;
@@ -44,31 +43,36 @@
             font-size: 1em;
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             margin-bottom: 20px;
-            /* Dynamic text size adjustment */
-            max-height: 40%;
-            overflow: hidden;
-            /* Text will shrink if there are large images */
-            flex: 0 1 auto;
+            /* Don't hide any overflow text, let it flow naturally */
+            overflow: visible;
+        }
+        /* Style for code blocks */
+        pre[class*="language-"] {
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        code {
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
         }
         .page-images {
-            text-align: center;
-            margin: 10px auto;
-            /* Images area takes remaining space */
-            flex: 1 1 auto;
+            margin: 1cm 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            gap: 1cm;
         }
         .page-image {
-            display: block;
-            width: auto;
-            height: auto;
             max-width: 100%;
-            /* Dynamic height - will shrink if there are multiple images */
-            max-height: calc((100% - 20px) / var(--image-count, 1));
-            margin: 5px auto;
+            height: auto;
             object-fit: contain;
         }
         .page-number {
@@ -76,7 +80,6 @@
             margin-top: 10px;
             font-size: 0.9em;
             color: #777;
-            flex: 0 0 auto;
         }
         @media print {
             body {
@@ -86,85 +89,58 @@
             }
             .container {
                 box-shadow: none;
-                padding: 0;
-                height: 100%;
+                padding: 1cm;
+                height: auto;
+                min-height: auto;
             }
-            .persian-translation {
-                /* Ensure text doesn't overflow in print */
-                overflow: hidden;
+            /* Page break utility */
+            .page-break {
+                page-break-before: always;
             }
-            .page-images {
-                /* Ensure images don't cause page breaks */
-                page-break-inside: avoid;
-                overflow: hidden;
-            }
-            .page-image {
-                /* Ensure images are scaled properly for print */
-                max-height: calc((100% - 20px) / var(--image-count, 1));
+            /* Ensure code blocks print with background colors */
+            pre[class*="language-"] {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }
         }
     </style>
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageContainer = document.querySelector('.page-images');
-            if (imageContainer) {
-                const images = imageContainer.querySelectorAll('.page-image');
-                document.documentElement.style.setProperty('--image-count', images.length);
-                
-                // Further adjust if text is large
-                const textElement = document.querySelector('.persian-translation');
-                const textHeight = textElement.offsetHeight;
-                const containerHeight = document.querySelector('.container').offsetHeight;
-                
-                // If text takes more than 40% of container, reduce image max-height
-                if (textHeight > containerHeight * 0.4) {
-                    const remainingHeight = containerHeight - textHeight - 50; // 50px for margins
-                    const imageMaxHeight = remainingHeight / images.length;
-                    images.forEach(img => {
-                        img.style.maxHeight = imageMaxHeight + 'px';
-                    });
-                }
-            }
-        });
-    
-    </script>
 </head>
 <body>
     <div class="container">
-        <div dir='rtl' class='persian-translation'>۱.۳. قانون دوم: نیازی به زمینه خاص نیست . . . . . . . . . . . . . . . . . . . ۷
-۱.۴. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۱۲
-۲. مدل دامنه ۱۵
-۲.۱. دستورات SQL در همه جا . . . . . . . . . . . . . . . . . . . . . . . . . ۱۵
-۲.۲. تلاش برای رفع آن با دروازه داده‌های جدول . . . . . . . . . . . . . . . . ۱۸
-۲.۳. طراحی یک موجودیت . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۱۹
-۲.۴. معرفی یک انبار . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۳
-۲.۵. نگاشت داده‌های موجودیت به ستون‌های جدول . . . . . . . . . . . . . . . . ۲۶
-۲.۵.۱. استفاده از ORM . . . . . . . . . . . . . . . . . . . . . . . . . . . ۲۷
-۲.۵.۲. نگاشت دستی . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۰
-۲.۶. تولید شناسه زودتر . . . . . . . . . . . . . . . . . . . . . . . . . . . ۳۴
-۲.۶.۱. استفاده از UUID به جای شناسه‌های عدد صحیح (خودکار) افزایش‌یافته . . . . . . ۳۹
-۲.۷. استفاده از یک شیء مقدار برای شناسه . . . . . . . . . . . . . . . . . . . ۴۱
-۲.۸. رکورد فعال در مقابل نقشه داده‌ها . . . . . . . . . . . . . . . . . . . . . ۴۴
-۲.۹. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۴۷
-۳. مدل‌های خواندن و مدل‌های نمایش ۴۸
-۳.۱. استفاده مجدد از مدل نوشتن . . . . . . . . . . . . . . . . . . . . . . . . . ۵۳
-۳.۲. ایجاد یک مدل خواندن جداگانه . . . . . . . . . . . . . . . . . . . . . . ۵۸
-۳.۳. پیاده‌سازی انبار مدل خواندن . . . . . . . . . . . . . . . . . . . . . ۶۰
-۳.۳.۱. اشتراک منبع داده زیربنایی . . . . . . . . . . . . . . . . . . ۶۰
-۳.۳.۲. استفاده از رویدادهای دامنه مدل نوشتن . . . . . . . . . . . . . . . ۶۲
-۳.۴. استفاده از اشیاء مقدار با مدل‌های خواندن داخلی . . . . . . . . . . . . ۶۷
-۳.۵. یک نوع خاص از مدل خواندن: مدل نمایش . . . . . . . . . . . . . . . . . . ۷۰
-۳.۶. استفاده از مدل‌های نمایش برای API . . . . . . . . . . . . . . . . . . . . . ۷۹
-۳.۷. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۸۱
-۴. سرویس‌های کاربردی ۸۴
-۴.۱. در نظر گرفتن زیرساخت‌های دیگر . . . . . . . . . . . . . . . . . . . . . ۸۵
-۴.۲. طراحی یک مورد استفاده قابل بازیافت . . . . . . . . . . . . . . . . . . . . ۸۹
-۴.۳. استخراج یک سرویس کاربردی . . . . . . . . . . . . . . . . . . . . . . . ۹۱
-۴.۴. معرفی یک شیء پارامتر . . . . . . . . . . . . . . . . . . . . . . . . . . ۹۵
-۴.۵. برخورد با مراحل متعدد . . . . . . . . . . . . . . . . . . . . . . . . . ۹۷
-۴.۶. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ۱۰۶
-v
+        <div dir='rtl' class='persian-translation'><p><b>فهرست</b></p>
+<p>1.3. قانون شماره 2: نیازی به زمینه خاص نیست . . . . . . . . . . . . . . . . . 7</p>
+<p>1.4. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12</p>
+<p>2. مدل دامنه 15</p>
+<p>2.1. دستورات SQL در همه جا . . . . . . . . . . . . . . . . . . . . . . . . . . 15</p>
+<p>2.2. تلاش برای رفع آن با دروازه داده‌های جدول . . . . . . . . . . . . . . . . 18</p>
+<p>2.3. طراحی یک موجودیت . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19</p>
+<p>2.4. معرفی یک انبار . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23</p>
+<p>2.5. نگاشت داده‌های موجودیت به ستون‌های جدول . . . . . . . . . . . . . . . . . 26</p>
+<p>2.5.1. استفاده از ORM . . . . . . . . . . . . . . . . . . . . . . . . . . . 27</p>
+<p>2.5.2. نگاشت دستی . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30</p>
+<p>2.6. تولید شناسه زودتر . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34</p>
+<p>2.6.1. استفاده از UUIDها به جای شناسه‌های صحیح (خودکار) افزایشی . . 39</p>
+<p>2.7. استفاده از شیء مقدار برای شناسه . . . . . . . . . . . . . . . . . . . . . . 41</p>
+<p>2.8. رکورد فعال در مقابل نقشه داده‌ای . . . . . . . . . . . . . . . . . . . . . . 44</p>
+<p>2.9. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47</p>
+<p>3. مدل‌های خواندن و مدل‌های نمایش 52</p>
+<p>3.1. استفاده مجدد از مدل نوشتن . . . . . . . . . . . . . . . . . . . . . . . . . 53</p>
+<p>3.2. ایجاد یک مدل خواندن مجزا . . . . . . . . . . . . . . . . . . . . . . . . . 58</p>
+<p>3.3. پیاده‌سازی‌های انبار مدل خواندن . . . . . . . . . . . . . . . . . . . . . 60</p>
+<p>3.3.1. اشتراک منبع داده پایه . . . . . . . . . . . . . . . . . . . . . . 60</p>
+<p>3.3.2. استفاده از رویدادهای دامنه مدل نوشتن . . . . . . . . . . . . . . . 62</p>
+<p>3.4. استفاده از اشیاء مقدار با مدل‌های خواندن داخلی . . . . . . . . . . . 67</p>
+<p>3.5. نوع خاصی از مدل خواندن: مدل نمایش . . . . . . . . . . . . . . . . . . 70</p>
+<p>3.6. استفاده از مدل‌های نمایش برای APIها . . . . . . . . . . . . . . . . . . . . 79</p>
+<p>3.7. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 81</p>
+<p>4. سرویس‌های کاربردی 84</p>
+<p>4.1. در نظر گرفتن زیرساخت‌های دیگر . . . . . . . . . . . . . . . . . . . . . 85</p>
+<p>4.2. طراحی یک مورد استفاده قابل استفاده مجدد . . . . . . . . . . . . . . . . 89</p>
+<p>4.3. استخراج یک سرویس کاربردی . . . . . . . . . . . . . . . . . . . . . . . . . 91</p>
+<p>4.4. معرفی یک شیء پارامتر . . . . . . . . . . . . . . . . . . . . . . . . . . . 95</p>
+<p>4.5. برخورد با چندین مرحله . . . . . . . . . . . . . . . . . . . . . . . . . . 97</p>
+<p>4.6. خلاصه . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106</p>
+<p>v</p>
 
 </div>
         
@@ -174,5 +150,103 @@ v
             6
         </div>
     </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {
+            /* Add line-numbers class to all pre elements if not already there */
+            document.querySelectorAll('pre').forEach(block => {
+                if (!block.classList.contains('line-numbers')) {
+                    block.classList.add('line-numbers');
+                }
+                
+                /* If language class is not specified, add 'language-clike' as default */
+                let hasLanguageClass = false;
+                block.classList.forEach(className => {
+                    if (className.startsWith('language-')) {
+                        hasLanguageClass = true;
+                    }
+                });
+                
+                if (!hasLanguageClass) {
+                    block.classList.add('language-clike');
+                }
+                
+                /* Ensure code elements inside pre also have the correct language class */
+                const codeElement = block.querySelector('code');
+                if (codeElement) {
+                    if (!hasLanguageClass) {
+                        codeElement.classList.add('language-clike');
+                    } else {
+                        /* Copy the language class from pre to code if code doesn't have it */
+                        block.classList.forEach(className => {
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
+                                codeElement.classList.add(className);
+                            }
+                        });
+                    }
+                }
+            });
+            
+            /* Re-highlight all code blocks */
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+            
+            /* Smart image scaling based on page content */
+            const container = document.querySelector('.container');
+            const textElement = document.querySelector('.persian-translation');
+            const imageContainer = document.querySelector('.page-images');
+            
+            if (imageContainer && textElement) {
+                const images = imageContainer.querySelectorAll('.page-image');
+                if (images.length > 0) {
+                    /* Calculate available space */
+                    const containerHeight = container.clientHeight;
+                    const textHeight = textElement.clientHeight;
+                    const pageNumberHeight = document.querySelector('.page-number').clientHeight;
+                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; /* Extra margins */
+                    
+                    /* Estimate total height of images */
+                    let totalImageHeight = 0;
+                    images.forEach(img => {
+                        /* Wait for image to load to get accurate height */
+                        img.onload = function() {
+                            /* Get natural aspect ratio */
+                            const ratio = img.naturalWidth / img.naturalHeight;
+                            /* Calculate height based on max width */
+                            const estimatedHeight = (img.clientWidth / ratio);
+                            totalImageHeight += estimatedHeight + 40; /* Add gap */
+                            
+                            /* Check if images don't fit */
+                            if (totalImageHeight > availableHeight) {
+                                /* Try to scale down by up to 30% */
+                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
+                                
+                                /* If even with 30% reduction it doesn't fit, set page-break */
+                                if (scaleFactor < 0.7) {
+                                    imageContainer.classList.add('page-break');
+                                } else {
+                                    /* Scale images to fit */
+                                    images.forEach(i => {
+                                        i.style.maxWidth = (scaleFactor * 100) + '%';
+                                    });
+                                }
+                            }
+                        };
+                        
+                        /* Force layout calculation in case image is already loaded */
+                        if (img.complete) {
+                            img.onload();
+                        }
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
