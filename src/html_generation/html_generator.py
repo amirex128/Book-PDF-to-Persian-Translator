@@ -92,28 +92,7 @@ def process_html_content(content):
         
         # Parse the HTML content
         soup = BeautifulSoup(content, 'html.parser')
-        
-        # Find all text nodes and apply directional attributes where needed
-        for text in soup.find_all(text=True):
-            # Skip text in script, style, code, or pre tags
-            if text.parent.name in ['script', 'style', 'code', 'pre']:
-                continue
                 
-            # Add ltr direction to English text segments that are not already wrapped
-            if re.search(r'[a-zA-Z0-9_]', text):
-                # Only process if there's substantial English text (more than just a couple characters)
-                english_segments = re.findall(r'[a-zA-Z0-9_]{2,}', text)
-                if english_segments:
-                    # Create a new string with wrapped segments
-                    new_text = text
-                    for seg in english_segments:
-                        if len(seg) > 1:  # Only wrap segments with more than 1 character
-                            wrapped = f'<span dir="ltr">{seg}</span>'
-                            new_text = new_text.replace(seg, wrapped)
-                    
-                    # Replace the text node with the new wrapped content
-                    text.replace_with(BeautifulSoup(new_text, 'html.parser'))
-        
         # Convert soup back to string
         processed_content = str(soup)
         return processed_content
