@@ -10,6 +10,7 @@ import fitz  # PyMuPDF
 import requests
 import json
 from bs4 import BeautifulSoup
+import argparse  # Re-add argparse for command line arguments
 
 # Try to import pdfkit
 try:
@@ -84,6 +85,40 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
     max_retries = 3
     current_retry = 0
     wait_time = 60  # Wait time in seconds before retrying
+    
+    # Analyze the original text structure
+    paragraphs = text.split('\n\n')
+    has_headings = False
+    has_bullet_points = False
+    has_numbered_list = False
+    has_code_blocks = False
+    
+    # Check for structural elements
+    for para in paragraphs:
+        if para.strip():
+            # Check for headings (e.g., lines with fewer than 50 chars followed by a blank line)
+            if len(para.strip()) < 50 and para.strip().endswith(':'):
+                has_headings = True
+            # Check for bullet points
+            if re.search(r'^\s*[•\-\*]\s', para):
+                has_bullet_points = True
+            # Check for numbered lists
+            if re.search(r'^\s*\d+\.\s', para):
+                has_numbered_list = True
+            # Check for possible code blocks (indentation, special characters)
+            if re.search(r'^\s{4,}', para) or re.search(r'[{};()\[\]]', para):
+                has_code_blocks = True
+    
+    # Prepare additional instructions based on structure
+    structure_instructions = ""
+    if has_headings:
+        structure_instructions += "این متن دارای عنوان‌ها و سرفصل‌هایی است. لطفاً عنوان‌ها را با تگ <h3> و زیرعنوان‌ها را با تگ <h4> مشخص کنید. "
+    if has_bullet_points:
+        structure_instructions += "متن دارای لیست‌های نقطه‌ای است. لطفاً آنها را با تگ‌های <ul> و <li> مشخص کنید. "
+    if has_numbered_list:
+        structure_instructions += "متن دارای لیست‌های شماره‌دار است. لطفاً آنها را با تگ‌های <ol> و <li> مشخص کنید. "
+    if has_code_blocks:
+        structure_instructions += "متن ممکن است حاوی بلوک‌های کد باشد. لطفاً کدها را بدون ترجمه در <pre><code class=\"language-relevant_language\"> قرار دهید. "
     
     while current_retry <= max_retries:
         try:
@@ -181,22 +216,19 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
                 7. اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید.
                    برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
                 
-                8. متن را با فاصله‌گذاری مناسب مرتب کنید.
-                
-                9. فقط متن ترجمه شده را برگردانید، بدون هیچ توضیح اضافی.
-                
-                10.در کد های برنامه نویسی کامنت ها را اصلا ترجمه نکن 
+                8. بسیار مهم: ساختار متن اصلی را حفظ کنید. پاراگراف‌بندی، سرفصل‌ها، لیست‌ها و بخش‌های کد را با تگ‌های HTML مناسب حفظ کنید:
+                   - تیترها و عنوان‌ها: از <h3> برای عنوان اصلی و <h4> برای زیرعنوان استفاده کنید
+                   - پاراگراف‌ها: هر پاراگراف را با <p> محصور کنید
+                   - لیست‌های نقطه‌ای: از <ul><li>آیتم اول</li><li>آیتم دوم</li></ul> استفاده کنید
+                   - لیست‌های شماره‌دار: از <ol><li>آیتم اول</li><li>آیتم دوم</li></ol> استفاده کنید
+                   - کدها: از <pre><code class="language-xxx">کد</code></pre> استفاده کنید
+                   - تأکید: از <strong> برای متن پررنگ و <em> برای متن ایتالیک استفاده کنید
+                   - جداول: ساختار <table>, <tr>, <td> را حفظ کنید
 
-                11.کد های برنامه نویسی را با فاصله گذاری درست بنویس
-                
-                برای درک بهتر:
-                متن نمونه: "The API Gateway uses HTTP to communicate with the backend services. When a user sends a POST request, the UserController processes it and returns a JSON response with appropriate HTTP status codes."
-                
-                ترجمه صحیح: "API Gateway از HTTP برای ارتباط با backend services استفاده می‌کند. وقتی یک user یک request از نوع POST ارسال می‌کند، UserController آن را پردازش کرده و یک response از نوع JSON با HTTP status codes مناسب برمی‌گرداند."
-                
-                ترجمه نادرست: "دروازه رابط برنامه‌نویسی از پروتکل انتقال ابرمتن برای ارتباط با سرویس‌های پشتی استفاده می‌کند. وقتی کاربر یک درخواست ارسال می‌کند، کنترل‌کننده کاربر آن را پردازش کرده و یک پاسخ جی‌سان با کدهای وضعیت مناسب برمی‌گرداند."
-                
-                متن های ترجمه شده باید به زبان فارسی روان و قابل فهم و گرامر درست نوشته شو
+                9.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده
+
+                10.متن های ترجمه شده باید به زبان فارسی روان و قابل فهم و گرامر درست نوشته شود و اگر امکانش هست ترجمه را کمی تغییر هم بده تا متن ترجمه شده به فارسی روان تر و خوانا تر و واضح تر باشد
+
                 """
                 
                 # Send initial instructions
@@ -205,8 +237,11 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
                 # Check if model acknowledges the instructions
                 # Now send the actual text to translate with a simpler prompt
                 translate_prompt = f"""
-                لطفاً متن زیر را با توجه به دستورالعمل‌های قبلی ترجمه کنید:
+                لطفاً متن زیر را با توجه به دستورالعمل‌های قبلی ترجمه کنید و ساختار متن اصلی را با استفاده از تگ‌های HTML حفظ کنید.
                 
+                {structure_instructions}
+                
+                متن برای ترجمه:
                 {text}
                 """
                 response = conversation.send_message(translate_prompt)
@@ -214,11 +249,17 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
             else:
                 # Continue existing conversation - only send the text to translate
                 conversation = conversation_history
-                response = conversation.send_message(f"""متن برای ترجمه:
+                response = conversation.send_message(f"""لطفا متن زیر را ترجمه کنید و ساختار آن را با تگ‌های HTML حفظ کنید.
                 
+                {structure_instructions}
+                
+                متن برای ترجمه:
                 {text}
                 """)
                 translated_text = response.text
+            
+            # Clean Markdown code block markers from the translated text
+            translated_text = clean_markdown_blocks(translated_text)
             
             # Return the translated text and the conversation for future use
             return translated_text, conversation
@@ -243,6 +284,26 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
     
     # This should not be reached, but just in case
     return "", "Maximum retries exceeded. Unable to translate."
+
+def clean_markdown_blocks(text):
+    """Remove Markdown code block markers and other AI formatting artifacts from text"""
+    # Remove code block markers with language specifiers
+    text = re.sub(r'```(?:html|css|javascript|js|python|java|csharp|c\+\+|cpp|c|bash|shell|sql|php|go|ruby|rust|swift|kotlin|typescript|tsx|jsx|xml|json|yaml|yml|markdown|md)?\s*\n', '', text)
+    text = re.sub(r'\n\s*```', '', text)
+    
+    # Remove potential inline code markers
+    text = re.sub(r'`([^`]+)`', r'\1', text)
+    
+    # Remove potential AI response prefixes
+    text = re.sub(r'^(assistant:|AI:|ChatGPT:|Claude:|Gemini:)\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
+    
+    # Remove potential HTML comments that might be inserted by the AI
+    text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
+    
+    # Clean up any duplicate newlines that might result from the above operations
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    
+    return text
 
 def copy_font_assets(output_dir):
     """Copy font files to output directory"""
@@ -283,507 +344,90 @@ def copy_font_assets(output_dir):
     
     return True
 
-def create_html_content(page_num, english_text, persian_translation, image_paths, filename, temp_dir=None, base_dir=None):
-    """Create an HTML file with the Persian translation and the original English text."""
-    # Replace consecutive newlines with a single paragraph break
-    english_text = re.sub(r'\n{2,}', '\n\n', english_text)
-    persian_translation = re.sub(r'\n{2,}', '\n\n', persian_translation)
+def create_html_content(persian_html, file_name, include_font_path, images=None):
+    """Create HTML content with Persian translation and images"""
+    # We no longer need to clean HTML tags as we're now actively preserving them
+    persian_text = persian_html
     
-    # Get just the image filename without the path
-    image_files = []
-    for img_path in image_paths:
-        if temp_dir and img_path.startswith(temp_dir):
-            # Use relative path if in temp dir
-            rel_path = os.path.relpath(img_path, base_dir if base_dir else temp_dir)
-            image_files.append(rel_path)
-        else:
-            # Use absolute path if not in temp dir
-            image_files.append(img_path)
+    # Check if the translated text already contains HTML tags
+    # If it doesn't have basic HTML structure, wrap it in Persian translation div
+    if not re.search(r'<(p|h[1-6]|ul|ol|pre|table)\b', persian_text, re.IGNORECASE):
+        persian_text = f"<p>{persian_text}</p>"
     
-    # Create a heading tag if this appears to be a heading
-    heading_tag = detect_heading(english_text, page_num)
+    # Wrap everything in a Persian translation div
+    persian_html = f"<div dir='rtl' class='persian-translation'>{persian_text}</div>"
     
-    # JavaScript part with raw string to prevent escape issues
-    js_code = r'''
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to fix indentation for non-supported languages
-        function fixIndentation(code) {
-            if (!code || !code.trim()) return code;
-            
-            // Split into lines
-            const lines = code.split('\n');
-            
-            // Find minimum indentation level (ignoring empty lines)
-            let minIndent = Number.MAX_SAFE_INTEGER;
-            for (const line of lines) {
-                if (line.trim() === '') continue;
-                const indent = line.search(/\S/);
-                if (indent >= 0 && indent < minIndent) {
-                    minIndent = indent;
-                }
-            }
-            
-            // Remove common indentation and normalize
-            if (minIndent > 0 && minIndent !== Number.MAX_SAFE_INTEGER) {
-                return lines.map(function(line) {
-                    if (line.trim() === '') return '';
-                    return line.substring(minIndent);
-                }).join('\n');
-            }
-            
-            return code;
-        }
-
-        // Format code blocks with Prettier
-        document.querySelectorAll('pre code').forEach(function(codeBlock) {
-            try {
-                // Get the language from class
-                let parser = 'babel'; // Default to JavaScript/babel parser
-                
-                // Determine parser based on language class
-                if (codeBlock.className.includes('language-html')) {
-                    parser = 'html';
-                } else if (codeBlock.className.includes('language-css')) {
-                    parser = 'css';
-                } else if (codeBlock.className.includes('language-typescript') || 
-                           codeBlock.className.includes('language-ts')) {
-                    parser = 'typescript';
-                } else if (codeBlock.className.includes('language-java') || 
-                           codeBlock.className.includes('language-csharp') || 
-                           codeBlock.className.includes('language-c') || 
-                           codeBlock.className.includes('language-cpp')) {
-                    // For non-JavaScript languages, just fix indentation
-                    const code = codeBlock.textContent;
-                    const formattedCode = fixIndentation(code);
-                    codeBlock.textContent = formattedCode;
-                    // Skip Prettier formatting for these languages
-                    return;
-                }
-                
-                // Format with Prettier if it's a supported language
-                if (window.prettierPlugins && window.prettierPlugins[parser]) {
-                    const code = codeBlock.textContent;
-                    // Only format if code isn't empty and has more than one line
-                    if (code && code.trim() && code.includes('\n')) {
-                        const formattedCode = window.prettier.format(code, {
-                            parser: parser,
-                            plugins: window.prettierPlugins,
-                            printWidth: 80,
-                            tabWidth: 2,
-                            singleQuote: true,
-                            trailingComma: 'es5',
-                            bracketSpacing: true,
-                            semi: true,
-                            arrowParens: 'avoid'
-                        });
-                        codeBlock.textContent = formattedCode;
-                    }
-                }
-            } catch (error) {
-                console.warn('Prettier formatting failed, using fallback indentation fix', error);
-                const code = codeBlock.textContent;
-                const formattedCode = fixIndentation(code);
-                codeBlock.textContent = formattedCode;
-            }
-        });
-        
-        // Add line-numbers class to all pre elements if not already there
-        document.querySelectorAll('pre').forEach(function(block) {
-            if (!block.classList.contains('line-numbers')) {
-                block.classList.add('line-numbers');
-            }
-            
-            // If language class is not specified, add 'language-clike' as default
-            let hasLanguageClass = false;
-            block.classList.forEach(function(className) {
-                if (className.startsWith('language-')) {
-                    hasLanguageClass = true;
-                }
-            });
-            
-            if (!hasLanguageClass) {
-                block.classList.add('language-clike');
-            }
-            
-            // Ensure code elements inside pre also have the correct language class
-            const codeElement = block.querySelector('code');
-            if (codeElement) {
-                if (!hasLanguageClass) {
-                    codeElement.classList.add('language-clike');
-                } else {
-                    // Copy the language class from pre to code if code doesn't have it
-                    block.classList.forEach(function(className) {
-                        if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
-                            codeElement.classList.add(className);
-                        }
-                    });
-                }
-            }
-        });
-        
-        // Re-highlight all code blocks
-        if (window.Prism) {
-            window.Prism.highlightAll();
-        }
-        
-        // Smart image scaling based on page content
-        const container = document.querySelector('.container');
-        const textElement = document.querySelector('.persian-translation');
-        const imageContainer = document.querySelector('.page-images');
-        
-        if (imageContainer && textElement && container) {
-            const images = imageContainer.querySelectorAll('.page-image');
-            if (images.length > 0) {
-                // Calculate available space
-                const containerHeight = container.clientHeight;
-                const textHeight = textElement.clientHeight;
-                const pageNumberElement = document.querySelector('.page-number');
-                
-                if (pageNumberElement) {
-                    const pageNumberHeight = pageNumberElement.clientHeight;
-                    const availableHeight = containerHeight - textHeight - pageNumberHeight - 40; // Extra margins
-                    
-                    // Handle image scaling
-                    let totalImageHeight = 0;
-                    
-                    // Process each image
-                    images.forEach(function(img) {
-                        // Set up onload handler to handle image dimensions
-                        img.onload = function() {
-                            // Get natural aspect ratio
-                            const ratio = img.naturalWidth / img.naturalHeight;
-                            // Calculate height based on max width
-                            const estimatedHeight = (img.clientWidth / ratio);
-                            totalImageHeight += estimatedHeight + 40; // Add gap
-                            
-                            // Check if images don't fit
-                            if (totalImageHeight > availableHeight) {
-                                // Try to scale down by up to 30%
-                                const scaleFactor = Math.max(0.7, availableHeight / totalImageHeight);
-                                
-                                // If even with 30% reduction it doesn't fit, set page-break
-                                if (scaleFactor < 0.7) {
-                                    imageContainer.classList.add('page-break');
-                                } else {
-                                    // Scale images to fit
-                                    images.forEach(function(i) {
-                                        i.style.maxWidth = (scaleFactor * 100) + '%';
-                                    });
-                                }
-                            }
-                        };
-                        
-                        // Force layout calculation in case image is already loaded
-                        if (img.complete) {
-                            img.onload();
-                        }
-                    });
-                }
-            }
-        }
-    });
-    '''
+    # Extract page number from filename
+    page_number = ""
+    if re.search(r'page_(\d+)', file_name):
+        page_number = re.search(r'page_(\d+)', file_name).group(1)
+        # Remove leading zeros from page number
+        page_number = str(int(page_number))
     
+    # Add CSS font link
+    font_link = ''
+    if include_font_path:
+        font_link = '<link rel="stylesheet" href="fontiran.css">'
+    
+    # Check if there are images to add
+    has_images = images and len(images) > 0
+    
+    # Prepare image HTML - Include images inline with text when possible
+    images_html = ""
+    if has_images:
+        images_html = "<div class='page-images'>\n"
+        for img in images:
+            images_html += f"    <img src='{img['relative_path']}' class='page-image' alt='Page {page_number} image' />\n"
+        images_html += "</div>\n"
+    
+    # Create HTML content with text and images together
     html_content = f"""<!DOCTYPE html>
-<html dir="rtl" lang="fa">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page {page_num}</title>
-    <link rel="stylesheet" href="fonts/font.css">
-    <!-- Prism CSS for syntax highlighting -->
+    <title>{file_name}</title>
+    {font_link}
+    <!-- Add Prism CSS for syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
     <style>
         @page {{
             size: A4;
-            margin: 0;
-        }}
-        body {{
-            margin: 0;
-            padding: 0;
-            font-family: 'Vazirmatn', Arial, sans-serif;
-            background-color: white;
-            font-size: 13px;
-        }}
-        .container {{
-            width: 18cm;
-            min-height: 26.7cm;
-            margin: 0 auto;
-            padding: 1.5cm;
-            box-sizing: border-box;
-            position: relative;
-        }}
-        h1, h2, h3, h4, h5, h6 {{
-            color: #333;
-            margin-top: 1em;
-            margin-bottom: 0.5em;
-        }}
-        .persian-translation {{
-            text-align: justify;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            direction: rtl;
-            overflow: visible;
-            margin-bottom: 1.5em;
-        }}
-        .english-text {{
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 0.5em;
-            margin-top: 0.5em;
-            font-size: 0.9em;
-            direction: ltr;
-            text-align: left;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }}
-        .page-images {{
-            width: 100%;
-            overflow: hidden;
-            margin-top: 1em;
-            text-align: center;
-        }}
-        .page-image {{
-            max-width: 100%;
-            max-height: 20cm;
-            object-fit: contain;
-            margin: 1em auto;
-            display: block;
-        }}
-        .page-break {{
-            page-break-before: always;
-        }}
-        .page-number {{
-            position: absolute;
-            bottom: 0.5cm;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 10px;
-            color: #999;
-        }}
-        pre {{
-            direction: ltr;
-            text-align: left;
-            max-width: 100%;
-            overflow-x: auto;
-            margin: 1em 0;
-            padding: 1em;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            white-space: pre-wrap;
-            font-family: 'Courier New', monospace;
-        }}
-        code {{
-            direction: ltr;
-            text-align: left;
-            font-family: 'Courier New', monospace;
-            background-color: #f5f5f5;
-            border-radius: 3px;
-            padding: 2px 4px;
-            color: #333;
-            font-size: 0.9em;
-        }}
-        pre code {{
-            padding: 0;
-            background-color: transparent;
-            border-radius: 0;
-            border: none;
-            white-space: pre-wrap;
-        }}
-        blockquote {{
-            border-right: 3px solid #ddd;
-            margin-right: 0;
-            padding-right: 1em;
-            margin-left: 0;
-            color: #777;
-            font-style: italic;
-        }}
-        table {{
-            border-collapse: collapse;
-            width: 100%;
-            margin: 1em 0;
-        }}
-        th, td {{
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: right;
-        }}
-        th {{
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }}
-        img {{
-            max-width: 100%;
-            height: auto;
-        }}
-        figure {{
-            margin: 1em 0;
-            text-align: center;
-        }}
-        figcaption {{
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 0.5em;
-        }}
-        
-        @media print {{
-            .container {{
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 1.5cm;
-                box-sizing: border-box;
-            }}
-            .page-break {{
-                page-break-before: always;
-            }}
-            body {{
-                background-color: white;
-            }}
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="persian-translation">
-            {heading_tag[0] if heading_tag else ""}
-            {persian_translation}
-        </div>
-        <div class="english-text">
-            {heading_tag[1] if heading_tag else ""}
-            {english_text}
-        </div>
-        
-        <div class="page-images">
-            {"".join([f'<img src="{img}" class="page-image" alt="Page {page_num} Image {i+1}" />' for i, img in enumerate(image_files)])}
-        </div>
-        
-        <div class="page-number">صفحه {persian_numbers(page_num)}</div>
-    </div>
-    
-    <!-- Add Prism JS for syntax highlighting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
-    <!-- Add Prettier for code formatting -->
-    <script src="https://unpkg.com/prettier@2.8.8/standalone.js"></script>
-    <script src="https://unpkg.com/prettier@2.8.8/parser-babel.js"></script>
-    <script src="https://unpkg.com/prettier@2.8.8/parser-html.js"></script>
-    <script src="https://unpkg.com/prettier@2.8.8/parser-postcss.js"></script>
-    <script src="https://unpkg.com/prettier@2.8.8/parser-typescript.js"></script>
-    <script>
-{js_code}
-    </script>
-</body>
-</html>"""
-    
-    # Ensure the directory exists
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    
-    # Write the content to the file
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
-    
-    return filename
-
-def detect_heading(text, page_num):
-    """Detect if the text appears to be a heading."""
-    # If the text is short and doesn't end with period, it might be a heading
-    if len(text.strip()) < 100 and not text.strip().endswith('.'):
-        # Try to determine heading level based on length
-        if len(text.strip()) < 30:
-            return (f'<h1>{text}</h1>', f'<h1>{text}</h1>')
-        elif len(text.strip()) < 50:
-            return (f'<h2>{text}</h2>', f'<h2>{text}</h2>')
-        else:
-            return (f'<h3>{text}</h3>', f'<h3>{text}</h3>')
-    return None
-
-def create_html_book(html_files, output_html, output_dir, file_base_name, toc_headings=None):
-    """Create a single HTML book file from multiple HTML files"""
-    try:
-        print(f"\nCreating HTML book: {output_html}")
-        print(f"  Combining {len(html_files)} HTML pages into a single book...")
-        
-        # Filter out non-existent files
-        existing_files = [f for f in html_files if os.path.exists(f)]
-        if not existing_files:
-            print("No HTML files found for combining.")
-            return False
-        
-        # Sort files by page number
-        existing_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
-        
-        # Create book structure
-        book_html = f"""<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{file_base_name}</title>
-    <style>
-        @page {{
-            size: A4;
             margin: 1.5cm;
+        }}
+        html, body {{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }}
         body {{
             font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
             line-height: 1.5;
             background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }}
-        .book {{
-            max-width: 21cm;
-            margin: 0 auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }}
-        .page {{
+            /* A4 size enforcement */
             width: 21cm;
-            padding: 1.5cm;
+            height: 29.7cm;
+        }}
+        .container {{
+            width: 18cm; /* A4 width minus margins */
+            min-height: 26.7cm; /* A4 height minus margins */
+            background-color: white;
+            padding: 1cm;
             box-sizing: border-box;
-            margin-bottom: 2cm;
-            position: relative;
-            border-bottom: 1px dashed #ddd;
-        }}
-        .page:last-child {{
-            border-bottom: none;
-            margin-bottom: 0;
-        }}
-        .page-content {{
-            min-height: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }}
         .persian-translation {{
             text-align: right;
             direction: rtl;
             font-size: 1em;
-        }}
-        .page-number {{
-            position: absolute;
-            bottom: 0.5cm;
-            width: 100%;
-            text-align: center;
-            font-size: 1em;
-            color: #444;
-            font-weight: bold;
-            padding: 5px 0;
-            border-top: 1px solid #ddd;
-        }}
-        .page-images {{
-            margin: 1cm 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1cm;
-        }}
-        .page-image {{
-            max-width: 90%;
-            height: auto;
-            object-fit: contain;
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            margin-bottom: 20px;
+            /* Don't hide any overflow text, let it flow naturally */
+            overflow: visible;
         }}
         /* Style for code blocks */
         pre[class*="language-"] {{
@@ -794,8 +438,6 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
             font-size: 0.9em;
             overflow-x: auto;
             white-space: pre-wrap;
-            background-color: #f5f5f5;
-            padding: 1em;
         }}
         code {{
             direction: ltr;
@@ -804,288 +446,62 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
             border-radius: 3px;
             padding: 2px 4px;
         }}
-        .cover-page {{
+        .page-images {{
+            margin: 1cm 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100%;
+            gap: 1cm;
+        }}
+        .page-image {{
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }}
+        .page-number {{
             text-align: center;
-        }}
-        .book-title {{
-            font-size: 2em;
-            margin-bottom: 1cm;
-        }}
-        .book-subtitle {{
-            font-size: 1.5em;
-            margin-bottom: 2cm;
-            color: #555;
-        }}
-        .toc {{
-            text-align: right;
-            direction: rtl;
-        }}
-        .toc-title {{
-            font-size: 1.5em;
-            margin-bottom: 1cm;
-        }}
-        .toc-entry {{
-            margin-bottom: 0.5em;
-        }}
-        .toc-entry a {{
-            text-decoration: none;
-            color: #333;
-        }}
-        .toc-entry a:hover {{
-            text-decoration: underline;
-        }}
-        .toc-page {{
-            float: left;
+            font-size: 1em;
+            color: #444;
+            font-weight: bold;
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+            margin-top: 1.5em;
+            margin-bottom: 2em;
         }}
         @media print {{
             body {{
                 background: none;
+                width: 21cm;
+                height: 29.7cm;
             }}
-            .book {{
+            .container {{
                 box-shadow: none;
-                margin: 0;
+                padding: 1cm;
+                height: auto;
+                min-height: auto;
             }}
-            .page {{
-                page-break-after: always;
+            /* Page break utility */
+            .page-break {{
+                page-break-before: always;
             }}
+            /* Ensure code blocks print with background colors */
             pre[class*="language-"] {{
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
             }}
         }}
-        .toc-level1 {{
-            font-weight: bold;
-            margin-top: 0.8em;
-        }}
-        .toc-level2 {{
-            margin-left: 1.5em;
-        }}
-        .toc-level3 {{
-            margin-left: 3em;
-            font-size: 0.9em;
-        }}
-        .page-heading {{
-            text-align: right;
-            direction: rtl;
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            color: #333;
-            border-bottom: 1px solid #eee;
-        }}
     </style>
-    <!-- Add Prism CSS for syntax highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
 </head>
 <body>
-    <div class="book">
-        <!-- Cover Page -->
-        <div class="page">
-            <div class="cover-page">
-                <h1 class="book-title">{file_base_name}</h1>
-                <h2 class="book-subtitle">ترجمه فارسی</h2>
-                <p>تاریخ ایجاد: {time.strftime("%Y/%m/%d")}</p>
-            </div>
+    <div class="container">
+        {persian_html}
+        
+        {images_html}
+        
+        <div class="page-number">
+            صفحه -{page_number}-
         </div>
-        
-        <!-- Table of Contents -->
-        <div class="page">
-            <div class="toc">
-                <h2 class="toc-title">فهرست مطالب</h2>
-"""
-        
-        # Use extracted headings if available, otherwise create basic TOC from page numbers
-        if toc_headings and len(toc_headings) > 0:
-            # Sort headings by page number
-            toc_headings.sort(key=lambda x: (x['page'], x['level']))
-            
-            # Remove duplicate headings on the same page (keep all but at different levels)
-            filtered_headings = []
-            seen_entries = set()
-            
-            for heading in toc_headings:
-                # Create a key for this entry that combines title and page
-                entry_key = f"{heading['text']}_{heading['page']}"
-                if entry_key not in seen_entries:
-                    filtered_headings.append(heading)
-                    seen_entries.add(entry_key)
-            
-            # Group headings by level for hierarchical display
-            current_level1 = None
-            current_level2 = None
-            
-            # Variables to track section count for better numbering
-            section_count = 0
-            subsection_counts = {}
-            
-            for heading in filtered_headings:
-                level = heading['level']
-                heading_text = heading['text']
-                heading_page = heading['page']
-                
-                # Calculate the book page number (offset by 2 for cover and TOC)
-                book_page = heading_page + 2
-                
-                # First level headings
-                if level == 1:
-                    section_count += 1
-                    subsection_counts[section_count] = 0
-                    current_level1 = heading_text
-                    current_level2 = None
-                    
-                    # Add numbering to first level headings
-                    numbered_heading = f"{section_count}. {heading_text}"
-                    book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
-                
-                # Second level headings
-                elif level == 2:
-                    if current_level1:
-                        subsection_counts[section_count] += 1
-                        current_level2 = heading_text
-                        
-                        # Add hierarchical numbering
-                        numbered_heading = f"{section_count}.{subsection_counts[section_count]} {heading_text}"
-                        book_html += f'                <div class="toc-entry toc-level2"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
-                    else:
-                        # If no parent heading, treat as level 1
-                        section_count += 1
-                        subsection_counts[section_count] = 0
-                        current_level1 = heading_text
-                        
-                        # Add numbering
-                        numbered_heading = f"{section_count}. {heading_text}"
-                        book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
-                
-                # Third level headings
-                elif level >= 3:
-                    if current_level2:
-                        # Add deeper hierarchical numbering for level 3
-                        subsubsection = subsection_counts.get(section_count, 0)
-                        numbered_heading = f"{section_count}.{subsubsection}.{1} {heading_text}"
-                        book_html += f'                <div class="toc-entry toc-level3"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
-                    elif current_level1:
-                        # If no direct parent but has a grandparent, treat as level 2
-                        subsection_counts[section_count] += 1
-                        numbered_heading = f"{section_count}.{subsection_counts[section_count]} {heading_text}"
-                        book_html += f'                <div class="toc-entry toc-level2"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
-                    else:
-                        # No parents at all, treat as level 1
-                        section_count += 1
-                        numbered_heading = f"{section_count}. {heading_text}"
-                        book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{numbered_heading}<span class="toc-page">{book_page}</span></a></div>\n'
-        else:
-            # Default to page-based TOC if no headings detected
-            for i, html_file in enumerate(existing_files):
-                page_match = re.search(r'page_(\d+)_fa', html_file)
-                if page_match:
-                    original_page = int(page_match.group(1))
-                    book_html += f'                <div class="toc-entry"><a href="#page-{i+3}">صفحه {original_page}<span class="toc-page">{page_number}</span></a></div>\n'
-                    page_number += 1
-        
-        # Close TOC section
-        book_html += """            </div>
-        </div>
-"""
-        
-        # Process and integrate each HTML file content
-        for i, html_file in enumerate(existing_files):
-            print(f"  Processing page {i+3}/{len(existing_files)}: {os.path.basename(html_file)}")
-            
-            try:
-                with open(html_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # Get original page number
-                page_match = re.search(r'page_(\d+)_fa', html_file)
-                original_page = page_match.group(1) if page_match else str(i+1)
-                
-                # Extract content from the individual HTML
-                # Find the persian-translation div content
-                translation_match = re.search(r'<div\s+dir=[\'"]rtl[\'"]\s+class=[\'"]persian-translation[\'"]>(.*?)</div>', content, re.DOTALL)
-                text_content = ""
-                if translation_match:
-                    text_content = translation_match.group(1).strip()
-                
-                # Find original English text
-                original_text_match = re.search(r'<div\s+class=[\'"]original-text[\'"]><h3>Original Text</h3>(.*?)</div>', content, re.DOTALL)
-                original_text_content = ""
-                if original_text_match:
-                    original_text_content = original_text_match.group(1).strip()
-                
-                # Find image tags
-                image_match = re.search(r'<div\s+class=[\'"]page-images[\'"]>(.*?)</div>', content, re.DOTALL)
-                images_content = ""
-                if image_match:
-                    # Update image paths to be relative to the output directory
-                    images_content = image_match.group(0)
-                    
-                    # Copy any images referenced into the output directory
-                    img_tags = re.findall(r'<img\s+src=[\'"]([^\'"]+)[\'"]', images_content)
-                    for img_src in img_tags:
-                        source_path = os.path.join(os.path.dirname(html_file), img_src)
-                        target_dir = os.path.join(output_dir, os.path.dirname(img_src))
-                        target_path = os.path.join(output_dir, img_src)
-                        
-                        # Create directories if they don't exist
-                        if not os.path.exists(target_dir):
-                            os.makedirs(target_dir)
-                        
-                        # Copy image file
-                        if os.path.exists(source_path):
-                            shutil.copy2(source_path, target_path)
-                
-                # Add page to book
-                book_html += f'        <!-- Page {i+3} -->\n'
-                book_html += f'        <div class="page" id="page-{i+3}">\n'
-                book_html += f'            <div class="page-content">\n'
-
-                # Find the current heading for this page
-                page_heading = ""
-                if toc_headings:
-                    # Get the original page number for this file
-                    orig_page_num = int(page_match.group(1)) if page_match else i+1
-                    
-                    # Find the most recent heading for this page
-                    current_heading = None
-                    current_level = 999  # Start with high number to catch any level
-                    
-                    # Sort headings by page and then level (to get most specific/nested heading)
-                    sorted_headings = sorted(toc_headings, key=lambda x: (x['page'], x['level']))
-                    
-                    for heading in sorted_headings:
-                        if heading['page'] <= orig_page_num and heading['level'] < current_level:
-                            current_heading = heading
-                            current_level = heading['level']
-                    
-                    # Add the heading as a breadcrumb/title if found
-                    if current_heading:
-                        clean_title = current_heading['text']
-                        page_heading = f'<div class="page-heading">{clean_title}</div>\n'
-
-                book_html += f'                {page_heading}'
-                book_html += f'                <div dir="rtl" class="persian-translation">{text_content}</div>\n'
-                
-                # Add original English text if available
-                if original_text_content:
-                    book_html += f'                <div class="original-text"><h3>Original Text</h3>{original_text_content}</div>\n'
-                
-                book_html += f'                {images_content}\n'
-                book_html += f'                <div class="page-number">صفحه -{i+3}-</div>\n'
-                book_html += f'            </div>\n'
-                book_html += f'        </div>\n'
-                
-            except Exception as e:
-                print(f"  Error processing {html_file}: {str(e)}")
-        
-        # Close HTML structure
-        book_html += """    </div>
+    </div>
     
     <!-- Add Prism JS for syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
@@ -1186,6 +602,549 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
     </script>
 </body>
 </html>"""
+
+    # Create an empty string for the overflow HTML (in case images don't fit and need a new page)
+    overflow_html = ""
+    
+    # If we decide images need to be on a separate page, create that HTML separately
+    # This will be handled by the JavaScript logic above based on content height
+    
+    return html_content, overflow_html
+
+def detect_heading(text, page_num):
+    """Detect if text contains a heading based on formatting and content"""
+    # Initialize result
+    headings = []
+    
+    # Simple heuristics to detect headings
+    lines = text.split('\n')
+    previous_line_empty = True  # Assume start of text is like an empty line
+    
+    for i, line in enumerate(lines):
+        original_line = line
+        line = line.strip()
+        
+        # Skip empty lines but track them
+        if not line:
+            previous_line_empty = True
+            continue
+        
+        # Get next line if available
+        next_line = lines[i+1].strip() if i+1 < len(lines) else ""
+        
+        # Potential heading characteristics
+        is_heading = False
+        heading_level = 0
+        
+        # 1. Check for English heading patterns
+        if len(line) < 100:  # Headings are usually short
+            # Chapter or section indicators (English)
+            if re.match(r'^(chapter|section|part|appendix)\s+\d+', line.lower()):
+                is_heading = True
+                heading_level = 1
+            
+            # Numbered headings like "1.", "1.1", "1.1.1" (common in technical docs)
+            elif re.match(r'^\d+\.(\d+\.)*\s+\w+', line):
+                is_heading = True
+                heading_level = line.count('.') + 1  # Level based on dots in numbering
+            
+            # Simple numbered headings "1 Introduction"
+            elif re.match(r'^\d+\s+[A-Z]', line):
+                is_heading = True
+                heading_level = 1
+            
+            # All caps headings (common in academic papers and books)
+            elif line.isupper() and len(line.split()) <= 10:
+                is_heading = True
+                heading_level = 2
+            
+            # Title case headings (proper nouns capitalized)
+            elif line.istitle() and len(line.split()) <= 7:
+                is_heading = True
+                heading_level = 2
+            
+            # Headings often have different formatting - check if isolated
+            elif previous_line_empty and (not next_line or next_line == ""):
+                if len(line.split()) <= 10:  # Reasonably short isolated line
+                    is_heading = True
+                    heading_level = 3
+        
+        # 2. Check for Persian heading patterns
+        if not is_heading and len(line) < 100:
+            # Persian chapter indicators فصل، بخش، etc.
+            if re.match(r'^(فصل|بخش|قسمت|پیوست)\s+\d+', line):
+                is_heading = True
+                heading_level = 1
+            
+            # Persian numbered headings
+            elif re.match(r'^\d+[\-\.]\s+\S+', line):  # Number followed by period/dash and text
+                is_heading = True
+                heading_level = 1
+            
+            # Check for lines with special formatting that might indicate headings
+            # If line is isolated (empty lines before and after) and short
+            elif previous_line_empty and (not next_line or next_line == "") and len(line.split()) <= 8:
+                is_heading = True
+                heading_level = 3
+            
+            # Check for semantic indicators that might suggest a heading (Persian)
+            # Common heading starters in Persian
+            elif re.match(r'^(مقدمه|نتیجه‌گیری|روش|مروری بر|بررسی)', line):
+                is_heading = True
+                heading_level = 2
+        
+        # 3. Check for heading with underline pattern (text followed by a line of --- or ===)
+        if not is_heading and next_line and re.match(r'^[=\-_]{3,}$', next_line):
+            is_heading = True
+            heading_level = 1 if '=' in next_line else 2  # === is usually level 1, --- is level 2
+        
+        # If this looks like a heading, add it to the results
+        if is_heading:
+            # Clean up the heading (remove extra whitespace, etc.)
+            clean_heading = ' '.join(line.split())
+            
+            # Remove common prefix numbers for cleaner display
+            display_heading = re.sub(r'^\d+[\.\s]+', '', clean_heading)
+            
+            # Add to our headings list
+            headings.append({
+                'text': display_heading,
+                'level': heading_level,
+                'page': page_num + 1  # Page numbers are 1-based
+            })
+        
+        # Update previous line status
+        previous_line_empty = False
+    
+    # Remove duplicate headings on the same page (keep the one with higher level/priority)
+    filtered_headings = []
+    seen_texts = set()
+    
+    # Sort by level (lower level number = higher priority)
+    sorted_headings = sorted(headings, key=lambda x: x['level'])
+    
+    for heading in sorted_headings:
+        text = heading['text'].lower()
+        if text not in seen_texts:
+            filtered_headings.append(heading)
+            seen_texts.add(text)
+    
+    return filtered_headings
+
+def create_html_book(html_files, output_html, output_dir, file_base_name, toc_headings=None):
+    """Create a single HTML book file from multiple HTML files"""
+    try:
+        print(f"\nCreating HTML book: {output_html}")
+        print(f"  Combining {len(html_files)} HTML pages into a single book...")
+        
+        # Filter out non-existent files
+        existing_files = [f for f in html_files if os.path.exists(f)]
+        if not existing_files:
+            print("No HTML files found for combining.")
+            return False
+        
+        # Sort files by page number
+        existing_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
+        
+        # Analyze text content to better detect chapter/section headings if not provided
+        if not toc_headings or len(toc_headings) == 0:
+            print("  No headings found. Analyzing PDF content to detect chapter titles...")
+            toc_headings = []
+            current_chapter = None
+            
+            # Try to load headings from JSON if it exists
+            headings_file = os.path.join(os.path.dirname(existing_files[0]), "..", "headings.json")
+            if os.path.exists(headings_file):
+                try:
+                    with open(headings_file, 'r', encoding='utf-8') as f:
+                        toc_headings = json.load(f)
+                    print(f"  Loaded {len(toc_headings)} headings from headings.json")
+                except Exception as e:
+                    print(f"  Error loading headings from JSON: {str(e)}")
+            
+            # If still no headings, analyze content
+            if not toc_headings or len(toc_headings) == 0:
+                for html_file in existing_files:
+                    with open(html_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    # Get page number
+                    page_match = re.search(r'page_(\d+)_fa', html_file)
+                    if page_match:
+                        page_num = int(page_match.group(1))
+                        
+                        # Find any potential headings in this page
+                        # Look for bold text, larger text, or text that appears to be a heading
+                        # This is a simple approach - adjust as needed for your specific PDFs
+                        soup = BeautifulSoup(content, 'html.parser')
+                        translation_div = soup.find('div', class_='persian-translation')
+                        
+                        if translation_div:
+                            text_content = translation_div.get_text()
+                            lines = text_content.split('\n')
+                            
+                            for line in lines:
+                                line = line.strip()
+                                if not line:
+                                    continue
+                                    
+                                # Look for potential chapter/section indicators
+                                if (re.search(r'^(فصل|بخش|قسمت)\s+\d+', line) or 
+                                    re.search(r'^(chapter|section|part)\s+\d+', line, re.IGNORECASE) or
+                                    (line.isupper() and len(line) < 80) or
+                                    re.match(r'^\d+[\.\-]\s+[A-Z]', line) or
+                                    (len(line) < 60 and line.strip().endswith(':'))):
+                                    
+                                    level = 1
+                                    toc_headings.append({
+                                        'text': line.strip(),
+                                        'level': level,
+                                        'page': page_num
+                                    })
+                                    current_chapter = line.strip()
+                                    
+                                # Look for potential subsections
+                                elif current_chapter and (
+                                    re.match(r'^\d+\.\d+\s+[A-Z]', line) or 
+                                    (len(line) < 60 and line[0].isupper() and line.endswith(':'))):
+                                    
+                                    toc_headings.append({
+                                        'text': line.strip(),
+                                        'level': 2,
+                                        'page': page_num
+                                    })
+        
+        # Create book structure
+        book_html = """<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{file_base_name}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .book {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2cm;
+        }
+        .chapter {
+            margin-bottom: 2em;
+            page-break-after: always;
+        }
+        .chapter:last-child {
+            page-break-after: auto;
+        }
+        .chapter-content {
+            width: 100%;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 0.5cm;
+            width: 100%;
+            text-align: center;
+            font-size: 1em;
+            color: #444;
+            font-weight: bold;
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+        }
+        .page-images {
+            margin: 1cm 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1cm;
+        }
+        .page-image {
+            max-width: 90%;
+            height: auto;
+            object-fit: contain;
+        }
+        /* Style for code blocks */
+        pre[class*="language-"] {
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            padding: 1em;
+        }
+        code {
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+        .book-title {
+            font-size: 2em;
+            margin-bottom: 1cm;
+        }
+        .book-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 2cm;
+            color: #555;
+        }
+        .toc {
+            text-align: right;
+            direction: rtl;
+        }
+        .toc-title {
+            font-size: 1.5em;
+            margin-bottom: 1cm;
+        }
+        .toc-entry {
+            margin-bottom: 0.5em;
+        }
+        .toc-entry a {
+            text-decoration: none;
+            color: #333;
+        }
+        .toc-entry a:hover {
+            text-decoration: underline;
+        }
+        .toc-page {
+            float: left;
+        }
+        @media print {
+            body {
+                background: none;
+            }
+            .book {
+                box-shadow: none;
+                margin: 0;
+                padding: 1.5cm;
+            }
+            .page {
+                page-break-after: always;
+            }
+            pre[class*="language-"] {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+        .toc-level1 {
+            font-weight: bold;
+            margin-top: 0.8em;
+        }
+        .toc-level2 {
+            margin-left: 1.5em;
+        }
+        .toc-level3 {
+            margin-left: 3em;
+            font-size: 0.9em;
+        }
+    </style>
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+</head>
+<body>
+    <div class="book">
+        <!-- Cover Page -->
+        <div class="page">
+            <div class="cover-page">
+                <h1 class="book-title">{file_base_name}</h1>
+                <h2 class="book-subtitle">ترجمه فارسی</h2>
+                <p>تاریخ ایجاد: """ + time.strftime("%Y/%m/%d") + """</p>
+            </div>
+        </div>
+        
+        <!-- Table of Contents -->
+        <div class="page">
+            <div class="toc">
+                <h2 class="toc-title">فهرست مطالب</h2>
+"""
+        
+        # Generate table of contents entries
+        page_number = 3  # Start after cover and TOC
+        
+        # Use extracted headings if available, otherwise create basic TOC from page numbers
+        if toc_headings and len(toc_headings) > 0:
+            # Sort headings by page number
+            toc_headings.sort(key=lambda x: (x['page'], x['level']))
+            
+            # Group headings by level for hierarchical display
+            current_level1 = None
+            current_level2 = None
+            
+            for heading in toc_headings:
+                level = heading['level']
+                heading_text = heading['text']
+                heading_page = heading['page']
+                
+                # Calculate the book page number (offset by 2 for cover and TOC)
+                book_page = heading_page + 2
+                
+                # First level headings
+                if level == 1:
+                    current_level1 = heading_text
+                    current_level2 = None
+                    book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                # Second level headings
+                elif level == 2:
+                    current_level2 = heading_text
+                    if current_level1:
+                        book_html += f'                <div class="toc-entry toc-level2"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                    else:
+                        book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                # Third level headings
+                elif level >= 3:
+                    if current_level2:
+                        book_html += f'                <div class="toc-entry toc-level3"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                    elif current_level1:
+                        book_html += f'                <div class="toc-entry toc-level2"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                    else:
+                        book_html += f'                <div class="toc-entry toc-level1"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+        else:
+            # Default to page-based TOC if no headings detected
+            for i, html_file in enumerate(existing_files):
+                page_match = re.search(r'page_(\d+)_fa', html_file)
+                if page_match:
+                    original_page = int(page_match.group(1))
+                    book_html += f'                <div class="toc-entry"><a href="#page-{i+3}">صفحه {original_page}<span class="toc-page">{page_number}</span></a></div>\n'
+                    page_number += 1
+        
+        # Close TOC section
+        book_html += """            </div>
+        </div>
+"""
+        
+        # Process and integrate each HTML file content
+        for i, html_file in enumerate(existing_files):
+            print(f"  Processing page {i+3}/{len(existing_files)}: {os.path.basename(html_file)}")
+            
+            try:
+                with open(html_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # Get original page number
+                page_match = re.search(r'page_(\d+)_fa', html_file)
+                original_page = page_match.group(1) if page_match else str(i+1)
+                
+                # Extract content from the individual HTML
+                # Find the persian-translation div content
+                translation_match = re.search(r'<div\s+dir=[\'"]rtl[\'"]\s+class=[\'"]persian-translation[\'"]>(.*?)</div>', content, re.DOTALL)
+                text_content = ""
+                if translation_match:
+                    text_content = translation_match.group(1).strip()
+                
+                # Find image tags
+                image_match = re.search(r'<div\s+class=[\'"]page-images[\'"]>(.*?)</div>', content, re.DOTALL)
+                images_content = ""
+                if image_match:
+                    # Update image paths to be relative to the output directory
+                    images_content = image_match.group(0)
+                    
+                    # Copy any images referenced into the output directory
+                    img_tags = re.findall(r'<img\s+src=[\'"]([^\'"]+)[\'"]', images_content)
+                    for img_src in img_tags:
+                        source_path = os.path.join(os.path.dirname(html_file), img_src)
+                        target_dir = os.path.join(output_dir, os.path.dirname(img_src))
+                        target_path = os.path.join(output_dir, img_src)
+                        
+                        # Create directories if they don't exist
+                        if not os.path.exists(target_dir):
+                            os.makedirs(target_dir)
+                        
+                        # Copy image file
+                        if os.path.exists(source_path):
+                            shutil.copy2(source_path, target_path)
+                
+                # Add page to book
+                book_html += f'        <!-- Page {i+3} -->\n'
+                book_html += f'        <div class="chapter" id="page-{i+3}">\n'
+                book_html += f'            <div class="chapter-content">\n'
+                book_html += f'                <div dir="rtl" class="persian-translation">{text_content}</div>\n'
+                book_html += f'                {images_content}\n'
+                book_html += f'                <div class="page-number">صفحه -{i+3}-</div>\n'
+                book_html += f'            </div>\n'
+                book_html += f'        </div>\n'
+                
+            except Exception as e:
+                print(f"  Error processing {html_file}: {str(e)}")
+        
+        # Close HTML structure
+        book_html += """    </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Add line-numbers class to all pre elements if not already there
+            document.querySelectorAll('pre').forEach(block => {
+                if (!block.classList.contains('line-numbers')) {
+                    block.classList.add('line-numbers');
+                }
+                
+                // If language class is not specified, add 'language-clike' as default
+                let hasLanguageClass = false;
+                block.classList.forEach(className => {
+                    if (className.startsWith('language-')) {
+                        hasLanguageClass = true;
+                    }
+                });
+                
+                if (!hasLanguageClass) {
+                    block.classList.add('language-clike');
+                }
+                
+                // Ensure code elements inside pre also have the correct language class
+                const codeElement = block.querySelector('code');
+                if (codeElement) {
+                    if (!hasLanguageClass) {
+                        codeElement.classList.add('language-clike');
+                    } else {
+                        // Copy the language class from pre to code if code doesn't have it
+                        block.classList.forEach(className => {
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {
+                                codeElement.classList.add(className);
+                            }
+                        });
+                    }
+                }
+            });
+            
+            // Re-highlight all code blocks
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>"""
         
         # Save the combined book HTML
         with open(output_html, 'w', encoding='utf-8') as f:
@@ -1198,40 +1157,7 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
         print(f"Error during HTML book creation: {str(e)}")
         return False
 
-def extract_pdf_toc(pdf_path):
-    """Extract table of contents from PDF if available"""
-    try:
-        toc_entries = []
-        # Open PDF file with PyMuPDF (fitz)
-        doc = fitz.open(pdf_path)
-        
-        # Try to get the table of contents (outline)
-        toc = doc.get_toc()
-        
-        # Process each TOC item
-        for item in toc:
-            level, title, page = item
-            # Convert from PDF page count (0-based) to our page count (1-based)
-            page_number = page + 1
-            
-            # Clean up the title
-            clean_title = title.strip()
-            
-            # Add to our list of headings
-            toc_entries.append({
-                'text': clean_title,
-                'level': level,
-                'page': page_number
-            })
-        
-        doc.close()
-        return toc_entries
-    
-    except Exception as e:
-        print(f"Error extracting TOC from PDF: {str(e)}")
-        return None
-
-def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
+def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     """Extract and translate a PDF file"""
     
     pdf_dir = os.path.dirname(pdf_path)
@@ -1244,16 +1170,16 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
     if not os.path.exists(output_dir_base):
         os.makedirs(output_dir_base)
     
-    # Create a subdirectory for this specific book
-    book_output_dir = os.path.join(output_dir_base, file_base_name)
-    if not os.path.exists(book_output_dir):
-        os.makedirs(book_output_dir)
-        print(f"Created output directory: {book_output_dir}")
+    # Create a subdirectory with the PDF name in the output directory
+    pdf_output_dir = os.path.join(output_dir_base, sanitized_name)
+    if not os.path.exists(pdf_output_dir):
+        os.makedirs(pdf_output_dir)
+        print(f"Created output directory: {pdf_output_dir}")
     else:
-        print(f"Using existing output directory: {book_output_dir}")
-    
-    # Define output HTML path in the book-specific output directory
-    output_html = os.path.join(book_output_dir, f"{file_base_name}_Farsi.html")
+        print(f"Using existing output directory: {pdf_output_dir}")
+        
+    # Define output HTML path in the PDF-specific output directory
+    output_html = os.path.join(pdf_output_dir, f"{file_base_name}_Farsi.html")
     
     # Create directory for this book if it doesn't exist, or keep existing one
     temp_dir = os.path.join(pdf_dir, sanitized_name)
@@ -1293,11 +1219,6 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
     # Lists to store headings for table of contents
     toc_headings = []
     
-    # If we have TOC data from the PDF, use it
-    if pdf_toc:
-        toc_headings = pdf_toc
-        print(f"Using {len(toc_headings)} headings from PDF's table of contents")
-    
     try:
         with open(pdf_path, 'rb') as pdf_file:
             pdf_reader = PyPDF2.PdfReader(pdf_file)
@@ -1329,7 +1250,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
                         return True
                     else:
                         print("Previous HTML book creation may have failed. Attempting to create HTML book from existing translations...")
-                        if create_html_book(html_files, output_html, book_output_dir, file_base_name, toc_headings):
+                        if create_html_book(html_files, output_html, pdf_output_dir, file_base_name, toc_headings):
                             print(f"HTML book created: {output_html}")
                             return True
                         else:
@@ -1360,8 +1281,8 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
                 # Extract text
                 text = page.extract_text()
                 
-                # Detect headings in the text only if we don't have TOC data from the PDF
-                if text and text.strip() and not pdf_toc:
+                # Detect headings in the text
+                if text and text.strip():
                     headings = detect_heading(text, page_num)
                     if headings:
                         # Add headings to the table of contents list
@@ -1398,13 +1319,12 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
                                 html_files.append(html_file)
                             continue
                         
-                        # Create HTML with just images
+                        # Create HTML contents
                         page_html, _ = create_html_content(
                             "این صفحه فقط شامل تصاویر است.", # "This page contains only images"
                             base_name,
                             fonts_copied,
-                            images=images,
-                            original_text="This page contains only images"
+                            images=images
                         )
                         
                         # Save HTML file
@@ -1459,8 +1379,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
                     translated_text, 
                     base_name, 
                     fonts_copied,
-                    images=page_images_list,
-                    original_text=original_text
+                    images=page_images_list
                 )
                 
                 # Save HTML file
@@ -1500,8 +1419,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
                 "این صفحه فقط شامل تصاویر است.", # "This page contains only images"
                 base_name,
                 fonts_copied,
-                images=images,
-                original_text="This page contains only images"
+                images=images
             )
             
             # Save HTML file
@@ -1527,7 +1445,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, pdf_toc=None):
     
     # After translation is complete, create HTML book from HTML files
     if html_files:
-        if create_html_book(html_files, output_html, book_output_dir, file_base_name, toc_headings):
+        if create_html_book(html_files, output_html, pdf_output_dir, file_base_name, toc_headings):
             print(f"HTML book created: {output_html}")
             return True
         else:
@@ -1562,14 +1480,7 @@ def process_all_pdfs(books_dir, api_key, limit=None):
         print(f"Processing file: {os.path.basename(pdf_path)}")
         print(f"{'='*50}")
         
-        # First extract TOC/headings data from the PDF if possible
-        pdf_toc = extract_pdf_toc(pdf_path)
-        if pdf_toc:
-            print(f"Extracted {len(pdf_toc)} table of contents entries from PDF")
-        else:
-            print("No table of contents found in PDF, will use heading detection")
-        
-        result = extract_and_translate_pdf(pdf_path, api_key, limit, pdf_toc)
+        result = extract_and_translate_pdf(pdf_path, api_key, limit)
         
         if result:
             successful += 1
@@ -1584,18 +1495,147 @@ def process_all_pdfs(books_dir, api_key, limit=None):
     print(f"  Failed: {failed}")
     print("="*30)
 
+def retranslate_page(pdf_path, page_number, api_key):
+    """Re-translate a specific page from a PDF file and update the final output"""
+    pdf_dir = os.path.dirname(pdf_path)
+    pdf_filename = os.path.basename(pdf_path)
+    file_base_name = os.path.splitext(pdf_filename)[0]
+    sanitized_name = sanitize_filename(file_base_name)
+    
+    # Get the temp and output directories
+    temp_dir = os.path.join(pdf_dir, sanitized_name)
+    output_dir_base = os.path.join(os.getcwd(), "output")
+    pdf_output_dir = os.path.join(output_dir_base, sanitized_name)
+    output_html = os.path.join(pdf_output_dir, f"{file_base_name}_Farsi.html")
+    
+    # Check if the directories exist
+    if not os.path.exists(temp_dir):
+        print(f"Error: Processing directory not found for {pdf_filename}")
+        return False
+    
+    if not os.path.exists(pdf_output_dir):
+        os.makedirs(pdf_output_dir)
+    
+    # Extract the specified page from the PDF
+    try:
+        with open(pdf_path, 'rb') as pdf_file:
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            num_pages = len(pdf_reader.pages)
+            
+            if page_number <= 0 or page_number > num_pages:
+                print(f"Error: Page number {page_number} is out of range (1-{num_pages})")
+                return False
+            
+            # Extract text from the specified page (page_number is 1-based, index is 0-based)
+            page = pdf_reader.pages[page_number - 1]
+            text = page.extract_text()
+            
+            if not text.strip():
+                print(f"Warning: Page {page_number} appears to be empty.")
+            
+            # Save the text to a temporary file
+            page_file = os.path.join(temp_dir, f"page_{page_number:04d}.txt")
+            with open(page_file, 'w', encoding='utf-8') as f:
+                f.write(text)
+            
+            # Extract images from the page
+            images = extract_images_from_pdf_page(pdf_path, page_number - 1, temp_dir)
+            
+            # Copy font files if needed
+            fonts_path = os.path.join(temp_dir, "fontiran.css")
+            fonts_copied = os.path.exists(fonts_path)
+            if not fonts_copied:
+                fonts_copied = copy_font_assets(temp_dir)
+            
+            # Translate the text
+            translated_text, _ = translate_text_to_persian(text, api_key)
+            
+            if not translated_text:
+                print(f"Error: Failed to translate page {page_number}")
+                return False
+            
+            # Create HTML content with the translation
+            page_html, _ = create_html_content(
+                translated_text,
+                f"page_{page_number:04d}",
+                fonts_copied,
+                images=images
+            )
+            
+            # Save the HTML file
+            html_file = os.path.join(temp_dir, f"page_{page_number:04d}_fa.html")
+            with open(html_file, 'w', encoding='utf-8') as f:
+                f.write(page_html)
+            
+            print(f"Page {page_number} has been re-translated successfully.")
+            
+            # Rebuild the complete HTML book
+            html_files = glob.glob(os.path.join(temp_dir, "page_*_fa.html"))
+            if not html_files:
+                print("Error: No HTML files found to create the book.")
+                return False
+            
+            # Load existing headings if available
+            headings_file = os.path.join(temp_dir, "headings.json")
+            toc_headings = []
+            if os.path.exists(headings_file):
+                try:
+                    with open(headings_file, 'r', encoding='utf-8') as f:
+                        toc_headings = json.load(f)
+                except Exception as e:
+                    print(f"Error loading headings: {str(e)}")
+            
+            # Rebuild the book
+            if create_html_book(html_files, output_html, pdf_output_dir, file_base_name, toc_headings):
+                print(f"HTML book has been updated with the re-translated page.")
+                return True
+            else:
+                print("Error: Failed to update the HTML book.")
+                return False
+            
+    except Exception as e:
+        print(f"Error during re-translation: {str(e)}")
+        return False
+
 if __name__ == "__main__":
-    # Fixed configuration values
-    api_key = "AIzaSyD1HS27l8i8N5jBnSCixhGH3sRiH81i9HQ"
-    books_dir = os.path.join(os.getcwd(), "books")
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Extract, translate and convert PDF files to Persian HTML')
+    parser.add_argument('--api-key', default="AIzaSyD1HS27l8i8N5jBnSCixhGH3sRiH81i9HQ", help='Gemini API key')
+    parser.add_argument('--books-dir', default=os.path.join(os.getcwd(), "books"), help='Directory containing PDF files')
+    parser.add_argument('--limit', type=int, help='Maximum number of pages to process from each book')
+    parser.add_argument('--retranslate', nargs=2, metavar=('PDF_FILE', 'PAGE_NUMBER'), 
+                        help='Re-translate a specific page from a PDF file. Format: --retranslate "pdf_file.pdf" 42')
     
-    print(f"Using books directory: {books_dir}")
+    args = parser.parse_args()
     
-    # Process all PDFs without any page limit
-    process_all_pdfs(
-        books_dir=books_dir,
-        api_key=api_key,
-        limit=None
-    )
-    
-    print("Processing completed.") 
+    # Check if re-translation is requested
+    if args.retranslate:
+        pdf_file, page_num = args.retranslate
+        try:
+            page_num = int(page_num)
+            # Check if the PDF file exists
+            pdf_path = pdf_file
+            if not os.path.exists(pdf_path):
+                # Try with books directory
+                pdf_path = os.path.join(args.books_dir, pdf_file)
+                if not os.path.exists(pdf_path):
+                    print(f"Error: PDF file '{pdf_file}' not found.")
+                    exit(1)
+            
+            print(f"Re-translating page {page_num} of '{pdf_file}'...")
+            retranslate_page(pdf_path, page_num, args.api_key)
+        except ValueError:
+            print(f"Error: Invalid page number '{page_num}'. Must be an integer.")
+            exit(1)
+    else:
+        # Normal processing mode
+        print(f"Using books directory: {args.books_dir}")
+        
+        # Process all PDFs
+        process_all_pdfs(
+            books_dir=args.books_dir,
+            api_key=args.api_key,
+            limit=args.limit
+        )
+        
+        print("Processing completed.") 
