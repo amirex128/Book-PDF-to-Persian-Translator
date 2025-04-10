@@ -11,6 +11,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import argparse  # Re-add argparse for command line arguments
+import base64
 
 # Try to import pdfkit
 try:
@@ -225,10 +226,11 @@ def translate_text_to_persian(text, api_key, conversation_history=None):
                    - تأکید: از <strong> برای متن پررنگ و <em> برای متن ایتالیک استفاده کنید
                    - جداول: ساختار <table>, <tr>, <td> را حفظ کنید
 
-                9.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده
-
-                10.متن های ترجمه شده باید به زبان فارسی روان و قابل فهم و گرامر درست نوشته شود و اگر امکانش هست ترجمه را کمی تغییر هم بده تا متن ترجمه شده به فارسی روان تر و خوانا تر و واضح تر باشد
-
+                9.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده.
+                10.از تگ ها html زیاد استفاده کن برای زیبا سازی متن ترجمه شده و خوانا کردن ان ها و حتی بهتر متن های انگلیسی که وسط متن های فارسی ترجمه نشده ان رو داخل یک تگ span بزاری و دایرکتشن ltr بهش بدی تا تراز بندی بهتری داشته باشه
+                11.متن های ترجمه شده باید به زبان فارسی روان و قابل فهم و گرامر درست نوشته شود و اگر امکانش هست ترجمه را کمی تغییر هم بده تا متن ترجمه شده به فارسی روان تر و خوانا تر و واضح تر باشد
+                12.در صورتی که متن انگلیسی در قسمتی از متن فارسی ترجمه نشده باشد، آن را داخل یک تگ span بزاری و دایرکتشن ltr بهش بدی تا تراز بندی بهتری داشته باشه
+                
                 """
                 
                 # Send initial instructions
@@ -820,7 +822,7 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{file_base_name}</title>
+    <title>""" + file_base_name + """</title>
     <style>
         @page {
             size: A4;
@@ -971,10 +973,10 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
 <body>
     <div class="book">
         <!-- Cover Page -->
-        <div class="page">
+        <div class="dual-page-container">
             <div class="cover-page">
-                <h1 class="book-title">{file_base_name}</h1>
-                <h2 class="book-subtitle">ترجمه فارسی</h2>
+                <h1 class="book-title">""" + file_base_name + """</h1>
+                <h2 class="book-subtitle">نسخه ترجمه شده</h2>
                 <p>تاریخ ایجاد: """ + time.strftime("%Y/%m/%d") + """</p>
             </div>
         </div>
@@ -1157,6 +1159,295 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, toc_he
         print(f"Error during HTML book creation: {str(e)}")
         return False
 
+def extract_pdf_page_as_image(pdf_path, page_num, output_dir, dpi=300):
+    """Extract a single page from PDF as an image"""
+    try:
+        # Open the PDF
+        doc = fitz.open(pdf_path)
+        
+        # Get the page
+        page = doc[page_num]
+        
+        # Create a directory for the page images if it doesn't exist
+        page_images_dir = os.path.join(output_dir, f"page_{page_num + 1:04d}_original")
+        if not os.path.exists(page_images_dir):
+            os.makedirs(page_images_dir)
+        
+        # Set the zoom factors (higher values mean higher resolution)
+        zoom = dpi / 72  # Default DPI in PDF is 72
+        mat = fitz.Matrix(zoom, zoom)
+        
+        # Render page to a pixmap (image)
+        pix = page.get_pixmap(matrix=mat)
+        
+        # Save the image
+        image_path = os.path.join(page_images_dir, f"original_page.png")
+        pix.save(image_path)
+        
+        # Return the path to the saved image
+        return image_path
+    
+    except Exception as e:
+        print(f"Error extracting page {page_num + 1} as image: {str(e)}")
+        return None
+
+def create_dual_page_html(persian_html, original_pdf_path, page_num, file_name, include_font_path, images=None):
+    """Create HTML content with original PDF page and Persian translation side by side"""
+    # We no longer need to clean HTML tags as we're now actively preserving them
+    persian_text = persian_html
+    
+    # Check if the translated text already contains HTML tags
+    # If it doesn't have basic HTML structure, wrap it in Persian translation div
+    if not re.search(r'<(p|h[1-6]|ul|ol|pre|table)\b', persian_text, re.IGNORECASE):
+        persian_text = f"<p>{persian_text}</p>"
+    
+    # Wrap everything in a Persian translation div
+    persian_html = f"<div dir='rtl' class='persian-translation'>{persian_text}</div>"
+    
+    # Extract page number from filename
+    page_number = ""
+    if re.search(r'page_(\d+)', file_name):
+        page_number = re.search(r'page_(\d+)', file_name).group(1)
+        # Remove leading zeros from page number
+        page_number = str(int(page_number))
+    
+    # Extract the original PDF page as an image
+    temp_dir = os.path.dirname(file_name)
+    pdf_dir = os.path.dirname(original_pdf_path)
+    
+    # Extract PDF page as image (page_num is 0-based, page_number is 1-based)
+    image_path = extract_pdf_page_as_image(original_pdf_path, int(page_number) - 1, temp_dir)
+    
+    # Relative path to the image
+    if image_path:
+        image_rel_path = os.path.relpath(image_path, temp_dir)
+    else:
+        image_rel_path = ""
+    
+    # Add CSS font link
+    font_link = ''
+    if include_font_path:
+        font_link = '<link rel="stylesheet" href="fontiran.css">'
+    
+    # Check if there are images to add
+    has_images = images and len(images) > 0
+    
+    # Prepare image HTML - Include images inline with text when possible
+    images_html = ""
+    if has_images:
+        images_html = "<div class='page-images'>\n"
+        for img in images:
+            images_html += f"    <img src='{img['relative_path']}' class='page-image' alt='Page {page_number} image' />\n"
+        images_html += "</div>\n"
+    
+    # Create HTML content with dual page layout
+    html_content = f"""<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{file_name}</title>
+    {font_link}
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        @page {{
+            size: A4 landscape;
+            margin: 0;
+        }}
+        html, body {{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        body {{
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            /* A3 landscape size to accommodate two A4 pages side by side */
+            width: 42cm;
+            height: 29.7cm;
+        }}
+        .dual-page-container {{
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }}
+        .page-container {{
+            width: 50%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0.5cm;
+            overflow: hidden;
+        }}
+        .persian-page {{
+            background-color: white;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 1cm;
+            direction: rtl;
+            overflow-y: auto;
+        }}
+        .original-page {{
+            background-color: white;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }}
+        .original-pdf-image {{
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }}
+        .persian-translation {{
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            margin-bottom: 20px;
+            /* Don't hide any overflow text, let it flow naturally */
+            overflow: visible;
+        }}
+        /* Style for code blocks */
+        pre[class*="language-"] {{
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }}
+        code {{
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }}
+        .page-images {{
+            margin: 1cm 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1cm;
+        }}
+        .page-image {{
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }}
+        .page-number {{
+            text-align: center;
+            font-size: 1em;
+            color: #444;
+            font-weight: bold;
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+            margin-top: 1.5em;
+            margin-bottom: 2em;
+        }}
+        @media print {{
+            body {{
+                background: none;
+                width: 42cm;
+                height: 29.7cm;
+            }}
+            .persian-page, .original-page {{
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }}
+            /* Ensure code blocks print with background colors */
+            pre[class*="language-"] {{
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="dual-page-container">
+        <!-- Persian Translation (Right Side) -->
+        <div class="page-container">
+            <div class="persian-page">
+                {persian_html}
+                
+                {images_html}
+                
+                <div class="page-number">
+                    صفحه -{page_number}-
+                </div>
+            </div>
+        </div>
+        
+        <!-- Original PDF Page (Left Side) -->
+        <div class="page-container">
+            <div class="original-page">
+                <img src="{image_rel_path}" class="original-pdf-image" alt="Original PDF Page {page_number}" />
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {{
+            /* Add line-numbers class to all pre elements if not already there */
+            document.querySelectorAll('pre').forEach(block => {{
+                if (!block.classList.contains('line-numbers')) {{
+                    block.classList.add('line-numbers');
+                }}
+                
+                /* If language class is not specified, add 'language-clike' as default */
+                let hasLanguageClass = false;
+                block.classList.forEach(className => {{
+                    if (className.startsWith('language-')) {{
+                        hasLanguageClass = true;
+                    }}
+                }});
+                
+                if (!hasLanguageClass) {{
+                    block.classList.add('language-clike');
+                }}
+                
+                /* Ensure code elements inside pre also have the correct language class */
+                const codeElement = block.querySelector('code');
+                if (codeElement) {{
+                    if (!hasLanguageClass) {{
+                        codeElement.classList.add('language-clike');
+                    }} else {{
+                        /* Copy the language class from pre to code if code doesn't have it */
+                        block.classList.forEach(className => {{
+                            if (className.startsWith('language-') && !codeElement.classList.contains(className)) {{
+                                codeElement.classList.add(className);
+                            }}
+                        }});
+                    }}
+                }}
+            }});
+            
+            /* Re-highlight all code blocks */
+            if (window.Prism) {{
+                Prism.highlightAll();
+            }}
+        }});
+    </script>
+</body>
+</html>"""
+
+    # Create an empty string for the overflow HTML (in case images don't fit and need a new page)
+    overflow_html = ""
+    
+    return html_content, overflow_html
+
 def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     """Extract and translate a PDF file"""
     
@@ -1178,8 +1469,9 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     else:
         print(f"Using existing output directory: {pdf_output_dir}")
         
-    # Define output HTML path in the PDF-specific output directory
-    output_html = os.path.join(pdf_output_dir, f"{file_base_name}_Farsi.html")
+    # Define output HTML paths in the PDF-specific output directory
+    translation_html = os.path.join(pdf_output_dir, f"{file_base_name}_Farsi.html")
+    dual_view_html = os.path.join(pdf_output_dir, f"{file_base_name}_Dual_View.html")
     
     # Create directory for this book if it doesn't exist, or keep existing one
     temp_dir = os.path.join(pdf_dir, sanitized_name)
@@ -1241,21 +1533,33 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                 expected_pages = min(pages_to_process, num_pages)
                 processed_pages_in_range = sum(1 for p in processed_page_numbers if p <= expected_pages)
                 
-                # If all pages are processed but HTML book doesn't exist or failed to create
+                # If all pages are processed but HTML books don't exist or failed to create
                 if processed_pages_in_range >= expected_pages:
                     print(f"All {expected_pages} pages have already been translated.")
                     
-                    if os.path.exists(output_html):
-                        print(f"HTML book already exists: {output_html}")
+                    create_both = False
+                    if not os.path.exists(translation_html):
+                        print("Translation-only HTML book doesn't exist. Attempting to create it from existing translations...")
+                        create_both = True
+                    
+                    if not os.path.exists(dual_view_html):
+                        print("Dual-view HTML book doesn't exist. Attempting to create it from existing translations...")
+                        create_both = True
+                    
+                    if not create_both:
+                        print(f"Both HTML books already exist.")
+                        return True
+                    
+                    # Create both books from existing translations
+                    translation_success = create_html_book(html_files, translation_html, pdf_output_dir, file_base_name, toc_headings)
+                    dual_view_success = create_dual_page_book(html_files, dual_view_html, pdf_output_dir, file_base_name, pdf_path, toc_headings)
+                    
+                    if translation_success and dual_view_success:
+                        print(f"Both HTML books created successfully.")
                         return True
                     else:
-                        print("Previous HTML book creation may have failed. Attempting to create HTML book from existing translations...")
-                        if create_html_book(html_files, output_html, pdf_output_dir, file_base_name, toc_headings):
-                            print(f"HTML book created: {output_html}")
-                            return True
-                        else:
-                            print("Failed to create HTML book from existing translations.")
-                            return False
+                        print("Failed to create HTML books from existing translations.")
+                        return False
                 else:
                     # Continue from where we left off
                     last_processed_page = max(processed_page_numbers) if processed_page_numbers else 0
@@ -1374,7 +1678,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
                 # Check for images for this page
                 page_images_list = page_images.get(base_name, [])
                 
-                # Create HTML content with translation and images
+                # For regular view, just show the translation
                 page_html, _ = create_html_content(
                     translated_text, 
                     base_name, 
@@ -1443,16 +1747,427 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None):
     with open(headings_file, 'w', encoding='utf-8') as f:
         json.dump(toc_headings, f, ensure_ascii=False, indent=2)
     
-    # After translation is complete, create HTML book from HTML files
+    # Extract all PDF pages as images for dual-page view
+    print("\nExtracting original PDF pages as images...")
+    for page_num in tqdm(range(pages_to_process), desc="Extracting page images", unit="page"):
+        # Skip if the image already exists
+        image_path = os.path.join(temp_dir, f"page_{page_num + 1:04d}_original", "original_page.png")
+        if not os.path.exists(image_path):
+            extract_pdf_page_as_image(pdf_path, page_num, temp_dir)
+    
+    # After translation is complete, create both HTML books from HTML files
     if html_files:
-        if create_html_book(html_files, output_html, pdf_output_dir, file_base_name, toc_headings):
-            print(f"HTML book created: {output_html}")
-            return True
+        # Create translation-only book first
+        translation_success = create_html_book(html_files, translation_html, pdf_output_dir, file_base_name, toc_headings)
+        if translation_success:
+            print(f"Translation-only HTML book created: {translation_html}")
         else:
-            print("Failed to create HTML book. Individual HTML files are preserved for manual review.")
-            return False
+            print("Failed to create translation-only HTML book.")
+        
+        # Create dual-view book
+        dual_view_success = create_dual_page_book(html_files, dual_view_html, pdf_output_dir, file_base_name, pdf_path, toc_headings)
+        if dual_view_success:
+            print(f"Dual-view HTML book created: {dual_view_html}")
+        else:
+            print("Failed to create dual-view HTML book.")
+        
+        # Return success if at least one book was created successfully
+        return translation_success or dual_view_success
     else:
         print("No HTML files were created. Translation failed.")
+        return False
+
+def create_dual_page_book(html_files, output_html, output_dir, file_base_name, pdf_path, toc_headings=None):
+    """Create a single HTML book file with dual page layout (original PDF + translation)"""
+    try:
+        print(f"\nCreating dual-page HTML book: {output_html}")
+        print(f"  Combining {len(html_files)} pages into a dual-page book...")
+        
+        # Filter out non-existent files
+        existing_files = [f for f in html_files if os.path.exists(f)]
+        if not existing_files:
+            print("No HTML files found for combining.")
+            return False
+        
+        # Sort files by page number
+        existing_files.sort(key=lambda x: int(re.search(r'page_(\d+)_fa', x).group(1)))
+        
+        # Create book structure
+        book_html = """<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>""" + file_base_name + """ - Dual View</title>
+    <style>
+        @page {
+            size: A3 landscape;
+            margin: 0;
+        }
+        body {
+            font-family: 'IRANSansX', 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .book {
+            width: 100%;
+            margin: 0 auto;
+            background-color: white;
+        }
+        .dual-page-container {
+            display: flex;
+            width: 100%;
+            height: 29.7cm; /* A4 height */
+            page-break-after: always;
+        }
+        .dual-page-container:last-child {
+            page-break-after: auto;
+        }
+        .page-container {
+            width: 50%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0.5cm;
+            overflow: hidden;
+        }
+        .persian-page {
+            background-color: white;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 1cm;
+            direction: rtl;
+            overflow-y: auto;
+        }
+        .original-page {
+            background-color: white;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .original-pdf-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .persian-translation {
+            text-align: right;
+            direction: rtl;
+            font-size: 1em;
+        }
+        .page-images {
+            margin: 1cm 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1cm;
+        }
+        .page-image {
+            max-width: 90%;
+            height: auto;
+            object-fit: contain;
+        }
+        .page-number {
+            text-align: center;
+            font-size: 1em;
+            color: #444;
+            font-weight: bold;
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+            margin-top: 1.5em;
+        }
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+        }
+        .book-title {
+            font-size: 2.5em;
+            margin-bottom: 1cm;
+        }
+        .book-subtitle {
+            font-size: 1.8em;
+            margin-bottom: 2cm;
+            color: #555;
+        }
+        /* Style for code blocks */
+        pre[class*="language-"] {
+            direction: ltr;
+            text-align: left;
+            border-radius: 5px;
+            margin: 1em 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            padding: 1em;
+        }
+        code {
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        @media print {
+            body {
+                background: none;
+            }
+            .book {
+                box-shadow: none;
+                margin: 0;
+            }
+            .persian-page, .original-page {
+                box-shadow: none;
+                border: 1px solid #eee;
+            }
+            pre[class*="language-"] {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+        /* TOC Styles */
+        .toc {
+            text-align: right;
+            direction: rtl;
+            padding: 0 1cm;
+        }
+        .toc-entry {
+            margin-bottom: 0.5em;
+        }
+        .toc-entry a {
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+        }
+        .toc-entry a:hover {
+            text-decoration: underline;
+        }
+        .toc-page {
+            float: left;
+        }
+        .toc-level1 {
+            font-weight: bold;
+            margin-top: 0.8em;
+        }
+        .toc-level2 {
+            margin-left: 1.5em;
+        }
+        .toc-level3 {
+            margin-left: 3em;
+            font-size: 0.9em;
+        }
+    </style>
+    <!-- Add Prism CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+</head>
+<body>
+    <div class="book">
+        <!-- Cover Page -->
+        <div class="dual-page-container">
+            <div class="cover-page">
+                <h1 class="book-title">""" + file_base_name + """</h1>
+                <h2 class="book-subtitle">نسخه ترجمه شده</h2>
+                <p>تاریخ ایجاد: """ + time.strftime("%Y/%m/%d") + """</p>
+            </div>
+        </div>
+        
+        <!-- Table of Contents -->
+        <div class="dual-page-container">
+            <div class="page-container" style="width: 100%;">
+                <div class="persian-page">
+                    <div class="toc">
+                        <h2 class="toc-title" style="text-align: center; font-size: 1.8em; margin-bottom: 1.5cm;">فهرست مطالب</h2>
+"""
+        
+        # Generate table of contents entries
+        page_number = 3  # Start after cover and TOC
+        
+        # Use extracted headings if available, otherwise create basic TOC from page numbers
+        if toc_headings and len(toc_headings) > 0:
+            # Sort headings by page number
+            toc_headings.sort(key=lambda x: (x['page'], x['level']))
+            
+            # Group headings by level for hierarchical display
+            current_level1 = None
+            current_level2 = None
+            
+            for heading in toc_headings:
+                level = heading['level']
+                heading_text = heading['text']
+                heading_page = heading['page']
+                
+                # Calculate the book page number (offset by 2 for cover and TOC)
+                book_page = heading_page + 2
+                
+                # First level headings
+                if level == 1:
+                    current_level1 = heading_text
+                    current_level2 = None
+                    book_html += f'                        <div class="toc-entry toc-level1"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                # Second level headings
+                elif level == 2:
+                    current_level2 = heading_text
+                    if current_level1:
+                        book_html += f'                        <div class="toc-entry toc-level2"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                    else:
+                        book_html += f'                        <div class="toc-entry toc-level1"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                # Third level headings
+                elif level >= 3:
+                    if current_level2:
+                        book_html += f'                        <div class="toc-entry toc-level3"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                    elif current_level1:
+                        book_html += f'                        <div class="toc-entry toc-level2"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+                    else:
+                        book_html += f'                        <div class="toc-entry toc-level1"><a href="#page-{book_page}">{heading_text}<span class="toc-page">{book_page}</span></a></div>\n'
+        else:
+            # Default to page-based TOC if no headings detected
+            for i, html_file in enumerate(existing_files):
+                page_match = re.search(r'page_(\d+)_fa', html_file)
+                if page_match:
+                    original_page = int(page_match.group(1))
+                    book_html += f'                        <div class="toc-entry"><a href="#page-{i+3}">صفحه {original_page}<span class="toc-page">{page_number}</span></a></div>\n'
+                    page_number += 1
+        
+        # Close TOC section
+        book_html += """                    </div>
+                </div>
+            </div>
+        </div>
+"""
+
+        # Process and integrate each HTML file content
+        for i, html_file in enumerate(existing_files):
+            print(f"  Processing page {i+1}/{len(existing_files)}: {os.path.basename(html_file)}")
+            
+            try:
+                with open(html_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # Get original page number
+                page_match = re.search(r'page_(\d+)_fa', html_file)
+                if page_match:
+                    original_page_num = int(page_match.group(1))
+                else:
+                    original_page_num = i + 1
+                
+                # Extract content from the individual HTML
+                translation_match = re.search(r'<div\s+dir=[\'"]rtl[\'"]\s+class=[\'"]persian-translation[\'"]>(.*?)</div>', content, re.DOTALL)
+                text_content = ""
+                if translation_match:
+                    text_content = translation_match.group(1).strip()
+                
+                # Find image tags
+                image_match = re.search(r'<div\s+class=[\'"]page-images[\'"]>(.*?)</div>', content, re.DOTALL)
+                images_content = ""
+                if image_match:
+                    # Update image paths to be relative to the output directory
+                    images_content = image_match.group(0)
+                    
+                    # Copy any images referenced into the output directory
+                    img_tags = re.findall(r'<img\s+src=[\'"]([^\'"]+)[\'"]', images_content)
+                    for img_src in img_tags:
+                        source_path = os.path.join(os.path.dirname(html_file), img_src)
+                        target_dir = os.path.join(output_dir, os.path.dirname(img_src))
+                        target_path = os.path.join(output_dir, img_src)
+                        
+                        # Create directories if they don't exist
+                        if not os.path.exists(target_dir):
+                            os.makedirs(target_dir)
+                        
+                        # Copy image file
+                        if os.path.exists(source_path):
+                            shutil.copy2(source_path, target_path)
+                
+                # Get the path to the original PDF page image from the temp directory
+                temp_dir = os.path.dirname(html_file)
+                image_path = os.path.join(temp_dir, f"page_{original_page_num:04d}_original", "original_page.png")
+                
+                # If the image exists in the temp directory, copy it to the output directory
+                if os.path.exists(image_path):
+                    # Create output directory for original page image
+                    output_image_dir = os.path.join(output_dir, f"page_{original_page_num:04d}_original")
+                    os.makedirs(output_image_dir, exist_ok=True)
+                    
+                    # Copy the image to the output directory
+                    output_image_path = os.path.join(output_image_dir, "original_page.png")
+                    shutil.copy2(image_path, output_image_path)
+                    
+                    # Calculate relative path to the image from the output directory
+                    image_rel_path = os.path.relpath(output_image_path, os.path.dirname(output_html))
+                else:
+                    # Fallback message if image doesn't exist
+                    image_rel_path = ""
+                    image_content = "<div style='text-align: center; padding: 2cm;'>Original PDF page could not be loaded</div>"
+                
+                # Add dual-page layout to book
+                book_html += f'''
+        <!-- Page {i+1} -->
+        <div class="dual-page-container" id="page-{i+3}">
+            <!-- Persian Translation (Right Side) -->
+            <div class="page-container">
+                <div class="persian-page">
+                    <div dir="rtl" class="persian-translation">{text_content}</div>
+                    {images_content}
+                    <div class="page-number">صفحه {original_page_num}</div>
+                </div>
+            </div>
+            
+            <!-- Original PDF Page (Left Side) -->
+            <div class="page-container">
+                <div class="original-page">
+                    <img src="{image_rel_path}" class="original-pdf-image" alt="Original PDF Page {original_page_num}" />
+                </div>
+            </div>
+        </div>
+'''
+                
+            except Exception as e:
+                print(f"  Error processing {html_file}: {str(e)}")
+        
+        # Add closing tags to the book HTML
+        book_html += """
+    </div>
+    
+    <!-- Add Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // Initialize Prism highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {{
+            /* Re-highlight all code blocks */
+            if (window.Prism) {{
+                Prism.highlightAll();
+            }}
+        }});
+    </script>
+</body>
+</html>
+"""
+        
+        # Format the book HTML with the actual values
+        book_html = book_html.replace("{file_base_name}", file_base_name)
+        
+        # Save the combined book HTML
+        with open(output_html, 'w', encoding='utf-8') as f:
+            f.write(book_html)
+        
+        print(f"  Dual-page HTML book created successfully: {output_html}")
+        return True
+    
+    except Exception as e:
+        print(f"Error during dual-page HTML book creation: {str(e)}")
         return False
 
 def process_all_pdfs(books_dir, api_key, limit=None):
@@ -1480,6 +2195,7 @@ def process_all_pdfs(books_dir, api_key, limit=None):
         print(f"Processing file: {os.path.basename(pdf_path)}")
         print(f"{'='*50}")
         
+        # Process the PDF - both normal and dual-page versions will be created
         result = extract_and_translate_pdf(pdf_path, api_key, limit)
         
         if result:
@@ -1493,6 +2209,7 @@ def process_all_pdfs(books_dir, api_key, limit=None):
     print(f"  Total PDF files: {len(pdf_files)}")
     print(f"  Successful: {successful}")
     print(f"  Failed: {failed}")
+    print(f"  Output format: Both translation-only and dual-page views")
     print("="*30)
 
 def retranslate_page(pdf_path, page_number, api_key):
@@ -1506,7 +2223,8 @@ def retranslate_page(pdf_path, page_number, api_key):
     temp_dir = os.path.join(pdf_dir, sanitized_name)
     output_dir_base = os.path.join(os.getcwd(), "output")
     pdf_output_dir = os.path.join(output_dir_base, sanitized_name)
-    output_html = os.path.join(pdf_output_dir, f"{file_base_name}_Farsi.html")
+    translation_html = os.path.join(pdf_output_dir, f"{file_base_name}_Farsi.html")
+    dual_view_html = os.path.join(pdf_output_dir, f"{file_base_name}_Dual_View.html")
     
     # Check if the directories exist
     if not os.path.exists(temp_dir):
@@ -1541,6 +2259,9 @@ def retranslate_page(pdf_path, page_number, api_key):
             # Extract images from the page
             images = extract_images_from_pdf_page(pdf_path, page_number - 1, temp_dir)
             
+            # Extract the original PDF page as an image
+            extract_pdf_page_as_image(pdf_path, page_number - 1, temp_dir)
+            
             # Copy font files if needed
             fonts_path = os.path.join(temp_dir, "fontiran.css")
             fonts_copied = os.path.exists(fonts_path)
@@ -1569,10 +2290,10 @@ def retranslate_page(pdf_path, page_number, api_key):
             
             print(f"Page {page_number} has been re-translated successfully.")
             
-            # Rebuild the complete HTML book
+            # Rebuild the complete HTML books
             html_files = glob.glob(os.path.join(temp_dir, "page_*_fa.html"))
             if not html_files:
-                print("Error: No HTML files found to create the book.")
+                print("Error: No HTML files found to create the books.")
                 return False
             
             # Load existing headings if available
@@ -1585,12 +2306,21 @@ def retranslate_page(pdf_path, page_number, api_key):
                 except Exception as e:
                     print(f"Error loading headings: {str(e)}")
             
-            # Rebuild the book
-            if create_html_book(html_files, output_html, pdf_output_dir, file_base_name, toc_headings):
-                print(f"HTML book has been updated with the re-translated page.")
+            # Rebuild both books
+            translation_success = create_html_book(html_files, translation_html, pdf_output_dir, file_base_name, toc_headings)
+            dual_view_success = create_dual_page_book(html_files, dual_view_html, pdf_output_dir, file_base_name, pdf_path, toc_headings)
+            
+            if translation_success and dual_view_success:
+                print(f"Both HTML books have been updated with the re-translated page.")
+                return True
+            elif translation_success:
+                print(f"Translation-only HTML book has been updated, but dual-view book creation failed.")
+                return True
+            elif dual_view_success:
+                print(f"Dual-view HTML book has been updated, but translation-only book creation failed.")
                 return True
             else:
-                print("Error: Failed to update the HTML book.")
+                print("Error: Failed to update the HTML books.")
                 return False
             
     except Exception as e:
