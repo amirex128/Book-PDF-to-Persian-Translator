@@ -3,6 +3,7 @@ import argparse
 import sys
 import datetime  # Add proper datetime import
 from dotenv import load_dotenv
+import time
 
 # Add the src directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -82,10 +83,9 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
             # Check which pages already have translations
             for page_num in extracted_text.keys():
                 page_str = f"{page_num:04d}"
-                trans_file = os.path.join(output_dir, f"page_{page_str}_fa.txt")
                 html_file = os.path.join(output_dir, f"page_{page_str}_fa.html")
                 
-                if os.path.exists(trans_file) and os.path.exists(html_file):
+                if os.path.exists(html_file):
                     already_translated_count += 1
                 else:
                     pages_needing_translation.append(page_num)
@@ -147,7 +147,6 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
             # Create corresponding file paths
             page_str = f"{page_num:04d}"
             orig_file = os.path.join(output_dir, f"page_{page_str}.txt")
-            trans_file = os.path.join(output_dir, f"page_{page_str}_fa.txt")
             html_file = os.path.join(output_dir, f"page_{page_str}_fa.html")
             
             # Add to list of HTML files for book creation
@@ -158,7 +157,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
                 f.write(text)
             
             # Check if translation already exists
-            if os.path.exists(trans_file) and os.path.exists(html_file) and check_existing and not force:
+            if os.path.exists(html_file) and check_existing and not force:
                 print(f"Page {page_num} already translated, skipping")
                 skipped_count += 1
                 successful_translations += 1
@@ -167,17 +166,38 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
             # Translate text to Persian
             try:
                 print(f"  Translating page {i+1}/{len(extracted_text)}: page_{page_str}")
-                translated_text, conversation = translate_text_to_persian(
-                    text, 
-                    api_key, 
-                    model_name="models/gemini-2.0-flash",
-                    conversation=conversation,
-                    api_keys=additional_api_keys
-                )
+                max_translation_attempts = 3
+                translation_successful = False
+                translation_attempt = 0
                 
-                # Save translated text
-                with open(trans_file, 'w', encoding='utf-8') as f:
-                    f.write(translated_text)
+                while not translation_successful and translation_attempt < max_translation_attempts:
+                    try:
+                        translation_attempt += 1
+                        translated_text, conversation = translate_text_to_persian(
+                            text, 
+                            api_key, 
+                            model_name="models/gemini-2.0-flash-lite",
+                            conversation=conversation,
+                            api_keys=additional_api_keys
+                        )
+                        translation_successful = True
+                    except Exception as translation_error:
+                        error_str = str(translation_error).lower()
+                        if "429" in error_str or "rate limit" in error_str or "quota" in error_str:
+                            # This is a rate limit error - handled by the rotation mechanism
+                            # Give it one more chance - the translator will handle retries
+                            print(f"Rate limit encountered. Making attempt {translation_attempt+1}/{max_translation_attempts}...")
+                            if translation_attempt < max_translation_attempts - 1:
+                                # Let's wait a bit before making another full try
+                                time.sleep(3)
+                            else:
+                                # Last attempt failed - raise to outer try/except
+                                raise translation_error
+                        else:
+                            # This is not a rate limit error, raise it to the outer handler
+                            raise translation_error
+                
+                # If we got here, translation was successful
                 
                 # Create base name for HTML file
                 base_name_html = f"page_{page_str}"
@@ -190,7 +210,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
                 # Create HTML file with translation and images
                 html_content, _ = create_html_content(translated_text, base_name_html, fonts_copied, page_images)
                 
-                # Save HTML content
+                # Save HTML content directly without saving to TXT first
                 with open(html_file, 'w', encoding='utf-8') as f:
                     f.write(html_content)
                 
@@ -201,7 +221,10 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
                 error_str = str(e).lower()
                 if "429" in error_str or "rate limit" in error_str or "quota" in error_str:
                     rate_limited_count += 1
-                print(f"Error processing page {page_num}: {str(e)}")
+                    print(f"Failed to translate page {page_num} after multiple attempts due to rate limiting.")
+                    print("Moving to next page, will need to run the script again later to translate this page.")
+                else:
+                    print(f"Error processing page {page_num}: {str(e)}")
                 continue
         
         # Print translation stats

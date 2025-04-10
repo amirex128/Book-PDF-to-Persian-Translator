@@ -101,7 +101,7 @@ class APIKeyManager:
         api_key_usage[key]['count'] += 1
         api_key_usage[key]['last_used'] = datetime.datetime.now()
     
-    def mark_key_rate_limited(self, key: str, duration_minutes: int = 5):
+    def mark_key_rate_limited(self, key: str, duration_minutes: int = 1):
         """
         Mark an API key as rate limited for a specified duration
         
@@ -118,10 +118,188 @@ class APIKeyManager:
         # This helps prevent repeatedly hitting limits on problematic keys
         rate_limit_count = api_key_usage[key]['rate_limit_count']
         if rate_limit_count > 1:
-            # Progressive backoff: 5 min, 15 min, 30 min, 60 min max
-            backoff_minutes = min(60, 5 * (2 ** (rate_limit_count - 1)))
+            # Progressive backoff: 1 min, 2 min, 4 min, 8 min max
+            backoff_minutes = min(8, 1 * (2 ** (rate_limit_count - 1)))
             api_key_usage[key]['rate_limited_until'] = now + datetime.timedelta(minutes=backoff_minutes)
             print(f"Key has hit rate limit {rate_limit_count} times. Increasing cooldown to {backoff_minutes} minutes")
+    
+    def try_all_keys_for_translation(self, text: str, model_name: str, conversation=None, max_attempts=20) -> Tuple[str, Any]:
+        """
+        Try each available API key until translation succeeds or all keys have been tried
+        
+        Args:
+            text: The text to translate
+            model_name: The name of the model to use
+            conversation: An optional existing conversation to continue
+            max_attempts: Maximum number of attempts across all keys
+            
+        Returns:
+            Tuple of translated text and conversation object
+            
+        Raises:
+            Exception: If all keys fail after multiple attempts
+        """
+        total_attempts = 0
+        keys_tried = set()
+        
+        # We'll keep trying until we've made max_attempts or tried all keys
+        while total_attempts < max_attempts and len(keys_tried) < len(self.all_keys):
+            # Get the next available key
+            current_key = self.get_next_available_key()
+            keys_tried.add(current_key)
+            
+            try:
+                # Configure API key
+                genai.configure(api_key=current_key)
+                
+                # Get generative model
+                model = genai.GenerativeModel(model_name)
+                
+                # Create or continue conversation
+                if conversation is None:
+                    conversation = model.start_chat(history=[])
+                
+                # Add prompt for translation
+                prompt = f"""
+            من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. این متن‌ها از یک کتاب فنی هستند.
+            لطفاً به دستورالعمل‌های زیر دقت کنید و همیشه آن‌ها را در ترجمه‌های خود رعایت کنید:
+            
+            قوانین بسیار مهم برای ترجمه (این قوانین از هر چیزی مهم‌تر هستند):
+            
+            1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید.
+            
+            2. اولویت اصلی: حفظ اصطلاحات فنی به زبان اصلی (انگلیسی) است.
+            
+            3. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید:
+            
+               الف) اصطلاحات فنی مهندسی نرم‌افزار:
+               - مفاهیم معماری: API, HTTP, REST, SOAP, MVC, MVVM, Microservices, Monolith, Service, Controller, Middleware, Backend, Frontend
+               - فرمت‌های داده: JSON, XML, YAML, CSV, Protobuf, Schema
+               - پروتکل‌ها: TCP/IP, HTTP, WebSocket, gRPC, SSL, HTTPS
+               - تکنولوژی‌های وب: HTML, CSS, DOM, AJAX, WebAssembly, SPA
+               - مفاهیم امنیت: JWT, OAuth, CORS, XSS, Authentication, Authorization
+               - ابزارها و محیط‌ها: IDE, Repository, VCS, CI/CD, Pipeline
+               
+               ب) نام‌های کلاس‌ها، متدها و سرویس‌ها:
+               - نام‌های کلاس: UserService, InvoiceController, PaymentProcessor, DataContext, Repository
+               - نام‌های متد: getBalance(), processPayment(), validateUser(), findById(), execute()
+               - نام‌های سرویس‌ها: AuthService, Invoicing, PaymentGateway, EventBus, MessageQueue
+               
+               ج) اسامی متغیرها، پارامترها و فیلدها:
+               - متغیرها: userId, accountBalance, isActive, counter, index, temp
+               - پارامترها: customerId, amount, transactionDate, options, config
+               - فیلدها: firstName, lastName, email, createdAt, updatedAt
+               - ثابت‌ها: MAX_RETRY_COUNT, DEFAULT_TIMEOUT, API_VERSION
+               
+               د) الگوهای طراحی و معماری:
+               - الگوهای طراحی: Singleton, Factory, Observer, Strategy, Adapter, Facade
+               - الگوهای معماری: Saga, CQRS, Event Sourcing, Domain-Driven Design, Microservices
+               - اصول: SOLID, DRY, KISS, Separation of Concerns, Dependency Injection
+               - معماری‌های لایه‌ای: n-tier, Clean Architecture, Hexagonal Architecture
+               
+               ه) زبان‌های برنامه‌نویسی، فریم‌ورک‌ها و کتابخانه‌ها:
+               - زبان‌ها: Java, Python, C#, JavaScript, TypeScript, Go, Rust, Swift
+               - فریم‌ورک‌ها: Spring, .NET, React, Angular, Django, Express, Flask
+               - کتابخانه‌ها: JUnit, NumPy, Redux, Axios, Hibernate, Entity Framework
+               - پلتفرم‌ها: Node.js, JVM, .NET Core, WebAssembly
+               
+               و) اسامی خاص محصولات، ابزارها و شرکت‌ها:
+               - محصولات: Docker, Kubernetes, AWS, Azure, Kafka, RabbitMQ, Redis
+               - ابزارها: Git, Jenkins, Travis CI, GitHub Actions, Terraform, Ansible
+               - شرکت‌ها: Microsoft, Google, IBM, Oracle, Amazon, Atlassian
+               - سرویس‌های ابری: S3, EC2, Lambda, Azure Functions, Firestore
+               
+               ز) نام افراد، کتاب‌ها و مراجع:
+               - نویسندگان: Martin Fowler, Robert Martin, Eric Evans, Kent Beck
+               - مراجع: Gang of Four, Reactive Manifesto, Agile Manifesto
+               - کتاب‌ها: "Clean Code", "Domain-Driven Design", "Refactoring"
+            
+            4. قانون‌های کلیدی برای تشخیص اصطلاحات فنی:
+               - هر کلمه‌ای که حتی یک حرف بزرگ انگلیسی دارد، یک اصطلاح فنی است و نباید ترجمه شود.
+               - هر کلمه‌ای که با حروف بزرگ نوشته شده یا اختصار است، نباید ترجمه شود.
+               - هر عبارتی که با حروف مخفف (acronym) نوشته شده مانند API، REST، SOAP، نباید ترجمه شود.
+               - هر عبارتی که با خط تیره یا زیرخط جدا شده (مانند client-side یا snake_case)، احتمالاً اصطلاح فنی است.
+               - اصطلاحات شناخته شده مهندسی نرم‌افزار مانند endpoint، service، handler، را ترجمه نکنید.
+            
+            5. مثال‌های بیشتر از آنچه ترجمه نشود (به تفاوت‌ها توجه کنید):
+               - "Invoicing displays the view models to its actors" -> "Invoicing، view models را به actors خود نمایش می‌دهد"
+               - "Customers can get a JSON representation of invoices" -> "مشتریان می‌توانند یک representation از نوع JSON برای invoices دریافت کنند"
+               - "The code uses the Factory pattern to create Order objects" -> "کد از pattern به نام Factory برای ایجاد objects از نوع Order استفاده می‌کند"
+               - "InvoiceController calls PaymentService to process transactions" -> "InvoiceController، PaymentService را برای پردازش transactions فراخوانی می‌کند"
+               - "The app implements CQRS with event sourcing" -> "این app، CQRS را همراه با event sourcing پیاده‌سازی می‌کند"
+               - "REST APIs should use proper HTTP status codes" -> "REST APIs باید از HTTP status codes مناسب استفاده کنند"
+               - "The system has a PostgreSQL database with indexes on frequently queried fields" -> "این system دارای یک database از نوع PostgreSQL با indexes روی fields که مرتباً query می‌شوند، است"
+               - "The authentication middleware validates JWT tokens" -> "middleware مربوط به authentication، JWT tokens را اعتبارسنجی می‌کند"
+               - "React components should be stateless when possible" -> "components در React باید تا حد ممکن stateless باشند"
+               - "Dependency Injection helps with unit testing the service layer" -> "Dependency Injection به unit testing لایه service کمک می‌کند"
+               - "Apache Kafka is used for event streaming between microservices" -> "از Apache Kafka برای event streaming بین microservices استفاده می‌شود"
+               - "Redis provides in-memory caching for frequently accessed data" -> "Redis قابلیت caching درون حافظه را برای data‌هایی که مکرراً به آنها دسترسی می‌شود، فراهم می‌کند"
+               - "The backend exposes endpoints to process client requests" -> "backend، endpoints را برای پردازش client requests در معرض دید قرار می‌دهد"
+               - "Cloud-native applications often use container orchestration" -> "applications از نوع cloud-native اغلب از container orchestration استفاده می‌کنند"
+            
+            6. مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید.
+            
+            7. اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید.
+               برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
+            
+            8. بسیار مهم: ساختار متن اصلی را حفظ کنید. پاراگراف‌بندی، سرفصل‌ها، لیست‌ها و بخش‌های کد را با تگ‌های HTML مناسب حفظ کنید:
+               - تیترها و عنوان‌ها: از <h3> برای عنوان اصلی و <h4> برای زیرعنوان استفاده کنید
+               - پاراگراف‌ها: هر پاراگراف را با <p> محصور کنید
+               - لیست‌های نقطه‌ای: از <ul><li>آیتم اول</li><li>آیتم دوم</li></ul> استفاده کنید
+               - لیست‌های شماره‌دار: از <ol><li>آیتم اول</li><li>آیتم دوم</li></ol> استفاده کنید
+               - کدها: از <pre><code class="language-xxx">کد</code></pre> استفاده کنید
+               - تأکید: از <strong> برای متن پررنگ و <em> برای متن ایتالیک استفاده کنید
+               - جداول: ساختار <table>, <tr>, <td> را حفظ کنید
+
+            9.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده.
+                
+                متن برای ترجمه:
+                
+                {text}
+                """
+                
+                # Generate response
+                response = conversation.send_message(prompt)
+                
+                # Track successful usage
+                self.mark_key_used(current_key)
+                
+                # Return the successful translation
+                return response.text, conversation
+                
+            except Exception as e:
+                error_str = str(e).lower()
+                total_attempts += 1
+                
+                # Handle rate limiting specifically
+                if "429" in error_str or "rate limit" in error_str or "quota" in error_str:
+                    # Mark current key as rate limited
+                    print(f"API key hit rate limit. Rotating to next key...")
+                    self.mark_key_rate_limited(current_key)
+                    
+                    # If all keys are rate limited, wait before trying again
+                    now = datetime.datetime.now()
+                    all_limited = all(
+                        api_key_usage[k].get('rate_limited_until', now) > now 
+                        for k in self.all_keys
+                    )
+                    
+                    if all_limited:
+                        # Find the key that will be available soonest
+                        best_key = min(
+                            self.all_keys,
+                            key=lambda k: api_key_usage[k].get('rate_limited_until', now)
+                        )
+                        wait_time = (api_key_usage[best_key]['rate_limited_until'] - now).total_seconds()
+                        print(f"All keys are rate limited. Waiting {wait_time:.1f} seconds for a key to become available...")
+                        time.sleep(min(wait_time + 1, 60))  # Wait up to 60 seconds max
+                else:
+                    # For other errors, wait a shorter time
+                    print(f"Error during translation with key {current_key[:6]}...: {str(e)}")
+                    time.sleep(2)  # Brief pause before trying next key
+        
+        # If we've tried all keys multiple times and none worked
+        raise Exception(f"Failed to translate after {total_attempts} attempts with {len(keys_tried)} different API keys")
     
     def get_usage_stats(self) -> Dict[str, Any]:
         """
@@ -132,14 +310,17 @@ class APIKeyManager:
         """
         return api_key_usage
 
-def translate_text_to_persian(text: str, api_key: str, model_name: str = "models/gemini-2.0-flash", 
+def translate_text_to_persian(text: str, api_key: str, model_name: str = "models/gemini-2.0-flash-lite", 
                              conversation=None, api_keys: List[str] = None) -> Tuple[str, Any]:
     """
-    Translate text to Persian using Google's generative AI model
+    Translate text to Persian using Google's generative AI model with persistent retry logic
+    
+    This function will persistently try to translate text, rotating between API keys and 
+    waiting for rate limits to expire before giving up.
 
     Args:
         text: The text to translate
-        api_key: The API key to use for translation
+        api_key: The primary API key to use for translation
         model_name: The name of the model to use
         conversation: An optional existing conversation to continue
         api_keys: A list of additional API keys to use for rotation
@@ -148,20 +329,20 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
         The translated text and the conversation for continuation
     """
     # Create API key manager if multiple keys are provided
-    key_manager = None
-    current_key = api_key
+    if api_keys:
+        key_manager = APIKeyManager(api_key, api_keys)
+        # Use the enhanced key manager to try all keys
+        return key_manager.try_all_keys_for_translation(text, model_name, conversation, max_attempts=30)
+    
+    # If only a single key is provided, use simpler logic
     retry_count = 0
     max_retries = 5
     base_wait_time = 2  # seconds
     
-    if api_keys:
-        key_manager = APIKeyManager(api_key, api_keys)
-        current_key = key_manager.get_next_available_key()
-    
     while retry_count <= max_retries:
         try:
             # Configure API key
-            genai.configure(api_key=current_key)
+            genai.configure(api_key=api_key)
             
             # Get generative model
             model = genai.GenerativeModel(model_name)
@@ -172,19 +353,105 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
             
             # Add prompt for translation
             prompt = f"""
-            Please translate the following text to Persian (Farsi). 
-            Maintain the structure of the text including paragraphs, headings, bullet points and numbering.
-            Do not add any additional content not in the original text.
+            من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. این متن‌ها از یک کتاب فنی هستند.
+            لطفاً به دستورالعمل‌های زیر دقت کنید و همیشه آن‌ها را در ترجمه‌های خود رعایت کنید:
+            
+            قوانین بسیار مهم برای ترجمه (این قوانین از هر چیزی مهم‌تر هستند):
+            
+            1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید.
+            
+            2. اولویت اصلی: حفظ اصطلاحات فنی به زبان اصلی (انگلیسی) است.
+            
+            3. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید:
+            
+               الف) اصطلاحات فنی مهندسی نرم‌افزار:
+               - مفاهیم معماری: API, HTTP, REST, SOAP, MVC, MVVM, Microservices, Monolith, Service, Controller, Middleware, Backend, Frontend
+               - فرمت‌های داده: JSON, XML, YAML, CSV, Protobuf, Schema
+               - پروتکل‌ها: TCP/IP, HTTP, WebSocket, gRPC, SSL, HTTPS
+               - تکنولوژی‌های وب: HTML, CSS, DOM, AJAX, WebAssembly, SPA
+               - مفاهیم امنیت: JWT, OAuth, CORS, XSS, Authentication, Authorization
+               - ابزارها و محیط‌ها: IDE, Repository, VCS, CI/CD, Pipeline
+               
+               ب) نام‌های کلاس‌ها، متدها و سرویس‌ها:
+               - نام‌های کلاس: UserService, InvoiceController, PaymentProcessor, DataContext, Repository
+               - نام‌های متد: getBalance(), processPayment(), validateUser(), findById(), execute()
+               - نام‌های سرویس‌ها: AuthService, Invoicing, PaymentGateway, EventBus, MessageQueue
+               
+               ج) اسامی متغیرها، پارامترها و فیلدها:
+               - متغیرها: userId, accountBalance, isActive, counter, index, temp
+               - پارامترها: customerId, amount, transactionDate, options, config
+               - فیلدها: firstName, lastName, email, createdAt, updatedAt
+               - ثابت‌ها: MAX_RETRY_COUNT, DEFAULT_TIMEOUT, API_VERSION
+               
+               د) الگوهای طراحی و معماری:
+               - الگوهای طراحی: Singleton, Factory, Observer, Strategy, Adapter, Facade
+               - الگوهای معماری: Saga, CQRS, Event Sourcing, Domain-Driven Design, Microservices
+               - اصول: SOLID, DRY, KISS, Separation of Concerns, Dependency Injection
+               - معماری‌های لایه‌ای: n-tier, Clean Architecture, Hexagonal Architecture
+               
+               ه) زبان‌های برنامه‌نویسی، فریم‌ورک‌ها و کتابخانه‌ها:
+               - زبان‌ها: Java, Python, C#, JavaScript, TypeScript, Go, Rust, Swift
+               - فریم‌ورک‌ها: Spring, .NET, React, Angular, Django, Express, Flask
+               - کتابخانه‌ها: JUnit, NumPy, Redux, Axios, Hibernate, Entity Framework
+               - پلتفرم‌ها: Node.js, JVM, .NET Core, WebAssembly
+               
+               و) اسامی خاص محصولات، ابزارها و شرکت‌ها:
+               - محصولات: Docker, Kubernetes, AWS, Azure, Kafka, RabbitMQ, Redis
+               - ابزارها: Git, Jenkins, Travis CI, GitHub Actions, Terraform, Ansible
+               - شرکت‌ها: Microsoft, Google, IBM, Oracle, Amazon, Atlassian
+               - سرویس‌های ابری: S3, EC2, Lambda, Azure Functions, Firestore
+               
+               ز) نام افراد، کتاب‌ها و مراجع:
+               - نویسندگان: Martin Fowler, Robert Martin, Eric Evans, Kent Beck
+               - مراجع: Gang of Four, Reactive Manifesto, Agile Manifesto
+               - کتاب‌ها: "Clean Code", "Domain-Driven Design", "Refactoring"
+            
+            4. قانون‌های کلیدی برای تشخیص اصطلاحات فنی:
+               - هر کلمه‌ای که حتی یک حرف بزرگ انگلیسی دارد، یک اصطلاح فنی است و نباید ترجمه شود.
+               - هر کلمه‌ای که با حروف بزرگ نوشته شده یا اختصار است، نباید ترجمه شود.
+               - هر عبارتی که با حروف مخفف (acronym) نوشته شده مانند API، REST، SOAP، نباید ترجمه شود.
+               - هر عبارتی که با خط تیره یا زیرخط جدا شده (مانند client-side یا snake_case)، احتمالاً اصطلاح فنی است.
+               - اصطلاحات شناخته شده مهندسی نرم‌افزار مانند endpoint، service، handler، را ترجمه نکنید.
+            
+            5. مثال‌های بیشتر از آنچه ترجمه نشود (به تفاوت‌ها توجه کنید):
+               - "Invoicing displays the view models to its actors" -> "Invoicing، view models را به actors خود نمایش می‌دهد"
+               - "Customers can get a JSON representation of invoices" -> "مشتریان می‌توانند یک representation از نوع JSON برای invoices دریافت کنند"
+               - "The code uses the Factory pattern to create Order objects" -> "کد از pattern به نام Factory برای ایجاد objects از نوع Order استفاده می‌کند"
+               - "InvoiceController calls PaymentService to process transactions" -> "InvoiceController، PaymentService را برای پردازش transactions فراخوانی می‌کند"
+               - "The app implements CQRS with event sourcing" -> "این app، CQRS را همراه با event sourcing پیاده‌سازی می‌کند"
+               - "REST APIs should use proper HTTP status codes" -> "REST APIs باید از HTTP status codes مناسب استفاده کنند"
+               - "The system has a PostgreSQL database with indexes on frequently queried fields" -> "این system دارای یک database از نوع PostgreSQL با indexes روی fields که مرتباً query می‌شوند، است"
+               - "The authentication middleware validates JWT tokens" -> "middleware مربوط به authentication، JWT tokens را اعتبارسنجی می‌کند"
+               - "React components should be stateless when possible" -> "components در React باید تا حد ممکن stateless باشند"
+               - "Dependency Injection helps with unit testing the service layer" -> "Dependency Injection به unit testing لایه service کمک می‌کند"
+               - "Apache Kafka is used for event streaming between microservices" -> "از Apache Kafka برای event streaming بین microservices استفاده می‌شود"
+               - "Redis provides in-memory caching for frequently accessed data" -> "Redis قابلیت caching درون حافظه را برای data‌هایی که مکرراً به آنها دسترسی می‌شود، فراهم می‌کند"
+               - "The backend exposes endpoints to process client requests" -> "backend، endpoints را برای پردازش client requests در معرض دید قرار می‌دهد"
+               - "Cloud-native applications often use container orchestration" -> "applications از نوع cloud-native اغلب از container orchestration استفاده می‌کنند"
+            
+            6. مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید.
+            
+            7. اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید.
+               برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
+            
+            8. بسیار مهم: ساختار متن اصلی را حفظ کنید. پاراگراف‌بندی، سرفصل‌ها، لیست‌ها و بخش‌های کد را با تگ‌های HTML مناسب حفظ کنید:
+               - تیترها و عنوان‌ها: از <h3> برای عنوان اصلی و <h4> برای زیرعنوان استفاده کنید
+               - پاراگراف‌ها: هر پاراگراف را با <p> محصور کنید
+               - لیست‌های نقطه‌ای: از <ul><li>آیتم اول</li><li>آیتم دوم</li></ul> استفاده کنید
+               - لیست‌های شماره‌دار: از <ol><li>آیتم اول</li><li>آیتم دوم</li></ol> استفاده کنید
+               - کدها: از <pre><code class="language-xxx">کد</code></pre> استفاده کنید
+               - تأکید: از <strong> برای متن پررنگ و <em> برای متن ایتالیک استفاده کنید
+               - جداول: ساختار <table>, <tr>, <td> را حفظ کنید
+
+            9.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده.
+            
+            متن برای ترجمه:
             
             {text}
             """
             
             # Generate response
             response = conversation.send_message(prompt)
-            
-            # Track usage if using key manager
-            if key_manager:
-                key_manager.mark_key_used(current_key)
             
             return response.text, conversation
             
@@ -194,28 +461,15 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
             
             # Handle rate limiting specifically
             if "429" in error_str or "rate limit" in error_str or "quota" in error_str:
-                if key_manager:
-                    # Mark current key as rate limited
-                    print(f"API key hit rate limit. Rotating to next key...")
-                    key_manager.mark_key_rate_limited(current_key)
-                    
-                    # Get next available key
-                    current_key = key_manager.get_next_available_key()
-                    
-                    # If we found a different key, reset retry count to give it a fresh chance
-                    if current_key != api_key:
-                        retry_count -= 1  # don't count this as a retry
-                        continue
-                
-                # If no key manager or no other keys available, add adaptive delay
-                wait_time = base_wait_time * (2 ** retry_count)  # Exponential backoff
-                print(f"Rate limit encountered. Waiting {wait_time} seconds before retry {retry_count}/{max_retries}")
+                # If only a single key is available, we need to wait
+                wait_time = 60  # Wait 1 minute for rate limit to reset
+                print(f"Rate limit encountered with the only available API key. Waiting {wait_time} seconds before retry {retry_count}/{max_retries}")
                 time.sleep(wait_time)
             else:
                 # For other errors, wait a shorter time
                 print(f"Error during translation: {str(e)}")
-                print(f"Retrying in {retry_count} seconds... ({retry_count}/{max_retries})")
-                time.sleep(retry_count)
+                print(f"Retrying in {retry_count * 2} seconds... ({retry_count}/{max_retries})")
+                time.sleep(retry_count * 2)
             
             # If we've exhausted all retries, raise the error
             if retry_count > max_retries:
