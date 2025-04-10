@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+import time
 from bs4 import BeautifulSoup
 
 def ensure_directory_exists(directory_path):
@@ -330,8 +331,12 @@ def create_html_content(text_content, base_name=None, fonts_copied=False, images
     elif page_number is None:
         page_number = "1"
     
-    # Process HTML content for better Persian display
-    processed_text = process_html_content(text_content)
+    # If text_content is already HTML, use it directly
+    if text_content.strip().startswith('<'):
+        processed_text = text_content
+    else:
+        # Process plain text content
+        processed_text = process_html_content(text_content)
     
     # Create images content HTML if images parameter is provided
     if images_content is None and images:
@@ -339,7 +344,7 @@ def create_html_content(text_content, base_name=None, fonts_copied=False, images
         for img in images:
             if 'relative_path' in img:
                 img_path = img['relative_path']
-                images_content += f'<img src="{img_path}" alt="Image from page {page_number}" />\n'
+                images_content += f'<div class="page-image"><img src="{img_path}" alt="Image from page {page_number}" /></div>\n'
     elif images_content is None:
         images_content = ""
     
@@ -376,7 +381,7 @@ def create_html_content(text_content, base_name=None, fonts_copied=False, images
             text-align: right;
             direction: rtl;
         }}
-        .persian-translation {{
+        .translated-content {{
             font-size: 14pt;
             margin-bottom: 15px;
             text-align: right;
@@ -387,13 +392,16 @@ def create_html_content(text_content, base_name=None, fonts_copied=False, images
             margin: 20px 0;
             page-break-before: always;
         }}
-        .page-images img {{
+        .page-image {{
+            margin: 10px 0;
+            text-align: center;
+        }}
+        .page-image img {{
             max-width: 100%;
             height: auto;
-            margin: 10px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }}
-        pre {{
+        .code-block {{
             direction: ltr;
             text-align: left;
             background-color: #f5f5f5;
@@ -401,20 +409,21 @@ def create_html_content(text_content, base_name=None, fonts_copied=False, images
             border-radius: 5px;
             overflow-x: auto;
             margin: 15px 0;
-        }}
-        code {{
             font-family: 'Courier New', Courier, monospace;
+        }}
+        .english-text {{
             direction: ltr;
             text-align: left;
-        }}
-        span[dir="ltr"] {{
             display: inline-block;
-            direction: ltr;
-            text-align: left;
         }}
-        h3, h4 {{
+        .heading {{
             color: #2c3e50;
             margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }}
+        .paragraph {{
             margin-bottom: 15px;
             text-align: right;
             direction: rtl;
@@ -459,7 +468,7 @@ def create_html_content(text_content, base_name=None, fonts_copied=False, images
 </head>
 <body>
     <div class="chapter-content">
-        <div dir="rtl" class="persian-translation">
+        <div class="translated-content">
             {processed_text}
         </div>
     </div>
@@ -645,8 +654,24 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, pdf_pa
             print(f"  Processing page {i+1}/{len(existing_files)}: {os.path.basename(html_file)}")
             
             try:
-                with open(html_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
+                # Try to open the file with a retry mechanism
+                max_retries = 5
+                wait_time = 1  # seconds
+                attempts = 0
+                
+                while attempts < max_retries:
+                    try:
+                        with open(html_file, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                        break  # Successfully read the file
+                    except PermissionError:
+                        attempts += 1
+                        if attempts < max_retries:
+                            print(f"  File in use, retrying in {wait_time} seconds... ({attempts}/{max_retries})")
+                            time.sleep(wait_time)
+                            wait_time *= 2  # Exponential backoff
+                        else:
+                            raise  # Re-raise the exception if max retries reached
                 
                 # Get original page number
                 page_match = re.search(r'page_(\d+)_fa', html_file)
@@ -657,7 +682,7 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, pdf_pa
                 
                 # Extract Persian translation div content
                 soup = BeautifulSoup(content, 'html.parser')
-                persian_div = soup.find('div', class_='persian-translation')
+                persian_div = soup.find('div', class_='persian-translation') or soup.find('div', class_='translated-content')
                 text_content = str(persian_div) if persian_div else ""
                 
                 # Extract images content and fix paths
@@ -676,8 +701,21 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, pdf_pa
                                 dst_dir = os.path.join(output_dir, img_dir)
                                 ensure_directory_exists(dst_dir)
                                 dst_path = os.path.join(output_dir, src)
-                                if os.path.exists(src_path):
-                                    shutil.copy2(src_path, dst_path)
+                                
+                                # Try to copy with retries
+                                max_copy_retries = 3
+                                copy_attempts = 0
+                                while copy_attempts < max_copy_retries:
+                                    try:
+                                        if os.path.exists(src_path) and not os.path.exists(dst_path):
+                                            shutil.copy2(src_path, dst_path)
+                                        break  # Successfully copied or file exists
+                                    except PermissionError:
+                                        copy_attempts += 1
+                                        if copy_attempts < max_copy_retries:
+                                            time.sleep(1)
+                                        else:
+                                            print(f"  Could not copy image after {max_copy_retries} attempts: {src_path}")
                 
                 images_content = str(images_div) if images_div else ""
                 
@@ -709,9 +747,39 @@ def create_html_book(html_files, output_html, output_dir, file_base_name, pdf_pa
 </body>
 </html>"""
         
-        # Save the HTML book
-        with open(output_html, 'w', encoding='utf-8') as f:
-            f.write(book_html)
+        # Try to write the file with retries
+        max_write_retries = 5
+        write_attempts = 0
+        write_wait_time = 1
+        
+        while write_attempts < max_write_retries:
+            try:
+                # Ensure output directory exists
+                os.makedirs(os.path.dirname(output_html), exist_ok=True)
+                
+                # Write the HTML book to a temporary file first, then rename
+                temp_output = f"{output_html}.temp"
+                with open(temp_output, 'w', encoding='utf-8') as f:
+                    f.write(book_html)
+                
+                # If an old file exists, try to remove it
+                if os.path.exists(output_html):
+                    try:
+                        os.remove(output_html)
+                    except PermissionError:
+                        pass
+                
+                # Rename temp file to final name
+                os.rename(temp_output, output_html)
+                break  # Successfully written
+            except PermissionError:
+                write_attempts += 1
+                if write_attempts < max_write_retries:
+                    print(f"  Could not write file, retrying in {write_wait_time} seconds... ({write_attempts}/{max_write_retries})")
+                    time.sleep(write_wait_time)
+                    write_wait_time *= 2  # Exponential backoff
+                else:
+                    raise  # Re-raise the exception if max retries reached
         
         print(f"  HTML book created successfully: {output_html}")
         return True
@@ -856,8 +924,24 @@ def create_dual_page_book(html_files, output_html, output_dir, file_base_name, p
         
         # Process each HTML file
         for html_file in existing_files:
-            with open(html_file, 'r', encoding='utf-8') as f:
-                content = f.read()
+            # Try to open the file with a retry mechanism
+            max_retries = 5
+            wait_time = 1  # seconds
+            attempts = 0
+            
+            while attempts < max_retries:
+                try:
+                    with open(html_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    break  # Successfully read the file
+                except PermissionError:
+                    attempts += 1
+                    if attempts < max_retries:
+                        print(f"  File in use, retrying in {wait_time} seconds... ({attempts}/{max_retries})")
+                        time.sleep(wait_time)
+                        wait_time *= 2  # Exponential backoff
+                    else:
+                        raise  # Re-raise the exception if max retries reached
             
             # Get page number
             page_match = re.search(r'page_(\d+)_fa', html_file)
@@ -870,7 +954,7 @@ def create_dual_page_book(html_files, output_html, output_dir, file_base_name, p
             soup = BeautifulSoup(content, 'html.parser')
             
             # Extract Persian translation content
-            persian_div = soup.find('div', class_='persian-translation')
+            persian_div = soup.find('div', class_='persian-translation') or soup.find('div', class_='translated-content')
             persian_content = str(persian_div) if persian_div else ""
             
             # Process HTML content
@@ -892,8 +976,21 @@ def create_dual_page_book(html_files, output_html, output_dir, file_base_name, p
                             dst_dir = os.path.join(output_dir, img_dir)
                             ensure_directory_exists(dst_dir)
                             dst_path = os.path.join(output_dir, src)
-                            if os.path.exists(src_path):
-                                shutil.copy2(src_path, dst_path)
+                            
+                            # Try to copy with retries
+                            max_copy_retries = 3
+                            copy_attempts = 0
+                            while copy_attempts < max_copy_retries:
+                                try:
+                                    if os.path.exists(src_path) and not os.path.exists(dst_path):
+                                        shutil.copy2(src_path, dst_path)
+                                    break  # Successfully copied or file exists
+                                except PermissionError:
+                                    copy_attempts += 1
+                                    if copy_attempts < max_copy_retries:
+                                        time.sleep(1)
+                                    else:
+                                        print(f"  Could not copy image after {max_copy_retries} attempts: {src_path}")
             
             images_content = str(images_div) if images_div else ""
             
@@ -910,7 +1007,20 @@ def create_dual_page_book(html_files, output_html, output_dir, file_base_name, p
             
             # Copy original page image if it exists
             if os.path.exists(src_image_path):
-                shutil.copy2(src_image_path, dst_image_path)
+                # Try to copy with retries
+                max_copy_retries = 3
+                copy_attempts = 0
+                while copy_attempts < max_copy_retries:
+                    try:
+                        if not os.path.exists(dst_image_path):
+                            shutil.copy2(src_image_path, dst_image_path)
+                        break  # Successfully copied or file exists
+                    except PermissionError:
+                        copy_attempts += 1
+                        if copy_attempts < max_copy_retries:
+                            time.sleep(1)
+                        else:
+                            print(f"  Could not copy image after {max_copy_retries} attempts: {src_image_path}")
             
             # Add dual-page spread
             book_html += f"""        <div class="dual-page-spread">
@@ -939,9 +1049,39 @@ def create_dual_page_book(html_files, output_html, output_dir, file_base_name, p
 </body>
 </html>"""
         
-        # Save the dual-page book
-        with open(output_html, 'w', encoding='utf-8') as f:
-            f.write(book_html)
+        # Try to write the file with retries
+        max_write_retries = 5
+        write_attempts = 0
+        write_wait_time = 1
+        
+        while write_attempts < max_write_retries:
+            try:
+                # Ensure output directory exists
+                os.makedirs(os.path.dirname(output_html), exist_ok=True)
+                
+                # Write the HTML book to a temporary file first, then rename
+                temp_output = f"{output_html}.temp"
+                with open(temp_output, 'w', encoding='utf-8') as f:
+                    f.write(book_html)
+                
+                # If an old file exists, try to remove it
+                if os.path.exists(output_html):
+                    try:
+                        os.remove(output_html)
+                    except PermissionError:
+                        pass
+                
+                # Rename temp file to final name
+                os.rename(temp_output, output_html)
+                break  # Successfully written
+            except PermissionError:
+                write_attempts += 1
+                if write_attempts < max_write_retries:
+                    print(f"  Could not write file, retrying in {write_wait_time} seconds... ({write_attempts}/{max_write_retries})")
+                    time.sleep(write_wait_time)
+                    write_wait_time *= 2  # Exponential backoff
+                else:
+                    raise  # Re-raise the exception if max retries reached
         
         print(f"  Dual-page HTML book created successfully: {output_html}")
         return True

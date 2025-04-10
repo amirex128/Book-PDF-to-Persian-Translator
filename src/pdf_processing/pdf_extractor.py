@@ -20,7 +20,7 @@ def extract_text_from_pdf(pdf_path, limit=None, skip_pages=None):
         skip_pages (list, optional): List of page numbers to skip. Defaults to None.
         
     Returns:
-        list: List of dictionaries with page number and text
+        tuple: Dictionary mapping page numbers to text, and count of pages extracted
     """
     print(f"Extracting text from {pdf_path}...")
     
@@ -43,7 +43,7 @@ def extract_text_from_pdf(pdf_path, limit=None, skip_pages=None):
         skip_pages = []
     
     # Extract text from each page
-    extracted_text = []
+    extracted_text = {}
     
     for page_num in range(limit):
         if page_num + 1 in skip_pages:
@@ -59,10 +59,7 @@ def extract_text_from_pdf(pdf_path, limit=None, skip_pages=None):
                 print(f"Page {page_num + 1} is empty, skipping")
                 continue
             
-            extracted_text.append({
-                "page_number": page_num + 1,
-                "text": text
-            })
+            extracted_text[page_num + 1] = text
             
             if (page_num + 1) % 10 == 0:
                 print(f"Extracted text from {page_num + 1} pages")
@@ -74,7 +71,7 @@ def extract_text_from_pdf(pdf_path, limit=None, skip_pages=None):
     pdf_document.close()
     
     print(f"Successfully extracted text from {len(extracted_text)} pages")
-    return extracted_text
+    return extracted_text, len(extracted_text)
 
 def extract_images_from_pdf(pdf_path, output_dir, limit=None, skip_pages=None):
     """Extract images from PDF file
@@ -86,7 +83,7 @@ def extract_images_from_pdf(pdf_path, output_dir, limit=None, skip_pages=None):
         skip_pages (list, optional): List of page numbers to skip. Defaults to None.
         
     Returns:
-        list: List of dictionaries with page number and image paths
+        tuple: List of all extracted images and dictionary mapping page numbers to images
     """
     print(f"Extracting images from {pdf_path}...")
     
@@ -111,6 +108,7 @@ def extract_images_from_pdf(pdf_path, output_dir, limit=None, skip_pages=None):
     
     # Extract images from each page
     extracted_images = []
+    pages_images = {}
     
     for page_num in range(limit):
         if page_num + 1 in skip_pages:
@@ -137,21 +135,24 @@ def extract_images_from_pdf(pdf_path, output_dir, limit=None, skip_pages=None):
             # Extract embedded images
             image_list = page.get_images(full=True)
             
+            # Initialize page images list
+            page_images = []
+            
             # If no images found on this page
             if not image_list:
-                print(f"No images found on page {page_num + 1}")
-                extracted_images.append({
+                image_data = {
                     "page_number": page_num + 1,
                     "images": [],
                     "original_page": {
                         "path": original_page_path,
                         "relative_path": f"page_{page_num + 1:04d}_original/original_page.png"
                     }
-                })
+                }
+                extracted_images.append(image_data)
+                pages_images[page_num + 1] = []
                 continue
             
             # Process and save each image
-            page_images = []
             for img_index, img in enumerate(image_list):
                 # Get image properties
                 xref = img[0]
@@ -167,24 +168,27 @@ def extract_images_from_pdf(pdf_path, output_dir, limit=None, skip_pages=None):
                         img_file.write(img_data)
                     
                     # Add image info to the list
-                    page_images.append({
+                    image_info = {
                         "index": img_index + 1,
                         "path": img_path,
                         "relative_path": f"page_{page_num + 1:04d}/{img_name}"
-                    })
+                    }
+                    page_images.append(image_info)
                 
                 except Exception as img_error:
                     print(f"Error extracting image {img_index + 1} from page {page_num + 1}: {img_error}")
             
             # Add page info to the extracted images list
-            extracted_images.append({
+            image_data = {
                 "page_number": page_num + 1,
                 "images": page_images,
                 "original_page": {
                     "path": original_page_path,
                     "relative_path": f"page_{page_num + 1:04d}_original/original_page.png"
                 }
-            })
+            }
+            extracted_images.append(image_data)
+            pages_images[page_num + 1] = page_images
             
             print(f"Extracted {len(page_images)} images from page {page_num + 1}")
         
@@ -198,7 +202,7 @@ def extract_images_from_pdf(pdf_path, output_dir, limit=None, skip_pages=None):
     total_images = sum(len(page["images"]) for page in extracted_images)
     print(f"Successfully extracted {total_images} images from {len(extracted_images)} pages")
     
-    return extracted_images
+    return extracted_images, pages_images
 
 def process_pdf_concurrently(pdf_path, output_dir, num_workers=4, limit=None):
     """Process PDF file concurrently, extracting both text and images

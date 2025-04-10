@@ -1,20 +1,27 @@
 import re
 import time
 import google.generativeai as genai
+import datetime
+import os
+import random
+from typing import List, Dict, Tuple, Optional, Any
+
+# Global API key usage tracking
+api_key_usage = {}
 
 def clean_markdown_blocks(text):
-    """Remove markdown code block markers and other artifacts"""
-    # Remove code block markers with language specifier
-    text = re.sub(r'```[a-zA-Z0-9_+-]*\n', '', text)
+    """Remove markdown code blocks and other artifacts from text"""
+    # Remove code block markers with language specifiers
+    text = re.sub(r'```\w*\n', '', text)
     text = re.sub(r'```', '', text)
     
     # Remove inline code markers
     text = re.sub(r'`([^`]+)`', r'\1', text)
     
     # Remove AI response prefixes
-    text = re.sub(r'^(AI:|Assistant:|ChatGPT:)\s*', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^(AI:|Assistant:|آنالیز:|ترجمه:)\s*', '', text, flags=re.MULTILINE)
     
-    # Remove potential HTML comments
+    # Remove any HTML comments
     text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
     
     # Clean up duplicate newlines
@@ -22,133 +29,206 @@ def clean_markdown_blocks(text):
     
     return text
 
-def translate_text_to_persian(text, api_key, conversation_history=None):
-    """Translate text to Persian using Gemini API"""
-    if not text.strip():
-        return "", conversation_history
-    
-    # Initialize retry counter
-    retries = 0
-    max_retries = 3
-    wait_time = 60  # seconds
-    
-    # Analyze text structure to identify special elements
-    has_headings = False
-    has_bullet_points = False
-    has_numbered_list = False
-    has_code_blocks = False
-    
-    lines = text.split('\n')
-    for line in lines:
-        line = line.strip()
-        if line:
-            # Check for headings (Markdown style)
-            if re.match(r'^#{1,6}\s+', line):
-                has_headings = True
-            # Check for bullet points
-            elif re.match(r'^\s*[\*\-\+•]\s+', line):
-                has_bullet_points = True
-            # Check for numbered lists
-            elif re.match(r'^\s*\d+\.\s+', line):
-                has_numbered_list = True
-            # Check for code blocks
-            elif '```' in line or line.startswith('    '):
-                has_code_blocks = True
-    
-    # Add additional instructions based on content structure
-    structure_instructions = []
-    if has_headings:
-        structure_instructions.append("Preserve heading levels like '# Heading 1', '## Heading 2' in your translation.")
-    if has_bullet_points:
-        structure_instructions.append("Maintain bullet point lists in the same format as the original.")
-    if has_numbered_list:
-        structure_instructions.append("Keep numbered lists with the same numbering as in the original text.")
-    if has_code_blocks:
-        structure_instructions.append("Do NOT translate code blocks. Keep them exactly as they are in the original.")
-    
-    # Configure the Gemini API with the API key
-    genai.configure(api_key=api_key)
-    
-    # Create a model instance
-    model = genai.GenerativeModel('models/gemini-2.0-flash')
-    
-    # Create a ChatSession if we don't have one
-    if conversation_history is None:
-        # Start a conversation with initial prompt for translation guidelines
-        system_prompt = """
-        You are a highly skilled English to Persian translator with expertise in technical and educational content.
-        
-        Guidelines:
-        1. Translate the provided English text to natural, fluent Persian.
-        2. TECHNICAL TERMS POLICY: Keep technical terms, variable names, and code segments in English.
-        3. Use HTML tags to highlight preserved English terms, like: <span dir="ltr">technical_term</span>
-        4. Maintain the original text structure, including paragraphs, bullet points, and numbering.
-        5. For code blocks or technical examples, do not translate code or commands - keep them in the original English.
-        6. When translating headings, make sure to retain any numbering or hierarchical structure.
-        
-        Term categories to KEEP IN ENGLISH (do not translate these):
-        - Software engineering concepts: API, REST, HTTP, frontend, backend, etc.
-        - Class names: "UserManager", "DataProcessor", etc.
-        - Method and function names: "getUser()", "processData()", etc.
-        - Variable names: "userId", "dataValue", etc.
-        - Design patterns: "Singleton", "Factory", "Observer", etc.
-        - Programming languages: Java, Python, JavaScript, TypeScript, etc.
-        - Framework names: React, Angular, Spring, Django, etc.
-        - Product names: AWS, Azure, Google Cloud, Kubernetes, etc.
-        
-        Other important guidelines:
-        - Translate from English to Persian in a way that feels natural for Persian readers
-        - The translation should be Persian, not Farsi written in Latin alphabet
-        - Use the proper Persian equivalents of technical terms when they exist and are commonly used
+class APIKeyManager:
+    """
+    Class to manage multiple API keys, track usage and avoid rate limits
+    """
+    def __init__(self, primary_key: str, additional_keys: List[str] = None):
         """
+        Initialize the API key manager with a primary key and optional additional keys
+        """
+        self.primary_key = primary_key
+        self.additional_keys = additional_keys or []
+        self.all_keys = [primary_key] + self.additional_keys
         
-        conversation = model.start_chat(history=[
-            {
-                "role": "user",
-                "parts": system_prompt
-            },
-            {
-                "role": "model",
-                "parts": "من آماده ترجمه متن انگلیسی به فارسی با رعایت اصول ذکر شده هستم. لطفاً متن مورد نظر برای ترجمه را ارسال کنید."
-            }
-        ])
-    else:
-        # Continue with existing conversation
-        conversation = conversation_history
+        # Initialize usage tracking for all keys
+        global api_key_usage
+        for key in self.all_keys:
+            if key not in api_key_usage:
+                api_key_usage[key] = {
+                    'count': 0,
+                    'last_used': None,
+                    'rate_limited_until': None,
+                    'rate_limit_count': 0
+                }
     
-    while retries < max_retries:
+    def get_next_available_key(self) -> str:
+        """
+        Get the next available API key that's not rate limited
+        
+        Returns:
+            The next available API key
+        """
+        global api_key_usage
+        now = datetime.datetime.now()
+        
+        # Filter out rate-limited keys
+        available_keys = []
+        for key in self.all_keys:
+            rate_limited_until = api_key_usage[key].get('rate_limited_until')
+            if not rate_limited_until or now > rate_limited_until:
+                available_keys.append(key)
+        
+        if not available_keys:
+            # If all keys are rate-limited, pick the one that will be available soonest
+            soon_available = sorted(
+                self.all_keys, 
+                key=lambda k: api_key_usage[k].get('rate_limited_until', now)
+            )[0]
+            wait_time = (api_key_usage[soon_available]['rate_limited_until'] - now).total_seconds()
+            print(f"All API keys are rate limited. Using key with shortest wait time: {wait_time:.1f} seconds")
+            return soon_available
+            
+        # Sort available keys by usage count (prefer least used keys)
+        available_keys.sort(key=lambda k: api_key_usage[k]['count'])
+        
+        # Select a key with some randomness (80% chance of using least used key, 20% chance of using others)
+        if len(available_keys) > 1 and random.random() > 0.8:
+            # Randomly select from all available keys except the most used one
+            return random.choice(available_keys[:-1])
+        else:
+            # Use the least used key
+            return available_keys[0]
+    
+    def mark_key_used(self, key: str):
+        """
+        Mark an API key as used, updating its usage statistics
+        
+        Args:
+            key: The API key that was used
+        """
+        global api_key_usage
+        api_key_usage[key]['count'] += 1
+        api_key_usage[key]['last_used'] = datetime.datetime.now()
+    
+    def mark_key_rate_limited(self, key: str, duration_minutes: int = 5):
+        """
+        Mark an API key as rate limited for a specified duration
+        
+        Args:
+            key: The API key that hit a rate limit
+            duration_minutes: How long to avoid using this key
+        """
+        global api_key_usage
+        now = datetime.datetime.now()
+        api_key_usage[key]['rate_limited_until'] = now + datetime.timedelta(minutes=duration_minutes)
+        api_key_usage[key]['rate_limit_count'] += 1
+        
+        # Increase cooldown period based on number of rate limits this key has hit
+        # This helps prevent repeatedly hitting limits on problematic keys
+        rate_limit_count = api_key_usage[key]['rate_limit_count']
+        if rate_limit_count > 1:
+            # Progressive backoff: 5 min, 15 min, 30 min, 60 min max
+            backoff_minutes = min(60, 5 * (2 ** (rate_limit_count - 1)))
+            api_key_usage[key]['rate_limited_until'] = now + datetime.timedelta(minutes=backoff_minutes)
+            print(f"Key has hit rate limit {rate_limit_count} times. Increasing cooldown to {backoff_minutes} minutes")
+    
+    def get_usage_stats(self) -> Dict[str, Any]:
+        """
+        Get usage statistics for all API keys
+        
+        Returns:
+            Dictionary containing usage statistics for all keys
+        """
+        return api_key_usage
+
+def translate_text_to_persian(text: str, api_key: str, model_name: str = "models/gemini-2.0-flash", 
+                             conversation=None, api_keys: List[str] = None) -> Tuple[str, Any]:
+    """
+    Translate text to Persian using Google's generative AI model
+
+    Args:
+        text: The text to translate
+        api_key: The API key to use for translation
+        model_name: The name of the model to use
+        conversation: An optional existing conversation to continue
+        api_keys: A list of additional API keys to use for rotation
+
+    Returns:
+        The translated text and the conversation for continuation
+    """
+    # Create API key manager if multiple keys are provided
+    key_manager = None
+    current_key = api_key
+    retry_count = 0
+    max_retries = 5
+    base_wait_time = 2  # seconds
+    
+    if api_keys:
+        key_manager = APIKeyManager(api_key, api_keys)
+        current_key = key_manager.get_next_available_key()
+    
+    while retry_count <= max_retries:
         try:
-            # Add structure-specific instructions to the prompt
+            # Configure API key
+            genai.configure(api_key=current_key)
+            
+            # Get generative model
+            model = genai.GenerativeModel(model_name)
+            
+            # Create or continue conversation
+            if conversation is None:
+                conversation = model.start_chat(history=[])
+            
+            # Add prompt for translation
             prompt = f"""
-            Please translate the following English text to Persian:
+            Please translate the following text to Persian (Farsi). 
+            Maintain the structure of the text including paragraphs, headings, bullet points and numbering.
+            Do not add any additional content not in the original text.
             
             {text}
-            
-            Special instructions for this text:
-            - {' '.join(structure_instructions)}
-            - Remember to keep technical terms in English, wrapped in <span dir="ltr">...</span> tags.
-            - Maintain original text structure including paragraphs, lists, and code blocks.
             """
             
-            # Get the response
+            # Generate response
             response = conversation.send_message(prompt)
-            translated_text = response.text
             
-            # Clean the translated text
-            translated_text = clean_markdown_blocks(translated_text)
+            # Track usage if using key manager
+            if key_manager:
+                key_manager.mark_key_used(current_key)
             
-            return translated_text, conversation
+            return response.text, conversation
             
         except Exception as e:
-            retries += 1
-            error_message = str(e)
+            error_str = str(e).lower()
+            retry_count += 1
             
-            if "RESOURCE_EXHAUSTED" in error_message or "rate limit" in error_message.lower():
-                print(f"\nAPI rate limit reached. Waiting {wait_time} seconds before retry ({retries}/{max_retries})...")
+            # Handle rate limiting specifically
+            if "429" in error_str or "rate limit" in error_str or "quota" in error_str:
+                if key_manager:
+                    # Mark current key as rate limited
+                    print(f"API key hit rate limit. Rotating to next key...")
+                    key_manager.mark_key_rate_limited(current_key)
+                    
+                    # Get next available key
+                    current_key = key_manager.get_next_available_key()
+                    
+                    # If we found a different key, reset retry count to give it a fresh chance
+                    if current_key != api_key:
+                        retry_count -= 1  # don't count this as a retry
+                        continue
+                
+                # If no key manager or no other keys available, add adaptive delay
+                wait_time = base_wait_time * (2 ** retry_count)  # Exponential backoff
+                print(f"Rate limit encountered. Waiting {wait_time} seconds before retry {retry_count}/{max_retries}")
                 time.sleep(wait_time)
             else:
-                print(f"\nTranslation error: {error_message}. Retrying in {wait_time} seconds ({retries}/{max_retries})...")
-                time.sleep(wait_time)
+                # For other errors, wait a shorter time
+                print(f"Error during translation: {str(e)}")
+                print(f"Retrying in {retry_count} seconds... ({retry_count}/{max_retries})")
+                time.sleep(retry_count)
+            
+            # If we've exhausted all retries, raise the error
+            if retry_count > max_retries:
+                raise Exception(f"Failed to translate after {max_retries} retries: {str(e)}")
     
-    print("\nMaximum retries reached. Translation failed.")
-    return "", conversation_history 
+    # This should not be reached due to the exception above, but just in case
+    raise Exception(f"Failed to translate after {max_retries} retries")
+
+def get_api_key_usage_stats():
+    """
+    Get current API key usage statistics
+    
+    Returns:
+        Dictionary containing usage statistics for all keys
+    """
+    return api_key_usage 
