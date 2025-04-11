@@ -41,7 +41,8 @@ def load_api_keys_from_env():
     return primary_key, additional_keys
 
 def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, force=False, 
-                           output_format="both", check_existing=True, conversation=None, additional_api_keys=None):
+                           output_format="both", check_existing=True, conversation=None, additional_api_keys=None,
+                           retranslate_pages=None):
     """Extract text and images from a PDF file and translate it to Persian"""
     try:
         # Create output directory
@@ -64,6 +65,9 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
         if skip_pages:
             print(f"Skipping pages: {skip_pages}")
             
+        if retranslate_pages:
+            print(f"Retranslating pages: {retranslate_pages}")
+            
         if force:
             print("Force mode: Overwriting existing translations")
         
@@ -72,7 +76,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
             print(f"Using {num_keys} API keys with smart rotation for rate limit management")
         
         # First, check for already translated pages to give proper statistics
-        if check_existing and not force:
+        if check_existing and not force and not retranslate_pages:
             already_translated_count = 0
             pages_needing_translation = []
             
@@ -288,7 +292,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
         return False
 
 def process_all_pdfs(books_dir, api_key, additional_api_keys=None, limit=None, skip_pages=None, force=False, 
-               output_format="both", check_existing=True, output_dir="output"):
+               output_format="both", check_existing=True, output_dir="output", retranslate_pages=None):
     """Process all PDF files in the specified directory"""
     # Check if directory exists
     if not os.path.exists(books_dir):
@@ -323,7 +327,8 @@ def process_all_pdfs(books_dir, api_key, additional_api_keys=None, limit=None, s
             force=force, 
             output_format=output_format, 
             check_existing=check_existing,
-            additional_api_keys=additional_api_keys
+            additional_api_keys=additional_api_keys,
+            retranslate_pages=retranslate_pages
         )
         
         if result:
@@ -350,6 +355,7 @@ def main():
     parser.add_argument('--output_dir', type=str, default='output', help='Directory to save output')
     parser.add_argument('--limit', type=int, default=None, help='Limit number of pages to process')
     parser.add_argument('--skip_pages', type=str, default=None, help='Comma-separated list of pages to skip')
+    parser.add_argument('--retranslate_pages', type=str, default=None, help='Comma-separated list of pages to retranslate')
     parser.add_argument('--force', action='store_true', help='Force overwrite existing translations')
     parser.add_argument('--output_format', type=str, default='both', choices=['html', 'dual_page', 'both'], 
                         help='Output format: html, dual_page, or both')
@@ -362,6 +368,13 @@ def main():
     skip_pages = None
     if args.skip_pages:
         skip_pages = [int(p) for p in args.skip_pages.split(',')]
+    
+    # Convert retranslate_pages to list if provided
+    retranslate_pages = None
+    if args.retranslate_pages:
+        retranslate_pages = [int(p) for p in args.retranslate_pages.split(',')]
+        # If retranslate_pages is specified, force should be True for those pages
+        args.force = True
     
     # Load API keys from .env file
     primary_api_key, additional_api_keys = load_api_keys_from_env()
@@ -382,7 +395,8 @@ def main():
         skip_pages=skip_pages,
         force=args.force,
         output_format=args.output_format,
-        check_existing=args.check_existing
+        check_existing=args.check_existing,
+        retranslate_pages=retranslate_pages
     )
 
 if __name__ == "__main__":
