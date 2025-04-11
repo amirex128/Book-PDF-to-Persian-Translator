@@ -252,7 +252,7 @@ def extract_and_translate_pdf(pdf_path, api_key, limit=None, skip_pages=None, fo
                 if stats.get('rate_limited_until'):
                     # Directly use the datetime module
                     now = datetime.datetime.now()
-                    if stats['rate_limited_until'] > now:
+                    if stats['rate_limited_until'] is not None and stats['rate_limited_until'] > now:
                         time_left = (stats['rate_limited_until'] - now).total_seconds() / 60
                         cooldown_info = f", cooldown for {time_left:.1f} min"
                 

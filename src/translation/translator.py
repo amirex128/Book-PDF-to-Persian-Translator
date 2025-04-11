@@ -65,18 +65,27 @@ class APIKeyManager:
         # Filter out rate-limited keys
         available_keys = []
         for key in self.all_keys:
+            if key not in api_key_usage:
+                available_keys.append(key)
+                continue
+                
             rate_limited_until = api_key_usage[key].get('rate_limited_until')
-            if not rate_limited_until or now > rate_limited_until:
+            if rate_limited_until is None or now > rate_limited_until:
                 available_keys.append(key)
         
         if not available_keys:
             # If all keys are rate-limited, pick the one that will be available soonest
             soon_available = sorted(
                 self.all_keys, 
-                key=lambda k: api_key_usage[k].get('rate_limited_until', now)
+                key=lambda k: api_key_usage[k].get('rate_limited_until', now) if api_key_usage[k].get('rate_limited_until') is not None else now
             )[0]
-            wait_time = (api_key_usage[soon_available]['rate_limited_until'] - now).total_seconds()
-            print(f"All API keys are rate limited. Using key with shortest wait time: {wait_time:.1f} seconds")
+            
+            if api_key_usage[soon_available].get('rate_limited_until') is not None:
+                wait_time = (api_key_usage[soon_available]['rate_limited_until'] - now).total_seconds()
+                print(f"All API keys are rate limited. Using key with shortest wait time: {wait_time:.1f} seconds")
+            else:
+                print("All API keys are rate limited. Using key with no rate limit information.")
+            
             return soon_available
             
         # Sort available keys by usage count (prefer least used keys)
@@ -161,14 +170,12 @@ class APIKeyManager:
                 
                 # Add prompt for translation
                 prompt = f"""
-            من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. این متن‌ها از یک کتاب فنی هستند.
+            من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. خودت را به عنوان یک مهندس نرم افزار در نظر بگیر که میخواهد یک متن انگلیسی را به فارسی ترجمه کند . باید اصطلاحات و کلمات فنی مهندسی نرم افزار را به انگلیسی نگهدارد و بقیه متن را به فارسی ترجمه کند .
             لطفاً به دستورالعمل‌های زیر دقت کنید و همیشه آن‌ها را در ترجمه‌های خود رعایت کنید:
-            
-            قوانین بسیار مهم برای ترجمه (این قوانین از هر چیزی مهم‌تر هستند):
-            
-            1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید.
                         
-            2. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید:
+            1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید و ما بقی متن را به فارسی ترجمه کنید
+                        
+            2. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید و مابقی را به فارسی ترجمه کنید :
             
                الف) اصطلاحات فنی مهندسی نرم‌افزار:
                - مفاهیم معماری: API, HTTP, REST, SOAP, MVC, MVVM, Microservices, Monolith, Service, Controller, Middleware, Backend, Frontend
@@ -212,14 +219,14 @@ class APIKeyManager:
                - مراجع: Gang of Four, Reactive Manifesto, Agile Manifesto
                - کتاب‌ها: "Clean Code", "Domain-Driven Design", "Refactoring"
             
-            3. قانون‌های کلیدی برای تشخیص اصطلاحات فنی:
+            3. قانون‌های کلیدی برای تشخیص اصطلاحات فنی انگلیسی که نباید ترجمه شود
                - هر کلمه‌ای که حتی یک حرف بزرگ انگلیسی دارد، یک اصطلاح فنی است و نباید ترجمه شود.
                - هر کلمه‌ای که با حروف بزرگ نوشته شده یا اختصار است، نباید ترجمه شود.
                - هر عبارتی که با حروف مخفف (acronym) نوشته شده مانند API، REST، SOAP، نباید ترجمه شود.
                - هر عبارتی که با خط تیره یا زیرخط جدا شده (مانند client-side یا snake_case)، احتمالاً اصطلاح فنی است.
                - اصطلاحات شناخته شده مهندسی نرم‌افزار مانند endpoint، service، handler، را ترجمه نکنید.
             
-            4. مثال‌های بیشتر از آنچه ترجمه نشود (به تفاوت‌ها توجه کنید):
+            4. میتوانی از این مثال ها یاد بگیری که چطور یک متن انگلیسی را به فارسی ترجمه باید بکنی بدون ترجمه اصطلاحات فنی مهندسی نرم افزار
                - "Invoicing displays the view models to its actors" -> "Invoicing، view models را به actors خود نمایش می‌دهد"
                - "Customers can get a JSON representation of invoices" -> "مشتریان می‌توانند یک representation از نوع JSON برای invoices دریافت کنند"
                - "The code uses the Factory pattern to create Order objects" -> "کد از pattern به نام Factory برای ایجاد objects از نوع Order استفاده می‌کند"
@@ -235,7 +242,7 @@ class APIKeyManager:
                - "The backend exposes endpoints to process client requests" -> "backend، endpoints را برای پردازش client requests در معرض دید قرار می‌دهد"
                - "Cloud-native applications often use container orchestration" -> "applications از نوع cloud-native اغلب از container orchestration استفاده می‌کنند"
             
-            5. مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید.
+            5.  مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید و مابقی متن را به زبان فارسی ترجمه کنید
             
             6. اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید.
                برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
@@ -250,8 +257,13 @@ class APIKeyManager:
                - جداول: ساختار <table>, <tr>, <td> را حفظ کنید
 
             8.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده.
+
+            9. متن شما باید یک متن html با شد که زیبا سازی شده باشد و فضا های اضافه برای زیبا سازی ایجاد شده باشد و یک متن تمیز و زیبا با استفاده از تگ های html ساخته شده باشد 
                 
-            متن برای ترجمه:
+            10.شما نباید یک قالب کامل html بسازی و برگردانی برای من . بلکه باید یک div ّرگردانی که تمام مواردی که من از تو خواسته ام به شکل تگ های html باشد که من از ان ها در صفحات html خودم استفاده کنم
+
+            11.مستقیم فقط تگ div ای برگردان که داخلش متن من به فارسی ترجمه شده باشد بدون ترجمه اصطلاحات فنی مهندسی نرم افزار و متن را داخل markdown نزاشته باشی و فقط یک تگ div که تمام ترجمه با خواسته های من داخلش باشد
+            متن برای ترجمه به زبان فارسی با در نظر گرفتن تمام نکات و قواعد قبلی :
                 
             {text}
                 """
@@ -278,7 +290,9 @@ class APIKeyManager:
                     # If all keys are rate limited, wait before trying again
                     now = datetime.datetime.now()
                     all_limited = all(
-                        api_key_usage[k].get('rate_limited_until', now) > now 
+                        k in api_key_usage and 
+                        api_key_usage[k].get('rate_limited_until') is not None and
+                        api_key_usage[k].get('rate_limited_until') > now 
                         for k in self.all_keys
                     )
                     
@@ -351,14 +365,12 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
             
             # Add prompt for translation
             prompt = f"""
-            من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. این متن‌ها از یک کتاب فنی هستند.
+            من قصد دارم متن‌های انگلیسی فنی را به شما بدهم تا به فارسی ترجمه کنید. خودت را به عنوان یک مهندس نرم افزار در نظر بگیر که میخواهد یک متن انگلیسی را به فارسی ترجمه کند . باید اصطلاحات و کلمات فنی مهندسی نرم افزار را به انگلیسی نگهدارد و بقیه متن را به فارسی ترجمه کند .
             لطفاً به دستورالعمل‌های زیر دقت کنید و همیشه آن‌ها را در ترجمه‌های خود رعایت کنید:
-            
-            قوانین بسیار مهم برای ترجمه (این قوانین از هر چیزی مهم‌تر هستند):
-            
-            1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید.
                         
-            2. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید:
+            1. اصطلاحات تخصصی و فنی را به انگلیسی نگه دارید و ترجمه نکنید. هیچ اصطلاح تخصصی را ترجمه نکنید و ما بقی متن را به فارسی ترجمه کنید
+                        
+            2. موارد زیر را هرگز ترجمه نکنید و عیناً به انگلیسی نگه دارید و مابقی را به فارسی ترجمه کنید :
             
                الف) اصطلاحات فنی مهندسی نرم‌افزار:
                - مفاهیم معماری: API, HTTP, REST, SOAP, MVC, MVVM, Microservices, Monolith, Service, Controller, Middleware, Backend, Frontend
@@ -402,14 +414,14 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
                - مراجع: Gang of Four, Reactive Manifesto, Agile Manifesto
                - کتاب‌ها: "Clean Code", "Domain-Driven Design", "Refactoring"
             
-            3. قانون‌های کلیدی برای تشخیص اصطلاحات فنی:
+            3. قانون‌های کلیدی برای تشخیص اصطلاحات فنی انگلیسی که نباید ترجمه شود
                - هر کلمه‌ای که حتی یک حرف بزرگ انگلیسی دارد، یک اصطلاح فنی است و نباید ترجمه شود.
                - هر کلمه‌ای که با حروف بزرگ نوشته شده یا اختصار است، نباید ترجمه شود.
                - هر عبارتی که با حروف مخفف (acronym) نوشته شده مانند API، REST، SOAP، نباید ترجمه شود.
                - هر عبارتی که با خط تیره یا زیرخط جدا شده (مانند client-side یا snake_case)، احتمالاً اصطلاح فنی است.
                - اصطلاحات شناخته شده مهندسی نرم‌افزار مانند endpoint، service، handler، را ترجمه نکنید.
             
-            4. مثال‌های بیشتر از آنچه ترجمه نشود (به تفاوت‌ها توجه کنید):
+            4. میتوانی از این مثال ها یاد بگیری که چطور یک متن انگلیسی را به فارسی ترجمه باید بکنی بدون ترجمه اصطلاحات فنی مهندسی نرم افزار
                - "Invoicing displays the view models to its actors" -> "Invoicing، view models را به actors خود نمایش می‌دهد"
                - "Customers can get a JSON representation of invoices" -> "مشتریان می‌توانند یک representation از نوع JSON برای invoices دریافت کنند"
                - "The code uses the Factory pattern to create Order objects" -> "کد از pattern به نام Factory برای ایجاد objects از نوع Order استفاده می‌کند"
@@ -425,7 +437,7 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
                - "The backend exposes endpoints to process client requests" -> "backend، endpoints را برای پردازش client requests در معرض دید قرار می‌دهد"
                - "Cloud-native applications often use container orchestration" -> "applications از نوع cloud-native اغلب از container orchestration استفاده می‌کنند"
             
-            5. مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید.
+            5.  مطلقاً هیچ کلمه‌ای را که فکر می‌کنید ممکن است یک اصطلاح فنی باشد ترجمه نکنید. اگر در مورد ترجمه یک کلمه یا عبارت شک دارید، آن را به انگلیسی نگه دارید و مابقی متن را به زبان فارسی ترجمه کنید
             
             6. اگر بخش‌هایی از متن حاوی کد برنامه‌نویسی است، آن را داخل تگ‌های <pre><code class="language-زبان_برنامه_نویسی"> و </code></pre> قرار دهید.
                برای مثال، کد جاوا را به این صورت قرار دهید: <pre><code class="language-java">کد جاوا</code></pre>
@@ -440,8 +452,13 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
                - جداول: ساختار <table>, <tr>, <td> را حفظ کنید
 
             8.عنوان ها یا سرفصل ها سر تیتر ها یا هر مورد دیگری که به ظرت باید bold باشد با تگ html بهش این قابلیت رو بده.
+
+            9. متن شما باید یک متن html با شد که زیبا سازی شده باشد و فضا های اضافه برای زیبا سازی ایجاد شده باشد و یک متن تمیز و زیبا با استفاده از تگ های html ساخته شده باشد 
                 
-            متن برای ترجمه:
+            10.شما نباید یک قالب کامل html بسازی و برگردانی برای من . بلکه باید یک div ّرگردانی که تمام مواردی که من از تو خواسته ام به شکل تگ های html باشد که من از ان ها در صفحات html خودم استفاده کنم
+
+            11.مستقیم فقط تگ div ای برگردان که داخلش متن من به فارسی ترجمه شده باشد بدون ترجمه اصطلاحات فنی مهندسی نرم افزار و متن را داخل markdown نزاشته باشی و فقط یک تگ div که تمام ترجمه با خواسته های من داخلش باشد
+            متن برای ترجمه به زبان فارسی با در نظر گرفتن تمام نکات و قواعد قبلی :
                 
             {text}
             """
