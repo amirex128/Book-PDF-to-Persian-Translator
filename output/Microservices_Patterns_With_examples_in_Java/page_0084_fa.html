@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 84</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>54</p>
+  <p>فصل 2</p>
+  <p><strong>Decomposition strategies</strong></p>
+  <p>نقطه‌ای که تقسیم آن به چندین <strong>services</strong> ارزشمند می‌شود. علاوه بر این، در بخش 2.2.5، من چندین مانع برای تجزیه را توصیف می‌کنم که ممکن است باعث شود شما تصمیم خود را دوباره بررسی کنید.</p>
+  <p>بیایید به راه دیگری برای تجزیه یک <strong>application</strong> که بر اساس طراحی مبتنی بر <strong>domain</strong> است، نگاهی بیندازیم.</p>
+  <p>2.2.3</p>
+  <p><strong>Defining services by applying the Decompose by subdomain pattern</strong></p>
+  <p><strong>DDD</strong>، همانطور که در کتاب عالی <strong>Domain-driven design</strong> اثر
+   <strong>Eric Evans (Addison-Wesley Professional, 2003)</strong> توضیح داده شده است، یک رویکرد برای ساخت <strong>applications software</strong> پیچیده است که بر توسعه یک مدل <strong>domain</strong> شی‌گرا متمرکز است. یک مدل <strong>domain</strong>، دانش در مورد یک <strong>domain</strong> را در قالبی که می‌تواند برای حل مشکلات در آن <strong>domain</strong> استفاده شود، ثبت می‌کند. این واژگانی را که توسط تیم استفاده می‌شود، تعریف می‌کند، آنچه <strong>DDD</strong> آن را زبان همه‌جا می‌نامد. مدل <strong>domain</strong> به‌طور تنگاتنگی در طراحی و پیاده‌سازی <strong>application</strong> منعکس می‌شود. <strong>DDD</strong> دارای دو مفهوم است که هنگام اعمال معماری <strong>microservice</strong>، فوق‌العاده مفید هستند: زیر <strong>domains</strong> و
+   <strong>bounded contexts</strong>.
+  </p>
+  <p><strong>DDD</strong> کاملاً با رویکرد سنتی مدل‌سازی سازمانی که یک مدل واحد برای کل سازمان ایجاد می‌کند، متفاوت است. به عنوان مثال، در چنین مدلی، یک تعریف واحد از هر نهاد تجاری، مانند مشتری، سفارش و غیره وجود خواهد داشت. مشکل این نوع مدل‌سازی این است که وادار کردن بخش‌های مختلف یک سازمان به توافق بر سر یک مدل واحد، یک کار بزرگ است. همچنین، این بدان معناست که از دیدگاه یک بخش معین از سازمان، مدل برای نیازهای آن‌ها بیش از حد پیچیده است. علاوه بر این، مدل <strong>domain</strong> می‌تواند گیج‌کننده باشد زیرا بخش‌های مختلف سازمان ممکن است از یک اصطلاح برای مفاهیم مختلف یا اصطلاحات مختلف برای یک مفهوم یکسان استفاده کنند. <strong>DDD</strong> از این مشکلات با تعریف چندین مدل <strong>domain</strong>، که هر کدام دارای یک دامنه صریح هستند، اجتناب می‌کند.</p>
+  <p><strong>DDD</strong> یک مدل <strong>domain</strong> جداگانه برای هر زیر <strong>domain</strong> تعریف می‌کند. یک زیر <strong>domain</strong> بخشی از <strong>domain</strong> است، اصطلاح <strong>DDD</strong> برای فضای مشکل <strong>application</strong>. زیر <strong>domains</strong> با استفاده از همان رویکردی که برای شناسایی قابلیت‌های کسب‌وکار استفاده می‌شود، شناسایی می‌شوند: کسب‌وکار را تجزیه و تحلیل کنید و حوزه‌های مختلف تخصص را شناسایی کنید. نتیجه نهایی به احتمال زیاد زیر <strong>domains</strong>ی خواهد بود که شبیه قابلیت‌های کسب‌وکار هستند. نمونه‌هایی از زیر <strong>domains</strong> در <strong>FTGO</strong> شامل ثبت سفارش، مدیریت سفارش، مدیریت آشپزخانه، تحویل و امور مالی است. همانطور که می‌بینید، این زیر <strong>domains</strong> بسیار شبیه به قابلیت‌های کسب‌وکار هستند که قبلاً توضیح داده شد.
+  </p>
+  <p>الگو: تجزیه بر اساس زیر <strong>domain</strong></p>
+  <p><strong>Define services</strong> متناظر با زیر <strong>domains DDD</strong>. به
+   <a href="http://microservices.io/patterns/decomposition/decompose-by-subdomain.html">http://microservices.io/patterns/decomposition/decompose-by-subdomain.html</a> مراجعه کنید.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

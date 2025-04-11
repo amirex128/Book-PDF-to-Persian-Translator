@@ -1,0 +1,63 @@
+3
+The slow march toward monolithic hell
+1.1.1
+The architecture of the FTGO application
+FTGO is a typical enterprise Java application. Figure 1.1 shows its architecture. The
+FTGO application has a hexagonal architecture, which is an architectural style
+described in more detail in chapter 2. In a hexagonal architecture, the core of the
+application consists of the business logic. Surrounding the business logic are various
+adapters that implement UIs and integrate with external systems.
+The business logic consists of modules, each of which is a collection of domain
+objects. Examples of the modules include Order Management, Delivery Management,
+Billing, and Payments. There are several adapters that interface with the external sys-
+tems. Some are inbound adapters, which handle requests by invoking the business
+logic, including the REST API and Web UI adapters. Others are outbound adapters,
+which enable the business logic to access the MySQL database and invoke cloud ser-
+vices such as Twilio and Stripe.
+ Despite having a logically modular architecture, the FTGO application is packaged
+as a single WAR file. The application is an example of the widely used monolithic style
+Invoked by mobile applications
+Twilio
+messaging
+service
+Cloud services
+FTGO application
+AWS SES
+email
+service
+Stripe
+payment
+service
+Adapters invoke
+cloud services.
+Twilio
+adapter
+Courier
+REST
+API
+Web
+UI
+MySQL
+adapter
+Restaurant
+management
+Payments
+Billing
+Notiﬁcation
+Order
+management
+Delivery
+management
+Amazon
+SES
+adapter
+Stripe
+adapter
+Consumer
+Restaurant
+MySQL
+Figure 1.1
+The FTGO application has a hexagonal architecture. It consists of business logic 
+surrounded by adapters that implement UIs and interface with external systems, such as mobile 
+applications and cloud services for payments, messaging, and email.
+ 

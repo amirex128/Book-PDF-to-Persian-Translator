@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 43</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>13</p>
+  <p><strong>Microservice architecture to the rescue</strong></p>
+  <ul>
+   <li>
+    <strong>Restaurant Service</strong>—اطلاعات مربوط به رستوران‌ها را نگهداری می‌کند
+   </li>
+   <li>
+    <strong>Kitchen Service</strong>—مدیریت آماده‌سازی سفارشات
+   </li>
+   <li>
+    <strong>Accounting Service</strong>—رسیدگی به صورتحساب و پرداخت‌ها
+   </li>
+  </ul>
+  <p>بسیاری از <strong>services</strong> با ماژول‌هایی که قبلاً در این فصل توضیح داده شد، مطابقت دارند. آنچه متفاوت است این است که هر <strong>service</strong> و
+   <strong>API</strong> آن بسیار واضح تعریف شده است. هر کدام را می‌توان به طور مستقل توسعه داد، تست کرد، مستقر کرد و مقیاس‌بندی کرد. همچنین، این معماری کار خوبی در حفظ ماژولار بودن انجام می‌دهد. یک <strong>developer</strong> نمی‌تواند <strong>API</strong> یک <strong>service</strong> را دور بزند و به مؤلفه‌های داخلی آن دسترسی پیدا کند. فصل 13 نحوه تبدیل یک <strong>application monolithic</strong> موجود را به <strong>microservices</strong> توضیح می‌دهد.
+  </p>
+  <p>1.4.5</p>
+  <p><strong>Comparing the microservice architecture and SOA</strong></p>
+  <p>برخی از منتقدان معماری <strong>microservice</strong> ادعا می‌کنند که این چیز جدیدی نیست - این معماری <strong>service-oriented (SOA)</strong> است. در سطح بسیار بالایی، شباهت‌هایی وجود دارد.
+   <strong>SOA</strong> و معماری <strong>microservice</strong> سبک‌های معماری هستند که یک سیستم را به صورت مجموعه‌ای از <strong>services</strong> ساختار می‌دهند. اما همانطور که جدول 1.1 نشان می‌دهد، هنگامی که عمیق‌تر می‌شوید، با تفاوت‌های قابل توجهی مواجه می‌شوید.</p>
+  <p><strong>Amazon</strong></p>
+  <p><strong>SES</strong></p>
+  <p>آداپتور</p>
+  <p><strong>Twilio</strong></p>
+  <p>آداپتور</p>
+  <p><strong>Stripe</strong></p>
+  <p>آداپتور</p>
+  <p><strong>The API Gateway routes</strong></p>
+  <p>درخواست‌ها از <strong>mobile</strong></p>
+  <p><strong>applications</strong> به <strong>services</strong>.</p>
+  <p><strong>Services</strong> دارای <strong>APIs</strong> هستند.</p>
+  <p>داده‌های یک <strong>service</strong> خصوصی است.</p>
+  <p><strong>Services</strong> مربوط به قابلیت‌های تجاری/</p>
+  <p><strong>domain-driven design (DDD)</strong> زیر دامنه‌ها</p>
+  <p><strong>API</strong></p>
+  <p><strong>Gateway</strong></p>
+  <p>رستوران</p>
+  <p>وب <strong>UI</strong></p>
+  <p><strong>Order</strong></p>
+  <p><strong>Service</strong></p>
+  <p>پیک</p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p>مصرف‌کننده</p>
+  <p>رستوران</p>
+  <p>رستوران</p>
+  <p><strong>Service</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p><strong>Accounting</strong></p>
+  <p><strong>Service</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p>اعلان</p>
+  <p><strong>Service</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p>آشپزخانه</p>
+  <p><strong>Service</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p>تحویل</p>
+  <p><strong>Service</strong></p>
+  <p><strong>REST</strong></p>
+  <p><strong>API</strong></p>
+  <p>شکل 1.7</p>
+  <p>برخی از <strong>services</strong> از نسخه مبتنی بر معماری
+   <strong>microservice</strong> از <strong>application</strong> <strong>FTGO</strong>. یک <strong>API Gateway</strong> درخواست‌ها را از <strong>mobile applications</strong> به <strong>services</strong> هدایت می‌کند. <strong>services</strong> از طریق <strong>APIs</strong> با هم همکاری می‌کنند.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

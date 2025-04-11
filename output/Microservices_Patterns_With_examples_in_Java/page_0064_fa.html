@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 64</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>34</p>
+  <p>فصل 2</p>
+  <p><strong>Decomposition strategies</strong></p>
+  <p>بنابراین، تعریف <strong>services</strong>. همانطور که در اطراف تخته وایت‌برد ایستاده بودند، تیم
+   <strong>FTGO</strong> از خود می‌پرسیدند که دقیقاً چگونه این کار را انجام دهند!</p>
+  <p>در این فصل، یاد خواهید گرفت که چگونه یک معماری <strong>microservice</strong> را برای یک <strong>application</strong> تعریف کنید. من استراتژی‌هایی را برای تجزیه یک <strong>application</strong> به <strong>services</strong> توضیح می‌دهم. شما یاد خواهید گرفت که <strong>services</strong> حول نگرانی‌های تجاری سازماندهی شده‌اند نه نگرانی‌های فنی.
+   همچنین نشان می‌دهم که چگونه از ایده‌های طراحی مبتنی بر دامنه (<strong>DDD</strong>) برای حذف کلاس‌های <strong>god</strong> استفاده کنید، که کلاس‌هایی هستند که در سراسر یک <strong>application</strong> استفاده می‌شوند و باعث وابستگی‌های درهم می‌شوند که از تجزیه جلوگیری می‌کنند.
+  </p>
+  <p>من این فصل را با تعریف معماری <strong>microservice</strong> از نظر مفاهیم معماری <strong>software</strong> آغاز می‌کنم. پس از آن، فرآیندی را برای تعریف یک معماری <strong>microservice</strong> برای یک <strong>application</strong>، با شروع از الزامات آن، توضیح می‌دهم. من در مورد استراتژی‌هایی برای تجزیه یک <strong>application</strong> به مجموعه‌ای از <strong>services</strong>، موانع آن و نحوه غلبه بر آن‌ها بحث می‌کنم. بیایید با بررسی مفهوم معماری <strong>software</strong> شروع کنیم.</p>
+  <p>2.1</p>
+  <p><strong>What is the microservice architecture exactly?</strong></p>
+  <p>فصل 1 توضیح می‌دهد که چگونه ایده کلیدی معماری <strong>microservice</strong>، تجزیه عملکردی است. به جای توسعه یک <strong>application</strong> بزرگ، شما <strong>application</strong> را به عنوان مجموعه‌ای از <strong>services</strong> ساختار می‌دهید. از یک طرف، توصیف معماری <strong>microservice</strong> به عنوان نوعی تجزیه عملکردی مفید است. اما از سوی دیگر، چندین سؤال را بی‌پاسخ می‌گذارد، از جمله اینکه معماری <strong>microservice</strong> چگونه با مفاهیم گسترده‌تر معماری <strong>software</strong> مرتبط است؟ یک <strong>service</strong> چیست؟ و اندازه یک <strong>service</strong> چقدر مهم است؟</p>
+  <p>برای پاسخ به این سؤالات، باید یک قدم به عقب برداریم و نگاهی بیندازیم که منظور از معماری <strong>software</strong> چیست. معماری یک <strong>application software</strong>، ساختار سطح بالای آن است که از بخش‌های تشکیل‌دهنده و وابستگی‌های بین آن بخش‌ها تشکیل شده است. همانطور که در این بخش خواهید دید، معماری یک <strong>application</strong> چند بعدی است، بنابراین راه‌های متعددی برای توصیف آن وجود دارد. دلیل اهمیت معماری این است که ویژگی‌های کیفیت <strong>software application</strong> یا -<strong>ilities</strong> آن را تعیین می‌کند. به طور سنتی، هدف از معماری، مقیاس‌پذیری، قابلیت اطمینان و امنیت بوده است. اما امروزه مهم است که معماری همچنین توسعه سریع و ایمن <strong>software</strong> را فعال کند. شما یاد خواهید گرفت که معماری <strong>microservice</strong> یک سبک معماری است که به یک <strong>application</strong> قابلیت نگهداری، قابلیت تست و قابلیت استقرار بالایی می‌دهد.</p>
+  <p>من این بخش را با توصیف مفهوم معماری <strong>software</strong> و دلیل اهمیت آن آغاز می‌کنم. در مرحله بعد، در مورد ایده یک سبک معماری بحث می‌کنم. سپس معماری <strong>microservice</strong> را به عنوان یک سبک معماری خاص تعریف می‌کنم. بیایید با نگاهی به مفهوم معماری <strong>software</strong> شروع کنیم.</p>
+  <p>2.1.1</p>
+  <p><strong>What is software architecture and why does it matter?</strong></p>
+  <p>معماری قطعاً مهم است. حداقل دو کنفرانس به این موضوع اختصاص داده شده است: کنفرانس معماری <strong>software</strong>
+   <strong>O’Reilly</strong> (https://conferences.oreilly.com/software-architecture) و کنفرانس
+   <strong>SATURN</strong> (https://resources.sei.cmu.edu/news-events/events/saturn/). بسیاری از <strong>developers</strong> این هدف را دارند که معمار شوند. اما معماری چیست و چرا مهم است؟</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

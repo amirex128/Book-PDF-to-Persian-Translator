@@ -1,0 +1,43 @@
+57
+Defining an application’s microservice architecture
+the number of services that need to be changed and deployed when some require-
+ment changes. Ideally, a change will only affect a single team and a single service. CCP
+is the antidote to the distributed monolith anti-pattern.
+ SRP and CCP are 2 of the 11 principles developed by Bob Martin. They’re particu-
+larly useful when developing a microservice architecture. The remaining nine princi-
+ples are used when designing classes and packages. For more information about SRP,
+CCP, and the other OOD principles, see the article “The Principles of Object Ori-
+ented Design” on Bob Martin’s website (http://butunclebob.com/ArticleS.UncleBob
+.PrinciplesOfOod).
+ Decomposition by business capability and by subdomain along with SRP and CCP
+are good techniques for decomposing an application into services. In order to apply
+them and successfully develop a microservice architecture, you must solve some trans-
+action management and interprocess communication issues. 
+2.2.5
+Obstacles to decomposing an application into services
+On the surface, the strategy of creating a microservice architecture by defining ser-
+vices corresponding to business capabilities or subdomains looks straightforward. You
+may, however, encounter several obstacles:
+Network latency
+Reduced availability due to synchronous communication
+Maintaining data consistency across services
+Obtaining a consistent view of the data
+God classes preventing decomposition
+Let’s take a look at each obstacle, starting with network latency.
+NETWORK LATENCY
+Network latency is an ever-present concern in a distributed system. You might discover
+that a particular decomposition into services results in a large number of round-trips
+between two services. Sometimes, you can reduce the latency to an acceptable amount
+by implementing a batch API for fetching multiple objects in a single round trip. But
+in other situations, the solution is to combine services, replacing expensive IPC with
+language-level method or function calls. 
+SYNCHRONOUS INTERPROCESS COMMUNICATION REDUCES AVAILABILITY
+Another problem is how to implement interservice communication in a way that
+doesn’t reduce availability. For example, the most straightforward way to implement
+the createOrder() operation is for the Order Service to synchronously invoke the
+other services using REST. The drawback of using a protocol like REST is that it
+reduces the availability of the Order Service. It won’t be able to create an order if any
+of those other services are unavailable. Sometimes this is a worthwhile trade-off, but in
+chapter 3 you’ll learn that using asynchronous messaging, which eliminates tight cou-
+pling and improves availability, is often a better choice. 
+ 

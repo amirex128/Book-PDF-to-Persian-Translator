@@ -1,0 +1,48 @@
+60
+CHAPTER 2
+Decomposition strategies
+The Delivery Service isn’t interested in any of the other attributes of an order.
+ The Kitchen Service also has a much simpler view of an order. Its version of an
+Order is called a Ticket. As figure 2.12 shows, a Ticket simply consist of a status, the
+requestedDeliveryTime, a prepareByTime, and a list of line items that tell the
+restaurant what to prepare. It’s unconcerned with the consumer, payment, delivery,
+and so on.
+The Order service has the most complex view of an order, shown in figure 2.13. Even
+though it has quite a few fields and methods, it’s still much simpler than the original
+version.
+The Order class in each domain model represents different aspects of the same Order
+business entity. The FTGO application must maintain consistency between these differ-
+ent objects in different services. For example, once the Order Service has authorized
+Delivery
+Address
+Pickup location
+Delivery location
+Assigned to
+Courier
+status
+scheduledPickupTime
+ScheduledDeliveryTime
+Figure 2.11
+The Delivery Service domain model
+Ticket
+status
+requestedDeliveryTime
+preparedByTime
+TicketLineItem
+quantity
+item
+Figure 2.12
+The Kitchen Service domain model
+Order
+OrderLineItem
+Address
+Consumer
+Restaurant
+PaymentInfo
+status
+orderTotal
+deliveryTime
+...
+Figure 2.13
+The Order Service domain model
+ 

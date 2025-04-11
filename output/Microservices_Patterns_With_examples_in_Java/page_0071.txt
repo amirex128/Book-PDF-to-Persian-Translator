@@ -1,0 +1,74 @@
+41
+What is the microservice architecture exactly?
+A key constraint imposed by the microservice architecture is that the services are
+loosely coupled. Consequently, there are restrictions on how the services collaborate.
+In order to explain those restrictions, I’ll attempt to define the term service, describe
+what it means to be loosely coupled, and tell you why this matters.
+WHAT IS A SERVICE?
+A service is a standalone, independently deployable software component that imple-
+ments some useful functionality. Figure 2.4 shows the external view of a service, which in
+this example is the Order Service. A service has an API that provides its clients access to
+its functionality. There are two types of operations: commands and queries. The API
+consists of commands, queries, and events. A command, such as createOrder(), per-
+forms actions and updates data. A query, such as findOrderById(), retrieves data. A ser-
+vice also publishes events, such as OrderCreated, which are consumed by its clients.
+ A service’s API encapsulates its internal implementation. Unlike in a monolith, a
+developer can’t write code that bypasses its API. As a result, the microservice architec-
+ture enforces the application’s modularity.
+ Each service in a microservice architecture has its own architecture and, potentially,
+technology stack. But a typical service has a hexagonal architecture. Its API is imple-
+mented by adapters that interact with the service’s business logic. The operations
+Amazon
+SES
+Adapter
+Twilio
+Adapter
+Stripe
+Adapter
+The API Gateway routes
+requests from the mobile
+applications to services.
+Services have APIs.
+A service’s data is private.
+Services corresponding
+to business capabilities/
+DDD subdomains
+API
+Gateway
+Restaurant
+Web UI
+Order
+Service
+Courier
+REST
+API
+REST
+API
+REST
+API
+Consumer
+Restaurant
+Restaurant
+Service
+REST
+API
+Accounting
+Service
+REST
+API
+Notiﬁcation
+Service
+REST
+API
+Kitchen
+Service
+REST
+API
+Delivery
+Service
+REST
+API
+Figure 2.3
+A possible microservice architecture for the FTGO application. It consists of numerous 
+services.
+ 

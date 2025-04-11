@@ -1,0 +1,61 @@
+63
+Defining an application’s microservice architecture
+So far, we’ve identified the services and the operations that each service implements.
+But it’s important to remember that the architecture we’ve sketched out is very
+abstract. We’ve not selected any specific IPC technology. Moreover, even though the
+term operation suggests some kind of synchronous request/response-based IPC mecha-
+nism, you’ll see that asynchronous messaging plays a significant role. Throughout this
+book I describe architecture and design concepts that influence how these services
+collaborate.
+ Chapter 3 describes specific IPC technologies, including synchronous communica-
+tion mechanisms such as REST, and asynchronous messaging using a message broker.
+I discuss how synchronous communication can impact availability and introduce the
+concept of a self-contained service, which doesn’t invoke other services synchronously.
+One way to implement a self-contained service is to use the CQRS pattern, covered in
+chapter 7. The Order Service could, for example, maintain a replica of the data owned
+by the Restaurant Service in order to eliminate the need for it to synchronously
+invoke the Restaurant Service to validate an order. It keeps the replica up-to-date by
+subscribing to events published by the Restaurant Service whenever it updates
+its data.
+ Chapter 4 introduces the saga concept and how it uses asynchronous messaging
+for coordinating the services that participate in the saga. As well as reliably updating
+Table 2.3
+The services, their revised APIs, and their collaborators
+Service
+Operations
+Collaborators
+Consumer Service
+verifyConsumerDetails()
+—
+Order Service
+createOrder()
+Consumer Service
+verifyConsumerDetails()
+Restaurant Service
+verifyOrderDetails()
+Kitchen Service
+createTicket()
+Accounting Service
+authorizeCard()
+Restaurant 
+Service
+findAvailableRestaurants()
+verifyOrderDetails()
+—
+Kitchen Service
+createTicket()
+acceptOrder()
+noteOrderReadyForPickup()
+Delivery Service
+scheduleDelivery()
+Delivery Service
+scheduleDelivery()
+noteUpdatedLocation()
+noteDeliveryPickedUp()
+noteDeliveryDelivered()
+—
+Accounting 
+Service
+authorizeCard()
+—
+ 

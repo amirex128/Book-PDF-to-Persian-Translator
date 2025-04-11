@@ -1,0 +1,62 @@
+48
+CHAPTER 2
+Decomposition strategies
+The responsibilities of each class are as follows:
+
+Consumer—A consumer who places orders.
+
+Order—An order placed by a consumer. It describes the order and tracks its status.
+
+OrderLineItem—A line item of an Order.
+
+DeliveryInfo—The time and place to deliver an order.
+
+Restaurant—A restaurant that prepares orders for delivery to consumers.
+
+MenuItem—An item on the restaurant’s menu.
+
+Courier—A courier who deliver orders to consumers. It tracks the availability of
+the courier and their current location.
+
+Address—The address of a Consumer or a Restaurant.
+
+Location—The latitude and longitude of a Courier.
+A class diagram such as the one in figure 2.7 illustrates one aspect of an application’s
+architecture. But it isn’t much more than a pretty picture without the scenarios to ani-
+mate it. The next step is to define the system operations, which correspond to archi-
+tectural scenarios. 
+DEFINING SYSTEM OPERATIONS
+Once you’ve defined a high-level domain model, the next step is to identify the requests
+that the application must handle. The details of the UI are beyond the scope of this
+book, but you can imagine that in each user scenario, the UI will make requests to the
+backend business logic to retrieve and update data. FTGO is primarily a web applica-
+tion, which means that most requests are HTTP-based, but it’s possible that some clients
+might use messaging. Instead of committing to a specific protocol, therefore, it makes
+sense to use the more abstract notion of a system operation to represent requests.
+ There are two types of system operations:
+Commands—System operations that create, update, and delete data
+Queries—System operations that read (query) data
+Ultimately, these system operations will correspond to REST, RPC, or messaging
+endpoints, but for now thinking of them abstractly is useful. Let’s first identify some
+commands.
+ A good starting point for identifying system commands is to analyze the verbs in the
+user stories and scenarios. Consider, for example, the Place Order story. It clearly sug-
+gests that the system must provide a Create Order operation. Many other stories individ-
+ually map directly to system commands. Table 2.1 lists some of the key system commands.
+Table 2.1
+Key system commands for the FTGO application
+Actor
+Story
+Command
+Description
+Consumer
+Create Order
+createOrder()
+Creates an order
+Restaurant
+Accept Order
+acceptOrder()
+Indicates that the restaurant has 
+accepted the order and is committed 
+to preparing it by the indicated time
+ 

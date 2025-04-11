@@ -1,0 +1,59 @@
+27
+The Microservice architecture pattern language
+OBSERVABILITY PATTERNS PROVIDE INSIGHT INTO APPLICATION BEHAVIOR
+A key part of operating an application is understanding its runtime behavior and trouble-
+shooting problems such as failed requests and high latency. Though understanding and
+troubleshooting a monolithic application isn’t always easy, it helps that requests are han-
+dled in a simple, straightforward way. Each incoming request is load balanced to a par-
+ticular application instance, which makes a few calls to the database and returns a
+response. For example, if you need to understand how a particular request was handled,
+you look at the log file of the application instance that handled the request.
+ In contrast, understanding and diagnosing problems in a microservice architec-
+ture is much more complicated. A request can bounce around between multiple ser-
+vices before a response is finally returned to a client. Consequently, there isn’t one log
+file to examine. Similarly, problems with latency are more difficult to diagnose because
+there are multiple suspects.
+ You can use the following patterns to design observable services:
+Health check API—Expose an endpoint that returns the health of the service.
+Log aggregation—Log service activity and write logs into a centralized logging
+server, which provides searching and alerting.
+Traditional approach of deploying
+services using their language-speciﬁc
+packaging, such as WAR ﬁles
+Automated, self-service
+platform for deploying
+and managing services
+A modern approach,
+which runs your code
+without you having to
+worry about managing
+the infrastructure
+A modern approach, which
+encapsulates a service’s
+technology stack
+Single service
+per host
+Multiple services
+per host
+Serverless
+deployment
+Service-per-container
+Service-per-VM
+Service deployment
+platform
+General
+Alternative A
+Predecessor
+Speciﬁc
+Alternative B
+Successor
+Key
+Problem area
+Figure 1.15
+Several patterns for deploying microservices. The traditional approach is to deploy 
+services in a language-specific packaging format. There are two modern approaches to deploying 
+services. The first deploys services as VM or containers. The second is the serverless approach. 
+You simply upload the service’s code and the serverless platform runs it. You should use a service 
+deployment platform, which is an automated, self-service platform for deploying and managing 
+services.
+ 

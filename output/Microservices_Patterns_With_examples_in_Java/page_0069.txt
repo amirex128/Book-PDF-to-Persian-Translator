@@ -1,0 +1,46 @@
+39
+What is the microservice architecture exactly?
+Surrounding the business logic are adapters. As with ports, there are two types of
+adapters: inbound and outbound. An inbound adapter handles requests from the out-
+side world by invoking an inbound port. An example of an inbound adapter is a
+Spring MVC Controller that implements either a set of REST endpoints or a set of
+web pages. Another example is a message broker client that subscribes to messages.
+Multiple inbound adapters can invoke the same inbound port.
+ An outbound adapter implements an outbound port and handles requests from
+the business logic by invoking an external application or service. An example of an
+outbound adapter is a data access object (DAO) class that implements operations for
+accessing a database. Another example would be a proxy class that invokes a remote
+service. Outbound adapters can also publish events.
+ An important benefit of the hexagonal architectural style is that it decouples the
+business logic from the presentation and data access logic in the adapters. The busi-
+ness logic doesn’t depend on either the presentation logic or the data access logic.
+Business logic
+Browser
+Message broker
+Outbound adapter
+Outbound port
+Outbound adapter
+Inbound port
+Inbound adapter
+Inbound adapter
+Some
+controller
+class
+Message
+consumer
+Messaging
+interface
+Foo
+service
+Repository
+interface
+DAO
+Database
+Message
+producer
+Figure 2.2
+An example of a hexagonal architecture, which consists of the business logic and one or 
+more adapters that communicate with external systems. The business logic has one or more ports. 
+Inbound adapters, which handled requests from external systems, invoke an inbound port. An 
+outbound adapter implements an outbound port, and invokes an external system.
+ 

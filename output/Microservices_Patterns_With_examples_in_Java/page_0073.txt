@@ -1,0 +1,44 @@
+43
+What is the microservice architecture exactly?
+spend time coordinating with developers working on other services. Not sharing data-
+base tables also improves runtime isolation. It ensures, for example, that one service
+can’t hold database locks that block another service. Later on, though, you’ll learn
+that one downside of not sharing databases is that maintaining data consistency and
+querying across services are more complex. 
+THE ROLE OF SHARED LIBRARIES
+Developers often package functionality in a library (module) so that it can be reused
+by multiple applications without duplicating code. After all, where would we be today
+without Maven or npm repositories? You might be tempted to also use shared libraries
+in microservice architecture. On the surface, it looks like a good way to reduce code
+duplication in your services. But you need to ensure that you don’t accidentally intro-
+duce coupling between your services.
+ Imagine, for example, that multiple services need to update the Order business
+object. One approach is to package that functionality as a library that’s used by multi-
+ple services. On one hand, using a library eliminates code duplication. On the other
+hand, consider what happens when the requirements change in a way that affects the
+Order business object. You would need to simultaneously rebuild and redeploy those
+services. A much better approach would be to implement functionality that’s likely to
+change, such as Order management, as a service.
+ You should strive to use libraries for functionality that’s unlikely to change. For
+example, in a typical application it makes no sense for every service to implement a
+generic Money class. Instead, you should create a library that’s used by the services. 
+THE SIZE OF A SERVICE IS MOSTLY UNIMPORTANT
+One problem with the term microservice is that the first thing you hear is micro. This
+suggests that a service should be very small. This is also true of other size-based terms
+such as miniservice or nanoservice. In reality, size isn’t a useful metric.
+ A much better goal is to define a well-designed service to be a service capable of
+being developed by a small team with minimal lead time and with minimal collabora-
+tion with other teams. In theory, a team might only be responsible for a single service,
+so that service is by no means micro. Conversely, if a service requires a large team or
+takes a long time to test, it probably makes sense to split the team and the service. Or
+if you constantly need to change a service because of changes to other services or if it’s
+triggering changes in other services, that’s a sign that it’s not loosely coupled. You
+might even have built a distributed monolith.
+ The microservice architecture structures an application as a set of small, loosely
+coupled services. As a result, it improves the development time attributes—main-
+tainability, testability, deployability, and so on—and enables an organization to
+develop better software faster. It also improves an application’s scalability, although
+that’s not the main goal. To develop a microservice architecture for your application,
+you need to identify the services and determine how they collaborate. Let’s look at
+how to do that. 
+ 

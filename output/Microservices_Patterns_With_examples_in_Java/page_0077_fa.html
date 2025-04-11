@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 77</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>47</p>
+  <p><strong>Defining an application’s microservice architecture</strong></p>
+  <p><strong>the Place Order story</strong>. ما می‌توانیم آن داستان را به سناریوهای کاربری متعددی از جمله این یکی گسترش دهیم:</p>
+  <p>با توجه به یک مصرف‌کننده</p>
+  <p>و یک رستوران</p>
+  <p>و یک آدرس/زمان تحویل که توسط آن رستوران قابل سرویس باشد</p>
+  <p>و یک سفارش کل که حداقل سفارش رستوران را برآورده کند</p>
+  <p>هنگامی که مصرف‌کننده سفارشی را برای رستوران ثبت می‌کند</p>
+  <p>سپس کارت اعتباری مصرف‌کننده مجاز است</p>
+  <p>و یک سفارش در حالت <strong>PENDING_ACCEPTANCE</strong> ایجاد می‌شود</p>
+  <p>و سفارش با مصرف‌کننده مرتبط است</p>
+  <p>و سفارش با رستوران مرتبط است</p>
+  <p>اسم‌ها در این سناریوی کاربر به وجود کلاس‌های مختلفی از جمله</p>
+  <p>مصرف‌کننده، سفارش، رستوران و <strong>CreditCard</strong> اشاره می‌کنند.</p>
+  <p>به طور مشابه، داستان
+   <strong>Accept Order</strong> را می‌توان به یک سناریو مانند این گسترش داد:</p>
+  <p>با توجه به یک سفارش که در حالت <strong>PENDING_ACCEPTANCE</strong> است</p>
+  <p>و یک پیک که برای تحویل سفارش در دسترس است</p>
+  <p>هنگامی که یک رستوران سفارشی را با وعده آماده‌سازی تا یک زمان خاص می‌پذیرد</p>
+  <p>سپس وضعیت سفارش به <strong>ACCEPTED</strong> تغییر می‌کند</p>
+  <p>و <strong>promiseByTime</strong> سفارش به زمان وعده داده شده به‌روزرسانی می‌شود</p>
+  <p>و پیک برای تحویل سفارش منصوب می‌شود</p>
+  <p>این سناریو وجود کلاس‌های پیک و تحویل را پیشنهاد می‌کند. نتیجه نهایی پس از چند تکرار از تجزیه و تحلیل، یک مدل <strong>domain</strong> خواهد بود که، طبق انتظار، از آن کلاس‌ها و سایر موارد، مانند
+   <strong>MenuItem</strong> و
+   <strong>Address</strong>، تشکیل شده است. شکل 2.7 یک نمودار کلاس است که کلاس‌های کلیدی را نشان می‌دهد.</p>
+  <p>مصرف‌کننده</p>
+  <p>سفارش</p>
+  <p>حالت</p>
+  <p>...</p>
+  <p><strong>creditcardId</strong></p>
+  <p>...</p>
+  <p><strong>deliveryTime</strong></p>
+  <p>مقدار</p>
+  <p>نام</p>
+  <p>قیمت</p>
+  <p>خیابان 1</p>
+  <p>خیابان 2</p>
+  <p>شهر</p>
+  <p>ایالت</p>
+  <p>کد پستی</p>
+  <p>نام</p>
+  <p>...</p>
+  <p>در دسترس است</p>
+  <p>...</p>
+  <p>عرض جغرافیایی</p>
+  <p>طول جغرافیایی</p>
+  <p>رستوران</p>
+  <p>پیک</p>
+  <p>موقعیت مکانی</p>
+  <p>اطلاعات پرداخت</p>
+  <p>اطلاعات تحویل</p>
+  <p><strong>OrderLineItem</strong></p>
+  <p><strong>MenuItem</strong></p>
+  <p>آدرس</p>
+  <p>ثبت شده توسط</p>
+  <p>برای</p>
+  <p>منتسب به</p>
+  <p>با استفاده از پرداخت می‌شود</p>
+  <p>با استفاده از پرداخت می‌کند</p>
+  <p>شکل 2.7</p>
+  <p>کلاس‌های کلیدی در مدل <strong>domain</strong> <strong>FTGO</strong></p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

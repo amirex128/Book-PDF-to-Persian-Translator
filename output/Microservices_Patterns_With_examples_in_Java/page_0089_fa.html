@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 89</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>59</p>
+  <p><strong>Defining an application’s microservice architecture</strong></p>
+  <p>از بخش‌های نامرتبط <strong>application</strong>. در شکل فعلی، این کلاس، تقسیم کد را به <strong>services</strong> بسیار دشوار می‌کند.</p>
+  <p>یک راه‌حل این است که کلاس <strong>Order</strong> را در یک کتابخانه بسته‌بندی کرده و یک پایگاه داده سفارش مرکزی ایجاد کنید. همه <strong>services</strong> که سفارشات را پردازش می‌کنند از این کتابخانه استفاده می‌کنند و به پایگاه داده دسترسی پیدا می‌کنند. مشکل این رویکرد این است که یکی از اصول کلیدی معماری <strong>microservice</strong> را نقض می‌کند و منجر به <strong>coupling</strong> نامطلوب و تنگاتنگ می‌شود. به عنوان مثال، هر تغییری در <strong>Order schema</strong>، مستلزم آن است که تیم‌ها کد خود را گام به گام به‌روزرسانی کنند.</p>
+  <p>راه‌حل دیگر این است که پایگاه داده <strong>Order</strong> را در یک <strong>Order Service</strong> محصور کنید، که توسط سایر <strong>services</strong> برای بازیابی و به‌روزرسانی سفارشات فراخوانی می‌شود. مشکل این طراحی این است که <strong>Order Service</strong> یک سرویس داده خواهد بود که دارای یک مدل <strong>domain</strong> ضعیف است که حاوی <strong>business logic</strong> کمی یا بدون <strong>business logic</strong> است. هیچ یک از این گزینه‌ها جذاب نیستند، اما خوشبختانه، <strong>DDD</strong> راه‌حلی ارائه می‌دهد.</p>
+  <p>یک رویکرد بسیار بهتر این است که <strong>DDD</strong> را اعمال کنید و با هر <strong>service</strong> به عنوان یک زیر <strong>domain</strong> جداگانه با مدل <strong>domain</strong> خود رفتار کنید. این بدان معنی است که هر یک از <strong>services</strong> در <strong>application</strong> <strong>FTGO</strong> که با سفارشات مرتبط است، مدل <strong>domain</strong> خود را با نسخه خود از کلاس <strong>Order</strong> دارد. یک مثال عالی از مزیت مدل‌های <strong>domain</strong> متعدد، <strong>Delivery Service</strong> است. <strong>view</strong> آن از یک سفارش، که در شکل 2.11 نشان داده شده است، بسیار ساده است: آدرس تحویل، زمان تحویل، آدرس تحویل و زمان تحویل. علاوه بر این، <strong>Delivery Service</strong> به جای اینکه آن را سفارش بنامد، از نام مناسب‌تری به نام تحویل استفاده می‌کند.
+  </p>
+  <p>سفارش</p>
+  <p><strong>OrderLineItem</strong></p>
+  <p>آدرس</p>
+  <p>پیک</p>
+  <p>مصرف‌کننده</p>
+  <p>رستوران</p>
+  <p>اطلاعات پرداخت</p>
+  <p><strong>OrderTotal</strong></p>
+  <p><strong>deliveryTime</strong></p>
+  <p>وضعیت</p>
+  <p><<تحویل>></p>
+  <p><strong>pickupTime</strong></p>
+  <p><<صورتحساب>></p>
+  <p><strong>transactionid</strong></p>
+  <p><<ثبت سفارش>></p>
+  <p>ایجاد()</p>
+  <p>لغو()</p>
+  <p><<رستوران>></p>
+  <p>پذیرش()</p>
+  <p>رد()</p>
+  <p><strong>noteReadyForPickup()</strong></p>
+  <p>شکل 2.10</p>
+  <p>کلاس <strong>Order god</strong> با مسئولیت‌های متعددی متورم شده است.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

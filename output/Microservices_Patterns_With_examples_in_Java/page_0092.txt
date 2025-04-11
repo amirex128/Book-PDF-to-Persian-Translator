@@ -1,0 +1,51 @@
+62
+CHAPTER 2
+Decomposition strategies
+it might make sense to assign an operation to the service that has the information nec-
+essary to handle it.
+ Table 2.2 shows which services in the FTGO application are responsible for which
+operations.
+After having assigned operations to services, the next step is to decide how the services
+collaborate in order to handle each system operation. 
+DETERMINING THE APIS REQUIRED TO SUPPORT COLLABORATION BETWEEN SERVICES
+Some system operations are handled entirely by a single service. For example, in the
+FTGO application, the Consumer Service handles the createConsumer() operation
+entirely by itself. But other system operations span multiple services. The data needed
+to handle one of these requests might, for instance, be scattered around multiple ser-
+vices. For example, in order to implement the createOrder() operation, the Order
+Service must invoke the following services in order to verify its preconditions and
+make the post-conditions become true:
+
+Consumer Service—Verify that the consumer can place an order and obtain their
+payment information.
+
+Restaurant Service—Validate the order line items, verify that the delivery
+address/time is within the restaurant’s service area, verify order minimum is
+met, and obtain prices for the order line items.
+
+Kitchen Service—Create the Ticket.
+
+Accounting Service—Authorize the consumer’s credit card.
+Similarly, in order to implement the acceptOrder() system operation, the Kitchen
+Service must invoke the Delivery Service to schedule a courier to deliver the order.
+Table 2.3 shows the services, their revised APIs, and their collaborators. In order to
+fully define the service APIs, you need to analyze each system operation and deter-
+mine what collaboration is required.
+Table 2.2
+Mapping system operations to services in the FTGO application
+Service
+Operations
+Consumer Service
+createConsumer()
+Order Service
+createOrder()
+Restaurant Service
+findAvailableRestaurants()
+Kitchen Service
+acceptOrder()
+noteOrderReadyForPickup()
+Delivery Service
+noteUpdatedLocation()
+noteDeliveryPickedUp()
+noteDeliveryDelivered()
+ 

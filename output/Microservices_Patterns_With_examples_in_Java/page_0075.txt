@@ -1,0 +1,45 @@
+45
+Defining an application’s microservice architecture
+the more abstract notion of system operation. A system operation is an abstraction of a
+request that the application must handle. It’s either a command, which updates data,
+or a query, which retrieves data. The behavior of each command is defined in terms
+of an abstract domain model, which is also derived from the requirements. The sys-
+tem operations become the architectural scenarios that illustrate how the services
+collaborate.
+ The second step in the process is to determine the decomposition into services.
+There are several strategies to choose from. One strategy, which has its origins in the
+discipline of business architecture, is to define services corresponding to business
+capabilities. Another strategy is to organize services around domain-driven design sub-
+domains. The end result is services that are organized around business concepts
+rather than technical concepts.
+ The third step in defining the application’s architecture is to determine each ser-
+vice’s API. To do that, you assign each system operation identified in the first step to a
+service. A service might implement an operation entirely by itself. Alternatively, it
+might need to collaborate with other services. In that case, you determine how the ser-
+vices collaborate, which typically requires services to support additional operations.
+You’ll also need to decide which of the IPC mechanisms I describe in chapter 3 to
+implement each service’s API.
+ There are several obstacles to decomposition. The first is network latency. You
+might discover that a particular decomposition would be impractical due to too many
+round-trips between services. Another obstacle to decomposition is that synchronous
+communication between services reduces availability. You might need to use the con-
+cept of self-contained services, described in chapter 3. The third obstacle is the
+requirement to maintain data consistency across services. You’ll typically need to use
+sagas, discussed in chapter 4. The fourth and final obstacle to decomposition is so-
+called god classes, which are used throughout an application. Fortunately, you can use
+concepts from domain-driven design to eliminate god classes.
+ This section first describes how to identity an application’s operations. After that,
+we’ll look at strategies and guidelines for decomposing an application into services,
+and at obstacles to decomposition and how to address them. Finally, I’ll describe how
+to define each service’s API.
+2.2.1
+Identifying the system operations
+The first step in defining an application’s architecture is to define the system opera-
+tions. The starting point is the application’s requirements, including user stories and
+their associated user scenarios (note that these are different from the architectural
+scenarios). The system operations are identified and defined using the two-step pro-
+cess shown in figure 2.6. This process is inspired by the object-oriented design process
+covered in Craig Larman’s book Applying UML and Patterns (Prentice Hall, 2004) (see
+www.craiglarman.com/wiki/index.php?title=Book_Applying_UML_and_Patterns for
+details). The first step creates the high-level domain model consisting of the key classes
+ 

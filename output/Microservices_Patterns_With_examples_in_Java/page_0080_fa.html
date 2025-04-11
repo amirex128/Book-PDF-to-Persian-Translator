@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 80</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>50</p>
+  <p>فصل 2</p>
+  <p><strong>Decomposition strategies</strong></p>
+  <p>پیش‌شرط‌ها و شرایط پس از آن، سناریوی کاربر را از قبل منعکس می‌کنند.</p>
+  <p>اکثر عملیات سیستم مرتبط با معماری، دستورات هستند. با این حال، گاهی اوقات، <strong>queries</strong>، که داده‌ها را بازیابی می‌کنند، نیز مهم هستند.</p>
+  <p>علاوه بر پیاده‌سازی دستورات، یک <strong>application</strong> باید <strong>queries</strong> را نیز پیاده‌سازی کند. <strong>queries</strong> اطلاعاتی را که کاربر برای تصمیم‌گیری به آن نیاز دارد، به <strong>UI</strong> ارائه می‌دهند. در این مرحله، ما یک طراحی
+   <strong>UI</strong> خاص را برای <strong>application</strong> <strong>FTGO</strong> در نظر نداریم، اما به عنوان مثال، جریان زمانی که یک مصرف‌کننده یک سفارش را ثبت می‌کند، در نظر بگیرید:</p>
+  <p>1 کاربر آدرس و زمان تحویل را وارد می‌کند.</p>
+  <p>2 سیستم رستوران‌های موجود را نمایش می‌دهد.</p>
+  <p>3 کاربر رستوران را انتخاب می‌کند.</p>
+  <p>4 سیستم منو را نمایش می‌دهد.</p>
+  <p>5 کاربر مورد را انتخاب می‌کند و پرداخت می‌کند.</p>
+  <p>6 سیستم سفارش ایجاد می‌کند.</p>
+  <p>این سناریوی کاربر، <strong>queries</strong> زیر را پیشنهاد می‌کند:</p>
+  <ul>
+   <li>
+    <strong>findAvailableRestaurants(deliveryAddress, deliveryTime)</strong>—رستوران‌هایی را بازیابی می‌کند که می‌توانند به آدرس تحویل مشخص شده در زمان مشخص شده تحویل دهند
+   </li>
+   <li>
+    <strong>findRestaurantMenu(id)</strong>—اطلاعاتی در مورد یک رستوران از جمله اقلام منو بازیابی می‌کند
+   </li>
+  </ul>
+  <p>از بین دو <strong>queries</strong>،
+   <strong>findAvailableRestaurants()</strong> احتمالاً از نظر معماری مهم‌ترین است. این یک <strong>query</strong> پیچیده است که شامل <strong>geosearch</strong> است. مؤلفه
+   <strong>geosearch</strong> <strong>query</strong> شامل یافتن تمام نقاط - رستوران‌ها - است که در نزدیکی یک مکان - آدرس تحویل - قرار دارند. همچنین رستوران‌هایی را که زمانی که سفارش باید آماده و تحویل گرفته شود، فیلتر می‌کند. علاوه بر این، عملکرد بسیار مهم است، زیرا این
+   <strong>query</strong> هر زمان که یک مصرف‌کننده بخواهد سفارشی را ثبت کند، اجرا می‌شود.
+  </p>
+  <p>مدل <strong>domain</strong> سطح بالا و عملیات سیستم، آنچه را که <strong>application</strong> انجام می‌دهد، ثبت می‌کنند. آن‌ها به تعریف معماری <strong>application</strong> کمک می‌کنند. رفتار هر عملیات سیستم بر اساس مدل <strong>domain</strong> توصیف می‌شود. هر عملیات سیستم مهم، یک سناریوی مهم معماری را نشان می‌دهد که بخشی از توصیف معماری است.
+  </p>
+  <p>پس از تعریف عملیات سیستم، گام بعدی شناسایی <strong>services</strong> <strong>application</strong> است. همانطور که قبلاً ذکر شد، یک فرآیند مکانیکی برای دنبال کردن وجود ندارد. با این حال، استراتژی‌های تجزیه مختلفی وجود دارد که می‌توانید از آن‌ها استفاده کنید. هر کدام از یک دیدگاه متفاوت به این مشکل حمله می‌کنند و از اصطلاحات خاص خود استفاده می‌کنند. اما با تمام استراتژی‌ها، نتیجه نهایی یکسان است: معماری متشکل از <strong>services</strong> که در درجه اول حول مفاهیم کسب‌وکار سازماندهی شده‌اند تا مفاهیم فنی.
+  </p>
+  <p>بیایید به اولین استراتژی نگاهی بیندازیم که <strong>services</strong> را متناظر با قابلیت‌های کسب‌وکار تعریف می‌کند.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 57</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>27</p>
+  <p><strong>The Microservice architecture pattern language</strong></p>
+  <p><strong>OBSERVABILITY PATTERNS PROVIDE INSIGHT INTO APPLICATION BEHAVIOR</strong></p>
+  <p>یک بخش کلیدی از راه‌اندازی یک <strong>application</strong>، درک رفتار زمان اجرای آن و عیب‌یابی مشکلاتی مانند درخواست‌های ناموفق و تأخیر بالا است. اگرچه درک و عیب‌یابی یک <strong>application monolithic</strong> همیشه آسان نیست، اما این به این دلیل کمک می‌کند که درخواست‌ها به روشی ساده و سرراست مدیریت می‌شوند. هر درخواست ورودی به یک نمونه <strong>application</strong> خاص <strong>load balanced</strong> می‌شود، که چند تماس به پایگاه داده برقرار می‌کند و پاسخ را برمی‌گرداند. به عنوان مثال، اگر نیاز دارید بدانید که چگونه یک درخواست خاص مدیریت شده است، به فایل <strong>log</strong> نمونه <strong>application</strong> که درخواست را مدیریت کرده است، نگاه می‌کنید.</p>
+  <p>
+   در مقابل، درک و تشخیص مشکلات در معماری <strong>microservice</strong> بسیار پیچیده‌تر است. یک درخواست می‌تواند قبل از اینکه پاسخی در نهایت به یک <strong>client</strong> بازگردانده شود، بین چندین <strong>service</strong> جابه‌جا شود. در نتیجه، یک فایل
+   <strong>log</strong> واحد برای بررسی وجود ندارد. به طور مشابه، مشکلات مربوط به تأخیر تشخیص آن دشوارتر است زیرا چندین مظنون وجود دارد.
+  </p>
+  <p>شما می‌توانید از الگوهای زیر برای طراحی <strong>services</strong> قابل مشاهده استفاده کنید:</p>
+  <ul>
+   <li>
+    <strong>Health check API</strong>—یک <strong>endpoint</strong> را در معرض دید قرار دهید که سلامت <strong>service</strong> را برمی‌گرداند.
+   </li>
+   <li>
+    تجمیع <strong>Log</strong>—فعالیت <strong>service</strong> را ثبت کنید و <strong>logs</strong> را در یک سرور ثبت مرکزی بنویسید، که جستجو و هشدار را ارائه می‌دهد.
+   </li>
+  </ul>
+  <p>رویکرد سنتی استقرار</p>
+  <p><strong>services</strong> با استفاده از بسته‌بندی مختص زبان آن‌ها، مانند فایل‌های <strong>WAR</strong></p>
+  <p>پلتفرم خودکار و سلف سرویس</p>
+  <p>برای استقرار</p>
+  <p>و مدیریت <strong>services</strong></p>
+  <p>یک رویکرد مدرن،</p>
+  <p>که کد شما را اجرا می‌کند</p>
+  <p>بدون اینکه شما نگران</p>
+  <p>مدیریت زیرساخت باشید</p>
+  <p>یک رویکرد مدرن، که</p>
+  <p><strong>technology stack</strong> یک <strong>service</strong> را کپسوله می‌کند</p>
+  <p><strong>Service-per-VM</strong></p>
+  <p><strong>Service-per-container</strong></p>
+  <p>استقرار <strong>Serverless</strong></p>
+  <p><strong>Service</strong></p>
+  <p>پلتفرم استقرار</p>
+  <p><strong>General</strong></p>
+  <p>جایگزین <strong>A</strong></p>
+  <p>پیشینی</p>
+  <p>خاص</p>
+  <p>جایگزین <strong>B</strong></p>
+  <p>جانشین</p>
+  <p>کلید</p>
+  <p>حوزه مشکل</p>
+  <p>شکل 1.15</p>
+  <p>الگوهای متعددی برای استقرار <strong>microservices</strong>. رویکرد سنتی این است که <strong>services</strong> را در یک قالب بسته‌بندی خاص زبان مستقر کنید. دو رویکرد مدرن برای استقرار <strong>services</strong> وجود دارد. اولین مورد، <strong>services</strong> را به عنوان
+   <strong>VM</strong> یا <strong>container</strong> مستقر می‌کند. دومی رویکرد <strong>serverless</strong> است. شما به سادگی کد <strong>service</strong> را آپلود می‌کنید و پلتفرم <strong>serverless</strong> آن را اجرا می‌کند. شما باید از یک پلتفرم استقرار <strong>service</strong> استفاده کنید، که یک پلتفرم خودکار و سلف سرویس برای استقرار و مدیریت <strong>services</strong> است.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 91</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>61</p>
+  <p><strong>Defining an application’s microservice architecture</strong></p>
+  <p>کارت اعتباری مصرف‌کننده، باید ایجاد <strong>Ticket</strong> را در <strong>Kitchen Service</strong> فعال کند. به طور مشابه، اگر رستوران سفارش را از طریق <strong>Kitchen Service</strong> رد کند، باید در <strong>service Order Service</strong> لغو شود، و مشتری در <strong>service billing</strong> اعتبار دریافت کند. در فصل 4، شما یاد خواهید گرفت که چگونه سازگاری بین <strong>services</strong> را با استفاده از مکانیسم
+   <strong>event-driven</strong> قبلاً ذکر شده، <strong>sagas</strong>، حفظ کنید.
+  </p>
+  <p>علاوه بر ایجاد چالش‌های فنی، داشتن مدل‌های <strong>domain</strong> متعدد، بر پیاده‌سازی تجربه کاربر نیز تأثیر می‌گذارد. یک <strong>application</strong> باید بین تجربه کاربر، که مدل <strong>domain</strong> خود است، و مدل‌های <strong>domain</strong> هر یک از <strong>services</strong>، ترجمه کند. به عنوان مثال، در <strong>application</strong> <strong>FTGO</strong>، وضعیت سفارش نشان داده شده به یک مصرف‌کننده، از اطلاعات سفارش ذخیره شده در <strong>services</strong> متعدد مشتق شده است. این ترجمه اغلب توسط
+   <strong>API gateway</strong> انجام می‌شود که در فصل 8 مورد بحث قرار می‌گیرد. علیرغم این چالش‌ها، ضروری است که کلاس‌های <strong>god</strong> را شناسایی و حذف کنید.
+  </p>
+  <p>اکنون به نحوه تعریف
+   <strong>APIs service</strong> نگاهی می‌اندازیم.
+  </p>
+  <p>2.2.6</p>
+  <p><strong>Defining service APIs</strong></p>
+  <p>تاکنون، ما یک لیست از عملیات سیستم و لیستی از <strong>services</strong> بالقوه داریم. گام بعدی، تعریف <strong>API</strong> هر <strong>service</strong> است: عملیات و رویدادهای آن. یک عملیات <strong>API service</strong> به یکی از دو دلیل وجود دارد: برخی از عملیات‌ها با عملیات سیستم مطابقت دارند. آن‌ها توسط <strong>clients</strong> خارجی و احتمالاً توسط سایر <strong>services</strong> فراخوانی می‌شوند. عملیات‌های دیگر برای پشتیبانی از همکاری بین <strong>services</strong> وجود دارند. این عملیات‌ها فقط توسط سایر
+   <strong>services</strong> فراخوانی می‌شوند.
+  </p>
+  <p>یک <strong>service</strong> رویدادهایی را منتشر می‌کند که در درجه اول برای فعال کردن آن برای همکاری با سایر
+   <strong>services</strong> استفاده می‌شود. فصل 4 توضیح می‌دهد که چگونه می‌توان از رویدادها برای پیاده‌سازی <strong>sagas</strong> استفاده کرد که سازگاری داده‌ها را در <strong>services</strong> حفظ می‌کنند. و فصل 7 در مورد چگونگی استفاده از رویدادها برای به‌روزرسانی <strong>CQRS views</strong>، که از <strong>querying</strong> کارآمد پشتیبانی می‌کنند، بحث می‌کند. یک <strong>application</strong> همچنین می‌تواند از رویدادها برای اطلاع‌رسانی به <strong>clients</strong> خارجی استفاده کند. به عنوان مثال، می‌توانست از <strong>WebSockets</strong> برای ارائه رویدادها به یک مرورگر استفاده کند.
+  </p>
+  <p>نقطه شروع برای تعریف <strong>APIs service</strong>، نگاشت هر عملیات سیستم به یک <strong>service</strong> است. پس از آن، ما تصمیم می‌گیریم که آیا یک <strong>service</strong> برای پیاده‌سازی یک عملیات سیستم نیاز به همکاری با دیگران دارد یا خیر. اگر همکاری لازم باشد، ما سپس تعیین می‌کنیم که آن <strong>services</strong> دیگر برای پشتیبانی از همکاری، چه <strong>APIs</strong> باید ارائه دهند. بیایید با نگاهی به نحوه اختصاص عملیات سیستم به <strong>services</strong> شروع کنیم.</p>
+  <p><strong>ASSIGNING SYSTEM OPERATIONS TO SERVICES</strong></p>
+  <p>اولین قدم این است که تصمیم بگیرید کدام <strong>service</strong> نقطه ورود اولیه برای یک درخواست است. بسیاری از عملیات سیستم به‌طور مرتب به یک <strong>service</strong> نگاشت می‌شوند، اما گاهی اوقات نگاشت کمتر واضح است. به عنوان مثال، عملیات
+   <strong>noteUpdatedLocation()</strong> را در نظر بگیرید، که موقعیت پیک را به‌روزرسانی می‌کند. از یک طرف، به دلیل ارتباط آن با پیک‌ها، این عملیات باید به <strong>service</strong> <strong>Courier</strong> اختصاص داده شود. از سوی دیگر، <strong>Delivery Service</strong> است که به موقعیت مکانی پیک نیاز دارد. در این مورد، اختصاص یک عملیات به یک <strong>service</strong> که به اطلاعات ارائه شده توسط عملیات نیاز دارد، انتخاب بهتری است. در موقعیت‌های دیگر،</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

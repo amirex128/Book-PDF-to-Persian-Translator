@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices_Patterns_With_examples_in_Java - فارسی</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+        }
+        .book-title {
+            text-align: center;
+            font-size: 24pt;
+            margin: 3cm 0 1cm 0;
+        }
+        .book-subtitle {
+            text-align: center;
+            font-size: 18pt;
+            margin-bottom: 3cm;
+        }
+        .toc {
+            margin: 2cm 0;
+            padding: 1cm;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            page-break-after: always;
+        }
+        .toc h2 {
+            margin-bottom: 1cm;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .toc li {
+            margin: 0.5cm 0;
+            padding-right: 1cm;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #2980b9;
+        }
+        .chapter {
+            margin-bottom: 1cm;
+            page-break-before: always;
+        }
+        .chapter:first-of-type {
+            page-break-before: avoid;
+        }
+        .chapter-content {
+            margin-bottom: 1cm;
+        }
+        .persian-translation {
+            font-size: 14pt;
+        }
+        .page-images {
+            text-align: center;
+            margin: 1cm 0;
+            page-break-before: always;
+        }
+        .page-images img {
+            max-width: 100%;
+            height: auto;
+            margin: 0.5cm 0;
+        }
+        pre {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            direction: ltr;
+            text-align: left;
+        }
+        span[dir="ltr"] {
+            display: inline-block;
+            direction: ltr;
+            text-align: left;
+        }
+        .page-number {
+            text-align: center;
+            margin-top: 1cm;
+            font-size: 10pt;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="book-title">Microservices_Patterns_With_examples_in_Java</h1>
+    <h2 class="book-subtitle">نسخه ترجمه شده</h2>
+        <!-- Page 0001 -->
+        <div class="chapter" id="page-0001">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p>
+<strong style="font-size: 1.5em;">M A N N I N G</strong>
+</p>
+<p>
+<em style="font-size: 1.2em;">Chris Richardson</em>
+</p>
+</div>
+</div>
+                <div class="page-images">
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_1.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_2.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_3.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_4.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_5.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_6.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_7.png"/></div>
+<div class="page-image"><img alt="Image from page 1" src="page_0001/image_8.png"/></div>
+</div>
+                <div class="page-number">صفحه 0001</div>
+            </div>
+        </div>
+        <!-- Page 0002 -->
+        <div class="chapter" id="page-0002">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<h3 style="font-size: 1.5em;">List of Patterns</h3>
+<h4>Application architecture patterns</h4>
+<ul>
+<li><strong>Monolithic architecture</strong> (40)</li>
+<li><strong>Microservice architecture</strong> (40)</li>
+</ul>
+<h4>Decomposition patterns</h4>
+<ul>
+<li>Decompose by business capability (51)</li>
+<li>Decompose by subdomain (54)</li>
+</ul>
+<h4>Messaging style patterns</h4>
+<ul>
+<li>Messaging (85)</li>
+<li>Remote procedure invocation (72)</li>
+</ul>
+<h4>Reliable communications patterns</h4>
+<ul>
+<li>Circuit breaker (78)</li>
+</ul>
+<h4>Service discovery patterns</h4>
+<ul>
+<li>3rd party registration (85)</li>
+<li>Client-side discovery (83)</li>
+<li>Self-registration (82)</li>
+<li>Server-side discovery (85)</li>
+</ul>
+<h4>Transactional messaging patterns</h4>
+<ul>
+<li>Polling publisher (98)</li>
+<li>Transaction log tailing (99)</li>
+<li>Transactional outbox (98)</li>
+</ul>
+<h4>Data consistency patterns</h4>
+<ul>
+<li>Saga (114)</li>
+</ul>
+<h4>Business logic design patterns</h4>
+<ul>
+<li>Aggregate (150)</li>
+<li>Domain event (160)</li>
+<li>Domain model (150)</li>
+<li>Event sourcing (184)</li>
+<li>Transaction script (149)</li>
+</ul>
+<h4>Querying patterns</h4>
+<ul>
+<li>API composition (223)</li>
+<li>Command query responsibility segregation (228)</li>
+</ul>
+<h4>External API patterns</h4>
+<ul>
+<li>API gateway (259)</li>
+<li>Backends for frontends (265)</li>
+</ul>
+<h4>Testing patterns</h4>
+<ul>
+<li>Consumer-driven contract test (302)</li>
+<li>Consumer-side contract test (303)</li>
+<li>Service component test (335)</li>
+</ul>
+<h4>Security patterns</h4>
+<ul>
+<li>Access token (354)</li>
+</ul>
+<h4>Cross-cutting concerns patterns</h4>
+<ul>
+<li>Externalized configuration (361)</li>
+<li>Microservice chassis (379)</li>
+</ul>
+<h4>Observability patterns</h4>
+<ul>
+<li>Application metrics (373)</li>
+<li>Audit logging (377)</li>
+<li>Distributed tracing (370)</li>
+<li>Exception tracking (376)</li>
+<li>Health check API (366)</li>
+<li>Log aggregation (368)</li>
+</ul>
+<h4>Deployment patterns</h4>
+<ul>
+<li>Deploy a service as a container (393)</li>
+<li>Deploy a service as a VM (390)</li>
+<li>Language-specific packaging format (387)</li>
+<li>Service mesh (380)</li>
+<li>Serverless deployment (416)</li>
+<li>Sidecar (410)</li>
+</ul>
+<h4>Refactoring to microservices patterns</h4>
+<ul>
+<li>Anti-corruption layer (447)</li>
+<li>Strangler application (432)</li>
+</ul>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0002</div>
+            </div>
+        </div>
+        <!-- Page 0003 -->
+        <div class="chapter" id="page-0003">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<h3 style="font-size: 1.5em;">Microservices Patterns</h3>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0003</div>
+            </div>
+        </div>
+        <!-- Page 0005 -->
+        <div class="chapter" id="page-0005">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<h3 style="font-size: 1.5em;">Microservices Patterns</h3>
+<p style="font-style: italic;">WITH EXAMPLES IN JAVA</p>
+<p>
+<strong style="font-size: 1.2em;">CHRIS RICHARDSON</strong>
+</p>
+<p>
+<strong style="font-size: 1.2em;">M A N N I N G</strong>
+</p>
+<p>SHELTER ISLAND</p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0005</div>
+            </div>
+        </div>
+        <!-- Page 0006 -->
+        <div class="chapter" id="page-0006">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p>برای اطلاعات online و سفارش این و سایر کتاب‌های Manning، لطفاً از وب‌سایت
+    <a href="http://www.manning.com">www.manning.com</a> بازدید کنید. ناشر برای این کتاب
+    در صورت سفارش عمده، تخفیف ارائه می‌دهد.</p>
+<p>برای اطلاعات بیشتر، لطفاً با بخش فروش ویژه تماس بگیرید:</p>
+<p>
+<strong>Special Sales Department</strong>
+<br/>
+    Manning Publications Co.
+    <br/>
+    20 Baldwin Road
+    <br/>
+    PO Box 761
+    <br/>
+    Shelter Island, NY 11964
+    <br/>
+    Email: <a href="mailto:orders@manning.com">orders@manning.com</a>
+</p>
+<p>©2019 by Chris Richardson. All rights reserved.</p>
+<p>
+    هیچ بخشی از این publication نباید تکثیر، در یک system بازیابی ذخیره یا منتقل شود،
+    به هر form یا توسط means الکترونیکی، مکانیکی، فتوکپی یا غیره، بدون written قبلی
+    از publisher.
+  </p>
+<p>
+    بسیاری از designations مورد استفاده توسط تولیدکنندگان و فروشندگان برای تمایز محصولاتشان به عنوان
+    trademarks ادعا شده‌اند. در جایی که آن designations در کتاب ظاهر می‌شوند، و Manning
+    Publications از یک trademark claim آگاه بود، designations در initial caps
+    یا all caps چاپ شده‌اند.
+  </p>
+<p>
+    با درک اهمیت حفظ آنچه نوشته شده است، این policy از Manning است که کتاب‌هایی را که منتشر می‌کنیم
+    روی کاغذ acid-free چاپ کنیم و ما بهترین تلاش خود را در این راستا انجام می‌دهیم.
+    همچنین با درک مسئولیت خود در حفظ منابع سیاره‌مان، کتاب‌های Manning
+    بر روی کاغذی چاپ می‌شوند که حداقل 15 درصد آن بازیافتی است و بدون استفاده از
+    کلر عنصری پردازش شده است.
+  </p>
+<p>Manning Publications Co.</p>
+<p>
+    Development editor: Marina Michaels
+    <br/>
+    20 Baldwin Road
+    <br/>
+    Technical development editor: Christian Mennerich
+    <br/>
+    PO Box 761
+    <br/>
+    Review editor: Aleksandar Dragosavljevic´
+    <br/>
+    Shelter Island, NY 11964
+    <br/>
+    Project editor: Lori Weidert
+    <br/>
+    Copy editor: Corbin Collins
+    <br/>
+    Proofreader: Alyson Brener
+    <br/>
+    Technical proofreader: Andy Miles
+    <br/>
+    Typesetter: Dennis Dalinnik
+    <br/>
+    Cover designer: Marija Tudor
+    <br/>
+    ISBN: 9781617294549
+    <br/>
+    Printed in the United States of America
+    <br/>
+    1 2 3 4 5 6 7 8 9 10 – DP – 23 22 21 20 19 18
+  </p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0006</div>
+            </div>
+        </div>
+        <!-- Page 0007 -->
+        <div class="chapter" id="page-0007">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p>
+    Where you see wrong or inequality or injustice, speak out, because this is your country.
+    This is your democracy. Make it. Protect it. Pass it on.
+  </p>
+<p>
+    — Thurgood Marshall, Justice of the Supreme Court
+  </p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0007</div>
+            </div>
+        </div>
+        <!-- Page 0009 -->
+        <div class="chapter" id="page-0009">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">vii</p>
+<p>brief contents</p>
+<ol>
+<li>
+      ■
+      Escaping monolithic hell
+      <span style="float: right;">1</span>
+</li>
+<li>
+      ■
+      Decomposition strategies
+      <span style="float: right;">33</span>
+</li>
+<li>
+      ■
+      Interprocess communication in a microservice architecture
+      <span style="float: right;">65</span>
+</li>
+<li>
+      ■
+      Managing transactions with sagas
+      <span style="float: right;">110</span>
+</li>
+<li>
+      ■
+      Designing business logic in a microservice architecture
+      <span style="float: right;">146</span>
+</li>
+<li>
+      ■
+      Developing business logic with event sourcing
+      <span style="float: right;">183</span>
+</li>
+<li>
+      ■
+      Implementing queries in a microservice architecture
+      <span style="float: right;">220</span>
+</li>
+<li>
+      ■
+      External API patterns
+      <span style="float: right;">253</span>
+</li>
+<li>
+      ■
+      Testing microservices: Part 1
+      <span style="float: right;">292</span>
+</li>
+<li>
+      ■
+      Testing microservices: Part 2
+      <span style="float: right;">318</span>
+</li>
+<li>
+      ■
+      Developing production-ready services
+      <span style="float: right;">348</span>
+</li>
+<li>
+      ■
+      Deploying microservices
+      <span style="float: right;">383</span>
+</li>
+<li>
+      ■
+      Refactoring to microservices
+      <span style="float: right;">428</span>
+</li>
+</ol>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0009</div>
+            </div>
+        </div>
+        <!-- Page 0011 -->
+        <div class="chapter" id="page-0011">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">ix</p>
+<p>contents</p>
+<p>preface <span style="float: right;">xvii</span></p>
+<p>acknowledgments <span style="float: right;">xx</span></p>
+<p>about this book <span style="float: right;">xxii</span></p>
+<p>about the cover illustration <span style="float: right;">xxvi</span></p>
+<p>
+    1
+    <br/>
+    ■
+    Escaping monolithic hell
+    <span style="float: right;">1</span>
+</p>
+<p>
+    1.1
+    <br/>
+    The slow march toward monolithic hell
+    <span style="float: right;">2</span>
+</p>
+<p>The architecture of the FTGO application <span style="float: right;">3</span></p>
+<p>
+    ■The benefits of the monolithic architecture
+    <span style="float: right;">4</span>
+</p>
+<p>
+    ■Living in monolithic hell
+    <span style="float: right;">4</span>
+</p>
+<p>
+    1.2
+    <br/>
+    Why this book is relevant to you
+    <span style="float: right;">7</span>
+</p>
+<p>
+    1.3
+    <br/>
+    What you’ll learn in this book
+    <span style="float: right;">7</span>
+</p>
+<p>
+    1.4
+    <br/>
+    Microservice architecture to the rescue
+    <span style="float: right;">8</span>
+</p>
+<p>Scale cube and microservices <span style="float: right;">8</span></p>
+<p>
+    ■Microservices as a form of modularity
+    <span style="float: right;">11</span>
+</p>
+<p>
+    ■Each service has its own database
+    <span style="float: right;">12</span>
+</p>
+<p>The FTGO microservice architecture <span style="float: right;">12</span></p>
+<p>
+    ■Comparing the microservice architecture and SOA
+    <span style="float: right;">13</span>
+</p>
+<p>
+    1.5
+    <br/>
+    Benefits and drawbacks of the microservice architecture
+    <span style="float: right;">14</span>
+</p>
+<p>Benefits of the microservice architecture <span style="float: right;">14</span></p>
+<p>
+    ■Drawbacks of the microservice architecture
+    <span style="float: right;">17</span>
+</p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0011</div>
+            </div>
+        </div>
+        <!-- Page 0012 -->
+        <div class="chapter" id="page-0012">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">CONTENTS</p>
+<p style="float: right;">x</p>
+<p>
+    1.6
+    <br/>
+    The Microservice architecture pattern language
+    <span style="float: right;">19</span>
+</p>
+<p>Microservice architecture is not a silver bullet <span style="float: right;">19</span></p>
+<p>
+    ■Patterns and pattern languages
+    <span style="float: right;">20</span>
+</p>
+<p>
+    ■Overview of the Microservice architecture pattern language
+    <span style="float: right;">23</span>
+</p>
+<p>
+    1.7
+    <br/>
+    Beyond microservices: Process and organization
+    <span style="float: right;">29</span>
+</p>
+<p>Software development and delivery organization <span style="float: right;">29</span></p>
+<p>
+    ■Software development and delivery process
+    <span style="float: right;">30</span>
+</p>
+<p>
+    ■The human side of adopting microservices
+    <span style="float: right;">31</span>
+</p>
+<p>
+    2
+    <br/>
+    Decomposition strategies
+    <span style="float: right;">33</span>
+</p>
+<p>
+    2.1
+    <br/>
+    What is the microservice architecture exactly?
+    <span style="float: right;">34</span>
+</p>
+<p>What is software architecture and why does it matter? <span style="float: right;">34</span></p>
+<p>Overview of architectural styles <span style="float: right;">37</span></p>
+<p>
+    ■The microservice architecture is an architectural style
+    <span style="float: right;">40</span>
+</p>
+<p>
+    2.2
+    <br/>
+    Defining an application’s microservice architecture
+    <span style="float: right;">44</span>
+</p>
+<p>Identifying the system operations <span style="float: right;">45</span></p>
+<p>
+    ■Defining services by applying the Decompose by business capability pattern
+    <span style="float: right;">51</span>
+</p>
+<p>Defining services by applying the Decompose by sub-domain pattern <span style="float: right;">54</span></p>
+<p>
+    ■Decomposition guidelines
+    <span style="float: right;">56</span>
+</p>
+<p>
+    ■Obstacles to decomposing an application into services
+    <span style="float: right;">57</span>
+</p>
+<p>
+    ■Defining service APIs
+    <span style="float: right;">61</span>
+</p>
+<p>
+    3
+    <br/>
+    Interprocess communication in a microservice architecture
+    <span style="float: right;">65</span>
+</p>
+<p>
+    3.1
+    <br/>
+    Overview of interprocess communication in a microservice architecture
+    <span style="float: right;">66</span>
+</p>
+<p>Interaction styles <span style="float: right;">67</span></p>
+<p>
+    ■Defining APIs in a microservice architecture
+    <span style="float: right;">68</span>
+</p>
+<p>
+    ■Evolving APIs
+    <span style="float: right;">69</span>
+</p>
+<p>
+    ■Message formats
+    <span style="float: right;">71</span>
+</p>
+<p>
+    3.2
+    <br/>
+    Communicating using the synchronous Remote procedure invocation pattern
+    <span style="float: right;">72</span>
+</p>
+<p>Using REST <span style="float: right;">73</span></p>
+<p>
+    ■Using gRPC
+    <span style="float: right;">76</span>
+</p>
+<p>
+    ■Handling partial failure using the Circuit breaker pattern
+    <span style="float: right;">77</span>
+</p>
+<p>
+    ■Using service discovery
+    <span style="float: right;">80</span>
+</p>
+<p>
+    3.3
+    <br/>
+    Communicating using the Asynchronous messaging pattern
+    <span style="float: right;">85</span>
+</p>
+<p>Overview of messaging <span style="float: right;">86</span></p>
+<p>
+    ■Implementing the interaction styles using messaging
+    <span style="float: right;">87</span>
+</p>
+<p>
+    ■Creating an API specification for a messaging-based service API
+    <span style="float: right;">89</span>
+</p>
+<p>
+    ■Using a message broker
+    <span style="float: right;">90</span>
+</p>
+<p>Competing receivers and message ordering <span style="float: right;">94</span></p>
+<p>
+    ■Handling duplicate messages
+    <span style="float: right;">95</span>
+</p>
+<p>
+    ■Transactional messaging
+    <span style="float: right;">97</span>
+</p>
+<p>Libraries and frameworks for messaging <span style="float: right;">100</span></p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0012</div>
+            </div>
+        </div>
+        <!-- Page 0013 -->
+        <div class="chapter" id="page-0013">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">CONTENTS</p>
+<p style="float: right;">xi</p>
+<p>
+    3.4
+    <br/>
+    Using asynchronous messaging to improve availability
+    <span style="float: right;">103</span>
+</p>
+<p>Synchronous communication reduces availability <span style="float: right;">103</span></p>
+<p>Eliminating synchronous interaction <span style="float: right;">104</span></p>
+<p>
+    4
+    <br/>
+    Managing transactions with sagas
+    <span style="float: right;">110</span>
+</p>
+<p>
+    4.1
+    <br/>
+    Transaction management in a microservice architecture
+    <span style="float: right;">111</span>
+</p>
+<p>The need for distributed transactions in a microservice architecture <span style="float: right;">112</span></p>
+<p>
+    ■The trouble with distributed transactions
+    <span style="float: right;">112</span>
+</p>
+<p>
+    ■Using the Saga pattern to maintain data consistency
+    <span style="float: right;">114</span>
+</p>
+<p>
+    4.2
+    <br/>
+    Coordinating sagas
+    <span style="float: right;">117</span>
+</p>
+<p>Choreography-based sagas <span style="float: right;">118</span></p>
+<p>
+    ■Orchestration-based sagas
+    <span style="float: right;">121</span>
+</p>
+<p>
+    4.3
+    <br/>
+    Handling the lack of isolation
+    <span style="float: right;">126</span>
+</p>
+<p>Overview of anomalies <span style="float: right;">127</span></p>
+<p>
+    ■Countermeasures for handling the lack of isolation
+    <span style="float: right;">128</span>
+</p>
+<p>
+    4.4
+    <br/>
+    The design of the Order Service and the Create Order Saga
+    <span style="float: right;">132</span>
+</p>
+<p>The OrderService class <span style="float: right;">133</span></p>
+<p>
+    ■The implementation of the Create Order Saga
+    <span style="float: right;">135</span>
+</p>
+<p>
+    ■The OrderCommandHandlers class
+    <span style="float: right;">142</span>
+</p>
+<p>The OrderServiceConfiguration class <span style="float: right;">143</span></p>
+<p>
+    5
+    <br/>
+    Designing business logic in a microservice architecture
+    <span style="float: right;">146</span>
+</p>
+<p>
+    5.1
+    <br/>
+    Business logic organization patterns
+    <span style="float: right;">147</span>
+</p>
+<p>Designing business logic using the Transaction script pattern <span style="float: right;">149</span></p>
+<p>Designing business logic using the Domain model pattern <span style="float: right;">150</span></p>
+<p>About Domain-driven design <span style="float: right;">151</span></p>
+<p>
+    5.2
+    <br/>
+    Designing a domain model using the DDD aggregate pattern
+    <span style="float: right;">152</span>
+</p>
+<p>The problem with fuzzy boundaries <span style="float: right;">153</span></p>
+<p>
+    ■Aggregates have explicit boundaries
+    <span style="float: right;">154</span>
+</p>
+<p>
+    ■Aggregate rules
+    <span style="float: right;">155</span>
+</p>
+<p>
+    ■Aggregate granularity
+    <span style="float: right;">158</span>
+</p>
+<p>
+    ■Designing business logic with aggregates
+    <span style="float: right;">159</span>
+</p>
+<p>
+    5.3
+    <br/>
+    Publishing domain events
+    <span style="float: right;">160</span>
+</p>
+<p>Why publish change events? <span style="float: right;">160</span></p>
+<p>
+    ■What is a domain event?
+    <span style="float: right;">161</span>
+</p>
+<p>
+    ■Event enrichment
+    <span style="float: right;">161</span>
+</p>
+<p>
+    ■Identifying domain events
+    <span style="float: right;">162</span>
+</p>
+<p>
+    ■Generating and publishing domain events
+    <span style="float: right;">164</span>
+</p>
+<p>Consuming domain events <span style="float: right;">167</span></p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0013</div>
+            </div>
+        </div>
+        <!-- Page 0014 -->
+        <div class="chapter" id="page-0014">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">CONTENTS</p>
+<p style="float: right;">xii</p>
+<p>
+    5.4
+    <br/>
+    Kitchen Service business logic
+    <span style="float: right;">168</span>
+</p>
+<p>The Ticket aggregate <span style="float: right;">169</span></p>
+<p>
+    5.5
+    <br/>
+    Order Service business logic
+    <span style="float: right;">173</span>
+</p>
+<p>The Order Aggregate <span style="float: right;">175</span></p>
+<p>
+    ■The OrderService class
+    <span style="float: right;">180</span>
+</p>
+<p>
+    6
+    <br/>
+    Developing business logic with event sourcing
+    <span style="float: right;">183</span>
+</p>
+<p>
+    6.1
+    <br/>
+    Developing business logic using event sourcing
+    <span style="float: right;">184</span>
+</p>
+<p>The trouble with traditional persistence <span style="float: right;">185</span></p>
+<p>
+    ■Overview of event sourcing
+    <span style="float: right;">186</span>
+</p>
+<p>
+    ■Handling concurrent updates using optimistic locking
+    <span style="float: right;">193</span>
+</p>
+<p>
+    ■Event sourcing and publishing events
+    <span style="float: right;">194</span>
+</p>
+<p>Using snapshots to improve performance <span style="float: right;">195</span></p>
+<p>
+    ■Idempotent message processing
+    <span style="float: right;">197</span>
+</p>
+<p>
+    ■Evolving domain events
+    <span style="float: right;">198</span>
+</p>
+<p>Benefits of event sourcing <span style="float: right;">199</span></p>
+<p>
+    ■Drawbacks of event sourcing
+    <span style="float: right;">200</span>
+</p>
+<p>
+    6.2
+    <br/>
+    Implementing an event store
+    <span style="float: right;">202</span>
+</p>
+<p>How the Eventuate Local event store works <span style="float: right;">203</span></p>
+<p>
+    ■The Eventuate client framework for Java
+    <span style="float: right;">205</span>
+</p>
+<p>
+    6.3
+    <br/>
+    Using sagas and event sourcing together
+    <span style="float: right;">209</span>
+</p>
+<p>Implementing choreography-based sagas using event sourcing <span style="float: right;">210</span></p>
+<p>Creating an orchestration-based saga <span style="float: right;">211</span></p>
+<p>
+    ■Implementing an event sourcing-based saga participant
+    <span style="float: right;">213</span>
+</p>
+<p>
+    ■Implementing saga orchestrators using event sourcing
+    <span style="float: right;">216</span>
+</p>
+<p>
+    7
+    <br/>
+    Implementing queries in a microservice architecture
+    <span style="float: right;">220</span>
+</p>
+<p>
+    7.1
+    <br/>
+    Querying using the API composition pattern
+    <span style="float: right;">221</span>
+</p>
+<p>The findOrder() query operation <span style="float: right;">221</span></p>
+<p>
+    ■Overview of the API composition pattern
+    <span style="float: right;">222</span>
+</p>
+<p>
+    ■Implementing the findOrder() query operation using the API composition pattern
+    <span style="float: right;">224</span>
+</p>
+<p>
+    ■API composition design issues
+    <span style="float: right;">225</span>
+</p>
+<p>
+    ■The benefits and drawbacks of the API composition pattern
+    <span style="float: right;">227</span>
+</p>
+<p>
+    7.2
+    <br/>
+    Using the CQRS pattern
+    <span style="float: right;">228</span>
+</p>
+<p>Motivations for using CQRS <span style="float: right;">229</span></p>
+<p>
+    ■Overview of CQRS
+    <span style="float: right;">232</span>
+</p>
+<p>The benefits of CQRS <span style="float: right;">235</span></p>
+<p>
+    ■The drawbacks of CQRS
+    <span style="float: right;">236</span>
+</p>
+<p>
+    7.3
+    <br/>
+    Designing CQRS views
+    <span style="float: right;">236</span>
+</p>
+<p>Choosing a view datastore <span style="float: right;">237</span></p>
+<p>
+    ■Data access module design
+    <span style="float: right;">239</span>
+</p>
+<p>Adding and updating CQRS views <span style="float: right;">241</span></p>
+<p>
+    7.4
+    <br/>
+    Implementing a CQRS view with AWS DynamoDB
+    <span style="float: right;">242</span>
+</p>
+<p>The OrderHistoryEventHandlers module <span style="float: right;">243</span></p>
+<p>Data modeling and query design with DynamoDB <span style="float: right;">244</span></p>
+<p>The OrderHistoryDaoDynamoDb class <span style="float: right;">249</span></p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0014</div>
+            </div>
+        </div>
+        <!-- Page 0015 -->
+        <div class="chapter" id="page-0015">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">CONTENTS</p>
+<p style="float: right;">xiii</p>
+<p>
+    8
+    <br/>
+    External API patterns
+    <span style="float: right;">253</span>
+</p>
+<p>
+    8.1
+    <br/>
+    External API design issues
+    <span style="float: right;">254</span>
+</p>
+<p>API design issues for the FTGO mobile client <span style="float: right;">255</span></p>
+<p>
+    ■API design issues for other kinds of clients
+    <span style="float: right;">258</span>
+</p>
+<p>
+    8.2
+    <br/>
+    The API gateway pattern
+    <span style="float: right;">259</span>
+</p>
+<p>Overview of the API gateway pattern <span style="float: right;">259</span></p>
+<p>
+    ■Benefits and drawbacks of an API gateway
+    <span style="float: right;">267</span>
+</p>
+<p>
+    ■Netflix as an example of an API gateway
+    <span style="float: right;">267</span>
+</p>
+<p>
+    ■API gateway design issues
+    <span style="float: right;">268</span>
+</p>
+<p>
+    8.3
+    <br/>
+    Implementing an API gateway
+    <span style="float: right;">271</span>
+</p>
+<p>Using an off-the-shelf API gateway product/service <span style="float: right;">271</span></p>
+<p>Developing your own API gateway <span style="float: right;">273</span></p>
+<p>
+    ■Implementing an API gateway using GraphQL
+    <span style="float: right;">279</span>
+</p>
+<p>
+    9
+    <br/>
+    Testing microservices: Part 1
+    <span style="float: right;">292</span>
+</p>
+<p>
+    9.1
+    <br/>
+    Testing strategies for microservice architectures
+    <span style="float: right;">294</span>
+</p>
+<p>Overview of testing <span style="float: right;">294</span></p>
+<p>
+    ■The challenge of testing microservices
+    <span style="float: right;">299</span>
+</p>
+<p>
+    ■The deployment pipeline
+    <span style="float: right;">305</span>
+</p>
+<p>
+    9.2
+    <br/>
+    Writing unit tests for a service
+    <span style="float: right;">307</span>
+</p>
+<p>Developing unit tests for entities <span style="float: right;">309</span></p>
+<p>
+    ■Writing unit tests for value objects
+    <span style="float: right;">310</span>
+</p>
+<p>
+    ■Developing unit tests for sagas
+    <span style="float: right;">310</span>
+</p>
+<p>
+    ■Writing unit tests for domain services
+    <span style="float: right;">312</span>
+</p>
+<p>
+    ■Developing unit tests for controllers
+    <span style="float: right;">313</span>
+</p>
+<p>
+    ■Writing unit tests for event and message handlers
+    <span style="float: right;">315</span>
+</p>
+<p>
+    10
+    <br/>
+    Testing microservices: Part 2
+    <span style="float: right;">318</span>
+</p>
+<p>
+    10.1
+    <br/>
+    Writing integration tests
+    <span style="float: right;">319</span>
+</p>
+<p>Persistence integration tests <span style="float: right;">321</span></p>
+<p>
+    ■Integration testing REST-based request/response style interactions
+    <span style="float: right;">322</span>
+</p>
+<p>
+    ■Integration testing publish/subscribe-style interactions
+    <span style="float: right;">326</span>
+</p>
+<p>
+    ■Integration contract tests for asynchronous request/response interactions
+    <span style="float: right;">330</span>
+</p>
+<p>
+    10.2
+    <br/>
+    Developing component tests
+    <span style="float: right;">335</span>
+</p>
+<p>Defining acceptance tests <span style="float: right;">336</span></p>
+<p>
+    ■Writing acceptance tests using Gherkin
+    <span style="float: right;">337</span>
+</p>
+<p>
+    ■Designing component tests
+    <span style="float: right;">339</span>
+</p>
+<p>
+    ■Writing component tests for the FTGO Order Service
+    <span style="float: right;">340</span>
+</p>
+<p>
+    10.3
+    <br/>
+    Writing end-to-end tests
+    <span style="float: right;">345</span>
+</p>
+<p>Designing end-to-end tests <span style="float: right;">345</span></p>
+<p>
+    ■Writing end-to-end tests
+    <span style="float: right;">346</span>
+</p>
+<p>Running end-to-end tests <span style="float: right;">346</span></p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0015</div>
+            </div>
+        </div>
+        <!-- Page 0016 -->
+        <div class="chapter" id="page-0016">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">CONTENTS</p>
+<p style="float: right;">xiv</p>
+<p>
+    11
+    <br/>
+    Developing production-ready services
+    <span style="float: right;">348</span>
+</p>
+<p>
+    11.1
+    <br/>
+    Developing secure services
+    <span style="float: right;">349</span>
+</p>
+<p>Overview of security in a traditional monolithic application <span style="float: right;">350</span></p>
+<p>Implementing security in a microservice architecture <span style="float: right;">353</span></p>
+<p>
+    11.2
+    <br/>
+    Designing configurable services
+    <span style="float: right;">360</span>
+</p>
+<p>Using push-based externalized configuration <span style="float: right;">362</span></p>
+<p>
+    ■Using pull-based externalized configuration
+    <span style="float: right;">363</span>
+</p>
+<p>
+    11.3
+    <br/>
+    Designing observable services
+    <span style="float: right;">364</span>
+</p>
+<p>Using the Health check API pattern <span style="float: right;">366</span></p>
+<p>
+    ■Applying the Log aggregation pattern
+    <span style="float: right;">368</span>
+</p>
+<p>
+    ■Using the Distributed tracing pattern
+    <span style="float: right;">370</span>
+</p>
+<p>
+    ■Applying the Application metrics pattern
+    <span style="float: right;">373</span>
+</p>
+<p>Using the Exception tracking pattern <span style="float: right;">376</span></p>
+<p>
+    ■Applying the Audit logging pattern
+    <span style="float: right;">377</span>
+</p>
+<p>
+    11.4
+    <br/>
+    Developing services using the Microservice chassis pattern
+    <span style="float: right;">378</span>
+</p>
+<p>Using a microservice chassis <span style="float: right;">379</span></p>
+<p>
+    ■From microservice chassis to service mesh
+    <span style="float: right;">380</span>
+</p>
+<p>
+    12
+    <br/>
+    Deploying microservices
+    <span style="float: right;">383</span>
+</p>
+<p>
+    12.1
+    <br/>
+    Deploying services using the Language-specific packaging format pattern
+    <span style="float: right;">386</span>
+</p>
+<p>Benefits of the Service as a language-specific package pattern <span style="float: right;">388</span></p>
+<p>Drawbacks of the Service as a language-specific package pattern <span style="float: right;">389</span></p>
+<p>
+    12.2
+    <br/>
+    Deploying services using the Service as a virtual machine pattern
+    <span style="float: right;">390</span>
+</p>
+<p>The benefits of deploying services as VMs <span style="float: right;">392</span></p>
+<p>
+    ■The drawbacks of deploying services as VMs
+    <span style="float: right;">392</span>
+</p>
+<p>
+    12.3
+    <br/>
+    Deploying services using the Service as a container pattern
+    <span style="float: right;">393</span>
+</p>
+<p>Deploying services using Docker <span style="float: right;">395</span></p>
+<p>
+    ■Benefits of deploying services as containers
+    <span style="float: right;">398</span>
+</p>
+<p>
+    ■Drawbacks of deploying services as containers
+    <span style="float: right;">399</span>
+</p>
+<p>
+    12.4
+    <br/>
+    Deploying the FTGO application with Kubernetes
+    <span style="float: right;">399</span>
+</p>
+<p>Overview of Kubernetes <span style="float: right;">399</span></p>
+<p>
+    ■Deploying the Restaurant service on Kubernetes
+    <span style="float: right;">402</span>
+</p>
+<p>
+    ■Deploying the API gateway
+    <span style="float: right;">405</span>
+</p>
+<p>Zero-downtime deployments <span style="float: right;">406</span></p>
+<p>
+    ■Using a service mesh to separate deployment from release
+    <span style="float: right;">407</span>
+</p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0016</div>
+            </div>
+        </div>
+        <!-- Page 0017 -->
+        <div class="chapter" id="page-0017">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<p style="font-size: 1.2em;">CONTENTS</p>
+<p style="float: right;">xv</p>
+<p>
+    12.5
+    <br/>
+    Deploying services using the Serverless deployment pattern
+    <span style="float: right;">415</span>
+</p>
+<p>Overview of serverless deployment with AWS Lambda <span style="float: right;">416</span></p>
+<p>Developing a lambda function <span style="float: right;">417</span></p>
+<p>
+    ■Invoking lambda functions
+    <span style="float: right;">417</span>
+</p>
+<p>
+    ■Benefits of using lambda functions
+    <span style="float: right;">418</span>
+</p>
+<p>Drawbacks of using lambda functions <span style="float: right;">419</span></p>
+<p>
+    12.6
+    <br/>
+    Deploying a RESTful service using AWS Lambda and AWS Gateway
+    <span style="float: right;">419</span>
+</p>
+<p>The design of the AWS Lambda version of Restaurant Service <span style="float: right;">419</span></p>
+<p>Packaging the service as ZIP file <span style="float: right;">424</span></p>
+<p>
+    ■Deploying lambda functions using the Serverless framework
+    <span style="float: right;">425</span>
+</p>
+<p>
+    13
+    <br/>
+    Refactoring to microservices
+    <span style="float: right;">428</span>
+</p>
+<p>
+    13.1
+    <br/>
+    Overview of refactoring to microservices
+    <span style="float: right;">429</span>
+</p>
+<p>Why refactor a monolith? <span style="float: right;">429</span></p>
+<p>
+    ■Strangling the monolith
+    <span style="float: right;">430</span>
+</p>
+<p>
+    13.2
+    <br/>
+    Strategies for refactoring a monolith to microservices
+    <span style="float: right;">433</span>
+</p>
+<p>Implement new features as services <span style="float: right;">434</span></p>
+<p>
+    ■Separate presentation tier from the backend
+    <span style="float: right;">436</span>
+</p>
+<p>
+    ■Extract business capabilities into services
+    <span style="float: right;">437</span>
+</p>
+<p>
+    13.3
+    <br/>
+    Designing how the service and the monolith collaborate
+    <span style="float: right;">443</span>
+</p>
+<p>Designing the integration glue <span style="float: right;">444</span></p>
+<p>
+    ■Maintaining data consistency across a service and a monolith
+    <span style="float: right;">449</span>
+</p>
+<p>
+    ■Handling authentication and authorization
+    <span style="float: right;">453</span>
+</p>
+<p>
+    13.4
+    <br/>
+    Implementing a new feature as a service: handling misdelivered orders
+    <span style="float: right;">455</span>
+</p>
+<p>The design of Delayed Delivery Service <span style="float: right;">456</span></p>
+<p>
+    ■Designing the integration glue for Delayed Delivery Service
+    <span style="float: right;">457</span>
+</p>
+<p>
+    13.5
+    <br/>
+    Breaking apart the monolith: extracting delivery management
+    <span style="float: right;">459</span>
+</p>
+<p>Overview of existing delivery management functionality <span style="float: right;">460</span></p>
+<p>Overview of Delivery Service <span style="float: right;">462</span></p>
+<p>
+    ■Designing the Delivery Service domain model
+    <span style="float: right;">463</span>
+</p>
+<p>
+    ■The design of the Delivery Service integration glue
+    <span style="float: right;">465</span>
+</p>
+<p>
+    ■Changing the FTGO monolith to interact with Delivery Service
+    <span style="float: right;">467</span>
+</p>
+<p>index <span style="float: right;">473</span></p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0017</div>
+            </div>
+        </div>
+        <!-- Page 0019 -->
+        <div class="chapter" id="page-0019">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<h3><mark>پیشگفتار</mark></h3>
+<p>یکی از نقل قول‌های مورد علاقه‌ی من این است:</p>
+<p><em>"آینده از قبل اینجاست—فقط به طور مساوی توزیع نشده است."</em></p>
+<p>— ویلیام گیبسون، نویسنده داستان‌های علمی تخیلی</p>
+<p>
+   خلاصه این نقل قول این است که ایده‌ها و تکنولوژی‌های جدید مدتی طول می‌کشد تا
+   در یک جامعه پخش شوند و به طور گسترده پذیرفته شوند. یک مثال خوب از انتشار
+   آهسته‌ی ایده‌ها، داستان چگونگی کشف
+   microservices توسط من است. این ماجرا در سال 2006 آغاز شد، زمانی که، پس از
+   اینکه از یک سخنرانی توسط یک مبلغ AWS الهام گرفتم، مسیری را شروع کردم که در
+   نهایت منجر به ایجاد Cloud Foundry اصلی توسط من شد. (تنها وجه اشتراک با Cloud Foundry
+   امروزی نام آن است.) Cloud Foundry یک Platform-as-a-Service (PaaS) برای
+   اتوماسیون استقرار برنامه‌های Java بر روی EC2 بود. مانند هر
+   application دیگری از نوع enterprise Java که ساخته بودم، Cloud Foundry من دارای
+   یک معماری monolith بود که متشکل از یک فایل Java Web Application Archive (WAR) بود.
+  </p>
+<p>
+   بسته‌بندی یک مجموعه متنوع و پیچیده از توابع مانند provisioning، configuration،
+   monitoring و management در یک monolith، چالش‌هایی را هم در توسعه و هم در
+   operations ایجاد کرد. به عنوان مثال، شما نمی‌توانستید UI را بدون تست و
+   redeploy کردن کل application تغییر دهید. و از آنجایی که جزء monitoring و management
+   به یک موتور Complex Event Processing (CEP) متکی بود که state را در حافظه نگه می‌داشت، ما
+   نمی‌توانستیم چندین instance از application را اجرا کنیم! اعتراف به این موضوع شرم‌آور است،
+   اما تنها چیزی که می‌توانم بگویم این است که من یک software developer هستم و "بگذارید آن کس که
+   بی‌گناه است، اولین سنگ را پرتاب کند."
+  </p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0019</div>
+            </div>
+        </div>
+        <!-- Page 0020 -->
+        <div class="chapter" id="page-0020">
+            <div class="chapter-content">
+                <div class="translated-content">
+<div>
+<h3><mark>PREFACE</mark></h3>
+<p>
+   به وضوح، این application به سرعت از معماری monolith خود فراتر رفته بود، اما چه
+   جایگزینی وجود داشت؟ پاسخ مدتی در جامعه software در شرکت‌هایی مانند eBay و Amazon
+   وجود داشت. به عنوان مثال، Amazon
+   مهاجرت از monolith را در حدود سال 2002 آغاز کرد
+   (
+   <a href="https://plus.google.com/110981030061712822816/posts/AaygmbzVeRq" target="_blank">
+    https://plus.google.com/110981030061712822816/
+    posts/AaygmbzVeRq
+   </a>
+   ). معماری جدید، monolith را با مجموعه‌ای از
+   loosely coupled services جایگزین کرد. Services توسط چیزی که Amazon آن را two-pizza
+   teams می‌نامد، متعلق به آن هستند—تیم‌هایی به اندازه کافی کوچک که با دو پیتزا تغذیه
+   شوند.
+  </p>
+<p>
+   Amazon این معماری را برای تسریع سرعت توسعه software اتخاذ کرده بود تا شرکت
+   بتواند سریع‌تر نوآوری کند و به طور موثرتری رقابت کند. نتایج چشمگیر است: طبق گزارش‌ها،
+   Amazon هر 11.6 ثانیه تغییراتی را در production پیاده‌سازی می‌کند!
+  </p>
+<p>
+   در اوایل سال 2010، پس از اینکه به پروژه‌های دیگری منتقل شدم، آینده معماری
+   software سرانجام با من همگام شد. در آن زمان بود که کتاب The Art of Scalability:
+   Scalable Web Architecture, Processes, and Organizations for the Modern Enterprise
+   (Addison-Wesley Professional, 2009) نوشته Michael T. Fisher و Martin L. Abbott
+   را خواندم. یک ایده کلیدی در آن کتاب، scale cube است که، همانطور که در فصل 2
+   توضیح داده شده است، یک مدل سه بعدی برای مقیاس‌بندی یک application است. مقیاس‌بندی
+   محور Y که توسط scale cube تعریف شده است، یک application را به صورت functional به
+   services تجزیه می‌کند. در گذشته، این کاملاً واضح بود، اما برای من در آن زمان، یک لحظه
+   a-ha بود! من می‌توانستم چالش‌هایی را که دو سال قبل با آن مواجه بودم با
+   architecting Cloud Foundry به عنوان مجموعه‌ای از services حل کنم!
+  </p>
+<p>
+   در آوریل 2012، اولین سخنرانی خود را در مورد این رویکرد معماری ارائه دادم، با عنوان
+   “Decomposing Applications of Deployability and Scalability”
+   (
+   <a href="www.slideshare.net/chris.e.richardson/decomposing-applications-for-scalability-and-deployability-april-2012" target="_blank">www.slideshare.net/chris.e.richardson/decomposing-applications-for-scalability-and-deployability-april-2012</a>
+   ). در آن زمان، اصطلاحاً
+   accepted برای این نوع معماری وجود نداشت. من گاهی اوقات آن را modular، polyglot
+   architecture می‌نامیدم، زیرا services می‌توانستند به زبان‌های مختلف نوشته شوند.
+  </p>
+<p>
+   اما در مثالی دیگر از اینکه چگونه آینده به طور نامساوی توزیع شده است، اصطلاح
+   microservice در یک کارگاه معماری software در سال 2011 برای توصیف این نوع
+   architecture استفاده شد
+   (
+   <a href="https://en.wikipedia.org/wiki/Microservices" target="_blank">https://en.wikipedia.org/wiki/Microservices</a>
+   ).
+   من اولین بار این اصطلاح را زمانی شنیدم که Fred George در Oredev 2013 سخنرانی
+   کرد و آن را دوست داشتم!
+  </p>
+<p>
+   در ژانویه 2014، وب‌سایت
+   <a href="https://microservices.io" target="_blank">https://microservices.io</a>
+   را برای مستندسازی الگوهای architecture و design که با آن مواجه شده بودم، ایجاد
+   کردم. سپس در مارس 2014، James Lewis و Martin Fowler یک پست وبلاگ در مورد
+   microservices منتشر کردند (
+   <a href="https://martinfowler.com/articles/microservices.html" target="_blank">https://martinfowler.com/articles/microservices.html</a>
+   ). با popularizing اصطلاح microservices، پست وبلاگ باعث شد تا جامعه software حول
+   این مفهوم متمرکز شود.
+  </p>
+<p>
+   ایده teams کوچک و loosely coupled که به سرعت و به طور قابل اعتماد
+   microservices را توسعه و ارائه می‌دهند، به آرامی در حال انتشار در جامعه software
+   است. اما احتمالاً این vision از آینده با واقعیت روزانه شما بسیار متفاوت است. امروزه،
+   business-critical enterprise applications معمولاً monoliths بزرگی هستند که توسط
+   تیم‌های بزرگ توسعه یافته‌اند. releases از software به ندرت اتفاق می‌افتد و اغلب برای
+   همه افراد درگیر دردناک است. IT اغلب برای همگام شدن با نیازهای business تلاش
+   می‌کند. شما می‌پرسید چگونه می‌توانید معماری microservice را اتخاذ کنید.
+  </p>
+</div>
+</div>
+                <div class="page-images">
+</div>
+                <div class="page-number">صفحه 0020</div>
+            </div>
+        </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

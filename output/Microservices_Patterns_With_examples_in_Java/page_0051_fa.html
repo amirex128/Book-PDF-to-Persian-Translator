@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 51</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>21</p>
+  <p><strong>The Microservice architecture pattern language</strong></p>
+  <p>یک دلیل ارزشمند بودن <strong>patterns</strong> این است که یک <strong>pattern</strong> باید زمینه‌ای را که در آن اعمال می‌شود، توصیف کند. این ایده که یک راه‌حل مختص یک زمینه خاص است و ممکن است در زمینه‌های دیگر خوب عمل نکند، پیشرفتی نسبت به نحوه بحث معمول فناوری دارد. به عنوان مثال، یک راه‌حل که مشکل را در مقیاس
+   <strong>Netflix</strong> حل می‌کند، ممکن است بهترین رویکرد برای یک <strong>application</strong> با کاربران کمتر نباشد.
+  </p>
+  <p>با این حال، ارزش یک <strong>pattern</strong>، فراتر از این است که شما را ملزم به در نظر گرفتن زمینه یک مشکل کند. این شما را مجبور می‌کند که جنبه‌های حیاتی دیگر، اما اغلب نادیده گرفته شده، از یک راه‌حل را توصیف کنید. یک ساختار <strong>pattern</strong> که معمولاً استفاده می‌شود شامل سه بخش ارزشمند است:</p>
+  <ul>
+   <li>نیروها</li>
+   <li>زمینه نتیجه</li>
+   <li>الگوهای مرتبط</li>
+  </ul>
+  <p>بیایید به هر یک از این موارد، با شروع از نیروها، نگاهی بیندازیم.</p>
+  <p><strong>FORCES: THE ISSUES THAT YOU MUST ADDRESS WHEN SOLVING A PROBLEM</strong></p>
+  <p>بخش نیروهای یک <strong>pattern</strong>، نیروها (مسائل) را توصیف می‌کند که هنگام حل یک مشکل در یک زمینه معین باید به آن‌ها رسیدگی کنید. نیروها می‌توانند با هم تضاد داشته باشند، بنابراین ممکن است نتوانید همه آن‌ها را حل کنید. اینکه کدام نیروها مهم‌تر هستند به زمینه بستگی دارد. شما باید اولویت‌بندی کنید که برخی از نیروها را نسبت به دیگران حل کنید. به عنوان مثال، کد باید به راحتی قابل درک باشد و عملکرد خوبی داشته باشد. کدی که به سبک واکنشی نوشته شده است عملکرد بهتری نسبت به کد همزمان دارد، اما اغلب درک آن دشوارتر است. فهرست کردن صریح نیروها مفید است زیرا مشخص می‌کند که کدام مسائل باید حل شوند.</p>
+  <p><strong>RESULTING CONTEXT: THE CONSEQUENCES OF APPLYING A PATTERN</strong></p>
+  <p>بخش زمینه حاصل یک <strong>pattern</strong>، عواقب اعمال <strong>pattern</strong> را توصیف می‌کند. این شامل سه قسمت است:</p>
+  <ul>
+   <li>مزایا - مزایای <strong>pattern</strong>، از جمله نیروهایی که حل شده‌اند</li>
+   <li>معایب - معایب <strong>pattern</strong>، از جمله نیروهای حل نشده</li>
+   <li>مسائل - مشکلات جدیدی که با اعمال <strong>pattern</strong> معرفی شده‌اند</li>
+  </ul>
+  <p>زمینه حاصل، دیدگاهی کامل‌تر و کم‌طرفدارانه از راه‌حل ارائه می‌دهد که امکان تصمیم‌گیری بهتر در طراحی را فراهم می‌کند.</p>
+  <p><strong>RELATED PATTERNS: THE FIVE DIFFERENT TYPES OF RELATIONSHIPS</strong></p>
+  <p>بخش الگوهای مرتبط یک <strong>pattern</strong>، رابطه بین <strong>pattern</strong> و سایر الگوها را توصیف می‌کند. پنج نوع رابطه بین الگوها وجود دارد:</p>
+  <ul>
+   <li>
+    پیشینی - یک الگوی پیشینی، الگویی است که نیاز به این <strong>pattern</strong> را ایجاد می‌کند. به عنوان مثال، الگوی معماری <strong>Microservice</strong>، پیشینی سایر الگوها در زبان <strong>pattern</strong>، به جز الگوی معماری <strong>monolithic</strong> است.
+   </li>
+   <li>
+    جانشین - الگویی که مشکلی را که توسط این <strong>pattern</strong> معرفی شده است، حل می‌کند. به عنوان مثال، اگر الگوی معماری <strong>Microservice</strong> را اعمال کنید، باید
+   </li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+12
+CHAPTER 1
+Escaping monolithic hell
+the API and access an internal class as you can with a Java package. As a result, it’s
+much easier to preserve the modularity of the application over time. There are other
+benefits of using services as building blocks, including the ability to deploy and scale
+them independently. 
+1.4.3
+Each service has its own database
+A key characteristic of the microservice architecture is that the services are loosely
+coupled and communicate only via APIs. One way to achieve loose coupling is by each
+service having its own datastore. In the online store, for example, Order Service has a
+database that includes the ORDERS table, and Customer Service has its database, which
+includes the CUSTOMERS table. At development time, developers can change a service’s
+schema without having to coordinate with developers working on other services. At
+runtime, the services are isolated from each other—for example, one service will
+never be blocked because another service holds a database lock.
+Now that we’ve defined the microservice architecture and described some of its essen-
+tial characteristics, let’s look at how this applies to the FTGO application. 
+1.4.4
+The FTGO microservice architecture
+The rest of this book discusses the FTGO application’s microservice architecture in
+depth. But first let’s quickly look at what it means to apply Y-axis scaling to this applica-
+tion. If we apply Y-axis decomposition to the FTGO application, we get the architec-
+ture shown in figure 1.7. The decomposed application consists of numerous frontend
+and backend services. We would also apply X-axis and, possibly Z-axis scaling, so that
+at runtime there would be multiple instances of each service.
+ The frontend services include an API gateway and the Restaurant Web UI. The API
+gateway, which plays the role of a facade and is described in detail in chapter 8, provides
+the REST APIs that are used by the consumers’ and couriers’ mobile applications. The
+Restaurant Web UI implements the web interface that’s used by the restaurants to man-
+age menus and process orders.
+ The FTGO application’s business logic consists of numerous backend services.
+Each backend service has a REST API and its own private datastore. The backend ser-
+vices include the following:
+
+Order Service—Manages orders
+
+Delivery Service—Manages delivery of orders from restaurants to consumers
+Don’t worry: Loose coupling doesn’t make Larry Ellison richer
+The requirement for each service to have its own database doesn’t mean it has its
+own database server. You don’t, for example, have to spend 10 times more on Oracle
+RDBMS licenses. Chapter 2 explores this topic in depth.
+ 

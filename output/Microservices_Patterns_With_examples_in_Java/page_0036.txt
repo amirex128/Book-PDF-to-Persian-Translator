@@ -1,0 +1,45 @@
+6
+CHAPTER 1
+Escaping monolithic hell
+deploying changes to production many times a day during business hours. Apparently,
+as of 2011, Amazon.com deployed a change into production every 11.6 seconds with-
+out ever impacting the user! For the FTGO developers, updating production more
+than once a month seems like a distant dream. And adopting continuous deployment
+seems next to impossible.
+ FTGO has partially adopted agile. The engineering team is divided into squads
+and uses two-week sprints. Unfortunately, the journey from code complete to running
+in production is long and arduous. One problem with so many developers committing
+to the same code base is that the build is frequently in an unreleasable state. When the
+FTGO developers tried to solve this problem by using feature branches, their attempt
+resulted in lengthy, painful merges. Consequently, once a team completes its sprint, a
+long period of testing and code stabilization follows.
+ Another reason it takes so long to get changes into production is that testing takes
+a long time. Because the code base is so complex and the impact of a change isn’t well
+understood, developers and the Continuous Integration (CI) server must run the
+entire test suite. Some parts of the system even require manual testing. It also takes a
+while to diagnose and fix the cause of a test failure. As a result, it takes a couple of days
+to complete a testing cycle. 
+SCALING IS DIFFICULT
+The FTGO team also has problems scaling its application. That’s because different
+application modules have conflicting resource requirements. The restaurant data, for
+example, is stored in a large, in-memory database, which is ideally deployed on servers
+with lots of memory. In contrast, the image processing module is CPU intensive and
+best deployed on servers with lots of CPU. Because these modules are part of the same
+application, FTGO must compromise on the server configuration. 
+DELIVERING A RELIABLE MONOLITH IS CHALLENGING
+Another problem with the FTGO application is the lack of reliability. As a result, there
+are frequent production outages. One reason it’s unreliable is that testing the applica-
+tion thoroughly is difficult, due to its large size. This lack of testability means bugs
+make their way into production. To make matters worse, the application lacks fault iso-
+lation, because all modules are running within the same process. Every so often, a bug
+in one module—for example, a memory leak—crashes all instances of the applica-
+tion, one by one. The FTGO developers don’t enjoy being paged in the middle of the
+night because of a production outage. The business people like the loss of revenue
+and trust even less. 
+LOCKED INTO INCREASINGLY OBSOLETE TECHNOLOGY STACK
+The final aspect of monolithic hell experienced by the FTGO team is that the archi-
+tecture forces them to use a technology stack that’s becoming increasingly obsolete. The
+monolithic architecture makes it difficult to adopt new frameworks and languages. It
+would be extremely expensive and risky to rewrite the entire monolithic application so
+that it would use a new and presumably better technology. Consequently, developers
+ 

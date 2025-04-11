@@ -1,0 +1,50 @@
+59
+Defining an application’s microservice architecture
+from disparate parts of the application. In its current form, this class makes it extremely
+difficult to split code into services.
+ One solution is to package the Order class into a library and create a central Order
+database. All services that process orders use this library and access the access data-
+base. The trouble with this approach is that it violates one of the key principles of the
+microservice architecture and results in undesirable, tight coupling. For example, any
+change to the Order schema requires the teams to update their code in lockstep.
+ Another solution is to encapsulate the Order database in an Order Service, which
+is invoked by the other services to retrieve and update orders. The problem with that
+design is that the Order Service would be a data service with an anemic domain
+model containing little or no business logic. Neither of these options is appealing, but
+fortunately, DDD provides a solution.
+ A much better approach is to apply DDD and treat each service as a separate sub-
+domain with its own domain model. This means that each of the services in the FTGO
+application that has anything to do with orders has its own domain model with its
+version of the Order class. A great example of the benefit of multiple domain mod-
+els is the Delivery Service. Its view of an Order, shown in figure 2.11, is extremely
+simple: pickup address, pickup time, delivery address, and delivery time. Moreover,
+rather than call it an Order, the Delivery Service uses the more appropriate name of
+Delivery.
+Order
+OrderLineItem
+Address
+Courier
+Consumer
+Restaurant
+PaymentInfo
+OrderTotal
+deliveryTime
+status
+<<delivery>>
+pickupTime
+<<billing>>
+transactionid
+<<orderTaking>>
+create()
+cancel()
+<<restaurant>>
+accept()
+reject()
+noteReadyForPickup()
+<<delivery>>
+assignCourier()
+notePickedUp()
+noteDelivered()
+Figure 2.10
+The Order god class is bloated with numerous responsibilities.
+ 

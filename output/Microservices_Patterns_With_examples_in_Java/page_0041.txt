@@ -1,0 +1,59 @@
+11
+Microservice architecture to the rescue
+A service is a mini application that implements narrowly focused functionality, such as
+order management, customer management, and so on. A service is scaled using X-axis
+scaling, though some services may also use Z-axis scaling. For example, the Order ser-
+vice consists of a set of load-balanced service instances.
+ The high-level definition of microservice architecture (microservices) is an archi-
+tectural style that functionally decomposes an application into a set of services. Note
+that this definition doesn’t say anything about size. Instead, what matters is that each
+service has a focused, cohesive set of responsibilities. Later in the book I discuss what
+that means.
+ Now let’s look at how the microservice architecture is a form of modularity. 
+1.4.2
+Microservices as a form of modularity
+Modularity is essential when developing large, complex applications. A modern appli-
+cation like FTGO is too large to be developed by an individual. It’s also too complex
+to be understood by a single person. Applications must be decomposed into modules
+that are developed and understood by different people. In a monolithic application,
+modules are defined using a combination of programming language constructs (such
+as Java packages) and build artifacts (such as Java JAR files). However, as the FTGO
+developers have discovered, this approach tends not to work well in practice. Long-
+lived, monolithic applications usually degenerate into big balls of mud.
+ The microservice architecture uses services as the unit of modularity. A service has
+an API, which is an impermeable boundary that is difficult to violate. You can’t bypass
+Order
+Service
+Application
+Customer
+Service
+Client
+Review
+Service
+Order
+requests
+Customer
+requests
+Review
+requests
+Order
+Service
+instance 1
+Order service
+Order
+Service
+instance 2
+Order
+Service
+instance 3
+Load
+balancer
+Request
+Y-axis scaling functionality decomposes
+an application into services.
+Each service is typically scaled using
+X-axis and possibly Z-axis scaling.
+Figure 1.6
+Y-axis scaling splits the application into a set of services. Each service is responsible for 
+a particular function. A service is scaled using X-axis scaling and, possibly, Z-axis scaling.
+ 

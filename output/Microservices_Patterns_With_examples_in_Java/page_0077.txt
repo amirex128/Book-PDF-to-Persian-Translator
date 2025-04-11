@@ -1,0 +1,64 @@
+47
+Defining an application’s microservice architecture
+the Place Order story. We can expand that story into numerous user scenarios includ-
+ing this one:
+Given a consumer
+And a restaurant
+And a delivery address/time that can be served by that restaurant
+And an order total that meets the restaurant's order minimum
+When the consumer places an order for the restaurant
+Then consumer's credit card is authorized
+And an order is created in the PENDING_ACCEPTANCE state
+And the order is associated with the consumer
+And the order is associated with the restaurant
+The nouns in this user scenario hint at the existence of various classes, including
+Consumer, Order, Restaurant, and CreditCard.
+ Similarly, the Accept Order story can be expanded into a scenario such as this one:
+Given an order that is in the PENDING_ACCEPTANCE state
+and a courier that is available to deliver the order
+When a restaurant accepts an order with a promise to prepare by a particular
+time
+Then the state of the order is changed to ACCEPTED
+And the order's promiseByTime is updated to the promised time
+And the courier is assigned to deliver the order
+This scenario suggests the existence of Courier and Delivery classes. The end result
+after a few iterations of analysis will be a domain model that consists, unsurprisingly,
+of those classes and others, such as MenuItem and Address. Figure 2.7 is a class dia-
+gram that shows the key classes.
+Consumer
+Order
+state
+...
+creditcardId
+...
+deliveryTime
+quantity
+name
+price
+street1
+street2
+city
+state
+zip
+name
+...
+available
+...
+lat
+lon
+Restaurant
+Courier
+Location
+PaymentInfo
+DeliveryInfo
+OrderLineItem
+MenuItem
+Address
+Placed by
+For
+Assigned to
+Paid using
+Pays using
+Figure 2.7
+The key classes in the FTGO domain model
+ 

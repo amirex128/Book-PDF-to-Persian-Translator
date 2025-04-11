@@ -1,0 +1,45 @@
+58
+CHAPTER 2
+Decomposition strategies
+MAINTAINING DATA CONSISTENCY ACROSS SERVICES
+Another challenge is maintaining data consistency across services. Some system opera-
+tions need to update data in multiple services. For example, when a restaurant accepts
+an order, updates must occur in both the Kitchen Service and the Delivery Service.
+The Kitchen Service changes the status of the Ticket. The Delivery Service sched-
+ules delivery of the order. Both of these updates must be done atomically.
+ The traditional solution is to use a two-phase, commit-based, distributed trans-
+action management mechanism. But as you’ll see in chapter 4, this is not a good
+choice for modern applications, and you must use a very different approach to trans-
+action management, a saga. A saga is a sequence of local transactions that are coordi-
+nated using messaging. Sagas are more complex than traditional ACID transactions
+but they work well in many situations. One limitation of sagas is that they are eventu-
+ally consistent. If you need to update some data atomically, then it must reside within
+a single service, which can be an obstacle to decomposition. 
+OBTAINING A CONSISTENT VIEW OF THE DATA
+Another obstacle to decomposition is the inability to obtain a truly consistent view of
+data across multiple databases. In a monolithic application, the properties of ACID
+transactions guarantee that a query will return a consistent view of the database. In
+contrast, in a microservice architecture, even though each service’s database is consis-
+tent, you can’t obtain a globally consistent view of the data. If you need a consistent
+view of some data, then it must reside in a single service, which can prevent decompo-
+sition. Fortunately, in practice this is rarely a problem. 
+GOD CLASSES PREVENT DECOMPOSITION
+Another obstacle to decomposition is the existence of so-called god classes. God classes
+are the bloated classes that are used throughout an application (http://wiki.c2.com/
+?GodClass). A god class typically implements business logic for many different aspects
+of the application. It normally has a large number of fields mapped to a database
+table with many columns. Most applications have at least one of these classes, each
+representing a concept that’s central to the domain: accounts in banking, orders in
+e-commerce, policies in insurance, and so on. Because a god class bundles together
+state and behavior for many different aspects of an application, it’s an insurmountable
+obstacle to splitting any business logic that uses it into services.
+ The Order class is a great example of a god class in the FTGO application. That’s
+not surprising—after all, the purpose of FTGO is to deliver food orders to customers.
+Most parts of the system involve orders. If the FTGO application had a single domain
+model, the Order class would be a very large class. It would have state and behavior
+corresponding to many different parts of the application. Figure 2.10 shows the struc-
+ture of this class that would be created using traditional modeling techniques.
+ As you can see, the Order class has fields and methods corresponding to order pro-
+cessing, restaurant order management, delivery, and payments. This class also has a
+complex state model, due to the fact that one model has to describe state transitions
+ 

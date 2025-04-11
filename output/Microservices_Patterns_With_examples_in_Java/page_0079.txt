@@ -1,0 +1,66 @@
+49
+Defining an application’s microservice architecture
+A command has a specification that defines its parameters, return value, and behavior
+in terms of the domain model classes. The behavior specification consists of precondi-
+tions that must be true when the operation is invoked, and post-conditions that are
+true after the operation is invoked. Here, for example, is the specification of the
+createOrder() system operation:
+The preconditions mirror the givens in the Place Order user scenario described ear-
+lier. The post-conditions mirror the thens from the scenario. When a system operation
+is invoked it will verify the preconditions and perform the actions required to make
+the post-conditions true.
+ Here’s the specification of the acceptOrder() system operation:
+Restaurant
+Order Ready 
+for Pickup
+noteOrderReadyForPickup()
+Indicates that the order is ready for 
+pickup
+Courier
+Update 
+Location
+noteUpdatedLocation()
+Updates the current location of the 
+courier
+Courier
+Delivery 
+picked up
+noteDeliveryPickedUp()
+Indicates that the courier has 
+picked up the order
+Courier
+Delivery 
+delivered
+noteDeliveryDelivered()
+Indicates that the courier has deliv-
+ered the order
+Operation
+createOrder (consumer id, payment method, delivery address, delivery time, 
+restaurant id, order line items)
+Returns
+orderId, …
+Preconditions
+The consumer exists and can place orders.
+The line items correspond to the restaurant’s menu items.
+The delivery address and time can be serviced by the restaurant.
+Post-conditions
+The consumer’s credit card was authorized for the order total.
+An order was created in the PENDING_ACCEPTANCE state.
+Operation
+acceptOrder(restaurantId, orderId, readyByTime)
+Returns
+—
+Preconditions
+The order.status is PENDING_ACCEPTANCE.
+A courier is available to deliver the order.
+Post-conditions
+The order.status was changed to ACCEPTED.
+The order.readyByTime was changed to the readyByTime.
+The courier was assigned to deliver the order.
+Table 2.1
+Key system commands for the FTGO application (continued)
+Actor
+Story
+Command
+Description
+ 

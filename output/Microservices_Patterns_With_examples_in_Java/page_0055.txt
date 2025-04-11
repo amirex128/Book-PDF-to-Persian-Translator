@@ -1,0 +1,56 @@
+25
+The Microservice architecture pattern language
+Chapter 3 looks at the first four groups of patterns: communication style, discovery,
+reliability, and transaction messaging. Chapter 8 looks at the external API patterns. 
+DATA CONSISTENCY PATTERNS FOR IMPLEMENTING TRANSACTION MANAGEMENT
+As mentioned earlier, in order to ensure loose coupling, each service has its own data-
+base. Unfortunately, having a database per service introduces some significant issues. I
+describe in chapter 4 that the traditional approach of using distributed transactions
+(2PC) isn’t a viable option for a modern application. Instead, an application needs to
+maintain data consistency by using the Saga pattern. Figure 1.13 shows data-related
+patterns.
+ Chapters 4, 5, and 6 describe these patterns in more detail. 
+PATTERNS FOR QUERYING DATA IN A MICROSERVICE ARCHITECTURE
+The other issue with using a database per service is that some queries need to join
+data that’s owned by multiple services. A service’s data is only accessible via its API, so
+you can’t use distributed queries against its database. Figure 1.14 shows a couple of
+patterns you can use to implement queries.
+Polling
+publisher
+Transaction
+log tailing
+Transactional messaging
+Transactional
+outbox
+Messaging
+Remote procedure
+invocation
+Circuit
+breaker
+Communication style
+Reliability
+Domain-speciﬁc
+Self registration
+Client-side
+discovery
+Discovery
+External API
+3rd-party
+registration
+API gateway
+Backend for
+frontend
+Server-side
+discovery
+Service registry
+General
+Alternative A
+Predecessor
+Speciﬁc
+Alternative B
+Successor
+Key
+Problem area
+Figure 1.12
+The five groups of communication patterns
+ 

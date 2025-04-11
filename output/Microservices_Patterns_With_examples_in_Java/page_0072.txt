@@ -1,0 +1,48 @@
+42
+CHAPTER 2
+Decomposition strategies
+adapter invokes the business logic, and the events adapter publishes events emitted by
+the business logic.
+ Later in chapter 12, when I discuss deployment technologies, you’ll see that the
+implementation view of a service can take many forms. The component might be a
+standalone process, a web application or OSGI bundle running in a container, or a
+serverless cloud function. An essential requirement, however, is that a service has an
+API and is independently deployable. 
+WHAT IS LOOSE COUPLING?
+An important characteristic of the microservice architecture is that the services are
+loosely coupled (https://en.wikipedia.org/wiki/Loose_coupling). All interaction with a
+service happens via its API, which encapsulates its implementation details. This enables
+the implementation of the service to change without impacting its clients. Loosely
+coupled services are key to improving an application’s development time attributes,
+including its maintainability and testability. They are much easier to understand, change,
+and test.
+ The requirement for services to be loosely coupled and to collaborate only via APIs
+prohibits services from communicating via a database. You must treat a service’s
+persistent data like the fields of a class and keep them private. Keeping the data pri-
+vate enables a developer to change their service’s database schema without having to
+Order Service
+Invokes
+Subscribes to events
+Order
+Service
+client
+Deﬁnes operations
+Publishes events when data changes
+Commands:
+createOrder()
+...
+Queries:
+ﬁndOrderbyId()
+...
+Order
+event
+publisher
+Service API
+Order created
+Order cancelled
+Figure 2.4
+A service has an API that encapsulates the implementation. The API defines 
+operations, which are invoked by clients. There are two types of operations: commands update 
+data, and queries retrieve data. When its data changes, a service publishes events that clients 
+can subscribe to.
+ 

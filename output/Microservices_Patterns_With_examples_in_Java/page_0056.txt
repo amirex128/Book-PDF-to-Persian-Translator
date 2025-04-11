@@ -1,0 +1,58 @@
+26
+CHAPTER 1
+Escaping monolithic hell
+Sometimes you can use the API composition pattern, which invokes the APIs of one or
+more services and aggregates results. Other times, you must use the Command query
+responsibility segregation (CQRS) pattern, which maintains one or more easily queried
+replicas of the data. Chapter 7 looks at the different ways of implementing queries. 
+SERVICE DEPLOYMENT PATTERNS
+Deploying a monolithic application isn’t always easy, but it is straightforward in the
+sense that there is a single application to deploy. You have to run multiple instances of
+the application behind a load balancer.
+ In comparison, deploying a microservices-based application is much more com-
+plex. There may be tens or hundreds of services that are written in a variety of lan-
+guages and frameworks. There are many more moving parts that need to be managed.
+Figure 1.15 shows the deployment patterns.
+ The traditional, and often manual, way of deploying applications in a language-
+specific packaging format, for example WAR files, doesn’t scale to support a microser-
+vice architecture. You need a highly automated deployment infrastructure. Ideally,
+you should use a deployment platform that provides the developer with a simple UI
+(command-line or GUI) for deploying and managing their services. The deployment
+platform will typically be based on virtual machines (VMs), containers, or serverless
+technology. Chapter 12 looks at the different deployment options. 
+Database per
+service
+Saga
+Event
+sourcing
+Domain
+event
+Aggregate
+General
+Alternative A
+Predecessor
+Speciﬁc
+Alternative B
+Successor
+Key
+Problem area
+Figure 1.13
+Because each service has its own database, you must use the Saga pattern to maintain 
+data consistency across services.
+CQRS
+API
+composition
+Database
+per service
+General
+Alternative A
+Predecessor
+Speciﬁc
+Alternative B
+Successor
+Key
+Problem area
+Figure 1.14
+Because each service has its own database, you must use one 
+of the querying patterns to retrieve data scattered across multiple services.
+ 

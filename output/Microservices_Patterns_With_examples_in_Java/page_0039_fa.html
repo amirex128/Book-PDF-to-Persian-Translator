@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 39</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>9</p>
+  <p><strong>Microservice architecture to the rescue</strong></p>
+  <p>این کتاب یک مدل مقیاس‌پذیری سه‌بعدی مفید را توصیف می‌کند: <strong>scale cube</strong>، که در شکل 1.3 نشان داده شده است.</p>
+  <p>
+   این مدل سه روش برای مقیاس‌بندی یک <strong>application</strong> را تعریف می‌کند:
+   <strong>X</strong>،
+   <strong>Y</strong> و
+   <strong>Z</strong>.
+  </p>
+  <p><strong>X-AXIS SCALING LOAD BALANCES REQUESTS ACROSS MULTIPLE INSTANCES</strong></p>
+  <p>مقیاس‌بندی محور
+   <strong>X</strong> یک راه رایج برای مقیاس‌بندی یک <strong>application monolithic</strong> است. شکل 1.4 نحوه عملکرد مقیاس‌بندی محور <strong>X</strong> را نشان می‌دهد. شما چندین نمونه از <strong>application</strong> را در پشت یک
+   <strong>load balancer</strong> اجرا می‌کنید.
+   <strong>load balancer</strong> درخواست‌ها را بین
+   <strong>N</strong> نمونه یکسان از <strong>application</strong> توزیع می‌کند. این یک راه عالی برای بهبود ظرفیت و در دسترس بودن یک <strong>application</strong> است.
+  </p>
+  <p><strong>Z-AXIS SCALING ROUTES REQUESTS BASED ON AN ATTRIBUTE OF THE REQUEST</strong></p>
+  <p>مقیاس‌بندی محور
+   <strong>Z</strong> همچنین چندین نمونه از <strong>application monolith</strong> را اجرا می‌کند، اما بر خلاف مقیاس‌بندی محور <strong>X</strong>، هر نمونه فقط مسئول زیرمجموعه‌ای از داده‌ها است. شکل 1.5 نحوه عملکرد مقیاس‌بندی محور <strong>Z</strong> را نشان می‌دهد. مسیریاب جلوی نمونه‌ها از یک ویژگی درخواست برای هدایت آن به نمونه مناسب استفاده می‌کند. به عنوان مثال، یک <strong>application</strong> ممکن است درخواست‌ها را با استفاده از <strong>userId</strong> مسیریابی کند.
+  </p>
+  <p>
+   در این مثال، هر نمونه <strong>application</strong> مسئول زیرمجموعه‌ای از کاربران است. مسیریاب از <strong>userId</strong> مشخص شده توسط سربرگ <strong>Authorization</strong> درخواست برای انتخاب یکی از
+  </p>
+  <p>
+   <strong>Microservices</strong>
+  </p>
+  <p>مقیاس‌بندی محور
+   <strong>Y</strong>،
+   به عنوان مثال، تجزیه عملکردی
+  </p>
+  <p>مقیاس‌بندی با تقسیم</p>
+  <p>چیزهایی که متفاوت هستند، مانند</p>
+  <p>به وسیله عملکرد.</p>
+  <p>مقیاس‌بندی محور
+   <strong>X</strong>،
+   به عنوان مثال، تکرار افقی
+  </p>
+  <p>مقیاس‌بندی با کلون کردن.</p>
+  <p>مقیاس‌بندی محور
+   <strong>Z</strong>،
+   به عنوان مثال، پارتیشن‌بندی داده‌ها
+  </p>
+  <p>مقیاس‌بندی با تقسیم</p>
+  <p>چیزهای مشابه، مانند</p>
+  <p>با <strong>customer ID</strong>.</p>
+  <p>یک</p>
+  <p>نمونه</p>
+  <p>بسیاری از</p>
+  <p>نمونه‌ها</p>
+  <p>یک</p>
+  <p>پارتیشن</p>
+  <p>بسیاری از</p>
+  <p>پارتیشن‌ها</p>
+  <p><strong>Monolith</strong></p>
+  <p>شکل 1.3</p>
+  <p><strong>scale cube</strong> سه روش جداگانه برای مقیاس‌بندی یک <strong>application</strong> را تعریف می‌کند: مقیاس‌بندی محور <strong>X</strong> درخواست‌ها را در چندین نمونه یکسان متعادل می‌کند. مقیاس‌بندی محور
+   <strong>Z</strong> درخواست‌ها را بر اساس یک ویژگی از درخواست مسیریابی می‌کند. محور
+   <strong>Y</strong> یک <strong>application</strong> را از نظر عملکردی به <strong>services</strong> تجزیه می‌کند.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

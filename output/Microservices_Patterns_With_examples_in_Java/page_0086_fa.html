@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 86</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>56</p>
+  <p>فصل 2</p>
+  <p><strong>Decomposition strategies</strong></p>
+  <p>2.2.4</p>
+  <p><strong>Decomposition guidelines</strong></p>
+  <p>تاکنون در این فصل، ما به راه‌های اصلی تعریف معماری <strong>microservice</strong> نگاه کرده‌ایم. ما همچنین می‌توانیم از چند اصل از طراحی شی گرا هنگام اعمال الگوی معماری <strong>microservice</strong> استفاده کنیم و آن‌ها را تطبیق دهیم. این اصول توسط
+   <strong>Robert C. Martin</strong> ایجاد شده و در کتاب کلاسیک او <strong>Designing Object Oriented C++ Applications Using The Booch Method (Prentice Hall, 1995)</strong> توضیح داده شده است. اولین اصل، اصل مسئولیت واحد (<strong>SRP</strong>) برای تعریف مسئولیت‌های یک کلاس است. اصل دوم، اصل بسته شدن مشترک (<strong>CCP</strong>) برای سازماندهی کلاس‌ها در بسته‌ها است. بیایید نگاهی به این اصول بیندازیم و ببینیم چگونه می‌توان آن‌ها را برای معماری <strong>microservice</strong> اعمال کرد.</p>
+  <p><strong>SINGLE RESPONSIBILITY PRINCIPLE</strong></p>
+  <p>یکی از اهداف اصلی معماری و طراحی <strong>software</strong>، تعیین مسئولیت‌های هر عنصر <strong>software</strong> است. اصل مسئولیت واحد به شرح زیر است:</p>
+  <p>یک کلاس باید فقط یک دلیل برای تغییر داشته باشد.</p>
+  <p><strong>Robert C. Martin</strong></p>
+  <p>هر مسئولیتی که یک کلاس دارد، یک دلیل بالقوه برای تغییر آن کلاس است. اگر یک کلاس دارای مسئولیت‌های متعددی باشد که به‌طور مستقل تغییر می‌کنند، کلاس پایدار نخواهد بود.
+   با پیروی از <strong>SRP</strong>، شما کلاس‌هایی را تعریف می‌کنید که هر کدام یک مسئولیت واحد و از این رو یک دلیل واحد برای تغییر دارند.</p>
+  <p>ما می‌توانیم <strong>SRP</strong> را هنگام تعریف معماری <strong>microservice</strong> اعمال کنیم و <strong>services</strong> کوچک و منسجمی ایجاد کنیم که هر کدام یک مسئولیت واحد دارند. این امر اندازه <strong>services</strong> را کاهش می‌دهد و ثبات آن‌ها را افزایش می‌دهد. معماری جدید
+   <strong>FTGO</strong> نمونه‌ای از <strong>SRP</strong> در عمل است. هر جنبه‌ای از رساندن غذا به یک مصرف‌کننده - ثبت سفارش، آماده‌سازی سفارش و تحویل - مسئولیت یک <strong>service</strong> جداگانه است.</p>
+  <p><strong>COMMON CLOSURE PRINCIPLE</strong></p>
+  <p>اصل مفید دیگر، اصل بسته شدن مشترک است:</p>
+  <p>کلاس‌های موجود در یک بسته باید در برابر انواع تغییرات یکسان بسته شوند. تغییری که بر یک بسته تأثیر می‌گذارد، بر تمام کلاس‌های موجود در آن بسته تأثیر می‌گذارد.</p>
+  <p><strong>Robert C. Martin</strong></p>
+  <p>ایده این است که اگر دو کلاس به دلیل یک دلیل اساسی یکسان، گام به گام تغییر کنند، آنگاه به یک بسته تعلق دارند. به عنوان مثال، شاید آن کلاس‌ها جنبه متفاوتی از یک قانون تجاری خاص را پیاده‌سازی کنند. هدف این است که وقتی آن قانون تجاری تغییر می‌کند، <strong>developers</strong> فقط باید کد را در تعداد کمی از بسته‌ها (در حالت ایده‌آل فقط یک) تغییر دهند. پایبندی به <strong>CCP</strong>، قابلیت نگهداری یک <strong>application</strong> را به میزان قابل توجهی بهبود می‌بخشد.</p>
+  <p>ما می‌توانیم <strong>CCP</strong> را هنگام ایجاد یک معماری <strong>microservice</strong> و بسته‌بندی مؤلفه‌هایی که به همین دلیل تغییر می‌کنند، در همان <strong>service</strong> اعمال کنیم. انجام این کار،</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

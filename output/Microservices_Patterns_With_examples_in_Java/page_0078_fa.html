@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 78</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>48</p>
+  <p>فصل 2</p>
+  <p><strong>Decomposition strategies</strong></p>
+  <p>مسئولیت‌های هر کلاس به شرح زیر است:</p>
+  <ul>
+   <li>مصرف‌کننده - مصرف‌کننده‌ای که سفارش می‌دهد.</li>
+   <li>سفارش - سفارشی که توسط یک مصرف‌کننده ثبت می‌شود. سفارش را توصیف و وضعیت آن را پیگیری می‌کند.</li>
+   <li><strong>OrderLineItem</strong>—یک آیتم خط از یک سفارش.</li>
+   <li><strong>DeliveryInfo</strong>—زمان و مکان تحویل یک سفارش.</li>
+   <li>رستوران - رستورانی که سفارش‌ها را برای تحویل به مصرف‌کنندگان آماده می‌کند.</li>
+   <li><strong>MenuItem</strong>—یک آیتم در منوی رستوران.</li>
+   <li>پیک - پیکی که سفارش‌ها را به مصرف‌کنندگان تحویل می‌دهد. این پیک، در دسترس بودن پیک و موقعیت مکانی فعلی آن‌ها را پیگیری می‌کند.</li>
+   <li>آدرس - آدرس یک مصرف‌کننده یا یک رستوران.</li>
+   <li>مکان - عرض جغرافیایی و طول جغرافیایی یک پیک.</li>
+  </ul>
+  <p>یک نمودار کلاس مانند نمودار موجود در شکل 2.7، یک جنبه از معماری یک <strong>application</strong> را نشان می‌دهد. اما این چیزی بیش از یک تصویر زیبا بدون سناریوها برای متحرک کردن آن نیست. مرحله بعدی تعریف عملیات سیستم است که با سناریوهای معماری مطابقت دارد.</p>
+  <p><strong>DEFINING SYSTEM OPERATIONS</strong></p>
+  <p>هنگامی که شما یک مدل <strong>domain</strong> سطح بالا را تعریف کردید، گام بعدی شناسایی درخواست‌هایی است که <strong>application</strong> باید مدیریت کند. جزئیات <strong>UI</strong> فراتر از محدوده این کتاب است، اما می‌توانید تصور کنید که در هر سناریوی کاربر، <strong>UI</strong> درخواست‌هایی را به <strong>business logic backend</strong> برای بازیابی و به‌روزرسانی داده‌ها ارسال می‌کند.
+   <strong>FTGO</strong> در درجه اول یک <strong>application web</strong> است، به این معنی که اکثر درخواست‌ها مبتنی بر
+   <strong>HTTP</strong> هستند، اما ممکن است برخی از <strong>clients</strong> از پیام‌رسانی استفاده کنند. بنابراین، به جای تعهد به یک پروتکل خاص، منطقی است که از مفهوم انتزاعی‌تر یک عملیات سیستم برای نشان دادن درخواست‌ها استفاده کنید.
+  </p>
+  <p>دو نوع عملیات سیستم وجود دارد:</p>
+  <ul>
+   <li>دستورات - عملیات سیستمی که داده‌ها را ایجاد، به‌روزرسانی و حذف می‌کنند</li>
+   <li>پرسش‌ها - عملیات سیستمی که داده‌ها را می‌خوانند (پرس و جو)</li>
+  </ul>
+  <p>در نهایت، این عملیات سیستم با <strong>REST</strong>، <strong>RPC</strong> یا <strong>messaging endpoints</strong> مطابقت خواهند داشت، اما در حال حاضر انتزاعی فکر کردن در مورد آن‌ها مفید است. بیایید ابتدا برخی از دستورات را شناسایی کنیم.
+  </p>
+  <p>یک نقطه شروع خوب برای شناسایی دستورات سیستم، تجزیه و تحلیل فعل‌ها در داستان‌ها و سناریوهای کاربر است. به عنوان مثال، داستان
+   <strong>Place Order</strong> را در نظر بگیرید. این به وضوح نشان می‌دهد که سیستم باید یک عملیات
+   <strong>Create Order</strong> ارائه دهد. بسیاری از داستان‌های دیگر به‌طور جداگانه به دستورات سیستم نگاشت می‌شوند. جدول 2.1 برخی از دستورات سیستم کلیدی را فهرست می‌کند.</p>
+  <p>جدول 2.1</p>
+  <p>دستورات سیستم کلیدی برای <strong>application</strong> <strong>FTGO</strong></p>
+  <p>بازیگر</p>
+  <p>داستان</p>
+  <p>دستور</p>
+  <p>شرح</p>
+  <p>مصرف‌کننده</p>
+  <p>ثبت سفارش</p>
+  <p><strong>createOrder()</strong></p>
+  <p>یک سفارش ایجاد می‌کند</p>
+  <p>رستوران</p>
+  <p>پذیرش سفارش</p>
+  <p><strong>acceptOrder()</strong></p>
+  <p>نشان می‌دهد که رستوران سفارش را پذیرفته است و متعهد به آماده‌سازی آن تا زمان مشخص‌شده است</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+50
+CHAPTER 2
+Decomposition strategies
+Its pre- and post-conditions mirror the user scenario from earlier.
+ Most of the architecturally relevant system operations are commands. Sometimes,
+though, queries, which retrieve data, are also important.
+ Besides implementing commands, an application must also implement queries.
+The queries provide the UI with the information a user needs to make decisions. At
+this stage, we don’t have a particular UI design for FTGO application in mind, but
+consider, for example, the flow when a consumer places an order:
+1
+User enters delivery address and time.
+2
+System displays available restaurants.
+3
+User selects restaurant.
+4
+System displays menu.
+5
+User selects item and checks out.
+6
+System creates order.
+This user scenario suggests the following queries:
+
+findAvailableRestaurants(deliveryAddress, deliveryTime)—Retrieves the
+restaurants that can deliver to the specified delivery address at the specified time
+
+findRestaurantMenu(id)—Retrieves information about a restaurant including
+the menu items
+Of the two queries, findAvailableRestaurants() is probably the most architecturally
+significant. It’s a complex query involving geosearch. The geosearch component of
+the query consists of finding all points—restaurants—that are near a location—the
+delivery address. It also filters out those restaurants that are closed when the order
+needs to be prepared and picked up. Moreover, performance is critical, because this
+query is executed whenever a consumer wants to place an order.
+ The high-level domain model and the system operations capture what the applica-
+tion does. They help drive the definition of the application’s architecture. The behav-
+ior of each system operation is described in terms of the domain model. Each
+important system operation represents an architecturally significant scenario that’s
+part of the description of the architecture.
+ Once the system operations have been defined, the next step is to identify the
+application’s services. As mentioned earlier, there isn’t a mechanical process to follow.
+There are, however, various decomposition strategies that you can use. Each one
+attacks the problem from a different perspective and uses its own terminology. But
+with all strategies, the end result is the same: an architecture consisting of services that
+are primarily organized around business rather than technical concepts.
+ Let’s look at the first strategy, which defines services corresponding to business
+capabilities. 
+ 

@@ -1,0 +1,44 @@
+61
+Defining an application’s microservice architecture
+the consumer’s credit card, it must trigger the creation of the Ticket in the Kitchen
+Service. Similarly, if the restaurant rejects the order via the Kitchen Service, it must
+be cancelled in the Order Service service, and the customer credited in the billing
+service. In chapter 4, you’ll learn how to maintain consistency between services, using
+the previously mentioned event-driven mechanism sagas.
+ As well as creating technical challenges, having multiple domain models also
+impacts the implementation of the user experience. An application must translate
+between the user experience, which is its own domain model, and the domain models
+of each of the services. In the FTGO application, for example, the Order status dis-
+played to a consumer is derived from Order information stored in multiple services.
+This translation is often handled by the API gateway, discussed in chapter 8. Despite
+these challenges, it’s essential that you identify and eliminate god classes when defin-
+ing a microservice architecture.
+ We’ll now look at how to define the service APIs. 
+2.2.6
+Defining service APIs
+So far, we have a list of system operations and a list of a potential services. The next
+step is to define each service’s API: its operations and events. A service API operation
+exists for one of two reasons: some operations correspond to system operations. They
+are invoked by external clients and perhaps by other services. The other operations
+exist to support collaboration between services. These operations are only invoked by
+other services.
+ A service publishes events primarily to enable it to collaborate with other ser-
+vices. Chapter 4 describes how events can be used to implement sagas, which main-
+tain data consistency across services. And chapter 7 discusses how events can be used
+to update CQRS views, which support efficient querying. An application can also use
+events to notify external clients. For example, it could use WebSockets to deliver
+events to a browser.
+ The starting point for defining the service APIs is to map each system operation to
+a service. After that, we decide whether a service needs to collaborate with others to
+implement a system operation. If collaboration is required, we then determine what
+APIs those other services must provide in order to support the collaboration. Let’s
+begin by looking at how to assign system operations to services.
+ASSIGNING SYSTEM OPERATIONS TO SERVICES
+The first step is to decide which service is the initial entry point for a request. Many
+system operations neatly map to a service, but sometimes the mapping is less obvious.
+Consider, for example, the noteUpdatedLocation() operation, which updates the
+courier location. On one hand, because it’s related to couriers, this operation should
+be assigned to the Courier service. On the other hand, it’s the Delivery Service
+that needs the courier location. In this case, assigning an operation to a service that
+needs the information provided by the operation is a better choice. In other situations,
+ 
