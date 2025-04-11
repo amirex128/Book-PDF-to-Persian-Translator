@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 98</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   user requests ها. انواع مختلفی از services ها (به عنوان مثال، service دادن به یک search index از documents) وجود دارد که برای service دادن به user requests ها، نیاز به مقدار زیادی data دارند که در حافظه بارگذاری شود. حتی با یک لایه storage نسبتاً سریع، بارگذاری چنین data هایی می‌تواند به طور قابل توجهی بیشتر از زمان مورد نظر برای service دادن به یک user request طول بکشد. از آنجایی که با FaaS، خود function ممکن است به صورت پویا در پاسخ به یک user request راه‌اندازی شود در حالی که user در حال انتظار است، نیاز به بارگذاری مقدار زیادی جزئیات ممکن است به طور قابل توجهی بر latency که user هنگام تعامل با service شما درک می‌کند، تأثیر بگذارد. البته، هنگامی که FaaS شما ایجاد شد، ممکن است تعداد زیادی از requests ها را مدیریت کند، بنابراین این هزینه بارگذاری را می‌توان در تعداد زیادی از requests ها amortized کرد. اما اگر شما تعداد کافی از requests ها را دارید تا یک function را فعال نگه دارید، پس احتمالاً شما بیش از حد برای requests هایی که در حال پردازش آنها هستید، پرداخت می‌کنید.
+  </p>
+  <h4><strong>The Costs of Sustained Request-Based Processing</strong></h4>
+  <p>
+   مدل هزینه FaaS cloud public بر اساس قیمت‌گذاری per-request است. این رویکرد عالی است اگر شما فقط چند request در دقیقه یا ساعت دارید. در چنین شرایطی، شما بیشتر اوقات idle هستید، و با توجه به یک مدل pay-per-request، شما فقط برای زمانی که service شما فعالانه requests ها را service می‌دهد، پرداخت می‌کنید. در مقابل، اگر شما requests ها را از طریق یک service طولانی مدت در یک container یا یک virtual machine service می‌دهید، پس شما همیشه برای چرخه‌های پردازنده که تا حد زیادی در انتظار یک user request هستند، پرداخت می‌کنید.
+  </p>
+  <p>
+   با این حال، با رشد یک service، تعداد requests هایی که شما در حال service دادن آنها هستید به نقطه‌ای می‌رسد که می‌توانید یک processor را به طور مداوم فعال نگه دارید و به user requests ها service دهید.
+  </p>
+  <p>
+   در این مرحله، economics یک مدل pay-per-request شروع به بد شدن می‌کند، و فقط بدتر می‌شود زیرا هزینه virtual machines cloud به طور کلی با اضافه کردن cores های بیشتر کاهش می‌یابد (و همچنین از طریق منابع متعهد شده مانند reservations یا sustained use discounts)، در حالی که هزینه per-request تا حد زیادی با تعداد requests ها به صورت خطی افزایش می‌یابد.
+  </p>
+  <p>
+   در نتیجه، با رشد و تکامل service شما، بسیار محتمل است که استفاده شما از FaaS نیز تکامل یابد. یک راه ایده‌آل برای scale کردن FaaS، اجرای یک FaaS متن‌باز (open source) است که بر روی یک container orchestrator مانند Kubernetes اجرا می‌شود. به این ترتیب، شما همچنان می‌توانید از مزایای developer از FaaS استفاده کنید، در حالی که از مدل‌های قیمت‌گذاری virtual machines بهره می‌برید.
+  </p>
+  <h4><strong>Patterns for FaaS</strong></h4>
+  <p>
+   علاوه بر درک trade-offs در استقرار architecture های event-driven یا FaaS به عنوان بخشی از system توزیع‌شده شما، درک بهترین راه‌ها برای استقرار FaaS برای طراحی یک system موفق، بسیار مهم است. این بخش برخی از canonical patterns ها را برای گنجاندن FaaS شرح می‌دهد.
+  </p>
+  <p>
+   84
+   | Chapter 8: Functions and Event-Driven Processing
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

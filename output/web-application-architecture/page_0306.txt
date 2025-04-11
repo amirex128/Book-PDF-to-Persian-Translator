@@ -1,0 +1,30 @@
+12. Architectural layers
+12.2.3. The domain layer
+The domain layer is also a layer without any infrastructure code. It contains:
+• Entities
+• Value objects
+• Domain events
+• Entity (write model) repository interfaces
+• Domain services
+These domain objects should be considered implementation details of the
+application layer. In fact, most of these details should stay behind the ap-
+plication layer. The infrastructure layer generally shouldn’t be concerned
+with anything that’s going on in the domain layer. Infrastructure code, like a
+web controller, should mainly have to deal with primitive-type data (or DTOs
+containing primitive-type data) when it communicates with the application
+layer. The application layer will use code from the domain layer to perform
+its task, and it will know about the rich domain objects it contains.
+“Is that extra subdivision of core code into Domain and Ap-
+plication code really necessary?”
+Great question. After all, the biggest win in terms of testability and life
+expectancy of your application comes from separating core from infras-
+tructure code. The separation between application and domain code is
+not strictly necessary, and doesn’t improve either of these quality aspects.
+However, I like to keep the distinction because it helps me clarify what
+the use cases of my application are. What can an actor do with the appli-
+cation? What information can they retrieve from it? Without a separate
+application layer, this would not be immediately clear. The reader would
+see entities, but wouldn’t know what an actor could do with them. They
+would see a repository, but they wouldn’t know if the information exposed
+by it will end up being presented to a user, or if it’s only for internal use.
+286

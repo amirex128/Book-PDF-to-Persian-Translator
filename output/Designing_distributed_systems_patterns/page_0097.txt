@@ -1,0 +1,40 @@
+• functionA() which calls functionB()
+• functionB() which calls functionC()
+• functionC() which calls back to functionA()
+Now consider what happens when a request comes into any of these functions: it
+kicks off an infinite loop that only terminates when the original request times out
+(and possibly not even then) or when you run out of money to pay for requests in the
+system. Obviously, the above example is quite contrived, but it is actually quite diffi‐
+cult to detect in your code. Since each function is radically decoupled from the other
+functions, there is no real representation of the dependencies or interactions between
+different functions. These problems are not unsolvable, and I expect that as FaaSs
+mature, more analysis and debugging tools will provide a richer experience to under‐
+stand how and why an application comprised of FaaS is performing the way that it
+does.
+For now, when adopting FaaS, you must be vigilant to adopt rigorous monitoring and
+alerting for how your system is behaving so that you can detect situations and correct
+them before they become significant problems. Of course, the complexity introduced
+by monitoring flies somewhat in the face of the simplicity of deploying to FaaS, which
+is friction that your developers must overcome.
+The Need for Background Processing
+FaaS is inherently an event-based application model. Functions are executed in
+response to discrete events that occur and trigger the execution of the functions.
+Additionally, because of the serverless nature of the implementation of theses serv‐
+ices, the runtime of any particular function instance is generally time bounded. This
+means that FaaS is usually a poor fit for situations that require processing. Examples
+of such background processing might be transcoding a video, compressing log files,
+or other sorts of low-priority, long-running computations. In many cases, it is possi‐
+ble to set up a scheduled trigger that synthetically generates events in your functions
+on a particular schedule. Though this is a good fit for responding to temporal events
+(e.g., firing a text-message alarm to wake someone up), it is still not sufficient infra‐
+structure for generic background processing. To achieve that, you need to launch
+your code in an environment that supports long-running processes. And this gener‐
+ally means switching to a pay-per-consumption rather than pay-per-request model
+for the parts of your application that do background processing.
+The Need to Hold Data in Memory
+In addition to the operational challenges, there are some architectural limitations that
+make FaaS ill-suited for some types of applications. The first of these limitations is
+the need to have a significant amount of data loaded into memory in order to process
+Determining When FaaS Makes Sense 
+| 
+83

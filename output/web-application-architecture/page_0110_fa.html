@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 110</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>4. Application services</strong></h3>
+  <p>
+    ارائه <code>data</code> ورودی در فرمی که از مکانیزم ارائه <code>data</code> جدا شده است (یعنی، <code>HTTP</code>)، خیلی سخت نیست. ما باید فقط از داده‌های با نوع ابتدایی استفاده کنیم، و این کار را انجام می‌دهد.
+    در مثال ما، ما از یک <code>string</code> برای آدرس <code>email</code> خریدار و اعداد صحیح برای <code>ID</code> <code>e-book</code> و تعداد سفارش استفاده خواهیم کرد. Listing 4.4 نشان می‌دهد که اگر استفاده از <code>object</code> <code>Request</code> را به سمت بالای <code>method</code> منتقل کنیم و دیگر از آن در وسط استفاده نکنیم، چه اتفاقی می‌افتد.
+    تکنیک <code>refactoring</code> که ما در اینجا استفاده می‌کنیم، <code>Extract Variable</code><sup>2</sup> نامیده می‌شود. <code>IDE</code> شما ممکن است در این مورد به شما کمک کند.
+  </p>
+  <p>
+    <em>Listing 4.4.</em> <code>Push</code> کردن استفاده از <code>object</code> <code>Request</code> به بالای <code>controller action</code>.
+  </p>
+  <pre><code class="language-php">
+    public function orderEbookAction(Request $request): Response
+    {
+    // We extract
+    $ebookId = (int)$request->get('ebook_id');
+    $orderQuantity = (int)$request->get('quantity');
+    $emailAddress = $request->get('email_address');
+    // Below this point, we don't need the Request anymore:
+    $ebook = $this->container->get('ebook_repository')
+    ->getById($ebookId);
+    $orderAmount = $ebook->price()
+    ->multipliedBy($orderQuantity);
+    // ...
+    $orderRepository->save($order);
+    // We make sure that we only use the Session below this point:
+    $this->container->get('session')->set(
+    'currentOrderId',
+    $orderId->asString()
+    );
+  </code></pre>
+  <p>
+    <sup>2</sup>Martin Fowler, “Refactoring: Improving the Design of Existing Code”, Addison-Wesley Professional (2018). از این به بعد من به سادگی به صفحه وب مربوطه اشاره می‌کنم. در این مورد: https://advwebapparch.com/extract-variable.
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+This is a fortunate contrast to the join pattern, because unlike join, it means that
+reduce can be started in parallel while there is still processing going on as part of the
+map/shard phase. Of course, in order to produce a complete output, all of the data
+must be processed eventually, but the ability to begin early means that the batch com‐
+putation executes more quickly overall.
+Hands On: Count
+To understand how the reduce pattern works, consider the task of counting the num‐
+ber of instances of a particular word in a book. We can first use sharding to divide up
+the work of counting words into a number of different work queues. As an example,
+we could create 10 different sharded work queues with 10 different people responsi‐
+ble for counting words in each queue. We can shard the book among these 10 work
+queues by looking at the page number. All pages that end in the number 1 will go to
+the first queue, all pages that end in the number 2 will go to the second, and so forth.
+Once all of the people have finished processing their pages, they write down their
+results on a piece of paper. For example, they might write:
+a: 50
+the: 17
+cat: 2
+airplane: 1
+...
+This can be output to the reduce phase. Remember that the reduce pattern reduces by
+combining two or more outputs into a single output.
+Given a second output:
+a: 30
+the: 25
+dog: 4
+airplane: 2
+...
+The reduction proceeds by summing up all of the counts for the various words, in
+this example producing:
+a: 80
+the 42
+dog: 4
+cat: 2
+airplane: 3
+...
+It’s clear to see that this reduction phase can be repeated on the output of previous
+reduce phases until there is only a single reduced output left. This is valuable since
+this means that reductions can be performed in parallel.
+136 
+| 
+Chapter 12: Coordinated Batch Processing

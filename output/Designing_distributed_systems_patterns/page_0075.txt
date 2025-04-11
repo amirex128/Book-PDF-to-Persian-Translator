@@ -1,0 +1,41 @@
+ate number of RPS (10 × 100 is still 1,000), but because each cache serves a
+completely unique set of data, we are able to store 50% (10 × 10 GB/200 GB) of the
+total data set. This tenfold increase in cache storage means that the memory for the
+cache is much better utilized, since each key exists only in a single cache.
+The Role of the Cache in System Performance
+In Chapter 5 we discussed how caches can be used to optimize end-user performance
+and latency, but one thing that wasn’t covered was the criticality of the cache to your
+application’s performance, reliability, and stability.
+Put simply, the important question for you to consider is: If the cache were to fail,
+what would the impact be for your users and your service?
+When we discussed the replicated cache, this question was less relevant because the
+cache itself was horizontally scalable, and failures of specific replicas would only lead
+to transient failures. Likewise, the cache could be horizontally scaled in response to
+increased load without impacting the end user.
+This changes when you consider sharded caches. Because a specific user or request is
+always mapped to the same shard, if that shard fails, that user or request will always
+miss the cache until the shard is restored. Given the nature of a cache as transient
+data, this miss is not inherently a problem, and your system must know how to recal‐
+culate the data. However, this recalculation is inherently slower than using the cache
+directly, and thus it has performance implications for your end users.
+The performance of your cache is defined in terms of its hit rate. The hit rate is the
+percentage of the time that your cache contains the data for a user request. Ulti‐
+mately, the hit rate determines the overall capacity of your distributed system and
+affects the overall capacity and performance of your system.
+Imagine, if you will, that you have a request-serving layer that can handle 1,000 RPS.
+After 1,000 RPS, the system starts to return HTTP 500 errors to users. If you place a
+cache with a 50% hit rate in front of this request-serving layer, adding this cache
+increases your maximum RPS from 1,000 RPS to 2,000 RPS. To understand why this
+is true, you can see that of the 2,000 inbound requests, 1,000 (50%) can be serviced by
+the cache, leaving 1,000 requests to be serviced by your serving layer. In this instance,
+the cache is fairly critical to your service, because if the cache fails, then the serving
+layer will be overloaded and half of all your user requests will fail. Given this, it likely
+makes sense to rate your service at a maximum of 1,500 RPS rather than the full 2,000
+RPS. If you do this, then you can sustain a failure of half of your cache replicas and
+still keep your service stable.
+But the performance of your system isn’t just defined in terms of the number of
+requests that it can process. Your system’s end-user performance is defined in terms
+of the latency of requests as well. A result from a cache is generally significantly faster
+Sharded Caching 
+| 
+61

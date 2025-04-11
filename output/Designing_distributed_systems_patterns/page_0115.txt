@@ -1,0 +1,40 @@
+course, you would want to use a programming language; there are etcd clients for
+most popular programming languages.
+Let’s start by creating a lock named my-lock:
+kubectl exec my-etcd-cluster-0000 -- sh -c \
+  "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} set my-lock unlocked"
+This creates a key in etcd named my-lock and sets the initial value to unlocked.
+Now let’s suppose that Alice and Bob both want to take ownership of my-lock. Alice
+and Bob both try to write their name to the lock, using a precondition that the value
+of the lock is unlocked.
+Alice first runs:
+kubectl exec my-etcd-cluster-0000 -- sh -c \
+  "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+      set --swap-with-value unlocked my-lock alice"
+And obtains the lock. Now Bob attempts to obtain the lock:
+kubectl exec my-etcd-cluster-0000 -- sh -c \
+  "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+      set --swap-with-value unlocked my-lock bob"
+Error:  101: Compare failed ([unlocked != alice]) [6]
+You can see that Bob’s attempt to claim the lock has failed, since Alice currently owns
+the lock.
+To unlock the lock, Alice writes unlocked with a precondition value of alice:
+kubectl exec my-etcd-cluster-0000 -- sh -c \
+  "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+      set --swap-with-value alice my-lock unlocked"
+Implementing Ownership
+While locks are great for establishing temporary ownership of some critical compo‐
+nent, sometimes you want to take ownership for the duration of the time that the
+component is running. For example, in a highly available deployment of Kubernetes,
+there are multiple replicas of the scheduler but only one replica is actively making
+scheduling decisions. Further, once it becomes the active scheduler, it remains the
+active scheduler until that process fails for some reason.
+Obviously, one way to do this would be to extend the TTL for the lock to a very long
+period (say a week or longer), but this has the significant downside that if the current
+lock owner fails, a new lock owner wouldn’t be chosen until the TTL expired a week
+later.
+Instead, we need to create a renewable lock, which can be periodically renewed by the
+owner so that the lock can be retained for an arbitrary period of time.
+The Basics of Master Election 
+| 
+101

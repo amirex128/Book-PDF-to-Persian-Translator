@@ -1,0 +1,33 @@
+4. Application services
+Providing the input data in a form that’s decoupled from the mechanism that
+delivered the data (that is, HTTP), isn’t too hard. We should only use primitive-
+type data, and that would do the trick. In our example we’ll use a string for
+the email address of the buyer and integers for the e-book ID and the order
+quantity. Listing 4.4 shows what happens if we push usages of the Request
+object towards the top of the method and stop using it in the middle. The
+refactoring technique we use here is called Extract Variable2. Your IDE may
+help you with it.
+Listing 4.4. Push usages of the Request object to the top of the controller ac-
+tion.
+public function orderEbookAction(Request $request): Response
+{
+// We extract
+$ebookId = (int)$request->get('ebook_id');
+$orderQuantity = (int)$request->get('quantity');
+$emailAddress = $request->get('email_address');
+// Below this point, we don't need the `Request` anymore:
+$ebook = $this->container->get('ebook_repository')
+->getById($ebookId);
+$orderAmount = $ebook->price()
+->multipliedBy($orderQuantity);
+// ...
+$orderRepository->save($order);
+// We make sure that we only use the `Session` below this point:
+$this->container->get('session')->set(
+'currentOrderId',
+$orderId->asString()
+);
+2Martin Fowler, “Refactoring: Improving the Design of Existing Code”, Addison-Wesley Pro-
+fessional (2018). From now on I’ll simply refer to the corresponding web page; in this case:
+https://advwebapparch.com/extract-variable .
+90

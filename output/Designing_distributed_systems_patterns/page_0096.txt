@@ -1,0 +1,38 @@
+Determining When FaaS Makes Sense
+As with many tools for developing a distributed system, it can be tempting to see a
+particular solution like event-driven processing as a universal hammer. However, the
+truth is that it is best suited to a particular set of problems. Within a particular con‐
+text it is a powerful tool, but stretching it to fit all applications or systems will lead to
+overly complicated, brittle designs. Especially since FaaS is such a new computing
+tool, before discussing specific design patterns, it is worth discussing the benefits,
+limitations, and optimal situations for employing event-driven computing.
+The Benefits of FaaS
+The benefits of FaaS are primarily for the developer. It dramatically simplifies the dis‐
+tance from code to running service. Because there is no artifact to create or push
+beyond the source code itself, FaaS makes it simple to go from code on a laptop or
+web browser to running code in the cloud.
+Likewise, the code that is deployed is managed and scaled automatically. As more
+traffic is loaded onto the service, more instances of the function are created to handle
+that increase in traffic. If a function fails due to application or machine failures, it is
+automatically restarted on some other machine.
+Finally, much like containers, functions are an even more granular building block for
+designing distributed systems. Functions are stateless and thus any system you build
+on top of functions is inherently more modular and decoupled than a similar system
+built into a single binary. But, of course, this is also the challenge of developing sys‐
+tems in FaaS. The decoupling is both a strength and a weakness. The following sec‐
+tion describes some of the challenges that come from developing systems using FaaS.
+The Challenges of FaaS
+As described in the previous section, developing systems using FaaS forces you to
+strongly decouple each piece of your service. Each function is entirely independent.
+The only communication is across the network, and each function instance cannot
+have local memory, requiring all states to be stored in a storage service. This forced
+decoupling can improve the agility and speed with which you can develop services,
+but it can also significantly complicate the operations of the same service.
+In particular, it is often quite difficult to obtain a comprehensive view of your service,
+determine how the various functions integrate with one another, and understand
+when things go wrong, and why they go wrong. Additionally, the request-based and
+serverless nature of functions means that certain problems are quite difficult to
+detect. As an example, consider the following functions:
+82 
+| 
+Chapter 8: Functions and Event-Driven Processing

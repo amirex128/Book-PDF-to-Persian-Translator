@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 92</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>3. Read models and view models</strong></h3>
+  <p>
+    to talk to something outside the application for it.”
+  </p>
+  <p>
+    اینکه آیا شما <code>read model repository</code> خود را پیاده‌سازی می‌کنید تا از <code>domain events</code> به عنوان منبع <code>data</code> استفاده کند، یا <code>database</code> <code>write model</code>، یا چیز دیگری کاملاً به این بستگی دارد: هر <code>client</code> می‌تواند از <code>interface</code> <code>repository</code> برای دریافت اطلاعات مورد نیاز خود استفاده کند.
+    در <code>controller</code> ما، ما فقط به قیمت یک <code>e-book</code> نیاز داشتیم، که اکنون می‌توانیم آن را از <code>repository</code> <code>read model</code> <code>e-book</code> بازیابی کنیم (Listing 3.9).
+  </p>
+  <p>
+    <em>Listing 3.9.</em> استفاده از <code>read model</code> در داخل <code>controller</code>.
+  </p>
+  <pre><code class="language-php">
+    public function orderEbookAction(Request $request): Response
+    {
+    $ebook = $this->ebookRepository->getById(
+    EbookId::fromString($request->request->get('ebook_id'))
+    );
+    $ebookPrice = $ebook->price();
+    // ...
+    return new Response(/* ... */);
+    }
+  </code></pre>
+  <p>
+    ما نیاز داریم.
+  </p>
+  <p>
+    مدل‌سازی <code>query</code> ممکن است آسان‌ترین کار باشد. ما فقط باید یک توصیف خوب از سؤال خود پیدا کنیم. ما می‌توانیم یک <code>interface</code> <code>Ebooks</code> با یک <code>method</code> <code>listAvailableEbooks()</code> داشته باشیم (به Listing 3.13 مراجعه کنید).
+    آن <code>method</code> یک <code>array</code> از <code>object</code>های <code>Ebook read model</code> را برمی‌گرداند.
+  </p>
+  <p>
+    <em>Listing 3.13.</em> یک <code>interface</code> برای بازیابی لیستی از <code>e-books</code>های موجود.
+  </p>
+  <pre><code class="language-php">
+    interface Ebooks
+    {
+    /**
+    * @return array&lt;Ebook&gt;
+    */
+    public function listAvailableEbooks(): array;
+    }
+  </code></pre>
+  <p>
+    باز هم، این کلاس <code>Ebook</code> با کلاس <code>entity</code> یکسان نیست. <code>Objects</code> از این نوع به عنوان <code>read models</code> برای نمایش <code>data</code> در یک صفحه <code>HTML</code> عمل می‌کنند.
+    این <code>read models</code> را می‌توان "<code>view models</code>" نامید، زیرا از آنها برای نمایش <code>data</code> به کاربران یا سیستم‌های خارجی استفاده می‌شود. این با هدف <code>Ebook read model</code> از بخش 3.2 که در آن استفاده می‌شد، متفاوت است.
+    آن یکی فقط به صورت داخلی، برای محاسبه مقدار سفارش صحیح استفاده می‌شد. <code>data</code> از <code>Ebook view model</code> که ما قصد ایجاد آن را داریم، از مرزهای <code>application</code> ما، به دنیای بیرون، به کاربران واقعی <code>application</code> ما می‌رود.
+  </p>
+  <p>
+    این <code>Ebook view model</code> خاص چه شکلی دارد؟ چه <code>data</code>ای را شامل می‌شود، چه انواع <code>data</code>ای باید استفاده شود؟
+  </p>
+  <p>
+    برای یافتن پاسخ این سؤالات، ما باید به مکانی نگاه کنیم که <code>view model</code> در آن استفاده می‌شود. در این مورد این فایل <code>list.html.twig</code> است (Listing 3.14)، که <code>template</code> <code>Twig1</code> است که <code>HTML response</code> را برای <code>listEbooksAction()</code> تولید می‌کند.
+  </p>
+  <p>
+    <em>Listing 3.14.</em> <code>The Twig template</code> که لیست <code>e-books</code>های موجود را <code>renders</code> می‌کند.
+  </p>
+  <p>
+    <sup>1</sup> https://advwebapparch.com/twig
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

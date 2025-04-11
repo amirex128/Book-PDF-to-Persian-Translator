@@ -1,0 +1,39 @@
+Parameterized Containers
+Parameterizing your containers is the most important thing you can do to make your
+containers modular and reusable regardless of whether they are sidecars or not,
+though sidecars and other add-on containers are especially important to parameter‐
+ize.
+What do I mean when I say “parameterize”? Consider your container as a function in
+your program. How many parameters does it have? Each parameter represents an
+input that can customize a generic container to a specific situation. Consider, for
+example, the SSL add-on sidecar deployed previously. To be generally useful, it likely
+needs at least two parameters: the first is the name of the certificate being used to
+provide SSL, and the other is the port of the “legacy” application server running on
+localhost. Without these parameters, it is hard to imagine this sidecar container being
+usable for a broad array of applications. Similar parameters exist for all of the other
+sidecars described in this chapter.
+Now that we know the parameters we want to expose, how do we actually expose
+them to users, and how do we consume them inside the container. There are two
+ways in which such parameters can be passed to your container: through environ‐
+ment variables or the command line. Though either is feasible, I have a general pref‐
+erence for passing parameters via environment variables. An example of passing such
+parameters to a sidecar container is:
+docker run -e=PORT=<port> -d <image>
+Of course, delivering values into the container is only part of the battle. The other
+part is actually using these variables inside the container. Typically, to do that, a sim‐
+ple shell script is used that loads the environment variables supplied with the sidecar
+container and either adjusts the configuration files or parameterizes the underlying
+application.
+For example, you might pass in the certificate path and port as environment variables:
+docker run -e=PROXY_PORT=8080 -e=CERTIFICATE_PATH=/path/to/cert.crt ...
+In your container, you would use those variables to configure an nginx.conf file that
+points the web server to the correct file and proxy location.
+Define Each Container’s API
+Given that you are parameterizing your containers, it is obvious that your containers
+are defining a “function” that is called whenever the container is executed. This func‐
+tion is clearly a part of the API that is defined by your container, but there are other
+parts to this API as well, including calls that the container will make to other services
+as well as traditional HTTP or other APIs that the container provides.
+Designing Sidecars for Modularity and Reusability 
+| 
+17

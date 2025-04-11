@@ -1,0 +1,20 @@
+Figure 12-2. The join pattern for batch processing
+Reduce
+If sharding a work queue is an example of the map phase of the canonical map/reduce
+algorithm, then what remains is the reduce phase. Reduce is an example of a coordi‐
+nated batch processing pattern because it can happen regardless of how the input is
+split up, and it is used similar to join; that is, to group together the parallel output of a
+number of different batch operations on different pieces of data.
+However, in contrast to the join pattern described previously, the goal of reduce is not
+to wait until all data has been processed, but rather to optimistically merge together
+all of the parallel data items into a single comprehensive representation of the full set.
+With the reduce pattern, each step in the reduce merges several different outputs into
+a single output. This stage is called “reduce” because it reduces the total number of
+outputs. Additionally, it reduces the data from a complete data item to simply the
+representative data necessary for producing the answer to a specific batch computa‐
+tion. Because the reduce phase operates on a range of input, and produces a similar
+output, the reduce phase can be repeated as many or as few times as necessary in
+order to successfully reduce the output down to a single output for the entire data set.
+Reduce 
+| 
+135

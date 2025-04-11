@@ -1,0 +1,16 @@
+Figure 5-6. Adding the caching layer to our replicated service
+Unless you are careful, caching can break session tracking. The rea‐
+son for this is that if you use default IP address affinity and load
+balancing, all requests will be sent from the IP addresses of the
+cache, not the end user of your service. If you’ve followed the
+advice previously given and deployed a few large caches, your IP-
+address-based affinity may in fact mean that some replicas of your
+web layer see no traffic. Instead, you need to use something like a
+cookie or HTTP header for session tracking.
+Hands On: Deploying the Caching Layer
+The dictionary-server service we built earlier distributes traffic to the dictionary
+server and is discoverable as the DNS name dictionary-server-service. This pat‐
+tern is illustrated in Figure 5-7.
+Introducing a Caching Layer 
+| 
+51

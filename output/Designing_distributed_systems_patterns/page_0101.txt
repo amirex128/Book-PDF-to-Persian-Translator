@@ -1,0 +1,40 @@
+    --from-file defaults.py \
+    --trigger-http
+If you want to test the handling of this function, you can also use the kubeless tool:
+kubeless function call add-defaults --data '{"name": "foo"}'
+The decorator pattern shows just how easy it is to adapt and extend existing APIs
+with additional features like validation or defaulting.
+Handling Events
+While most systems are request driven, handling a steady stream of user and API
+requests, many other systems are more event-driven in nature. The differentiation, in
+my mind at least, between a request and an event have to do with the notion of ses‐
+sion. Requests are part of a larger series of interactions or sessions; generally each user
+request is part of a larger interaction with a complete web application or API. Events,
+as I see them, instead tend to be single-instance and asynchronous in nature. Events
+are important and need to be properly handled, but they are fired off from a main
+interaction and responded to some time later. Examples of events include a user sign‐
+ing up for a new service (which might trigger a welcome email, someone uploading a
+file to a shared folder (which might send notifications to everyone who has access to
+the folder), or even a machine being about to reboot (which might notify an operator
+or automated system to take appropriate action).
+Because these events tend to be largely independent and stateless in nature, and
+because the rate of events can be highly variable, they are ideal candidates for event-
+driven and FaaS architectures. In this role, they are often deployed alongside a pro‐
+duction application server as augmentation to the main user experience, or to handle
+some sort of reactive, background processing. Additionally, because new events are
+often dynamically added to the service, the lightweight nature of deploying functions
+is a good match for defining new event handlers. Likewise, because each event is con‐
+ceptually independent, the forced decoupling of a functions-based system actually
+helps reduce the conceptual complexity by enabling a developer to focus on the steps
+required to handle just a single type of event.
+A concrete example of integrating an event-based component to an existing service is
+implementing two-factor authentication. In this case, the event is the user logging
+into a service. The service can generate an event for this action, fire it into a function-
+based handler that takes the code and the user’s contact information, and sends the
+two-factor code via text message.
+Hands On: Implementing Two-Factor Authentication
+Two-factor authentication requires that the user both have something that they know
+(e.g., a password) as well as something that they possess (e.g., a phone) to be able to
+Patterns for FaaS 
+| 
+87

@@ -1,0 +1,29 @@
+3. Read models and view models
+'id' => $request->request->get('ebook_id')
+]
+)->fetchColumn(0);
+$orderAmount = (int)$request->get('quantity')
+* (int)$ebookPrice;
+// Save the order (Chapter 1)
+// ...
+return new Response(/* ... */);
+}
+For the same reasons as we discussed in the previous chapter, we’d like to
+have a better way to represent this crucial step of the scenario; retrieving
+the price of an e-book. We want to hide the low-level implementation details
+(relational database, ebooks table, price column, etc.) behind a high-level
+interface, which represents what information we’re interested in, instead of
+how the system retrieves that information. Maybe we can apply the same
+kind of refactoring as we did in Chapter 2? That is, introduce an Entity to
+represent the e-book and retrieve it from its repository.
+3.1. Reusing the write model
+Let’s assume we already have such an Ebook entity and an EbookRepository
+interface in our project, as shown in Listing 3.2. So far these classes have only
+been used inside the EbookController to add a new e-book to the catalog, or
+to change its details.
+Listing 3.2. The Ebook entity and EbookRepository interface.
+final class Ebook
+{
+private EbookId $ebookId;
+private int $price;
+53

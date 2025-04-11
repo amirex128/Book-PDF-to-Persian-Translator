@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 249</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3><strong>9. Conclusion</strong></h3>
+    <p>شما مجبور نخواهید بود کل Sprint Zero را صرف انتخاب و راه‌اندازی تمام infrastructure کنید. شما مجبور نخواهید بود بفهمید که وقتی بیشتر بودجه توسعه قبلاً خرج شده است، چیز اشتباهی ساخته‌اید. شما پشیمان نخواهید شد که MongoDB را به جای MySQL انتخاب کرده‌اید، زیرا مجبور نیستید در روز اول پروژه تصمیم بگیرید.</p>
+    <h4><strong>9.2. A summary of the strategy</strong></h4>
+    <p>فشار دادن infrastructure code به کناره‌ها به چه معناست؟ در فصل‌های قبل، ما قبلاً بسیاری از مراحل refactoring را دیده‌ایم که به ما در انجام این کار کمک کردند. همه آن تکنیک‌های refactoring "تاکتیکی" را می‌توان با یک strategy ساده خلاصه کرد. جداسازی core code از infrastructure code را می‌توان با اعمال اصول زیر به دست آورد:</p>
+    <ul>
+        <li>
+            از dependency injection در همه جا استفاده کنید، بگذارید services فقط به abstractions وابسته باشند.
+        </li>
+        <li>
+            Use cases را مستقل از مکانیزم تحویل input آن‌ها کنید.
+        </li>
+    </ul>
+    <p>نتیجه این خواهد بود که هیچ‌یک از core code به infrastructure code در هیچ‌کدام از طرفین وابسته نیست. در عین حال، هر infrastructure code قادر خواهد بود core code را فراخوانی کند. هیچ الزامات ویژه‌ای برای انجام این کار وجود ندارد. هر دو عنصر با هم ترکیب می‌شوند و کدی را ایجاد می‌کنند که کاملاً قابل حمل است. این یک دید واضح از use cases application را بدون هیچ گونه distortion ناشی از نگرانی‌های زیرساختی ارائه می‌دهد. این می‌تواند به راحتی و در isolation کامل، بدون هیچ setup خاصی تست شود.</p>
+    <h4><strong>9.2.1. Use dependency injection و inversion در همه جا</strong></h4>
+    <p>Dependency injection به این معنی است که services هر چیزی را که به آن وابسته هستند (سایر services و همچنین مقادیر configuration) را به عنوان constructor arguments تزریق می‌کنند. Dependency inversion به این معنی است که services به جای concrete classes، به abstractions وابسته هستند.</p>
+    <p><sup>1</sup>Robert C. Martin, “Agile Software Development, Principles, Patterns, and Practices”, Prentice Hall (2003).</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

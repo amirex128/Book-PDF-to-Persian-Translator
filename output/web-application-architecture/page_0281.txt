@@ -1,0 +1,35 @@
+11. Key design patterns
+Listing 11.13. Translating primitive-type values to rich domain objects.
+final class OrderService
+{
+private OrderRepository $orderRepository;
+// ...
+public function changeDeliveryAddress(
+ChangeDeliveryAddress $command
+): void {
+$order = $this->orderRepository->getById(
+OrderId::fromString($command->orderId())
+);
+// ...
+$order->changeDeliveryAddress(
+DeliveryAddress::fromScalars(
+$command->address(),
+$command->postalCode(),
+$command->city(),
+$command->country()
+)
+);
+// ...
+}
+}
+This helps keep the knowledge about how to deal with domain objects inside
+the core of the application, and not in infrastructure code like the controller.
+It also ensures that entities and value objects will only throw exceptions once
+the application service has been invoked. This way, the controller still has a
+chance to validate the command object itself and show form errors to the
+user.
+However, application services tend to become long lists of these primitive-
+value-to-value-object transformations, which obscures the view on the the
+actual use case that the service represents. As an alternative you can add
+accessor methods to the command object which instantiate and return the
+261

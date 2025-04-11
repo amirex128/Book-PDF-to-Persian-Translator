@@ -1,0 +1,30 @@
+The Decorator Pattern: Request or Response Transformation
+FaaS is ideal for deploying simple functions that can take an input, transform it into
+an output, and then pass it on to a different service. This general pattern can be used
+to augment or decorate HTTP requests to or from a different service. A basic illustra‐
+tion of this pattern is shown in Figure 8-1.
+Figure 8-1. The decorator pattern applied to HTTP APIs
+Interestingly, there are several analogies to this pattern in programming languages. In
+particular, the decorator pattern from Python is a close analogue for the services that a
+request or response decorator can perform. Because decoration transformations are
+generally stateless, and also because they are often added after the fact to existing
+code as the service evolves, they are ideal services to implement via FaaS. Addition‐
+ally, the lightness of FaaS means that you can experiment with a variety of different
+decorators before finally adopting one and pulling it more completely into the imple‐
+mentation of the service.
+A great example of the value of the decorator pattern is adding defaults to the input to
+an HTTP RESTFul API. In many cases in the API, there are fields whose values
+should have sane defaults if they are left empty. For example, you may want a field to
+default to true, but it’s difficult to accomplish this in classical JSON, because the
+default value for a field is null, which is generally understood to be false. To resolve
+this, we can add defaulting logic either in the front of the API server or within the
+application code itself (e.g., if (field == null) field = true). However, both of
+these solutions are somewhat unappealing since the defaulting mechanism is fairly
+conceptually independent from the handling of the request. Instead, we can use the
+FaaS decorator pattern to transform the request in between the user and the service
+implementation.
+Given the previous discussion of the adapter pattern in the single-node section, you
+may be wondering why we don’t simply package this defaulting as an adapter con‐
+Patterns for FaaS 
+| 
+85

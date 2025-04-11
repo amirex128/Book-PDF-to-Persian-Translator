@@ -1,0 +1,47 @@
+Finally, all of the preparations are done and we can deploy our ambasssador example.
+We define a pod that looks like:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ambassador-example
+spec:
+  containers:
+    # This is where the application container would go, for example
+    # - name: nginx
+    #   image: nginx
+    # This is the ambassador container
+    - name: twemproxy
+      image: ganomede/twemproxy
+      command:
+      - nutcracker
+      - -c
+      - /etc/config/nutcracker.yaml
+      - -v
+      - 7
+      - -s
+      - 6222
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: twem-config
+This pod defines the ambassador; then the specific user’s application container can be
+injected to complete the pod.
+Using an Ambassador for Service Brokering
+When trying to render an application portable across multiple environments (e.g.,
+public cloud, physical datacenter, or private cloud), one of the primary challenges is
+service discovery and configuration. To understand what this means, imagine a front‐
+end that relies on a MySQL database to store its data. In the public cloud, this MySQL
+service might be provided as software-as-a-service (SaaS), whereas in a private cloud
+it might be necessary to dynamically spin up a new virtual machine or container run‐
+ning MySQL.
+Consequently, building a portable application requires that the application know how
+to introspect its environment and find the appropriate MySQL service to connect to. 
+This process is called service discovery, and the system that performs this discovery
+and linking is commonly called a service broker. As with previous examples, the
+ambassador pattern enables a system to separate the logic of the application container
+Using an Ambassador for Service Brokering 
+| 
+25

@@ -1,0 +1,28 @@
+shard, which searches through it’s patent shard for patents which match the word in
+the query. Any matches that are found are returned to the root node in response to
+the shard request. The root node then collates all of these responses together into a
+single response that contains all the patents that match the particular word. The oper‐
+ation of this search index is illustrated in Figure 7-3.
+Hands On: Sharded Document Search
+The previous example scattered the different term requests across the cluster, but this
+only works if all of the documents are present on all of the machines in the scatter/
+gather tree. If there is not enough room for all of the documents in all of the leaves in
+the tree, then sharding must be used to put different sets of documents onto different
+leaves.
+This means that when a user makes a request for all documents that match the words
+“cat” and “dog,” the request is actually sent out to every leaf in the scatter/gather sys‐
+tem. Each leaf node returns the set of documents that it knows about that matches
+“cat” and “dog.” Previously, the root node was responsible for performing the inter‐
+section of the two sets of documents returned for two different words. In the sharded
+case, the root node is responsible for generating the union of all of the documents
+returned by all of the different shards and returning this complete set of documents
+back up to the user.
+In Figure 7-3, the first leaf serves documents 1 through 10 and returns {doc1, doc5}.
+The second leaf serves documents 11 through 20 and returns {doc15}. The third leaf
+serves documents 21 through 30 and returns {doc22, doc28}. The root combines all
+of these responses together into a single response and returns {doc1, doc5, doc15,
+doc22, doc28}.
+Figure 7-3. Conjunctive query executing in a scatter/gather search system
+Scatter/Gather with Leaf Sharding 
+| 
+77

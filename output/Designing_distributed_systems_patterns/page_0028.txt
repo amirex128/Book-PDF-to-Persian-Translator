@@ -1,0 +1,42 @@
+Modular Application Containers
+At this point, you might be forgiven if you thought that the sole reason for the sidecar
+pattern to exist was to adapt legacy applications where you no longer wanted to make
+modifications to the original source code. While this is a common use case for the
+pattern, there are many other motivations for designing things using sidecars. One of
+the other main advantages of using the sidecar pattern is modularity and reuse of the
+components used as sidecars. In deploying any real-world, reliable application, there
+is functionality that you need for debugging or other management of the application,
+such as giving a readout of all of the different processes using resources in the con‐
+tainer, similar to the top command line tool.
+One approach to providing this introspection is to require that each developer imple‐
+ment an HTTP /topz interface that provides a readout of resource usage. To make
+this easier, you might implement this webhook as a language-specific plugin that the
+developer could simply link into their application. But even if done this way, the
+developer would be forced to choose to link it in and your organization would be
+forced to implement the interface for every language it wants to support. Unless done
+with extreme rigor, this approach is bound to lead to variations among languages as
+well as a lack of support for the functionality when using new languages. Instead, this
+topz functionality can be deployed as a sidecar container that shares the process-id
+(PID) namespace with the application container. This topz container can introspect
+all running processes and provide a consistent user interface. Moreover, you can use
+the orchestration system to automatically add this container to all applications
+deployed via the orchestration system to ensure that there is a consistent set of tools
+available for all applications running in your infrastructure.
+Of course, with any technical choice, there are trade-offs between this modular
+container-based pattern and rolling your own code into your application. The
+library-based approach is always going to be somewhat less tailored to the specifics of
+your application. This means that it may be less efficient in terms of size of perfor‐
+mance, or that the API may require some adaptation to fit into your environment. I
+would compare these trade-offs to the difference between buying off-the-rack cloth‐
+ing versus bespoke fashion. The bespoke fashion will always fit you better, but it will
+take longer to arrive and cost more to acquire. As with clothes, for most of us it
+makes sense to buy the more general-purpose solution when it comes to coding. Of
+course, if your application demands extremes in terms of performance, you can
+always choose the handwritten solution.
+Hands On: Deploying the topz Container
+To see the topz sidecar in action, you first need to deploy some other container to act
+as the application container. Choose an existing application that you are running and
+deploy it using Docker:
+14 
+| 
+Chapter 2: The Sidecar Pattern

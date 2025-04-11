@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 36</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4 style="font-weight: bold;">Using an Ambassador to Shard a Service</h4>
+    <p>
+        گاهی اوقات داده‌هایی که می‌خواهید در یک storage layer ذخیره کنید، برای اینکه یک machine واحد بتواند آنها را مدیریت کند، بیش از حد بزرگ می‌شوند. در چنین situation هایی، شما باید storage layer خود را shard کنید. Sharding، لایه را به قطعات مجزا و متعددی تقسیم می‌کند که هر کدام توسط یک machine جداگانه میزبانی می‌شوند. این فصل بر یک pattern single-node برای تطبیق یک service موجود برای صحبت با یک service sharded که در جایی از world وجود دارد، متمرکز است. این بحث نمی‌کند که چگونه service sharded به وجود آمده است. Sharding و یک multi-node sharded service design pattern با جزئیات زیاد در فصل 6 مورد بحث قرار گرفته است. نموداری از یک service sharded در شکل 3-2 نشان داده شده است.
+    </p>
+    <p style="text-align: center;">
+        <em style="font-style: italic;">Figure 3-2. A generic sharded service</em>
+    </p>
+    <p>
+        هنگام deploy کردن یک service sharded، یک سوال مطرح می‌شود این است که چگونه آن را با frontend یا middleware code که داده‌ها را ذخیره می‌کند، ادغام کنیم. واضح است که باید logic وجود داشته باشد که یک request خاص را به یک shard خاص هدایت کند، اما اغلب retrofit کردن چنین client sharded در source code موجود که انتظار دارد به یک storage backend واحد متصل شود، دشوار است. علاوه بر این، services sharded، اشتراک configuration را بین development environments (که اغلب فقط یک storage shard وجود دارد) و production environments (که اغلب storage shards زیادی وجود دارد) دشوار می‌کند.
+    </p>
+    <p>
+        یک رویکرد این است که تمام logic sharding را در خود service sharded بسازیم. در این رویکرد، service sharded همچنین دارای یک load balancer stateless است که ترافیک را به shard مناسب هدایت می‌کند. به‌طور مؤثر، این load balancer یک ambassador توزیع شده به‌عنوان یک service است. این کار، یک ambassador client-side را در ازای یک deployment پیچیده‌تر برای service sharded غیر ضروری می‌کند. جایگزین این است که یک ambassador single-node را در سمت client ادغام کنید تا ترافیک را به shard مناسب هدایت کنید.
+    </p>
+    <p>
+        این کار، deploy کردن client را تا حدودی پیچیده‌تر می‌کند، اما deployment service sharded را ساده می‌کند. همانطور که همیشه در مورد trade-offs ها صدق می‌کند، این به ویژگی‌های application خاص شما بستگی دارد که مشخص کند کدام رویکرد منطقی‌تر است. برخی از عواملی که باید در نظر گرفته شوند عبارتند از جایی که خطوط تیم در معماری شما قرار دارند، و همچنین جایی که شما کد می‌نویسید در مقابل deploy کردن نرم‌افزار off-the-shelf.
+    </p>
+    <p>
+        در نهایت، هر دو انتخاب معتبر هستند. بخش زیر نحوه استفاده از single-node ambassador pattern را برای sharding client-side توضیح می‌دهد.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0036/image_1.png" alt="Image from page 36" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

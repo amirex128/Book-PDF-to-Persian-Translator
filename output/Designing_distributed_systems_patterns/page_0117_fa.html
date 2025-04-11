@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 117</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   ممکن است عجیب به نظر برسد که Alice به طور مداوم نام خود را در lock بازنویسی می‌کند، اما این روشی است که lease lock از 10-second TTL فراتر می‌رود.
+  </p>
+  <p>
+   اگر به هر دلیلی، TTL منقضی شود، پس update lock با شکست مواجه می‌شود، و Alice به ایجاد lock با استفاده از دستور etcd mk برمی‌گردد، یا Bob ممکن است از دستور mk برای به دست آوردن lock برای خود استفاده کند. Bob به همین ترتیب نیاز دارد که lock را هر 10 ثانیه تنظیم و update کند تا ownership را حفظ کند.
+  </p>
+  <h4><strong>Handling Concurrent Data Manipulation</strong></h4>
+  <p>
+   حتی با تمام mechanisms های locking که ما شرح داده‌ایم، هنوز هم ممکن است که دو replica به طور همزمان معتقد باشند که lock را برای یک دوره زمانی بسیار کوتاه در اختیار دارند.
+  </p>
+  <p>
+   برای درک اینکه چگونه این اتفاق می‌تواند رخ دهد، تصور کنید که lock holder اصلی آنقدر غرق شده است که processor آن برای چند دقیقه در یک زمان متوقف می‌شود. این می‌تواند در machine های بیش از حد برنامه‌ریزی شده رخ دهد. در چنین موردی، lock time out می‌شود و برخی از replica های دیگر، lock را در اختیار خواهند داشت. اکنون processor، replica ای را که lock holder اصلی بود، آزاد می‌کند. بدیهی است، function handleLockLost() به سرعت فراخوانی می‌شود، اما یک دوره کوتاه وجود خواهد داشت که replica هنوز معتقد است که lock را در اختیار دارد. اگرچه چنین event ای نسبتاً بعید است، systems ها باید طوری ساخته شوند که در برابر این رخدادها مقاوم باشند. اولین قدم این است که دوباره بررسی کنید که آیا lock هنوز در اختیار است یا خیر، با استفاده از یک function مانند این:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) isLocked() boolean {
+  return l.locked && l.lockTime + 0.75 * l.ttl > now()
+}
+   </code>
+  </pre>
+  <p>
+   اگر این function قبل از هر code ای که نیاز به محافظت توسط یک lock دارد، اجرا شود، احتمال فعال بودن دو master به طور قابل توجهی کاهش می‌یابد، اما – مهم است که توجه داشته باشید – به طور کامل حذف نمی‌شود. timeout lock همیشه می‌تواند بین زمانی که lock بررسی شد و code محافظت شده اجرا شد، رخ دهد. برای محافظت در برابر این سناریوها، system که از replica فراخوانی می‌شود، نیاز دارد که اعتبار‌سنجی کند که replica که در حال ارسال یک request است، در واقع همچنان master است. برای انجام این کار، hostname از replica که lock را در اختیار دارد، علاوه بر state از lock، در key-value store ذخیره می‌شود. به این ترتیب، دیگران می‌توانند دوباره بررسی کنند که آیا یک replica که ادعا می‌کند master است، در واقع master است یا خیر.
+  </p>
+  <p>
+   این diagram system در Figure 9-2 نشان داده شده است. در اولین تصویر، shard2 owner از lock است، و هنگامی که یک request به worker ارسال می‌شود، worker با lock server دوباره بررسی می‌کند و اعتبار‌سنجی می‌کند که shard2 در واقع owner فعلی است.
+  </p>
+  <p>
+   Handling Concurrent Data Manipulation
+   | 103
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

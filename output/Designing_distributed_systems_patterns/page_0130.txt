@@ -1,0 +1,77 @@
+const path = process.env.MEDIA_PATH;
+const requestHandler = (request, response) => {
+ 
+console.log(request.url);
+ 
+fs.readdir(path + '/*.mp4', (err, items) => {
+ 
+ 
+var msg = {
+ 
+ 
+ 
+'kind': 'ItemList',
+ 
+ 
+ 
+'apiVersion': 'v1',
+ 
+ 
+ 
+'items': []
+ 
+ 
+};
+ 
+ 
+if (!items) {
+ 
+ 
+ 
+return msg;
+ 
+ 
+}
+ 
+ 
+for (var i = 0; i < items.length; i++) {
+ 
+ 
+ 
+msg.items.push(items[i]);
+ 
+ 
+}
+ 
+ 
+response.end(JSON.stringify(msg));
+ 
+});
+}
+const server = http.createServer(requestHandler);
+server.listen(port, (err) => {
+ 
+if (err) {
+ 
+ 
+return console.log('Error starting server', err);
+ 
+}
+ 
+console.log(`server is active on ${port}`)
+});
+This source of defines the queue of movies to thumbnail. We use the ffmpeg utility to
+actually perform the thumbnailing work.
+You can create a container that uses the following as its command line:
+ffmpeg -i ${INPUT_FILE} -frames:v 100 thumb.png
+This command will take one frame every 100 frames (that’s the -frames:v 100 flag)
+and output it as a PNG file (e.g., thumb1.png, thumb2.png, etc.).
+You can implement this image processing using an existing ffmpeg Docker image.
+The jrottenberg/ffmpeg Docker image is a popular choice.
+By defining a simple source container as well as an even simpler worker container, we
+can clearly see the power and utility of a generic, container-based queuing system. It
+dramatically reduces the time/distance between an idea for implementing a work
+queue and the corresponding concrete implementation.
+116 
+| 
+Chapter 10: Work Queue Systems

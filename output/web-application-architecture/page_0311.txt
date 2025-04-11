@@ -1,0 +1,32 @@
+12. Architectural layers
+• Will they be able to understand it, and apply it to their own contribu-
+tions?
+• Who will make sure the documentation gets updated if it needs to?
+It’s better not to document the layering system separately. Instead, make sure
+the use of layers is apparent from the moment you take your first look at the
+code.
+12.4.2. Using namespaces for layering
+Layers are a way of grouping things. Those things are mostly classes, and
+classes can be grouped in namespaces. So using class namespaces as an indi-
+cator for the presence of a layering system would be a good idea. As an exam-
+ple, an Order class would be in the Domain namespace. The EbookOrderService
+class would be in the Application namespace. The OrderRepositoryUsingSql
+class would be in the Infrastructure namespace.
+Although a good solution, it’s not a very scalable one. Given the amount of
+classes in each namespace we should make a subdivision within each layer
+namespace.
+For starters, Domain could have two sub-namespaces, namely Model and Service.
+Model could have sub-namespaces for each entity (or actually, each aggre-
+gate) (see Figure 12.7 for an example).
+Note that this is really just an example. This layout is based on Vaughn Ver-
+non’s “Implementing Domain-Driven Design”3 and I have had some good re-
+sults with it. You and your team can always settle on a different structure.
+The Application namespace could have sub-namespaces for every use case it
+implements. You could provide actual phrases as the name for each use case.
+Make sure to include use cases for performing tasks (e.g. CreateOrder) as well
+as use cases that are about retrieving information (e.g. ListAvailableEbooks).
+In each sub-namespace you could keep the classes that are involved in han-
+dling the use case, like the application service itself, the command DTO, the
+3See Chapter 4: Architecture, in Vaughn Vernon, “Implementing Domain-Driven Design”,
+Addison-Wesley Professional (2013).
+291

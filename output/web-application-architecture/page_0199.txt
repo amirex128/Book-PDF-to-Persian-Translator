@@ -1,0 +1,35 @@
+7. Time and randomness
+public static function fromDateTimeImmutable(
+DateTimeImmutable $dateTimeImmutable
+): self {
+return new self(
+$dateTimeImmutable->format(self::DATE_FORMAT)
+);
+}
+// ...
+}
+Adding a named constructor like this exposes some of the object’s internal
+implementation details. But the benefits of allowing this to happen (easier
+conversion between different types of values) may be larger than the costs
+(keeping everything inside the object).
+Listing 7.16 shows how the Calender and OrderRepository can now be used
+inside the EbookOrderService.
+Listing 7.16. Using Calendar and OrderRepository.
+final class EbookOrderService
+{
+private Calendar $calendar;
+private OrderRepository $orderRepository;
+// ...
+public function __construct(
+Calendar $calendar,
+OrderRepository $orderRepository,
+// ...
+) {
+$this->calendar = $calendar;
+$this->orderRepository = $orderRepository;
+// ...
+}
+public function create(/* ... */): OrderId
+{
+$order = Order::create(
+179

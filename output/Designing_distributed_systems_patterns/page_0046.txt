@@ -1,0 +1,34 @@
+Figure 4-1. The generic adapter pattern
+The remainder of this chapter gives several different applications of the adapter pat‐
+tern.
+Monitoring
+When monitoring your software, you want a single solution that can automatically
+discover and monitor any application that is deployed into your environment. To
+make this feasible, every application has to implement the same monitoring interface.
+There are numerous examples of standardized monitoring interfaces, such as syslog,
+event tracing on Windows (etw), JMX for Java applications, and many, many other
+protocols and interfaces. However, each of these is unique in both protocol for com‐
+munication as well as the style of communication (push versus pull).
+Sadly, applications in your distributed system are likely to span the gamut from code
+that you have written yourself to off-the-shelf open source components. As a result,
+you will find yourself with a wide range of different monitoring interfaces that you
+need to integrate into a single well-understood system.
+Fortunately, most monitoring solutions understand that they need to be widely appli‐
+cable, and thus they have implemented a variety of plugins that can adapt one moni‐
+toring format to a common interface. Given this set of tools, how can we deploy and
+manage our applications in an agile and stable manner? Fortunately, the adapter pat‐
+tern can provide us with the answers. Applying the adapter pattern to monitoring, we
+see that the application container is simply the application that we want to monitor.
+The adapter container contains the tools for transforming the monitoring interface
+exposed by the application container into the interface expected by the general-
+purpose monitoring system.
+Decoupling the system in this fashion makes for a more comprehensible, maintaina‐
+ble system. Rolling out new versions of the application doesn’t require a rollout of the
+monitoring adapter. Additionally, the monitoring container can be reused with multi‐
+ple different application containers. The monitoring container may even have been
+supplied by the monitoring system maintainers independent of the application devel‐
+opers. Finally, deploying the monitoring adapter as a separate container ensures that
+each container gets its own dedicated resources in terms of both CPU and memory.
+32 
+| 
+Chapter 4: Adapters

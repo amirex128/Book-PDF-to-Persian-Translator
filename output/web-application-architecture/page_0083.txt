@@ -1,0 +1,34 @@
+3. Read models and view models
+// When state changes, we additionally "record" a domain event
+$this->events[] = new PriceChanged($this->ebookId, $newPrice);
+}
+public function recordedEvents(): array
+{
+// Clients can find out what happened by calling this method
+return $this->events;
+}
+}
+/*
+* A `PriceChanged` domain event is an object that holds the ID of the
+* e-book whose price changed, as well as the new price.
+*/
+final class PriceChanged
+{
+private EbookId $ebookId;
+private int $newPrice;
+public function __construct(EbookId $ebookId, int $newPrice)
+{
+$this->ebookId = $ebookId;
+$this->newPrice = $newPrice;
+}
+public function ebookId(): EbookId
+{
+return $this->ebookId;
+}
+public function newPrice(): int
+{
+return $this->newPrice;
+}
+}
+In order for the events to be useful outside of the entity, they have to be ex-
+63

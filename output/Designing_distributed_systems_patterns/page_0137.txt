@@ -1,0 +1,25 @@
+where the video is intended to be shown. There might be a 4-KB high-resolution for‐
+mat for playing off of a hard drive, a 1080-pixel rendering for digital streaming, a
+low-resolution format for streaming to mobile users on slow networks, and an ani‐
+mated GIF thumbnail for displaying in a movie-picking user interface. All of these
+work items can be modeled as separate work queues for each render, but the input to
+each work item is identical. An illustration of the copier pattern applied to transcod‐
+ing is shown in Figure 11-2.
+Figure 11-2. The copier batch pattern for transcoding
+Filter
+The second pattern for event-driven batch processing is a filter. The role of a filter is
+to reduce a stream of work items to a smaller stream of work items by filtering out
+work items that don’t meet particular criteria. As an example of this, consider setting
+up a batch workflow that handles new users signing up for a service. Some set of
+those users will have ticked the checkbox that indicates that they wish to be contacted
+via email for promotions and other information. In such a workflow, you can filter
+the set of newly signed-up users to only be those who have explicitly opted into being
+contacted.
+Ideally you would compose a filter work queue source as an ambassador that wraps
+up an existing work queue source. The original source container provides the com‐
+plete list of items to be worked on, and the filter container then adjusts that list based
+on the filter criteria and only returns those filtered results to the work queue infra‐
+structure. An illustration of this use of the adapter pattern is shown in Figure 11-3.
+Patterns of Event-Driven Processing 
+| 
+123

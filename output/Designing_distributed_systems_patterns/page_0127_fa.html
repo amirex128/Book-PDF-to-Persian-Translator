@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 127</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Figure 10-4.</h3>
+  <p>
+   The work queue worker API
+  </p>
+  <p>
+   این <strong>file-based API pattern</strong>، پیاده‌سازی را برای <strong>container</strong> نیز آسان‌تر می‌کند. اغلب یک <strong>work queue worker</strong>، به سادگی یک <strong>shell script</strong> در میان چند <strong>command line tools</strong> است. در این زمینه، راه‌اندازی یک <strong>web server</strong> برای مدیریت کاری که باید انجام شود، یک پیچیدگی غیرضروری است. همانطور که در مورد پیاده‌سازی <strong>work queue source</strong> صدق می‌کرد، اکثر <strong>worker containers</strong>، <strong>container images</strong> با هدف خاص هستند که برای <strong>work queue applications</strong> خاص ساخته شده‌اند، اما <strong>workers</strong> <strong>generic</strong> نیز وجود دارند که می‌توانند برای چندین <strong>work queue applications</strong> مختلف اعمال شوند.
+  </p>
+  <p>
+   مثال یک <strong>work queue worker</strong> را در نظر بگیرید که یک فایل را از <strong>cloud storage</strong> دانلود می‌کند و یک <strong>shell script</strong> را با آن فایل به عنوان ورودی اجرا می‌کند و سپس خروجی آن را به <strong>cloud storage</strong> کپی می‌کند. چنین <strong>container</strong> می‌تواند عمدتاً <strong>generic</strong> باشد، اما سپس <strong>script</strong> خاصی را که باید اجرا شود، به عنوان یک <strong>runtime parameter</strong> به آن ارائه می‌دهد. به این ترتیب، بیشتر کارهای مربوط به <strong>file handling</strong> می‌تواند توسط چندین کاربر/<strong>work queues</strong> به اشتراک گذاشته شود و تنها موارد خاص پردازش فایل باید توسط کاربر نهایی ارائه شود.
+  </p>
+  <h3>The Shared Work Queue Infrastructure</h3>
+  <p>
+   با توجه به پیاده‌سازی‌های دو <strong>container interface</strong> که قبلاً توضیح داده شد، برای پیاده‌سازی مجدد <strong>work queue</strong> ما چه چیزی باقی مانده است؟ <strong>algorithm</strong> اساسی برای <strong>work queue</strong> کاملاً ساده است:
+  </p>
+  <ol>
+   <li>بارگیری کار موجود با فراخوانی در <strong>source container interface</strong>.</li>
+   <li>با <strong>work queue state</strong> مشورت کنید تا مشخص کنید کدام <strong>work items</strong> پردازش شده‌اند یا در حال حاضر در حال پردازش هستند.</li>
+   <li>برای این <strong>items</strong>، <strong>jobs</strong>ی را راه‌اندازی کنید که از <strong>worker container interface</strong> برای پردازش <strong>work item</strong> استفاده می‌کنند.</li>
+   <li>هنگامی که یکی از این <strong>worker containers</strong> با موفقیت به پایان رسید، ثبت کنید که <strong>work item</strong> تکمیل شده است.</li>
+  </ol>
+  <p>
+   در حالی که بیان این <strong>algorithm</strong> با کلمات ساده است، پیاده‌سازی آن در واقعیت تا حدودی پیچیده‌تر است. خوشبختانه برای ما، <strong>Kubernetes container orchestrator</strong> حاوی تعدادی از ویژگی‌ها است که پیاده‌سازی آن را به طور قابل توجهی آسان‌تر می‌کند. به طور خاص،
+  </p>
+  <p>
+   A Generic Work Queue System
+  </p>
+  <p>
+   113
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0127/image_1.png" alt="Image from page 127" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

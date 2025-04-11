@@ -1,0 +1,34 @@
+6. External services
+complish this by tagging or grouping them, or keeping them in a separate
+test suite. Make sure the code itself gives detailed reports about the fail-
+ures, so you won’t accidentally ignore important issues, like when an ex-
+ternal service has introduced a breaking change in their API. You will find
+more suggestions for improving unreliable tests in “xUnit Test Patterns:
+Refactoring Test Code” by Gerard Meszaros, Addison-Wesley Professional
+(2007).
+The advice to extract as much unit-testable code as possible holds here too.
+For instance, take the VatApi::vatRateCheck() method. Its return value is a
+VatRateCheckResult object. It contains all the logic for interpreting the re-
+sponse data and returning the requested values from it (see Listing 6.17)
+Listing 6.17. VatRateCheckResult again.
+final class VatRateCheckResult
+{
+private array $responseData;
+public function __construct(array $responseData)
+{
+$this->responseData = $responseData;
+}
+public function rate(string $fallbackType): int
+{
+if ($this->responseData['filter_match']) {
+return (int)$this->responseData['rate'];
+}
+return (int)$this->responseData['rates']
+[$fallbackType]['rate'];
+}
+}
+The different execution paths in rate() shouldn’t be tested through an in-
+tegration test. You don’t need a network connection to verify that this logic
+works. Instead, a unit test would suffice (see Listing 6.18).
+Listing 6.18. A unit test for VatRateCheckResult.
+157

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 63</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   به طور کلی، این session tracking با hashing کردن source و destination IP addresses انجام می‌شود و از آن key برای شناسایی server ای که باید requests ها را service دهد، استفاده می‌شود. تا زمانی که source و destination IP addresses ثابت بمانند، همه requests ها به همان replica ارسال می‌شوند.
+  </p>
+  <p>
+   IP-based session tracking در داخل یک cluster (IP های داخلی) کار می‌کند اما به طور کلی با IP addresses های خارجی به دلیل network address translation (NAT) به خوبی کار نمی‌کند. برای external session tracking، application-level tracking (به عنوان مثال، از طریق cookies) ترجیح داده می‌شود.
+  </p>
+  <p>
+   اغلب، session tracking از طریق یک consistent hashing function انجام می‌شود. مزیت یک consistent hashing function زمانی آشکار می‌شود که service به بالا یا پایین scale می‌شود. بدیهی است، هنگامی که تعداد replicas تغییر می‌کند، mapping یک user خاص به یک replica ممکن است تغییر کند. Consistent hashing functions تعداد users هایی را که واقعاً replica ای که به آن map شده‌اند را تغییر می‌دهند، به حداقل می‌رسانند، که تأثیر scaling بر application شما را کاهش می‌دهد.
+  </p>
+  <h4><strong>Application-Layer Replicated Services</strong></h4>
+  <p>
+   در تمام مثال‌های قبلی، replication و load balancing در لایه network service انجام می‌شود. load balancing مستقل از protocol واقعی است که بر روی network صحبت می‌شود، فراتر از TCP/IP. با این حال، بسیاری از applications از HTTP به عنوان protocol برای صحبت با یکدیگر استفاده می‌کنند، و دانش protocol application که در حال صحبت است، اصلاحات بیشتری را برای الگوی serving stateless replicated برای قابلیت‌های اضافی امکان‌پذیر می‌کند.
+  </p>
+  <h4><strong>Introducing a Caching Layer</strong></h4>
+  <p>
+   گاهی اوقات code در service stateless شما با وجود stateless بودن همچنان expensive است. ممکن است برای service requests ها، query هایی را به یک database انجام دهد یا مقدار قابل توجهی rendering یا data mixing را برای service request انجام دهد. در چنین دنیایی، یک caching layer می‌تواند حس بسیار خوبی داشته باشد. یک cache بین application stateless شما و request end-user وجود دارد. ساده‌ترین شکل caching برای web applications، یک caching web proxy است. caching proxy به سادگی یک HTTP server است که requests های user را در state حافظه نگه می‌دارد. اگر دو user یک web page یکسان را request کنند، فقط یک request به backend شما می‌رود. دیگری از حافظه cache service می‌شود. این در Figure 5-4 نشان داده شده است.
+  </p>
+  <p>
+   Application-Layer Replicated Services
+   | 49
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0063/image_1.png" alt="Image from page 63" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

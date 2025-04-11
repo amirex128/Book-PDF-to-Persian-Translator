@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 180</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> External services</h3>
+  <p><code>EbookOrderService</code> آن را کارآمد کرد، اما ما را با یک طراحی بد رها کرد. ما جزئیات ارتباط سطح پایین را به یک کلاس <strong>service</strong> جداگانه منتقل کردیم. این ما را با یک <strong>client API</strong>، یا <strong>Facade</strong>، به نام <code>VatApi</code> رها کرد، که می‌توانست به عنوان یک وابستگی تزریق شود، اما نمی‌توانست با چیز دیگری جایگزین شود. وابستگی مستقیم به یک کلاس، آینده <strong>service</strong> را به خطر می‌اندازد، اما <strong>testability</strong> آن را نیز کاهش می‌دهد. ما یک <strong>abstraction</strong> مناسب را معرفی کردیم تا بر این مشکلات غلبه کنیم، و ما را با یک <strong>interface VatRateProvider</strong> و یک پیاده‌سازی استاندارد، که از <strong>client VatApi</strong> که از قبل داشتیم، استفاده می‌کند. وضعیت آزمایش بسیار بهتر است، زیرا <strong>clients</strong> از <code>VatRateProvider</code> اکنون می‌توانند به راحتی یک <strong>test double</strong> برای آن تنظیم کنند. این بدان معناست که <code>EbookOrderService</code> یک بار دیگر به صورت مجزا قابل آزمایش است. هر پیاده‌سازی از <strong>interface</strong> هنوز به <strong>integration test</strong> خود نیاز دارد.</p>
+  <p>به عنوان بخشی از اجرای چنین تستی، پیاده‌سازی یک تماس واقعی با <strong>service</strong> از راه دور برقرار می‌کند تا تأیید کند که فرضیات آن در مورد <strong>service</strong> خارجی درست است، و اینکه کلاس یک پیاده‌سازی صحیح از <strong>interface</strong> است.</p>
+  <p><strong>Exercises</strong></p>
+  <p>1. روش صحیح برای انتزاع فراخوانی <strong>services</strong> خارجی چیست؟a</p>
+  <ol>
+   <li>به جای توابع <code>curl_*</code> از یک <strong>abstraction client HTTP</strong> استفاده کنید.</li>
+   <li>یک کلاس <strong>abstract</strong> معرفی کنید که می‌توانید به آن وابسته باشید. زیر کلاس می‌تواند کار واقعی را انجام دهد.</li>
+   <li>یک <strong>interface</strong> و یک پیاده‌سازی معرفی کنید که تماس واقعی را برقرار می‌کند.</li>
+  </ol>
+  <p>2. یک <strong>test</strong> خوب برای فهمیدن اینکه آیا شما به سطح مناسب <strong>abstraction</strong> برای یک وابستگی <strong>service</strong> رسیده‌اید، چیست؟b</p>
+  <ol>
+   <li>اگر بتوانید یک <strong>test double</strong> برای آن ایجاد کنید، یک <strong>abstraction</strong> خوب است.</li>
+   <li>اگر جزئیات پیاده‌سازی به طور اساسی تغییر کند، یک <strong>abstraction</strong> خوب است.</li>
+  </ol>
+  <p>3. اگر یک <strong>object</strong> با یک <strong>service</strong> خارجی ارتباط برقرار می‌کند، شما باید چه نوع تستی برای آن بنویسید؟c</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

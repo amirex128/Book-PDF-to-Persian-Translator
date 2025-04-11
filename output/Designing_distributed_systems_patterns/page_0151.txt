@@ -1,0 +1,36 @@
+Ultimately, in this example you can see that the output of the reduction will be a sin‐
+gle output with the count of all of the various words that are present in the book.
+Sum
+A similar but slightly different form of reduction is the summation of a collection of
+different values. This is like counting, but rather than simply counting one for every
+value, you actually add together a value that is present in the original output data.
+Suppose, for example, you want to sum the total population of the United States.
+Assume that you will do this by measuring the population in every town and then
+summing them all together.
+A first step might be to shard the work into work queues of towns, sharded by state.
+This is a great first sharding, but it’s clear that even when distributed in parallel, it
+would take a single person a long time to count the number of people in every town.
+Consequently, we perform a second sharding to another set of work queues, this time
+by county.
+At this point, we have parallelized first to the level of states, then to the level of coun‐
+ties, and then each work queue in each county produces a stream of outputs of (town,
+population) tuples.
+Now that we are producing output, the reduce pattern can kick in.
+In this case, the reduce doesn’t even really need to be aware of the two-level sharding
+that we performed. It is sufficient for the reduce to simply grab two or more output
+items, such as (Seattle, 4,000,000) and (Northampton, 25,000), and sum them
+together to produce a new output (Seattle-Northampton, 4,025,000). It’s clear to
+see that, like counting, this reduction can be performed an arbitrary number of times
+with the same code running at each interval, and at the end, there will only be a single
+output containing the complete population of the United States. Importantly, again,
+nearly all of the computation required is happening in parallel.
+Histogram
+As a final example of the reduce pattern, consider that while we are counting the pop‐
+ulation of the United States via parallel sharding/mapping and reducing, we also want
+to build a model of the average American family. To do this, we want to develop a
+histogram of family size; that is, a model that estimates the total number of families
+with zero to 10 children. We will perform our multi-level sharding exactly as before
+(indeed, we can likely use the same workers).
+Reduce 
+| 
+137

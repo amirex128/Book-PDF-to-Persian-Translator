@@ -1,0 +1,40 @@
+By adding TTL to our locks, we have actually introduced a bug into our unlock func‐
+tion. Consider the following scenario:
+1. Process-1 obtains the lock with TTL t.
+2. Process-1 runs really slowly for some reason, for longer than t.
+3. The lock expires.
+4. Process-2 acquires the lock, since Process-1 has lost it due to TTL.
+5. Process-1 finishes and calls unlock.
+6. Process-3 acquires the lock.
+At this point, Process-1 believes that it has unlocked the lock that it held at the begin‐
+ning; it doesn’t understand that it has actually lost the lock due to TTL, and in fact
+unlocked the lock held by Process-2. Then Process-3 comes along and also grabs the
+lock. Now both Process-2 and Process-3 both believe they own the lock, and hilarity
+ensues.
+Fortunately, the key-value store provides a resource version for every write that is per‐
+formed. Our lock function can store this resource version and augment compareAnd
+Swap to ensure that not only is the value as expected, but the resource version is the
+same as when the lock operation occurred. This changes our simple Lock function to
+look like this:
+func (Lock l) simpleLock() boolean {
+  // compare and swap "1" for "0"
+  locked, l.version, error = compareAndSwap(l.lockName, "1", "0", l.ttl)
+  // lock doesn't exist, try to write "1" with a previous value of
+  // non-existent
+  if error != null {
+    locked, l.version, _ = compareAndSwap(l.lockName, "1", null, l.ttl)
+  }
+  return locked
+}
+And the unlock function then looks like this:
+func (Lock l) unlock() {
+  compareAndSwap(l.lockName, "0", "1", l.version)
+}
+This ensures that the lock is only unlocked if the TTL has not expired.
+Hands On: Implementing Locks in etcd
+To implement locks in etcd, you can use a key as the name of the lock and pre-
+condition writes to ensure that only one lock holder is allowed at a time. For simplic‐
+ity, we’ll use the etcdctl command line to lock and unlock the lock. In reality, of
+100 
+| 
+Chapter 9: Ownership Election

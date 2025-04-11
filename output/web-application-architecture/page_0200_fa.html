@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 200</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Time and randomness</h3>
+  <pre><code class="language-php">
+        $this->orderRepository->nextIdentity(),
+        $this->calendar->currentDate(),
+        // ...
+    );
+    // ...
+    return $order->orderId();
+}
+</code></pre>
+  <p>به ما این امکان را می‌دهد که در یک <strong>Test</strong> <strong>ID</strong> منحصر به فرد و تاریخ را دریافت کنیم. ما اکنون <strong>entity Order</strong> را بازنویسی کردیم تا از این <strong>services</strong> جدید استفاده کند. اکنون در مورد <strong>UUID</strong> و <code>DateTimeImmutable</code>، ما <strong>IO</strong> را از <strong>test</strong> خارج کردیم. در اینجا یک قدم دیگر برمی‌داریم.</p>
+  <h4> 7.5. Manipulating the current time</h4>
+  <p>اکنون که ما <strong>interface Clock</strong> و یک پیاده‌سازی استاندارد را داریم، ما می‌توانیم هر <strong>instantiation</strong> از <code>DateTimeImmutable</code> را در <strong>application</strong> خود به عنوان یک فراخوانی به <code>Clock::currentTime()</code> بازنویسی کنیم. این به ما یک مکان واحد می‌دهد تا زمان فعلی را تعیین کنیم، که هنگام شروع نوشتن <strong>acceptance tests</strong> در ادامه (به فصل 14 مراجعه کنید) بسیار مفید خواهد بود. <strong>Listing</strong> 7.17 نشان می‌دهد که ما می‌توانیم در یک <strong>test</strong> انجام دهیم تا بر زمان فعلی تأثیر بگذاریم، زیرا <strong>application</strong> ما آن را درک خواهد کرد.</p>
+  <p><strong>Listing</strong> 7.17. In a test, you can easily configure the “current” time.</p>
+  <pre><code class="language-php">
+final class CreateOrderTest extends TestCase
+{
+    public function it_creates_an_order(): void
+    {
+        $clock = new class implements Clock {
+            public function currentTime(): DateTimeImmutable
+            {
+                return new DateTimeImmutable('2019-07-09');
+            }
+        };
+
+        $service = new EbookOrderService(
+            new CalendarUsesClock($clock),
+            // ...
+        );
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

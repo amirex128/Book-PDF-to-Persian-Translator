@@ -1,0 +1,27 @@
+between the user requests and the actually frontend implementation. A high-level
+diagram of the system is shown in Figure 6-2.
+Figure 6-2. A sharded cache
+In Chapter 3, we discussed how an ambassador could be used to distribute data to a
+sharded service. This section discusses how to build that service. When designing a
+sharded cache, there are a number of design aspects to consider:
+• Why you might need a sharded cache
+• The role of the cache in your architecture
+• Replicated, sharded caches
+• The sharding function
+Why You Might Need a Sharded Cache
+As was mentioned in the introduction, the primary reason for sharding any service is
+to increase the size of the data being stored in the service. To understand how this
+helps a caching system, imagine the following system: Each cache has 10 GB of RAM
+available to store results, and can serve 100 requests per second (RPS). Suppose then
+that our service has a total of 200 GB possible results that could be returned, and an
+expected 1,000 RPS. Clearly, we need 10 replicas of the cache in order to satisfy 1,000
+RPS (10 replicas × 100 requests per second per replica). The simplest way to deploy
+this service would be as a replicated service, as described in the previous chapter. But
+deployed this way, the distributed cache can only hold a maximum of 5% (10 GB/200
+GB) of the total data set that we are serving. This is because each cache replica is
+independent, and thus each cache replica stores roughly the exact same data in the
+cache. This is great for redundancy, but pretty terrible for maximizing memory uti‐
+lization. If instead, we deploy a 10-way sharded cache, we can still serve the appropri‐
+60 
+| 
+Chapter 6: Sharded Services

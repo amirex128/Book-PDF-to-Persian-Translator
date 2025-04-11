@@ -1,0 +1,34 @@
+5. Service locators
+// ...
+OrderRepository $orderRepository
+) {
+// ...
+$this->orderRepository = $orderRepository;
+}
+}
+We could have injected the service container itself, which would have made
+moving the code even easier. If we had done that, the application service
+would depend on the framework-specific ContainerInterface:
+use Symfony\Component\DependencyInjection\ContainerInterface;
+final class EbookOrderService
+{
+private ContainerInterface $container;
+public function __construct(ContainerInterface $container)
+{
+$this->container = $container;
+}
+public function createOrder(/* ... */): OrderId
+{
+// ...
+$orderRepository = $this->container->get('order_repository');
+// ...
+}
+}
+It’s not a very nice thing to introduce a dependency on framework code inside
+core code. It doesn’t break the first rule for core code though, because there
+is no runtime dependency on external systems. However, it does conflict
+somewhat with the second rule. By injecting the generic ContainerInterface
+we now require a special context for our service to run in. The container has
+to know about all the dependencies that the application service might need,
+and know how to instantiate any one of them at any point in time. If we
+110

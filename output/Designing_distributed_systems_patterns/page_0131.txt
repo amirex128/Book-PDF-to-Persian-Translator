@@ -1,0 +1,41 @@
+Dynamic Scaling of the Workers
+The previously described work queue is great for processing work items as quickly as
+they arrive in the work queue, but this can lead to bursty resource loads being placed
+onto a container orchestrator cluster. This is good if you have a lot of different work‐
+loads that will burst at different times and thus keep your infrastructure evenly uti‐
+lized. But if you don’t have a sufficient number of different workloads, this feast or
+famine approach to scaling your work queue might require that you over-provision
+resources to support the bursts that will lay idle (and cost too much money) while
+you don’t have work to perform.
+To address this problem, you can limit the overall number of Job objects that your
+work queue is willing to create. This will naturally serve to limit the number of work
+items you process in parallel and consequentially limit the maximum amount of
+resources that you use at a particular time. However, doing this will increase the time
+to completion (latency) for each work item being completed when under heavy load.
+If the load is bursty, then this is probably okay because you can use the slack times to
+catch up with the backlog that developed during a burst of usage. However, if your
+steady-state usage is too high, your work queue may never be able to catch up and the
+time to completion will simply get longer and longer.
+When your work queue is faced with this situation, you need to have it dynamically
+adjust itself to increase the parallelism that it is willing to create (and correspondingly
+the resources it is willing to use) so that it can keep up with the incoming work. For‐
+tunately, there are mathematical formulas that we can use to determine when we need
+to dynamically scale up our work queue.
+Consider a work queue where a new work item arrives an average of once every
+minute, and each work item takes an average of 30 seconds to complete. Such a sys‐
+tem is capable of keeping up with all of the work it receives. Even if a large batch of
+work arrives all at once and creates a backlog, on average the work queue processes
+two work items for every one work item that arrives, and thus it will be able to gradu‐
+ally work through its backlog.
+If, instead, a new work item arrives on average once every minute and it takes an
+average of one minute to process each work item, then the system is perfectly bal‐
+anced, but it does not handle variance well. It can catch up with bursts—but it will
+take a while, and it has no slack or capacity to absorb a sustained increase in the rate
+at which new work items arrive. This is probably not an ideal way to run, as some
+safety margin for growth and other sustained increases in work (or unexpected slow‐
+downs in processing) is needed to preserve a stable system.
+Finally, consider a system in which a work item arrives every minute and each item
+takes 2 minutes to process. In such a system, we are always losing ground. The queue
+Dynamic Scaling of the Workers 
+| 
+117

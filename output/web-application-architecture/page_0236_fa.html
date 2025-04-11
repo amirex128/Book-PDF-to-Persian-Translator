@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 236</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3><strong>8. Validation</strong></h3>
+    <p>
+        isn’t there or isn’t of the right type? When processing forms, a known issue
+        is that empty input fields may not be submitted by the browser. So if we ask
+        the Request object to give us the value of field X, we may find out that field
+        X wasn’t even in the request body. Another issue is that we can’t distinguish
+        between an empty string and null when it comes to serialized data like a
+        request body. So before we know it, we’re passing around an empty string,
+        where it would make more sense to use null. If not the browser, then your
+        JS framework may do weird things to form data, so we need to improve the
+        situation either way.
+    </p>
+    <p>
+        آنچه من پیشنهاد می‌کنم این است که ابتدا به input data مقداری shape ارائه دهید. به جای
+        گرفتن مقادیر جداگانه از Request، می‌توانیم این values را بسته‌بندی کنیم
+        و آنها را در یک object قرار دهیم. ما به object یک class name خوب می‌دهیم، که به
+        reader می‌گوید که چگونه از data داخل آن استفاده می‌شود. ما قبلاً چنین ob-
+        ject را در Section 4.4 دیده‌ایم: این یک Command object است. در آنجا آن را معرفی کردیم
+        به عنوان یک راه برای گروه بندی پارامترهای یک application service call. یک command
+        object همچنین به عنوان یک shape قابل تشخیص برای input data در application شما عمل می‌کند.
+    </p>
+    <p>
+        Object یک data holder است و data را از یک controller به یک appli-
+        cation service منتقل می‌کند، به همین دلیل یک command object نیز یک Data Transfer Object
+        (DTO) است.
+    </p>
+    <p>
+        مزایای متعددی برای دسترسی به properties یا getters یک ob-
+        ject سفارشی نسبت به دسترسی به request data key by key وجود دارد.
+    </p>
+    <ol>
+        <li>
+            <p>یک object سفارشی یک لیست کامل از تمام "keys" موجود (یعنی
+                properties یا getters) را ارائه می‌دهد. یک Request object نمی‌تواند چنین لیستی را ارائه دهد و فقط
+                یک lookup در request data برای هر key که شما ارائه می‌کنید هنگام فراخوانی
+                get() انجام می‌دهد.</p>
+        </li>
+        <li>
+            <p>یک client بالقوه از یک application service می‌تواند به command ob-
+                ject نگاه کند و متوجه شود چه data را باید ارائه دهد. نمی‌توانست آن را پیدا کند
+                با نگاه کردن به ساختار request body، زیرا ممکن است in-
+                complete باشد یا fields بیشتری نسبت به آنچه لازم است، داشته باشد، که توسط
+                application نادیده گرفته می‌شود.</p>
+        </li>
+        <li>
+            <p>یک Request object ذاتاً از data types خاصی استفاده نمی‌کند. Values که
+                از یک Request object استخراج می‌شوند یا از نوع string هستند یا unde-
+                fined (null). استفاده از یک object سفارشی ما را قادر می‌سازد تا types را صریحاً تعریف کنیم
+                و مشخص کنیم که آیا یک value "nullable" است یا خیر.</p>
+        </li>
+    </ol>
+    <p>216</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

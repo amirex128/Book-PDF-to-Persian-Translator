@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 175</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> External services</h3>
+  <pre><code class="language-xml">
+<directory>./test/integration</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
+</code></pre>
+  <p><strong>test</strong> برای <code>VatRateProviderUsingVatApiDotCom</code> نشان می‌دهد که به عنوان یک پیاده‌سازی مناسب از <strong>interface VatProvider</strong> عمل می‌کند. این متد، فراخوانی آن تابع را با نوع پاسخ صحیح برمی‌گرداند. ممکن است جنبه‌های دیگری وجود داشته باشد که شما مایل به تأیید آنها در یک <strong>integration test</strong> مانند این باشید. شاید <strong>interface</strong> یک نوع <strong>exception</strong> خاص را تعریف کند که در صورت شکست پرتاب می‌شود.</p>
+  <p>در این صورت، شما باید یک تست اضافی اضافه کنید که آن شکست را شبیه‌سازی می‌کند، و تأیید می‌کند که <strong>exception</strong> مورد انتظار در واقع پرتاب خواهد شد.</p>
+  <p>همانطور که ممکن است متوجه شده باشید، ما یک <strong>integration test</strong> اختصاصی برای کلاس <code>VatApi</code> نداریم. ما فقط رفتار آن را به عنوان یک وابستگی از کلاس <code>VatRateProviderUsingVatApiDotCom</code> آزمایش می‌کنیم. اینکه آیا شما باید یک <strong>integration test</strong> برای <code>VatApi</code> به تنهایی بنویسید، بستگی به موارد زیر دارد:</p>
+  <ul>
+   <li>اینکه آیا کلاس <code>VatApi</code> توسط <strong>clients</strong> دیگر نیز استفاده می‌شود یا خیر.</li>
+   <li>اینکه آیا کلاس <code>VatApi</code> متدها یا مسیرهای اجرای دیگری دارد که مشکل‌ساز هستند که فقط به طور غیرمستقیم از طریق تست <code>VatRateProviderUsingVatApiDotCom</code></li>
+  </ul>
+  <p>این موارد معمولاً با هم مرتبط هستند: اگر <code>VatApi</code> بیشتر شبیه یک کلاس <strong>library</strong> است، که توسط <strong>clients</strong> مختلف استفاده می‌شود، رفتارهای دیگری خواهد داشت که نباید فقط از طریق <code>VatRateProviderUsingVatApiDotCom</code> آزمایش شوند. در مورد ما، کلاس <code>VatApi</code> احتمالاً منطق خاصی برای رسیدگی به خرابی‌های اتصال، اعتبارسنجی پاسخ <strong>API</strong> و غیره دارد. آزمایش <strong>edge cases</strong> و شاخه‌های اجرای عجیب و غریب‌تر از طریق یک کلاس دیگر غیر از خود <code>VatApi</code> احتمالاً ناخوشایند است. به همین دلیل نوشتن یک <strong>integration test</strong> جداگانه برای <code>VatApi</code> به تنهایی منطقی است. در این صورت، <strong>integration test</strong> برای <code>VatRateProviderUsingVatApiDotCom</code> می‌تواند بسیار کوچک باشد، فقط با یک یا دو متد <strong>test</strong>، و <strong>integration test</strong> برای <code>VatApi</code> می‌تواند مفصل‌تر باشد. به <strong>Listing</strong> 6.16 برای یک مثال مراجعه کنید.</p>
+  <p><strong>Listing</strong> 6.16. An integration test for the <strong>VatApi class</strong>.</p>
+  <pre><code class="language-php">
+final class VatApiTest extends TestCase
+{
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+umenting container images, but there are some best practices you can use to accom‐
+plish this.
+For every container image, the most obvious place to look for documentation is the
+Dockerfile from which the container was built. There are some parts of the Docker
+file that already document how the container works. One example of this is the
+EXPOSE directive, which indicates the ports that the image listens on. Even though
+EXPOSE is not necessary, it is a good practice to include it in your Dockerfile and also
+to add a comment that explains what exactly is listening on that port. For example:
+...
+# Main web server runs on port 8080
+EXPOSE 8080
+...
+Additionally, if you use environment variables to parameterize your container, you
+can use the ENV directive to set default values for those parameters as well as docu‐
+ment their usage:
+...
+# The PROXY_PORT parameter indicates the port on localhost to redirect
+# traffic to.
+ENV PROXY_PORT 8000
+...
+Finally, you should always use the LABEL directive to add metadata for your image; for
+example, the maintainer’s email address, web page, and version of the image:
+...
+LABEL "org.label-schema.vendor"="name@company.com"
+LABEL "org.label.url"="http://images.company.com/my-cool-image"
+LABEL "org.label-schema.version"="1.0.3"
+...
+The names for these labels are drawn from the schema established by the Label
+Schema project. The project is working to establish a shared set of well-known labels.
+By using a common taxonomy of image labels, multiple different tools can rely on the
+same meta information in order to visualize, monitor, and correctly use an applica‐
+tion. By adopting shared terms, you can use the set of tools developed in the commu‐
+nity without modifying your image. Of course, you can also add whatever additional
+labels make sense in the context of your image.
+Summary
+Over the course of this chapter, we’ve introduced the sidecar pattern for combining
+containers on a single machine. In the sidecar pattern, a sidecar container augments
+Summary 
+| 
+19

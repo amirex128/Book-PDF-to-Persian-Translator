@@ -1,0 +1,34 @@
+4. Application services
+return $this->ebookId;
+}
+public function orderQuantity(): int
+{
+return $this->orderQuantity;
+}
+public function emailAddress(): string
+{
+return $this->emailAddress;
+}
+}
+The service should be modified to accept an instance of the new CreateOrder
+class (see Listing 4.9). Whenever the service needs input data, it has to fetch
+it from the CreateOrder object.
+Listing 4.9. A CreateOrder object has to be passed to the EbookOrderService
+as a method argument.
+final class EbookOrderService
+{
+// ...
+public function create(CreateOrder $createOrder): OrderId
+{
+$ebook = $this->ebookRepository->getById(
+$createOrder->ebookId()
+);
+$orderAmount = $ebook->price()
+->multipliedBy($createOrder->orderQuantity());
+// ...
+$order = new Order(
+$orderId,
+$ebook->id(),
+$createOrder->emailAddress(),
+$createOrder->orderQuantity(),
+96

@@ -1,0 +1,37 @@
+of work will grow without bound and the latency of any one item in the queue will
+grow toward infinity (and our users will become very frustrated).
+Thus, we can keep track of both of these metrics for our work queue, and the average
+time between work items over an extended period of time (# work items / 24 hours)
+will give us the interarrival time for new work. We can also keep track of the average
+time to process any one item once we start working on it (not counting any time in
+the queue). To have a stable work queue, we need to adjust the number of resources
+so that the time to process any item is less than the interarrival time of new items. If
+we are processing work items in parallel, we also divide the processing time for a
+work item by the parallelism. For example, if each item takes one minute to process
+but we process four items in parallel, the effective time to process one item is 15 sec‐
+onds, and thus we can sustain an interarrival period of 16 or more seconds.
+This approach makes it fairly straightforward to build an autoscaler to dynamically
+size up our work queue. Sizing down the work queue is somewhat trickier, but you
+can use the same math as well as a heuristic for the amount of spare capacity for the
+safety margin you want to maintain. For example, you can reduce the parallelism
+until the processing time for an item is 90% of the interarrival time for new items.
+The Multi-Worker Pattern
+One of the themes of this book has been the use of containers for encapsulation and
+reuse of code. The same holds true for the work queue patterns described in this
+chapter. In addition to the patterns for reusing containers for driving the work queue
+itself, you can also reuse multiple different containers to compose a worker imple‐
+mentation. Suppose, for example, that you have three different types of work that you
+want to perform on a particular work queue item. For example, you might want to
+detect faces in an image, tag those faces with identities, and then blur the faces in the
+image. You could write a single worker to perform this complete set of tasks, but this
+would be a bespoke solution that would not be reusable the next time you want to
+identify something else, such as cars, yet still provide the same blurring.
+To achieve this kind of code reuse, the multi-worker pattern is something of a speciali‐
+zation of the adapter pattern described in previous chapters. In this case, the multi-
+worker pattern transforms a collection of different worker containers into a single
+unified container that implements the worker interface, yet delegates the actual work
+to a collection of different, reusable containers. This process is illustrated in
+Figure 10-5.
+118 
+| 
+Chapter 10: Work Queue Systems

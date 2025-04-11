@@ -1,0 +1,40 @@
+6. External services
+CURLOPT_ENCODING => "",
+CURLOPT_MAXREDIRS => 10,
+CURLOPT_TIMEOUT => 0,
+CURLOPT_FOLLOWLOCATION => false,
+CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+CURLOPT_CUSTOMREQUEST => 'GET',
+CURLOPT_HTTPHEADER => [
+'x-api-key: ' . $apiKey
+]
+]
+);
+$response = curl_exec($curl);
+$curlError = curl_error($curl);
+curl_close($curl);
+if ($curlError) {
+throw new RuntimeException('cURL Error #:' . $curlError);
+}
+$responseData = json_decode($response, true);
+if ($responseData['status'] === 200) {
+if ($responseData['filter_match']) {
+$vatRate = VatRate::fromInt(
+// The "ebooks" filter returned a match
+$responseData['rate']
+);
+} else {
+/*
+* The "ebooks" filter didn't return a match.
+* We should take the rate from the generic rates object.
+*/
+$vatRate = VatRate::fromInt(
+$responseData['rates']['electronic']['rate']
+);
+}
+} else {
+throw new RuntimeException(
+'Could not determine the VAT rate'
+);
+}
+136

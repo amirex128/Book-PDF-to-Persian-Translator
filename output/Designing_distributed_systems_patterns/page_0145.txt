@@ -1,0 +1,39 @@
+For example, if you are using the Sharder pattern described previously, you would
+have a topic for each of the output shards. If you called your output Photos and you
+chose to have three shards, then you would have three topics: Photos-1, Photos-2,
+and Photos-3. Your sharder module would output messages to the appropriate topic,
+after applying the sharding function.
+Here’s how you create a topic. First, create a container in the cluster so that we can
+access Kafka:
+for x in 0 1 2; do
+  kubectl run kafka --image=solsson/kafka:0.11.0.0 --rm --attach --command -- \
+    ./bin/kafka-topics.sh --create --zookeeper kafka-service-zookeeper:2181 \
+      --replication-factor 3 --partitions 10 --topic photos-$x
+done
+Note that there are two interesting parameters in addition to the topic name and the
+zookeeper service. They are --replication-factor and --partitions. The replica‐
+tion factor is how many different machines messages in the topic will be replicated to.
+This is the redundancy that is available in case things crash. A value of 3 or 5 is rec‐
+ommended. The second parameter is the number of partitions for the topic. The
+number of partitions represents the maximum distribution of the topic onto multiple
+machines for purposes of load balancing. In this case, since there are 10 partitions,
+there can be at most 10 different replicas of the topic for load balancing.
+Now that we have created a topic, we can send messages to that topic:
+kubectl run kafka-producer --image=solsson/kafka:0.11.0.0 --rm -it --command -- \
+    ./bin/kafka-console-producer.sh --broker-list kafka-service-kafka:9092 \
+    --topic photos-1
+Once that command is up and connected, you should see the Kafka prompt and you
+can then send messages to the topic(s). To receive messages, you can run:
+kubectl run kafka-consumer --image=solsson/kafka:0.11.0.0 --rm -it --command -- \
+    ./bin/kafka-console-consumer.sh --bootstrap-server kafka-service-kafka:9092\
+    --topic photos-1 \
+        --from-beginning
+Of course, running these command lines only gives you a taste of how to communi‐
+cate via Kafka messages. To build a real-world event-driven batch processing system,
+you would likely use a proper programming language and Kafka SDK to access the
+service. But on the other hand, never underestimate the power of a good Bash script!
+This section has shown how installing Kafka into your Kubernetes cluster can dra‐
+matically simplify the task of building a work queue based system.
+Hands On: Deploying Kafka 
+| 
+131

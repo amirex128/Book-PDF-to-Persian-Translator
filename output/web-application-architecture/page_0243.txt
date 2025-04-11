@@ -1,0 +1,32 @@
+8. Validation
+// ...
+}
+}
+// Inside the controller:
+$createOrder = CreateOrder::fromRequestData(
+$request->request->all()
+);
+$errors = $this->validator->validate($createOrder);
+if (count($errors) === 0) {
+// Create the order
+} else {
+// Render the form again
+}
+If you use Symfony and its Validator component1 you could also add some
+configuration to the command object and its properties. Then you can use
+the generic validator service to create a list of validation errors for you. This
+is really useful if you use Symfony’s Form component2 as well, and don’t want
+to write the validator and the integration code with form rendering yourself.
+In that case you may have to do some extra work, like adding setters with
+nullable parameters, which may seem a little “impure” to you. But if you
+keep an eye on the relation between the time you invest and the value that it
+delivers, I think it’s something you should consider.
+8.7. Summary
+When separating core from infrastructure like we’ve been doing in previous
+chapters, the activity of validating user input also has to be divided in two
+parts. In the first place, domain objects like entities have to protect them-
+selves against ending up in an invalid state. An entity will throw an exception
+as soon as any part of the input is invalid, incomplete, or leads to an incon-
+1 https://advwebapparch.com/symfony-validator-component
+2 https://advwebapparch.com/symfony-form-component
+223

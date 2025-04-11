@@ -1,0 +1,36 @@
+6. External services
+'TBE',
+'NL',
+'ebooks'
+);
+if ($responseData['filter_match']) {
+// use $responseData['rate']
+} else {
+// use $responseData['rates']['electronic']['rate']
+}
+This code only works for the particular remote API that we’re using now. A
+bigger problem is that this code might produce PHP errors. There’s nothing
+about the array return type that guarantees us that these keys are actually
+defined. So what we should do is define a clear outline of the response and
+return an object that represents this response. Objects are easier to use than
+an array of data because they have a predefined set of methods that can be
+used without fear. Objects can also validate their input upon construction,
+which will make them safer to use.
+So let’s improve the vatRateCheck() method by returning for instance a
+VatRateCheckResult object. This object receives the raw response data as
+a constructor argument, and offers getters which know how to extract the
+requested information from that response data (see Listing 6.4).
+Listing 6.4. vatRateCheck() returns a specialized VatRateCheckResult ob-
+ject.
+final class VatRateCheckResult
+{
+private array $responseData;
+public function __construct(array $responseData)
+{
+$this->responseData = $responseData;
+}
+public function rate(string $fallbackType): int
+{
+if ($this->responseData['filter_match']) {
+return (int)$this->responseData['rate'];
+140

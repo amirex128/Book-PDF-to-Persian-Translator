@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 148</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   احتمالاً متعارف‌ترین مثال از این <strong>aggregation</strong>، قسمت <strong>reduce</strong> از <strong>MapReduce pattern</strong> است. به راحتی می‌توان دید که مرحله <strong>map</strong> نمونه‌ای از <strong>sharding</strong> یک <strong>work queue</strong> است، و مرحله <strong>reduce</strong> نمونه‌ای از پردازش هماهنگ است که در نهایت تعداد زیادی خروجی را به یک پاسخ <strong>aggregate</strong> واحد کاهش می‌دهد. با این حال، تعدادی الگوهای <strong>aggregate</strong> مختلف برای پردازش <strong>batch</strong> وجود دارد، و این فصل علاوه بر برنامه‌های کاربردی دنیای واقعی، تعدادی از آن‌ها را مورد بحث قرار می‌دهد.
+  </p>
+  <h3>Join (or Barrier Synchronization)</h3>
+  <p>
+   در فصل‌های قبل، الگوهایی را برای تقسیم کار و توزیع آن به موازات در چندین گره دیدیم. به طور خاص، دیدیم که چگونه یک <strong>sharded work queue</strong> می‌تواند کار را به موازات به تعدادی از <strong>work queue shards</strong> مختلف توزیع کند. با این حال، گاهی اوقات هنگام پردازش یک <strong>workflow</strong>، لازم است که مجموعه کاملی از کار را قبل از رفتن به مرحله بعدی <strong>workflow</strong> داشته باشید.
+  </p>
+  <p>
+   یک گزینه برای انجام این کار در فصل قبل نشان داده شد، که ادغام چندین <strong>queues</strong> با هم بود. با این حال، <strong>merge</strong> به سادگی خروجی دو <strong>work queues</strong> را در یک <strong>work queue</strong> واحد برای پردازش بیشتر ترکیب می‌کند. در حالی که <strong>merge pattern</strong> در برخی موارد کافی است، این اطمینان را نمی‌دهد که یک مجموعه داده کامل قبل از شروع پردازش وجود داشته باشد. این بدان معناست که نمی‌توان هیچ تضمینی در مورد کامل بودن پردازش انجام شده و همچنین هیچ فرصتی برای محاسبه آمار <strong>aggregate</strong> برای همه عناصری که پردازش شده‌اند، وجود ندارد.
+  </p>
+  <p>
+   در عوض، ما به یک <strong>primitive</strong> هماهنگ و قوی‌تر برای پردازش داده‌های <strong>batch</strong> نیاز داریم، و آن <strong>primitive</strong>، <strong>join pattern</strong> است. <strong>Join</strong> شبیه پیوستن به یک <strong>thread</strong> است. ایده اصلی این است که همه کارها به صورت موازی در حال انجام هستند، اما <strong>work items</strong> تا زمانی که همه <strong>work items</strong>ی که به صورت موازی پردازش می‌شوند، تکمیل نشوند، از <strong>join</strong> منتشر نمی‌شوند. این نیز به طور کلی به عنوان <strong>barrier synchronization</strong> در برنامه‌نویسی همزمان شناخته می‌شود. یک تصویر از <strong>join pattern</strong> برای یک <strong>batch</strong> هماهنگ در شکل 12-2 نشان داده شده است.
+  </p>
+  <p>
+   هماهنگی از طریق <strong>join</strong> تضمین می‌کند که قبل از انجام نوعی فاز <strong>aggregation</strong>، هیچ داده‌ای وجود ندارد (به عنوان مثال، یافتن مجموع مقداری در یک مجموعه). ارزش <strong>join</strong> این است که تضمین می‌کند همه داده‌های موجود در مجموعه وجود دارند. جنبه منفی <strong>join pattern</strong> این است که مستلزم آن است که همه داده‌ها توسط یک مرحله قبلی پردازش شوند قبل از اینکه محاسبات بعدی بتواند شروع شود. این موازی‌سازی ممکن در <strong>batch workflow</strong> را کاهش می‌دهد و بنابراین <strong>latency</strong> کلی اجرای <strong>workflow</strong> را افزایش می‌دهد.
+  </p>
+  <p>
+   134
+  </p>
+  <p>
+   Chapter 12: Coordinated Batch Processing
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

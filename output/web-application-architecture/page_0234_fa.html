@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 234</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3><strong>8. Validation</strong></h3>
+    <p>
+        thrown. Depending on how many concurrent users the application has,
+        the chance that this happens should be really small. If it turns out that
+        an exception is no longer exceptional, that is, it gets thrown a lot, this is a
+        strong sign that we need to improve the user experience somehow.
+    </p>
+    <p>
+        تعریف دیگری از "exceptional" می‌تواند این باشد: "زمانی که اوضاع واقعاً اشتباه است".
+        به عنوان مثال، شبکه قطع است، ما نمی‌توانستیم در یک فایل بنویسیم و غیره. البته،
+        اینها موقعیت‌هایی هستند که در آنها باید احساس کنیم که می‌توانیم یک exception پرتاب کنیم. اما
+        فکر نمی‌کنم این تنها موردی باشد که در آن مجاز به استفاده از آنها باشیم.
+    </p>
+    <p>
+        Exceptions یک راه برای متوقف کردن اجرای یک function است، و ما می‌خواهیم
+        این کار را زمانی انجام دهیم که می‌دانیم نباید ادامه دهیم. جلوگیری از اتفاقات بد برای
+        domain objects ما یک دلیل عالی برای پرتاب exceptions است.
+    </p>
+    <h4><strong>8.5. When validation is not the answer</strong></h4>
+    <p>
+        بیایید کمی بیشتر با وضعیت insufficient-stock-level بمانیم. عنوان
+        بالای این بخش، غافلگیری را خراب می‌کند: شاید validation در این
+        مورد پاسخگو نباشد. البته، یک بررسی ابتدایی که ما چیزی را نمی‌فروشیم
+        که نداریم یک ایده خوب است. اما پاسخی که ما از StockRepository
+        numberOfAvailableBooks() دریافت می‌کنیم، ممکن است به دقیقی که می‌خواهیم نباشد. ما
+        این متد را در آخرین لحظه ممکن فراخوانی می‌کنیم، اما از نظر تئوری ممکن است
+        هنوز پاسخ اشتباهی از آن دریافت کنیم. شاید بین فراخوانی numberOfAvailableBooks()
+        و ذخیره order، system نیز order دیگری را برای همان book ذخیره می‌کند
+        اما از یک customer متفاوت. اگر فقط یک کتاب باقی‌مانده از
+        stock وجود داشت، customer هرگز کتابی را که سفارش داده است دریافت نخواهد کرد، زیرا customer دیگر آن را دریافت می‌کند (به هر حال، آنها اول بودند!). آیا StockRepository به ما پاسخ اشتباهی داد؟ خیر، پاسخی که ارائه داد همیشه پاسخ صحیح در لحظه‌ای است که
+        پاسخ را محاسبه می‌کند. فقط این است که پاسخ همیشه در حال تغییر است.
+    </p>
+    <p>
+        از نظر functional programming، numberOfAvailableBooks() یک function impure است. چنین function، referentially transparent نیست، به این معنی که می‌تواند
+        اگر دوباره function را فراخوانی کنید، پاسخ‌های متفاوتی بدهد. اما در حالی که پاسخ
+        به طور مداوم در حال تغییر است، ما هنوز می‌خواهیم هنگام validation form
+        data ارسال شده به application، به آن تکیه کنیم. خب، متاسفم، اما ما نمی‌توانیم به
+        یک query function impure تکیه کنیم.
+    </p>
+    <p>
+        این ممکن است برای system و users شما مشکل‌ساز نباشد.
+        شاید
+    </p>
+    <p>214</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 195</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Time and randomness</h3>
+  <pre><code class="language-php">
+final class Order
+{
+    private Date $orderDate;
+
+    public function __construct(
+        // ...
+        Date $orderDate,
+        // ...
+    ) {
+        // ...
+        $this->orderDate = $orderDate;
+    }
+}
+</code></pre>
+  <p>برای اعتبارسنجی رشته تاریخ ارائه شده، ما همچنین می‌توانستیم از <code>Assertion::date(self::FORMAT, $date)</code> استفاده کنیم. با این حال، من می‌خواستم در این مثال به این نکته اشاره کنم که شما همچنان می‌توانید از <strong>objects</strong> پشتیبانی‌کننده از کتابخانه‌های شخص ثالث برای انجام کارهای سنگین برای شما استفاده کنید. تکیه بر کلاس‌های دیگران در داخل <strong>object value</strong> شما کاملاً خوب است، تا زمانی که آنها برخی از مشکلاتی را که ما سعی در اجتناب از آنها داشته‌ایم، دوباره معرفی نکنند:</p>
+  <ol>
+   <li><strong>Value objects</strong> نباید شامل کد زیرساخت باشند. به عبارت دیگر:</li>
+   <li><strong>Value objects</strong> نباید مسئولیت‌های <strong>service</strong> داشته باشند.</li>
+   <li><strong>Value objects</strong> نباید هیچ رفتاری را ارائه دهند که صریحاً فعال نشده و برای <strong>use case</strong> شما طراحی شده است.</li>
+  </ol>
+  <p>این بدان معناست که شما می‌توانید از <strong>value objects</strong> از کتابخانه‌های دیگر استفاده کنید، اگر آنها رفتار (کم و بیش) دقیقی را که نیاز دارید ارائه می‌دهند. اگر اینطور نیست، شما باید آنها را با پیچیدن آنها در داخل <strong>value objects</strong> خود، تطبیق دهید. فقط یک یادداشت سریع: هنگام استفاده از ابزارهای شخص ثالث مانند <code>DateTimeImmutable</code>، شما هنوز هم باید فرضیات خود را بررسی کنید. یک <strong>unit test</strong> مفصل برای آن مفید خواهد بود. به عنوان مثال، من از کشف این موضوع بسیار شگفت‌زده شدم که <strong>instantiating</strong> یک تاریخ آشکارا بی‌معنی مانند <code>2019-02-29</code> هیچ <strong>exception</strong> ایجاد نمی‌کند. <strong>constructor</strong> از نوع <code>DateTimeImmutable</code> به سادگی آن را به <code>2019-03-01</code> تبدیل می‌کند...</p>
+  <p>گذشته از مسائل مربوط به تاریخ/زمان، معرفی <strong>value objects</strong> خودتان برای تاریخ‌ها و زمان‌ها راهی برای به دست آوردن مالکیت طراحی بر روی انواع <strong>objects</strong> است که</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

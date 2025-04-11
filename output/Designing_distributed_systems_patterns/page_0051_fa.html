@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 51</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Hands On: Adding Rich Health Monitoring for MySQL</h3>
+  <p>فرض کنید شما می‌خواهید یک نظارت عمیق را به یک database از نوع MySQL اضافه کنید که در آن، شما واقعاً یک query را اجرا می‌کنید که نمایانگر workload شما است. در این مورد، یک گزینه این است که MySQL container را به‌روزرسانی کنید تا شامل یک health check باشد که مختص به application شما است. با این حال، این ایده به‌طور کلی جذاب نیست، زیرا مستلزم آن است که شما هم image پایه MySQL موجود را اصلاح کنید و هم آن image را هنگام انتشار images جدید MySQL به‌روزرسانی کنید.</p>
+  <p>استفاده از <strong>adapter pattern</strong> یک رویکرد بسیار جذاب‌تر برای افزودن health checks به database container شما است. به‌جای اصلاح MySQL container موجود، می‌توانید یک adapter container اضافی به MySQL container از قبل موجود اضافه کنید، که query مناسب را برای تست health database اجرا می‌کند. با توجه به اینکه این adapter container، HTTP health check مورد انتظار را پیاده‌سازی می‌کند، به سادگی تعریف health check از process مربوط به database MySQL، برحسب interface ارائه‌شده توسط این adapter database، است.</p>
+  <p>
+   source code این adapter نسبتاً ساده است و در Go به این شکل است (اگرچه مشخص است که پیاده‌سازی‌های زبان‌های دیگر نیز امکان‌پذیر است):
+  </p>
+  <pre><code class="language-go">
+package main
+
+import (
+ "database/sql"
+ "flag"
+ "fmt"
+ "net/http"
+ _ "github.com/go-sql-driver/mysql"
+)
+
+var (
+ user   = flag.String("user", "", "The database user name")
+ passwd = flag.String("password", "", "The database password")
+ db     = flag.String("database", "", "The database to connect to")
+ query  = flag.String("query", "", "The test query")
+ addr   = flag.String("address", "localhost:8080",
+                    "The address to listen on")
+)
+
+// Basic usage:
+//   db-check --query="SELECT * from my-cool-table" \
+//            --user=bdburns \
+//            --passwd="you wish"
+//
+func main() {
+ flag.Parse()
+ db, err := sql.Open("localhost",
+                    fmt.Sprintf("%s:%s@/%s", *user, *passwd, *db))
+ if err != nil {
+  Adding a Health Monitor 
+ | 
+ 37
+ </code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

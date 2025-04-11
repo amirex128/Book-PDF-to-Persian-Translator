@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 158</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> External services</h3>
+  <p>چیزی که من را در مورد تمام آن فراخوانی‌های <code>curl_*</code> و <code>json_decode()</code> آزار می‌دهد این است که این یک کد رویه‌ای قدیمی است که امکانات زیادی را باز می‌گذارد و به انواع باگ‌ها اجازه می‌دهد بدون اینکه متوجه شوند از بین بروند. من معمولاً می‌خواهم از <strong>objects</strong> استفاده کنم و اجازه دهم این <strong>objects</strong> انواع بررسی‌ها را انجام دهند تا مطمئن شوند که داده‌ها خوب و ایمن هستند. اساساً آنچه من می‌خواهم، یک <strong>wrapper object-oriented</strong> در اطراف <strong>API</strong> از راه دور است. من با ایجاد یک <strong>object</strong> واحد که نشان دهنده <strong>API</strong> است، شروع به توسعه چنین لایه‌ای خواهم کرد، مانند کلاس <code>VatApi</code> در <strong>Listing</strong> 6.3. این به <strong>clients</strong> اجازه می‌دهد تا از <strong>web service</strong> استفاده کنند بدون اینکه نگران این باشند که درخواست‌های <strong>HTTP</strong> باید چگونه باشد. چنین کلاس <code>VatApi</code> می‌تواند متدی داشته باشد که نامی مشابه <strong>endpoint</strong> <strong>API</strong> داشته باشد. در مورد ما، کلاس متدی به نام <code>vatRateCheck()</code> دارد که مربوط به <strong>endpoint</strong> از نوع <code>/vat-rate-check</code> است. متد <code>vatRateCheck()</code>، درخواست <strong>HTTP</strong> واقعی را انجام می‌دهد، و از رمزگشایی پاسخ، از جمله <strong>error handling</strong> اولیه مراقبت می‌کند. پارامترهای <strong>query</strong> از نوع <code>rate_type</code>، <code>country_code</code>، و <code>filter</code> به پارامترهای متد ارتقا می‌یابند. توجه داشته باشید که <strong>API key</strong> به عنوان یک آرگومان <strong>constructor</strong> ارائه می‌شود، نه به عنوان یک آرگومان متد، زیرا این یک مقدار <strong>configuration</strong> است.</p>
+  <p><strong>Listing</strong> 6.3. <code>VatApi</code> تماس واقعی با <code>vatapi.com</code> را برقرار می‌کند.</p>
+  <pre><code class="language-php">
+final class VatApi
+{
+    private string $apiKey;
+
+    public function __construct(string $apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+
+    public function vatRateCheck(
+        string $rateType,
+        string $countryCode,
+        ?string $filter
+    ): array {
+        $curl = curl_init();
+
+        $url = 'https://eu.vatapi.com/v2/vat-rate-check?' .
+            http_build_query(
+                [
+                    'rate_type' => $rateType,
+                    'country_code' => $countryCode,
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

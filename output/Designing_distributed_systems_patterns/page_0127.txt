@@ -1,0 +1,31 @@
+Figure 10-4. The work queue worker API
+This file-based API pattern is also easier for the container to implement. Often a
+work queue worker is simply a shell script across a few command line tools. In that
+context, spinning up a web server to manage the work to perform is an unnecessary
+complexity. As was true with the work queue source implementation, most of the
+worker containers will be special-purpose container images built for specific work
+queue applications, but there are also generic workers that can be applied to multiple
+different work queue applications.
+Consider the example of a work queue worker that downloads a file from cloud stor‐
+age and runs a shell script with that file as input, and then copies its output back up
+to cloud storage. Such a container can be mostly generic but then have the specific
+script to execute supplied to it as a runtime parameter. In this way, most of the work
+of file handling can be shared by multiple users/work queues and only the specifics of
+file processing need to be supplied by the end user.
+The Shared Work Queue Infrastructure
+Given implementations of the two container interfaces described previously, what is
+left to implement our reusable work queue implementation? The basic algorithm for
+the work queue is fairly straightforward:
+1. Load the available work by calling into source container interface.
+2. Consult with work queue state to determine which work items have been pro‐
+cessed or are being processed currently.
+3. For these items, spawn jobs that use the worker container interface to process the
+work item.
+4. When one of these worker containers finishes successfully, record that the work
+item has been completed.
+While this algorithm is simple to express in words, it is somewhat more complicated
+to implement in reality. Fortunately for us, the Kubernetes container orchestrator
+contains a number of features that make it significantly easier to implement. Namely,
+A Generic Work Queue System 
+| 
+113

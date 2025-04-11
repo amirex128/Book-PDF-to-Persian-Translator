@@ -1,0 +1,33 @@
+13. Ports and adapters
+destination for this book’s quest of designing applications that are decoupled
+from surrounding infrastructure.
+An alternative name for hexagonal architecture is Ports & Adapters. I think
+this name is actually better, because ports and adapters are the main con-
+cepts, and they are almost self-explanatory.
+13.2. Ports
+Let’s start with the concept of a Port, which can only be explained using the
+concept of an Actor. In Chapter 9 we already talked about actors and the
+distinction between a primary and a secondary or supporting actor, but let’s
+quickly repeat the definitions here. A primary actor is an actor that takes the
+initiative for communication. An example of a primary actor is a user who
+visits our web page, or an external system that talks to one of our API end-
+points. When our application reaches out to an external system, for instance
+the database or a mail server, the external system should be considered a
+secondary or supporting actor.
+With hexagonal architecture all the use cases are core code and they live in-
+side the Hexagon. Whenever a primary actor needs to invoke one of the ap-
+plication’s use cases the application should define a Port for that. Whenever
+a use case needs to communicate with a supporting actor, like the database,
+we also have to define a Port for that. A port is an “intention of communica-
+tion”. For example: our application may have a port “for creating an order”
+which can be used by primary actors to create an order. Our application will
+also have a port “for saving an order” which indicates that the application
+needs a supporting actor for saving orders.
+A port that is used by a primary actor to communicate with our application
+could be called an Incoming port. A port that our application itself uses to
+communicate with a supporting actor could be called an Outgoing port. Fig-
+ure 13.1 shows the hexagon with some of the use cases of our e-book webshop
+application. Each side of the hexagon represents a single port; the left side is
+usually used for incoming ports, the right side for outgoing ports.
+Cockburn equates a port with an interface. It’s a way in which actors can “in-
+299

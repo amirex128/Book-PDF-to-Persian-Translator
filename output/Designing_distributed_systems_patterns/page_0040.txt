@@ -1,0 +1,27 @@
+from the logic of the service broker ambassador. The application simply always con‐
+nects to an instance of the service (e.g., MySQL) running on localhost. It is the
+responsibility of the service broker ambassador to introspect its environment and
+broker the appropriate connection. This process is shown in Figure 3-3.
+Figure 3-3. A service broker ambassador creating a MySQL service
+Using an Ambassador to Do Experimentation or Request
+Splitting
+A final example application of the ambassador pattern is to perform experimentation
+or other forms of request splitting. In many production systems, it is advantageous to
+be able to perform request splitting, where some fraction of all requests are not serv‐
+iced by the main production service but rather are redirected to a different imple‐
+mentation of the service. Most often, this is used to perform experiments with new,
+beta versions of the service to determine if the new version of the software is reliable
+or comparable in performance to the currently deployed version.
+Additionally, request splitting is sometimes used to tee or split traffic such that all
+traffic goes to both the production system as well as a newer, undeployed version.
+The responses from the production system are returned to the user, while the respon‐
+ses from the tee-d service are ignored. Most often, this form of request splitting is
+used to simulate production load on the new version of the service without risking
+impact to existing production users.
+Given the previous examples, it is straightforward to see how a request-splitting
+ambassador can interact with an application container to implement request splitting.
+As before, the application container simply connects to the service on localhost, while
+the ambassador container receives the requests, proxies responses to both the pro‐
+26 
+| 
+Chapter 3: Ambassadors

@@ -1,0 +1,36 @@
+7. Time and randomness
+$clock->currentTime()->format('U')
+);
+This test is more likely to pass, but might still fail when the test creates the
+DateTimeImmutable instance at the end of the current second, and the Clock-
+UsingSystemClock creates it in the next second. A common solution for these
+scenarios is to calculate the difference between the two timestamps and as-
+sert that the difference is smaller than a certain allowed value. This value
+represents the time difference in microseconds between the two instantia-
+tions of DateTimeImmutable that you think would be acceptable. Listing 7.23
+shows how to do it.
+Listing 7.23. Comparing the difference between timestamps.
+final class ClockUsingSystemClockTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_returns_the_current_time(): void
+{
+$clock = new ClockUsingSystemClock();
+$actualCurrentTime = new DateTimeImmutable('now');
+self::assertEqualsWithDelta(
+self::secondsWithMicroseconds($actualCurrentTime)),
+self::secondsWithMicroseconds($clock->currentTime()),
+0.1
+);
+}
+private static function secondsWithMicroseconds(
+DateTimeImmutable $timestamp
+): float {
+/*
+* We concatenate the number of seconds, a decimal separator,
+* and the number of microseconds within this second which
+* already has leading 0s. We then cast it to a float.
+*/
+186

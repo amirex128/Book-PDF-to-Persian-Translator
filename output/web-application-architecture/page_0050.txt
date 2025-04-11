@@ -1,0 +1,30 @@
+2. The domain model
+back to this topic in Section 11.2.
+How is Doctrine able to get the data out of the entity? It uses reflection9 to
+reach into the object, copy the data from the object’s private properties, and
+prepare the desired array using this data. Listing 2.13 shows what it would
+look like if we’d inline the mapping code in our own save() method.
+Listing 2.13. An implementation of save() that uses reflection.
+public function save(Order $order): int
+{
+// ...
+$data = [];
+$object = new ReflectionObject($order);
+$emailProperty = $object->getProperty('emailAddress');
+// Make the private property accessible:
+$emailProperty->setAccessible(true);
+// Get the current value of the emailAddress property:
+$data['email'] = $emailProperty->getValue($order);
+// And so on, for all the properties of `Order`...
+// ...
+}
+2.5.2. Manual mapping
+Though it’s great that Doctrine can do all this work for us, we don’t see how
+it does all of it. And this is the reason that it’ll be hard to find out what the
+problem is when anything doesn’t work as expected. In the past few years
+I’ve come to the conclusion more than once that doing the mapping manually,
+that is, writing the code for this myself, can be a pretty good solution. In that
+case we can, but don’t have to use reflection, and we don’t need separate
+mapping configuration (using annotations, or XML, etc.).
+9 https://advwebapparch.com/php-reflection
+30

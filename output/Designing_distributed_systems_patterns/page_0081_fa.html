@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 81</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   Shard = ShardingFunction(Req)
+  </p>
+  <p>
+   به طور معمول، sharding function با استفاده از یک hashing function و عملگر modulo (%) تعریف می‌شود. Hashing functions، توابعی هستند که یک object دلخواه را به یک integer hash تبدیل می‌کنند. hash function دو ویژگی مهم برای sharding ما دارد:
+  </p>
+  <p>
+   <strong>Determinism</strong>
+   خروجی باید همیشه برای یک ورودی منحصر به فرد یکسان باشد.
+  </p>
+  <p>
+   <strong>Uniformity</strong>
+   توزیع خروجی‌ها در فضای خروجی باید برابر باشد.
+  </p>
+  <p>
+   برای service sharded ما، determinism و uniformity مهمترین characteristics هستند. Determinism مهم است زیرا تضمین می‌کند که یک request خاص R همیشه به همان shard در service می‌رود. Uniformity مهم است زیرا تضمین می‌کند که load به طور مساوی بین shards های مختلف پخش می‌شود.
+  </p>
+  <p>
+   خوشبختانه برای ما، زبان‌های برنامه‌نویسی مدرن شامل انواع گسترده‌ای از hash functions با کیفیت بالا هستند. با این حال، خروجی‌های این hash functions اغلب به طور قابل توجهی بزرگتر از تعداد shards ها در یک service sharded هستند. در نتیجه، ما از عملگر modulo (%) برای کاهش یک hash function به محدوده مناسب استفاده می‌کنیم. با بازگشت به service sharded ما با 10 shards، ما می‌توانیم ببینیم که می‌توانیم sharding function خود را به صورت زیر تعریف کنیم:
+  </p>
+  <p>
+   Shard = hash(Req) % 10
+  </p>
+  <p>
+   اگر خروجی hash function دارای properties مناسب از نظر determinism و uniformity باشد، آن properties ها توسط عملگر modulo حفظ می‌شوند.
+  </p>
+  <h4><strong>Selecting a Key</strong></h4>
+  <p>
+   با توجه به این sharding function، ممکن است وسوسه‌انگیز باشد که به سادگی از hash function استفاده کنید که در زبان برنامه‌نویسی ساخته شده است، کل object را hash کنید و آن را یک روز بنامید.
+   با این حال، نتیجه این کار یک sharding function بسیار خوب نخواهد بود.
+  </p>
+  <p>
+   برای درک این موضوع، یک request HTTP ساده را در نظر بگیرید که شامل سه مورد است:
+  </p>
+  <ul>
+   <li>زمان request</li>
+   <li>آدرس IP منبع از client</li>
+   <li>request path HTTP (به عنوان مثال، /some/page.html)</li>
+  </ul>
+  <p>
+   اگر ما از یک hash function مبتنی بر object ساده، shard(request)، استفاده کنیم، پس مشخص است که {12:00, 1.2.3.4, /some/file.html} یک shard value متفاوت از {12:01 دارد،
+  </p>
+  <p>
+   An Examination of Sharding Functions
+   | 67
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

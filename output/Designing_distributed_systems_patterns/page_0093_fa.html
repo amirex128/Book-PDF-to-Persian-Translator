@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 93</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   با هم، این complications های systems scatter/gather ما را به سمت چند نتیجه سوق می‌دهند:
+  </p>
+  <ul>
+   <li>parallelism افزایش یافته همیشه سرعت را افزایش نمی‌دهد زیرا overhead بر روی هر node وجود دارد.</li>
+   <li>parallelism افزایش یافته همیشه سرعت را افزایش نمی‌دهد زیرا مشکل straggler وجود دارد.</li>
+   <li>performance از 99th percentile در مقایسه با systems های دیگر مهمتر است زیرا هر user request در واقع به requests های متعددی به service تبدیل می‌شود.</li>
+  </ul>
+  <p>
+   همان مشکل straggler برای availability نیز اعمال می‌شود. اگر شما یک request را به 100 leaf node صادر کنید، و احتمال اینکه هر leaf node با شکست مواجه شود 1 در 100 باشد، شما دوباره عملاً تضمین می‌کنید که هر user request با شکست مواجه می‌شود.
+  </p>
+  <h4><strong>Scaling Scatter/Gather for Reliability and Scale</strong></h4>
+  <p>
+   البته، درست مانند یک system sharded، داشتن یک replica واحد از یک system scatter/gather sharded احتمالاً انتخاب طراحی مطلوبی نیست. یک replica واحد به این معنی است که اگر آن با شکست مواجه شود، تمام scatter/gather requests ها برای مدت زمانی که shard در دسترس نیست، با شکست مواجه می‌شوند زیرا تمام requests ها باید توسط تمام leaf nodes ها در pattern scatter/gather پردازش شوند. به همین ترتیب، upgrades ها، درصدی از shards شما را از بین می‌برند، بنابراین یک upgrade در حالی که تحت user-facing load قرار دارد، دیگر امکان‌پذیر نیست. در نهایت، scale محاسباتی system شما با load ای محدود می‌شود که هر node واحد قادر به دستیابی به آن است.
+  </p>
+  <p>
+   در نهایت، این امر scale شما را محدود می‌کند، و همانطور که در بخش‌های قبلی دیده‌ایم، شما نمی‌توانید به سادگی تعداد shards ها را برای بهبود قدرت محاسباتی یک pattern scatter/gather افزایش دهید.
+  </p>
+  <p>
+   با توجه به این چالش‌های reliability و scale، رویکرد صحیح این است که هر یک از shards های individual را replicated کنید تا به جای یک instance واحد در هر leaf node، یک service replicated وجود داشته باشد که هر leaf shard را پیاده‌سازی می‌کند. این pattern scatter/gather sharded و replicated در Figure 7-4 نشان داده شده است.
+  </p>
+  <p>
+   Scaling Scatter/Gather for Reliability and Scale
+   | 79
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

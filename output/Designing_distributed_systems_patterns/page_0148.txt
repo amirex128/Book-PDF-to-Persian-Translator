@@ -1,0 +1,34 @@
+Probably the most canonical example of this aggregation is the reduce part of the
+MapReduce pattern. It’s easy to see that the map step is an example of sharding a
+work queue, and the reduce step is an example of coordinated processing that eventu‐
+ally reduces a large number of outputs down to a single aggregate response. However,
+there are a number of different aggregate patterns for batch processing, and this chap‐
+ter discusses a number of them in addition to real-world applications.
+Join (or Barrier Synchronization)
+In previous chapters, we saw patterns for breaking up work and distributing it in par‐
+allel on multiple nodes. In particular, we saw how a sharded work queue could dis‐
+tribute work in parallel to a number of different work queue shards. However,
+sometimes when processing a workflow, it is necessary to have the complete set of
+work available to you before you move on to the next stage of the workflow.
+One option for doing this was shown in the previous chapter, which was to merge
+multiple queues together. However, merge simply blends the output of two work
+queues into a single work queue for additional processing. While the merge pattern is
+sufficient in some cases, it does not ensure that a complete dataset is present prior to
+the beginning of processing. This means that there can be no guarantees about the
+completeness of the processing being performed, as well as no opportunity to com‐
+pute aggregate statistics for all of the elements that have been processed.
+Instead, we need a stronger, coordinated primitive for batch data processing, and that
+primitive is the join pattern. Join is similar to joining a thread. The basic idea is that
+all of the work is happening in parallel, but work items aren’t released out of the join
+until all of the work items that are processed in parallel are completed. This is also
+generally known as barrier synchronization in concurrent programming. An illustra‐
+tion of the join pattern for a coordinated batch is shown in Figure 12-2.
+Coordination through join ensures that no data is missing before some sort of aggre‐
+gation phase is performed (e.g., finding the sum of some value in a set). The value of
+the join is that it ensures that all of the data in the set is present. The downside of the
+join pattern is that it requires that all data be processed by a previous stage before
+subsequent computation can begin. This reduces the parallelism that is possible in the
+batch workflow, and thus increases the overall latency of running the workflow.
+134 
+| 
+Chapter 12: Coordinated Batch Processing

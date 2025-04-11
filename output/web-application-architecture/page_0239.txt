@@ -1,0 +1,36 @@
+8. Validation
+isset($data['email']) ? (string)$data['email'] : '',
+isset($data['ebook_id']) ? (int)$data['ebook_id'] : 0,
+isset($data['quantity']) ? (int)$data['quantity'] : 0,
+isset($data['buyer_name']) && $data['buyer_name'] !== ''
+? (string)$data['buyer_name'] : null
+);
+}
+This ensures that where our application expects an integer, there will be an
+integer (even if it’s a meaningless one like 0). If there has to be a string, there
+will be a string, even if it’s an empty one. Listing 8.19 illustrates this for the
+email address. Clients can call the emailAddress() getter of the command
+object to get the email address from it. The return value will always be a
+string, but it could be an empty string. That doesn’t really matter, because
+down the stream there will always be some domain object that looks inside
+the variable and validates it. At least we won’t get generic type errors any-
+more; we’ll get proper exceptions which indicate a specific problem with the
+content of a variable.
+Listing 8.19. The type of input data will always be correct, but the value has
+to be validated.
+final class OrderEbook
+{
+private string $emailAddress;
+// ...
+public function emailAddress(): string
+{
+return $this->emailAddress;
+}
+}
+final class EmailAddress
+{
+public static function fromString(string $emailAddress): self
+{
+// Validate the string
+}
+219

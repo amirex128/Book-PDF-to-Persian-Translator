@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 39</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <pre><code class="language-php">
+    // ...
+    return new Response(/* ... */);
+  </code></pre>
+  <p>
+    این <code>method</code> اکنون بسیار کوتاه‌تر است. ما دیگر <code>SQL statements</code> در کد معمولی خود نداریم. هنگام خواندن آن، ما مجبور نیستیم به دفعات <code>contexts</code> را تغییر دهیم، بنابراین قطعاً درک آنچه اتفاق می‌افتد آسان‌تر است.
+    با این حال، ما فقط موفق شدیم نیمی از مشکل اصلی را برطرف کنیم. ما می‌توانستیم فقط برخی از جزئیات <code>implementation</code> (نام جدول، <code>SQL queries</code>) را پنهان کنیم، اما سایر جزئیات <code>implementation</code> را
+    درون <code>controller action</code> (نام و انواع ستون‌ها) باقی گذاشتیم. این امر ما را همچنان بسیار وابسته به تصمیمات <code>technological</code> که برای این قطعه کد گرفته‌ایم، می‌کند: کد،
+    کد بسیار table-oriented باقی می‌ماند، بنابراین ما مجبور به استفاده از یک <code>relational database</code> هستیم.
+  </p>
+  <p>
+    ارائه دستکاری‌های table-oriented عمومی مانند یک <code>table gateway</code>، یک مشکل دیگر را نشان می‌دهد که ما هنوز متوجه آن نشده‌ایم، اما از ابتدا وجود داشته است. هیچ چیز مانع از این نمی‌شود که ما یک <code>string</code> را در ستون <code>email</code> درج کنیم
+    که حتی شبیه یک <code>email address</code> نباشد. <code>table gateway</code> همچنین ما را از محاسبه نادرست مقدار سفارش و درج مستقیم آن در <code>database</code> باز نمی‌دارد. به عبارت دیگر: ما نمی‌توانیم از <code>internal consistency</code> یک سفارش <code>e-book</code> محافظت کنیم.
+  </p>
+  <h4>2.3. Designing an entity</h4>
+  <p>
+    ما می‌خواهیم سفارش یک <code>e-book</code> مشتری را بگیریم و آن را به خاطر بسپاریم، بنابراین می‌توانیم بعداً آن را پردازش کنیم. بنابراین قبل از ذخیره یک سفارش، باید اطمینان حاصل کنیم که کامل و صحیح است.
+    اگر این کار را نکنیم، ممکن است حتی مجبور شویم بعداً با مشتریان خود تماس بگیریم و از آنها بخواهیم داده‌هایی را که از آنها دریافت کرده‌ایم تصحیح کنند. ما همچنین می‌خواهیم اطمینان حاصل کنیم که آنچه در <code>database</code> قرار می‌گیرد،
+    می‌تواند با خیال راحت توسط سایر قسمت‌های <code>application</code> استفاده شود، به عنوان مثال توسط ماژول پرداخت، یا ماژول انجام، که <code>e-book</code> را برای مشتری ارسال می‌کند.
+  </p>
+  <p>
+    ما خوش شانس هستیم که <code>object-oriented programming</code> را انجام می‌دهیم، زیرا با <code>objects</code> می‌توانیم به تمام اهداف خود دست یابیم. هنگامی که یک <code>object</code> ایجاد می‌شود، می‌تواند بپذیرد
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

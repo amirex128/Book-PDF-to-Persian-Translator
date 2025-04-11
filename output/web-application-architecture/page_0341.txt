@@ -1,0 +1,34 @@
+14. A testing strategy for decoupled applications
+tem’s random device to be infrastructure code. Items 4 and 5 correspond to
+our discovery that code that relies on global state or statically accessible ser-
+vice and configuration locators shouldn’t be considered core code; it needs
+special setup in order to run. So I think it makes sense to generalize Feathers’
+definition and say that:
+A test is not a unit test if it invokes infrastructure code.
+This certainly isn’t true for many of the tests that developers call “unit tests”.
+The confusion stems from the fact that unit tests and non-unit tests can both
+be executed by PHPUnit. The test framework has “unit” in its name, so all
+the tests that this framework runs are usually called “unit tests”. But the test
+framework itself can’t guarantee that the tests you write and run are true
+unit tests. So once again it will be your own responsibility to only invoke
+core code in a unit test. It may help to call actual unit tests “isolated tests”
+and move the tests that invoke infrastructure code to a different test suite
+called “integration tests” (see also Section 14.2).
+In my projects I usually write isolated tests only for some smaller building
+blocks like entities and value objects. These domain objects are great can-
+didates for isolated tests because they have to protect all kinds of domain
+invariants, which all deserve to be separately tested. It’s convenient to test
+these invariants close to the object that protects them, instead of in higher-
+level tests. I don’t write unit tests for objects that coordinate changes in do-
+main objects, like application services, event subscribers, and repositories.
+These will be tested with Use case tests (Section 14.5) and Adapter tests (Sec-
+tion 14.2).
+Listing 14.1 shows several examples of unit tests for the Order entity. I try
+to keep the test methods really small. Ideally each method consists of three
+statements. Wherever I can I use factory methods like aPaidOrder(). The
+method name can be used to describe what’s special about the object it re-
+turns. This makes it easier to understand what the test tries to prove.
+Listing 14.1. Examples of unit tests for an entity.
+use PHPUnit\Framework\TestCase;
+final class OrderTest extends TestCase
+321

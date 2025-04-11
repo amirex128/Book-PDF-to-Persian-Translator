@@ -1,0 +1,33 @@
+2. The domain model
+final class Order
+{
+// ...
+public function mappedData(): array
+{
+return [
+'id' => $this->id,
+'email' => $this->emailAddress,
+// ...
+];
+}
+}
+In the controller, things are looking much better now: we first get the next
+order ID, provide it to Order as a constructor argument, then save the Order
+using the repository (see Listing 2.22).
+Listing 2.22. orderEbookAction() uses nextIdentity() to determine the or-
+der ID upfront.
+public function orderEbookAction(Request $request): Response
+{
+// ...
+$orderId = $orderRepository->nextIdentity();
+$order = new Order(
+$orderId,
+// ...
+);
+$orderRepository->save($order);
+// ...
+}
+Since we no longer have to rely on save() to return the new order’s ID, we
+should remove that int return type from the repository’s save() method (see
+Listing 2.23).
+38

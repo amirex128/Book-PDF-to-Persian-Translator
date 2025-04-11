@@ -1,0 +1,36 @@
+7. Time and randomness
+A similar reasoning applies to the Calendar interface, but there it’s the other
+way around. The only thing that CalenderUsingClock does is talk to the Clock
+interface and use the current time to create a new Date instance. Using the
+Calendar gives us “jumpy” code, where we go from application service to ab-
+straction, to concrete class, to abstraction, to concrete class. Instead, an appli-
+cation service could just use the Clock directly, and create a Date from it, us-
+ing its fromDateTimeImmutable() factory method. Listing 7.20 shows the ap-
+plication service after removing Calender (and CalenderUsingSystemClock).
+Listing 7.20. Using Clock and OrderRepository.
+final class EbookOrderService
+{
+private Clock $clock;
+private OrderRepository $orderRepository;
+// ...
+public function __construct(
+Clock $clock,
+OrderRepository $orderRepository,
+// ...
+) {
+$this->clock = $clock;
+$this->orderRepository = $orderRepository;
+// ...
+}
+public function create(/* ... */): OrderId
+{
+$order = Order::create(
+$this->orderRepository->nextIdentity(),
+Date::fromDateTimeImmutable($this->clock->currentTime()),
+// ...
+);
+// ...
+return $order->orderId();
+}
+}
+183

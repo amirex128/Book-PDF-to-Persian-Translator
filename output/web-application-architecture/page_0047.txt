@@ -1,0 +1,31 @@
+2. The domain model
+. ') VALUES (' . implode(', ', $values) . ')';
+$this->connection->execute($sql);
+$lastInsertedId = $this->connection->execute(
+'SELECT LAST_INSERT_ID();'
+)->fetchColumn(0);
+return $lastInsertedId;
+}
+}
+There are different options here. The most common one is to install an ORM
+in your project, which can do the mapping from object properties to table
+columns for you.
+2.5.1. Using an ORM
+In Section 2.8 we’ll talk about what type of ORM works best in this scenario.
+For now, let’s look at an example using the popular Doctrine ORM6. Once
+we have installed Doctrine ORM in our project and have set up the database
+connection we first need to add mapping configuration to the entity class and
+its properties. Listing 2.11 shows how to do that using annotations.
+Listing 2.11. Using annotations for mapping configuration.
+use Doctrine\ORM\Mapping as ORM;
+/**
+* @ORM\Entity
+* @ORM\Table(name="orders")
+*/
+final class Order
+{
+/**
+* @ORM\Id
+* @ORM\GeneratedValue
+6 https://advwebapparch.com/doctrine-orm
+27

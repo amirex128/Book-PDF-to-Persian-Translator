@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 23</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>1. Introduction</strong></h3>
+  <p>با توجه به <strong>infrastructure</strong>، هر یک از فصل‌های زیر با برخی از نمونه‌های رایج کد "مخلوط" در یک <em>legacy</em> <strong>web application</strong> شروع می‌شود. پس از اشاره به مشکلات این نوع کد، تعدادی از مراحل <strong>refactoring</strong> را برای جداسازی بخش <strong>core</strong> از بخش <strong>infrastructure</strong> انجام می‌دهیم. پس از شش مورد از این تکرارها، تمام تکنیک‌های برنامه‌نویسی را که می‌تواند شما را از داشتن کد مخلوط در کلاس‌هایتان نجات دهد، مشاهده خواهید کرد.</p>
+  <p>اما قبل از اینکه شروع به <strong>refactoring</strong> و بهبود نمونه‌های کد کنیم، اجازه دهید تعریفی از اصطلاحات "<strong>core</strong>" و کد "<strong>infrastructure</strong>" ارائه دهیم. ما کد <strong>core</strong> را با معرفی دو قانون برای آن تعریف می‌کنیم. هر کد دیگری که از قوانین کد <strong>core</strong> پیروی نمی‌کند، باید کد <strong>infrastructure</strong> در نظر گرفته شود.</p>
+  <h4><strong>1.1. Rule no 1: No dependencies on external systems</strong></h4>
+  <p>بیایید با قانون اول شروع کنیم:</p>
+  <p>کد <strong>core</strong> مستقیماً به سیستم‌های خارجی وابسته نیست و نه به کدی که برای تعامل با یک نوع خاص از سیستم خارجی نوشته شده است، وابسته است.</p>
+  <p>یک سیستم خارجی چیزی است که خارج از <strong>application</strong> شما وجود دارد، مانند یک <em>database</em>، برخی از <strong>web service</strong> های از راه دور، ساعت سیستم، <em>file system</em> و غیره. کد <strong>core</strong> باید بتواند بدون این وابستگی‌های خارجی اجرا شود.</p>
+  <p>Listing 1.1 تعدادی از متدهای کلاس را نشان می‌دهد که از این قانون اول پیروی نمی‌کنند و بنابراین باید کد <strong>infrastructure</strong> در نظر گرفته شوند. شما نمی‌توانید هیچ یک از این متدها را بدون اینکه وابستگی‌های خارجی آنها واقعاً در دسترس باشند، فراخوانی کنید.</p>
+  <p>Listing 1.1. Examples of code that needs external dependencies to run.</p>
+  <pre><code class="language-php">
+final class NeedsExternalDependencies
+{
+    public function callARemoteService(): void
+    {
+        /*
+         * To run this code, we need an internet connection,
+         * and the API of remoteservice.com should be responsive.
+         */
+        $ch = curl_init('https://remoteservice.com/api');
+    }
+}
+  </code></pre>
+  <p>3</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

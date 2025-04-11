@@ -1,0 +1,41 @@
+7. Time and randomness
+To
+improve
+the
+language
+used
+in
+this
+code,
+we
+should
+rename
+Date::fromDateTimeImmutable() to Date::fromCurrentTime(). This would
+take away the focus from the data type used, and bring back focus on the
+story: we’re making a date based on the current time, which makes a lot of
+sense too.
+Figure 7.5 shows the elements we have left after cleaning up.
+“Do you recommend starting with more elements than needed?”
+Great question; that’s not exactly what I wanted to show in this chapter. I
+don’t think it should be your goal to create more elements than needed, but
+I know that it sometimes happens. That’s why I thought it would be useful
+to show what are signs of too many elements (“jumpy” code), and also how
+to reduce the number of elements.
+7.6. Integration tests again
+Testing core code is easy because core code by definition runs well in isola-
+tion. You need no special context, and no external dependencies. With infras-
+tructure code it’s a different story. They usually need special setup and exter-
+nal dependencies need to be actually available. As mentioned before, tests
+for infrastructure code are called integration tests. They show that the code
+works well with third-party libraries and the external dependencies that the
+code relies on. In Section 6.4 we saw how to test code that communicates with
+remote services. The system clock and the system’s random device are in a
+sense remote services too, although we don’t need an HTTP client to connect
+to these devices. Still, we’d want to show in a test that our application works
+correctly when it uses these external devices.
+The thing is, we don’t have a lot of code to test. We used to have a UuidFactory-
+UsingRamseyUuid but we removed it already. We still have a ClockUsingSystemClock
+class without tests. It’s so very simple that I’d be tempted not to write a test
+for it. But what if your team has a rule that every class should have a test?
+Then get rid of this rule (no joke). As a fun experiment, let’s find out what
+184

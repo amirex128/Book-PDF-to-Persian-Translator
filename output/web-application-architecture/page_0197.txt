@@ -1,0 +1,35 @@
+7. Time and randomness
+Listing 7.13. OrderRepository can produce new OrderId instances.
+interface OrderRepository
+{
+// ...
+public function nextIdentity(): OrderId;
+}
+final class OrderRepositoryUsingSql
+implements OrderRepository
+{
+private UuidFactory $uuidFactory;
+public function __construct(UuidFactory $uuidFactory)
+{
+$this->uuidFactory = $uuidFactory;
+}
+public function nextIdentity(): OrderId
+{
+return OrderId::fromString(
+$this->uuidFactory->create()->toString()
+);
+}
+}
+This offers a clean separation between core and infrastructure code. The
+infrastructure code is the code that creates a fresh UUID based on what data
+the system’s random device provides. The core code is the OrderId class itself,
+and the interface from which you can retrieve a new OrderId instance.
+For retrieving a Date instance we could do a similar thing. We’d define an
+interface, with a method that creates a Date instance for the caller. We could
+call it a DateFactory but maybe a Calendar with a today() method would
+be more appropriate. This method returns a Date instance correctly repre-
+senting today’s actual date. The standard implementation of this interface
+can use the Clock abstraction we defined earlier to get the current time and
+create a Date instance based on it (see Listing 7.14).
+Listing 7.14. The Calendar interface and its standard implementation.
+177

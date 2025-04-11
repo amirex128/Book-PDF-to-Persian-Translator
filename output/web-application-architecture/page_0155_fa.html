@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 155</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> External services</h3>
+  <h4> 6.1. Connecting to the external service</h4>
+  <p>خب، چگونه نرخ <strong>VAT</strong> را تعیین کنیم؟ با نگاهی به <strong>documentation</strong> از <code>vatapi.com</code>1 ما متوجه می‌شویم که یک <strong>endpoint API</strong> از نوع "<strong>VAT Rate Check</strong>" وجود دارد. آنها حتی چند نمونه نوشته شده در <strong>PHP</strong> ارائه می‌دهند. کپی کردن کد در <strong>service</strong> به ما یک ویژگی کم و بیش در حال کار می‌دهد، همانطور که در <strong>Listing</strong> 6.4 نشان داده شده است.</p>
+  <p><strong>Listing</strong> 6.2. <strong>EbookOrderService</strong> از <code>curl</code> برای واکشی یک نرخ <strong>VAT</strong> از <code>vatapi.com</code> استفاده می‌کند.</p>
+  <pre><code class="language-php">
+public function create(/* ... */): OrderId
+{
+    // ...
+    $curl = curl_init();
+
+    /*
+     * Search for TBE services (Telecommunications,
+     * broadcasting & electronic services).
+     * Filter on "ebooks".
+     * For now, let's use a hard-coded country code.
+     */
+    $url = 'https://eu.vatapi.com/v2/vat-rate-check?' .
+        http_build_query(
+            [
+                'rate_type' => 'TBE',
+                'country_code' => 'NL',
+                'filter' => 'ebooks'
+            ]
+        );
+    // @todo Inject the API key as a configuration value
+    $apiKey = 'THE_SECRET_API_KEY';
+
+    curl_setopt_array(
+        $curl,
+        [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+</code></pre>
+  <p>1 https://advwebapparch.com/vat-api-docs</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

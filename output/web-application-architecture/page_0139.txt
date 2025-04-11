@@ -1,0 +1,37 @@
+5. Service locators
+tracted the order-an-e-book use case from the web controller. Doing this for
+the SendIp-ConfirmationEmail service too, makes it effectively reusable in
+a different context. For example, your company’s support website could of-
+fer a form, allowing an employee to manually send the confirmation email,
+in case something went wrong. Such a controller action gets the user’s in-
+formation not from the session, but from the form. Because the refactored
+SendIpConfirmationEmail service doesn’t rely on global state for its input, it
+can easily be reused in this new context, as is shown in Listing 5.7.
+Listing 5.7. Reusing the SendIpConfirmationEmail service in a different con-
+text.
+final class SupportController
+{
+private SendIpConfirmationEmail $confirmationEmail;
+private UserRepository $userRepository;
+public function __construct(
+UserRepository $userRepository,
+SendIpConfirmationEmail $confirmationEmail
+) {
+$this->userRepository = $userRepository;
+$this->confirmationEmail = $confirmationEmail;
+}
+public function sendIpConfirmationEmail(
+Request $request
+): Response {
+$user = $this->userRepository->getById(
+// Take the user ID from the form:
+$request->request->get('user_id')
+);
+$this->confirmationEmail->send(
+$user,
+// Take the user's IP address from the form:
+$request->request->get('ip')
+);
+// ...
+}
+119

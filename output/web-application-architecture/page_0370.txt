@@ -1,0 +1,36 @@
+14. A testing strategy for decoupled applications
+private ?OrderId $orderId = null;
+public function __construct()
+{
+$this->container = new TestServiceContainer();
+}
+/**
+* @When a customer creates an order for an e-book
+*/
+public function aCustomerCreatesAnOrderForAnEbook(): void
+{
+$this->orderId = $this->container->application()
+->createOrder(
+new CreateOrder(2, 1, 'matthiasnoback@gmail.com')
+);
+}
+/**
+* @Then they should receive an order confirmation email
+*/
+public function theyShouldReceiveAnOrderConfirmationEmail(): void
+{
+Assert::assertInstanceOf(OrderId::class, $this->orderId);
+Assert::assertContainsEqual(
+$this->orderId,
+$this->container->mailer()->emailsSentFor()
+);
+}
+}
+Behat reads the first line of the scenario: “When a customer creates an order
+for an e-book” and looks for a method that has a @When annotation followed by
+the step itself. In this case it finds the method aCustomerCreatesAnOrderForAn-
+Ebook(). Behat then invokes this method. If this produces an exception, Be-
+hat considers the step “failed”. If all goes well, Behat considers the step to be
+successful and it proceeds with the next step “Then they should receive an or-
+der confirmation email”. It matches the step to the theyShouldReceiveAnOrder-
+350

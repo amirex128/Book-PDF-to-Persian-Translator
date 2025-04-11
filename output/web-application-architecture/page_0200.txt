@@ -1,0 +1,33 @@
+7. Time and randomness
+$this->orderRepository->nextIdentity(),
+$this->calendar->currentDate(),
+// ...
+);
+// ...
+return $order->orderId();
+}
+}
+7.5. Manipulating the current time
+Now that we have the Clock interface and a standard implementation, we
+can rewrite any instantiation of a DateTimeImmutable in our application as a
+call to Clock::currentTime(). This gives us a single place to determine the
+current time, which will be very helpful when we start writing acceptance
+tests later on (see Chapter 14). Listing 7.17 shows what we can do in a test to
+influence the current time as our application will perceive it.
+Listing 7.17. In a test, you can easily configure the “current” time.
+final class CreateOrderTest extends TestCase
+{
+public function it_creates_an_order(): void
+{
+$clock = new class implements Clock {
+public function currentTime(): DateTimeImmutable
+{
+return new DateTimeImmutable('2019-07-09');
+}
+};
+$service = new EbookOrderService(
+new CalendarUsesClock($clock),
+// ...
+);
+$service->create(/* ... */);
+180

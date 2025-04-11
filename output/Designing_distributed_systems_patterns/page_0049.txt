@@ -1,0 +1,43 @@
+One question that often comes up when considering adapter pat‐
+terns is: Why not simply modify the application container itself? If
+you are the developer responsible for the application container,
+then this might actually be a good solution. Adapting your code or
+your container to implement a consistent interface can work well.
+However, in many cases we are reusing a container produced by
+another party. In such cases, deriving a slightly modified image that
+we have to maintain (patch, rebase, etc.) is significantly more
+expensive than developing an adapter container that can run
+alongside the other party’s image. Additionally, decoupling the
+adapter into its own container allows for the possibility of sharing
+and reuse, which isn’t possible when you modify the application
+container.
+Hands On: Normalizing Different Logging Formats with Fluentd
+One common task for an adapter is to normalize log metrics into a standard set of
+events. Many different applications have different output formats, but you can use a
+standard logging tool deployed as an adapter to normalize them all to a consistent
+format. In this example, we will use the fluentd monitoring agent as well as some
+community-supported plugins to obtain logs from a variety of different sources.
+fluentd is one of the more popular open source logging agents available. One of its
+major features is a rich set of community-supported plugins that enable a great deal
+of flexibility in monitoring a variety of applications.
+The first application that we will monitor is Redis. Redis is a popular key-value store;
+one of the commands it offers is the SLOWLOG command. This command lists recent
+queries that exceeded a particular time interval. Such information is quite useful in
+debugging your application’s performance. Unfortunately, SLOWLOG is only available as
+a command on the Redis server, which means that it is difficult to use retrospectively
+if a problem happens when someone isn’t available to debug the server. To fix this
+limitation, we can use fluentd and the adapter pattern to add slow-query logging to
+Redis.
+To do this, we use the adapter pattern with a redis container as the main application
+container, and the fluentd container as our adapter container. In this case, we will
+also use the fluent-plugin-redis-slowlog fluentd plugin to listen to the slow
+queries. We can configure this plugin using the following snippet:
+<source>
+  type redis_slowlog
+  host localhost
+  port 6379
+  tag redis.slowlog
+</source>
+Logging 
+| 
+35

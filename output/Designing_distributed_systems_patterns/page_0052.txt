@@ -1,0 +1,73 @@
+ 
+ 
+fmt.Printf("Error opening database: %v", err)
+ 
+}
+ // Simple web handler that runs the query
+ 
+http.HandleFunc("", func(res http.ResponseWriter, req *http.Request) {
+ 
+ 
+_, err := db.Exec(*query)
+ 
+ 
+if err != nil {
+ 
+ 
+ 
+res.WriteHeader(http.StatusInternalServerError)
+ 
+ 
+ 
+res.Write([]byte(err.Error()))
+ 
+ 
+ 
+return
+ 
+ 
+}
+ 
+ 
+res.WriteHeader(http.StatusOK)
+ 
+ 
+res.Write([]byte("OK"))
+ 
+ 
+return
+ 
+})
+ // Startup the server
+ 
+http.ListenAndServe(*addr, nil)
+}
+We can then build this into a container image and pull it into a pod that looks like:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: adapter-example-health
+  namespace: default
+spec:
+  containers:
+  - image: mysql
+    name: mysql
+  - image: brendanburns/mysql-adapter
+    name: adapter
+That way, the mysql container is unchanged, but the desired feedback about the
+health of the mysql server can still be obtained from the adapter container.
+When looking at this application of the adapter pattern, it may seem like applying the
+pattern is superfluous. Clearly we could have built our own custom image that knew
+how to health check the mysql instance itself.
+While this is true, this method ignores the strong benefits that derive from modular‐
+ity. If every developer implements their own specific container with health checking
+built in, there are no opportunities for reuse or sharing.
+In contrast, if we use patterns like the adapter to develop modular solutions com‐
+prised of multiple containers, the work is inherently decoupled and more easily
+shared. An adapter that is developed to health check mysql is a module that can be
+shared and reused by a variety of people. Further, people can apply the adapter pat‐
+tern using this shared health-checking container, without having deep knowledge of
+how to health check a mysql database. Thus the modularity and adapter pattern serve
+38 
+| 
+Chapter 4: Adapters

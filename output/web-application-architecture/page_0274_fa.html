@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 274</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>implementation mapping خودتان، الزامات زیر را در نظر داشته باشید.</p>
+    <p>هنگامی که یک entity را ذخیره می‌کنید، باید بدانید که آیا یک entity جدید است یا یک entity موجود که در حال update شدن است. بر اساس این دانش، شما باید یک query از نوع INSERT یا UPDATE انجام دهید. شما می‌توانید چیزی را ایجاد کنید که به عنوان یک identity map شناخته می‌شود، جایی که شما entities را که از database بارگیری شده‌اند، پیگیری می‌کنید. دفعه بعد که application سعی می‌کند یک entity را save() کند، شما آن را در identity map جستجو می‌کنید. اگر آنجا بود، باید update شود، اگر آنجا نبود باید insert شود. پس از insert، شما entity را به identity map اضافه می‌کنید، بنابراین ذخیره آن یک بار دیگر باعث ایجاد یک update می‌شود. یک جایگزین (چیزی که من در TalisORMa استفاده کردم) این است که به خود entity اجازه دهیم تا پیگیری کند که آیا "new" است یا خیر.</p>
+    <p>اگر entity دارای child entities است، شما باید همان نوع change tracking را برای این entities نیز انجام دهید. Child entities اغلب می‌توانند حذف شوند، بنابراین باید راهی برای یافتن زمانی که یک query از نوع DELETE مورد نیاز است، وجود داشته باشد. و قبل از اینکه شما متوجه شوید، شما در حال پیاده‌سازی ORM خودتان خواهید بود، بنابراین خوب است که به نسبت هزینه/فایده توجه داشته باشید. در چند سال گذشته، من شخصاً از نوشتن mapping code خودم مزایای زیادی را تجربه کرده‌ام، اما قبل از پیمودن این مسیر، مطمئن شوید که context خود را به طور کامل در نظر گرفته‌اید.</p>
+    <p><sup>a</sup>https://advwebapparch.com/talis-orm</p>
+    <h4><strong>11.4. Application services</strong></h4>
+    <p>entity Order را می‌توان ایجاد کرد، شما می‌توانید delivery address آن را تغییر دهید، آن را لغو کنید و غیره. این رفتارها توسط command methods با یک name با intention-revealing نشان داده می‌شوند. فقط Application services باید به این methods دسترسی داشته باشند. یک application service، تغییر درخواستی را هماهنگ می‌کند. به عنوان مثال، order را ایجاد می‌کند و آن را در OrderRepository ذخیره می‌کند. یا یک entity Order را با ID آن بارگیری می‌کند، یک یا چند methods را روی آن فراخوانی می‌کند و دوباره آن را ذخیره می‌کند (برای برخی از مثال‌ها به Listing 11.7 مراجعه کنید).</p>
+    <p>Listing 11.7. برخی از application services.</p>
+    <pre><code class="language-php">
+final class CreateOrderService
+{
+    private OrderRepository $orderRepository;
+</code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

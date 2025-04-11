@@ -1,0 +1,60 @@
+Hands On: Adding Rich Health Monitoring for MySQL
+Suppose then that you want to add deep monitoring on a MySQL database where you
+actually run a query that was representative of your workload. In this case, one option
+would be to update the MySQL container to contain a health check that is specific to
+your application. However, this is generally an unattractive idea because it requires
+that you both modify some existing MySQL base image as well as update that image
+as new MySQL images are released.
+Using the adapter pattern is a much more attractive approach to adding health checks
+to your database container. Instead of modifying the existing MySQL container, you
+can add an additional adapter container to the pre-existing MySQL container, which
+runs the appropriate query to test the database health. Given that this adapter con‐
+tainer implements the expected HTTP health check, it is simply a case of defining the
+MySQL database process’s health check in terms of the interface exposed by this data‐
+base adapter.
+The source code for this adapter is relatively straightforward and looks like this in Go
+(though clearly other language implementations are possible as well):
+package main
+import (
+ 
+"database/sql"
+ 
+"flag"
+ 
+"fmt"
+ 
+"net/http"
+ 
+_ "github.com/go-sql-driver/mysql"
+)
+var (
+ 
+user   = flag.String("user", "", "The database user name")
+ 
+passwd = flag.String("password", "", "The database password")
+ 
+db     = flag.String("database", "", "The database to connect to")
+ 
+query  = flag.String("query", "", "The test query")
+ 
+addr   = flag.String("address", "localhost:8080",
+ 
+                    "The address to listen on")
+)
+// Basic usage:
+//   db-check --query="SELECT * from my-cool-table" \
+//            --user=bdburns \
+//            --passwd="you wish"
+//
+func main() {
+ 
+flag.Parse()
+ 
+db, err := sql.Open("localhost",
+ 
+                    fmt.Sprintf("%s:%s@/%s", *user, *passwd, *db))
+ 
+if err != nil {
+Adding a Health Monitor 
+| 
+37

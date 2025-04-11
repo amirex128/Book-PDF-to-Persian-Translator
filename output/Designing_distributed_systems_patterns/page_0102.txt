@@ -1,0 +1,43 @@
+log in to the system. Two-factor authentication is significantly more secure than pass‐
+words alone since it requires two different security compromises (a thief learning
+your password and a thief stealing your phone) to enable a true security problem.
+When considering how to implement two-factor authentication, one of the challenges
+is how to handle the request to generate a random code and register it with the login
+service as well as send the text message. It is possible to add this code to the main
+login web server. But it is complicated and monolithic, and forces the act of sending a
+text message, which can have some latency, to be inline with the code that renders the
+login web page. This latency produces a substandard user experience.
+A better option is to register a FaaS to asynchronously generate the random number,
+register it with the login service, and send the number to the user’s phone. In this way,
+the login server can simply fire an asynchronous web-hook request to a FaaS, and
+that FaaS can handle the somewhat slow and asynchronous task of registering the
+two-factor code and sending the text message.
+To see how this works in practice, consider the following code:
+def two_factor(context):
+  # Generate a random six digit code
+  code = random.randint(100000, 999999)
+  # Register the code with the login service
+  user = context.json["user"]
+  register_code_with_login_service(user, code)
+  # Use the twillio library to send texts
+  account = "my-account-sid"
+  token = "my-token"
+  client = twilio.rest.Client(account, token)
+  user_number = context.json["phoneNumber"]
+  msg = "Hello {} your authentication code is: {}.".format(user, code)
+  message = client.api.account.messages.create(to=user_number,
+                                               from_="+12065251212",
+                                               body=msg)
+  return {"status": "ok"}
+We can then register this FaaS with kubeless:
+kubeless function deploy add-two-factor \
+    --runtime python27 \
+    --handler two_factor.two_factor \
+    --from-file two_factor.py \
+    --trigger-http
+This function can then be made asynchronously from client-side JavaScript whenever
+the user successfully provides their password. The web UX can then immediately dis‐
+play a page to enter the code, and the user (once they receive the code as a text mes‐
+88 
+| 
+Chapter 8: Functions and Event-Driven Processing

@@ -1,0 +1,24 @@
+9. Conclusion
+chapter with the OrderController::orderEbookAction() method which con-
+tained all the steps of the “order an e-book” scenario. Figure 9.7 shows the
+initial situation. Although the controller depends on an abstraction provided
+by the core, the use case itself is sadly part of the infrastructure. This means
+we can’t easily invoke it, without also setting up and running other infras-
+tructure code.
+Figure 9.7. The use case is currently tied to a particular infrastructure, mak-
+ing it hard to invoke in other situations.
+After some refactoring steps we were able to extract a use case service from
+the controller. This service would now count as core code, since it no longer
+depends on any infrastructural element. Its input is plain data, not an HTTP
+Request object or something. It manipulates only data in memory, and it only
+talks to abstractions, like OrderRepository. Figure 9.8 shows the result of the
+operation.
+Again, the dependency arrows only point towards core code. This means that
+besides being able to completely replace the infrastructure code on the right
+side, we can now also replace the code on the left side. We can reuse the
+same use case with a different “front-end”, like an API endpoint, or a batch
+importer. Maybe we even build CLI commands that allow us to test some
+of the application’s use cases from the terminal. The application’s test suite
+will essentially be an alternative infrastructure for our core code as well.
+It will provide input for the use cases, and verify the outcomes of invoking
+232

@@ -1,0 +1,28 @@
+for such an API is driven both by ease of use as well as the ability to add automation
+like rollback, which makes configuring (and reconfiguring) safer and easier.
+Similar to the case of HTTPS, new applications can be written with the expectation
+that configuration is a dynamic property that should be obtained using a cloud API,
+but adapting and updating an existing application can be significantly more challeng‐
+ing. Fortunately, the sidecar pattern again can be used to provide new functionality
+that augments a legacy application without changing the existing application. For the
+sidecar pattern shown in Figure 2-3, there again are two containers: the container that
+is the serving application and the container that is the configuration manager. The
+two containers are grouped together into a pod where they share a directory between
+themselves. This shared directory is where the configuration file is maintained.
+When the legacy application starts, it loads its configuration from the filesystem, as
+expected. When the configuration manager starts, it examines the configuration API
+and looks for differences between the local filesystem and the configuration stored in
+the API. If there are differences, the configuration manager downloads the new con‐
+figuration to the local filesystem and signals to the legacy application that it should
+reconfigure itself with this new configuration. The actual mechanism for this notifi‐
+cation varies by application. Some applications actually watch the configuration file
+for changes, while others respond to a SIGHUP signal. In extreme cases, the configu‐
+ration manager may send a SIGKILL signal to abort the legacy application. Once
+aborted, the container orchestration system will restart the legacy application, at
+which point it will load its new configuration. As with adding HTTPS to an existing
+application, this pattern illustrates how the sidecar pattern can help adapt pre-
+existing applications to more cloud-native scenarios.
+Figure 2-3. A sidecar example of managing a dynamic configuration
+Dynamic Configuration with Sidecars 
+| 
+13

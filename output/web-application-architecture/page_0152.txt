@@ -1,0 +1,24 @@
+5. Service locators
+5. Is your code ever allowed to fetch a service directly from a service con-
+tainer?e
+1. No, never. Always use constructor injection.
+2. Yes, but only very close to where user code is first executed by the
+framework.
+aCorrect answer: declaring dependencies as constructor arguments makes it clear
+what those dependencies are. Clients can discover how to instantiate a service
+by inspecting the arguments and their types. There is no need to set up any-
+thing else than just the object itself. If you have provided all the dependencies,
+nothing else will be needed.
+bAlthough 1 could be the case, frameworks will offer a way to reconfigure those
+dependencies so that they don’t need external systems. The correct answer is
+2 because you need to do at least some work to prepare the context before you
+can run the code.
+cCorrect answer: 1 and 5 are service dependencies that should be injected as con-
+structor arguments. 2 is contextual information. 3 and 4 are job-specific data.
+dCorrect answer: dependencies and configuration values should be injected as
+constructor arguments, the other things should be provided as method argu-
+ments.
+eCorrect answer: 2. Core code should always use constructor injection. But there’s
+a point where the first service has to be fetched from the container. This has to
+be close to the first user code that the framework executes.
+132

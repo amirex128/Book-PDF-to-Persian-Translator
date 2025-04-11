@@ -1,0 +1,39 @@
+Hands On: Deploying etcd
+etcd is a distributed lock server developed by CoreOS. It is robust and proven in pro‐
+duction at high scale, and is used by a variety of projects including Kubernetes.
+Deploying etcd has fortunately become quite easy due to the development of two dif‐
+ferent open source projects:
+• Helm: a Kubernetes package manager supported by Microsoft Azure
+• The etcd operator developed by CoreOS
+Operators are an interesting topic being explored by CoreOS. An
+operator is an online program that runs inside your container
+orchestrator with the express purpose of running one or more
+applications. The operator is responsible for creating, scaling, and
+maintaining the successful operation of the program. Users config‐
+ure the application through a desired state API. For example, the
+etcd operator is in charge of monitoring etcd itself. Operators are
+still a new idea but represent an important new direction in build‐
+ing reliable distributed systems.
+To deploy the etcd operator for CoreOS, we’re going to use the helm package manage‐
+ment tool. Helm is an open source package manager that is part of the Kubernetes
+project, and was developed by Deis. Deis was acquired by Microsoft Azure in 2017
+and Microsoft continues to support the further open source development of Helm.
+If this is your first time using helm, you need to install the helm tool, following the
+instructions here: https://github.com/kubernetes/helm/releases.
+Once you have the helm tool installed in your environment, you can install the etcd
+operator using helm, as follows:
+# Initialize helm
+helm init
+# Install the etcd operator
+helm install stable/etcd-operator
+Once the operator is installed, it creates a custom Kubernetes resource to represent
+the etcd cluster. The operator is running, but there are no etcd clusters yet. To create
+an etcd cluster, you need to create a declarative configuration:
+apiVersion: "etcd.coreos.com/v1beta1"
+kind: "Cluster"
+metadata:
+  # Whatever name you want here
+  name: "my-etcd-cluster"
+The Basics of Master Election 
+| 
+97

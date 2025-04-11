@@ -1,0 +1,39 @@
+configuration loader is mostly a best-effort service; if it is delayed slightly during
+times of high user-request volume, the system will be okay. Likewise, the background
+configuration loader should not impact the quality of service that end users receive.
+For all of these reasons, you want to separate the user-facing service and the back‐
+ground shard loader into different containers. This allows you to attach different
+resource requirements and priorities to the two different containers and, for example,
+ensure that the background loader opportunistically steals cycles from the user-facing
+service whenever it is lightly loaded and the cycles are free. Likewise, separate
+resource requirements for the two containers ensure that the background loader will
+be terminated before the user-facing service if there is a resource contention issue
+caused by a memory leak or other overcommitment of memory resources.
+In addition to this resource isolation, there are other reasons to split your single-node
+application into multiple containers. Consider the task of scaling a team. There is
+good reason to believe that the ideal team size is six to eight people. In order to struc‐
+ture teams in this manner and yet still build significant systems, we need to have
+small, focused pieces for each team to own. Additionally, often some of the compo‐
+nents, if factored properly, are reusable modules that can be used by many teams.
+Consider, for example, the task of keeping a local filesystem synchronized with a git
+source code repository. If you build this Git sync tool as a separate container, you can
+reuse it with PHP, HTML, JavaScript, Python, and numerous other web-serving envi‐
+ronments. If you instead factor each environment as a single container where, for
+example, the Python runtime and the Git synchronization are inextricably bound,
+then this sort of modular reuse (and the corresponding small team that owns that
+reusable module) are impossible.
+Finally, even if your application is small and all of your containers are owned by a
+single team, the separation of concerns ensures that your application is well under‐
+stood and can easily be tested, updated, and deployed. Small, focused applications are
+easier to understand and have fewer couplings to other systems. This means, for
+example, that you can deploy the Git synchronization container without having to
+also redeploy your application server. This leads to rollouts with fewer dependencies
+and smaller scope. That, in turn, leads to more reliable rollouts (and rollbacks), which
+leads to greater agility and flexibility when deploying your application.
+Summary
+I hope that all of these examples have motivated you to think about breaking up your
+applications, even those on a single node, into multiple containers. The following
+chapters describe some patterns that can help guide you as you build modular groups
+of containers. In contrast to multi-node, distributed patterns, all of these patterns
+assume tight dependencies among all of the containers in the pattern. In particular,
+they assume that all of the containers in the pattern can be reliably coscheduled onto

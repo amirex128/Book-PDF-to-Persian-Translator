@@ -1,0 +1,33 @@
+abstraction to separate the replicated service from the consumers of the service. The
+load balancer also provides a resolvable name that is independent of any of the spe‐
+cific replicas.
+With Kubernetes, you can create this load balancer with a Service object:
+kind: Service
+apiVersion: v1
+metadata:
+  name: dictionary-server-service
+spec:
+  selector:
+    app: dictionary-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+Once you have the configuration file, you can create the dictionary service with:
+kubectl create -f dictionary-service.yaml
+Session Tracked Services
+The previous examples of the stateless replicated pattern routed requests from all
+users to all replicas of a service. While this ensures an even distribution of load and
+fault tolerance, it is not always the preferred solution. Often there are reasons for
+wanting to ensure that a particular user’s requests always end up on the same
+machine. Sometimes this is because you are caching that user’s data in memory, so
+landing on the same machine ensures a higher cache hit rate. Sometimes it is because
+the interaction is long-running in nature, so some amount of state is maintained
+between requests. Regardless of the reason, an adaption of the stateless replicated ser‐
+vice pattern is to use session tracked services, which ensure that all requests for a sin‐
+gle user map to the same replica, as illustrated in Figure 5-3.
+Figure 5-3. A session tracked service where all requests for a specific user are routed to a
+single instance
+48 
+| 
+Chapter 5: Replicated Load-Balanced Services

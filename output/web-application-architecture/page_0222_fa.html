@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 222</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Validation</h3>
+  <p>به این معنی نیست که یک <code>EbookId</code> معتبر است. تنها کاری که خود <code>EbookId</code> می‌تواند انجام دهد، <strong>validate</strong> کردن داده‌های ورودی خود، تأیید اینکه <strong>string</strong> ارائه شده به آن هنگام <strong>instantiated</strong> شدن با الگوی یک <strong>UUID</strong> مطابقت دارد، است.</p>
+  <p>از آنجایی که خود <strong>entity Order</strong> نمی‌تواند <code>EbookId</code> ارائه شده را <strong>validate</strong> کند، <strong>service</strong> که <code>addLine()</code> را فراخوانی می‌کند، باید به جای آن این کار را انجام دهد. یک راه خوب برای انجام این کار استفاده از <strong>repository entity</strong> برای <strong>entity</strong> مربوطه و واکشی <strong>entity</strong> از آن است. اگر وجود نداشته باشد، <strong>repository</strong> یک <strong>exception</strong> را پرتاب می‌کند و ما را از استفاده از <strong>ID</strong> یک <strong>entity</strong> که وجود ندارد، باز می‌دارد.</p>
+  <p>در بسیاری از موارد، رابطه به دلیلی وجود دارد، و ما در واقع به اطلاعات بیشتری از <strong>entity</strong> مربوطه، بیش از این واقعیت که وجود دارد، نیاز داریم. در وضعیت فعلی ما، ما باید بدانیم که <strong>Ebook</strong> وجود دارد، و ما همچنین به قیمت کتاب الکترونیکی نیاز داریم. بنابراین منطقی است که رابطه بین خط سفارش و کتاب الکترونیکی را با واکشی <strong>read model Ebook</strong> از <strong>repository read model</strong> آن <strong>validate</strong> کنیم، همانطور که در فصل 3 انجام دادیم.</p>
+  <p><strong>Listing</strong> 8.7 نشان می‌دهد که چگونه این در یک <strong>application service</strong> کار می‌کند. با واکشی <strong>read model Ebook</strong> توسط <strong>ID</strong> ارائه شده، ما وجود آن را تأیید می‌کنیم. اگر وجود نداشته باشد، <code>getById()</code> یک <strong>exception CouldNotFindEbook</strong> را پرتاب می‌کند.</p>
+  <p><strong>Listing</strong> 8.7. Validating the e-book ID by loading a corresponding read model.</p>
+  <pre><code class="language-php">
+$ebook = $this->ebookRepository->getById(
+        EbookId::fromString($ebookId)
+    );
+
+    $order = new Order(/* ... */);
+    $order->addLine(
+        $ebook->ebookId(),
+        $quantity,
+        $ebook->price()
+    );
+</code></pre>
+  <p>آیا ما نمی‌توانیم کل <strong>object Ebook</strong> را به عنوان یک آرگومان به متد <code>addLine()</code> منتقل کنیم؟ بله، من فکر می‌کنم می‌توانیم. این به <code>addLine()</code> اجازه می‌دهد که کمتر منفعل باشد. به جای ارائه فقط مقادیر جداگانه (<code>EbookId</code> و قیمت)، ما می‌توانیم <strong>read model Ebook</strong> را به آن بدهیم. این تضمین می‌کند که قیمت و <code>EbookId</code> در خط، واقعاً به یک کتاب الکترونیکی تعلق دارند. به عنوان یک پاداش، کد از نوع <code>addLine()</code></p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 82</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   5.6.7.8, /some/file.html}. خروجی sharding function متفاوت است زیرا آدرس IP client و زمان request بین دو request متفاوت است. اما البته، در بیشتر موارد، آدرس IP client و زمان request بر response به request HTTP تأثیری ندارند. در نتیجه، به جای hashing کل object request، یک sharding function بسیار بهتر خواهد بود
+   shard(request.path). هنگامی که ما از request.path به عنوان shard key استفاده می‌کنیم، سپس هر دو request را به همان shard نگاشت می‌کنیم، و بنابراین response به یک request می‌تواند از cache برای service دیگری استفاده شود.
+  </p>
+  <p>
+   البته، گاهی اوقات IP client برای response ای که از frontend برگردانده می‌شود، مهم است. به عنوان مثال، IP client ممکن است برای جستجوی منطقه جغرافیایی که user در آن قرار دارد، استفاده شود، و محتوای متفاوت (به عنوان مثال، زبان‌های مختلف) ممکن است به آدرس‌های IP مختلف برگردانده شود. در چنین مواردی، sharding function قبلی
+   shard(request.path) در واقع منجر به errors می‌شود، زیرا یک cache request از یک آدرس IP فرانسوی ممکن است یک صفحه result از cache را به زبان انگلیسی service دهد. در چنین مواردی، cache function بیش از حد general است، زیرا requests هایی را که responses یکسان ندارند، با هم گروه‌بندی می‌کند.
+  </p>
+  <p>
+   با توجه به این مشکل، تعریف sharding function ما به این صورت وسوسه‌انگیز خواهد بود
+   shard(request.ip, request.path)، اما این sharding function نیز مشکلاتی دارد.
+   این باعث می‌شود که دو آدرس IP فرانسوی مختلف به shards های مختلف map شوند، در نتیجه sharding نا‌کارآمدی ایجاد می‌شود. این shard function بیش از حد specific است، زیرا در گروه‌بندی requests هایی که یکسان هستند، شکست می‌خورد. یک sharding function بهتر برای این وضعیت خواهد بود:
+  </p>
+  <p>
+   shard(country(request.ip), request.path)
+  </p>
+  <p>
+   این ابتدا کشور را از آدرس IP تعیین می‌کند، و سپس از آن کشور به عنوان بخشی از key برای sharding function استفاده می‌کند. بنابراین چندین request از فرانسه به یک shard هدایت می‌شود، در حالی که requests ها از ایالات متحده به یک shard متفاوت هدایت می‌شوند.
+  </p>
+  <p>
+   تعیین key مناسب برای sharding function شما برای طراحی خوب system sharded شما حیاتی است. تعیین shard key صحیح نیاز به درک requests هایی دارد که انتظار دارید ببینید.
+  </p>
+  <h4><strong>Consistent Hashing Functions</strong></h4>
+  <p>
+   تنظیم initial shards برای یک service جدید نسبتاً ساده است: شما shards و roots مناسب را برای انجام sharding تنظیم می‌کنید و از مسابقه خارج می‌شوید. با این حال، چه اتفاقی می‌افتد وقتی نیاز دارید تعداد shards ها را در service sharded خود تغییر دهید؟ چنین "re-sharding" اغلب یک فرآیند پیچیده است.
+  </p>
+  <p>
+   برای درک اینکه چرا این درست است، cache sharded را که قبلاً بررسی شد، در نظر بگیرید. مطمئناً، scale کردن cache از 10 به 11 replicas، انجام آن با یک
+  </p>
+  <p>
+   68
+   | Chapter 6: Sharded Services
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

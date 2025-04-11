@@ -1,0 +1,32 @@
+11. Key design patterns
+): void {
+// The current user ID is part of the command data:
+$userId = $command->userId();
+// ...
+}
+}
+// In the controller:
+$this->orderService->changeDeliveryAddress(
+ChangeDeliveryAddress::fromRequestData(
+$request->request->all(),
+$user->userId()
+)
+)
+11.4.6. Save only one entity per application service call
+An application service should only make changes to a single entity. This can
+help improve the domain model’s performance, both in terms of processing
+changes in the database, and in preventing concurrent updates. It helps keep
+your use cases focused on a limited area of the domain. There is just one thing
+that the service has to do.
+11.4.7. Move secondary tasks to a domain event subscriber
+A change in one entity often requires other things to be done as well. Maybe
+another entity needs to be updated too. Maybe you have to send someone an
+email about the change, or push a message to a queue. For these secondary
+effects use domain events, an event dispatcher, and event subscribers. Fig-
+ure 11.2 shows how these elements work together.
+Events are created inside the entity and after the entity itself has been saved
+they can be taken out by the application service and sent to the event dis-
+patcher (as discussed in Section 4.5). So you shouldn’t dispatch the events
+until you are certain that the entity’s changes have been persisted. In order
+to dispatch events an application service should have the event dispatcher
+264

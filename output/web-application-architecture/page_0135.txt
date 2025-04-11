@@ -1,0 +1,32 @@
+5. Service locators
+->to(Auth::user()->email())
+->from($this->defaultSender)
+// ...
+;
+$this->mailer->send($message);
+}
+}
+With two constructor arguments, we can now be even more explicit: “The
+SendIpConfirmationEmail service needs the Mailer service and a default sender
+address to send an IP confirmation email to the currently logged in user.”
+5.5. Using method arguments for job-specific data
+Looking at the signature of the send() method, we can’t be certain to whom
+the system will send the email, or which IP address they will be asked to
+confirm. This leaves the client of the method with absolutely no control over
+the outcome.
+There are two pieces of information that the send() method needs to do its
+job: the IP address from which the current HTTP request originates, and the
+email address of the currently logged in user. The use of the word “current”
+hints at the fact that we’re talking about contextual data.6 This data is differ-
+ent for every request. Examples of contextual data are the request time, the
+client’s IP address, the ID of the logged in user, the size of the terminal the
+user uses to run our application, whether or not it supports color, etc.
+In our example, the SendIpConfirmationEmail service reaches out to globally
+available methods to find out more about the context in which the service
+was invoked. It inspects the current request object after retrieving it from the
+request() helper function, and it retrieves the logged in user’s email address
+through the Auth::user() method. The current user and IP address are nei-
+ther services nor configuration values. So we can’t inject them as constructor
+6Read more on contextual data and how to deal with it in my blog post “Context passing”:
+https://advwebapparch.com/context-passing .
+115

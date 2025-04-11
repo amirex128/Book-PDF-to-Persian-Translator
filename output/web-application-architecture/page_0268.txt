@@ -1,0 +1,34 @@
+11. Key design patterns
+final class Order
+{
+// ...
+private function __construct(/* ... */)
+{
+// ...
+}
+public static function create(
+OrderId $orderId,
+CustomerId $customerId
+): Order {
+return new self(/* ... */);
+}
+}
+11.2.2. Constrain updates
+Only allow clients to update fields that can actually be modified. Force clients
+to update fields together when it makes sense (e.g. when you change the deliv-
+ery address, clients should provide the street, number, postal code, and city
+in one go). Always validate the incoming data and throw exceptions when
+something is wrong. Verify that the requested change is possible given the
+current state of the entity, and that the entity won’t end up in an invalid state
+(see Listing 11.2).
+Listing 11.2. changeDeliveryAddress() puts limits on when the delivery ad-
+dress can actually be changed.
+final class Order
+{
+private bool $wasCancelled = false;
+// ...
+public function changeDeliveryAddress(
+DeliveryAddress $deliveryAddress
+): void {
+if ($this->wasCancelled) {
+248

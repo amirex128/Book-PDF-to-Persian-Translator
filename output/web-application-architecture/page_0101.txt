@@ -1,0 +1,31 @@
+3. Read models and view models
+)
+);
+You could also make the view model object immediately serializable by mak-
+ing its properties public (see Listing 3.20). The only thing missing here is
+a way to enforce immutability on this object after we make its properties
+public. PHP itself has no built-in options to do this at runtime, but it can be
+accomplished at “compile”-time using a static analyzer like Psalm.
+Listing 3.20. A view model with public properties.
+final class Ebook
+{
+public string $ebookId;
+public string $title;
+// ...
+}
+// Inside the controller:
+return new Response(
+json_encode(
+$this->ebooks->listAvailableEbooks()
+)
+);
+3.7. Summary
+In the beginning of this chapter we recognized the need to get information
+about a related entity. Instead of reusing the entity itself we decided not to
+combine write and read responsibilities in the same object. We introduced
+an immutable Ebook read model object, specialized in providing information.
+Such a read model object comes with its own read model repository inter-
+face. This interface needs an implementation, which fetches the data and
+instantiates the read model objects using that data. We discussed several al-
+ternatives for repository implementations: you can use the data source of
+81

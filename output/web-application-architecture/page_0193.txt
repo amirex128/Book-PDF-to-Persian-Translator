@@ -1,0 +1,35 @@
+7. Time and randomness
+final class Order
+{
+private OrderId $orderId;
+// ...
+public function __construct(
+OrderId $orderId,
+// ...
+) {
+$this->orderId = $orderId;
+// ...
+}
+}
+Upon construction, the OrderId accepts a string that looks like a UUID. It
+verifies this by using an assertion from the beberlei/assert package2. The
+fact that neither OrderId, nor Order itself, ever creates a Uuid instance from
+scratch, allows us to stop relying on IO in the test class. It would be sufficient
+to generate an actual UUID once (e.g. using the command line tool uuidgen, or
+using a simple PHP script which shows the result of calling Uuid::uuid4()).
+We could then copy the generated UUID and use it in our unit test, as shown
+in Listing 7.10.
+Listing 7.10. Providing a hard-coded string to OrderId::fromString().
+/**
+* @test
+*/
+public function it_can_be_created(): void
+{
+$order = new Order(
+OrderId::fromString('77d69702-e3b4-4af5-b40a-c9981d483880'),
+// ...
+);
+// ...
+}
+2 https://advwebapparch.com/beberlei-assert
+173

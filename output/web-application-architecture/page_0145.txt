@@ -1,0 +1,19 @@
+5. Service locators
+$sender,
+$translator
+);
+// OK
+$service->send();
+// Error: Missing method argument of type `User`
+$user = new User(/* ... */);
+$service->send($user);
+// Error: Missing method argument of type `string`
+$ip = '127.0.0.1';
+$service->send($user, $ip);
+// OK
+Figure 5.1. Before you can call send(), the compiler will help you discover
+everything you need to provide.
+If you try to do the same thing with the original version of the service, the
+result would be completely different. It will be very easy to instantiate the
+service since the constructor doesn’t have any required argument (there isn’t
+125

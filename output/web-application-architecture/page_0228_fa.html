@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 228</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3><strong>8. Validation</strong></h3>
+    <p>validation error.</p>
+    <p>
+        پس برای e-book ID validation، من همان strategy را پیشنهاد می‌کنم: حتی validate نکنید. به سادگی فرض کنید که کاربر از user interface به روش صحیح استفاده کرده و با request data دستکاری نکرده است. اگر این کار را کرده باشند، همه چیز باید خوب پیش برود زمانی که data برای instantiate و manipulate domain objects استفاده می‌شود. اگر این کار را نکرده باشند، ما هنوز protection در سطح entity را داریم و به سادگی صفحه خطای عمومی را نمایش می‌دهیم.
+    </p>
+    <p>
+        از آنجایی که throwing یک exception در سطح entity فقط یک مکانیسم protection است، شما باید آن‌ها را پیگیری کنید. اگر این exceptions را در server logs خود پیدا کردید، معمولاً به این معنی است که:
+    </p>
+    <ol>
+        <li>
+            <p>کسی در حال سوء استفاده از application شما است، یا</p>
+        </li>
+        <li>
+            <p>شما باید user interface را بهبود بخشید تا users نتوانند دوباره همان اشتباه را مرتکب شوند.</p>
+        </li>
+    </ol>
+    <p>
+        با نگاهی به داده‌های ارسال شده، باید انتخاب بین این دو گزینه آسان باشد. همچنین، اکثر users افراد خوبی هستند، بنابراین می‌توانیم فرض کنیم که بیشتر اوقات این فقط یک مسئله با user interface است که users را قادر می‌سازد تا data بد را ارسال کنند. اقدام کنید تا اطمینان حاصل شود که exception هرگز دوباره نمایش داده نمی‌شود.
+    </p>
+    <h4><strong>8.4. Using exceptions to talk to users</strong></h4>
+    <p>
+        منصفانه است که بگوییم، همه exceptions در سطح entity در دسته‌بندی‌های قبلی قرار نمی‌گیرند. یک دسته‌بندی سوم وجود دارد. برخی از موارد را نمی‌توان در user interface validate کرد، یا حداقل، انجام این کار بسیار ناکارآمد خواهد بود. و در برخی از موقعیت‌ها شما فقط دیر در process می‌دانید که آیا request می‌تواند به طور کامل پردازش شود یا خیر.
+    </p>
+    <p>
+        به عنوان مثال، اگر علاوه بر e-books، ما کتاب‌های فیزیکی نیز بفروشیم چه می‌شود. ما فقط supply محدودی از هر عنوان داریم و پیگیری می‌کنیم که چه تعداد کتاب هنوز در stock داریم. از آنجایی که ما فقط آنچه داریم می‌فروشیم و نمی‌توانیم re-stock کنیم، تعداد کتاب‌های هنوز در دسترس، تعداد کتاب‌هایی است که می‌توانیم به customers خود ارائه دهیم.
+    </p>
+    <p>
+        آیا باید validation را در لحظه‌ای که request می‌آید انجام دهیم؟ Listing 8.12 shows
+    </p>
+    <p>208</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

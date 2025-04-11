@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 101</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <pre>
+   <code class="language-bash">--from-file defaults.py \
+    --trigger-http
+   </code>
+  </pre>
+  <p>
+   اگر شما می‌خواهید handling این function را آزمایش کنید، شما همچنین می‌توانید از ابزار kubeless استفاده کنید:
+  </p>
+  <pre>
+   <code class="language-bash">kubeless function call add-defaults --data '{"name": "foo"}'
+   </code>
+  </pre>
+  <p>
+   the decorator pattern نشان می‌دهد که چقدر آسان است که APIs موجود را با ویژگی‌های اضافی مانند اعتبار‌سنجی یا defaulting، تطبیق داده و گسترش دهید.
+  </p>
+  <h4><strong>Handling Events</strong></h4>
+  <p>
+   در حالی که اکثر systems ها request driven هستند، handling یک جریان ثابت از user و API requests ها، بسیاری از systems های دیگر ذاتاً event-driven هستند. تمایز، حداقل در نظر من، بین یک request و یک event ارتباط با مفهوم session است. Requests ها بخشی از یک سری تعاملات یا sessions بزرگتر هستند. به طور کلی هر user request بخشی از یک تعامل بزرگتر با یک web application یا API کامل است. Events ها، همانطور که من آنها را می‌بینم، تمایل دارند که به جای آن، single-instance و asynchronous باشند. Events ها مهم هستند و باید به درستی مدیریت شوند، اما آنها از یک تعامل اصلی fire می‌شوند و مدتی بعد به آنها پاسخ داده می‌شود. نمونه‌هایی از events ها شامل ثبت نام user برای یک service جدید (که ممکن است یک ایمیل خوش‌آمدگویی را trigger کند، بارگذاری یک فایل توسط شخص در یک پوشه shared (که ممکن است اعلان‌هایی را به همه کسانی که به پوشه دسترسی دارند، ارسال کند)، یا حتی یک machine که قرار است reboot شود (که ممکن است یک operator یا system خودکار را مطلع کند تا اقدام مناسب را انجام دهد).
+  </p>
+  <p>
+   از آنجایی که این events ها تمایل دارند که ذاتاً مستقل و stateless باشند، و از آنجایی که rate of events می‌تواند بسیار متغیر باشد، آنها کاندیداهای ایده‌آلی برای architecture های event-driven و FaaS هستند. در این نقش، آنها اغلب در کنار یک application server تولیدی به عنوان augmentation به main user experience یا برای handling نوعی reactive، background processing، مستقر می‌شوند. علاوه بر این، از آنجایی که events های جدید اغلب به طور پویا به service اضافه می‌شوند، ماهیت سبک استقرار functions ها یک match خوب برای تعریف event handlers های جدید است. به همین ترتیب، از آنجایی که هر event از نظر مفهومی مستقل است، decoupling اجباری یک system مبتنی بر functions ها در واقع با فعال کردن یک developer برای تمرکز بر مراحل مورد نیاز برای handling فقط یک نوع event، به کاهش پیچیدگی مفهومی کمک می‌کند.
+  </p>
+  <p>
+   یک مثال مشخص از ادغام یک component مبتنی بر event به یک service موجود، پیاده‌سازی two-factor authentication است. در این مورد، event، وارد شدن user به یک service است. service می‌تواند یک event برای این action تولید کند، آن را به یک handler مبتنی بر function fire کند که code و اطلاعات تماس user را می‌گیرد، و کد two-factor را از طریق پیام متنی ارسال می‌کند.
+  </p>
+  <h4><strong>Hands On: Implementing Two-Factor Authentication</strong></h4>
+  <p>
+   Two-factor authentication نیاز دارد که user هم چیزی داشته باشد که می‌داند (به عنوان مثال، یک رمز عبور) و همچنین چیزی که دارد (به عنوان مثال، یک تلفن) تا بتواند
+  </p>
+  <p>
+   Patterns for FaaS
+   | 87
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

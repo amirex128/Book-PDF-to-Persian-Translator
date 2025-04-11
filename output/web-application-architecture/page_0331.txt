@@ -1,0 +1,34 @@
+13. Ports and adapters
+public function listAvailableEbooksAction(): Response
+{
+$ebooks = $this->application->listAvailableEbooks();
+return new JsonResponse(/* ... */);
+}
+}
+final class OrderController
+{
+private ApplicationInterface $application;
+public function __construct(
+ApplicationInterface $application
+) {
+$this->application = $application;
+}
+public function orderEbookAction(Request $request): Response
+{
+$orderId = $this->application->createOrder(
+CreateOrder::fromRequestData($request->request->all())
+);
+return new Response(/* ... */);
+}
+}
+Now that these port adapters depend on an interface we also need to provide
+a standard implementation which could be called TheActualApplication or
+just Application. This class will basically be a proxy for already existing
+services, as shown in Listing 13.11.
+Listing 13.11. The standard implementation of ApplicationInterface.
+final class Application implements ApplicationInterface
+{
+private EbookOrderService $ebookOrderService;
+private ListAvailableEbooksRepository $listAvailableEbooksRepository;
+public function __construct(
+311

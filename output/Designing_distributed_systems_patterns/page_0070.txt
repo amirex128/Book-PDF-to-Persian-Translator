@@ -1,0 +1,49 @@
+    ssl on;
+    ssl_certificate         /etc/certs/tls.crt;
+    ssl_certificate_key     /etc/certs/tls.key;
+    location / {
+        proxy_pass http://varnish-service:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+  }
+}
+As with Varnish, you need to transform this into a ConfigMap object:
+kubectl create configmap nginx-conf --from-file=nginx.conf
+Now that you have a secret and an nginx configuration, it is time to create the replica‐
+ted, stateless nginx layer:
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-ssl
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: nginx-ssl
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 443
+        volumeMounts:
+        - name: conf
+          mountPath: /etc/nginx
+        - name: certs
+          mountPath: /etc/certs
+      volumes:
+      - name: conf
+        configMap:
+          # This is the ConfigMap for nginx we created previously
+          name: nginx-conf
+      - name: certs
+        secret:
+          # This is the secret we created above
+          secretName: ssl
+56 
+| 
+Chapter 5: Replicated Load-Balanced Services

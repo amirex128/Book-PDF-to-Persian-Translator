@@ -1,0 +1,40 @@
+sage) can supply it to the service, where the code has already been registered via our
+FaaS.
+Again, developing a simple, asynchronous, event-based service that is triggered
+whenever a user logs in is made dramatically simpler using FaaS.
+Event-Based Pipelines
+There are some applications that are inherently easier to think about in terms of a
+pipeline of decoupled events. These event pipelines often resemble the flowcharts of
+old. They can be represented as a directed graph of connected event syncs. In the
+event pipeline pattern, each node is a different function or webhook, and the edges
+linking the graph together are HTTP or other network calls to the function/webhook.
+In general, there is no shared state between the different pieces of the pipeline, but
+there may be a context or other reference point that can be used to look up informa‐
+tion in shared storage.
+So what is the difference between this type of pipeline and a “microservices” architec‐
+ture? There are two central differences. The first is the main difference between func‐
+tions in general and long-running services, which is that an event-based pipeline is by
+its very nature event-driven. Conversely, a microservices architecture features a col‐
+lection of long-running services. Additionally, event-driven pipelines may be highly
+asynchronous and diverse in the things that they connect together. For example,
+while it is difficult to see how a human approving a ticket in a ticketing system like
+Jira could be integrated into a microservices application, it’s quite easy to see how that
+event could be incorporated into a event-driven pipeline.
+As an example of this, imagine a pipeline in which the original event is code being
+submitted into a source control system. This event then triggers a build. The build
+may take multiple minutes to complete, and when it does, it fires an event to a build
+analysis function. This function takes different actions if the build is successful or
+fails. If the build succeeded, a ticket is created for a human to approve it to be pushed
+to production. Once the ticket is closed, the act of closing is an event that triggers the
+actual push to production. If the build failed, a bug is filed on the failure, and the
+event pipeline terminates.
+Hands On: Implementing a Pipeline for New-User Signup
+Consider the task of implementing a new-user signup flow. When a new user account
+is created, there are certain things that are always done, such as sending a welcome
+email. And there are some things that are optionally done, such as registering a user
+to receive product updates (sometimes known as “spam”) via their email.
+One approach to implementing this logic would be to place everything into a single
+monolithic user-creation server. However, this factoring means that a single team
+Patterns for FaaS 
+| 
+89

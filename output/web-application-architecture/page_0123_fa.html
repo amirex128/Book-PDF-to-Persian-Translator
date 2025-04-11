@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 123</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Application services</h3>
+  <p>1. ایجاد سفارش و ذخیره آن</p>
+  <p>2. ارسال ایمیل تأیید</p>
+  <p>شما می‌توانید بگویید که گام اول در واقع از دو گام دیگر تشکیل شده است، اما ایجاد سفارش بدون ذخیره آن فایده‌ای ندارد، شما نمی‌توانید سفارشی را بدون ایجاد آن ذخیره کنید. بنابراین این واقعاً یک گام واحد است. غیر معمول نیست که یک سناریوی <strong>use case</strong> شامل چندین گام باشد، اما من همچنین متوجه شدم که اگر <strong>application service</strong> فقط گام اول را انجام دهد و گام‌های دیگر را به <strong>services</strong> دیگر بسپارد، بهتر عمل می‌کند. در مورد ما، <strong>application service</strong> فقط سفارش را ایجاد و ذخیره می‌کند. سپس یک <strong>event</strong> تولید می‌کند که نشان می‌دهد سفارش ایجاد شده است. سایر <strong>services</strong> می‌توانند به آن <strong>event</strong> پاسخ دهند، به عنوان مثال با ارسال ایمیل تأیید سفارش. ما تنظیمات را قبلاً در بخش 3.3.2 دیده‌ایم، و جزئیات الگو را در بخش 11.5 مورد بحث قرار خواهیم داد. به عنوان یک پیش‌نمایش، <strong>Listing</strong> 4.16 به شما ایده‌ای از چگونگی عملکرد این موضوع می‌دهد.</p>
+  <p>شکل 4.2 روابط بین این <strong>objects</strong> را در یک نمای واحد نشان می‌دهد. توجه داشته باشید که <strong>EbookOrderService</strong> دیگر مسئول ارسال ایمیل تأیید نیست. <strong>event subscriber</strong> این کار را انجام می‌دهد، و تنها کاری که <strong>EbookOrderService</strong> باید انجام دهد این است که <strong>domain events</strong> ثبت شده را به <strong>EventDispatcher service</strong> ارسال کند.</p>
+  <p><strong>Listing</strong> 4.16. Sending the email after receiving a <strong>OrderWasCreated event</strong>.</p>
+  <pre><code class="language-php">
+// This is a domain event:
+final class OrderWasCreated
+{
+    private OrderId $orderId;
+    private string $emailAddress;
+
+    public function __construct(OrderId $orderId, string $emailAddress)
+    {
+        $this->orderId = $orderId;
+        $this->emailAddress = $emailAddress;
+    }
+
+    public function orderId(): OrderId
+    {
+        return $this->orderId;
+    }
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

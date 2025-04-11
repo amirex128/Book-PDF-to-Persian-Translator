@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 22</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        configuration loader تا حد زیادی یک service با best-effort است؛ اگر در زمان‌های volume بالای user-request کمی به تأخیر بیفتد، system مشکلی نخواهد داشت. به همین ترتیب، background configuration loader نباید بر کیفیت service که end users دریافت می‌کنند، تأثیر بگذارد.
+    </p>
+    <p>
+        به همه این دلایل، شما می‌خواهید service با user-facing و background shard loader را به containersهای مختلف تقسیم کنید. این به شما امکان می‌دهد تا resource requirements و اولویت‌های مختلفی را به دو container مختلف اختصاص دهید و، به عنوان مثال، اطمینان حاصل کنید که background loader به‌طور opportunistically از cycles service با user-facing می‌دزدد هر زمان که سبک بارگذاری شده و cycles آزاد هستند. به همین ترتیب، جدا کردن resource requirements برای دو container تضمین می‌کند که background loader قبل از service با user-facing خاتمه می‌یابد، اگر مشکل resource contention ناشی از memory leak یا other overcommitment of memory resources وجود داشته باشد.
+    </p>
+    <p>
+        علاوه بر این resource isolation، دلایل دیگری نیز برای تقسیم application single-node شما به containersهای متعدد وجود دارد. task scaling یک team را در نظر بگیرید. دلایل خوبی وجود دارد که معتقد باشیم اندازه تیم ایده‌آل شش تا هشت نفر است. برای ساختاردهی teams به این روش و هنوز هم ساختن systems های مهم، ما باید قطعات کوچک و متمرکزی داشته باشیم که هر تیم مالک آن باشد. علاوه بر این، اغلب برخی از components ها، در صورت factored شدن صحیح، ماژول‌های قابل استفاده مجدد هستند که می‌توانند توسط many teams استفاده شوند.
+    </p>
+    <p>
+        به عنوان مثال، task همگام‌سازی یک filesystem محلی با یک git source code repository را در نظر بگیرید. اگر این Git sync tool را به‌عنوان یک container جداگانه بسازید، می‌توانید از آن با PHP، HTML، JavaScript، Python و بسیاری از web-serving environments دیگر استفاده مجدد کنید. اگر در عوض، هر environment را به‌عنوان یک container واحد در نظر بگیرید، به‌عنوان مثال، runtime Python و همگام‌سازی Git جدایی‌ناپذیر هستند، آنگاه این نوع modular reuse (و تیم کوچک مربوطه که مالک آن module قابل استفاده مجدد است) غیرممکن است.
+    </p>
+    <p>
+        در نهایت، حتی اگر application شما کوچک باشد و همه containers شما متعلق به یک team واحد باشد، separation of concerns تضمین می‌کند که application شما به خوبی درک شده و به راحتی می‌تواند tested، updated و deployed شود. applications کوچک و متمرکز، درک آنها آسان‌تر است و couplings کمتری با سایر systems دارند. این بدان معناست که، به عنوان مثال، شما می‌توانید container Git synchronization را بدون نیاز به redeploy کردن application server خود، deploy کنید. این منجر به rollouts با وابستگی‌های کمتر و دامنه کوچکتر می‌شود. این، به نوبه خود، منجر به rollouts قابل اعتمادتر (و rollbacks) می‌شود، که منجر به چابکی و انعطاف‌پذیری بیشتر هنگام deploying application شما می‌شود.
+    </p>
+    <h3 style="font-weight: bold;">Summary</h3>
+    <p>
+        امیدوارم که همه این examples شما را به فکر breaking up applications خود، حتی آنهایی که روی یک node واحد هستند، به multiple containers وادار کرده باشد. فصل‌های زیر برخی از patterns را شرح می‌دهند که می‌توانند به شما در ساختن گروه‌های modular از containers کمک کنند. در مقابل patterns distributed چند node، همه این patterns فرض می‌کنند که وابستگی‌های تنگاتنگی بین همه containers در pattern وجود دارد. به طور خاص، آنها فرض می‌کنند که همه containers در pattern را می‌توان به طور قابل اعتماد بر روی یکدیگر coscheduled کرد.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

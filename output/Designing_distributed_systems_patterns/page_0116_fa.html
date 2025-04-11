@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 116</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   ما می‌توانیم Lock موجود را که قبلاً تعریف کردیم، گسترش دهیم تا یک renewable lock ایجاد کنیم، که به lock holder این امکان را می‌دهد تا lock را تمدید کند:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) renew() boolean {
+  locked, _ = compareAndSwap(l.lockName, "1", "1", l.version, ttl)
+  return locked
+}
+   </code>
+  </pre>
+  <p>
+   البته، شما احتمالاً می‌خواهید این کار را به طور مکرر در یک thread جداگانه انجام دهید تا lock را به طور نامحدود در اختیار داشته باشید. توجه داشته باشید که lock هر ttl/2 ثانیه تمدید می‌شود. به این ترتیب خطر اینکه lock به طور تصادفی به دلیل ظرافت‌های زمان‌بندی منقضی شود، به طور قابل توجهی کمتر است:
+  </p>
+  <pre>
+   <code class="language-go">for {
+  if !l.renew() {
+    handleLockLost()
+  }
+  sleep(ttl/2)
+}
+   </code>
+  </pre>
+  <p>
+   البته، شما نیاز دارید function handleLockLost() را پیاده‌سازی کنید تا تمام فعالیت‌هایی را که در وهله اول نیازمند lock بودند، خاتمه دهید. در یک system container orchestration، ساده‌ترین راه برای انجام این کار ممکن است به سادگی خاتمه دادن به application و اجازه دادن به orchestrator برای راه‌اندازی مجدد آن باشد. این ایمن است، زیرا یک replica دیگر در این بین، lock را گرفته است، و هنگامی که application راه‌اندازی مجدد می‌شود، به یک listener ثانویه تبدیل می‌شود که منتظر آزاد شدن lock است.
+  </p>
+  <h4><strong>Hands On: Implementing Leases in etcd</strong></h4>
+  <p>
+   برای دیدن نحوه پیاده‌سازی leases ها با استفاده از etcd، ما به مثال locking قبلی خود بازمی‌گردیم و flag --ttl=<seconds> را به calls های create و update lock خود اضافه می‌کنیم. flag ttl یک زمان را تعریف می‌کند که پس از آن lock که ما ایجاد می‌کنیم، حذف می‌شود. از آنجایی که lock بعد از منقضی شدن ttl ناپدید می‌شود، به جای ایجاد با value از نوع unlocked، ما فرض می‌کنیم که عدم وجود lock به این معنی است که آن unlock شده است. برای انجام این کار، ما از دستور mk به جای دستور set استفاده می‌کنیم. etcdctl mk فقط در صورتی موفق می‌شود که key در حال حاضر وجود نداشته باشد.
+  </p>
+  <p>
+   بنابراین، برای lock کردن یک leased lock، Alice اجرا می‌کند:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl exec my-etcd-cluster-0000 -- \
+    sh -c "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+        --ttl=10 mk my-lock alice"
+   </code>
+  </pre>
+  <p>
+   این یک leased lock با مدت زمان 10 ثانیه ایجاد می‌کند.
+  </p>
+  <p>
+   برای اینکه Alice همچنان lock را در اختیار داشته باشد، او باید اجرا کند:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl exec my-etcd-cluster-0000 -- \
+    sh -c "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+        set --ttl=10 --swap-with-value alice my-lock alice"
+   </code>
+  </pre>
+  <p>
+   102
+   | Chapter 9: Ownership Election
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

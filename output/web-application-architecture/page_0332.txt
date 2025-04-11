@@ -1,0 +1,36 @@
+13. Ports and adapters
+EbookOrderService $ebookOrderService,
+ListAvailableEbooksRepository $listAvailableEbooksRepository
+) {
+$this->ebookOrderService = $ebookOrderService;
+$this->listAvailableEbooksRepository = $listAvailableEbooksRepository;
+}
+public function createOrder(CreateOrder $command): OrderId
+{
+return $this->ebookOrderService->createOrder($command);
+}
+public function listAvailableEbooks(): array
+{
+return $this->listAvailableEbooksRepository->listAll();
+}
+}
+The size of this class may quickly get out of hand and we should take that
+as design feedback. Maybe the application is starting to do too many things
+and you need to subdivide it into modules. Another option is to try out the
+Command bus pattern. The idea is to have a generic interface, you could call
+it CommandBus, which has a single method: handle(). It accepts an untyped
+command object, examines the type of the command object, and uses it to
+find a service that can “handle” the command. There usually is some kind of
+mapping from command class to service class. Listing 13.12 shows how this
+could work.
+Listing 13.12. A simple command bus for our application.
+interface CommandBus
+{
+/**
+* @return mixed
+*/
+public function handle(object $command);
+}
+final class HardWiredCommandBus implements CommandBus
+{
+312

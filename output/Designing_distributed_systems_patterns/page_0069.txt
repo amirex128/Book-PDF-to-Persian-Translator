@@ -1,0 +1,25 @@
+Figure 5-8. Complete replicated stateless serving example
+Hands On: Deploying nginx and SSL Termination
+The following instructions describe how to add a replicated SSL terminating nginx to
+the replicated service and cache that we previously deployed.
+These instructions assume that you have a certificate. If you need
+to obtain a certificate, the easiest way to do that is via the tools at
+Let’s Encrypt. Alternately, you can use the openssl tool to create
+them. The following instructions assume that you’ve named them
+server.crt (public certificate) and server.key (private key on the
+server). Such self-signed certificates will cause security alerts in
+modern web browsers and should never be used for production.
+The first step is to upload your certificate as a secret to Kubernetes:
+kubectl create secret tls ssl --cert=server.crt --key=server.key
+Once you have uploaded your certificate as a secret you need to create an nginx con‐
+figuration to serve SSL:
+events {
+  worker_connections  1024;
+}
+http {
+  server {
+    listen 443 ssl;
+    server_name my-domain.com www.my-domain.com;
+Expanding the Caching Layer 
+| 
+55

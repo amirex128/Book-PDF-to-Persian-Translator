@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 49</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <pre><code class="language-php">
+    {
+    $this->entityManager->persist($order);
+    $this->entityManager->flush();
+    }
+    }
+  </code></pre>
+  <p>
+    همانطور که در این نمونه‌های کد مشاهده می‌کنید، نصب و استفاده از یک <code>ORM</code> برای ذخیره یک <code>entity</code> در <code>database</code> کار زیادی نمی‌برد. و بله، ممکن است در زمان شما و احتمالاً خطوط زیادی از کد صرفه‌جویی کند، اما ممکن است شما را به دردسر هم بیندازد.
+    من شخصاً زمان زیادی را صرف تلاش برای فهمیدن این موضوع کرده‌ام که چگونه یا چرا چیزی کار نمی‌کرد، یا چرا <code>Doctrine</code> ناگهان مجبور شد تعداد زیادی <code>queries</code> انجام دهد. همچنین بیش از یک بار اتفاق افتاد که متوجه شدم چیزی خراب است در حالی که از قبل در <code>production</code> در حال اجرا بود.
+    مشکل خود <code>Doctrine ORM</code> نیست، بلکه استفاده از <code>abstractions</code> های عمومی است. پنهان کردن بسیاری از جزئیات <code>implementation</code> و مقدار زیادی "<code>magic</code>" پشت یک <code>abstract EntityManagerInterface</code> واحد به این معنی است که دیر یا زود با مشکل مواجه خواهید شد. با این حال، استفاده از یک <code>ORM</code> محبوب، مزایای متعددی نیز دارد، مانند:
+  </p>
+  <ol>
+    <li>
+      <code>Documentation</code> گسترده، نمونه‌های آنلاین، پست‌های وبلاگ، سؤالات و پاسخ‌ها در Stack Overflow و غیره.
+    </li>
+    <li>
+      راه‌حل‌های خودکار برای مشکلات رایج مانند <code>database migrations</code>، بارگذاری <code>fixture</code> و غیره.
+    </li>
+  </ol>
+  <p>
+    طبق تجربه من، استفاده از یک <code>ORM</code> در صورتی که بتوانید به قوانین زیر پایبند باشید، اشکالی ندارد:
+  </p>
+  <ol>
+    <li>
+      فقط از <code>mapping configuration</code> ساده استفاده کنید. بدون <code>table inheritance</code>، "<code>embeddables</code>"، <code>custom types</code> و غیره<sup>7</sup>
+    </li>
+    <li>
+      به <code>one-to-many associations</code> پایبند باشید.
+    </li>
+    <li>
+      <code>Entities</code> را با <code>ID</code> خود ارجاع دهید.
+    </li>
+    <li>
+      از <code>entity</code> به <code>entity</code> با استفاده از فیلدهای <code>association</code> پرش نکنید.
+    </li>
+  </ol>
+  <p>
+    این تصادفی نیست که این قوانین با قوانین "<code>effective aggregate design</code>" که توسط Vaughn Vernon<sup>8</sup> توضیح داده شده است، مشترکات زیادی دارند. ما خواهیم گرفت
+  </p>
+  <p>
+    <sup>7</sup> https://advwebapparch.com/doctrine-orm-and-ddd-aggregates
+  </p>
+  <p>
+    <sup>8</sup> https://advwebapparch.com/effective-aggregate-design
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

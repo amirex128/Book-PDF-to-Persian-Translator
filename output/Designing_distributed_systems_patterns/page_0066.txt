@@ -1,0 +1,30 @@
+Figure 5-7. Adding a caching layer to the dictionary server
+We can begin building this with the following Varnish cache configuration:
+vcl 4.0;
+backend default {
+  .host = "dictionary-server-service";
+  .port = "8080";
+}
+Create a ConfigMap object to hold this configuration:
+kubectl create configmap varnish-config --from-file=default.vcl
+Now we can deploy the replicated Varnish cache, which will load this configuration:
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: varnish-cache
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: varnish-cache
+    spec:
+      containers:
+      - name: cache
+        resources:
+          requests:
+            # We'll use two gigabytes for each varnish cache
+            memory: 2Gi
+52 
+| 
+Chapter 5: Replicated Load-Balanced Services

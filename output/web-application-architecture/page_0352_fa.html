@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 352</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <pre><code class="language-php">
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+final class OrderControllerTest extends WebTestCase
+{
+    public function it_correctly_invokes_createOrder(): void
+    {
+        $application = $this->createMock(ApplicationInterface::class);
+        $application->expects($this->once())
+            ->method('createOrder')
+            ->with(new CreateOrder(2, 1, 'matthiasnoback@gmail.com'))
+            ->will($this->returnValue(new OrderId(1001)));
+        $client = self::createClient();
+        $client->getContainer()->set(
+            ApplicationInterface::class,
+            $application
+        );
+        $client->request('POST', '/create-order', [
+            'ebook_id' => '2',
+            'quantity' => '1',
+            'email_address' => 'matthiasnoback@gmail.com'
+        ]);
+        self::assertTrue(
+            $this->client->getResponse()->isRedirect('/order-details/1001')
+        );
+    }
+}
+</code></pre>
+    <p>این test تأیید می‌کند که framework، the OrderController را نمونه‌سازی می‌کند و متد createOrderAction() را بر اساس '/create-order' URI فراخوانی می‌کند.
+        این تأیید می‌کند که createOrderAction() قادر به استخراج data ارسال شده از request body و کپی کردن آن در CreateOrder DTO است، که سپس به عنوان یک argument به ApplicationInterface::createOrder() منتقل می‌شود. و به عنوان یک bonus، این test همچنین تأیید می‌کند که ما به صفحه جزئیات order صحیح redirect می‌شویم.</p>
+    <p>هیچ یک از این کدها در واقع یک entity Order ایجاد نمی‌کند، زیرا ما ApplicationInterface را با یک mock جایگزین کرده‌ایم. به همین دلیل، هیچ یک از این کدها نیازی به</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

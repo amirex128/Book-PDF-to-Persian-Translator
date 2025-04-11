@@ -1,0 +1,36 @@
+14. A testing strategy for decoupled applications
+This is why in my experience it works best to start with a high-level speci-
+fication of the feature that you’re going to work on. What are the different
+scenarios that need to be implemented? Challenge these scenarios, come up
+with possible edge cases. Then write them down in Gherkin.
+I think it’s a common misconception that scenarios need to be written by
+business people, not by programmers. I’m afraid this is the reason that many
+developers don’t even think about writing them. For me the ideal scenario is
+that the developer discusses the feature with the other stakeholders. The de-
+veloper then write scenarios that reflect their understanding of the feature.
+When reading the scenarios, other stakeholders can verify that everybody
+has a shared understanding of what needs to be done. As a bonus, this in-
+creases their amount of trust in the development team.
+When the developer starts working on implementing the feature they may
+do a process modelling session first (as discussed in Section 11.7) and decide
+on the elements they have to build. Just like writing the high-level scenarios
+first, designing the high-level elements first may also save a lot of time spent
+on building the wrong solution. Instead of jumping right into the code, the
+process can be modelled in pseudo-code first (i.e. using sticky notes). Once
+the design is somewhat clear it makes sense to start programming.
+The programming itself should be test-driven. You’ll take a line from the sce-
+nario and start writing the code for it, using the elements you chose in the
+modelling session. Sometimes you may want to zoom in on a particular ele-
+ment, like an entity, or a value object. For these smaller objects you should
+write unit tests to demonstrate that they protect all their domain invariants.
+You’ll jump back and forth between unit tests and the scenarios until you
+have all the scenarios working. At this point you’ll have all the Application
+and Domain layer code needed for the scenario. The feature is working, but
+the entire Infrastructure layer is still missing. So far the port adapters for
+outgoing ports are provided by test doubles, and the Context classes act as
+adapters for the incoming ports.
+Of course, no stakeholder would consider the new feature “done” at this
+point. So it’s time to wrap the infrastructure layer around it. On the left side
+you’ll need to implement the port adapters for incoming communication.
+These consist of routing, controllers, templates, etc. On the right side you’ll
+354

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 90</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   <em>Figure 7-2. Example of a term-sharded scatter/gather system</em>
+  </p>
+  <h4><strong>Scatter/Gather with Leaf Sharding</strong></h4>
+  <p>
+   در حالی که اعمال pattern scatter/gather data replicated به شما امکان می‌دهد زمان پردازش مورد نیاز برای handling user requests را کاهش دهید، به شما این امکان را نمی‌دهد که از میزان data ای که می‌تواند در حافظه یا دیسک یک machine واحد نگه داشته شود، scale کنید. درست مانند pattern serving replicated که قبلاً توضیح داده شد، ساختن یک system scatter/gather replicated ساده است. اما در یک اندازه data خاص، لازم است که sharding را برای ساختن یک system که می‌تواند data بیشتری نسبت به آنچه در یک machine واحد ذخیره می‌شود، معرفی کنید.
+  </p>
+  <p>
+   قبلاً، هنگامی که sharding برای scale کردن systems های replicated معرفی شد، sharding در سطح per-request انجام شد. بخشی از request برای تعیین جایی که request ارسال می‌شد، استفاده می‌شد. سپس آن replica تمام پردازش را برای request مدیریت کرد و response به user بازگردانده شد. در عوض، با sharding scatter/gather، request به تمام leaf nodes (یا shards) در system ارسال می‌شود. هر leaf node، request را با استفاده از data ای که در shard خود بارگذاری کرده است، پردازش می‌کند. سپس این response جزئی به root node که data را درخواست کرده است، بازگردانده می‌شود و آن root node، همه responses ها را با هم ادغام می‌کند تا یک response جامع برای user ایجاد شود.
+  </p>
+  <p>
+   به عنوان یک مثال مشخص از این نوع architecture، پیاده‌سازی جستجو در یک مجموعه document بسیار بزرگ (به عنوان مثال، تمام patent ها در جهان) را در نظر بگیرید. در چنین مواردی، data بیش از آن است که در حافظه یک machine واحد جا شود، بنابراین در عوض data در چندین replica شارد می‌شود. به عنوان مثال، patent های 0-100,000 ممکن است در اولین machine، 100,001-200,000 در machine بعدی و غیره باشند. (توجه داشته باشید که این در واقع یک طرح sharding خوب نیست زیرا ما را به طور مداوم مجبور به اضافه کردن shards جدید می‌کند زیرا patent های جدید ثبت می‌شوند. در عمل، ما احتمالاً از شماره patent modulo تعداد کل shards استفاده می‌کنیم.) هنگامی که یک user یک request را برای یافتن یک کلمه خاص (به عنوان مثال، "rockets") در تمام patent ها در index ارسال می‌کند، آن request به هر
+   76
+   | Chapter 7: Scatter/Gather
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0090/image_1.png" alt="Image from page 90" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

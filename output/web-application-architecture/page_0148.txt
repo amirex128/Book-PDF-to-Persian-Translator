@@ -1,0 +1,33 @@
+5. Service locators
+The bigger the first island is, the better. You will have more code that can be
+unit tested. This code will be easier to work with, since all you need to do is
+instantiate an object and call methods on it. The test suite will be very fast,
+since running a unit test takes almost no time. This encourages you to write
+more tests, showing how the code deals with variations of the input data.
+And it tightens the feedback loop between writing the code, and finding out
+if you did the right thing.
+“Dependency injection, passing contextual information; seems
+like a lot of work!”
+A common objection to using dependency injection, explicitly passing con-
+textual information, etc. is that it’s a lot of work to write all that code.
+Comparing the refactored version of the SendIpConfirmationEmail with
+the original version of the class you could indeed reach this conclusion:
+too much work. Maybe there aren’t a lot more statements in the final ver-
+sion, but there are indeed more symbols in it, e.g. constructor and method
+parameters and properties. I hope that I’ve been able to demonstrate the
+advantages of adding these extra elements, but that still doesn’t answer
+the question: isn’t this a lot of work? Of course, if you’re using global static
+helper functions everywhere, refactoring all of your code to this new style
+will be quite the effort. But this is exactly the point: just make sure you’ll
+never have to do that. Don’t use any framework-assisted global state-based
+tool for retrieving dependencies, configuration values, etc. You can’t easily
+fix old code, but you can do the right thing from now on.
+Unfortunately, this chain of reasoning is lacking. “You should do A now,
+because if you did B and you want to go to A, that’ll be a lot of work!” So
+why not stay at B if you’re happy there? Because if your application lives
+longer than 2 or 3 years, you still want to go to A. Anecdotal evidence for
+this is that my team and I had a lot of trouble getting rid of the global static
+service and configuration locator called Zend_Registry (and I’m sure I’m
+not the only one with this experience). So again, all I can say is: just don’t
+start using anything like it.
+128

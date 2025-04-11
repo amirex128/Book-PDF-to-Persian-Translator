@@ -1,0 +1,35 @@
+8. Validation
+side entities and value objects is going to be valid. We’ve also established the
+fact that related entities actually exist, so we no longer need to worry about
+that either. However, the way we’ve been protecting our domain model against
+bad input is by checking each input value at the last possible moment. Just be-
+fore we assign the provided value to an object property, we throw an excep-
+tion if anything looks wrong. Exceptions are great when you want to block an
+operation and stop further execution. For other purposes it’s not as useful.
+If we want to provide an error message in the user’s language, an exception
+isn’t very helpful. Exceptions are meant to be visible only to the maintainers
+of the application, so they can find out what went wrong. Exposing them di-
+rectly to the user is often a security risk. So we can’t really turn an exception
+into a user-friendly error message.
+If instead of a single error message we want to provide a list of error mes-
+sages, we can’t do it either. We’ll only know about the first thing that went
+wrong. When the user submits the form again, we can only tell them about
+the next problem. That’s not user-friendly. The user shouldn’t have to submit
+the form again and again until they finally got it right. They should be able to
+see what’s wrong with any of the fields in the form the first time they submit
+it.
+So for form validation we can’t rely on entity-level exceptions. We want to
+collect all the problems and show them as a collection of form errors to the
+user. We also don’t want to wait until the data has already ended up inside
+the entity. Should we then collect form errors inside our application service?
+We can’t do that, because the application service isn’t aware of the origin of
+the data. It can’t provide a list of form errors since a form is a very web-
+specific thing. We need to do it before the data is used inside the application
+service, that is, in the web controller. An overly simplified implementation
+would look something like Listing 8.9.
+Listing 8.9. Validating form data inside the controller.
+public function createOrderAction(Request $request): Response
+{
+$formErrors = [];
+if (!filter_var($request->get('email'), FILTER_VALIDATE_EMAIL)) {
+204

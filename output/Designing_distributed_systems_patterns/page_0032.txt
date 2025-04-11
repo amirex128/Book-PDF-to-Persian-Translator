@@ -1,0 +1,41 @@
+As you think about defining modular, reusable containers, it is important to realize
+that all aspects of how your container interacts with its world are part of the API
+defined by that reusable container. As in the world of microservices, these micro-
+containers rely on APIs to ensure that there is a clean separation between the main
+application container and the sidecar. Additionally the API exists to ensure that all
+consumers of the sidecar will continue to work correctly as subsequent versions are
+released. Likewise, having a clean API for a sidecar enables the sidecar developer to
+move more quickly since they have a clear definition (and hopefully unit tests) for the
+services they provide as a part of the sidecar.
+To see a concrete example of why this API surface area is important, consider the
+configuration management sidecar we discussed earlier. A useful configuration for
+this sidecar might be UPDATE_FREQUENCY, which indicates how often the configuration
+should be synchronized with the filesystem. It is clear that if, at some later time, the
+name of the parameter is changed to UPDATE_PERIOD, this change would be a viola‐
+tion of the sidecar’s API and clearly would break it for some users.
+While that example is obvious, even more subtle changes can break the sidecar API.
+Imagine, for example, that UPDATE_FREQUENCY originally took a number in seconds.
+Over time and with feedback from users, the sidecar developer determined that speci‐
+fying seconds for large time values (e.g., minutes) was annoying users and changed
+the parameter to accept strings (10 m, 5 s, etc.). Because old parameter values (e.g.,
+10, for 10 seconds) won’t parse in this new scheme, this is a breaking API change.
+Suppose still that the developer anticipated this but made values without units parse
+to milliseconds where they had previously parsed to seconds. Even this change,
+despite not leading to an error, is a breaking API change for the sidecar since it will
+lead to significantly more frequent configuration checks and correspondingly more
+load on the cloud configuration server.
+I hope this discussion has shown you that for true modularity, you need to be very
+conscious of the API that your sidecar provides, and that “breaking” changes to that
+API may not always be as obvious as changing the name of a parameter.
+Documenting Your Containers
+By now, you’ve seen how you can parameterize your sidecar containers to make them
+modular and reuseable. You’ve learned about the importance of maintaining a stable
+API to ensure that you don’t break sidecars for your users. But there’s one final step to
+building modular, reusable containers: ensuring that people can use them in the first
+place.
+As with software libraries, the key to building something truly useful is explaining
+how to use it. There is little good in building a flexible, reliable modular container if
+no one can figure out how to use it. Sadly, there are few formal tools available for doc‐
+18 
+| 
+Chapter 2: The Sidecar Pattern

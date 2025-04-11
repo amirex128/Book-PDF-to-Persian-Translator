@@ -1,0 +1,36 @@
+3. Read models and view models
+];
+}
+return new Response(json_encode($data));
+}
+}
+Read models are supposed to be as user-friendly for its clients as possible.
+But this controller still needs to do a relatively large amount of work before
+it can show the data to the user. We can make it a lot easier for this client
+if the view model objects could be serialized to JSON in one step. There are
+many ways to accomplish this. We could let the view model convert itself to
+an associative array (see Listing 3.19).
+Listing 3.19. A view model with an asArray() method.
+final class Ebook
+{
+// ...
+/**
+* @return array<string,mixed>
+*/
+public function asArray(): array
+{
+return [
+'ebookId' => $this->ebookId(),
+'title' => $this->title(),
+// ...
+];
+}
+}
+// Inside the controller:
+return new Response(
+json_encode(
+array_map(
+fn (Ebook $ebook) => $ebook->asArray(),
+$this->ebooks->listAvailableEbooks()
+)
+80

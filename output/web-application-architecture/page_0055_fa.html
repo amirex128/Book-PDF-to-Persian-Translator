@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 55</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <pre><code class="language-php">
+    $orderRepository = $this->container->get('order_repository');
+    $lastInsertedId = $orderRepository->save($order);
+    // ...
+  </code></pre>
+  <p>
+    با معرفی <code>OrderRepository interface</code> ما موفق شدیم بیشتر جزئیات <code>implementation</code> مربوط به ذخیره <code>orders</code> را پنهان کنیم. فقط یکی باقی مانده است.
+    <code>ID</code> <code>Order</code> که ما ایجاد می‌کنیم یک عدد صحیح است. مقدار آن فقط زمانی برای ما مشخص می‌شود که <code>OrderRepository</code> <code>order</code> را ذخیره کرده باشد، به همین دلیل است که آن عدد صحیح مقدار بازگشتی <code>method</code> <code>save()</code> آن است.
+    این هنوز به خواننده کد نشان می‌دهد که مکانیسم مورد استفاده برای <code>persist</code> کردن یک <code>Order</code> از یک ستون عدد صحیح با افزایش خودکار برای <code>ID</code> اصلی یک <code>order</code> استفاده می‌کند.
+  </p>
+  <p>
+    این لزوماً بد نیست اگر یک <code>object</code> بخشی از عملکرد داخلی خود را آشکار کند، اگرچه ما عموماً تمایل داریم از آن اجتناب کنیم.
+    مشکل واقعی در اینجا این است که ما هنوز در موقعیتی نیستیم که بتوانیم به طور کامل <code>storage technology</code> زیربنایی را جایگزین کنیم.
+    همه <code>database</code> ها از ستون‌ها یا <code>fields</code> های <code>ID</code> با افزایش خودکار پشتیبانی نمی‌کنند. همه <code>database</code>ها قادر به تولید <code>ID</code> و بازگرداندن آن نخواهند بود. و در موارد بسیار شدید:
+    برخی از <code>persistence mechanisms</code>ها ممکن است حتی نتوانند یک <code>identifier</code> را به صورت همزمان به <code>client</code> بازگردانند.
+  </p>
+  <p>
+    مشکل دیگر این است که <code>Order entity</code> قرار است از ابتدا کامل باشد. باید حداقل مجموعه داده‌ها را برای مفید بودن و سازگاری در رفتار خود در اختیار داشته باشد.
+    با توجه به اینکه یک <code>Order</code> تا زمانی که ذخیره نشده است، <code>ID</code> ندارد، ما باید به نتیجه مخالف برسیم: <code>Order</code> سازگار نیست، تا زمانی که <code>database</code> ذخیره آن را تمام نکرده باشد.
+  </p>
+  <p>
+    آنچه ما در عوض دوست داریم، راهی برای ارائه یک <code>ID</code> به یک <code>Order</code> در لحظه‌ای است که آن را <code>instantiate</code> می‌کنیم. اضافه کردن آن به عنوان یک آرگومان <code>constructor</code> مورد نیاز، این کار را انجام می‌دهد.
+    با انجام این کار، می‌توانیم اطمینان حاصل کنیم که یک <code>object</code> <code>Order</code> همیشه یک <code>identifier</code> دارد (به Listing 2.25 مراجعه کنید).
+  </p>
+  <p>
+    <em>Listing 2.17.</em> <code>Order</code> اکنون از ابتدا یک <code>identity</code> دارد.
+  </p>
+  <pre><code class="language-php">
+    final class Order
+    {
+    private int $id;
+    // ...
+  </code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

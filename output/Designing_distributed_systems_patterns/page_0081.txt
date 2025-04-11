@@ -1,0 +1,35 @@
+Shard = ShardingFunction(Req)
+Commonly, the sharding function is defined using a hashing function and the modulo
+(%) operator. Hashing functions are functions that transform an arbitrary object into
+an integer hash. The hash function has two important characteristics for our shard‐
+ing:
+Determinism
+The output should always be the same for a unique input.
+Uniformity
+The distribution of outputs across the output space should be equal.
+For our sharded service, determinism and uniformity are the most important charac‐
+teristics. Determinism is important because it ensures that a particular request R
+always goes to the same shard in the service. Uniformity is important because it
+ensures that load is evenly spread between the different shards.
+Fortunately for us, modern programming languages include a wide variety of high-
+quality hash functions. However, the outputs of these hash functions are often signifi‐
+cantly larger than the number of shards in a sharded service. Consequently, we use
+the modulo operator (%) to reduce a hash function to the appropriate range. Return‐
+ing to our sharded service with 10 shards, we can see that we can define our sharding
+function as:
+Shard = hash(Req) % 10
+If the output of the hash function has the appropriate properties in terms of deter‐
+minism and uniformity, those properties will be preserved by the modulo operator.
+Selecting a Key
+Given this sharding function, it might be tempting to simply use the hashing function
+that is built into the programming language, hash the entire object, and call it a day.
+The result of this, however, will not be a very good sharding function.
+To understand this, consider a simple HTTP request that contains three things:
+• The time of the request
+• The source IP address from the client
+• The HTTP request path (e.g., /some/page.html)
+If we use a simple object-based hashing function, shard(request), then it is clear that
+{12:00, 1.2.3.4, /some/file.html} has a different shard value than {12:01,
+An Examination of Sharding Functions 
+| 
+67

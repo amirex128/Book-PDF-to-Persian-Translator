@@ -1,0 +1,34 @@
+9. Conclusion
+Such a function would be called “impure” because its return value depends
+on the actual current time. There are many reasons for a function to be im-
+pure. For instance, if it tries to load a file, make a network connection, gener-
+ates random data, etc. We’ve seen these situations in previous chapters and
+called the code that performs this kind of work infrastructure code.
+Now, there are ways to make impure code pure again, or rather, split impure
+code into a pure part and an impure part. Listing 9.3 shows how to do it in
+the case of secondsPassed(): you only need to “push” out the part that made
+the function impure.
+Listing 9.3. secondsPassed() is now made pure again.
+function secondsPassed(
+int $currentTimestamp,
+int $previousTimestamp
+): int {
+return $currentTimestamp - $previousTimestamp;
+}
+With objects, a similar approach can be used to make impure methods pure
+again. Take a look at Listing 9.4 which shows the rather silly Stopwatch class
+with an impure method, which is basically the same as the impure secondsPassed()
+function we just saw.
+Listing 9.4. secondsPassed() is an impure object method.
+final class Stopwatch
+{
+public function secondsPassed(int $previousTimestamp): int
+{
+return time() - $previousTimestamp;
+}
+}
+If we want to make the method pure again, we have to get rid of the call
+to time(). In the functional example we modified the function to accept the
+current time as an argument instead of fetching it. This is certainly an option
+here as well (see Listing 9.5).
+237

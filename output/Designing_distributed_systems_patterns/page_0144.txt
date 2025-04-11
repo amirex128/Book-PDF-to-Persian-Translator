@@ -1,0 +1,37 @@
+tion of queues (sometimes called topics). One or more publishers publishes messages
+to these queues. Likewise, one or more subscribers is listening to these queues for new
+messages. When a message is published, it is reliably stored by the queue and subse‐
+quently delivered to subscribers in a reliable manner.
+At this point, most public clouds feature a pub/sub API such as Azure’s EventGrid or
+Amazon’s Simple Queue Service. Additionally, the open source Kafka project pro‐
+vides a very popular pub/sub implementation that you can run on your own hard‐
+ware as well as on cloud virtual machines. For the remainder of this overview of
+pub/sub APIs we’ll use Kafka for our examples, but they are relatively simple to port
+to alternate pub/sub APIs.
+Hands On: Deploying Kafka
+There are obviously many ways to deploy Kafka, and one of the easiest ways is to run
+it as a container using a Kubernetes cluster and the Helm package manager.
+Helm is a package manager for Kubernetes that makes it easy to deploy and manage
+prepackaged, off-the-shelf applications like Kafka. If you don’t already have the helm
+command line tool installed, you can install it from https://helm.sh.
+Once the helm tool is on your machine, you need to initialize it. Initializing Helm
+deploys a cluster-side component named tiller to your cluster and installs some
+templates to your local filesystem:
+helm init
+Now that helm is initialized, you can install Kafka using this command:
+helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+helm install --name kafka-service incubator/kafka
+Helm templates have different levels of production hardening and
+support. stable templates are the most strictly vetted and sup‐
+ported, whereas incubator templates like Kafka are more experi‐
+mental and have less production mileage. Regardless, incubator
+templates are useful for quick proof of concepts as well as a place to
+start from when implementing a production deployment of a
+Kubernetes-based service.
+Once you have Kafka up and running, you can create a topic to publish to. Generally
+in batch processing, you’re going to use a topic to represent the output of one module
+in your workflow. This output is likely to be the input for another module in the
+workflow.
+130 
+| 
+Chapter 11: Event-Driven Batch Processing

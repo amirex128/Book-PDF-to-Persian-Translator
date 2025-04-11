@@ -1,0 +1,36 @@
+It may seem odd that Alice is continually rewriting her own name into the lock, but
+this is the way the lock lease is extended beyond the 10-second TTL.
+If, for some reason, the TTL expires, then the lock update will fail, and Alice will go
+back to creating the lock using the etcd mk command, or Bob may also use the mk
+command to obtain the lock for himself. Bob will likewise need to set and update the
+lock every 10 seconds to maintain ownership.
+Handling Concurrent Data Manipulation
+Even with all of the locking mechanisms we have described, it is still possible for two
+replicas to simultaneously believe they hold the lock for a very brief period of time.
+To understand how this can happen, imagine that the original lock holder becomes so
+overwhelmed that its processor stops running for minutes at a time. This can happen
+on extremely overscheduled machines. In such a case, the lock will time out and
+some other replica will own the lock. Now the processor frees up the replica that was
+the original lock holder. Obviously, the handleLockLost() function will quickly be
+called, but there will be a brief period where the replica still believes it holds the lock.
+Although such an event is fairly unlikely, systems need to be built to be robust to such
+occurrences. The first step to take is to double-check that the lock is still held, using a
+function like this:
+func (Lock l) isLocked() boolean {
+  return l.locked && l.lockTime + 0.75 * l.ttl > now()
+}
+If this function executes prior to any code that needs to be protected by a lock, then
+the probability of two masters being active is significantly reduced, but—it is impor‐
+tant to note—it is not completely eliminated. The lock timeout could always occur
+between the time that the lock was checked and the guarded code was executed. To
+protect against these scenarios, the system that is being called from the replica needs
+to validate that the replica sending a request is actually still the master. To do this, the
+hostname of the replica holding the lock is stored in the key-value store in addition to
+the state of the lock. That way, others can double-check that a replica asserting that it
+is the master is in fact the master.
+This system diagram is shown in Figure 9-2. In the first image, shard2 is the owner of
+the lock, and when a request is sent to the worker, the worker double-checks with the
+lock server and validates that shard2 is actually the current owner.
+Handling Concurrent Data Manipulation 
+| 
+103

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 78</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   memecache-0.memecache, memecache-1.memcache, etc. مانند Redis، ما می‌توانیم از این نام‌ها برای پیکربندی twemproxy استفاده کنیم.
+  </p>
+  <pre>
+   <code class="language-yaml">memcache:
+  listen: 127.0.0.1:11211
+  hash: fnv1a_64
+  distribution: ketama
+  auto_eject_hosts: true
+  timeout: 400
+  server_retry_timeout: 2000
+  server_failure_limit: 1
+  servers:
+   - memcache-0.memcache:11211:1
+   - memcache-1.memcache:11211:1
+   - memcache-2.memcache:11211:1
+   </code>
+  </pre>
+  <p>
+   در این config، شما می‌توانید ببینید که ما در حال service دادن protocol memcache بر روی localhost:11211 هستیم تا container application بتواند به ambassador دسترسی داشته باشد. ما این را با استفاده از یک object از نوع Kubernetes ConfigMap که می‌توانیم با دستور زیر ایجاد کنیم، در pod ambassador خود مستقر می‌کنیم:
+   <pre>
+    <code class="language-bash">kubectl create configmap --from-file=nutcracker.yaml twem-config.
+    </code>
+   </pre>
+  </p>
+  <p>
+   در نهایت، تمام آماده‌سازی‌ها انجام شده است و ما می‌توانیم مثال ambassador خود را مستقر کنیم.
+   ما یک pod را تعریف می‌کنیم که به این صورت است:
+  </p>
+  <pre>
+   <code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: sharded-memcache-ambassador
+spec:
+  containers:
+    # This is where the application container would go, for example
+    # - name: nginx
+    #   image: nginx
+    # This is the ambassador container
+    - name: twemproxy
+      image: ganomede/twemproxy
+      command:
+      - nutcracker
+      - -c
+      - /etc/config/nutcracker.yaml
+      - -v
+      - 7
+      - -s
+      - 6222
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: twem-config
+   </code>
+  </pre>
+  <p>
+   64
+   | Chapter 6: Sharded Services
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

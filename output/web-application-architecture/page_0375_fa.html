@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 375</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>به ports adapters برای برقراری ارتباط ورودی نیاز خواهید داشت. این شامل routing، controllers, templates و غیره است. در سمت راست، شما باید adapters port برای communication outgoing را پیاده‌سازی کنید.
+        این‌ها شامل repository implementations، some database migrations برای تولید، و شاید برخی از API clients برای توسعه، است. وقتی نوبت به تست کردن این port adapters می‌رسد، شما می‌توانید از پیشنهادات ارائه شده در بخش 14.2 استفاده کنید.
+        در نهایت شما می‌توانید مقداری end-to-end tests را تنظیم کنید. یک گزینه جالب این است که از scenarios هایی که برای use case tests نوشته‌اید، استفاده مجدد کنید. Behat به شما اجازه می‌دهد که همان scenario را در برابر یک Context متفاوت اجرا کنید. در طول اجرای اول شما core code را با برقراری تماس با ApplicationInterface مستقیماً تست می‌کنید. در طول اجرای دوم، شما web server و هر service دیگری را که لازم است، راه‌اندازی می‌کنید و کل application را با ایجاد requests HTTP واقعی، تست می‌کنید.
+    </p>
+    <p>برای من این approach top-down به توسعه application عالی است زیرا:</p>
+    <ul>
+        <li>با همکاری شروع می‌شود: توسعه‌دهندگان و سایر سهامداران با هم کار می‌کنند تا یک درک مشترک از آنچه باید ایجاد شود، ایجاد کنند.</li>
+        <li>هنگامی که توسعه‌دهندگان شروع به ساخت یک feature می‌کنند، آن‌ها ابتدا بر روی structural elements تمرکز می‌کنند، بدون اینکه هنوز آن‌ها را بسازند.</li>
+        <li>scenarios ها که برای ایجاد آن درک مشترک نوشته شده بودند، اکنون می‌توانند برای تأیید گام به گام راه‌حلی که پیاده‌سازی شده است، استفاده شوند؛ شما به ساختن چیز اشتباهی ختم نخواهید شد. شما به طور خودکار می‌دانید چه زمانی کار انجام می‌شود، بنابراین بیش از حد نیاز نخواهید ساخت.</li>
+        <li>
+            با استفاده از انواع مختلف تست‌ها، شما می‌توانید بر روی بخش‌های خاصی، به عنوان مثال، objects کوچکتر مانند entities، یا adapters ports خاص، زوم کنید. شما مجبور نیستید logic domain را از طریق end-to-end tests های کند و ناپایدار تست کنید.
+        </li>
+        <li>
+            اعتماد به راه‌حل بسیار بالاست. اجرای تست suite برای یک feature داده شده، ثابت می‌کند که همه چیز کار می‌کند و به کار خود ادامه می‌دهد.
+        </li>
+    </ul>
+    <h4><strong>14.8. Summary</strong></h4>
+    <p>تست کردن یک application decoupled نیازمند چندین نوع مختلف تست است. در وهله اول، Use case tests وجود خواهد داشت که رفتار application core را توصیف می‌کند. اجرای این تست‌ها فقط شامل core code می‌شود. شما می‌توانید spec-</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

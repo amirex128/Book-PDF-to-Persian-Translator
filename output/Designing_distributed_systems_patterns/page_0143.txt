@@ -1,0 +1,22 @@
+copy of the event active in our workflow. This copier triggers an additional work
+queue to handle notification settings. This work queue feeds into an example of the
+filter pattern, which splits the work queue into separate email and text message notifi‐
+cation queues. These specific queues register the user for email, text, or both notifica‐
+tions.
+The remainder of this workflow is shown in Figure 11-9.
+Figure 11-9. The user notification and welcome email work queue
+Publisher/Subscriber Infrastructure
+We have seen a variety of abstract patterns for linking together different event-driven
+batch processing patterns. But when it comes time to actually build such a system, we
+need to figure out how to manage the stream of data that passes through the event-
+driven workflow. The simplest thing to do would be to simply write each element in
+the work queue to a particular directory on a local filesystem, and then have each
+stage monitor that directory for input. But of course doing this with a local filesystem
+limits our workflow to operating on a single node. We can introduce a network file‐
+system to distribute files to multiple nodes, but this introduces increasing complexity
+both in our code and in the deployment of the batch workflow.
+Instead, a popular approach to building a workflow like this is to use a publisher/
+subscriber (pub/sub) API or service. A pub/sub API allows a user to define a collec‐
+Publisher/Subscriber Infrastructure 
+| 
+129

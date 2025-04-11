@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 146</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Service locators</h3>
+  <p>حتی یک <strong>constructor</strong> رسمی)، اما هنگامی که شروع به فراخوانی <code>send()</code> برای تأیید رفتار صحیح می‌کنید، دچار مشکل خواهید شد (<strong>Listing</strong> 5.11).</p>
+  <p><strong>Listing</strong> 5.11. With implicit dependencies, instantiation is easy, usage is not.</p>
+  <pre><code class="language-php">
+new SendIpConfirmationEmail();
+// OK
+
+$service->send();
+// Error: No logged in user
+// Or maybe: Fatal error: Call to a member function email() on null
+// Or maybe: Error: Undefined config key "mail.default_sender"
+</code></pre>
+  <p>برای رفع مشکلات، باید نگاه دقیق‌تری به کد متد <code>send()</code> داشته باشید. ابتدا باید همه وابستگی‌های ضمنی آن را تنظیم کنید. متأسفانه، شما حتی نمی‌دانید چه زمانی کارتان تمام می‌شود. حتی اگر با دقت در کد جستجو کنید تا بفهمید به چه چیزی نیاز دارد، هنوز این شانس وجود دارد که چیزی را از دست داده باشید. به عنوان مثال، فراخوانی <code>trans()</code> به طور مخفیانه به یک <strong>locale</strong> متکی است که توسط فراخوانی <code>App::setLocale()</code> ارائه می‌شود. کد در <code>send()</code> این اطلاعات را نشان نمی‌دهد. شما باید آن را بدانید. شکل 5.2 نشان می‌دهد که چگونه پیش‌نیازهای فراخوانی <code>send()</code> از ساختار کلاس (آرگومان‌های <strong>constructor</strong> و متد آن) جدا شده است.</p>
+  <h4> 5.8. Effective testing</h4>
+  <p>آیا بد است که برای نوشتن یک <strong>unit test</strong> برای یک <strong>object</strong>، باید کد آن را بخوانید؟ خب، من فکر می‌کنم اینطور است. شما باید بین کد تولید و کد تست، رفت و آمد کنید، و تمام کارهایی را که <strong>framework</strong> به طور معمول برای شما انجام می‌دهد، دوباره انجام دهید. این باعث می‌شود احساس کنید دو برابر کاری را انجام می‌دهید که بدون نوشتن یک تست انجام می‌دادید. در عین حال، اگر کد تولید را به گونه‌ای تغییر دهید که یک مرحله راه‌اندازی اضافی لازم باشد، قطعاً یک تست دیگر را که هنوز آن مرحله اضافی را ندارد، می‌شکنید.</p>
+  <p>مشکل این است که این نوع تست بیش از حد به کد تولید نزدیک است. این به شما کمک نمی‌کند که سریع‌تر کار کنید یا مؤثرتر باشید. بعد از چند تا از این</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

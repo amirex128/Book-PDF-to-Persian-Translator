@@ -1,0 +1,46 @@
+        command:
+        - nutcracker
+        - -c
+        - /etc/config/shared-nutcracker.yaml
+        - -v
+        - 7
+        - -s
+        - 6222
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: shared-twem-config
+If you save this to shared-twemproxy-deploy.yaml, you can create the replicated shard
+router using kubectl:
+kubectl create -f shared-twemproxy-deploy.yaml
+To complete the shard router, we have to declare a load balancer to process requests:
+kind: Service
+apiVersion: v1
+metadata:
+  name: shard-router-service
+spec:
+  selector:
+    app: shared-twemproxy
+  ports:
+    - protocol: TCP
+      port: 11211
+      targetPort: 11211
+This load balancer can be created using kubectl create -f shard-router-
+service.yaml.
+An Examination of Sharding Functions
+So far we’ve discussed the design and deployment of both simple sharded and replica‐
+ted sharded caches, but we haven’t spent very much time considering how traffic is
+routed to different shards. Consider a sharded service where you have 10 independ‐
+ent shards. Given some specific user request Req, how do you determine which shard
+S in the range from zero to nine should be used for the request? This mapping is the
+responsibility of the sharding function. A sharding function is very similar to a hash‐
+ing function, which you may have encountered when learning about hashtable data
+structures. Indeed, a bucket-based hashtable could be considered an example of a
+sharded service. Given both Req and Shard, then the role of the sharding function is
+to relate them together, specifically:
+66 
+| 
+Chapter 6: Sharded Services

@@ -1,0 +1,44 @@
+tainer. And this is a totally reasonable approach, but it does mean that we are going to
+couple the scale of the defaulting service with the API service itself. The defaulting is
+actually a lightweight operation, and we are likely to need far fewer instances of it
+than the service itself to handle the load.
+For the examples in this chapter, we are going to use the kubeless
+FaaS framework. Kubeless is deployed on top of the Kubernetes
+container orchestration service. Assuming that you have provi‐
+sioned a Kubernetes cluster, you can install Kubeless from its relea‐
+ses page. Once you have the kubeless binary installed, you can
+install it into your cluster with the following commands: kubeless
+install.
+Kubeless installs itself as a native Kubernetes third-party API. This
+means that once it is installed, you can use the native kubectl
+command-line tool. For example, you can see deployed functions
+using kubectl get functions. Currently, you should have no
+functions deployed.
+Hands On: Adding Request Defaulting Prior to Request Processing
+To demonstrate the utility of the decorator pattern for FaaS, consider the task of
+adding default values to a RESTful function call if the values are missing. This is quite
+straightforward to do using FaaS. We’ll write the defaulting function using the Python
+programming language:
+# Simple handler function for adding default values
+def handler(context):
+  # Get the input value
+  obj = context.json
+  # If the 'name' field is not present, set it randomly
+  if obj.get("name", None) is None:
+    obj["name"] = random_name()
+  # If the 'color' field is not present, set it to 'blue'
+  if obj.get("color", None) is None:
+    obj["color"] = "blue"
+  # Call the actual API, potentially with the new default
+  # values, and return the result
+  return call_my_api(obj)
+Save this function in a file named defaults.py. You obviously will want to update the
+call_my_api code so that it points to the actual API you want to call. Once you have
+finished writing the code, this defaulting function can be installed as a kubeless
+function using:
+kubeless function deploy add-defaults \
+    --runtime python27 \
+    --handler defaults.handler \
+86 
+| 
+Chapter 8: Functions and Event-Driven Processing

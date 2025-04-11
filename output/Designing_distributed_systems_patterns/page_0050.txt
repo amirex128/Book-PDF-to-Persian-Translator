@@ -1,0 +1,42 @@
+Because we are using an adapter and the containers both share a network namespace,
+configuring the logging simply uses localhost and the default Redis port (6379).
+Given this application of the adapter pattern, logging will always be available when‐
+ever we want to debug slow Redis queries.
+A similar exercise can be done to monitor logs from the Apache Storm system. Again,
+Storm provides data via a RESTful API, which is useful but has limitations if we are
+not currently monitoring the system when a problem occurs. Like Redis, we can use a
+fluentd adapter to transfor the Storm process into a time series of queryable logs. To
+do this, we deploy a fluentd adapter with the fluent-plugin-storm plugin enabled.
+We can configure this plugin with a fluentd config pointed at localhost (because
+again, we are running as a container group with a shared localhost); the config for the
+plugin looks like:
+<source>
+  type storm
+  tag storm
+  url http://localhost:8080
+  window 600
+  sys 0
+</source>
+Adding a Health Monitor
+One last example of applying the adapter pattern is derived from monitoring the
+health of an application container. Consider the task of monitoring the health of an
+off-the-shelf database container. In this case, the container for the database is sup‐
+plied by the database project, and we would rather not modify that container simply
+to add health checks. Of course, a container orchestrator will allow us to add simple
+health checks to ensure that the process is running and that it is listening on a partic‐
+ular port, but what if we want to add richer health checks that actually run queries
+against the database?
+Container orchestration systems like Kubernetes enable us to use shell scripts as
+health checks as well. Given this capability, we can write a rich shell script that runs a
+number of different diagnostic queries against the database to determine its health.
+But where can we store such a script and how can we version it?
+The answer to these problems should be easy to guess by now: we can use an adapter
+container. The database runs in the application container and shares a network inter‐
+face with the adapter container. The adapter container is a simple container that only
+contains the shell script for determining the health of the database. This script can
+then be set up as the health check for the database container and can perform what‐
+ever rich health checks our application requires. If these checks ever fail, the database
+will be automatically restarted.
+36 
+| 
+Chapter 4: Adapters

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 99</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>3. Read models and view models</strong></h3>
+  <p>
+    <code>repository</code> از <code>read model repository implementations</code>.
+  </p>
+  <h4>3.6. Using view models for APIs</h4>
+  <p>
+    در بخش قبل ما در مورد استفاده از <code>view models</code> در <code>HTML templates</code> بحث می‌کردیم. در این صورت کدی وجود خواهد داشت که بر روی <code>return values</code> از برخی از <code>getters</code> <code>view model</code> تکرار می‌شود و
+    <code>echo-ing</code> می‌شود. این فرض می‌کند که کاربر نهایی <code>application</code> شما یک شخص واقعی است که از یک مرورگر وب برای بازدید از صفحات <code>web application</code> شما استفاده می‌کند.
+    سایر انواع کاربران نیاز دارند که <code>data</code> در فرم‌های مختلف باشد. یک کاربر <code>command-line</code> به اطلاعات متن ساده نیاز دارد، برخی از سیستم‌های از راه دور ممکن است بخواهند با <code>SOAP</code> با <code>application</code> شما صحبت کنند.
+  </p>
+  <p>
+    بیایید دریابیم که چگونه این در <code>application</code> ما کار می‌کند. فرض کنید ما می‌خواهیم لیست <code>ebooks</code>های موجود را به عنوان یک <code>array</code> رمزگذاری شده <code>JSON</code> از <code>e-book objects</code> در معرض دید قرار دهیم.
+    در داخل <code>controller</code> ما می‌توانیم بر روی <code>array</code> از <code>object</code>های <code>Ebook view model</code> که توسط <code>listAvailableEbooks()</code> برگردانده می‌شود، تکرار کنیم و آن را به یک <code>data structure</code> قابل سریال‌سازی <code>JSON</code>، مانند یک <code>array</code> از <code>associative arrays</code> تبدیل کنیم (به Listing 3.18 مراجعه کنید).
+  </p>
+  <p>
+    <em>Listing 3.18.</em> بازگرداندن لیستی از <code>e-books</code>های موجود به عنوان <code>JSON</code>.
+  </p>
+  <pre><code class="language-php">
+    final class EbookApiController
+    {
+    private Ebooks $ebooks;
+    public function __construct(Ebooks $ebooks)
+    {
+    $this->ebooks = $ebooks;
+    }
+    public function listAvailableEbooksAction(): Response
+    {
+    $data = [];
+    foreach ($this->ebooks->listAvailableEbooks() as $ebook) {
+    $data[] = [
+    'ebookId' => $ebook->ebookId(),
+    'title' => $ebook->title(),
+    // ...
+  </code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

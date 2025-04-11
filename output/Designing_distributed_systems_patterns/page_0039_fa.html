@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 39</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در نهایت، همه preparations ها انجام شده است و ما می‌توانیم example ambassador خود را deploy کنیم.
+        ما یک pod تعریف می‌کنیم که به این صورت است:
+    </p>
+    <pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: ambassador-example
+spec:
+  containers:
+    # This is where the application container would go, for example
+    # - name: nginx
+    #   image: nginx
+    # This is the ambassador container
+    - name: twemproxy
+      image: ganomede/twemproxy
+      command:
+      - nutcracker
+      - -c
+      - /etc/config/nutcracker.yaml
+      - -v
+      - 7
+      - -s
+      - 6222
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: twem-config</code></pre>
+    <p>
+        این pod، ambassador را تعریف می‌کند. سپس application container کاربر خاص را می‌توان تزریق کرد تا pod تکمیل شود.
+    </p>
+    <h4 style="font-weight: bold;">Using an Ambassador for Service Brokering</h4>
+    <p>
+        هنگام تلاش برای رندر کردن یک application قابل حمل در محیط‌های متعدد (به عنوان مثال، public cloud، physical datacenter یا private cloud)، یکی از چالش‌های اصلی، service discovery و configuration است. برای درک معنای این، یک frontend را تصور کنید که برای ذخیره داده‌های خود به یک database MySQL متکی است. در public cloud، این service MySQL ممکن است به‌عنوان software-as-a-service (SaaS) ارائه شود، در حالی که در یک private cloud ممکن است لازم باشد یک virtual machine یا container جدید را که MySQL را اجرا می‌کند، به طور dynamic spin up کنید.
+    </p>
+    <p>
+        در نتیجه، ساختن یک application قابل حمل مستلزم این است که application بداند چگونه environment خود را introspect کند و service MySQL مناسب برای اتصال به آن را پیدا کند.
+        به این process، service discovery گفته می‌شود، و system که این discovery و linking را انجام می‌دهد، معمولاً یک service broker نامیده می‌شود. همانند examplesهای قبلی، ambassador pattern یک system را قادر می‌سازد تا logic application container را جدا کند.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

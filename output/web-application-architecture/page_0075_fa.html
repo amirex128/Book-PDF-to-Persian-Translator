@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 75</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>3. Read models and view models</strong></h3>
+  <pre><code class="language-php">
+    public function save(Ebook $ebook): void;
+    }
+  </code></pre>
+  <p>
+    اکنون بیایید ببینیم آیا می‌توانیم از این <code>Ebook entity</code> در طول <code>order process</code> استفاده کنیم، زمانی که نیاز به دانستن قیمت یک <code>e-book</code> داریم. ساده‌ترین کاری که می‌توانیم انجام دهیم این است که یک <code>method</code> <code>getPrice()</code> به <code>entity</code> اضافه کنیم.
+    این باعث می‌شود که بلافاصله در داخل <code>orderEbookAction()</code> قابل استفاده باشد. Listing 3.3 نشان می‌دهد که چگونه <code>controller</code> <code>Ebook entity</code> مناسب را از <code>EbookRepository</code> بر اساس <code>ID</code>ای که کاربر با ارسال فرم <code>HTML</code> ارائه کرده است، واکشی می‌کند.
+  </p>
+  <p>
+    <em>Listing 3.3.</em> استفاده از <code>Ebook entity</code> در داخل <code>OrderController</code>.
+  </p>
+  <pre><code class="language-php">
+    public function orderEbookAction(Request $request): Response
+    {
+    $ebook = $this->ebookRepository->getById(
+    EbookId::fromString($request->request->get('ebook_id'))
+    );
+    $ebookPrice = $ebook->getPrice();
+    $orderAmount = (int)$request->get('quantity')
+    * (int)$ebookPrice;
+    // Save the order (Chapter 1)
+    // ...
+    return new Response(/* ... */);
+    }
+  </code></pre>
+  <p>
+    این راه‌حل خوب به نظر می‌رسد. <code>Ebook entity</code> موجود یک <code>object</code> مناسب برای دریافت سریع اطلاعات است، زیرا این اطلاعات را از قبل در فیلد <code>$price</code> خود حمل می‌کند. با این حال، چند مشکل در مورد استفاده مجدد از یک <code>entity</code> موجود در یک <code>context</code> متفاوت وجود دارد.
+  </p>
+  <p>
+    اولاً، <code>object</code> موجود برای بازیابی اطلاعات <code>design</code> نشده است. ما از آن برای افزودن <code>e-books</code> جدید به <code>catalog</code> خود استفاده می‌کنیم. وقتی می‌خواهیم آن را موقتاً از <code>catalog</code> حذف کنیم، اما نمی‌خواهیم آن را حذف کنیم، <code>method</code> <code>hide()</code> آن را فراخوانی می‌کنیم و دوباره آن را ذخیره می‌کنیم.
+    هر چیز دیگری که ما با این <code>Ebook entity</code> انجام می‌دهیم مربوط به تغییرات <code>state</code> است، و در هر جایی که <code>entity</code> را بارگذاری می‌کنیم، این کار را با
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

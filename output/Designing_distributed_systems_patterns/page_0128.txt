@@ -1,0 +1,40 @@
+Kubernetes contains a Job object that allows for the reliable execution of the work
+queue. The Job can be configured to either run the worker container once or to run it
+until it completes successfully. If the worker container is set to run to completion,
+then even if a machine in the cluster fails, the job will eventually be run to success.
+This dramatically simplifies the task of building a work queue because the orchestra‐
+tor takes on responsibility for the reliable operation of each work item.
+Additionally, Kubernetes has annotations for each Job object that enable us to mark
+each job with the work item it is processing. This enables us to understand which
+items are being processed as well as those that have completed in either failure or suc‐
+cess.
+Put together, this means that we can implement a work queue on top of the Kuber‐
+netes orchestration layer without using any storage of our own. This dramatically
+simplifies the task of building the work queue infrastructure.
+Thus, the expanded operation of our work queue container looks like this:
+Repeat forever
+Get the list of work items from the work source container interface.
+Get the list of all jobs that have been created to service this work queue.
+Difference these lists to find the set of work items that haven’t been processed.
+For these unprocessed items, create new Job objects that spawn the appropriate
+worker container.
+Here is a simple Python script that implements this work queue:
+import requests
+import json
+from kubernetes import client, config
+import time
+namespace = "default"
+def make_container(item, obj):
+    container = client.V1Container()
+    container.image = "my/worker-image"
+    container.name = "worker"
+    return container
+def make_job(item):
+    response = requests.get("http://localhost:8000/items/{}".format(item))
+    obj = json.loads(response.text)
+    job = client.V1Job()
+    job.metadata = client.V1ObjectMeta()
+    job.metadata.name = item
+114 
+| 
+Chapter 10: Work Queue Systems

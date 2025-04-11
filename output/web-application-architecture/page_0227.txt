@@ -1,0 +1,36 @@
+8. Validation
+2. We’ve removed the duplication by reusing validation logic, but we still
+duplicate the effort. Everything gets checked twice. Are you sure we
+can’t skip one of these checks?
+The first suggestion is a very common one. If a method becomes too large,
+move part of it out of the way, and enjoy the view. However, if we follow the
+second suggestion, we could maybe even get rid of all this validation code.
+The question was: should we check everything twice? The answer is: no.
+Consider the email address validation. Can we remove it from the value ob-
+ject or from the controller? I think it’s obvious that we should never remove
+the validation from the value object. We have already established that we
+need it to protect our objects from containing invalid state. So can we re-
+move it from the controller? Yes, totally.
+In fact, we should do everything we can to ensure that no well-behaving user
+would ever see a validation error. Just make sure you help the user provide
+the correct data when they are still filling out the form. Use frontend valida-
+tion and assistance, in whatever way makes sense. While the user is entering
+their email address, the frontend can already provide a warning if the email
+address doesn’t look right. Form submission could be disabled for as long as
+the email address field doesn’t contain a correct value. All of this reduces
+the odds of the user providing bad data to the application. Even to the point
+where only a malevolent user who manually forges a POST request could sub-
+mit invalid data. At that point, we really don’t have to worry anymore about
+showing friendly form error messages in the user’s language. A simple 400
+Bad Request status message would suffice.
+The same goes for validating the e-book ID. Do we really have to do that? The
+source of this value is whatever element in the user interface allows the user
+to select the e-book they want. This could be a <select> element, or some
+kind of button they press, which results in a hidden field getting populated
+with the correct value. If the value that ends up being submitted is incorrect,
+it’s not the user’s fault. It could be a programming mistake (maybe the hid-
+den input value wasn’t set correctly, or we made a mistake when rendering
+the select element). No validation error can help the user then, and you’d
+hope that you caught this issue before the code was released to production.
+Or it could be a malevolent user again, but they still don’t need a friendly
+207

@@ -1,0 +1,40 @@
+Choosing the Right Number of Leaves
+It might seem that in the scatter/gather pattern, replicating out to a very large number
+of leaves would always be a good idea. You parallelize your computation and conse‐
+quently reduce the clock time required to process any particular request. However,
+increased parallelization comes at a cost, and thus choosing the right number of leaf
+nodes in the scatter/gather pattern is critical to designing a performant distributed
+system.
+To understand how this can happen, it’s worth considering two things. The first is
+that processing any particular request has a certain amount of overhead. This is the
+time spent parsing a request, sending HTTP across the wire, and so forth. In general,
+the overhead due to system request handling is constant and significantly less than
+the time spent in user code processing the request. Consequently, this overhead can
+generally be ignored when assessing the performance of the scatter/gather pattern.
+However, it is important to understand that the cost of this overhead scales with the
+number of leaf nodes in the scatter/gather pattern. Thus, even though it is low cost, as
+parallelization continues, this overhead eventually dominates the compute cost of
+your business logic. This means that the gains of parallelization are asymptotic.
+In addition to the fact that adding more leaf nodes may not actually speed up pro‐
+cessing, scatter/gather systems also suffer from the “straggler” problem. To under‐
+stand how this works, it is important to remember that in a scatter/gather system, the
+root node waits for requests from all of the leaf nodes to return before sending a
+response back to the end user. Since data from every leaf node is required, the overall
+time it takes to process a user request is defined by the slowest leaf node that sends a
+response. To understand the impact of this, imagine that we have a service that has a
+99th percentile latency of 2 seconds. This means that on average one request out of
+every 100 has a latency of 2 seconds, or put another way, there is a 1% chance that a
+request will take 2 seconds. This may be totally acceptable at first glance: a single user
+out of 100 has a slow request. However, consider how this actually works in a scatter/
+gather system. Since the time of the user request is defined by the slowest response,
+we need to consider not a single request but all requests scattered out to the various
+leaf nodes.
+Let’s see what happens when we scatter out to five leaf nodes. In this situation, there is
+a 5% chance that one of these five scatter requests has a latency of 2 seconds (0.99 ×
+0.99 × 0.99 × 0.99 × 0.99 == 0.95). This means that our 99th percentile latency for
+individual requests becomes a 95th percentile latency for our complete scatter/gather
+system. And it only gets worse from there: if we scatter out to 100 leaves, then we are
+more or less guaranteeing that our overall latency for all requests will be 2 seconds.
+78 
+| 
+Chapter 7: Scatter/Gather

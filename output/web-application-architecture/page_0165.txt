@@ -1,0 +1,34 @@
+6. External services
+): VatRateCheckResult {
+// Connect to the remote API...
+}
+}
+final class EbookOrderService
+{
+// Although VatApi is an interface now...
+private VatApi $vatApi;
+// ...
+public function create(/* ... */): OrderId
+{
+// ... Nothing changes here:
+$rateCheckResult = $this->vatApi->vatRateCheck(
+RateType::tbe(),
+'NL',
+'ebooks'
+);
+$vatRate = VatRate::fromInt(
+$rateCheckResult->rate('electronics')
+);
+// ...
+}
+}
+A better solution would be to rephrase our need and show what we are really
+looking for at this point. Basically, we’re asking for a service to establish the
+correct VAT rate for an e-book. There should be some other object that can
+provide us with that information. Let’s call that object a “VAT rate provider”.
+See Listing 6.8 for an example of how EbookOrderService would use such an
+object.
+Listing 6.8. How EbookOrderService would use a “VAT rate provider”.
+$vatRate = $this->vatRateProvider
+->vatRateForSellingEbooksInCountry('NL');
+145

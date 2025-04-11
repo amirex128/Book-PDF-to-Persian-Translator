@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 111</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>4. Application services</strong></h3>
+  <pre><code class="language-php">
+    // ...
+    return new Response(/* ... */);
+    }
+  </code></pre>
+  <p>
+    به جز چند مورد استفاده از <code>service locator</code> ($this->container->get())، بخش بزرگی از <code>controller action</code> شروع به شباهت به کد اصلی می‌کند. مستقل از <code>infrastructure</code>ای که آن را به کاربرانش متصل می‌کند، و مستقل از
+    <code>storage</code> اساسی و غیره. هنوز رسماً کد اصلی نیست، زیرا خود <code>method</code> هنوز به <code>web context</code> آن متصل است.
+  </p>
+  <h4>4.3. Extracting an application service</h4>
+  <p>
+    گام بعدی این خواهد بود که تمام کدی را که مختص وب نیست جابه‌جا کرده و آن را به کلاس خودش منتقل کنیم. این گام <code>refactoring</code> استاندارد دیگری است که <code>Extract Class</code><sup>3</sup> نامیده می‌شود. برای انجام این کار ما باید:
+  </p>
+  <ul>
+    <li>
+      یک کلاس جدید ایجاد کنید. بیایید آن را <code>EbookOrderService</code> بنامیم.
+    </li>
+    <li>
+      یک <code>method</code> <code>public</code> به آن اضافه کنید. بیایید آن را <code>create()</code> بنامیم.
+    </li>
+    <li>
+      کد مستقل از <code>infrastructure</code> را از <code>controller</code> به <code>method</code> جدید منتقل کنید.
+    </li>
+    <li>
+      وابستگی‌های لازم (<code>EbookRepository</code> و <code>OrderRepository</code>) را به عنوان آرگومان‌های <code>constructor</code> تزریق کنید.
+    </li>
+    <li>
+      از <code>service</code> جدید در داخل <code>controller</code> استفاده کنید.
+    </li>
+    <li>
+      <code>data</code>ای را که استخراج کردیم به عنوان آرگومان‌های <code>method</code> <code>create()</code> <code>service</code> ارائه دهید.
+    </li>
+  </ul>
+  <p>
+    کلاس <code>service</code> حاصل و استفاده از آن در <code>controller</code> در Listing 4.5 نشان داده شده است. به این <code>service</code> اغلب یک <code>Application service</code> گفته می‌شود.
+    از آن برای مدل‌سازی یک <code>use case</code> استفاده می‌شود که دارای <code>side-effects</code> است (مانند ذخیره یک <code>entity</code> جدید) به روشی قابل استفاده مجدد. ما این <code>pattern</code> را با جزئیات بیشتر در بخش 11.4 مورد بحث قرار خواهیم داد.
+  </p>
+  <p>
+    <sup>3</sup>https://advwebapparch.com/extract-class
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

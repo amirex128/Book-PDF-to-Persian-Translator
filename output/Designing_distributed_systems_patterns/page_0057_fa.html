@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 57</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   همان روش <strong>scaling</strong> را دارند. برخی از <strong>systems</strong> ها 
+   <strong>stateless</strong> هستند و می‌توانند به سادگی به صورت 
+   <strong>horizontally</strong> مقیاس شوند، در حالی که سایر 
+   <strong>systems</strong> ها <strong>state</strong> را حفظ می‌کنند و به <strong>sharding</strong> یا رویکردهای دیگری برای 
+   <strong>scale</strong> نیاز دارند. با جدا کردن هر <strong>service</strong>، هر <strong>service</strong> می‌تواند از رویکرد 
+   <strong>scaling</strong> که برایش مناسب است، استفاده کند. این امر زمانی که همه <strong>services</strong> بخشی از یک 
+   <strong>monolith</strong> واحد هستند، امکان‌پذیر نیست.
+  </p>
+
+  <p>
+   اما البته معایبی نیز برای رویکرد <strong>microservices</strong> در طراحی <strong>system</strong> وجود دارد. 
+   دو عیب اصلی این است که به دلیل اینکه <strong>system</strong> 
+   <strong>loosely coupled</strong> شده است، 
+   <strong>debugging</strong> سیستم در هنگام وقوع خرابی، به طور قابل توجهی دشوارتر می‌شود. 
+   شما دیگر نمی‌توانید به سادگی یک application واحد را در یک 
+   <strong>debugger</strong> بارگذاری کنید و تعیین کنید چه چیزی اشتباه رخ داده است. هر گونه خطا، محصولات جانبی تعداد زیادی <strong>system</strong> است که اغلب بر روی ماشین‌های مختلف اجرا می‌شوند. 
+   این محیط، بازتولید در یک <strong>debugger</strong> را کاملاً چالش برانگیز می‌کند. 
+   به عنوان یک نتیجه، سیستم‌های مبتنی بر <strong>microservices</strong> نیز دشوار برای طراحی و معماری هستند. 
+   یک <strong>system</strong> مبتنی بر <strong>microservices</strong> از روش‌های متعددی برای برقراری ارتباط بین 
+   <strong>services</strong> استفاده می‌کند. الگوهای مختلف (به عنوان مثال، <strong>synchronous, asynchronous, message-passing</strong> و غیره)؛ و الگوهای مختلف 
+   <strong>coordination</strong> و <strong>control</strong> بین <strong>services</strong>.
+  </p>
+
+  <p>
+   این چالش‌ها، انگیزه برای <strong>distributed patterns</strong> هستند. اگر یک معماری <strong>microservices</strong> از الگوهای شناخته شده تشکیل شده باشد، طراحی آن آسان‌تر است، زیرا بسیاری از 
+   <strong>design practices</strong> توسط الگوها مشخص شده‌اند. 
+   علاوه بر این، الگوها، <strong>systems</strong> را برای 
+   <strong>debug</strong> آسان‌تر می‌کنند، زیرا به 
+   <strong>developers</strong> این امکان را می‌دهند که درس‌های آموخته شده را در تعدادی از <strong>systems</strong> مختلف که از الگوهای یکسان استفاده می‌کنند، اعمال کنند.
+  </p>
+
+  <p>
+   با در نظر گرفتن این موضوع، این بخش تعدادی از الگوهای چند 
+   <strong>node</strong> را برای ساخت <strong>systems</strong> توزیع شده معرفی می‌کند. این الگوها منحصراً متقابل نیستند. هر <strong>system</strong> دنیای واقعی از مجموعه‌ای از این الگوها ساخته خواهد شد که با هم کار می‌کنند تا یک application سطح بالاتر را تولید کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

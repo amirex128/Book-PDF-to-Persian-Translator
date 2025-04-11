@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 82</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>3. Read models and view models</strong></h3>
+  <p>
+    این است که <code>integration tests</code> را برای <code>read model repositories</code> خود بنویسید. کار دیگری که می‌توانید برای بهبود وضعیت انجام دهید این است که به یک کلاس اجازه دهید هر دو <code>interface</code> <code>repository</code> <code>write</code> و <code>read model</code> را پیاده‌سازی کند.
+    به این ترتیب، دانش در مورد جدول <code>database</code> و معنای ستون‌های آن حداقل در یک مکان واحد قرار دارد، و احتمال اینکه با این نوع مشکل مواجه شوید کمتر می‌شود.
+  </p>
+  <h4>3.3.2. Using write model domain events</h4>
+  <p>
+    یک رویکرد دیگر برای همگام‌سازی <code>read model</code> با <code>write model</code> این است که یک <code>domain event</code> را برای هر تغییر مهم در داخل <code>entity</code> ارسال کنید.
+    <code>read model</code> سپس قادر است <code>state</code> خود را بر اساس اطلاعات موجود در آن <code>events</code> به‌روزرسانی کند. اینها اجزایی هستند که شما برای این رویکرد به آنها نیاز دارید:
+  </p>
+  <ol>
+    <li>
+      یک <code>entity</code>.
+    </li>
+    <li>
+      یک <code>domain event</code> برای هر تغییر <code>state</code> که مربوط به <code>read model</code> است.
+    </li>
+    <li>
+      یک <code>service</code> که به این <code>domain events</code> مشترک می‌شود و <code>read model</code> را مطابق با تغییرات نشان داده شده توسط <code>events</code> به‌روزرسانی می‌کند.
+    </li>
+  </ol>
+  <p>
+    Listing 3.7 نشان می‌دهد که چگونه <code>entity</code> می‌تواند <code>domain events</code> را در داخل زمانی که <code>state</code> آن به روشی که ممکن است برای دیگران مرتبط باشد، ثبت کند.
+  </p>
+  <p>
+    <em>Listing 3.7.</em> یک <code>entity</code> <code>domain events</code> را در داخل ثبت می‌کند.
+  </p>
+  <pre><code class="language-php">
+    final class Ebook
+    {
+    /**
+    * @var array&lt;object&gt;
+    */
+    private array $events;
+    private int $price;
+    // ...
+    public function changePrice(int $newPrice): void
+    {
+    $this->price = $newPrice;
+  </code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

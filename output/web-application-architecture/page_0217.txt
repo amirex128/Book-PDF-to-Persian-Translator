@@ -1,0 +1,32 @@
+8. Validation
+// We don't return an error, but throw an exception
+throw new InvalidArgumentException(
+sprintf('Invalid email address: ' . $emailAddress)
+);
+}
+$this->emailAddress = $emailAddress;
+}
+public function addLine(EbookId $ebookId, int $quantity): void
+{
+// We delegate the validation of $quantity to the Line constructor
+$this->lines[] = new Line($ebookId, $quantity);
+}
+}
+final class Line
+{
+private EbookId $ebookId;
+private int $quantity;
+public function __construct(EbookId $ebookId, int $quantity)
+{
+if ($quantity <= 0) {
+throw new InvalidArgumentException(
+sprintf('Line quantity should be at least 1')
+);
+}
+$this->ebookId = $ebookId;
+$this->quantity = $quantity;
+}
+}
+“Exceptions aren’t very user-friendly, right?”
+You’re totally right, exceptions aren’t user-friendly. In fact, they should
+197

@@ -1,0 +1,31 @@
+neighbor process that is interfering with resources), then the root can dynamically
+redistribute load to assure a fast response.
+Hands On: Distributed Document Search
+To see an example of scatter/gather in action, consider the task of searching across a
+large database of documents for all documents that contain the words “cat” and “dog.”
+One way to perform this search would be to open up all of the documents, read
+through the entire set, searching for the words in each document, and then return to
+the user the set of documents that contain both words.
+As you might imagine, this is quite a slow process because it requires opening and
+reading through a large number of files for each request. To make request processing
+faster, you can build an index. The index is effectively a hashtable, where the keys are
+individual words (e.g., “cat”) and the values are a list of documents containing that
+word.
+Now, instead of searching through every document, finding the documents that
+match any one word is as easy as doing a lookup in this hashtable. However, we have
+lost one important ability. Remember that we were looking for all documents that
+contained “cat” and “dog.” Since the index only has single words, not conjunctions of
+words, we still need to find the documents that contain both words. Luckily, this is
+just an intersection of the sets of documents returned for each word.
+Given this approach, we can implement this document search as an example of the
+scatter/gather pattern. When a request comes in to the document search root, it
+parses the request and farms out two leaf machines (one for the word “cat” and one
+for the word “dog”). Each of these machines returns a list of documents that match
+one of the words, and the root node returns the list of documents containing both
+“cat” and “dog.”
+A diagram of this process is shown in Figure 7-2: the leaf returns {doc1, doc2,
+doc4} for “cat” and {doc1, doc3, doc4} for “dog,” so the root finds the intersection
+and returns {doc1, doc4}.
+Scatter/Gather with Root Distribution 
+| 
+75

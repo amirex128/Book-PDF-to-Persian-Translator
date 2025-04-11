@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 79</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   شما می‌توانید این را در فایلی با نام memcached-ambassador-pod.yaml ذخیره کنید، و سپس آن را با دستور زیر مستقر کنید:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl create -f memcached-ambassador-pod.yaml
+   </code>
+  </pre>
+  <p>
+   البته، اگر نخواهیم، مجبور نیستیم از pattern ambassador استفاده کنیم. یک جایگزین، استقرار یک service shard router replicated است. بین استفاده از یک ambassador در مقابل استفاده از یک service shard routing، trade-offs وجود دارد. ارزش service کاهش پیچیدگی است. شما مجبور نیستید ambassador را با هر pod ای که می‌خواهد به service memcache sharded دسترسی داشته باشد، مستقر کنید، می‌توان از طریق یک service نام‌گذاری شده و load-balanced به آن دسترسی داشت. نقطه ضعف یک service shared دو چندان است. اول، از آنجایی که این یک service shared است، شما باید آن را با افزایش load تقاضا، scale کنید. دوم، استفاده از service shared، یک network hop اضافی را معرفی می‌کند که مقداری latency به requests ها اضافه می‌کند و به bandwith network در system توزیع‌شده کلی کمک می‌کند.
+  </p>
+  <p>
+   برای استقرار یک service shared routing، شما باید configuration twemproxy را کمی تغییر دهید تا به جای localhost:11211، به همه interfaces گوش دهد:
+  </p>
+  <pre>
+   <code class="language-yaml">memcache:
+  listen: 0.0.0.0:11211
+  hash: fnv1a_64
+  distribution: ketama
+  auto_eject_hosts: true
+  timeout: 400
+  server_retry_timeout: 2000
+  server_failure_limit: 1
+  servers:
+   - memcache-0.memcache:11211:1
+   - memcache-1.memcache:11211:1
+   - memcache-2.memcache:11211:1
+   </code>
+  </pre>
+  <p>
+   شما می‌توانید این را در فایلی با نام shared-nutcracker.yaml ذخیره کنید، و سپس با استفاده از kubectl، یک ConfigMap مربوطه ایجاد کنید:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl create configmap --from-file=shared-nutcracker.yaml shared-twem-config
+   </code>
+  </pre>
+  <p>
+   سپس شما می‌توانید service routing shard replicated را به عنوان یک Deployment بالا بیاورید:
+  </p>
+  <pre>
+   <code class="language-yaml">apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: shared-twemproxy
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: shared-twemproxy
+    spec:
+      containers:
+      - name: twemproxy
+        image: ganomede/twemproxy
+   </code>
+  </pre>
+  <p>
+   Sharded Caching
+   | 65
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

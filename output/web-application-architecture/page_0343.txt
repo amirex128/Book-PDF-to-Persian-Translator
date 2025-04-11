@@ -1,0 +1,34 @@
+14. A testing strategy for decoupled applications
+final class UrlTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_can_be_created_from_and_converted_back_to_a_string(): void
+{
+$string = 'https://matthiasnoback.nl';
+self::assertEquals(
+$string,
+Url::fromString($string)->asString()
+);
+}
+/**
+* @test
+*/
+public function it_can_extract_the_top_level_domain(): void
+{
+self::assertEquals(
+'nl',
+Url::fromString('https://matthiasnoback.nl')->tld()
+);
+}
+// ...
+}
+14.2. Adapter tests
+We’ve already determined that you can’t unit-test infrastructure code. But
+you still want to test it somehow, so what type of test can we use for infras-
+tructure code? Infrastructure tests are often called integration tests, or inte-
+grated tests. These tests show that infrastructure code including third-party
+code correctly integrates with external actors. In Chapter 13 we used an-
+other name for code that integrates with external actors: “port adapters”, or
+323

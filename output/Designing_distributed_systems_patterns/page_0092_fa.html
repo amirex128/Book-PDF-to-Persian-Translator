@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 92</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4><strong>Choosing the Right Number of Leaves</strong></h4>
+  <p>
+   ممکن است به نظر برسد که در pattern scatter/gather، replication کردن به تعداد بسیار زیادی از leaves همیشه یک ایده خوب خواهد بود. شما محاسبات خود را parallelize می‌کنید و در نتیجه زمان ساعت (clock time) مورد نیاز برای پردازش هر request خاص را کاهش می‌دهید. با این حال، افزایش parallelization هزینه‌بر است، و بنابراین انتخاب تعداد مناسب leaf nodes در pattern scatter/gather برای طراحی یک system توزیع‌شده با performance بالا، بسیار مهم است.
+  </p>
+  <p>
+   برای درک چگونگی وقوع این اتفاق، ارزش دارد که دو چیز را در نظر بگیرید. اولین مورد این است که پردازش هر request خاص دارای مقدار مشخصی از overhead است. این زمانی است که صرف parsing یک request، ارسال HTTP از طریق wire و غیره می‌شود. به طور کلی، overhead ناشی از رسیدگی به request system ثابت است و به طور قابل توجهی کمتر از زمان صرف شده در پردازش user code request است. در نتیجه، این overhead را می‌توان به طور کلی هنگام ارزیابی performance pattern scatter/gather نادیده گرفت.
+  </p>
+  <p>
+   با این حال، درک این نکته مهم است که هزینه این overhead با تعداد leaf nodes در pattern scatter/gather مقیاس می‌شود. بنابراین، حتی اگر هزینه کمی دارد، با ادامه parallelization، این overhead در نهایت بر هزینه محاسباتی business logic شما غلبه می‌کند. این بدان معنی است که gains parallelization، asymptotic هستند.
+  </p>
+  <p>
+   علاوه بر این واقعیت که اضافه کردن leaf nodes های بیشتر ممکن است در واقع سرعت پردازش را افزایش ندهد، systems های scatter/gather نیز از مشکل "straggler" رنج می‌برند. برای درک چگونگی عملکرد این، مهم است به یاد داشته باشید که در یک system scatter/gather، root node منتظر است تا requests ها از تمام leaf nodes برگردند قبل از اینکه یک response را به end user ارسال کند. از آنجایی که data از هر leaf node مورد نیاز است، زمان کلی لازم برای پردازش یک user request توسط کندترین leaf node که یک response ارسال می‌کند، تعریف می‌شود. برای درک impact این موضوع، تصور کنید که ما یک service داریم که دارای 99th percentile latency از 2 ثانیه است. این بدان معنی است که به طور متوسط ​​از هر 100 request، یک request دارای latency 2 ثانیه است، یا به عبارت دیگر، 1٪ احتمال وجود دارد که یک request 2 ثانیه طول بکشد. این ممکن است در ابتدا کاملاً قابل قبول باشد: یک user واحد از 100 نفر دارای یک request کند است. با این حال، در نظر بگیرید که این در واقع چگونه در یک system scatter/gather کار می‌کند. از آنجایی که زمان user request توسط کندترین response تعریف می‌شود، ما باید نه یک request واحد، بلکه تمام requests های پخش شده به leaf nodes های مختلف را در نظر بگیریم.
+  </p>
+  <p>
+   بیایید ببینیم وقتی به پنج leaf node پخش می‌کنیم، چه اتفاقی می‌افتد. در این وضعیت، 5٪ احتمال وجود دارد که یکی از این پنج scatter requests دارای latency 2 ثانیه باشد (0.99 × 0.99 × 0.99 × 0.99 × 0.99 == 0.95). این بدان معنی است که 99th percentile latency ما برای individual requests به 95th percentile latency برای system scatter/gather کامل ما تبدیل می‌شود. و از آنجا بدتر می‌شود: اگر ما به 100 leaves پخش کنیم، پس کم و بیش تضمین می‌کنیم که latency کلی ما برای همه requests ها 2 ثانیه خواهد بود.
+  </p>
+  <p>
+   78
+   | Chapter 7: Scatter/Gather
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

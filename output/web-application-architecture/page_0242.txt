@@ -1,0 +1,36 @@
+8. Validation
+command object with an explicit list of all the fields, types, and whether or
+not certain values are optional (i.e. nullable). We then created a method that
+was able to copy request data into the object. Once the request data is inside
+the object, the object’s getters and their return types ensure that any client in-
+side our application can safely use the request data, knowing that each value
+is defined and is of the expected type. This is a major advantage of using
+command objects instead of separate values.
+But there’s more! In Section 8.3 we talked about form validation and how
+it’s actually request data validation. We shouldn’t put data into an entity and
+then validate the entity, we should validate the request data before giving it
+to the entity. An entity will throw an exception when input data is invalid.
+When we validate request data, no exception will be thrown, and this allows
+us to build up a list of validation errors.
+The same is true for a command object. We can populate the command object
+and we won’t get any exception. All we do is transform the request data array
+into an object, fill in missing data, and quietly cast data to the correct types.
+We might just as well first populate the command object, and then validate
+its values, instead of validating the request data. Listing 8.21 shows a custom
+validator class that doesn’t validate the request or request data, but validates
+a command object.
+Listing 8.21. Validating a command object.
+final class OrderEbookValidator
+{
+/**
+* @return array<string,array<string>>
+*/
+public function validate(OrderEbook $command): array
+{
+$formErrors = [];
+try {
+EmailAddress::fromString($command->emailAddress());
+} catch (InvalidArgumentException $exception) {
+$formErrors['email'][] = 'invalid_email_address';
+}
+222

@@ -1,0 +1,34 @@
+8. Validation
+$request->get('quantity')
+/* .. */
+);
+} catch (UserErrorMessage $exception) {
+$formErrors['general'][] = $exception->translationKey();
+}
+// ...
+}
+Once you have the ability to give feedback to users using exceptions, you may
+start removing some validation code and throw a UserErrorMessage instead.
+Not every domain-level exception needs to be user-facing though. As we’ve
+discussed in the previous sections, most validation issues can be prevented
+by providing a good user experience. Assisting the user when they are work-
+ing with the user interface is the best way to communicate with the user.
+Using an exception for that should be a last resort. As an example, when
+we ask the StockRepository for the number of available books, and it fails to
+find a record in the stock_levels table, should it throw a UserErrorMessage?
+To answer that question; what’s a reason that this could fail? I can only think
+of reasons where either we made some kind of programming mistake, or
+the user tampered with the request data. In both these situations, it doesn’t
+make sense to tell the user about the problem. We should be notified about
+the problem, and fix it. Or in the second case, ignore it, because we can’t do
+anything about it.
+“Shouldn’t exceptions only be used in exceptional situa-
+tions?”
+I’ve heard this catchphrase often, and although intuitively it may make
+sense, in practice, it’s not very useful advice. You’d first have to define “ex-
+ceptional”. We could go with “it doesn’t usually happen”. But, how many
+times is “usually”? The CouldNotOrderPhysicalBook in the example above
+is actually a great example of an exception that we only throw in excep-
+tional situations. Only when we run out of stock between the moment
+the user selects the book and submits the form should this exception be
+213

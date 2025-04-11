@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 60</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   <strong>Stateless systems</strong> برای ارائه 
+   <strong>redundancy</strong> و 
+   <strong>scale</strong>، <strong>replicated</strong> می‌شوند. 
+   صرف نظر از اینکه <strong>service</strong> شما چقدر کوچک است، برای ارائه یک 
+   <strong>service</strong> با یک توافقنامه سطح <strong>service</strong> (SLA) با قابلیت اطمینان بالا، حداقل به دو 
+   <strong>replica</strong> نیاز دارید. برای درک دلیل این امر، تلاش برای ارائه سه نه (99.9٪ <strong>availability</strong>) را در نظر بگیرید. در یک 
+   <strong>service</strong> سه نه، 1.4 دقیقه <strong>downtime</strong> در روز دارید (24 × 60 × 0.001). با فرض اینکه 
+   <strong>service</strong> دارید که هرگز 
+   <strong>crashes</strong> نمی‌شود، هنوز هم به این معنی است که برای رسیدن به 
+   <strong>SLA</strong> خود با یک 
+   <strong>instance</strong> واحد، باید بتوانید یک 
+   <strong>software upgrade</strong> را در کمتر از 1.4 دقیقه انجام دهید. و این فرض بر این است که شما 
+   <strong>daily software rollouts</strong> را انجام می‌دهید. اگر تیم شما واقعاً 
+   <strong>continuous delivery</strong> را در آغوش گرفته است و شما هر ساعت یک نسخه جدید از <strong>software</strong> را منتشر می‌کنید، برای دستیابی به 
+   <strong>SLA</strong> 99.9٪ 
+   <strong>uptime</strong> خود با یک 
+   <strong>instance</strong> واحد، باید بتوانید یک <strong>software rollout</strong> را در 3.6 ثانیه انجام دهید. اگر زمان بیشتری طول بکشد، 
+   <strong>downtime</strong> شما بیش از 0.01٪ خواهد بود.
+  </p>
+
+  <p>
+   البته، به جای انجام تمام این کارها، می‌توانید فقط دو 
+   <strong>replica</strong> از 
+   <strong>service</strong> خود داشته باشید که یک 
+   <strong>load balancer</strong> در جلوی آنها قرار دارد. به این ترتیب، در حالی که در حال انجام یک 
+   <strong>rollout</strong> هستید، یا در رویدادی بعید -من مطمئن هستم - که <strong>software</strong> شما 
+   <strong>crashes</strong> می‌شود، <strong>users</strong> شما توسط 
+   <strong>replica</strong> دیگر 
+   <strong>service</strong> ارائه می‌شوند و هرگز متوجه نمی‌شوند که چه اتفاقی افتاده است.
+  </p>
+
+  <p>
+   همانطور که <strong>services</strong> بزرگتر می‌شوند، برای پشتیبانی از <strong>users</strong> اضافی نیز 
+   <strong>replicated</strong> می‌شوند. <strong>Systems</strong> با قابلیت <strong>horizontal scaling</strong> با افزودن 
+   <strong>replicas</strong> بیشتر، 
+   <strong>users</strong> بیشتری را مدیریت می‌کنند. به شکل 5-2 مراجعه کنید. آنها این کار را با 
+   <strong>load-balanced replicated serving pattern</strong> انجام می‌دهند.
+  </p>
+
+  <p>
+   Figure 5-2. Horizontal scaling of a replicated stateless application
+  </p>
+
+  <p>
+   <strong>Readiness Probes for Load Balancing</strong>
+  </p>
+
+  <p>
+   البته، به سادگی <strong>replicating</strong> 
+   <strong>service</strong> و افزودن یک 
+   <strong>load balancer</strong> تنها بخشی از یک <strong>pattern</strong> کامل برای 
+   <strong>stateless replicated serving</strong> است. هنگام طراحی یک 
+   <strong>replicated service</strong>، ساخت و استقرار یک 
+   <strong>readiness probe</strong> برای اطلاع رسانی به 
+   <strong>load balancer</strong> به همان اندازه مهم است. ما در مورد چگونگی استفاده از 
+   <strong>health probes</strong> توسط یک سیستم 
+   <strong>container orchestration</strong> برای تعیین زمان راه‌اندازی مجدد یک application بحث کرده‌ایم. در مقابل، یک 
+   <strong>readiness probe</strong> تعیین می‌کند که چه زمانی یک application آماده سرویس دهی به 
+   <strong>user requests</strong> است. دلیل این تمایز این است که بسیاری از applications برای آماده شدن برای سرویس دهی، به زمان نیاز دارند. آنها ممکن است نیاز داشته باشند که به <strong>databases</strong> متصل شوند، 
+   <strong>plugins</strong> را بارگیری کنند، یا فایل‌های 
+   <strong>serving</strong> را از <strong>network</strong> دانلود کنند. در همه این موارد، 
+   <strong>containers</strong> زنده هستند، اما آماده نیستند. هنگام ساخت یک application برای یک 
+   <strong>replicated service pattern</strong>، مطمئن شوید که یک <strong>URL</strong> ویژه شامل این 
+   <strong>readiness check</strong> است.
+  </p>
+  <p>46 | Chapter 5: Replicated Load-Balanced Services</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0060/image_1.png" alt="Image from page 60" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

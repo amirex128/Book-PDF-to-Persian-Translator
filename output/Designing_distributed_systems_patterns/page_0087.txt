@@ -1,0 +1,22 @@
+CHAPTER 7
+Scatter/Gather
+So far we’ve examined systems that replicate for scalability in terms of the number of
+requests processed per second (the stateless replicated pattern), as well as scalability
+for the size of the data (the sharded data pattern). In this chapter we introduce the
+scatter/gather pattern, which uses replication for scalability in terms of time. Specifi‐
+cally, the scatter/gather pattern allows you to achieve parallelism in servicing
+requests, enabling you to service them significantly faster than you could if you had
+to service them sequentially.
+Like replicated and sharded systems, the scatter/gather pattern is a tree pattern with a
+root that distributes requests and leaves that process those requests. However, in con‐
+trast to replicated and sharded systems, with scatter/gather requests are simultane‐
+ously farmed out to all of the replicas in the system. Each replica does a small amount
+of processing and then returns a fraction of the result to the root. The root server
+then combines the various partial results together to form a single complete response
+to the request and then sends this request back out to the client. The scatter/gather
+pattern is illustrated in Figure 7-1.
+Scatter/gather is quite useful when you have a large amount of mostly independent
+processing that is needed to handle a particular request. Scatter/gather can be seen as
+sharding the computation necessary to service the request, rather than sharding the
+data (although data sharding may be part of it as well).
+73

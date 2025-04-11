@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 348</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <pre><code class="language-php">
+}
+</code></pre>
+    <p>در فصل 6 ما به استفاده از function های curl_*() در داخل کلاس VatApi ادامه دادیم. یک approach واقعی‌تر این است که یک HTTP client را در کلاس VatApi تزریق کنیم، بنابراین خودش نیازی به رسیدگی به آن implementation details های low-level ندارد. تزریق یک HTTP client به عنوان یک dependency، این را روشن می‌کند که این class در حال برقراری یک network connection است. در Listing 14.4 حتی base URL را برای requests نشان می‌دهد. من این تغییر را در مثال ایجاد کرده‌ام تا نکته این adapter test را واضح‌تر کنم: همه چیز باید تا حد امکان واقعی باشد.</p>
+    <p>هنگام برقراری ارتباط با external services که توسط شما یا تیم شما مدیریت نمی‌شوند، انجام این کار بدون قربانی کردن مقداری از test stability می‌تواند واقعاً دشوار باشد. در اینجا کاری است که معمولاً انجام می‌دهم:</p>
+    <ol>
+        <li>تست را در برابر سرویس واقعی بنویسید</li>
+        <li>تست را در برابر یک sandbox environment که third party ارائه می‌دهد، بنویسید</li>
+        <li>تست را در برابر یک fake server که اجرا می‌کنم، بنویسید</li>
+        <li>تست را در برابر یک client HTTP fake یا mock که توسط library client که استفاده می‌کنم، ارائه شده است، بنویسید</li>
+        <li>تست را در برابر یک fake یا mock از interface HTTP client که من استفاده می‌کنم، بنویسید</li>
+    </ol>
+    <p>Option 1 و 2 به شما بیشترین اطمینان را می‌دهند، اما test ممکن است گاهی اوقات به دلایلی که شما نمی‌توانید در مورد آن‌ها کاری انجام دهید، شکست بخورد. Option 3 عالی است زیرا نشان می‌دهد که شما به درستی از client HTTP خود استفاده می‌کنید: می‌تواند requests های HTTP واقعی را ایجاد کند. شما می‌توانید در داخل fake server تأیید کنید که requestsهای مناسب ایجاد شده‌اند. Option 4 کمتر بهینه است، زیرا مقداری اعتماد به library شما دارد. شما فرض می‌کنید که آن قادر است با سرور خاصی که روی آن کار می‌کنید صحبت کند (اما ممکن است این فرض امن باشد). Option 5 حتی کمتر بهینه است، زیرا شما ممکن است برخی از فرض‌های بد را در مورد نحوه استفاده صحیح از library داشته باشید. این ارتباط نزدیکی با the testing rule دارد: "don’t mock what you don’t own". من فکر می‌کنم این می‌تواند به عنوان "don’t mock an interface whose contract is bigger than the interface itself can describe" تعمیم داده شود. اما این برای یک روز دیگر است.</p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+duction and experimental systems, and then returns the production responses back
+as if it had performed the work itself.
+This separation of concerns keeps the code in each container slim and focused, and
+the modular factoring of the application ensures that the request-splitting ambassa‐
+dor can be reused for a variety of different applications and settings.
+Hands On: Implementing 10% Experiments
+To implement our request-splitting experiment, we’re going to use the nginx web
+server. Nginx is a powerful, richly featured open source server. To configure nginx as
+the ambassador, we’ll use the following configuration (note that this is for HTTP but
+it could easily be adapted for HTTPS as well).
+worker_processes  5;
+error_log  error.log;
+pid        nginx.pid;
+worker_rlimit_nofile 8192;
+events {
+  worker_connections  1024;
+}
+http {
+    upstream backend {
+        ip_hash;
+        server web weight=9;
+        server experiment;
+    }
+    server {
+        listen localhost:80;
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+As with the previous discussion of sharded services, it’s also possi‐
+ble to deploy the experiment framework as a separate microservice
+in front of your application instead of integrating it as a part of
+your client pods. Of course, by doing this you are introducing
+another service that needs to be maintained, scaled, monitored, etc.
+If experimentation is likely to be a longstanding component in your
+architecture, this might be worthwhile. If it is used more occasion‐
+ally, then a client-side ambassador might make more sense.
+Using an Ambassador to Do Experimentation or Request Splitting 
+| 
+27

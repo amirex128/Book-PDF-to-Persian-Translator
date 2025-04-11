@@ -1,0 +1,31 @@
+8. Validation
+1. The provided email address has to look like an actual email address.
+2. The number of copies of an ordered e-book should be at least 1.
+3. The provided e-book IDs should refer to e-books that are actually avail-
+able in our catalog.
+This is a nice set of rules that will help me demonstrate different aspects of
+how a validation process should be implemented in a project that separates
+core from infrastructure code. In this chapter we’ll go over each rule and
+find out how and where it should be verified.
+8.1. Protecting entity state
+Eventually, data provided by a user of our application will end up inside an
+entity. An application service will then save the entity to the database. As you
+probably know, you can get yourself into a lot of trouble if your database con-
+tains bad, incomplete, or inconsistent data. So we have to make sure nothing
+ends up in our entity that, when saved to the database, leads to a corrupt
+database.
+However, a very common approach to validation, one that I’ve been using for
+years, does not prevent this at all. Listing 8.1 shows what this old-school style
+of validation looks like: we create the order object and gradually populate its
+fields with data from the request. We then call a validator to validate the
+object. If the validator does not return any validation error, everything is
+fine, and we can go ahead and save the order.
+Listing 8.1. Validating an object after populating its fields
+final class OrderController
+{
+// ...
+public function createOrder(Request $request): Response
+{
+$order = new Order();
+$order->setEmailAddress($request->get('email'));
+193

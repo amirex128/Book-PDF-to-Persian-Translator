@@ -1,0 +1,35 @@
+8. Validation
+public function order(
+string $bookId,
+int $quantity,
+/* ... */
+): OrderId {
+$quantityAvailable = $this->stockRepository
+->numberOfAvailableBooks($bookId);
+if ($quantityAvailable < $quantity) {
+// What to do here?
+}
+// ...
+}
+}
+It’s basically the same code, except, we don’t really know what to do if we
+find out the available quantity is insufficient. We can’t return a form error of
+some sorts; the application service is supposed to be useful even in a different
+kind of application.
+We might consider returning some kind of infrastructure-agnostic “result”
+object. When there is any kind of a problem, we can return an Error object,
+and when everything is okay, we return an OrderId. Although in some pro-
+gramming languages you can easily do that, object-oriented languages aren’t
+generally suited for that. The traditional way to indicate that a method was
+successful is to return nothing (or a value object like OrderId in this example),
+and to throw an exception when something goes wrong.
+We could catch the exception in the controller and manually map it to a form
+error. Or we could use the power of objects to do that in a semi-automatic
+way. First, we introduce a way to distinguish regular exceptions from excep-
+tions we want to tell the user about: the UserErrorMessage interface. When-
+ever we want to talk to the user about something that went wrong, we create
+a custom exception class that implements the UserErrorMessage interface.
+We may also introduce a base class that can save us some boilerplate code
+(BaseUserErrorMessage). Listing 8.14 shows both the interface and the base
+class.
+210

@@ -1,0 +1,42 @@
+7. Time and randomness
+interface Calendar
+{
+public function today(): Date;
+}
+final class CalendarUsesClock
+implements Calendar
+{
+private Clock $clock;
+public function __construct(Clock $clock)
+{
+$this->clock = $clock;
+}
+public function today(): Date
+{
+return Date::fromString(
+$this->clock->currentTime()
+->format('Y-m-d')
+);
+}
+}
+We should definitely introduce a method Date::fromDateTimeImmutable() to
+prevent all this type juggling, and to keep knowledge of DateTimeImmutable
+and the supported date string format inside Date itself. Listing 7.15 shows
+how you could implement this alternative constructor for Date objects.
+Listing 7.15. Instantiating
+Date
+based
+on
+an
+already
+existing
+DateTimeImmutable instance.
+final class Date
+{
+private const DATE_FORMAT = 'Y-m-d';
+private string $date;
+private function __construct(string $date)
+{
+// ...
+}
+178

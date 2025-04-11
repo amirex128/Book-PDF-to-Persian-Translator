@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 139</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Figure 11-4.</h3>
+  <p>
+   An example of the batch splitter pattern splitting shipping notifications into two different queues
+  </p>
+  <h3>Sharder</h3>
+  <p>
+   یک فرم کمی <strong>generic</strong>تر از <strong>splitter</strong>، یک <strong>sharder</strong> است. درست مانند سرور <strong>sharded</strong> که در فصل‌های قبل دیدیم، نقش یک <strong>sharder</strong> در یک <strong>workflow</strong> تقسیم یک <strong>queue</strong> واحد به مجموعه‌ای از <strong>work items</strong> که به طور مساوی تقسیم شده‌اند، بر اساس نوعی تابع <strong>sharding</strong> است. دلایل مختلفی وجود دارد که چرا ممکن است <strong>sharding</strong> <strong>workflow</strong> خود را در نظر بگیرید. یکی از اولین موارد برای قابلیت اطمینان است. اگر <strong>work queue</strong> خود را <strong>shard</strong> کنید، خرابی یک <strong>workflow</strong> واحد به دلیل یک <strong>update</strong> بد، خرابی زیرساخت یا مشکل دیگر فقط بر کسری از <strong>service</strong> شما تأثیر می‌گذارد.
+  </p>
+  <p>
+   به عنوان مثال، تصور کنید که شما یک <strong>update</strong> بد را به <strong>worker container</strong> خود منتقل می‌کنید، که باعث می‌شود <strong>workers</strong> شما خراب شوند و <strong>queue</strong> شما پردازش <strong>work items</strong> را متوقف کند. اگر فقط یک <strong>work queue</strong> دارید که <strong>items</strong> را پردازش می‌کند، پس شما یک <strong>outage</strong> کامل برای <strong>service</strong> خود خواهید داشت که همه کاربران تحت تأثیر قرار می‌گیرند. اگر، در عوض، <strong>work queue</strong> خود را به چهار <strong>shards</strong> مختلف تقسیم کرده‌اید، این فرصت را دارید که یک <strong>staged rollout</strong> از <strong>worker container</strong> جدید خود انجام دهید. با فرض اینکه شما شکست را در فاز اول <strong>staged rollout</strong> بگیرید، <strong>sharding queue</strong> شما به چهار <strong>shards</strong> مختلف به این معنی است که تنها یک چهارم از کاربران شما تحت تأثیر قرار می‌گیرند.
+  </p>
+  <p>
+   یک دلیل اضافی برای <strong>shard work queue</strong> شما، توزیع یکنواخت‌تر کار در منابع مختلف است. اگر واقعاً برای شما مهم نیست که از کدام منطقه یا <strong>datacenter</strong> برای پردازش یک مجموعه خاص از <strong>work items</strong> استفاده می‌شود، می‌توانید از یک <strong>sharder</strong> برای پخش یکنواخت کار در چندین <strong>datacenters</strong> استفاده کنید تا استفاده از تمام <strong>datacenters/regions</strong> را یکنواخت کنید. همانطور که در مورد <strong>updates</strong>، پخش <strong>work queue</strong> شما در چندین منطقه خرابی نیز مزایای
+  </p>
+  <p>
+   Patterns of Event-Driven Processing
+  </p>
+  <p>
+   125
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0139/image_1.png" alt="Image from page 139" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

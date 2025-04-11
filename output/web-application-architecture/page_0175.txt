@@ -1,0 +1,42 @@
+6. External services
+<directory>./test/integration</directory>
+</testsuite>
+</testsuites>
+</phpunit>
+The test for VatRateProviderUsingVatApiDotCom shows that it functions as a
+proper implementation of the VatProvider interface. It will return a call to
+that function with the correct type of answer. There may be other aspects
+you’d like to verify in an integration test like this one. Maybe the interface
+defines a specific type of exception that will be thrown in case of failure.
+In that case, you should add an extra test which simulates that failure, and
+verifies that the expected exception will indeed be thrown.
+As you may have noticed, we don’t have a dedicated integration test for the
+VatApi class itself. We’re only testing its behavior as a dependency of the
+VatRateProviderUsingVatApiDotCom class. Whether or not you should write
+an integration test for VatApi alone, depends on:
+• Whether or not the VatApi class will be used by other clients too.
+• Whether or not the VatApi class has other methods or execution paths
+that
+are
+troublesome
+to
+test
+only
+indirectly
+through
+testing
+VatRateProviderUsingVatApiDotCom.
+These things are usually interrelated: if VatApi is more like a library class,
+used by different clients, it will have other behaviors that should not only be
+tested through VatRateProviderUsingVatApiDotCom. In our case, the VatApi
+class is likely to have special logic for dealing with connection failures, API
+response validation, etc. It’s probably inconvenient to test the edge cases
+and more exotic execution branches through another class than VatApi itself.
+Which is why it makes sense to write a separate integration test for VatApi
+alone. In that case, the integration test for VatRateProviderUsingVatApiDotCom
+can be quite small, with just one or two test methods, and the integration test
+for VatApi can be more elaborate. See Listing 6.16 for an example.
+Listing 6.16. An integration test for the VatApi class.
+final class VatApiTest extends TestCase
+{
+155

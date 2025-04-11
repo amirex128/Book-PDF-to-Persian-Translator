@@ -1,0 +1,33 @@
+2. The domain model
+email address, it will throw an exception. These assertions will thereby pre-
+vent an Order object from being instantiated with invalid data. With these
+assertions in place, the Order object can provide basic consistency for the
+data it holds.
+“Can we use these assertion functions for validating user
+input?”
+If the user fills in an invalid looking email address, we’d likely want to show
+a nice and friendly error message next to the email form field where the
+user provided it. With the current version of our Order entity, we wouldn’t
+be able to do that, because calling Assertion::email() with a string that
+does not look like an email address will throw an exception. If you don’t
+catch that exception somewhere, it will just show the application’s default
+error page with some generic message like “Oops, an error occurred”. In
+short: assertions won’t be very useful when we need to validate user in-
+put. Instead, they should be used by objects as a way to protect themselves
+against incomplete, inconsistent, or meaningless data. When it comes to
+talking back to a user, informing them about their mistakes, you should
+look for alternatives. We’ll discuss several of those in Chapter 8.
+A stateful object that guarantees its own consistency, and is going to be per-
+sisted somehow, is often called an Entity4. Entities by definition have an iden-
+tity, which we can use to save it and get it back from storage again. Even
+though our Order doesn’t have an identity (ID) yet, we are going to give it an
+identity in Section 2.6, so let’s consider Order to be an entity already.
+We’re almost ready to use the new Order instance in the controller action.
+There’s one thing that prevents us from doing so: the table gateway for orders
+has an insert() method which accepts an array of columns => values (see
+Listing 2.5). But now that we pass the form data to the constructor of Order,
+we no longer have such an array inside the controller. We could add it back
+in, but getting rid of actual column names inside the controller action was
+already on our list of improvements, so we shouldn’t do that.
+4Eric Evans, “Domain-Driven Design”, Addison-Wesley Professional (2003).
+22

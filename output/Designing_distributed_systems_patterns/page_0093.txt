@@ -1,0 +1,28 @@
+Together, these complications of scatter/gather systems lead us to some conclusions:
+• Increased parallelism doesn’t always speed things up because of overhead on each
+node.
+• Increased parallelism doesn’t always speed things up because of the straggler
+problem.
+• The performance of the 99th percentile is more important than in other systems
+because each user request actually becomes numerous requests to the service.
+The same straggler problem applies to availability. If you issue a request to 100 leaf
+nodes, and the probability that any leaf node failing is 1 in 100, you are again practi‐
+cally guaranteed to fail every single user request.
+Scaling Scatter/Gather for Reliability and Scale
+Of course, just as with a sharded system, having a single replica of a sharded scatter/
+gather system is likely not the desirable design choice. A single replica means that if it
+fails, all scatter/gather requests will fail for the duration that the shard is unavailable
+because all requests are required to be processed by all leaf nodes in the scatter/gather
+pattern. Likewise, upgrades will take out a percentage of your shards, so an upgrade
+while under user-facing load is no longer possible. Finally, the computational scale of
+your system will be limited by the load that any single node is capable of achieving.
+Ultimately, this limits your scale, and as we have seen in previous sections, you can‐
+not simply increase the number of shards in order to improve the computational
+power of a scatter/gather pattern.
+Given these challenges of reliability and scale, the correct approach is to replicate
+each of the individual shards so that instead of a single instance at each leaf node,
+there is a replicated service that implements each leaf shard. This replicated, sharded
+scatter/gather pattern is shown in Figure 7-4.
+Scaling Scatter/Gather for Reliability and Scale 
+| 
+79

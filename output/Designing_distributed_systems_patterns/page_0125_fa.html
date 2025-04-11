@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 125</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   جالب توجه است، در حالی که <strong>ambassador container</strong> به وضوح <strong>application-specific</strong> است، همچنین انواع مختلفی از پیاده‌سازی‌های <strong>generic</strong> از <strong>work queue source API</strong> وجود دارد. به عنوان مثال، یک <strong>source</strong> ممکن است لیستی از تصاویر ذخیره شده در یک <strong>cloud storage API</strong>، مجموعه‌ای از فایل‌های ذخیره شده در <strong>network storage</strong>، یا یک <strong>queue</strong> در یک سیستم <strong>pub/sub</strong> مانند <strong>Kafka</strong> یا <strong>Redis</strong> باشد. در این موارد، اگرچه کاربر، <strong>ambassador</strong> خاص <strong>work queue</strong> را که متناسب با سناریوی آن‌ها است، انتخاب می‌کند، باید یک پیاده‌سازی "کتابخانه‌ای" <strong>generic</strong> از خود <strong>container</strong> را دوباره استفاده کنند. این کار، کار را به حداقل می‌رساند و استفاده مجدد از کد را به حداکثر می‌رساند.
+  </p>
+  <h3>Work queue API</h3>
+  <p>
+   با توجه به این هماهنگی بین <strong>generic work-queue manager</strong> و <strong>application-specific ambassador</strong>، ما به یک تعریف رسمی از <strong>interface</strong> بین دو <strong>containers</strong> نیاز داریم. اگرچه پروتکل‌های مختلفی وجود دارد، یک <strong>HTTP RESTful API</strong> هم ساده‌ترین راه برای پیاده‌سازی است و هم استاندارد <strong>de facto</strong> برای چنین <strong>interface</strong> است. <strong>The master work queue</strong> انتظار دارد که <strong>ambassador</strong>، <strong>URLs</strong> زیر را پیاده‌سازی کند:
+  </p>
+  <ul>
+   <li>GET http://localhost/api/v1/items</li>
+   <li>GET http://localhost/api/v1/items/&lt;item-name&gt;</li>
+  </ul>
+  <p>
+   ممکن است از خود بپرسید چرا ما یک v1 را در تعریف <strong>API</strong> قرار می‌دهیم. آیا تا به حال نسخه‌ی v2 از این <strong>interface</strong> وجود خواهد داشت؟ منطقی به نظر نمی‌رسد، اما <strong>versioning</strong> <strong>API</strong> در هنگام تعریف اولیه آن، هزینه بسیار کمی دارد. از سوی دیگر، <strong>Refactoring versioning</strong> روی یک <strong>API</strong> بدون آن، بسیار پرهزینه است. در نتیجه، این یک <strong>best practice</strong> است که همیشه نسخه‌ها را به <strong>APIs</strong> خود اضافه کنید، حتی اگر مطمئن نیستید که آیا آن‌ها تا به حال تغییر خواهند کرد یا خیر. احتیاط شرط عقل است.
+  </p>
+  <p>
+   <strong>/items/ URL</strong> یک لیست کامل از همه <strong>items</strong> را برمی‌گرداند:
+  </p>
+  <pre><code class="language-javascript">
+{
+   kind: ItemList,
+   apiVersion: v1,
+   items: [
+      “item-1”,
+      “item-2”,
+      ….
+   ]
+}
+  </code></pre>
+  <p>
+   <strong>The /items/&lt;item-name&gt; URL</strong> جزئیات یک <strong>item</strong> خاص را ارائه می‌دهد:
+  </p>
+  <pre><code class="language-javascript">
+{
+  kind: Item,
+  apiVersion: v1,
+  data: {
+  </code></pre>
+  <p>
+   A Generic Work Queue System
+  </p>
+  <p>
+   111
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0125/image_1.png" alt="Image from page 125" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 132</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   ازدیاد کار، بدون محدودیت رشد خواهد کرد و <strong>latency</strong> هر <strong>item</strong> در <strong>queue</strong> به سمت بی‌نهایت افزایش می‌یابد (و کاربران ما بسیار ناامید خواهند شد).
+  </p>
+  <p>
+   بنابراین، ما می‌توانیم هر دوی این <strong>metrics</strong> را برای <strong>work queue</strong> خود پیگیری کنیم، و میانگین زمان بین <strong>work items</strong> در یک دوره طولانی مدت (تعداد <strong>work items</strong> / 24 ساعت) زمان بین ورود برای کار جدید را به ما می‌دهد. ما همچنین می‌توانیم میانگین زمان برای پردازش هر <strong>item</strong> را پس از شروع کار بر روی آن، پیگیری کنیم (بدون احتساب زمان در <strong>queue</strong>). برای داشتن یک <strong>work queue</strong> پایدار، باید تعداد منابع را طوری تنظیم کنیم که زمان پردازش هر <strong>item</strong> کمتر از زمان بین ورود <strong>items</strong> جدید باشد. اگر ما در حال پردازش <strong>work items</strong> به صورت موازی هستیم، زمان پردازش را برای یک <strong>work item</strong> بر موازی‌سازی تقسیم می‌کنیم. به عنوان مثال، اگر پردازش هر <strong>item</strong> یک دقیقه طول بکشد، اما ما چهار <strong>item</strong> را به صورت موازی پردازش می‌کنیم، زمان مؤثر برای پردازش یک <strong>item</strong> 15 ثانیه است، و بنابراین ما می‌توانیم یک دوره بین ورود 16 ثانیه یا بیشتر را حفظ کنیم.
+  </p>
+  <p>
+   این رویکرد، ساخت یک <strong>autoscaler</strong> را برای <strong>dynamic</strong> اندازه کردن <strong>work queue</strong> ما کاملاً ساده می‌کند. کوچک کردن <strong>work queue</strong> تا حدودی دشوارتر است، اما شما می‌توانید از همان ریاضیات و همچنین یک <strong>heuristic</strong> برای مقدار ظرفیت <strong>spare</strong> برای <strong>safety margin</strong> که می‌خواهید حفظ کنید، استفاده کنید. به عنوان مثال، می‌توانید موازی‌سازی را کاهش دهید تا زمان پردازش برای یک <strong>item</strong> 90٪ از زمان بین ورود برای <strong>items</strong> جدید باشد.
+  </p>
+  <h3>The Multi-Worker Pattern</h3>
+  <p>
+   یکی از موضوعات اصلی این کتاب، استفاده از <strong>containers</strong> برای <strong>encapsulation</strong> و استفاده مجدد از کد بوده است. همین امر در مورد الگوهای <strong>work queue</strong> که در این فصل توضیح داده شده است، صدق می‌کند. علاوه بر الگوهایی برای استفاده مجدد از <strong>containers</strong> برای هدایت خود <strong>work queue</strong>، شما همچنین می‌توانید از چندین <strong>containers</strong> مختلف برای ترکیب یک پیاده‌سازی <strong>worker</strong> استفاده کنید. فرض کنید، به عنوان مثال، شما سه نوع مختلف کار دارید که می‌خواهید بر روی یک <strong>work queue item</strong> خاص انجام دهید. به عنوان مثال، ممکن است بخواهید چهره‌ها را در یک تصویر شناسایی کنید، آن چهره‌ها را با هویت‌ها برچسب‌گذاری کنید و سپس چهره‌ها را در تصویر محو کنید. شما می‌توانید یک <strong>worker</strong> واحد برای انجام این مجموعه کامل از وظایف بنویسید، اما این یک راه‌حل <strong>bespoke</strong> خواهد بود که دفعه بعد که می‌خواهید چیز دیگری مانند ماشین‌ها را شناسایی کنید، اما همچنان همان محو کردن را ارائه دهید، قابل استفاده مجدد نخواهد بود.
+  </p>
+  <p>
+   برای دستیابی به این نوع استفاده مجدد از کد، <strong>multi-worker pattern</strong> چیزی شبیه به یک <strong>specialization</strong> از <strong>adapter pattern</strong> است که در فصل‌های قبل توضیح داده شد. در این مورد، <strong>multi-worker pattern</strong> مجموعه‌ای از <strong>worker containers</strong> مختلف را به یک <strong>container</strong> واحد تبدیل می‌کند که <strong>worker interface</strong> را پیاده‌سازی می‌کند، اما کار واقعی را به مجموعه‌ای از <strong>containers</strong> مختلف و قابل استفاده مجدد واگذار می‌کند. این فرآیند در شکل 10-5 نشان داده شده است.
+  </p>
+  <p>
+   118
+  </p>
+  <p>
+   Chapter 10: Work Queue Systems
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

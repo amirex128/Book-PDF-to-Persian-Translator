@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 44</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <p>
+    برای چیزی که می‌تواند یک <code>Order</code> را در <code>database</code> ذخیره کند، فقط تصور کنید که آن چیز از قبل وجود دارد، و شروع به استفاده از آن کنید (به Listing 2.6 مراجعه کنید).
+  </p>
+  <p>
+    <em>Listing 2.6.</em> یک <code>object</code> خیالی برای ذخیره <code>orders</code>.
+  </p>
+  <pre><code class="language-php">
+    $order = new Order(/* ... */);
+    $lastInsertedId = $orderSaver->save($order);
+  </code></pre>
+  <p>
+    برای اینکه در این مکان برای ما مفید باشد، چیزی که می‌تواند یک <code>order</code> را ذخیره کند، فقط به یک <code>method</code> <code>save()</code> با یک پارامتر واحد از نوع <code>Order</code> نیاز دارد. از آنجایی که <code>database</code>، <code>ID</code> یک <code>order</code> جدید را با استفاده از یک ستون عدد صحیح با افزایش خودکار تعیین می‌کند،
+    ما می‌توانیم این <code>method</code> را یک نوع بازگشتی <code>int</code> بدهیم، بنابراین یک <code>client</code> از این <code>method</code> می‌تواند بعداً از <code>ID</code> تازه اختصاص داده شده استفاده کند. بیایید همه اینها را با تعریف یک
+    <code>interface</code> برای "<code>order saver</code>" خود (به Listing 2.7 مراجعه کنید) رسمی کنیم.
+  </p>
+  <p>
+    <em>Listing 2.7.</em> <code>The OrderSaver interface</code>.
+  </p>
+  <pre><code class="language-php">
+    interface OrderSaver
+    {
+    /**
+    * @return int The ID of the saved Order
+    */
+    public function save(Order $order): int;
+    }
+  </code></pre>
+  <p>
+    "<code>Object savers</code>" معمولاً <code>repositories</code> نامیده می‌شوند. <code>Repository</code> نام یک <code>design pattern</code> است که یک راه‌حل برای یک مشکل رایج ارائه می‌دهد: نیاز به ذخیره یک <code>domain object</code> و
+    بعداً بازسازی آن. برای اینکه روشن شود که ما قصد داریم از <code>repository design pattern</code><sup>5</sup> در اینجا استفاده کنیم، اجازه دهید <code>OrderSaver</code> را به <code>OrderRepository</code> تغییر نام دهیم (به Listing 2.8 مراجعه کنید).
+  </p>
+  <p>
+    <em>Listing 2.8.</em> <code>The OrderRepository interface</code>.
+  </p>
+  <pre><code class="language-php">
+    interface OrderRepository
+    {
+    public function save(Order $order): int;
+    }
+  </code></pre>
+  <p>
+    <sup>5</sup>Eric Evans, “Domain-Driven Design”, Addison-Wesley Professional (2003).
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

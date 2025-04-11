@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 144</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   <strong>tion</strong> از <strong>queues</strong> (که گاهی اوقات <strong>topics</strong> نامیده می‌شود). یک یا چند <strong>publisher</strong> پیام‌هایی را به این <strong>queues</strong> منتشر می‌کند. به همین ترتیب، یک یا چند <strong>subscriber</strong> در حال گوش دادن به این <strong>queues</strong> برای پیام‌های جدید هستند. هنگامی که یک پیام منتشر می‌شود، به طور قابل اطمینانی توسط <strong>queue</strong> ذخیره می‌شود و متعاقباً به <strong>subscribers</strong> به روشی قابل اطمینان تحویل داده می‌شود.
+  </p>
+  <p>
+   در این مرحله، اکثر <strong>public clouds</strong> دارای یک <strong>pub/sub API</strong> مانند <strong>Azure’s EventGrid</strong> یا <strong>Amazon’s Simple Queue Service</strong> هستند. علاوه بر این، پروژه <strong>Kafka</strong> متن‌باز، یک پیاده‌سازی <strong>pub/sub</strong> بسیار محبوب ارائه می‌دهد که می‌توانید آن را روی سخت‌افزار خود و همچنین روی ماشین‌های مجازی <strong>cloud</strong> اجرا کنید. برای بقیه این نمای کلی از <strong>pub/sub APIs</strong> ما از <strong>Kafka</strong> برای مثال‌های خود استفاده خواهیم کرد، اما انتقال آن‌ها به <strong>pub/sub APIs</strong> جایگزین نسبتاً ساده است.
+  </p>
+  <h3>Hands On: Deploying Kafka</h3>
+  <p>
+   بدیهی است راه‌های زیادی برای استقرار <strong>Kafka</strong> وجود دارد و یکی از ساده‌ترین راه‌ها این است که آن را به عنوان یک <strong>container</strong> با استفاده از یک <strong>Kubernetes cluster</strong> و <strong>Helm package manager</strong> اجرا کنید.
+  </p>
+  <p>
+   <strong>Helm</strong> یک <strong>package manager</strong> برای <strong>Kubernetes</strong> است که استقرار و مدیریت برنامه‌های از پیش بسته‌بندی شده و از پیش آماده شده مانند <strong>Kafka</strong> را آسان می‌کند. اگر از قبل ابزار <strong>command line</strong> را نصب نکرده‌اید، می‌توانید آن را از https://helm.sh نصب کنید.
+  </p>
+  <p>
+   هنگامی که ابزار <strong>helm</strong> روی دستگاه شما قرار گرفت، باید آن را مقداردهی اولیه کنید. مقداردهی اولیه <strong>Helm</strong> یک جزء سمت <strong>cluster</strong> به نام <strong>tiller</strong> را در <strong>cluster</strong> شما مستقر می‌کند و برخی از <strong>templates</strong> را در <strong>filesystem</strong> محلی شما نصب می‌کند:
+  </p>
+  <pre><code class="language-bash">
+helm init
+  </code></pre>
+  <p>
+   اکنون که <strong>helm</strong> را مقداردهی اولیه کرده‌اید، می‌توانید <strong>Kafka</strong> را با استفاده از این دستور نصب کنید:
+  </p>
+  <pre><code class="language-bash">
+helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+helm install --name kafka-service incubator/kafka
+  </code></pre>
+  <p>
+   <strong>Helm templates</strong> دارای سطوح مختلف <strong>production hardening</strong> و پشتیبانی هستند. <strong>stable templates</strong> سخت‌گیرانه‌ترین بررسی و پشتیبانی را دارند، در حالی که <strong>incubator templates</strong> مانند <strong>Kafka</strong> آزمایشی‌تر هستند و <strong>mileage production</strong> کمتری دارند. صرف نظر از این، <strong>incubator templates</strong> برای اثبات سریع مفاهیم و همچنین مکانی برای شروع هنگام پیاده‌سازی یک استقرار تولیدی از یک <strong>service</strong> مبتنی بر <strong>Kubernetes</strong> مفید هستند.
+  </p>
+  <p>
+   هنگامی که <strong>Kafka</strong> را راه‌اندازی و اجرا کردید، می‌توانید یک <strong>topic</strong> برای انتشار ایجاد کنید. به طور کلی در پردازش <strong>batch</strong>، شما می‌خواهید از یک <strong>topic</strong> برای نشان دادن خروجی یک ماژول در <strong>workflow</strong> خود استفاده کنید. این خروجی احتمالاً ورودی برای ماژول دیگری در <strong>workflow</strong> است.
+  </p>
+  <p>
+   130
+  </p>
+  <p>
+   Chapter 11: Event-Driven Batch Processing
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0144/image_1.png" alt="Image from page 144" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

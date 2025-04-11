@@ -1,0 +1,33 @@
+3. Read models and view models
+we need.
+3. Provide an implementation of the interface that can be used in produc-
+tion.
+Modeling the query might be the easiest thing to do. We only have to find a
+good description of our question. We could have an Ebooks interface with a
+listAvailableEbooks() method (see Listing 3.13). That method would return
+an array of Ebook read model objects.
+Listing 3.13. An interface for retrieving a list of available e-books.
+interface Ebooks
+{
+/**
+* @return array<Ebook>
+*/
+public function listAvailableEbooks(): array;
+}
+Again, this Ebook class is not the same as the entity class. Objects of this type
+will serve as read models for displaying data on an HTML page. Such read
+models can be called “view models”, since they are used to display data to
+users or external systems. This is different from the purpose that the Ebook
+read model from Section 3.2 served. That one was only used internally, to
+calculate the correct order amount. The data from the Ebook view model
+that we’re going to create will travel across our application’s boundaries, to
+the outside world, to actual users of our application.
+What does this particular Ebook view model look like? What data does it
+contain, what data types should be used?
+To find an answer to these questions, we should look at the place where the
+view model is going to be used. In this case that’s the list.html.twig file
+(Listing 3.14), which is the Twig1 template that produces the HTML response
+for listEbooksAction().
+Listing 3.14. The Twig template that renders the list of available e-books.
+1 https://advwebapparch.com/twig
+72

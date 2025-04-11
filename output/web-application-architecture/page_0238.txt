@@ -1,0 +1,34 @@
+8. Validation
+{
+return new self(
+$data['email'],
+$data['ebook_id'],
+$data['quantity'],
+$data['buyer_name']
+);
+}
+}
+As you may have noticed the current version of fromRequestData() is not
+able to deal with missing request data. If certain keys are missing we’ll get
+PHP notices for them. The method also doesn’t do any type casting and al-
+though we don’t want to ignore notices either, we certainly can’t ignore type
+errors.
+How to get from an array of request data (which is potentially even empty)
+to an OrderEbook object that contains values of the correct type? In our ex-
+ample, each value needs a different approach:
+• The $emailAddress property requires a string, but the email key may
+not be defined in $data.
+• The $ebookId property requires an int, but the ebook_id key may not
+be defined in $data.
+• The $quantity property requires an int, but the quantity key may not
+be defined in $data.
+• The $buyerName property requires a string, but is nullable. The buyer_name
+key may not be defined in $data, or it may be an empty string, in which
+case we should convert it to null.
+Listing 8.18 shows how to enhance the fromRequestData() method to deal
+with each of these cases.
+Listing 8.18. Dealing with undefined keys and type casting.
+public static function fromRequestData(array $data): self
+{
+return new self(
+218

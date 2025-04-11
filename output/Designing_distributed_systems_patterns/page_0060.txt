@@ -1,0 +1,35 @@
+Stateless systems are replicated to provide redundancy and scale. No matter how
+small your service is, you need at least two replicas to provide a service with a “highly
+available” service level agreement (SLA). To understand why this is true, consider try‐
+ing to deliver a three-nines (99.9% availability). In a three-nines service, you get 1.4
+minutes of downtime per day (24 × 60 × 0.001). Assuming that you have a service
+that never crashes, that still means you need to be able to do a software upgrade in
+less than 1.4 minutes in order to hit your SLA with a single instance. And that’s
+assuming that you do daily software rollouts. If your team is really embracing contin‐
+uous delivery and you’re pushing a new version of software every hour, you need to
+be able to do a software rollout in 3.6 seconds to achieve your 99.9% uptime SLA with
+a single instance. Any longer than that and you will have more than 0.01% downtime
+from those 3.6 seconds.
+Of course, instead of all of that work, you could just have two replicas of your service
+with a load balancer in front of them. That way, while you are doing a rollout, or in
+the—unlikely, I’m sure—event that your software crashes, your users will be served by
+the other replica of the service and never know anything was going on.
+As services grow larger, they are also replicated to support additional users. Horizon‐
+tally scalable systems handle more and more users by adding more replicas; see
+Figure 5-2. They achieve this with the load-balanced replicated serving pattern.
+Figure 5-2. Horizontal scaling of a replicated stateless application
+Readiness Probes for Load Balancing
+Of course, simply replicating your service and adding a load balancer is only part of a
+complete pattern for stateless replicated serving. When designing a replicated service,
+it is equally important to build and deploy a readiness probe to inform the load bal‐
+ancer. We have discussed how health probes can be used by a container orchestration
+system to determine when an application needs to be restarted. In contrast, a readi‐
+ness probe determines when an application is ready to serve user requests. The reason
+for the differentiation is that many applications require some time to become initial‐
+ized before they are ready to serve. They may need to connect to databases, load plu‐
+gins, or download serving files from the network. In all of these cases, the containers
+are alive, but they are not ready. When building an application for a replicated service
+pattern, be sure to include a special URL that implements this readiness check.
+46 
+| 
+Chapter 5: Replicated Load-Balanced Services

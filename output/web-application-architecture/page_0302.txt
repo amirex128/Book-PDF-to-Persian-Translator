@@ -1,0 +1,25 @@
+12. Architectural layers
+Figure 12.1. Controllers contain all business logic and become too big. Mod-
+els are only simple data holders.
+this move hasn’t been very successful because the extracted services aren’t
+truly decoupled from the framework. They still rely on the session, or the cur-
+rent web request. The methods in these services are often grouped around
+a certain domain concept and try to manage both the domain logic and the
+persistence logic for this particular concept. These services (sometimes even
+called “managers”) then grow too large and become unmanageable. Another
+reason for failure in this area is that domain models still remain simple data
+holders and can’t protect any of their invariants, nor implement any busi-
+ness rule all by themselves. This again results in services that have too much
+to do, and grow too large to deal with (see Figure 12.2). So the reason to start
+using services is a good one (we don’t want our controllers full of business
+logic), but usually it’s the implementation that’s lacking. Without decoupling
+the service from the framework, without separating domain logic from per-
+sistence logic, and without taking the extra step of defining richer domain
+objects, the result will be disastrous.
+So even after inventing an extra “service layer”, MVC is still lacking. For ex-
+ample, it doesn’t help us separate a use case in a primary action and its sec-
+ondary effects. Services usually end up having large methods that start pro-
+cessing a request and perform all of the secondary tasks in the same method
+(or if you’re “lucky” in private methods of the same class). These services may
+even reach out to remote parts of the code base to do remotely related jobs.
+282

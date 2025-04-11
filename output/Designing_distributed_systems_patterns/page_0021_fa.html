@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 21</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3 style="font-weight: bold;">PART I</h3>
+    <h3 style="font-weight: bold;">Single-Node Patterns</h3>
+    <p>
+        این کتاب به سیستم‌های distributed می‌پردازد، که applicationsهایی هستند که از اجزای مختلفی تشکیل شده‌اند و بر روی ماشین‌های مختلف اجرا می‌شوند. با این حال، بخش اول این کتاب به patternsهایی اختصاص دارد که بر روی یک node واحد وجود دارند. انگیزه این کار ساده است. Containersها بلوک‌های ساختمانی اساسی برای patternsهای موجود در این کتاب هستند، اما در نهایت، گروه‌هایی از containers که در یک machine واحد قرار دارند، عناصر اتمی patternsهای سیستم distributed را تشکیل می‌دهند.
+    </p>
+    <h3 style="font-weight: bold;">Motivations</h3>
+    <p>
+        اگرچه مشخص است که چرا ممکن است بخواهید application distributed خود را به مجموعه‌ای از containersهای مختلف که بر روی ماشین‌های مختلف اجرا می‌شوند، تقسیم کنید، شاید کمی کمتر مشخص باشد که چرا ممکن است بخواهید اجزای در حال اجرا بر روی یک machine واحد را نیز به containersهای مختلف تقسیم کنید. برای درک انگیزه این گروه‌های containers، ارزش دارد که اهداف پشت containerization را در نظر بگیریم. به طور کلی، هدف یک container ایجاد مرزهایی در اطراف منابع خاص است (به عنوان مثال، این application به دو هسته و 8 GB حافظه نیاز دارد). به همین ترتیب، این مرز، مالکیت تیم را مشخص می‌کند (به عنوان مثال، این team مالک این image است). در نهایت، این مرز به منظور ارائه separation of concerns در نظر گرفته شده است (به عنوان مثال، این image این یک کار را انجام می‌دهد).
+    </p>
+    <p>
+        همه این دلایل، انگیزه ای برای تقسیم یک application بر روی یک machine واحد به گروهی از containers فراهم می‌کند. ابتدا isolation منابع را در نظر بگیرید. ممکن است application شما از دو component تشکیل شده باشد: یکی یک user-facing application server است و دیگری یک background configuration file loader است. بدیهی است، latency در پاسخگویی به درخواست‌های end-user بالاترین اولویت را دارد، بنابراین application user-facing نیاز به منابع کافی دارد تا اطمینان حاصل شود که بسیار responsive است. از طرف دیگر، background
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

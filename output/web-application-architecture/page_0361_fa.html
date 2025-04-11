@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 361</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <pre><code class="language-php">
+private function subscribersForEvent(object $event): array
+{
+    return $this->subscribers[get_class($event)] ?? [];
+}
+</code></pre>
+    <p>ما مجبور نیستیم خودمان را به یک interface خاص متعهد کنیم.
+        “Can’t we use the framework’s event dispatcher?”</p>
+    <p>از نظر فنی شما می‌توانید. با این حال، من متوجه شدم که event dispatchers های third-party اغلب نوع API را که من می‌خواهم استفاده کنم، ارائه نمی‌دهند. به عنوان مثال، آن‌ها متد dispatchAll() را ندارند، آن‌ها به یک class پایه برای هر domain event نیاز دارند، یا object های event آن‌ها mutable هستند. همچنین، event dispatchersها اغلب به listeners اجازه می‌دهند که chain را بشکنند و از انتشار event به سایر subscribersها جلوگیری کنند. همه این موارد ناخواسته هستند و از آنجایی که یک event subscriber یک قطعه کد واقعاً ساده است، شما می‌توانید فقط خودتان آن را بنویسید و این تبدیل به یک maintenance burden نخواهد شد. البته مگر اینکه شما یک library event dispatcher خوب پیدا کنید که این ترفند را برای شما انجام دهد.</p>
+    <p>از آنجایی که ما به زودی چندین service خواهیم داشت (application service برای ایجاد the order، یک OrderRepository، یک Mailer و غیره)، ما باید یک ترکیب root که به عنوان یک service container نیز شناخته می‌شود، ایجاد کنیم که نمونه‌های service را مدیریت کرده و آن‌ها را در صورت نیاز ایجاد می‌کند. این container با container که framework ارائه می‌دهد، یکسان نیست. در حالی که یک event dispatcher می‌تواند در تئوری third-party code باشد، container ما یک hand-written code<sup>4</sup> خواهد بود. این فقط شامل services مورد نیاز توسط core application ما می‌شود، بنابراین شما یک router یا یک template renderer در آنجا پیدا نخواهید کرد.</p>
+    <p>Listing 14.12 container را نشان می‌دهد که ما در اولین scenario test از آن استفاده خواهیم کرد.</p>
+    <p>Listing 14.12. A hand-written service container برای testing</p>
+    <pre><code class="language-php">
+final class TestServiceContainer
+{
+    private ?EventDispatcher $eventDispatcher = null;
+    4See also Matthias Noback (2019),
+    “Hand-written service containers“:
+    https://
+    advwebapparch.com/hand-written-service-containers
+</code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+memecache-0.memecache, memecache-1.memcache, etc. As with Redis, we can use
+these names to configure twemproxy.
+memcache:
+  listen: 127.0.0.1:11211
+  hash: fnv1a_64
+  distribution: ketama
+  auto_eject_hosts: true
+  timeout: 400
+  server_retry_timeout: 2000
+  server_failure_limit: 1
+  servers:
+   - memcache-0.memcache:11211:1
+   - memcache-1.memcache:11211:1
+   - memcache-2.memcache:11211:1
+In this config, you can see that we are serving the memcache protocol on localhost:
+11211 so that the application container can access the ambassador. We will deploy
+this into our ambassador pod using a Kubernetes ConfigMap object that we can create
+with: kubectl create configmap --from-file=nutcracker.yaml twem-config.
+Finally, all of the preparations are done, and we can deploy our ambassador example.
+We define a pod that looks like this:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sharded-memcache-ambassador
+spec:
+  containers:
+    # This is where the application container would go, for example
+    # - name: nginx
+    #   image: nginx
+    # This is the ambassador container
+    - name: twemproxy
+      image: ganomede/twemproxy
+      command:
+      - nutcracker
+      - -c
+      - /etc/config/nutcracker.yaml
+      - -v
+      - 7
+      - -s
+      - 6222
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: twem-config
+64 
+| 
+Chapter 6: Sharded Services

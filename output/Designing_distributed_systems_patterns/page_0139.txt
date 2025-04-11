@@ -1,0 +1,26 @@
+Figure 11-4. An example of the batch splitter pattern splitting shipping notifications into
+two different queues
+Sharder
+A slightly more generic form of splitter is a sharder. Much like the sharded server that
+we saw in earlier chapters, the role of a sharder in a workflow is to divide up a single
+queue into an evenly divided collection of work items based upon some sort of shard‐
+ing function. There are several different reasons why you might consider sharding
+your workflow. One of the first is for reliability. If you shard your work queue, then
+the failure of a single workflow due to a bad update, infrastructure failure, or other
+problem only affects a fraction of your service.
+For example, imagine that you push a bad update to your worker container, which
+causes your workers to crash and your queue to stop processing work items. If you
+only have a single work queue that is processing items, then you will have a complete
+outage for your service with all users affected. If, instead, you have sharded your work
+queue into four different shards, you have the opportunity to do a staged rollout of
+your new worker container. Assuming you catch the failure in the first phase of the
+staged rollout, sharding your queue into four different shards means that only one
+quarter of your users would be affected.
+An additional reason to shard your work queue is to more evenly distribute work
+across different resources. If you don’t really care which region or datacenter is used
+to process a particular set of work items, you can use a sharder to evenly spread work
+across multiple datacenters to even out utilization of all datacenters/regions. As with
+updates, spreading your work queue across multiple failure regions also has the bene‐
+Patterns of Event-Driven Processing 
+| 
+125

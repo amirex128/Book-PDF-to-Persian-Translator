@@ -1,0 +1,39 @@
+owns the entirety of the user-creation service, and that the entire experience is
+deployed as a single service. Both of these mean that it is more difficult to perform
+experiments or make changes to the user experience.
+Consider, instead, implementing the user login experience as an event pipeline with a
+series of FaaS. In this factoring, the user-creation function is actually unaware of the
+details of what happens on user login. Instead, the main user-creation service simply
+has two lists:
+• A list of required actions (e.g., sending a welcome mail)
+• A list of optional actions (e.g., subscribing the user to a mailing list)
+Each of these actions is also implemented as a FaaS, and the list of actions is actually
+just a list of webhooks. Consequently, the main user creation function looks like this:
+def create_user(context):
+  # For required event handlers, call them universally
+  for key, value in required.items():
+    call_function(value.webhook, context.json)
+  # For optional event handlers, check and call them
+  # conditionally
+  for key, value in optional.items():
+    if context.json.get(key, None) is not None:
+      call_function(value.webhook, context.json)
+Now we can also use FaaS to implement each of these handlers:
+def email_user(context):
+  # Get the user name
+  user = context.json['username']
+  msg = 'Hello {} thanks for joining my awesome service!".format(user)
+  send_email(msg, contex.json['email])
+def subscribe_user(context):
+  # Get the user name
+  email = context.json['email']
+  subscribe_user(email)
+Factored in this way, each FaaS is simple, containing only a few lines of code and
+focused on implementing one specific piece of functionality. This microservices-
+based approach is simple to write but might lead to complexity if we actually had to
+deploy and manage three different microservices. This is where FaaS can shine, since
+it makes it trivially easy to host these small code snippets. Additionally, by visualizing
+our user-creation flow as an event-driven pipeline, it is also straightforward to have a
+90 
+| 
+Chapter 8: Functions and Event-Driven Processing

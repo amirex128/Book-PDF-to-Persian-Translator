@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 113</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   پیاده‌سازی‌های سنتی lock، تا زمان به دست آوردن lock، block می‌شوند، بنابراین ما در واقع چیزی شبیه به این می‌خواهیم:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) lock() {
+  while (!l.simpleLock()) {
+    sleep(2)
+  }
+}
+   </code>
+  </pre>
+  <p>
+   این پیاده‌سازی، اگرچه ساده است، این مشکل را دارد که شما همیشه حداقل یک ثانیه پس از آزاد شدن lock صبر می‌کنید تا lock را به دست آورید. خوشبختانه، بسیاری از key-value stores ها به شما اجازه می‌دهند که به جای polling، برای changes ها watch کنید، بنابراین شما می‌توانید پیاده‌سازی کنید:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) lock() {
+  while (!l.simpleLock()) {
+    waitForChanges(l.lockName)
+  }
+}
+   </code>
+  </pre>
+  <p>
+   با توجه به این locking function، ما همچنین می‌توانیم unlock را پیاده‌سازی کنیم:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) unlock() {
+  compareAndSwap(l.lockName, "0", "1")
+}
+   </code>
+  </pre>
+  <p>
+   شما ممکن است اکنون فکر کنید که ما کارمان تمام شده است، اما به یاد داشته باشید که ما این را برای یک system توزیع‌شده می‌سازیم. یک process می‌تواند در اواسط نگه داشتن lock با شکست مواجه شود، و در آن مرحله هیچ‌کس برای release کردن آن باقی نمی‌ماند. در چنین موقعیتی، system ما stuck خواهد شد. برای حل این مشکل، ما از functionality TTL از key-value store استفاده می‌کنیم. ما function simpleLock خود را تغییر می‌دهیم تا همیشه با یک TTL بنویسد، بنابراین اگر ما در یک زمان معین unlock نکنیم، lock به طور خودکار unlock می‌شود.
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) simpleLock() boolean {
+  // compare and swap "1" for "0"
+  locked, error = compareAndSwap(l.lockName, "1", "0", l.ttl)
+  // lock doesn't exist, try to write "1" with a previous value of
+  // non-existent
+  if error != nil {
+    locked, _ = compareAndSwap(l.lockName, "1", nil, l.ttl)
+  }
+  return locked
+}
+   </code>
+  </pre>
+  <p>
+   هنگام استفاده از distributed locks ها، اطمینان از اینکه هر processing ای که شما انجام می‌دهید، بیشتر از TTL از lock طول نمی‌کشد، بسیار مهم است. یک practice خوب این است که یک watchdog timer را هنگامی که lock را به دست می‌آورید، تنظیم کنید.
+   watchdog حاوی یک assertion است که اگر TTL از lock منقضی شود قبل از اینکه شما unlock را فراخوانی کنید، program شما را crash می‌کند.
+  </p>
+  <p>
+   The Basics of Master Election
+   | 99
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0113/image_1.png" alt="Image from page 113" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

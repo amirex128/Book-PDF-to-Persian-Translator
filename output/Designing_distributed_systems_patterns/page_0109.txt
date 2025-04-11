@@ -1,0 +1,41 @@
+• If the container hangs, and you implement a health check, it will automatically be
+restarted
+• If the machine fails, the container will be moved to a different machine
+Because of these guarantees, a singleton of a service running in a container orchestra‐
+tor has pretty good uptime. To take the definition of “pretty good” a little further, let’s
+examine what happens in each of these failure modes. If the container process fails or
+the container hangs, your application will be restarted in a few seconds. Assuming
+your container crashes once a day, this is roughly three to four nines of uptime (2 sec‐
+onds of downtime / day ~= 99.99% uptime). If your container crashes less often, it’s
+even better than that. If your machine fails, it takes a while for Kubernetes to decide
+that the machine has failed and move it over to a different machine; let’s assume that
+takes around 5 minutes. Given that, if every machine in your cluster fails every day,
+then your service will have two nines of uptime. And honestly, if every machine in
+your cluster fails every day, then you have way worse problems than the uptime of
+your master-elected service.
+It’s worth considering, of course, that there are more reasons for downtime than just
+failures. When you are rolling out new software, it takes time to download and start
+the new version. With a singleton, you cannot have both old and new versions run‐
+ning at the same time, so you will need to take down the old version for the duration
+of the upgrade, which may be several minutes if your image is large. Consequently, if
+you deploy daily and it takes 2 minutes to upgrade your software, you will only be
+able to run a two nines service, and if you deploy hourly, it won’t even be a single nine
+service. Of course, there are ways that you can speed up your deployment by pre-
+pulling the new image onto the machine before you run the update. This can reduce
+the time it takes to deploy a new version to a few seconds, but the trade-off is added
+complexity, which was what we were trying to avoid in the first place.
+Regardless, there are many applications (e.g., background asynchronous processing)
+where such an SLA is an acceptable trade-off for application simplicity. One of the
+key components of designing a distributed system is deciding when the “distributed”
+part is actually unnecessarily complex. But there are certainly situations where high
+availability (four+ nines) is a critical component of the application, and in such sys‐
+tems you need to run multiple replicas of the service, where only one replica is the
+designated owner. The design of these types of systems is described in the sections
+that follow.
+The Basics of Master Election
+Imagine that there is a service Foo with three replicas: Foo-1, Foo-2, and Foo-3. There
+is also some object Bar that must only be “owned” by one of the replicas (e.g., Foo-1)
+at a time. Often this replica is called the master, hence the term master election used to
+The Basics of Master Election 
+| 
+95

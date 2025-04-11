@@ -1,0 +1,31 @@
+1. Introduction
+complete abstraction for services that rely on external systems consists of
+two steps:
+1. Introduce an interface
+2. Communicate purpose instead of implementation details
+As an example: instead of a Connection interface and an insert() method,
+which only makes sense in the context of dealing with relational databases,
+we could define a Repository interface, with a save() method instead. Such
+an interface communicates purpose (saving objects) instead of implementa-
+tion details (storing data in tables). We’ll discuss the details of this type of
+refactoring in Chapter 2.
+1.3. Rule no 2: No special context needed
+The second rule for core code is:
+Core code doesn’t need a specific environment to run in, nor does
+it have dependencies that are designed to run in a specific context
+only.
+Listing 1.4 shows some examples of code that requires special context before
+you can run it. It assumes certain things have been set up, or that it runs
+inside a specific type of application, like a web or a command-line (CLI) ap-
+plication.
+Listing 1.4. Examples of code that needs a special context to run in.
+final class RequiresASpecialContext
+{
+public function usesGlobalState(): void
+{
+/*
+* Here we rely on global state, and we assume this
+* method gets executed as part of an HTTP request.
+*/
+$host = $_SERVER['HTTP_HOST'];
+7

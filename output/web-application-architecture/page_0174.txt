@@ -1,0 +1,24 @@
+6. External services
+);
+self::assertEquals(
+VatRate::fromInt(21),
+$provider->vatRateForSellingEbooksInCountry('NL')
+);
+}
+}
+Figure 6.5. Testing both the EbookOrderService and the implementation of
+the VatRateProvider interface.
+It still looks like a unit test because it’s the same test framework that runs this
+test. But because of the kind of code it executes, it definitely is an integration
+test. I recommend marking the test as such, either by adding an annotation to
+the test class (e.g. @group integration) or by defining a dedicated test suite
+for integration tests (see Listing 6.15).
+Listing 6.15. Define a separate test suite for integration tests in phpunit.xml.
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit>
+<testsuites>
+<testsuite name="Unit tests">
+<directory>./test/unit</directory>
+</testsuite>
+<testsuite name="Integration tests">
+154

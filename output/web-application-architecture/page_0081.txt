@@ -1,0 +1,36 @@
+3. Read models and view models
+Listing 3.6. Creating an Ebook read model object from the entity’s data
+source.
+final class SqlEbookRepository implements EbookRepository
+{
+private Connection $connection;
+public function __construct(Connection $connection)
+{
+$this->connection = $connection;
+}
+public function getById(EbookId $ebookId): Ebook
+{
+$record = $this->connection->execute(
+'SELECT price FROM ebooks WHERE id = ?',
+[
+$ebookId->asString()
+]
+)->fetchAssoc();
+if ($record === false) {
+throw CouldNotFindEbook::withId($ebookId);
+}
+return new Ebook(
+$ebookId,
+(int)$record['price']
+);
+}
+}
+Although a convenient solution, when the write and read model share the
+same data source, this can lead to new problems. It could happen that the
+read model repository interprets the data in a different way than the write
+model does. Even in the example above, the assumption is that the price col-
+umn contains the price of the e-book in cents. What if at some point the write
+model switches to a native decimal representation. The read model would
+start to provide bad prices, because 1.50 euro in the database when cast to
+an integer will become 1 cent in the application. One way to reduce that risk
+61

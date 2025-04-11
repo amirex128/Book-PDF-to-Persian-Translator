@@ -1,0 +1,44 @@
+Hands On: Creating a Replicated Service in Kubernetes
+The instructions below give a concrete example of how to deploy a stateless, replica‐
+ted service behind a load balancer. These directions use the Kubernetes container
+orchestrator, but the pattern can be implemented on top of a number of different
+container orchestrators.
+To begin with, we will create a small NodeJS application that serves definitions of
+words from the dictionary.
+To try this service out, you can run it using a container image:
+docker run -p 8080:8080 brendanburns/dictionary-server
+This runs a simple dictionary server on your local machine. For example, you can
+visit http://localhost:8080/dog to see the definition for dog.
+If you look at the logs for the container, you’ll see that it starts serving immediately
+but only reports readiness after the dictionary (which is approximately 8 MB) has
+been downloaded over the network.
+To deploy this in Kubernetes, you create a Deployment:
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dictionary-server
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: dictionary-server
+    spec:
+      containers:
+      - name: server
+        image: brendanburns/dictionary-server
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+You can create this replicated, stateless service with:
+kubectl create -f dictionary-deploy.yaml
+Now that you have a number of replicas, you need a load balancer to bring requests to
+your replicas. The load balancer serves to distribute the load as well as to provide an
+Stateless Services 
+| 
+47

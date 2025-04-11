@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 149</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Service locators</h3>
+  <h4> 5.9. The Composition root is near the entry point</h4>
+  <p>در نسخه اولیه <code>SendIpConfirmationEmail</code> ما از <code>resolve()</code> استفاده کردیم تا اجازه دهیم <strong>service container</strong>، <strong>service Mailer</strong> را برای ما <strong>instantiate</strong> کند. گام به گام ما توانستیم تمام آن وابستگی‌های <strong>dynamically resolved</strong> و مقادیر <strong>configuration</strong> را به آرگومان‌های <strong>constructor</strong> تبدیل کنیم. اما ما هنوز هم به <strong>service container</strong> متکی هستیم تا همه آن چیزها را برای ما حل کند و آنها را به عنوان آرگومان‌های <strong>constructor</strong> تزریق کند. تفاوت در این است که در ابتدا ما از <strong>service container</strong> برای یافتن <strong>services</strong> و مقادیر <strong>configuration</strong> برای ما استفاده می‌کردیم، در حالی که اکنون ما به <strong>container</strong> متکی هستیم تا این چیزها را به ما ارائه دهد. کلاس <code>SendIpConfirmationEmail</code> دیگر نیازی نیست نگران این باشد که وابستگی‌های آن از کجا باید بیایند یا چگونه آنها را بسازد. این فقط تعدادی از آرگومان‌های <strong>constructor</strong> مورد نیاز و انواع آنها را اعلام می‌کند. به این <strong>inversion of control</strong> گفته می‌شود. یک قانون کلی این است که هرگز از <strong>service container</strong> به عنوان یک <strong>locator</strong> استفاده نکنید، فقط به عنوان یک <strong>injector</strong>، که گاهی اوقات به آن یک <strong>inversion of control container</strong> می‌گویند.</p>
+  <p>اما حتی اگر ما از تزریق <strong>constructor</strong> مناسب در همه جا استفاده کنیم، باید حداقل یک تماس واحد با <strong>service container</strong> برای <strong>instantiate</strong> کردن اولین <strong>service</strong> وجود داشته باشد تا بتوانیم از آن در یک <strong>controller</strong> استفاده کنیم. با این حال، ما فقط گفتیم که یک <strong>container</strong> هرگز نباید به عنوان یک <strong>service locator</strong> استفاده شود.</p>
+  <p>برای حل این پارادوکس، باید به مارک سمان، که در مورد این مشکل خاص9 نوشت، روی آوریم. او مفهوم یک نقطه ورود را معرفی می‌کند، که اولین کد کاربری است که <strong>framework</strong> آن را فراخوانی می‌کند. کد کاربر، کدی است که بخشی از <strong>framework</strong> نیست، بلکه توسط شما یا اعضای تیم شما نوشته شده است. اغلب چنین نقطه ورودی، <strong>controller</strong> است که <strong>framework</strong> تصمیم می‌گیرد بر اساس <strong>URL request</strong> فعلی فراخوانی کند. در این مورد، <strong>framework</strong> ممکن است بتواند <strong>controller</strong> را با انجام کاری مانند <code>new $controllerClass()</code> <strong>instantiate</strong> کند. اما هنگامی که در داخل <strong>controller</strong> هستید، <strong>services</strong> خود را از کجا دریافت می‌کنید؟ شما باید از جایی شروع کنید. مارک پیشنهاد می‌کند که <strong>container</strong> در این شرایط نقش بسیار خاصی را ایفا می‌کند: نقش <strong>Composition root</strong>.</p>
+  <p>یک <strong>Composition Root</strong> یک مکان (ترجیحاً) منحصر به فرد در یک <strong>application</strong> است که در آن <strong>modules</strong> در کنار هم قرار می‌گیرند.</p>
+  <p>این جایی است که <strong>object graph</strong>، شامل اولین <strong>service</strong> از جمله همه موارد آن است</p>
+  <p>9 https://advwebapparch.com/composition-root</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

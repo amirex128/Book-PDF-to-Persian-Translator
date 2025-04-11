@@ -1,0 +1,35 @@
+13. Ports and adapters
+An adapter often isn’t a single class. All the collaborating objects should be
+considered part of the adapter too. For instance, if your OrderRepository
+implementation uses Doctrine ORM to store the Order entity, all of Doctrine
+ORM should be considered part of the adapter. Without it, the adapter wouldn’t
+be functioning properly.
+Since an outgoing port is defined in your code by an interface it’s a nat-
+ural option to provide alternative implementations for that interface, or in
+hexagonal terms: to provide an alternative adapter for the port. This is what
+hexagonal architecture is actually aiming for: the ability to replace adapters
+in order to make testing of the hexagon easier. An alternative implementa-
+tion for the OrderRepository specifically designed for testing would be the
+InMemoryOrderRepository class in Listing 13.3. We’ll use it in Section 14.5.
+Listing 13.3. An in-memory implementation of OrderRepository.
+final class InMemoryOrderRepository implements OrderRepository
+{
+/**
+* @var array<string,Order>
+*/
+private array $orders = [];
+public function save(Order $order): void
+{
+$this->orders[$order->orderId()->asString()] = $order;
+}
+public function getById(OrderId $orderId): Order
+{
+if (!isset($this->orders[$orderId->asString()])) {
+throw new RuntimeException(
+'Could not find order with ID ' . $orderId->asString()
+);
+}
+return $this->orders[$orderId->asString()];
+}
+}
+302

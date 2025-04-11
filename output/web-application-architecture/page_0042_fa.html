@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 42</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <p>
+    <code>email address</code>، یک <code>exception</code> پرتاب می‌کند. این <code>assertions</code> از این طریق از <code>instantiated</code> شدن یک <code>Order object</code> با <code>data</code> نامعتبر جلوگیری می‌کنند.
+    با وجود این <code>assertions</code>، <code>Order object</code> می‌تواند <code>consistency</code> اساسی را برای <code>data</code>ای که در اختیار دارد، فراهم کند.
+  </p>
+  <p>
+    "آیا می‌توانیم از این <code>assertion functions</code> برای اعتبارسنجی <code>user input</code> استفاده کنیم؟"
+  </p>
+  <p>
+    اگر کاربر یک <code>email address</code> نامعتبر را وارد کند، احتمالاً می‌خواهیم یک پیام خطا زیبا و دوستانه در کنار فیلد فرم <code>email</code> نشان دهیم که کاربر آن را ارائه کرده است.
+    با نسخه فعلی <code>Order entity</code> ما، نمی‌توانیم این کار را انجام دهیم، زیرا فراخوانی <code>Assertion::email()</code> با یک <code>string</code> که شبیه <code>email address</code> نیست، یک <code>exception</code> پرتاب می‌کند.
+    اگر شما آن <code>exception</code> را در جایی <code>catch</code> نکنید، فقط صفحه خطای پیش‌فرض <code>application</code> با یک پیام عمومی مانند "Oops, an error occurred" نشان داده می‌شود.
+    به طور خلاصه: <code>assertions</code> زمانی که ما نیاز به اعتبارسنجی <code>user input</code> داریم، خیلی مفید نخواهند بود. در عوض، آنها باید توسط <code>objects</code> به عنوان راهی برای محافظت از خود در برابر <code>data</code>
+    ناقص، <code>inconsistent</code> یا بی‌معنی استفاده شوند. هنگامی که صحبت از بازگشت به یک کاربر، اطلاع‌رسانی به آنها در مورد اشتباهاتشان می‌شود، باید به دنبال جایگزین‌ها باشید. ما در فصل 8 به چندین مورد از این موارد می‌پردازیم.
+  </p>
+  <p>
+    یک <code>object</code> <code>stateful</code> که <code>consistency</code> خود را تضمین می‌کند، و قرار است به نحوی <code>persisted</code> شود، اغلب یک <code>Entity</code><sup>4</sup> نامیده می‌شود. <code>Entities</code> طبق تعریف دارای یک <code>identity</code> هستند، که ما می‌توانیم از آن برای ذخیره و
+    بازگرداندن آن از <code>storage</code> استفاده کنیم. اگرچه <code>Order</code> ما هنوز یک <code>identity</code> (<code>ID</code>) ندارد، ما قصد داریم در بخش 2.6 به آن یک <code>identity</code> بدهیم، بنابراین اجازه دهید <code>Order</code> را از قبل یک <code>entity</code> در نظر بگیریم.
+  </p>
+  <p>
+    ما تقریباً آماده‌ایم تا از <code>Order instance</code> جدید در <code>controller action</code> استفاده کنیم. یک چیز وجود دارد که ما را از انجام این کار باز می‌دارد: <code>table gateway</code> برای <code>orders</code> یک <code>insert() method</code> دارد که یک <code>array</code> از <code>columns => values</code> را می‌پذیرد (به Listing 2.5 مراجعه کنید).
+    اما اکنون که ما <code>form data</code> را به <code>constructor</code> <code>Order</code> منتقل می‌کنیم، دیگر چنین <code>array</code>ای در داخل <code>controller</code> نداریم. ما می‌توانیم آن را دوباره اضافه کنیم، اما خلاص شدن از نام‌های <code>column</code> واقعی در داخل <code>controller action</code>
+    از قبل در لیست بهبودهای ما بود، بنابراین ما نباید این کار را انجام دهیم.
+  </p>
+  <p>
+    <sup>4</sup>Eric Evans, “Domain-Driven Design”, Addison-Wesley Professional (2003).
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

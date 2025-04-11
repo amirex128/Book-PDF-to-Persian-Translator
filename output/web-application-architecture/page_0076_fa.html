@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 76</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>3. Read models and view models</strong></h3>
+  <p>
+    قصد ما برای دستکاری و ذخیره آن است. اما اکنون ما استفاده از <code>Ebook</code> را در <code>createOrderAction()</code> شروع کردیم، جایی که ما نمی‌خواهیم چیزی را در مورد آن تغییر دهیم. ما فقط می‌خواهیم مقداری اطلاعات از آن بگیریم، و به همین دلیل مجبور شدیم <code>method</code> <code>getPrice()</code> را اضافه کنیم.
+    با این حال، با بازیابی <code>object</code> کامل <code>Ebook</code>، ما به همه این <code>methods</code> دسترسی داریم که می‌توانند <code>state</code> <code>object</code> را تغییر دهند، مانند <code>changePrice()</code> و <code>hide()</code>. به طور کلی ایده خوبی است که تعداد <code>methods</code> که یک <code>client</code> از یک <code>object</code> به آن دسترسی دارد را محدود کنید.
+    حتی بیشتر، اگر این <code>methods</code> دارای <code>side-effects</code> مانند تغییرات <code>state</code> هستند. در این شرایط نیز، ما احتمالاً نباید از <code>Ebook entity</code> استفاده کنیم، زمانی که فقط به اطلاعات نیاز داریم اما هرگز نمی‌خواهیم آن را تغییر دهیم.
+  </p>
+  <p>
+    مشکل دیگر مربوط به استفاده مجدد از <code>objects</code> به طور کلی است، نه فقط <code>entities</code>. اگر شروع به استفاده مجدد از یک <code>object</code> در مکان‌های مختلف و به دلایل مختلف کنید، <code>object</code> شروع به ایفای نقش‌های زیادی می‌کند. هر چه یک <code>object</code> نقش‌های بیشتری را ایفا کند، <code>methods</code> و در نتیجه خطوط کد بیشتری را شامل می‌شود.
+    به زودی خیلی بزرگ می‌شود که کد را بخوانیم و بفهمیم چه می‌کند، چه رسد به اینکه در آن تغییراتی ایجاد کنیم. وقتی <code>methods</code> با یکدیگر تماس می‌گیرند، یا زمانی که آنها به <code>properties</code> <code>object</code> یکسانی تکیه می‌کنند، تغییر هر چیزی در مورد آن واقعاً دشوار خواهد بود. از آنجایی که <code>clients</code> زیادی اکنون از <code>object</code> استفاده می‌کنند، آنها به رفتار آن متکی هستند تا یکسان بماند.
+    ارزیابی اینکه آیا ایجاد تغییر ایمن است یا خیر یا اینکه آیا یک <code>client</code> را که هنوز به برخی از رفتارهای مستند نشده موجود متکی است، خراب می‌کند، دشوار خواهد بود. چنین <code>object</code>ی در برابر تغییر مقاوم می‌شود، که یک کیفیت بد برای <code>objects</code> به طور کلی است.
+    شما احتمالاً این زنجیره رویدادها را تشخیص می‌دهید: این نحوه ایجاد کد قدیمی است.
+  </p>
+  <p>
+    البته، بدون هیچ‌گونه استفاده مجدد، انجام هر کاری به عنوان یک توسعه‌دهنده نرم‌افزار واقعاً دشوار خواهد بود. اما حداقل استفاده مورد نظر از <code>objects</code> را پیگیری کنید و مراقب تنش در <code>design</code> باشید.
+    وقتی دو <code>client</code> از یک <code>object</code> استفاده می‌کنند، به زودی رفتاری را جذب می‌کند که فقط به یکی از <code>clients</code> آن مربوط می‌شود. یا یک <code>client</code> ممکن است به دانشی دسترسی پیدا کند که نباید داشته باشد.
+    طبق تجربه من، شما می‌توانید از مقدار زیادی از این تنش <code>design</code> با معرفی <code>objects</code> جداگانه برای تغییر اطلاعات و بازیابی اطلاعات جلوگیری کنید. یا همانطور که به طور سنتی نامیده می‌شود: جدا کردن <code>write model</code> خود از <code>read model</code> خود.
+    یک <code>client</code> که به یک <code>object</code> برای دریافت اطلاعات از (خواندن) نیاز دارد، نباید همان <code>object</code> را به عنوان <code>clients</code> که می‌خواهند در آن تغییراتی ایجاد کنند (نوشتن) بازیابی کند.
+  </p>
+  <p>
+    اگرچه نسخه فعلی <code>controller</code> ما هنوز در مشکل بزرگی نیست، ما در حال حاضر نوشتن و خواندن را در یک <code>object</code> ترکیب می‌کنیم، بنابراین ما نیز ممکن است
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

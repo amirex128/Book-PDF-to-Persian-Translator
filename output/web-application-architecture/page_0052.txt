@@ -1,0 +1,33 @@
+2. The domain model
+Listing 2.15 shows the alternative, where the entity only exposes its internal
+data, and the repository performs the mapping itself.
+Listing 2.15. save() performs the mapping to database columns.
+final class Order
+{
+// ...
+public function internalData(): array
+{
+return get_object_vars($this);
+}
+}
+final class SqlOrderRepository implements OrderRepository
+{
+// ...
+public function save(Order $order): int
+{
+// ...
+$internalData = $order->internalData();
+$data = [
+'email' => $internalData['emailAddress'],
+'quantity' => $internalData['quantityOrdered'],
+// ...
+];
+// ...
+}
+}
+The downside of this approach is that it reduces the level of encapsulation
+of Order. The SqlOrderRepository has to know about Order’s private prop-
+erties: how many properties there are, and what their names and types are.
+Whenever you rename a property, change its type, add or remove properties,
+you’d also have to update the corresponding mapping code in SqlOrderRepository.
+32

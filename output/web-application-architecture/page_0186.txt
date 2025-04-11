@@ -1,0 +1,34 @@
+7. Time and randomness
+$order->orderDate = $orderDate;
+$order->recordThat(
+new OrderWasCreated($order->id, $order->orderDate)
+);
+return $order;
+}
+// ...
+}
+This change allows us once again to write an actual unit test (see Listing 7.4).
+Listing 7.4. The test itself provides the current time and random data.
+final class OrderTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_can_be_created(): void
+{
+$id = Uuid::uuid4();
+$orderDate = new DateTimeImmutable('now');
+$order = Order::create($id, $orderDate);
+self::assertEquals(
+[
+new OrderWasCreated(
+$id,
+$orderDate
+)
+],
+$order->releaseEvents();
+);
+}
+}
+The situation has improved a lot: taking control over the creation of these val-
+166

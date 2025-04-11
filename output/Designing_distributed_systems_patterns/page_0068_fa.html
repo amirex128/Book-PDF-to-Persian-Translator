@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 68</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4><strong>Rate Limiting and Denial-of-Service Defense</strong></h4>
+  <p>
+   تعداد کمی از ما سایت‌هایی را با این انتظار می‌سازیم که با یک denial-of-service attack مواجه شویم. اما با ساخت API های بیشتر و بیشتر، یک denial of service می‌تواند به سادگی از یک developer که یک client را به درستی پیکربندی نکرده یا یک site-reliability engineer که به طور تصادفی یک load test را در برابر یک نصب production اجرا می‌کند، ناشی شود. بنابراین، منطقی است که دفاع عمومی denial-of-service را از طریق rate limiting به caching layer اضافه کنیم. اکثر HTTP reverse proxies ها مانند Varnish دارای قابلیت‌هایی در این راستا هستند. به طور خاص، Varnish یک module به نام throttle دارد که می‌تواند برای ارائه throttling بر اساس آدرس IP و request path و همچنین اینکه آیا یک user وارد سیستم شده است یا خیر، پیکربندی شود.
+  </p>
+  <p>
+   اگر در حال استقرار یک API هستید، به طور کلی بهترین روش این است که یک rate limit نسبتاً کوچک برای دسترسی anonymous داشته باشید و سپس users را مجبور کنید تا وارد سیستم شوند تا یک rate limit بالاتر دریافت کنند. نیاز به login حسابرسی را فراهم می‌کند تا مشخص شود چه کسی مسئول load پیش‌بینی نشده است، و همچنین یک مانع برای مهاجمان احتمالی ارائه می‌دهد که نیاز به دریافت چندین identity برای راه‌اندازی یک attack موفق دارند.
+  </p>
+  <p>
+   هنگامی که یک user به rate limit می‌رسد، server، HTTP status code 429 را برمی‌گرداند که نشان می‌دهد requests های زیادی صادر شده است. با این حال، بسیاری از users می‌خواهند بدانند که قبل از رسیدن به آن limit، چند request دیگر دارند. برای این منظور، احتمالاً می‌خواهید یک HTTP header را با اطلاعات remaining-calls پر کنید. اگرچه یک header استاندارد برای برگرداندن این data وجود ندارد، بسیاری از APIs مقداری variation از X-RateLimit-Remaining را برمی‌گردانند.
+  </p>
+  <h4><strong>SSL Termination</strong></h4>
+  <p>
+   علاوه بر انجام caching برای performance، یکی دیگر از وظایف رایج انجام شده توسط edge layer، SSL termination است. حتی اگر قصد دارید از SSL برای ارتباط بین لایه‌ها در cluster خود استفاده کنید، همچنان باید از certificates های مختلف برای edge و services های داخلی خود استفاده کنید. در واقع، هر service internal باید از certificate خود استفاده کند تا اطمینان حاصل شود که هر layer می‌تواند به طور مستقل ارائه شود. متأسفانه، web cache از نوع Varnish نمی‌تواند برای SSL termination استفاده شود، اما خوشبختانه، application از نوع nginx می‌تواند. بنابراین ما می‌خواهیم یک لایه سوم به الگوی application stateless خود اضافه کنیم، که یک لایه replicated از servers های nginx خواهد بود که SSL termination را برای ترافیک HTTPS مدیریت کرده و ترافیک را به cache Varnish ما ارسال می‌کند.
+  </p>
+  <p>
+   ترافیک HTTP همچنان به web cache از نوع Varnish منتقل می‌شود و Varnish ترافیک را به application web ما ارسال می‌کند، همانطور که در Figure 5-8 نشان داده شده است.
+  </p>
+  <p>
+   54
+   | Chapter 5: Replicated Load-Balanced Services
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

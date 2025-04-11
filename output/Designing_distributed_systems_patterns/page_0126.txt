@@ -1,0 +1,39 @@
+      “some”: “json”,
+    “object”: “here”,
+  }
+}
+Importantly, you will notice that this API doesn’t have any affordances for recording
+that a work item has been processed. We could have designed a more complicated
+API and then pushed more implementation into the ambassador container, but
+remember, the goal of this effort is to place as much of the generic implementation
+inside of the generic work queue manager as possible. To that end, the work queue
+manager itself is responsible for tracking which items have been processed and which
+items remain to be processed.
+The item details are obtained from this API and the item.data field is passed along
+to the worker interface for processing.
+The Worker Container Interface
+Once a particular work item has been obtained by the work queue manager, it needs
+to be processed by a worker. This is the second container interface in our generic
+work queue. This container and interface are slightly different than the previous work
+queue source interface for a few reasons. The first is that it is a one-off API: a single
+call is made to begin the work, and no other API calls are made throughout the life of
+the worker container. Secondly, the worker container is not inside a container group
+with the work queue manager. Instead, it is launched via a container orchestration
+API and scheduled to its own container group. This means that the work queue man‐
+ager has to make a remote call to the worker container in order to start work. It also
+means that we may need to be more careful about security to prevent a malicious user
+in our cluster from injecting extra work into the system.
+With the work queue source API, we used a simple HTTP-based API for sending
+items back to the work queue manager. This was because we needed to make repeated
+calls to the API, and security wasn’t a concern since everything was running on local‐
+host. With the worker container, we only need to make a single call, and we want to
+ensure that other users in the system can’t accidentally or maliciously add work to our
+workers. Consequently, for the worker container, we will use a file-based API.
+Namely, when the worker container is created, it will receive an environment variable
+named WORK_ITEM_FILE; this will point to a file in the container’s local filesystem,
+where the data field from a work item has been written to a file. Concretely, as you
+will see below, this API can be implemented via a Kubernetes ConfigMap object that
+can be mounted into a container group as a file, as illustrated in Figure 10-4.
+112 
+| 
+Chapter 10: Work Queue Systems

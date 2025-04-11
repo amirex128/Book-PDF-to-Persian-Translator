@@ -1,0 +1,19 @@
+Merger
+The last pattern for event-driven or workflow batch systems is a merger. A merger is
+the opposite of a copier; the job of a merger is to take two different work queues and
+turn them into a single work queue. Suppose, for example, that you have a large num‐
+ber of different source repositories all adding new commits at the same time. You
+want to take each of these commits and perform a build-and-test for it. It is not scala‐
+ble to create a separate build infrastructure for each source repository. We can model
+each of the different source repositories as a separate work queue source that provides
+a set of commits. We can transform all of these different work queue inputs into a
+single merged set of inputs using a merger adapter. This merged stream of commits is
+then the single source to the build system that performs the actual build. The merger
+is another great example of the adapter pattern, though in this case, the adapter is
+actually adapting multiple running source containers into a single merged source.
+This multi-adapter pattern is shown in Figure 11-7.
+Figure 11-7. Using multiple levels of containers to adapt multiple independent work
+queues into a single shared queue
+Patterns of Event-Driven Processing 
+| 
+127

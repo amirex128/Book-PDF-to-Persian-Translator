@@ -1,0 +1,40 @@
+5.6.7.8, /some/file.html}. The output of the sharding function is different
+because the client’s IP address and the time of the request are different between the
+two requests. But of course, in most cases, the IP address of the client and the time of
+the request don’t impact the response to the HTTP request. Consequently, instead of
+hashing the entire request object, a much better sharding function would be
+shard(request.path). When we use request.path as the shard key, then we map
+both requests to the same shard, and thus the response to one request can be served
+out of the cache to service the other.
+Of course, sometimes client IP is important to the response that is returned from the
+frontend. For example, client IP may be used to look up the geographic region that
+the user is located in, and different content (e.g., different languages) may be returned
+to different IP addresses. In such cases, the previous sharding function
+shard(request.path) will actually result in errors, since a cache request from a
+French IP address may be served a result page from the cache in English. In such
+cases, the cache function is too general, as it groups together requests that do not have
+identical responses.
+Given this problem, it would be tempting then to define our sharding function as
+shard(request.ip, request.path), but this sharding function has problems as well.
+It will cause two different French IP addresses to map to different shards, thus result‐
+ing in inefficient sharding. This shard function is too specific, as it fails to group
+together requests that are identical. A better sharding function for this situation
+would be:
+shard(country(request.ip), request.path)
+This first determines the country from the IP address, and then uses that country as
+part of the key for the sharding function. Thus multiple requests from France will be
+routed to one shard, while requests from the United States will be routed to a differ‐
+ent shard.
+Determining the appropriate key for your sharding function is vital to designing your
+sharded system well. Determining the correct shard key requires an understanding of
+the requests that you expect to see.
+Consistent Hashing Functions
+Setting up the initial shards for a new service is relatively straightforward: you set up
+the appropriate shards and the roots to perform the sharding, and you are off to the
+races. However, what happens when you need to change the number of shards in
+your sharded service? Such “re-sharding” is often a complicated process.
+To understand why this is true, consider the sharded cache previously examined. Cer‐
+tainly, scaling the cache from 10 to 11 replicas is straightforward to do with a con‐
+68 
+| 
+Chapter 6: Sharded Services

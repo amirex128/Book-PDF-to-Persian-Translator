@@ -1,0 +1,24 @@
+CHAPTER 11
+Event-Driven Batch Processing
+In the previous chapter, we saw a generic framework for work queue processing, as
+well as a number of example applications of simple work queue processing. Work
+queues are great for enabling individual transformations of one input to one output.
+However, there are a number of batch applications where you want to perform more
+than a single action, or you may need to generate multiple different outputs from a
+single data input. In these cases, you start to link work queues together so that the
+output of one work queue becomes the input to one or more other work queues, and
+so on. This forms a series of processing steps that respond to events, with the events
+being the completion of the preceding step in the work queue that came before it.
+These sort of event-driven processing systems are often called workflow systems,
+since there is a flow of work through a directed, acyclic graph that describes the vari‐
+ous stages and their coordination. A basic illustration of such a system is shown in
+Figure 11-1.
+The most straightforward application of this type of system simply chains the output
+of one queue to the input of the next queue. But as systems become more complicated
+there are a series of different patterns that emerge for linking a series of work queues
+together. Understanding and designing in terms of these patterns is important for
+comprehending how the system is working. The operation of an event-driven batch
+processor is similar to event-driven FaaS. Consequently, without an overall blueprint
+for how the different event queues relate to each other, it can be hard to fully under‐
+stand how the system is operating.
+121

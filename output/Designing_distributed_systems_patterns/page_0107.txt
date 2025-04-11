@@ -1,0 +1,22 @@
+CHAPTER 9
+Ownership Election
+The previous patterns that we have seen have been about distributing requests in
+order to scale requests per second, the state being served, or the time to process a
+request. This final chapter on multi-node serving patterns is about how you scale
+assignment. In many different systems, there is a notion of ownership where a specific
+process owns a specific task. We have previously seen this in the context of sharded
+and hot-sharded systems where specific instances owned specific sections of the shar‐
+ded key space.
+In the context of a single server, ownership is generally straightforward to achieve
+because there is only a single application that is establishing ownership, and it can use
+well-established in-process locks to ensure that only a single actor owns a particular
+shard or context. However, restricting ownership to a single application limits scala‐
+bility, since the task can’t be replicated, and reliability, since if the task fails, it is
+unavailable for a period of time. Consequently, when ownership is required in your
+system, you need to develop a distributed system for establishing ownership.
+A general diagram of distributed ownership is shown in Figure 9-1. In the diagram,
+there are three replicas that could be the owner or master. Initially, the first replica is
+the master. Then that replica fails, and replica number three then becomes the master.
+Finally, replica number one recovers and returns to the group, but replica three
+remains as the master/owner.
+93

@@ -1,0 +1,45 @@
+When adapting an existing application to a sharded backend, you can introduce an
+ambassador container that contains all of the logic needed to route requests to the
+appropriate storage shard. Thus, your frontend or middleware application only con‐
+nects to what appears to be a single storage backend running on localhost. However,
+this server is in fact actually a sharding ambassador proxy, which receives all of the
+requests from your application code, sends a request to the appropriate storage shard,
+and then returns the result to your application. This use of an ambassador is dia‐
+grammed in Figure 3-3.
+The net result of applying the ambassador pattern to sharded services is a separation
+of concerns between the application container, which simply knows it needs to talk to
+a storage service and discovers that service on localhost, and the sharding ambassa‐
+dor proxy, which only contains the code necessary to perform appropriate sharding.
+As with all good single-node patterns, this ambassador can be reused between many
+different applications. Or, as we’ll see in the following hands-on example, an off-the
+shelf open source implementation can be used for the ambassador, speeding up the
+development of the overall distributed system.
+Hands On: Implementing a Sharded Redis
+Redis is a fast key-value store that can be used as a cache or for more persistent stor‐
+age. In this example, we’ll be using it as a cache. We’ll begin by deploying a sharded
+Redis service to a Kubernetes cluster. We’ll use the StatefulSet API object to deploy
+it, since it will give us unique DNS names for each shard that we can use when con‐
+figuring the proxy.
+The StatefulSet for Redis looks like this:
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: sharded-redis
+spec:
+  serviceName: "redis"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+Using an Ambassador to Shard a Service 
+| 
+23

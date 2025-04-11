@@ -1,0 +1,32 @@
+11. Key design patterns
+$command->address,
+$command->postalCode,
+$command->city,
+$command->country
+)
+);
+$this->orderRepository->save($order);
+$this->eventDispatcher->dispatchAll(
+$order->releaseEvents()
+);
+}
+}
+An application service may make multiple changes to an entity causing mul-
+tiple events to be recorded and released. An entity may also record multiple
+events for a single action. This could happen when a change to an entity
+means different things to different observers. Or when an update brings the
+entity into some new state (see Listing 11.17).
+Listing 11.17. Recording multiple events.
+final class Order
+{
+// ...
+public function markLineAsDelivered(int $lineNumber): void
+{
+$this->line($lineNumber)->markAsDelivered();
+$this->events[] = new LineDelivered($this->id, $lineNumber);
+if ($this->allLinesHaveBeenDelivered()) {
+$this->events[] = new OrderFullyDelivered($this->id);
+}
+}
+}
+266

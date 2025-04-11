@@ -1,0 +1,24 @@
+PART I
+Single-Node Patterns
+This book concerns itself with distributed systems, which are applications made up of
+many different components running on many different machines. However, the first
+section of this book is devoted to patterns that exist on a single node. The motivation
+for this is straightforward. Containers are the foundational building block for the pat‐
+terns in this book, but in the end, groups of containers co-located on a single
+machine make up the atomic elements of distributed system patterns.
+Motivations
+Though it is clear as to why you might want to break your distributed application into
+a collection of different containers running on different machines, it is perhaps some‐
+what less clear as to why you might also want to break up the components running on
+a single machine into different containers. To understand the motivation for these
+groups of containers, it is worth considering the goals behind containerization. In
+general, the goal of a container is to establish boundaries around specific resources
+(e.g., this application needs two cores and 8 GB of memory). Likewise, the boundary
+delineates team ownership (e.g., this team owns this image). Finally, the boundary is
+intended to provide separation of concerns (e.g., this image does this one thing).
+All of these reasons provide motivation for splitting up an application on a single
+machine into a group of containers. Consider resource isolation first. Your applica‐
+tion may be made up of two components: one is a user-facing application server and
+the other is a background configuration file loader. Clearly, end-user-facing request
+latency is the highest priority, so the user-facing application needs to have sufficient
+resources to ensure that it is highly responsive. On the other hand, the background

@@ -1,0 +1,34 @@
+Generally speaking, this session tracking is performed by hashing the source and des‐
+tination IP addresses and using that key to identify the server that should service the
+requests. So long as the source and destination IP addresses remain constant, all
+requests are sent to the same replica.
+IP-based session tracking works within a cluster (internal IPs) but
+generally doesn’t work well with external IP addresses because of
+network address translation (NAT). For external session tracking,
+application-level tracking (e.g., via cookies) is preferred.
+Often, session tracking is accomplished via a consistent hashing function. The benefit
+of a consistent hashing function becomes evident when the service is scaled up or
+down. Obviously, when the number of replicas changes, the mapping of a particular
+user to a replica may change. Consistent hashing functions minimize the number of
+users that actually change which replica they are mapped to, reducing the impact of
+scaling on your application.
+Application-Layer Replicated Services
+In all of the preceding examples, the replication and load balancing takes place in the
+network layer of the service. The load balancing is independent of the actual protocol
+that is being spoken over the network, beyond TCP/IP. However, many applications
+use HTTP as the protocol for speaking with each other, and knowledge of the appli‐
+cation protocol that is being spoken enables further refinements to the replicated
+stateless serving pattern for additional functionality.
+Introducing a Caching Layer
+Sometimes the code in your stateless service is still expensive despite being stateless.
+It might make queries to a database to service requests or do a significant amount of
+rendering or data mixing to service the request. In such a world, a caching layer can
+make a great deal of sense. A cache exists between your stateless application and the
+end-user request. The simplest form of caching for web applications is a caching web
+proxy. The caching proxy is simply an HTTP server that maintains user requests in
+memory state. If two users request the same web page, only one request will go to
+your backend; the other will be serviced out of memory in the cache. This is illustra‐
+ted in Figure 5-4.
+Application-Layer Replicated Services 
+| 
+49

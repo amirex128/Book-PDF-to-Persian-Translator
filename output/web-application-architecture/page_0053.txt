@@ -1,0 +1,33 @@
+2. The domain model
+I prefer Order to keep the names and the types of its internal properties to
+itself. It will be very hard to refactor the Order object if its internals are no
+longer private. The ability to freely change the internal structure of an object
+is what enables you to improve its design. So for me exposing private prop-
+erty names is too high a price to pay, and we should go with the first option:
+letting the entity do the mapping itself.10
+“But now we have column names inside the entity…Doesn’t
+that cause an unhealthy mix of infrastructure and core code?”
+A great question, with a subtle answer.
+To demonstrate that having column names inside an entity class does not
+automatically turn it into infrastructure code, let’s check the rules once
+more.
+1. Core code doesn’t directly depend on external systems, nor does it
+depend on code written for interacting with a specific type of external
+system.
+2. Core code doesn’t need a specific environment to run in, nor does it
+have dependencies that are designed to run in a specific context only.
+Take a look at the mappedData() method:
+final class Order
+{
+// ...
+public function mappedData(): array
+{
+return [
+'email' => $this->emailAddress,
+'quantity' => $this->quantityOrdered,
+// ...
+];
+10I’ve written more about this topic, the trade-offs that are involved, and different imple-
+mentation options. See: “ORMless; a Memento-like pattern for object persistence”, https:
+//advwebapparch.com/ormless .
+33

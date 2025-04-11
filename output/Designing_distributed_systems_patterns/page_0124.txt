@@ -1,0 +1,24 @@
+Figure 10-2. The same work queue as shown in Figure 10-1, but this time using reusable
+containers. The reusable system containers are shown in white while the user-supplied
+container is shown is grey/blue.
+Building a reusable container-based work queue requires the definition of interfaces
+between the generic library containers and the user-defined application logic. In the
+containerized work queue, there are two interfaces: the source container interface,
+which provides a stream of work items that need processing, and the worker con‐
+tainer interface, which knows how to actually process a work item.
+The Source Container Interface
+To operate, every work queue needs a collection of work items that need processing.
+There are many different sources of work items the work queue, depending on the
+specific application of the work queue. However, once the set of items has been
+obtained, the actual operation of the work queue is quite generic. Consequently, we
+can separate the application-specific queue source logic from the generic queue pro‐
+cessing logic. Given the previously defined patterns of container groups, this can be
+seen as an example of the ambassador pattern defined previously. The generic work
+queue container is the primary application container, and the application-specific
+source container is the ambassador that proxies the generic work queue’s requests out
+to the concrete definition of the work queue out in the real world. This container
+group is illustrated in Figure 10-3.
+Figure 10-3. The work queue container group
+110 
+| 
+Chapter 10: Work Queue Systems

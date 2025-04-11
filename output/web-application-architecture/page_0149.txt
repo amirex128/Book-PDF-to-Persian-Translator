@@ -1,0 +1,34 @@
+5. Service locators
+5.9. The Composition root is near the entry point
+In the initial version of SendIpConfirmationEmail we used resolve() to let
+the service container instantiate the Mailer service for us. Step by step we
+were able to transform all those dynamically resolved dependencies and con-
+figuration values into constructor arguments. But we still rely on the service
+container to resolve all those things for us, and inject them as constructor
+arguments. The difference is that in the beginning we used the service con-
+tainer to locate services and configuration values for us, whereas now we rely
+on the container to provide these things to us. The SendIpConfirmationEmail
+class no longer has to worry about where its dependencies should come from,
+or how to make them. It only declares a number of required constructor ar-
+guments and their types. This is called inversion of control. A general rule is
+to never use the service container as a locator, only as an injector, sometimes
+called an inversion of control container.
+But even if we use proper constructor injection everywhere, there has to be
+at least a single call to the service container to instantiate the first service so
+we can use it in a controller. However, we just said that a container should
+never be used as a service locator.
+To solve this paradox, we should turn to Mark Seemann, who wrote about
+this specific problem9. He introduces the concept of an entry point, which is
+the first user code that the framework calls. User code is code that is not part
+of the framework, but written by you or your team members. Often such an
+entry point is the controller which the framework decides to call based on the
+current request URL. In this case the framework may be able to instantiate
+the controller by doing something like new $controllerClass(). But once
+inside the controller, where do you get your services from? You have to start
+somewhere. Mark suggests that the container plays a very specific role in
+these situations: the role of Composition root.
+A Composition Root is a (preferably) unique location in an appli-
+cation where modules are composed together.
+It’s where the object graph, consisting of the first service including all its de-
+9 https://advwebapparch.com/composition-root
+129

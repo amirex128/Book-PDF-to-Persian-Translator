@@ -1,0 +1,37 @@
+However, this time, the output of the data collection phase is a histogram per town.
+0: 15%
+1: 25%
+2: 50%
+3: 10%
+4: 5%
+From the previous examples, we can see that if we apply the reduce pattern, we
+should be able to combine all of these histograms to develop a comprehensive picture
+of the United States. At first blush, it may seem quite difficult to understand how to
+merge these histograms, but when combined with the population data from the sum‐
+mation example, we can see that if we multiply each histogram by its relative popula‐
+tion, then we can obtain the total population for each item being merged. If we then
+divide this new total by the sum of the merged populations, it is clear that we can
+merge and update multiple different histograms into a single output. Given this, we
+can apply the reduce pattern as many times as necessary until a single output is pro‐
+duced.
+Hands On: An Image Tagging and Processing Pipeline
+To see how coordinated batch processing can be used to accomplish a larger batch
+task, consider the job of tagging and processing a set of images. Let us assume that we
+have a large collection of images of highways at rush hour, and we want to count both
+the numbers of cars, trucks, and motorcycles, as well as distribution of the colors of
+each of the cars. Let us also suppose that there is a preliminary step to blur the license
+plates of all of the cars to preserve anonymity.
+The images are delivered to us as a series of HTTPS URLs where each URL points to
+a raw image. The first stage in the pipeline is to find and blur the license plates. To
+simplify each task in the work queue, we will have one worker that detects a license
+plate, and a second worker that blurs that location in the image. We will combine
+these two different worker containers into a single container group using the multi-
+worker pattern described in the previous chapter. This separation of concerns may
+seem unnecessary, but it is useful given that the workers for blurring images can be
+reused to blur other outputs (e.g., people’s faces).
+Additionally, to ensure reliability and to maximize parallel processing, we will shard
+the images across multiple worker queues. This complete workflow for sharded
+image blurring is shown in Figure 12-3.
+138 
+| 
+Chapter 12: Coordinated Batch Processing

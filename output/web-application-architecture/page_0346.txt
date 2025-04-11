@@ -1,0 +1,16 @@
+14. A testing strategy for decoupled applications
+entity after it has been modified.
+Make sure that everything about the setup of the repository implementa-
+tions is as real as possible. That is, use a real database, preferably the same
+database that you use in production. Don’t create test doubles for anything.
+Make sure this test will expose any problem with the code that would other-
+wise only show up once the code is running in production. Figure 14.1 shows
+the result of this approach: a contract test for OrderRepository will invoke
+all the software elements involved in using the actual database. Such a test
+demonstrates that if an application service in the core of the application re-
+lies on the OrderRepository interface, and the service container has been
+configured to inject an instance of OrderRepositoryUsingDoctrineDbal, ev-
+erything will work just fine.
+Figure 14.1. Test coverage for the OrderRepository contract test.
+Something to keep in mind when writing a contract test is that you shouldn’t
+326

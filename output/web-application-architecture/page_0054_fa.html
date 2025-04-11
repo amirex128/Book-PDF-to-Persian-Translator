@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 54</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <pre><code class="language-php">
+    }
+    }
+  </code></pre>
+  <p>
+    هنگام فراخوانی <code>mappedData()</code>، سیستم‌های خارجی مانند <code>database</code>، نیازی به در دسترس بودن ندارند. در واقع، کد در این <code>method</code> هیچ وابستگی ندارد. <code>method</code> <code>mappedData()</code> می‌تواند در هر <code>context</code> بدون هیچ راه‌اندازی خاصی اجرا شود.
+    نیازی به هیچ راه‌اندازی خاصی ندارد: شما می‌توانید یک <code>object</code> <code>Order</code> را به روش معمول <code>instantiate</code> کنید و این <code>method</code> <code>mappedData()</code> را فراخوانی کنید. این کد نیز هیچ وابستگی ندارد که برای اجرا فقط در یک <code>context</code> خاص طراحی شده باشد.
+    بنابراین <code>mappedData()</code> با هر دو قانون برای کد اصلی مطابقت دارد. چگونه می‌تواند کد اصلی نباشد. فقط برخی از <code>transformations</code> های ساده را روی مقادیر در حافظه انجام می‌دهد.
+  </p>
+  <p>
+    در مورد افزودن <code>Doctrine mapping annotations</code> به <code>entity</code> خود، مانند <code>@Entity</code>، <code>@Table</code> و <code>@Column</code> چطور؟ آیا این منجر به کد ترکیبی می‌شود؟ خوب، <code>instantiating</code> یک <code>entity</code> با <code>mapping annotations</code> نیازی به هیچ راه‌اندازی خاصی ندارد.
+    و فراخوانی هر <code>method</code> روی آن نیازی به در دسترس بودن وابستگی‌های خارجی ندارد. بنابراین اگر <code>entity</code> شما آماده <code>persisted</code> شدن با استفاده از <code>Doctrine</code> است، هنوز هم باید کد اصلی در نظر گرفته شود، نه کد <code>infrastructure</code>.
+  </p>
+  <p>
+    با این حال، یک <code>entity</code> با <code>Doctrine annotations</code> یا یک <code>method</code> <code>mappedData()</code> شامل جزئیات <code>implementation</code> فنی (مانند نام جدول و ستون و انواع ستون) می‌شود. بنابراین وقتی شما به نقطه‌ای می‌رسید که می‌خواهید <code>databases</code> را در هر صورت تغییر دهید،
+    هنوز هم باید این کد را اصلاح کنید. برای من این دلیلی برای انتقال کد <code>mapping</code> به خارج از <code>entity</code> نیست. به خصوص به این دلیل که حفظ <code>properties</code> <code>entity</code> و کد <code>mapping</code> نزدیک به هم بسیار راحت است.
+  </p>
+  <h4>2.6. Generating the identifier earlier</h4>
+  <p>
+    بیایید دوباره به کد <code>controller</code> نگاهی بیندازیم، همانطور که بعد از شروع استفاده از <code>Order entity</code> و <code>OrderRepository</code> بود (به Listing 2.16 مراجعه کنید).
+  </p>
+  <p>
+    <em>Listing 2.16.</em> وضعیت فعلی <code>orderEbookAction()</code>.
+  </p>
+  <pre><code class="language-php">
+    public function orderEbookAction(Request $request): Response
+    {
+    // ...
+    $order = new Order(/* ... */);
+  </code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+CHAPTER 2
+The Sidecar Pattern
+The first single-node pattern is the sidecar pattern. The sidecar pattern is a single-
+node pattern made up of two containers. The first is the application container. It con‐
+tains the core logic for the application. Without this container, the application would
+not exist. In addition to the application container, there is a sidecar container. The role
+of the sidecar is to augment and improve the application container, often without the
+application container’s knowledge. In its simplest form, a sidecar container can be
+used to add functionality to a container that might otherwise be difficult to improve.
+Sidecar containers are coscheduled onto the same machine via an atomic container
+group, such as the pod API object in Kubernetes. In addition to being scheduled on
+the same machine, the application container and sidecar container share a number of
+resources, including parts of the filesystem, hostname and network, and many other
+namespaces. A generic image of this sidecar pattern is shown in Figure 2-1.
+Figure 2-1. The generic sidecar pattern
+An Example Sidecar: Adding HTTPS to a Legacy Service
+Consider, for example, a legacy web service. Years ago, when it was built, internal net‐
+work security was not as high a priority for the company, and thus, the application
+only services requests over unencrypted HTTP, not HTTPS. Due to recent security
+incidents, the company has mandated the use of HTTPS for all company websites. To
+11

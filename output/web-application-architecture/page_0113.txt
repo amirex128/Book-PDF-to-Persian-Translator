@@ -1,0 +1,35 @@
+4. Application services
+Listing 4.6 shows how the new service can be used inside the controller.
+Listing 4.6. orderEbookAction() uses the EbookOrderService.
+public function orderEbookAction(Request $request): Response
+{
+$ebookId = (int)$request->get('ebook_id');
+$orderQuantity = (int)$request->get('quantity');
+$emailAddress = $request->get('email_address');
+$orderId = $this->container->get('ebook_order_service')
+->create(
+$ebookId,
+$orderQuantity,
+$emailAddress
+);
+// ...
+}
+Since we don’t really need the input data to be in a variable anymore, we
+should do a quick Inline Variable4 refactoring:
+$orderId = $this->container->get('ebook_order_service')
+->create(
+(int)$request->get('ebook_id'),
+(int)$request->get('quantity'),
+$request->get('email_address')
+);
+We’ve reached the point where the EbookOrderService can be used by any
+client that is able to provide the required strings and integers. You could
+now build an API endpoint that accepts a JSON request body, decodes it, and
+calls EbookOrderService using its data. Or you could just as easily create a
+command-line tool that accepts a number of arguments and passes it to the
+EbookOrderService, as shown in Listing 4.7 (Figure 4.1). As long as the client
+can provide primitive data it can invoke the use case.
+Listing 4.7. It’s easy to reuse the same EbookOrderService in a command-line
+application.
+4 https://advwebapparch.com/inline-variable
+93

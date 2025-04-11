@@ -1,0 +1,36 @@
+3. Read models and view models
+final class Ebook
+{
+public function ebookId(): string
+{
+// ...
+}
+public function title(): string
+{
+// ...
+}
+public function numberOfTimesSold(): int
+{
+// ...
+}
+public function price(): string
+{
+// ...
+}
+}
+Most of the data exposed by the view model should be of type string because
+rendering the template itself is basically an exercise in string concatenation.
+In some cases it makes sense to use other primitive return types like int for
+the numberOfTimesSold() method.
+Note that price() doesn’t return a Price value object, like the price() method
+we saw earlier in this chapter. It returns a string, which is supposed to be
+a properly formatted amount of money, including the currency sign, and
+with the correct decimal precision. If we’d do all this formatting work in
+the template itself, the view model wouldn’t be as portable as it can be. Con-
+sider again the example of running a command-line-based e-book shop; we’d
+still want to show the e-book’s price, and we wouldn’t want to rewrite the
+logic for price formatting in a place where we can’t use HTML templates. We
+should make it as easy as possible for any client to show the data to actual
+users. Templates in particular shouldn’t need to know anything about the
+domain objects that our application uses internally. This means our view
+74

@@ -1,0 +1,37 @@
+6. External services
+The thing that bothers me about all those curl_* calls and json_decode()
+stuff is that it’s old-school procedural code which leaves a lot of possibili-
+ties open, allowing all kinds of bugs to slip by unnoticed. I’d normally want
+to use objects and let these objects do all kinds of checks to make sure that
+the data is good and safe to use. Basically what I want is an object-oriented
+wrapper around the remote API. I would start developing such a layer by
+creating a single object that represents the API, like the VatApi class in List-
+ing 6.3. It would allow clients to use the web service without worrying about
+what those HTTP requests should look like. Such a VatApi class could have a
+method that has the same name as the API’s endpoint. In our case, the class
+gets a method called vatRateCheck() which corresponds to the /vat-rate-check
+endpoint. The vatRateCheck() method performs the actual HTTP request,
+and takes care of the response decoding, including basic error handling. The
+query parameters rate_type, country_code, and filter are promoted to method
+parameters. Note that the API key is provided as a constructor argument, not
+as a method argument, because it’s a configuration value.
+Listing 6.3. VatApi makes the actual call to vatapi.com.
+final class VatApi
+{
+private string $apiKey;
+public function __construct(string $apiKey)
+{
+$this->apiKey = $apiKey;
+}
+public function vatRateCheck(
+string $rateType,
+string $countryCode,
+?string $filter
+): array {
+$curl = curl_init();
+$url = 'https://eu.vatapi.com/v2/vat-rate-check?' .
+http_build_query(
+[
+'rate_type' => $rateType,
+'country_code' => $countryCode,
+138

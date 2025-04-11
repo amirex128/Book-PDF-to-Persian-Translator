@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 37</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        هنگام تطبیق یک application موجود با یک sharded backend، می‌توانید یک ambassador container معرفی کنید که حاوی تمام logic مورد نیاز برای هدایت requests ها به storage shard مناسب باشد. بنابراین، frontend یا middleware application شما فقط به چیزی متصل می‌شود که به نظر می‌رسد یک storage backend واحد است که روی localhost در حال اجرا است. با این حال، این server در واقع یک sharding ambassador proxy است که تمام requests ها را از application code شما دریافت می‌کند، یک request را به storage shard مناسب ارسال می‌کند و سپس نتیجه را به application شما برمی‌گرداند. استفاده از این ambassador در شکل 3-3 نشان داده شده است.
+    </p>
+    <p style="text-align: center;">
+        <em style="font-style: italic;">Figure 3-3. A generic sharded service</em>
+    </p>
+    <p>
+        نتیجه خالص به‌کارگیری ambassador pattern برای services sharded، separation of concerns بین application container است که به سادگی می‌داند که باید با یک storage service صحبت کند و آن service را در localhost کشف می‌کند، و sharding ambassador proxy که فقط شامل code لازم برای انجام sharding مناسب است، می‌باشد.
+    </p>
+    <p>
+        همانند تمام الگوهای single-node خوب، این ambassador را می‌توان بین بسیاری از applications های مختلف استفاده مجدد کرد. یا، همانطور که در مثال hands-on زیر خواهیم دید، یک پیاده‌سازی open source off-the shelf را می‌توان برای ambassador استفاده کرد که توسعه system distributed کلی را سرعت می‌بخشد.
+    </p>
+    <h4 style="font-weight: bold;">Hands On: Implementing a Sharded Redis</h4>
+    <p>
+        Redis یک key-value store سریع است که می‌تواند به‌عنوان cache یا برای storage های پایدارتر استفاده شود. در این مثال، ما از آن به‌عنوان cache استفاده خواهیم کرد. ما با deploy کردن یک service sharded Redis به یک cluster Kubernetes شروع می‌کنیم. ما از شی API StatefulSet برای deploy کردن آن استفاده خواهیم کرد، زیرا این به ما نام‌های DNS منحصربه‌فردی را برای هر shard می‌دهد که می‌توانیم هنگام پیکربندی proxy از آنها استفاده کنیم.
+    </p>
+    <p>
+        StatefulSet برای Redis به این صورت است:
+    </p>
+    <pre><code class="language-yaml">apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: sharded-redis
+spec:
+  serviceName: "redis"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+          name: redis</code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

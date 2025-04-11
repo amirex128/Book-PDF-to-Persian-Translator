@@ -1,0 +1,44 @@
+        image: brendanburns/varnish
+        command:
+        - varnishd
+        - -F
+        - -f
+        - /etc/varnish-config/default.vcl
+        - -a
+        - 0.0.0.0:8080
+        - -s
+        # This memory allocation should match the memory request above
+        - malloc,2G
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: varnish
+          mountPath: /etc/varnish-config
+      volumes:
+      - name: varnish
+        configMap:
+          name: varnish-config
+You can deploy the replicated Varnish servers with:
+kubectl create -f varnish-deploy.yaml
+And then finally deploy a load balancer for this Varnish cache:
+kind: Service
+apiVersion: v1
+metadata:
+  name: varnish-service
+spec:
+  selector:
+    app: varnish-cache
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+which you can create with:
+kubectl create -f varnish-service.yaml
+Expanding the Caching Layer
+Now that we have inserted a caching layer into our stateless, replicated service, let’s
+look at what this layer can provide beyond standard caching. HTTP reverse proxies
+like Varnish are generally pluggable and can provide a number of advanced features
+that are useful beyond caching.
+Expanding the Caching Layer 
+| 
+53

@@ -1,0 +1,39 @@
+        listen localhost:80;
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+Note that we chose to use the full request URI as the key for the hash and use the key
+word consistent to indicate that we want to use a consistent hashing function.
+Sharded, Replicated Serving
+Most of the examples in this chapter so far have described sharding in terms of cache
+serving. But, of course, caches are not the only kinds of services that can benefit from
+sharding. Sharding is useful when considering any sort of service where there is more
+data than can fit on a single machine. In contrast to previous examples, the key and
+sharding function are not a part of the HTTP request, but rather some context for the
+user.
+For example, consider implementing a large-scale multi-player game. Such a game
+world is likely to be far too large to fit on a single machine. However, players who are
+distant from each other in this virtual world are unlikely to interact. Consequently,
+the world of the game can be sharded across many different machines. The sharding
+function is keyed off of the player’s location so that all players in a particular location
+land on the same set of servers.
+Hot Sharding Systems
+Ideally the load on a sharded cache will be perfectly even, but in many cases this isn’t
+true and “hot shards” appear because organic load patterns drive more traffic to one
+particular shard.
+As an example of this, consider a sharded cache for a user’s photos; when a particular
+photo goes viral and suddenly receives a disproportionate amount of traffic, the cache
+shard containing that photo will become “hot.” When this happens, with a replicated,
+sharded cache, you can scale the cache shard to respond to the increased load.
+Indeed, if you set up autoscaling for each cache shard, you can dynamically grow and
+shrink each replicated shard as the organic traffic to your service shifts around. An
+illustration of this process is shown in Figure 6-3. Initially the sharded service
+receives equal traffic to all three shards. Then the traffic shifts so that Shard A is
+receiving four times as much traffic as Shard B and Shard C. The hot sharding system
+moves Shard B to the same machine as Shard C, and replicates Shard A to a second
+machine. Traffic is now, once again, equally shared between replicas.
+70 
+| 
+Chapter 6: Sharded Services

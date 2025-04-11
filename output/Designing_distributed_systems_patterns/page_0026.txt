@@ -1,0 +1,37 @@
+compound the misery of the team sent to update this particular web service, the
+source code for this application was built with an old version of the company’s build
+system, which no longer functions. Containerizing this HTTP application is simple
+enough: the binary can run in a container with a version of an old Linux distribution
+on top of a more modern kernel being run by the team’s container orchestrator. How‐
+ever, the task of adding HTTPS to this application is significantly more challenging.
+The team is trying to decide between resurrecting the old build system versus porting
+the application’s source code to the new build system, when one of the team members
+suggests that they use the sidecar pattern to resolve the situation more easily.
+The application of the sidecar pattern to this situation is straightforward. The legacy
+web service is configured to serve exclusively on localhost (127.0.0.1), which means
+that only services that share the local network with the server will be able to access
+the service. Normally, this wouldn’t be a practical choice because it would mean that
+no one could access the web service. However, using the sidecar pattern, in addition
+to the legacy container, we will add an nginx sidecar container. This nginx container
+lives in the same network namespace as the legacy web application, so it can access
+the service that is running on localhost. At the same time, this nginx service can ter‐
+minate HTTPS traffic on the external IP address of the pod and proxy that traffic to
+the legacy web application (see Figure 2-2). Since this unencrypted traffic is only sent
+via the local loopback adapter inside the container group, the network security team
+is satisfied that the data is safe. Likewise, by using the sidecar pattern, the team has
+modernized a legacy application without having to figure out how to rebuild a new
+application to serve HTTPS.
+Figure 2-2. The HTTPS sidecar
+Dynamic Configuration with Sidecars
+Simply proxying traffic into an existing application is not the only use for a sidecar.
+Another common example is configuration synchronization. Many applications use a
+configuration file for parameterizing the application; this may be a raw text file or
+something more structured like XML, JSON, or YAML. Many pre-existing applica‐
+tions were written to assume that this file was present on the filesystem and read their
+configuration from there. However, in a cloud-native environment it is often quite
+useful to use an API for updating configuration. This allows you to do a dynamic
+push of configuration information via an API instead of manually logging in to every
+server and updating the configuration file using imperative commands. The desire
+12 
+| 
+Chapter 2: The Sidecar Pattern

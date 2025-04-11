@@ -1,0 +1,34 @@
+9. Conclusion
+production
+Stopwatch
+will
+of
+course
+call
+currentTimestamp()
+on
+TimerUsesSystemClock instead of the FakeTimer. A dependency injection con-
+tainer will usually take care of the actual setup of your service object, includ-
+ing any of its dependencies. Figure 9.10 shows the differences between both
+perspectives.
+Figure 9.10. The code of
+Stopwatch depends only on the Timer inter-
+face, but at runtime the Stopwatch will use an object of type
+TimerUsesSystemClock, without being aware of that.
+I find that when you start at a low level, the level of classes and methods, and
+you aim to write as much object-pure code as possible, while pushing all the
+infrastructure-related things to the sides, you will end up with a much better
+design at a higher level too. Which is why I’ve started this book focusing only
+on core versus infrastructure instead of architectural concepts like layering,
+and ports and adapters. Of course we’ll discuss these concepts in Part II, but
+the big win is separating core from infrastructure code. All the rest is nice-
+to-have, and you will get the rest more or less for free.
+9.6. Summary
+In this chapter we rephrased the definition of core code as code that repre-
+sents the use cases of an application. Infrastructure code is code that con-
+nects these use cases to its external actors. Actors can be primary actors
+(users of the application) or secondary/supporting actors (other systems that
+our application uses). To decouple from primary actors we have to make
+our use cases universally invokable, regardless of the delivery mechanism
+that a specific type of actor supports. To decouple from secondary actors we
+241

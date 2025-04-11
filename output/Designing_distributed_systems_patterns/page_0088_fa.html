@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 88</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   <em>Figure 7-1. A scatter/gather pattern</em>
+  </p>
+  <h4><strong>Scatter/Gather with Root Distribution</strong></h4>
+  <p>
+   ساده‌ترین شکل scatter/gather، حالتی است که در آن هر leaf کاملاً homogenous است اما کار به تعدادی از leaves های مختلف توزیع می‌شود تا performance request را بهبود بخشد. این pattern معادل حل یک مشکل "embarrassingly parallel" است. این مشکل می‌تواند به قطعات مختلفی تقسیم شود و هر قطعه را می‌توان با تمام قطعات دیگر در کنار هم قرار داد تا یک پاسخ کامل را تشکیل دهد.
+  </p>
+  <p>
+   برای درک این موضوع به صورت ملموس‌تر، تصور کنید که شما نیاز دارید یک user request R را service دهید و service دادن به این request توسط یک core واحد یک دقیقه طول می‌کشد تا پاسخ A را تولید کند. اگر ما یک application multi-threaded را برنامه‌نویسی کنیم، می‌توانیم این request را بر روی یک machine واحد با استفاده از چندین core موازی کنیم. با توجه به این رویکرد و یک processor 30 core (بله، معمولاً این یک processor 32 core خواهد بود، اما 30 محاسبات را تمیزتر می‌کند)، ما می‌توانیم زمان لازم برای پردازش یک request واحد را به 2 ثانیه کاهش دهیم (60 ثانیه محاسبه تقسیم شده در 30 thread برای محاسبه برابر با 2 ثانیه). اما حتی دو ثانیه برای service دادن به web request یک user بسیار کند است. علاوه بر این، دستیابی به یک سرعت کاملاً موازی بر روی یک process واحد، دشوار خواهد بود زیرا چیزهایی مانند حافظه، network یا پهنای باند دیسک شروع به تبدیل شدن به bottleneck می‌کنند. به جای parallelizing یک application در سراسر cores ها بر روی یک machine واحد، ما می‌توانیم از pattern scatter/gather برای parallelize کردن requests ها در سراسر چندین process بر روی machine های مختلف استفاده کنیم. به این ترتیب، ما می‌توانیم latency requests کلی خود را بهبود بخشیم، زیرا دیگر به تعداد cores هایی که می‌توانیم بر روی یک machine واحد داشته باشیم، محدود نیستیم، و همچنین اطمینان حاصل می‌کنیم که bottleneck در process ما همچنان CPU است، زیرا پهنای باند حافظه، network و دیسک همگی در تعدادی از machine های مختلف پخش می‌شوند. علاوه بر این، از آنجایی که هر machine در درخت scatter/gather قادر به رسیدگی به هر request است، root درخت می‌تواند به صورت پویا load را به گره‌های مختلف در زمان‌های مختلف بسته به responsiveness آنها، dispatch کند. اگر به هر دلیلی، یک leaf node خاص کندتر از machine های دیگر پاسخ می‌دهد (به عنوان مثال، دارای
+   74
+   | Chapter 7: Scatter/Gather
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0088/image_1.png" alt="Image from page 88" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

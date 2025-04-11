@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 131</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Dynamic Scaling of the Workers</h3>
+  <p>
+   <strong>work queue</strong> که قبلاً توضیح داده شد برای پردازش <strong>work items</strong> به سرعت مناسب است، اما این می‌تواند منجر به بارگذاری <strong>bursty resource</strong> بر روی یک <strong>container orchestrator cluster</strong> شود. این خوب است اگر شما تعداد زیادی <strong>workloads</strong> مختلف دارید که در زمان‌های مختلف <strong>burst</strong> خواهند شد و در نتیجه زیرساخت شما به طور مساوی مورد استفاده قرار می‌گیرد. اما اگر تعداد کافی <strong>workloads</strong> مختلف ندارید، این رویکرد <strong>feast or famine</strong> برای مقیاس‌بندی <strong>work queue</strong> شما ممکن است مستلزم این باشد که منابع را بیش از حد <strong>provision</strong> کنید تا از <strong>bursts</strong>ی که بیکار خواهند ماند (و هزینه زیادی را به همراه خواهد داشت) پشتیبانی کنید، در حالی که شما کاری برای انجام دادن ندارید.
+  </p>
+  <p>
+   برای حل این مشکل، می‌توانید تعداد کلی <strong>Job objects</strong>ی را که <strong>work queue</strong> شما مایل به ایجاد آن است، محدود کنید. این به طور طبیعی به محدود کردن تعداد <strong>work items</strong>ی که به صورت موازی پردازش می‌کنید و در نتیجه محدود کردن حداکثر مقدار منابعی که در یک زمان خاص استفاده می‌کنید، کمک می‌کند. با این حال، انجام این کار، زمان تکمیل (<strong>latency</strong>) را برای هر <strong>work item</strong> در حال تکمیل در زیر بار سنگین افزایش می‌دهد.
+  </p>
+  <p>
+   اگر بار <strong>bursty</strong> باشد، این احتمالاً اشکالی ندارد زیرا می‌توانید از زمان‌های <strong>slack</strong> برای رسیدگی به <strong>backlog</strong>ی که در طی یک <strong>burst of usage</strong> ایجاد شده است، استفاده کنید. با این حال، اگر استفاده <strong>steady-state</strong> شما بیش از حد زیاد باشد، <strong>work queue</strong> شما ممکن است هرگز نتواند به آن برسد و زمان تکمیل به سادگی طولانی‌تر و طولانی‌تر می‌شود.
+  </p>
+  <p>
+   هنگامی که <strong>work queue</strong> شما با این موقعیت مواجه می‌شود، باید آن را به صورت <strong>dynamic</strong> تنظیم کنید تا موازی‌سازی را که مایل به ایجاد آن است (و متناظر با منابعی که مایل به استفاده از آن است) افزایش دهد تا بتواند با کار ورودی همگام شود. خوشبختانه، فرمول‌های ریاضی وجود دارد که می‌توانیم از آن‌ها برای تعیین زمان نیاز به <strong>dynamic</strong> مقیاس‌بندی <strong>work queue</strong> خود استفاده کنیم.
+  </p>
+  <p>
+   یک <strong>work queue</strong> را در نظر بگیرید که در آن یک <strong>work item</strong> جدید به طور متوسط ​​یک بار در هر دقیقه می‌رسد و هر <strong>work item</strong> به طور متوسط ​​30 ثانیه طول می‌کشد تا تکمیل شود. چنین سیستمی قادر به همگامی با تمام کارهایی است که دریافت می‌کند. حتی اگر تعداد زیادی کار به یکباره برسد و یک <strong>backlog</strong> ایجاد کند، به طور متوسط ​​<strong>work queue</strong> دو <strong>work item</strong> را برای هر <strong>work item</strong>ی که می‌رسد پردازش می‌کند، و بنابراین قادر خواهد بود به تدریج از طریق <strong>backlog</strong> خود کار کند.
+  </p>
+  <p>
+   اگر، به جای آن، یک <strong>work item</strong> جدید به طور متوسط ​​یک بار در هر دقیقه برسد و پردازش هر <strong>work item</strong> به طور متوسط ​​یک دقیقه طول بکشد، سیستم کاملاً متعادل است، اما <strong>variance</strong> را به خوبی مدیریت نمی‌کند. این می‌تواند با <strong>bursts</strong> مقابله کند - اما مدتی طول می‌کشد، و هیچ <strong>slack</strong> یا ظرفیتی برای جذب افزایش مداوم در میزان ورود <strong>work items</strong> جدید ندارد. این احتمالاً یک راه ایده‌آل برای اجرا نیست، زیرا برای حفظ یک سیستم پایدار به مقداری <strong>safety margin</strong> برای رشد و سایر افزایش‌های مداوم در کار (یا کاهش‌های غیرمنتظره در پردازش) نیاز است.
+  </p>
+  <p>
+   در نهایت، سیستمی را در نظر بگیرید که در آن یک <strong>work item</strong> هر دقیقه می‌رسد و پردازش هر مورد 2 دقیقه طول می‌کشد. در چنین سیستمی، ما همیشه در حال از دست دادن زمین هستیم. <strong>queue</strong>
+  </p>
+  <p>
+   Dynamic Scaling of the Workers
+  </p>
+  <p>
+   117
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

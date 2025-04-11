@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 76</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   تا محاسبه آن result از ابتدا. در نتیجه، یک cache می‌تواند سرعت requests ها و همچنین تعداد کل requests های پردازش شده را بهبود بخشد. برای اینکه بدانید چرا این درست است، تصور کنید که system شما می‌تواند یک request را از یک user در 100 میلی‌ثانیه service دهد. شما یک cache با hit rate 25٪ اضافه می‌کنید که می‌تواند یک result را در 10 میلی‌ثانیه برگرداند. بنابراین، میانگین latency برای یک request در system شما اکنون 77.5 میلی‌ثانیه است. بر خلاف حداکثر requests در ثانیه، cache به سادگی requests های شما را سریع‌تر می‌کند، بنابراین نیاز کمتری به نگرانی در مورد این واقعیت وجود دارد که requests ها در صورت failure cache یا ارتقا کند می‌شوند. با این حال، در برخی موارد، impact performance می‌تواند باعث شود که requests های user زیادی در request queues جمع شوند و در نهایت time out شوند. همیشه توصیه می‌شود که system خود را هم با و هم بدون cache ها load test کنید تا impact cache را بر performance کلی system خود درک کنید.
+  </p>
+  <p>
+   در نهایت، این فقط failures نیست که شما باید در مورد آن فکر کنید. اگر شما نیاز به ارتقا یا redeploy یک sharded cache دارید، شما نمی‌توانید فقط یک replica جدید را مستقر کنید و فرض کنید که load را بر عهده می‌گیرد. استقرار یک version جدید از یک sharded cache به طور کلی منجر به از دست دادن موقت مقداری capacity می‌شود. یک گزینه پیشرفته‌تر دیگر، replicate کردن shards های شما است.
+  </p>
+  <h4><strong>Replicated, Sharded Caches</strong></h4>
+  <p>
+   گاهی اوقات system شما آنقدر به یک cache برای latency یا load وابسته است که از دست دادن یک cache shard کامل، قابل قبول نیست، چه failure یا شما در حال انجام rollout هستید. از طرف دیگر، ممکن است شما load زیادی بر روی یک cache shard خاص داشته باشید که نیاز به scale کردن آن برای مدیریت load دارید. به همین دلایل، شما ممکن است انتخاب کنید که یک service شارد شده و replicated را مستقر کنید. یک service sharded و replicated، pattern service replicated که در فصل قبل توضیح داده شد را با pattern sharded که در بخش‌های قبلی توضیح داده شد، ترکیب می‌کند. به طور خلاصه، به جای داشتن یک server واحد برای پیاده‌سازی هر shard در cache، از یک service replicated برای پیاده‌سازی هر cache shard استفاده می‌شود.
+  </p>
+  <p>
+   این طراحی بدیهی است که پیاده‌سازی و استقرار آن پیچیده‌تر است، اما چندین مزیت نسبت به یک service sharded ساده دارد. مهمتر از همه، با جایگزینی یک server واحد با یک service replicated، هر cache shard در برابر failures مقاوم است و همیشه در طول failures وجود دارد. به جای طراحی system خود به گونه‌ای که تحمل تخریب performance ناشی از cache shard failures را داشته باشد، می‌توانید به بهبود performance که cache ارائه می‌دهد، تکیه کنید. با فرض اینکه شما مایل به over-provision capacity shard هستید، این بدان معنی است که شما می‌توانید با خیال راحت یک cache rollout را در طول peak traffic انجام دهید، به جای انتظار برای یک دوره آرام برای service خود.
+  </p>
+  <p>
+   علاوه بر این، از آنجایی که هر cache shard replicated، یک service replicated مستقل است، شما می‌توانید هر cache shard را در پاسخ به load آن scale کنید. این نوع "hot sharding" در پایان این فصل مورد بحث قرار می‌گیرد.
+  </p>
+  <p>
+   62
+   | Chapter 6: Sharded Services
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

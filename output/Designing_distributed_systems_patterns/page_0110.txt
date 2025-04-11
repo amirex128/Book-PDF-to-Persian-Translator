@@ -1,0 +1,45 @@
+describe the process of how this master is selected as well as how a new master is
+selected if that master fails.
+There are two ways to implement this master election. This first is to implement a 
+distributed consensus algorithm like Paxos or RAFT, but the complexity of these
+algorithms make them beyond the scope of this book and not worthwhile to imple‐
+ment. Implementing one of these algorithms is akin to implementing locks on top of
+assembly code compare-and-swap instructions. It’s an interesting exercise for an
+undergraduate computer science course, but it is not something that is generally
+worth doing in practice.
+Fortunately, there are a large number of distributed key-value stores that have imple‐
+mented such consensus algorithms for you. At a general level, these systems provide a
+replicated, reliable data store and the primitives necessary to build more complicated
+locking and election abstractions on top. Examples of these distributed stores include
+etcd, ZooKeeper, and consul. The basic primitives that these systems provide is the
+ability to perform a compare-and-swap operation for a particular key. If you haven’t
+seen compare-and-swap before, it is basically an atomic operation that looks like this:
+var lock = sync.Mutex{}
+var store = map[string]string{}
+func compareAndSwap(key, nextValue, currentValue string) (bool, error) {
+  lock.Lock()
+  defer lock.Unlock()
+  if _, found := store[key]; found {
+    if len(currentValue) == 0 {
+      store[key] = nextValue
+      return true, nil
+    }
+    return false, fmt.Errorf("Expected value %s for key %s, but
+    found empty", currentValue, key)
+  }
+  if store[key] == currentValue {
+    store[key] = nextValue
+    return true, nil
+  }
+  return false, nil
+}
+Compare-and-swap atomically writes a new value if the existing value matches the
+expected value. If the value doesn’t match, it returns false. If the value doesn’t exist
+and currentValue is not null, it returns an error.
+In addition to compare-and-swap, the key-value stores allow you to set a time-to-live
+(TTL) for a key. Once the TTL expires, the key is set back to empty.
+Put together, these functions are sufficient to implement a variety of distributed syn‐
+chronization primitives.
+96 
+| 
+Chapter 9: Ownership Election

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 150</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Service locators</h3>
+  <p>وابستگی‌ها، و وابستگی‌های آنها، و غیره، <strong>composed</strong> می‌شود. در مثال ما <strong>controller</strong> نقطه ورود <strong>application</strong> است:</p>
+  <p>نقطه ورود، کد کاربری است که <strong>framework</strong> ابتدا آن را فراخوانی می‌کند.</p>
+  <p>سمان پیشنهاد می‌کند که در یا نزدیک نقطه ورود <strong>application</strong>، به نظر می‌رسد که ما از <strong>container</strong> به عنوان یک <strong>service locator</strong> استفاده می‌کنیم، اما در واقع، ما از آن به عنوان یک <strong>composition root</strong> استفاده می‌کنیم، که یک نقش متفاوت است. بنابراین ما می‌توانیم خاص‌تر باشیم و بگوییم که همه تماس‌ها با <code>resolve()</code>، <code>Container::get()</code> و غیره. نباید ممنوع شوند. تا زمانی که <strong>container</strong> نقش <strong>composition root</strong> را ایفا می‌کند، ما می‌توانیم از آن در نزدیکی نقطه ورود <strong>application</strong> خود استفاده کنیم:</p>
+  <p>یک <strong>Composition Root</strong> در یا نزدیک نقطه ورود قرار دارد. نقطه ورود جایی است که کد کاربر اولین بار توسط یک <strong>framework</strong> اجرا می‌شود.10</p>
+  <p>در عمل، این بدان معناست که در داخل یک <strong>controller</strong>، بازیابی یک <strong>service</strong> از <strong>container</strong> کاملاً اشکالی ندارد. با این حال، پس از ورود به آن <strong>service</strong>، استفاده از <strong>service container</strong> دیگر مجاز نیست. اگر <strong>framework</strong> شما این امکان را می‌دهد که <strong>controllers</strong> را نیز به عنوان <strong>services</strong> تعریف کنید، پس شما حتی می‌توانید <strong>composition root</strong> را یک سطح بالاتر ببرید. سپس <strong>framework</strong> از <strong>container</strong> می‌خواهد تا <strong>controller</strong> شما را <strong>instantiate</strong> کند، و تمام وابستگی‌های آن به عنوان آرگومان‌های <strong>constructor</strong> تزریق می‌شوند. توجه داشته باشید که این گام آخر لازم نیست. پیروزی بزرگ این است که ما از یک <strong>service locator</strong> در هیچ جای کدمان به جز نزدیک نقاط ورودی استفاده نمی‌کنیم.</p>
+  <h4> 5.10. Summary</h4>
+  <p>در این فصل، ما با یک <strong>service</strong> شروع کردیم که از توابع <strong>helper</strong> <strong>globally</strong> موجود برای حل وابستگی‌ها، مقادیر <strong>configuration</strong> و اطلاعات زمینه‌ای استفاده می‌کرد. ما کد را <strong>refactor</strong> کردیم تا وابستگی‌ها و مقادیر <strong>configuration</strong> خود را به عنوان آرگومان‌های <strong>constructor</strong> تزریق کنیم. ما همچنین اطمینان حاصل کردیم که هر اطلاعات زمینه‌ای مربوطه به عنوان آرگومان‌های متد ارائه شده است. تغییر ساختار <strong>service</strong> آن را به یک <strong>service</strong> "خالص" تبدیل کرد؛ رفتار آن کاملاً توسط پیاده‌سازی خود و رفتار <strong>constructor</strong> و آرگومان‌های متد تعیین می‌شود. این باعث می‌شود که <strong>service</strong>، کاندیدای بسیار بهتری برای <strong>unit</strong> باشد</p>
+  <p>10 https://advwebapparch.com/composition-root-location</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

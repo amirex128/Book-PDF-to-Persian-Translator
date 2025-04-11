@@ -1,0 +1,34 @@
+2. The domain model
+• Don’t use the same AR entity for changing state and retrieving state.
+Separate your model into a write and a read model. Take a look at Chap-
+ter 3 for more information about read models.
+• Don’t use your AR entity to navigate from one AR entity to other AR
+entities. If you want to make a change to a different AR entity, fetch it
+by its ID from the corresponding repository.
+• Ignore the fact that an AR entity provides typical service facilities like
+saving and deleting. Use a repository and double dispatch to perform
+these tasks.
+As an example, you should consider the save() method of the Order entity
+to be unavailable for regular clients. Instead, whenever you want to save an
+Order, save it using the repository’s save() method (see Listing 2.30).
+Listing 2.30. Saving an AR entity through the repository.
+final class ActiveRecordOrderRepository implements OrderRepository
+{
+public function save(Order $order): void
+{
+$order->save();
+}
+// ...
+}
+Likewise, when you want to retrieve an Order by its ID, use the repository as
+well (see Listing 2.31).
+Listing 2.31. Retrieving an AR entity through the repository.
+final class ActiveRecordOrderRepository implements OrderRepository
+{
+// ...
+public function getById(OrderId $orderId): Order
+{
+return Order::find($orderId->asString());
+}
+}
+46

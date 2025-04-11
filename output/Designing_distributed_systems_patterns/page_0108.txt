@@ -1,0 +1,17 @@
+Figure 9-1. A master election protocol in operation: initially the first master is selected,
+but when it fails, the third master takes over
+Often, establishing distributed ownership is both the most complicated and most
+important part of designing a reliable distributed system.
+Determining If You Even Need Master Election
+The simplest form of ownership is to just have a single replica of the service. Since
+there is only one instance running at a time, that instance implicitly owns everything
+without any need for election. This has advantages of simplifying your application
+and deployment, but it has disadvantages in terms of downtime and reliability. How‐
+ever, for many applications, the simplicity of this singleton pattern may be worth the
+reliability trade-off. Let’s look at this further.
+Assuming that you run your singleton in a container orchestration system like Kuber‐
+netes, you have the following guarantees:
+• If the container crashes, it will automatically be restarted
+94 
+| 
+Chapter 9: Ownership Election

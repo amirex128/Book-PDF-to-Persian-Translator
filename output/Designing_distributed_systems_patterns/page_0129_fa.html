@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 129</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <pre><code class="language-python">
+                job.spec = client.V1JobSpec()
+    job.spec.template = client.V1PodTemplate()
+    job.spec.template.spec = client.V1PodTemplateSpec()
+    job.spec.template.spec.restart_policy = "Never"
+    job.spec.template.spec.containers = [
+        make_container(item, obj)
+    ]
+    return job
+def update_queue(batch):
+    response = requests.get("http://localhost:8000/items")
+    obj = json.loads(response.text)
+    items = obj['items']
+    ret = batch.list_namespaced_job(namespace, watch=False)
+    for item in items:
+        found = False
+        for i in ret.items:
+            if i.metadata.name == item:
+                found = True
+        if not found:
+            # This function creates the job object, omitted for
+            # brevity
+            job = make_job(item)
+            batch.create_namespaced_job(namespace, job)
+config.load_kube_config()
+batch = client.BatchV1Api()
+while True:
+    update_queue(batch)
+    time.sleep(10)
+  </code></pre>
+  <h3>Hands On: Implementing a Video Thumbnailer</h3>
+  <p>
+   برای ارائه یک مثال عینی از نحوه استفاده ما از یک <strong>work queue</strong>، وظیفه ایجاد <strong>thumbnails</strong> برای ویدیوها را در نظر بگیرید. این <strong>thumbnails</strong> به کاربران کمک می‌کند تا تعیین کنند کدام ویدیوها را می‌خواهند تماشا کنند.
+  </p>
+  <p>
+   برای پیاده‌سازی این <strong>video thumbnailer</strong>، ما به دو <strong>user containers</strong> مختلف نیاز داریم. اولین مورد <strong>work item source container</strong> است. ساده‌ترین راه برای کار این است که <strong>work items</strong> در یک دیسک مشترک، مانند یک <strong>Network File System (NFS) share</strong>، ظاهر شوند. <strong>work item source</strong> به سادگی فایل‌ها را در این دایرکتوری فهرست می‌کند و آنها را به تماس‌گیرنده برمی‌گرداند.
+  </p>
+  <p>
+   در اینجا یک برنامه <strong>node</strong> ساده وجود دارد که این کار را انجام می‌دهد:
+  </p>
+  <pre><code class="language-javascript">
+const http = require('http');
+const fs = require('fs');
+const port = 8080;
+  </code></pre>
+  <p>
+   Hands On: Implementing a Video Thumbnailer
+  </p>
+  <p>
+   115
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

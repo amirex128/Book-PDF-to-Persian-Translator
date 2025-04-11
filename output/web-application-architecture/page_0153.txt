@@ -1,0 +1,28 @@
+6. External services
+This chapter covers:
+• Creating an object-oriented layer around calls to
+external services
+• Introducing proper abstractions for calls to ex-
+ternal services
+• Creating integration tests for code that uses ex-
+ternal services
+We ended Chapter 4 with an extracted use case for ordering an e-book. An
+important aspect of that use case is still missing: the correct calculation of
+VAT (value-added tax). VAT calculation is a huge topic, with lots of rules, and
+lots of exceptions too. Trying to get it right for all the possible situations and
+all the countries in the world, would be a tremendous effort. Standing in
+front of a large amount of work, we should consider our options. Instead of
+spending an awful lot of time getting every detail right, we could reduce the
+scope by limiting the number of possible situations the application needs to
+care about. Or we could outsource the solution. That doesn’t mean we should
+let a team of external developers work on it. Instead, we should consider
+using an already existing solution. In the case of VAT calculation there are
+multiple web services that can give us the answers we need. For now, let’s
+use vatapi.com (for no specific reason; I’m also not affiliated to them in any
+way).
+The domain model has already been prepared to deal with VAT (Listing 6.1).
+There’s a VatRate value object which can be created from an int, represent-
+ing the VAT percentage (ignoring for now the possibility that a VAT rate could
+actually be a decimal number). The Order class has an extra constructor ar-
+gument which accepts a VatRate object. Order will use this VatRate internally
+133

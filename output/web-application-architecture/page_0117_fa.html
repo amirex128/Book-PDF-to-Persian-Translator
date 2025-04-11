@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 117</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>4. Application services</strong></h3>
+  <pre><code class="language-php">
+    $ebook->price(),
+    $orderAmount
+    );
+    // ...
+    return new Response(/* ... */);
+    }
+    }
+    Finally, any client that uses the EbookOrderService has to be updated too.
+    From now on, they need to prepare a CreateOrder instance and pass it to the
+    service. See Listing 4.10 for what this looks like in the controller action.
+    Listing 4.10. orderEbookAction() instantiates and populates a CreateOrder
+    object and passes it to EbookOrderService.
+    public function orderEbookAction(Request $request): Response
+    {
+    $createOrder = new CreateOrder(
+    (int)$request->get('ebook_id'),
+    (int)$request->get('quantity'),
+    $request->get('email_address')
+    );
+    $orderId = $this->container->get('ebook_order_service')
+    ->create($createOrder);
+    // ...
+    return new Response(/* ... */);
+    }
+  </code></pre>
+  <p>
+    و ما باید این <code>application service</code> را نیز به‌روزرسانی کنیم. از این به بعد، آنها باید یک نمونه <code>CreateOrder</code> را آماده کرده و آن را به <code>service</code> منتقل کنند.
+    Listing 4.10 نشان می‌دهد که این در <code>controller action</code> چگونه به نظر می‌رسد.
+  </p>
+  <h4>4.5. Dealing with multiple steps</h4>
+  <p>
+    ما با موفقیت یک تکه از کد جدا شده را از <code>controller</code> به <code>application service</code> خود منتقل کردیم. اما معمولاً انجام این کار به این آسانی نیست.
+    در <code>projects</code>های قدیمی شما <code>controller actions</code> را پیدا خواهید کرد که از چندین صد (اگر نه هزاران) خط تشکیل شده‌اند. اگر خوش شانس باشید، این <code>methods</code> مانند <code>scripts</code> خوانده می‌شوند: ابتدا این کار را انجام دهید، سپس آن کار را انجام دهید، سپس این کار دیگر را انجام دهید و غیره.
+    اگر اینطور باشد، ممکن است بتوانید این مراحل را استخراج کرده و آنها را در کلاس‌های خود قرار دهید تا قابل نگهداری و شاید حتی قابل آزمایش شوند.
+    گاهی اوقات اینطور نیست
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

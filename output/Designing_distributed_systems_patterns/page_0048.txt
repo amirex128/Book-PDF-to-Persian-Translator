@@ -1,0 +1,31 @@
+tainer reuse. In this case, the example shown combines an existing Redis container
+with an existing Prometheus adapter. The net effect is a monitorable Redis server,
+with little work on our part to deploy it. In the absence of the adapter pattern, the
+same deployment would have required significantly more custom work and would
+have resulted in a much less operable solution, since any updates to either Redis or
+the adapter would have required work to apply the update.
+Logging
+Much like monitoring, there is a wide variety of heterogeneity in how systems log
+data to an output stream. Systems might divide their logs into different levels (such as
+debug, info, warning, and error) with each level going into a different file. Some
+might simply log to stdout and stderr. This is especially problematic in the world of
+containerized applications where there is a general expectation that your containers
+will log to stdout, because that is what is available via commands like docker logs or
+kubectl logs.
+Adding further complexity, the information logged generally has structured informa‐
+tion (e.g., the date/time of the log), but this information varies widely between differ‐
+ent logging libraries (e.g., Java’s built-in logging versus the glog package for Go).
+Of course, when you are storing and querying the logs for your distributed system,
+you don’t really care about these differences in logging format. You want to ensure
+that despite different structures for the data, every log ends up with the appropriate
+timestamp.
+Fortunately, as with monitoring, the adapter pattern can help provide a modular, re-
+usable design for both of these situations. While the application container may log to
+a file, the adapter container can redirect that file to stdout. Different application con‐
+tainers can log information in different formats, but the adapter container can trans‐
+form that data into a single structured representation that can be consumed by your
+log aggregator. Again, the adapter is taking a heterogeneous world of applications and
+creating a homogenous world of common interfaces.
+34 
+| 
+Chapter 4: Adapters

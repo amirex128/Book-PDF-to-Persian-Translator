@@ -1,0 +1,35 @@
+8. Validation
+Listing 8.14. UserErrorMessage and BaseUserErrorMessage,
+interface UserErrorMessage extends Throwable
+{
+public function translationKey(): string;
+}
+abstract class BaseUserErrorMessage
+extends RuntimeException
+implements UserErrorMessage
+{
+private string $translationKey;
+public function __construct(
+string $translationKey
+) {
+$this->translationKey = $translationKey;
+parent::__construct($translationKey);
+}
+public function translationKey(): string
+{
+return $this->translationKey;
+}
+}
+Now we introduce a custom exception class and let it extend from
+BaseUserErrorMessage. Using a named constructor we can create the excep-
+tion in an intention-revealing way. Listing 8.15 shows the custom exception
+class and how the application service can throw it.
+Listing 8.15. The application service throws a UserErrorMessage exception.
+final class CouldNotOrderPhysicalBook
+extends BaseUserErrorMessage
+{
+public static function becauseInsufficientStockLevels(): self
+{
+return new self(
+'create_order.insufficient_quantity_in_stock'
+211

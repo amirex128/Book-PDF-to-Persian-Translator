@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 46</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p style="text-align: center;">
+        <em style="font-style: italic;">Figure 4-1. The generic adapter pattern</em>
+    </p>
+    <p>
+        بقیه این فصل، چندین application مختلف از adapter pattern را ارائه می‌دهد.
+    </p>
+    <h4 style="font-weight: bold;">Monitoring</h4>
+    <p>
+        هنگام monitoring نرم‌افزار خود، شما به یک solution واحد نیاز دارید که بتواند به طور خودکار هر applicationی را که در environment شما deploy شده است، کشف و مانیتور کند. برای عملی کردن این، هر application باید یک interface نظارتی یکسان را پیاده‌سازی کند.
+        examples های متعددی از interfaces نظارتی استاندارد، مانند syslog، event tracing بر روی ویندوز (etw)، JMX برای applications جاوا، و بسیاری از protocols ها و interfaces های دیگر وجود دارد. با این حال، هر یک از این موارد، هم در protocol برای ارتباطات و هم در سبک ارتباطات (push در مقابل pull) منحصربه‌فرد هستند.
+    </p>
+    <p>
+        متأسفانه، applications در system distributed شما احتمالاً گستره‌ای از code را که خودتان نوشته‌اید، تا components های open source off-the-shelf در بر می‌گیرد. در نتیجه، شما خود را با طیف گسترده‌ای از interfaces های نظارتی مختلف خواهید یافت که باید آنها را در یک system واحد و well-understood ادغام کنید.
+    </p>
+    <p>
+        خوشبختانه، اکثر solutions های monitoring درک می‌کنند که باید به طور گسترده قابل اجرا باشند، و از این رو، آنها انواع مختلفی از plugins ها را پیاده‌سازی کرده‌اند که می‌توانند یک format نظارتی را با یک interface common تطبیق دهند. با توجه به این مجموعه از tools ها، چگونه می‌توانیم applications های خود را به روشی agile و stable، deploy و manage کنیم؟ خوشبختانه، adapter pattern می‌تواند پاسخ‌ها را به ما ارائه دهد. با به‌کارگیری adapter pattern برای monitoring، ما می‌بینیم که application container به سادگی applicationی است که ما می‌خواهیم آن را monitor کنیم.
+        adapter container، tools هایی را برای تبدیل interface نظارتی که توسط application container در معرض دید قرار دارد، به interface مورد انتظار توسط system monitoring general-purpose، شامل می‌شود.
+    </p>
+    <p>
+        Decoupling system به این روش، یک system قابل فهم‌تر و قابل نگهداری‌تر ایجاد می‌کند. ارائه نسخه‌های جدید application نیازی به rollout adapter نظارتی ندارد. علاوه بر این، container نظارتی می‌تواند با چندین application container مختلف مورد استفاده مجدد قرار گیرد. container نظارتی، ممکن است حتی توسط نگهدارندگان system monitoring، مستقل از developers application ارائه شده باشد. در نهایت، deploy کردن adapter نظارتی به‌عنوان یک container جداگانه تضمین می‌کند که هر container، resources های اختصاصی خود را هم از نظر CPU و هم از نظر memory دریافت می‌کند.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0046/image_1.png" alt="Image from page 46" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

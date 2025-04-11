@@ -1,0 +1,41 @@
+Interestingly, while the ambassador container is clearly application-specific, there is
+also a variety of generic implementations of the work queue source API. For example,
+a source might be a list of pictures stored in a cloud storage API, a collection of files
+stored on network storage, or a queue in an pub/sub system like Kafka or Redis. In
+these cases, though the user chooses the particular work queue ambassador that fits
+their scenario, they should be reusing a single generic “library” implementation of the
+container itself. This minimizes work and maximizes code reuse.
+Work queue API
+Given this coordination between the generic work-queue manager and the
+application-specific ambassador, we need a formal definition of the interface between
+the two containers. Though there are a variety of different protocols, an HTTP REST‐
+ful API is both the easiest to implement as well as the de facto standard for such an
+interface. The master work queue expects the ambassador to implement the following
+URLs:
+• GET http://localhost/api/v1/items
+• GET http://localhost/api/v1/items/<item-name>
+You might wonder why we include a v1 in the API definition. Will
+there ever be a v2 of this interface? It may not seem logical, but it
+costs very little to version your API when you initially define it.
+Refactoring versioning onto an API without it, on the other hand,
+is very expensive. Consequently, it is a best practice to always add
+versions to your APIs even if you’re not sure they will ever change.
+Better safe than sorry.
+The /items/ URL returns a complete list of all items:
+{
+   kind: ItemList,
+   apiVersion: v1,
+   items: [
+      “item-1”,
+      “item-2”,
+      ….
+   ]
+}
+The /items/<item-name> URL provides the details for a specific item:
+{
+  kind: Item,
+  apiVersion: v1,
+  data: {
+A Generic Work Queue System 
+| 
+111

@@ -1,0 +1,34 @@
+6. External services
+This is a more generic, possibly more reusable method than the one we
+proposed before. It removes the specific “e-book” aspect from the original
+method: vatRateForSellingEbooksInCountry(). But it introduces an extra
+parameter which ties it to our vatapi.com-based implementation. It’s most
+likely that the $filter parameter will have no use once we move away
+from vatapi.com and start using another API. Maybe we should even con-
+clude that the e-book-specificness was a benefit of the interface, since it
+encoded the filtering aspect in the method name itself. This would allow
+the implementing class to take care of the actual filtering itself, without the
+client having to worry about it.
+6.4. Testing
+So far we’ve seen several examples of splitting core code and infrastructure
+code. We’ve also seen how doing this influences the tests you create for your
+code. Core code is code that doesn’t use IO (network, file system, etc.). There-
+fore, code can be tested in complete isolation. You don’t need any special
+setup. It’s enough to instantiate the object, call a method on it, and compare
+the outcome with what you expect. These tests will give you quick feedback
+while you’re developing the code. They won’t fail for weird reasons, like con-
+currency problems, or a remote service that is down or responds in unex-
+pected ways. You’re only doing manipulations on data in memory, which is
+a deterministic process.
+These properties of isolated tests are very desirable. You’d want to maximize
+the number of classes that can be tested like this. Separating core code from
+infrastructure code is the best way to accomplish this. Always look for that
+part of the logic that you can test in isolation and extract it into its own class.
+We started this chapter by ruining our options for testing, because we had
+all those curl_*() calls right inside the EbookOrderService. Extracting those
+calls to a separate class, the VatApi service, was a good idea, but still didn’t
+give us more things to test in isolation. Only when we introduced an abstrac-
+tion for providing a VAT rate, we were back at a testable EbookOrderService.
+When testing this class we can now easily provide a test double for the VatRateProvider
+interface. Listing 6.13 shows what this would look like. This prevents an ac-
+151

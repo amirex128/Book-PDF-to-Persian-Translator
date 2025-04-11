@@ -1,0 +1,33 @@
+7. Time and randomness
+final class OrderTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_can_be_created(): void
+{
+$id = (new UuidFactoryUsingRamseyUuid())->create();
+$orderDate = (new ClockUsingSystemClock())->currentTime();
+$order = Order::create($id, $orderDate);
+self::assertEquals(
+[
+new OrderWasCreated(
+$id,
+$orderDate
+)
+],
+$order->releaseEvents();
+);
+}
+}
+Although a bit more verbose, this is definitely a more honest way of showing
+where the current time and the unique ID come from.
+7.3. Introducing value objects
+Instead of using the services while testing, couldn’t we just use hard-coded
+values, like in Listing 7.8? We could generate a UUID once and reuse it for
+every test run. The same for the timestamp: we should be able to set it to a
+fixed moment in time. And we don’t even need some ugly hack like overrid-
+ing PHP’s built-in functions or classes. We can just provide a string argument
+to DateTimeImmutable’s constructor (Listing 7.8).
+Listing 7.8. Using hard-coded values for Uuid and DateTimeImmutable
+170

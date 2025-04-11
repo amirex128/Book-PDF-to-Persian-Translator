@@ -1,0 +1,43 @@
+Traditional lock implementations block until the lock is acquired, so we actually want
+something like this:
+func (Lock l) lock() {
+  while (!l.simpleLock()) {
+    sleep(2)
+  }
+}
+This implementation, though simple, has the problem that you will always wait at
+least a second after the lock is released before you acquire the lock. Fortunately, many
+key-value stores let you watch for changes instead of polling, so you can implement:
+func (Lock l) lock() {
+  while (!l.simpleLock()) {
+    waitForChanges(l.lockName)
+  }
+}
+Given this locking function, we can also implement unlock:
+func (Lock l) unlock() {
+  compareAndSwap(l.lockName, "0", "1")
+}
+You might now think that we are done, but remember that we are building this for a
+distributed system. A process could fail in the middle of holding the lock, and at that
+point there is no one left to release it. In such a situation, our system will become
+stuck. To resolve this, we take advantage of the TTL functionality of the key-value
+store. We change our simpleLock function so that it always writes with a TTL, so if
+we don’t unlock within a given time, the lock will automatically unlock.
+func (Lock l) simpleLock() boolean {
+  // compare and swap "1" for "0"
+  locked, error = compareAndSwap(l.lockName, "1", "0", l.ttl)
+  // lock doesn't exist, try to write "1" with a previous value of
+  // non-existent
+  if error != nil {
+    locked, _ = compareAndSwap(l.lockName, "1", nil, l.ttl)
+  }
+  return locked
+}
+When using distributed locks, it is critical to ensure that any pro‐
+cessing you do doesn’t last longer than the TTL of the lock. One
+good practice is to set a watchdog timer when you acquire the lock.
+The watchdog contains an assertion that will crash your program if
+the TTL of the lock expires before you have called unlock.
+The Basics of Master Election 
+| 
+99

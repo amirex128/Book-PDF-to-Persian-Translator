@@ -1,0 +1,34 @@
+9. Conclusion
+{
+return $this->timer->currentTimestamp()
+- $previousTimestamp;
+}
+}
+By introducing the Timer interface, we have successfully built in the possibil-
+ity to call secondsPassed() without indirectly calling time(). We can easily
+instantiate a Stopwatch object, with a stand-in Timer object, which simply re-
+turns a hard-coded timestamp (see Listing 9.8)
+Listing 9.8. A FakeTimer that can be used when testing the Stopwatch.
+final class FakeTimer implements Timer
+{
+private int $timestamp;
+public function __construct(int $timestamp)
+{
+$this->timestamp = $timestamp;
+}
+public function currentTimestamp(): int
+{
+return $this->timestamp;
+}
+}
+$stopwatch = new Stopwatch(new FakeTimer(1562845845));
+Having seen the mechanism of making impure object methods pure, we could
+also rephrase “pure” as: deterministic. Because they only rely on method ar-
+guments and constructor-injected abstract dependencies the client has full
+control over the object. This results in deterministic objects, which is great
+for testability. There’s no special setup required. The only thing a test has
+to do is instantiate the object itself, providing any required dependency, and
+calling a method on it, providing any required argument.
+Looking at the code of StopWatch we can conclude that it’s now pure: it’s de-
+coupled from any infrastructure class. But when the application is running in
+240

@@ -1,0 +1,39 @@
+than calculating that result from scratch. Consequently, a cache can improve the
+speed of requests as well as the total number of requests processed. To see why this is
+true, imagine that your system can serve a request from a user in 100 milliseconds.
+You add a cache with a 25% hit rate that can return a result in 10 milliseconds. Thus,
+the average latency for a request in your system is now 77.5 milliseconds. Unlike
+maximum requests per second, the cache simply makes your requests faster, so there
+is somewhat less need to worry about the fact that requests will slow down if the
+cache fails or is being upgraded. However, in some cases, the performance impact can
+cause too many user requests to pile up in request queues and ultimately time out. It’s
+always recommended that you load test your system both with and without caches to
+understand the impact of the cache on the overall performance of your system.
+Finally, it isn’t just failures that you need to think about. If you need to upgrade or
+redeploy a sharded cache, you can not just deploy a new replica and assume it will
+take the load. Deploying a new version of a sharded cache will generally result in tem‐
+porarily losing some capacity. Another, more advanced option is to replicate your
+shards.
+Replicated, Sharded Caches
+Sometimes your system is so dependent on a cache for latency or load that it is not
+acceptable to lose an entire cache shard if there is a failure or you are doing a rollout.
+Alternatively, you may have so much load on a particular cache shard that you need
+to scale it to handle the load. For these reasons, you may choose to deploy a sharded,
+replicated service. A sharded, replicated service combines the replicated service pat‐
+tern described in the previous chapter with the sharded pattern described in previous
+sections. In a nutshell, rather than having a single server implement each shard in the
+cache, a replicated service is used to implement each cache shard.
+This design is obviously more complicated to implement and deploy, but it has sev‐
+eral advantages over a simple sharded service. Most importantly, by replacing a single
+server with a replicated service, each cache shard is resilient to failures and is always
+present during failures. Rather than designing your system to be tolerant to perfor‐
+mance degradation resulting from cache shard failures, you can rely on the perfor‐
+mance improvements that the cache provides. Assuming that you are willing to over-
+provision shard capacity, this means that it is safe for you to do a cache rollout during
+peak traffic, rather than waiting for a quiet period for your service.
+Additionally, because each replicated cache shard is an independent replicated ser‐
+vice, you can scale each cache shard in response to its load; this sort of “hot sharding”
+is discussed at the end of this chapter.
+62 
+| 
+Chapter 6: Sharded Services

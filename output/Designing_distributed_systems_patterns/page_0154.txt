@@ -1,0 +1,24 @@
+Figure 12-4. The output join, copier, deletion, and image recognition parts of the pipeline
+Finally we need to design the queue that identifies vehicles and colors and aggregates
+these statistics into a final count. To do this, we first again apply the shard pattern to
+distribute the work out to a number of queues. Each of these queues has two different
+workers: one that identifies the location and type of each vehicle and one that identi‐
+fies the color of a region. We will again join these together using the multi-worker
+pattern described in the previous chapter. As before, the separation of code into dif‐
+ferent containers enables us to reuse the color detection container for multiple tasks
+beyond identifying the color of the cars.
+The output of this work queue is a JSON tuple that looks like this:
+{
+  "vehicles": {
+     "car": 12,
+     "truck": 7,
+     "motorcycle": 4
+   },
+   "colors": {
+     "white": 8,
+     "black": 3,
+     "blue": 6,
+     "red": 6
+140 
+| 
+Chapter 12: Coordinated Batch Processing

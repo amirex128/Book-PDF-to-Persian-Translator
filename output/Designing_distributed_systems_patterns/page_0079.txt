@@ -1,0 +1,47 @@
+You can save this to a file named memcached-ambassador-pod.yaml, and then deploy
+it with:
+kubectl create -f memcached-ambassador-pod.yaml
+Of course, we don’t have to use the ambassador pattern if we don’t want to. An alter‐
+native is to deploy a replicated shard router service. There are trade-offs between
+using an ambassador versus using a shard routing service. The value of the service is
+a reduction of complexity. You don’t have to deploy the ambassador with every pod
+that wants to access the sharded memcache service, it can be accessed via a named
+and load-balanced service. The downside of a shared service is twofold. First, because
+it is a shared service, you will have to scale it larger as demand load increases. Second,
+using the shared service introduces an extra network hop that will add some latency
+to requests and contribute network bandwith to the overall distributed system.
+To deploy a shared routing service, you need to change the twemproxy configuration
+slightly so that it listens on all interfaces, not just localhost:
+memcache:
+  listen: 0.0.0.0:11211
+  hash: fnv1a_64
+  distribution: ketama
+  auto_eject_hosts: true
+  timeout: 400
+  server_retry_timeout: 2000
+  server_failure_limit: 1
+  servers:
+   - memcache-0.memcache:11211:1
+   - memcache-1.memcache:11211:1
+   - memcache-2.memcache:11211:1
+You can save this to a file named shared-nutcracker.yaml, and then create a corre‐
+sponding ConfigMap using kubectl:
+kubectl create configmap --from-file=shared-nutcracker.yaml shared-twem-config
+Then you can turn up the replicated shard routing service as a Deployment:
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: shared-twemproxy
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: shared-twemproxy
+    spec:
+      containers:
+      - name: twemproxy
+        image: ganomede/twemproxy
+Sharded Caching 
+| 
+65

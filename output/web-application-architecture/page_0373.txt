@@ -1,0 +1,32 @@
+14. A testing strategy for decoupled applications
+For web applications it makes sense to use something like Panther9. The dif-
+ference between Panther and the standard Symfony WebTestCase that we saw
+in Section 14.4 is that Panther talks to the web server itself instead of the
+framework’s entry point.
+Because we already have so many tests for different parts of our application,
+we shouldn’t test every bit of functionality once more using an end-to-end
+test. We only want to increase our confidence a little bit by showing that
+the parts work well together. Most of the wiring issues can be discovered
+by running only a few important scenarios as end-to-end tests. It’ll be smart
+to only write a few end-to-end tests because they tend to be slow and unsta-
+ble. They break for many unrelated reasons, and those reasons are often not
+programming or configuration mistakes.
+14.7. Development workflow
+With all these different types of tests, the question is: where to start?
+There are different ways to approach the development of a feature. If you
+don’t create decoupled applications, a common starting point is to set up the
+routing, the controller, the templates. Then perhaps a model and a database
+migration for it. Maybe then some forms and form validation. All these
+things are framework-specific so if you’d like to create decoupled applica-
+tions the workflow will be quite different.
+We have an entire catalog of design patterns that we can use to build our
+decoupled applications with. They could be used as building blocks to build
+an application from scratch. For instance, we could start with designing our
+Order entity, including some value objects, then add a repository for it, then
+write the application service. But the risk of starting with the smaller el-
+ements and working your way up is that in the end it may turn out that
+you chose the wrong building blocks, or designed them in the wrong way.
+You may discover this yourself, or you may get some feedback from another
+stakeholder who isn’t happy with the feature you’ve built.
+9 https://advwebapparch.com/panther
+353

@@ -1,0 +1,33 @@
+11. Key design patterns
+public function __construct(OrderRepository $orderRepository)
+{
+$this->orderRepository = $orderRepository;
+}
+public function __invoke(/* ... */): OrderId
+{
+$orderId = $this->orderRepository->nextIdentity();
+$order = Order::create(
+$orderId,
+/* ... */
+);
+$this->orderRepository->save($order);
+return $order->id();
+}
+}
+final class ChangeDeliveryAddressService
+{
+private OrderRepository $orderRepository;
+public function __construct(OrderRepository $orderRepository)
+{
+$this->orderRepository = $orderRepository;
+}
+public function __invoke(OrderId $orderId /* ... */): void
+{
+$order = $this->orderRepository->getById($orderId);
+$order->changeDeliveryAddress(/* ... */);
+$this->orderRepository->save($order);
+}
+}
+An application service could have a single method (like the __invoke() method
+in Listing 11.7). In that case the service represents a single use case as well.
+255

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 223</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Validation</h3>
+  <p>متد اکنون نشان می‌دهد که این مقادیر از کجا می‌آیند و اینکه آنها به هم تعلق دارند (<strong>Listing</strong> 8.8).</p>
+  <p><strong>Listing</strong> 8.8. Passing the <strong>Ebook read model</strong> to the <strong>Order entity</strong>.</p>
+  <pre><code class="language-php">
+// ...
+        $order->addLine($ebook, $quantity);
+
+    // inside the Order class:
+    public function addLine(Ebook $ebook, int $quantity): void
+    {
+        $this->lines[] = new Line(
+            $ebook->ebookId(),
+            $ebook->price(),
+            $quantity
+        );
+    }
+</code></pre>
+  <p>با این حال، ما باید آگاه باشیم که با انجام این کار ممکن است به <code>Order</code> در مورد جزئیات زیادی در مورد <code>Ebooks</code> اجازه دهیم. این به میزان داده‌هایی که <strong>Ebook read model</strong> نشان می‌دهد، بستگی دارد. اگر <strong>read model</strong> فقط برای این <strong>use case</strong> خاص طراحی شده باشد، هیچ خطر واقعی وجود ندارد. در این صورت، <strong>read model</strong> فقط آنچه را که این <strong>client</strong> خاص به آن نیاز دارد، نشان می‌دهد. اگر <strong>read model</strong> در مکان‌های دیگر نیز استفاده شود، ممکن است اطلاعات بی‌ربط زیادی را در معرض دید قرار دهد. این ممکن است هنوز هم یک مشکل بزرگ نباشد، اما به خاطر داشته باشید که هر چه متدهای کمتری را به یک <strong>client</strong> در معرض دید قرار دهید، طراحی شما انعطاف‌پذیرتر خواهد بود.</p>
+  <p>یک کاری که شما نباید انجام دهید این است که یک <strong>entity</strong> کامل را به یک <strong>object</strong> دیگر منتقل کنید. روابط باید بر اساس <strong>ID</strong>، و نه بر اساس <strong>object reference</strong>، ایجاد شوند. به اشتراک گذاشتن یک <strong>entity</strong>، تمام متدهای تعدیل‌کننده <strong>entity</strong> را برای <strong>clients</strong> که قصد ایجاد تغییراتی در آن را ندارند (یا نباید قصد آن را داشته باشند) در معرض دید قرار می‌دهد.</p>
+  <h4> 8.3. Form validation</h4>
+  <p>تا کنون ما به راه‌هایی برای جلوگیری از ورود داده‌های بد به <strong>domain objects</strong> خود نگاه می‌کردیم. در حال حاضر ما می‌توانیم مطمئن باشیم که تمام داده‌هایی که در</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

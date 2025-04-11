@@ -1,0 +1,39 @@
+user requests. There are a variety of services (e.g., serving a search index of docu‐
+ments) that require a great deal of data to be loaded in memory in order to service
+user requests. Even with a relatively fast storage layer, loading such data can take sig‐
+nificantly longer than the desired time to service a user request. Because with FaaS,
+the function itself may be dynamically spun up in response to a user request while the
+user is waiting, the need to load a lot of detail may significantly impact the latency
+that the user perceives while interacting with your service. Of course, once your FaaS
+has been created, it may handle a large number of requests, so this loading cost can be
+amortized across a large number of requests. But if you have a sufficient number of
+requests to keep a function active, then it’s likely you are overpaying for the requests
+you are processing.
+The Costs of Sustained Request-Based Processing
+The cost model of public cloud FaaS is based on per-request pricing. This approach is
+great if you only have a few requests per minute or hour. In such a situation, you are
+idle most of the time, and given a pay-per-request model, you are only paying for the
+time when your service is actively serving requests. In contrast, if you service requests
+via a long-running service either in a container or a virtual machine, then you are
+always paying for processor cycles that is largely sitting around waiting for a user
+request.
+However, as a service grows, the number of requests that you are servicing grows to
+the point where you can keep a processor continuously active servicing user requests.
+At this point, the economics of a pay-per-request model start to become bad, and
+only get worse because the cost of cloud virtual machines generally decreases as you
+add more cores (and also via committed resources like reservations or sustained use
+discounts), whereas the cost per-request largely grows linearly with the number of
+requests.
+Consequently, as your service grows and evolves, it’s highly likely that your use of
+FaaS will evolve as well. One ideal way to scale FaaS is to run an open source FaaS
+that runs on a container orchestrator like Kubernetes. That way, you can still take
+advantage of the developer benefits of FaaS, while taking advantage of the pricing
+models of virtual machines.
+Patterns for FaaS
+In addition to understanding the trade-offs in deploying event-driven or FaaS archi‐
+tectures as part of your distributed system, understanding the best ways to deploy
+FaaS is critical to the design of a successful system. This section describes some can‐
+onical patterns for incorporating FaaS.
+84 
+| 
+Chapter 8: Functions and Event-Driven Processing

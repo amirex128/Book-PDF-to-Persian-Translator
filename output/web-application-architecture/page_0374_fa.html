@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 374</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>The service container (TestServiceContainer) که در اینجا مورد استفاده قرار می‌گیرد، به این شکل است، و در این case باید یک test double را برای EbookOrderService و InvoicingService تنظیم کنیم.
+        به نظر می‌رسد که ما برای پیاده‌سازی این test به تمام این عناصر نیاز داریم.
+    </p>
+    <p>This is a good starting point, but it’s certainly not the only one. A good development workflow for applications در سطح enterprise یک workflow است که در آن شما در درجه اول به use case توجه می‌کنید. اینجوری شروع می‌شود: (1) پیدا کردن و بحث در مورد requirementsها (به صورت high-level)، و (2) توسعه کد مورد نیاز، (3) انجام تست‌های اتوماتیک برای بررسی درست بودن کد. این یک راه ایده‌آل برای شروع به نظر می‌رسد.</p>
+    <p>A testing strategy for decoupled applications</p>
+    <p>
+        این chapter شامل موارد زیر است:
+    </p>
+    <ul>
+        <li>چرا برای application های decoupled تست ضروری است</li>
+        <li>انواع مختلف تست و اینکه چگونه آن‌ها در توسعه نرم‌افزار کمک می‌کنند</li>
+        <li>چگونه از Hexagonal architecture برای test کردن آسان‌تر application خود استفاده کنیم</li>
+        <li>یک development workflow برای توسعه application های decoupled</li>
+    </ul>
+    <p>
+        The core code از یک application از use cases تشکیل شده است. code infrastructure چگونگی برقراری ارتباط با دنیای بیرون و با primary و supporting actors آن را درک می‌کند. برای اینکه application شما قابل تست باشد، باید با core code و infrastructure code شروع کنید، و سپس این موارد را با هم ترکیب کنید.
+    </p>
+    <p>بنابراین اجازه دهید این موارد را به ترتیب دنبال کنیم.</p>
+    <h4>
+        14.1. Test core code using unit tests
+    </h4>
+    <p>
+        "چرا جداسازی کد core از infrastructure code بسیار مهم است؟"
+    </p>
+    <p>وقتی شما بر روی یک feature جدید کار می‌کنید، به عنوان مثال: یک customer سفارش یک e-book را می‌دهد. شما به تعدادی از عناصر نرم‌افزاری نیاز دارید تا این feature را implement کنید. برای اینکه شما بتوانید این feature را به سرعت و با اطمینان develop کنید، باید قبل از شروع کار، testها را بنویسید.
+    </p>
+    <p>
+        ما یک entity Order را می‌بینیم. ما نشان داده‌ایم که به همین دلیل است که برای ایجاد یک application، یک workflow خوب برای توسعه این است: (1) نوشتن یک description از آنچه application باید انجام دهد، (2) ساختن objects که در core application شما وجود دارند، و (3) ایجاد یک interface برای برقراری ارتباط با infrastructure.
+    </p>
+    <p>در این approach ما شروع به description از feature می‌کنیم. ما این کار را با یک test شروع می‌کنیم. اجازه دهید یک scenario از test را انتخاب کنیم:</p>
+    <p>Feature: Ordering an e-book</p>
+    <p>Scenario: the customer receives an order confirmation email</p>
+    <p>When a customer creates an order for an e-book</p>
+    <p>Then they should receive an order confirmation email</p>
+    <p>
+        همانطور که می‌بینید، خود scenario چیزی را تست نمی‌کند. این عمدتاً برای ایجاد یک درک مشترک بین متخصصان domain و توسعه‌دهندگان نرم‌افزار مفید است.
+    </p>
+    <p>
+        “Seems interesting, where can I learn more?”
+    </p>
+    <p>عمل توصیف features application با استفاده از scenarios های high-level که بر روی technology زوم نمی‌کنند، با نام Specification by Example، Ac-
+        ceptance Test-Driven Development یا Behavior-Driven Development شناخته می‌شود. من مطمئنم که دلایل خوبی برای تمایز بین هر یک از این approaches وجود دارد، اما من فقط می‌خواستم چند نام ارائه دهم که ممکن است به شما در یافتن اطلاعات بیشتر در مورد آن کمک کند. من کتاب‌های زیر را در این موضوع توصیه می‌کنم:
+    </p>
+    <ol>
+        <li>The BDD Books series by Gáspár Nagy and Seb Rose<sup>a</sup></li>
+        <li>Gojko Adzic, “Specification by Example”, Manning Publications (2011)</li>
+    </ol>
+    <p>
+        به منظور استفاده از scenario به عنوان یک automated test، ما باید برای هر مرحله در scenario، مقداری کد بنویسیم. این کد، step definition نامیده می‌شود، و the test runner هر مرحله را با یک step definition در یک class به نام Context مطابقت می‌دهد. Listing 14.21 یک مثال را نشان می‌دهد که از Behat به عنوان test runner استفاده می‌کند.
+    </p>
+    <p><sup>a</sup>https://advwebapparch.com/bdd-books
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

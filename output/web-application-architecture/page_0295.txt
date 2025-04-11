@@ -1,0 +1,21 @@
+11. Key design patterns
+Figure 11.5. In this example, there is no code-level dependency between
+Invoicing and Orders.
+However, both modules use the same
+database to get their data.
+model. In that case the repository will copy data from the relevant ta-
+bles and populate the read model object with it.
+• The application can build up a read model based on domain events from
+the write model. The repository would then return the current state of
+the read model.
+We’ve already discussed these options in detail in Chapter 3.
+Whatever changes are made outside of the module, as long as the repository
+implementation is able to provide the right read model objects, everything
+should be fine. It’s like the Dependency Inversion Principle applied to mod-
+els. Even if the Orders module gets replaced by a third-party platform for
+selling e-books, the Invoicing module doesn’t need to suffer. The only thing
+that needs to be done is rewrite the OrderRepository implementation to use
+the third-party platform’s API to retrieve information about an order (see
+Figure 11.6). This makes the use of read models as local representations of
+remote entities a very powerful architectural technique.
+275

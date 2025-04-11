@@ -1,0 +1,32 @@
+7. Time and randomness
+// ...
+}
+}
+It will likely be more useful if instead of an anonymous class we’d define an
+actual class (e.g. FakeClock) which facilitates the process of providing the
+“current time” that we want. You may even want to make the FakeClock mu-
+table, allowing time to “pass” while running a test (see Listing 7.18).
+Listing 7.18. A FakeClock and how to use it in a test.
+final class FakeClock implements Clock
+{
+private ?DateTimeImmutable $currentTime;
+public function setCurrentTime(
+DateTimeImmutable $currentTime
+): void {
+$this->currentTime = $currentTime;
+}
+public function currentTime(): DateTimeImmutable
+{
+if ($this->currentTime === null) {
+return new DateTimeImmutable('now');
+}
+return $this->currentTime;
+}
+}
+$clock = new FakeClock();
+$currentTime = new DateTimeImmutable('2020-06-03 09:53');
+$clock->setCurrentTime($currentTime);
+// Do something
+$clock->setCurrentTime($currentTime->modify('+1 day'));
+// Do something else, the code will think it's one day later mpw
+181

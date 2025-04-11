@@ -1,0 +1,35 @@
+Rate Limiting and Denial-of-Service Defense
+Few of us build sites with the expectation that we will encounter a denial-of-service
+attack. But as more and more of us build APIs, a denial of service can come simply
+from a developer misconfiguring a client or a site-reliability engineer accidentally
+running a load test against a production installation. Thus, it makes sense to add gen‐
+eral denial-of-service defense via rate limiting to the caching layer. Most HTTP
+reverse proxies like Varnish have capabilities along this line. In particular, Varnish has
+a throttle module that can be configured to provide throttling based on IP address
+and request path, as well as whether or not a user is logged in.
+If you are deploying an API, it is generally a best practice to have a relatively small
+rate limit for anonymous access and then force users to log in to obtain a higher rate
+limit. Requiring a login provides auditing to determine who is responsible for the
+unexpected load, and also offers a barrier to would-be attackers who need to obtain
+multiple identities to launch a successful attack.
+When a user hits the rate limit, the server will return the 429 error code indicating
+that too many requests have been issued. However, many users want to understand
+how many requests they have left before hitting that limit. To that end, you will likely
+also want to populate an HTTP header with the remaining-calls information. Though
+there isn’t a standard header for returning this data, many APIs return some variation
+of X-RateLimit-Remaining.
+SSL Termination
+In addition to performing caching for performance, one of the other common tasks
+performed by the edge layer is SSL termination. Even if you plan on using SSL for
+communication between layers in your cluster, you should still use different certifi‐
+cates for the edge and your internal services. Indeed, each individual internal service
+should use its own certificate to ensure that each layer can be rolled out independ‐
+ently. Unfortunately, the Varnish web cache can’t be used for SSL termination, but
+fortunately, the nginx application can. Thus we want to add a third layer to our state‐
+less application pattern, which will be a replicated layer of nginx servers that will han‐
+dle SSL termination for HTTPS traffic and forward traffic on to our Varnish cache.
+HTTP traffic continues to travel to the Varnish web cache, and Varnish forwards traf‐
+fic on to our web application, as shown in Figure 5-8.
+54 
+| 
+Chapter 5: Replicated Load-Balanced Services

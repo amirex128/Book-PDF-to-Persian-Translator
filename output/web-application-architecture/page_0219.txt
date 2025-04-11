@@ -1,0 +1,34 @@
+8. Validation
+sprintf('Invalid email address: ' . $emailAddress)
+);
+}
+$this->emailAddress = $emailAddress;
+}
+}
+final class Quantity
+{
+private int $quantity;
+public function __construct(int $quantity)
+{
+if ($quantity <= 0) {
+throw new InvalidArgumentException(
+sprintf('Line quantity should be at least 1')
+);
+}
+$this->quantity = $quantity;
+}
+}
+Now whenever a method argument is of type EmailAddress or Quantity, you
+know that the value inside has been validated already. There is no need to
+validate the value again, so you can now safely accept this object. This sim-
+plifies the code in Order a lot, as you can see in Listing 8.5.
+Listing 8.5. Value objects simplify validation inside the entity.
+final class Order
+{
+private EmailAddress $emailAddress;
+/**
+* @var array<Line>
+*/
+private array $lines;
+public function __construct(EmailAddress $emailAddress)
+199

@@ -1,0 +1,19 @@
+Figure 12-3. The sharded work queue and the multiple blurring shards
+Once each image has been successfully blurred, we will upload it to a different loca‐
+tion, and we will then delete the originals. However, we don’t want to delete the origi‐
+nal until all of the images have been successfully blurred in case there is some sort of
+catastrophic failure and we need to rerun this entire pipeline. Thus, to wait for all of
+the blurring to complete, we use the join pattern to merge the output of all of the
+sharded blurring work queues into a single queue that will only release its items after
+all of the shards have completed the work.
+Now we are ready to delete the original images as well as begin work on car model
+and color detection. Again, we want to maximize the throughput of this pipeline, so
+we will use the copier pattern from the previous chapter to duplicate the work queue
+items to two different queues:
+• A work queue that deletes the original images
+• A work queue that identifies the type of vehicle (car, truck, motorcycle) and the
+color of the vehicle
+Figure 12-4 shows these stages of the processing pipeline.
+Hands On: An Image Tagging and Processing Pipeline 
+| 
+139

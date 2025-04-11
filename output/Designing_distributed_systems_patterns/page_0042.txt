@@ -1,0 +1,48 @@
+You’ll note that I’m using IP hashing in this configuration. This is important because
+it ensures that the user doesn’t flip-flop back and forth between the experiment and
+the main site. This assures that every user has a consistent experience with the appli‐
+cation.
+The weight parameter is used to send 90% of the traffic to the main existing applica‐
+tion, while 10% of the traffic is redirected to the experiment.
+As with other examples, we’ll deploy this configuration as a ConfigMap object in
+Kubernetes:
+kubectl create configmaps --from-file=nginx.conf
+Of course, this assumes that you have both a web and experiment service defined. If
+you don’t, you need to create them now before you try to create the ambassador con‐
+tainer, since nginx doesn’t like to start if it can’t find the services it is proxying to.
+Here are some example service configs:
+# This is the 'experiment' service
+apiVersion: v1
+kind: Service
+metadata:
+  name: experiment
+  labels:
+    app: experiment
+spec:
+  ports:
+  - port: 80
+    name: web
+  selector:
+    # Change this selector to match your application's labels
+    app: experiment
+---
+# This is the 'prod' service
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  ports:
+  - port: 80
+    name: web
+  selector:
+    # Change this selector to match your application's labels
+    app: web
+And then we will deploy nginx itself as the ambassador container within a pod:
+apiVersion: v1
+kind: Pod
+28 
+| 
+Chapter 3: Ambassadors

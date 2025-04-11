@@ -1,0 +1,43 @@
+spec:
+  # 1, 3, 5 are the options for size
+  size: 3
+  # The version of etcd to install
+  version: "3.1.0"
+Save this configuration to etcd-cluster.yaml and then create the cluster using kubectl
+create -f etcd-cluster.yaml.
+Creating this cluster will cause the the operator to create pods for the replicas of the
+etcd cluster. You can see the running replicas using:
+kubectl get pods
+Once all three replicas are running, you can get their endpoints using:
+export ETCD_ENDPOINTS=kubectl get endpoints example-etcd-cluster
+"-o=jsonpath={.subsets[*].addresses[*].ip}:2379,"
+You can then store something into etcd using:
+kubectl exec my-etcd-cluster-0000 -- sh -c "ETCD_API=3 etcdctl
+--endpoints=${ETCD_ENDPOINTS} set foo bar"
+Implementing Locks
+The simplest form of synchronization is the mutual exclusion lock (aka Mutex). Any‐
+one who has done concurrent programming on a single machine is familiar with
+locks, and the same concept can be applied to distributed replicas. Instead of local
+memory and assembly instructions, these distributed locks can be implemented in
+terms of the distributed key-value stores described previously.
+As with locks in memory, the first step is to acquire the lock:
+func (Lock l) simpleLock() boolean {
+  // compare and swap "1" for "0"
+  locked, _ = compareAndSwap(l.lockName, "1", "0")
+  return locked
+}
+But of course, it’s possible that the lock doesn’t already exist, because we are the first
+to claim it, so we need to handle that case, too:
+func (Lock l) simpleLock() boolean {
+  // compare and swap "1" for "0"
+  locked, error = compareAndSwap(l.lockName, "1", "0")
+  // lock doesn't exist, try to write "1" with a previous value of
+  // non-existent
+  if error != nil {
+    locked, _ = compareAndSwap(l.lockName, "1", nil)
+  }
+  return locked
+}
+98 
+| 
+Chapter 9: Ownership Election

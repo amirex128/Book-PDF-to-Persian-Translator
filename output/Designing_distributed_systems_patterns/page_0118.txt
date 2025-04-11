@@ -1,0 +1,28 @@
+Figure 9-2. A worker double-checking to validate that the requester who sent a message
+is actually the current owner of the shard
+In the second case, shard2 has lost ownership of the lock, but it has not yet realized
+this so it continues to send requests to the worker node. This time, when the worker
+node receives a request from shard2, it double-checks with the lock service and real‐
+izes that shard2 is no longer the lock owner, and thus the requests are rejected.
+To add one final further complicating wrinkle, it’s always possible that ownership
+could be obtained, lost, and then re-obtained by the system, which could actually
+cause a request to succeed when it should actually be rejected. To understand how
+this is possible, consider the following sequence of events:
+1. Shard-1 obtains ownership to become master.
+2. Shard-1 sends a request R1 as master at time T1.
+3. The network hiccups and delivery of R1 is delayed.
+4. Shard-1 fails TTL because of the network and loses lock to Shard-2.
+5. Shard-2 becomes master and sends a request R2 at time T2.
+6. Request R2 is received and processed.
+7. Shard-2 crashes and loses ownership back to Shard-1.
+8. Request R1 finally arrives, and Shard-1 is the current master, so it is accepted, but
+this is bad because R2 has already been processed.
+Such sequences of events seem byzantine, but in reality, in any large system they
+occur with disturbing frequency. Fortunately, this is similar to the case described pre‐
+viously, which we resolved with the resource version in etcd. We can do the same
+thing here. In addition to storing the name of the current owner in etcd, we also send
+the resource version along with each request. So in the previous example, R1 becomes
+(R1, Version1). Now when the request is received, the double-check validates both
+104 
+| 
+Chapter 9: Ownership Election

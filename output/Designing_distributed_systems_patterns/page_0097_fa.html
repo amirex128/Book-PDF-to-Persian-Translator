@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 97</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   • functionA() که functionB() را فراخوانی می‌کند
+  </p>
+  <p>
+   • functionB() که functionC() را فراخوانی می‌کند
+  </p>
+  <p>
+   • functionC() که به functionA() بازمی‌گردد
+  </p>
+  <p>
+   اکنون در نظر بگیرید که چه اتفاقی می‌افتد وقتی یک request وارد هر یک از این functions ها می‌شود: این یک حلقه بی‌نهایت را شروع می‌کند که فقط زمانی خاتمه می‌یابد که زمان request اصلی تمام شود (و احتمالاً حتی در آن صورت هم نه) یا زمانی که پول شما برای پرداخت requests ها در system تمام شود. بدیهی است، مثال بالا کاملاً ساختگی است، اما در واقع تشخیص آن در code شما بسیار دشوار است. از آنجایی که هر function به طور رادیکال از سایر functions ها جدا شده است، هیچ representation واقعی از dependencies یا تعاملات بین functions های مختلف وجود ندارد. این مشکلات غیرقابل حل نیستند، و من انتظار دارم که با بالغ شدن FaaS ها، ابزارهای تجزیه و تحلیل و اشکال‌زدایی بیشتری یک تجربه غنی‌تر را برای درک چگونگی و چرایی عملکرد یک application متشکل از FaaS، ارائه دهند.
+  </p>
+  <p>
+   در حال حاضر، هنگام اتخاذ FaaS، شما باید هوشیار باشید تا monitoring و alerting دقیق را برای نحوه عملکرد system خود اتخاذ کنید تا بتوانید موقعیت‌ها را شناسایی کرده و قبل از اینکه به مشکلات مهمی تبدیل شوند، آنها را اصلاح کنید. البته، پیچیدگی معرفی شده توسط monitoring تا حدودی در مقابل سادگی استقرار به FaaS است، که اصطکاکی است که developers شما باید بر آن غلبه کنند.
+  </p>
+  <h4><strong>The Need for Background Processing</strong></h4>
+  <p>
+   FaaS ذاتاً یک مدل application مبتنی بر event است. Functions ها در پاسخ به events های مجزایی که رخ می‌دهند و اجرای functions ها را trigger می‌کنند، اجرا می‌شوند. علاوه بر این، به دلیل ماهیت serverless پیاده‌سازی این services ها، زمان اجرا (runtime) هر instance function خاص، عموماً زمان‌بندی شده است. این بدان معنی است که FaaS معمولاً برای موقعیت‌هایی که نیاز به processing دارند، مناسب نیست. نمونه‌هایی از این background processing ممکن است شامل transcoding یک ویدیو، فشرده‌سازی log files یا انواع دیگری از محاسبات کم‌اولویت و طولانی‌مدت باشد. در بسیاری از موارد، می‌توان یک trigger زمان‌بندی‌شده تنظیم کرد که به طور مصنوعی events را در functions های شما در یک زمان‌بندی خاص تولید می‌کند. اگرچه این برای پاسخگویی به events زمانی (به عنوان مثال، راه‌اندازی یک هشدار پیام متنی برای بیدار کردن کسی) مناسب است، اما هنوز هم زیرساخت کافی برای background processing عمومی نیست. برای دستیابی به آن، شما باید code خود را در یک محیطی راه‌اندازی کنید که از processes های طولانی‌مدت پشتیبانی می‌کند. و این به طور کلی به معنای تغییر به یک مدل pay-per-consumption به جای pay-per-request برای بخش‌هایی از application شما است که background processing را انجام می‌دهند.
+  </p>
+  <h4><strong>The Need to Hold Data in Memory</strong></h4>
+  <p>
+   علاوه بر چالش‌های عملیاتی، برخی از محدودیت‌های architecture وجود دارد که FaaS را برای برخی از انواع applications نامناسب می‌کند. اولین مورد از این محدودیت‌ها، نیاز به داشتن مقدار قابل توجهی data است که برای پردازش در حافظه بارگذاری شده است.
+  </p>
+  <p>
+   Determining When FaaS Makes Sense
+   | 83
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

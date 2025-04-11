@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 176</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> External services</h3>
+  <pre><code class="language-php">
+/**
+     * @test
+     */
+    public function it_does_a_vat_check_for_TBE_sold_in_NL(): void
+    {
+        $vatApi = new VatApi('TEST_API_KEY');
+
+        $result = $vatApi->vatRateCheck(
+            RateType::tbe(),
+            'NL',
+            null
+        );
+
+        self::assertEquals(
+            VatRate::fromInt(21),
+            $result->rate('telecom')
+        );
+    }
+}
+</code></pre>
+  <p><strong>test</strong> برای <code>VatApi</code> سطح پایین‌تری دارد، زیرا به تماس <strong>API</strong> واقعی نزدیک‌تر است. این به شما امکان می‌دهد تغییرات بیشتری را آزمایش کنید. به عنوان مثال، در اینجا می‌توانید آرگومان‌های مختلفی را برای <code>$countryCode</code> یا <code>$rateType</code> امتحان کنید. شما می‌توانید مکانیسم برای "نوع نرخ <strong>fallback</strong>" را آزمایش کنید. و شما می‌توانید <code>VatApi</code> را با جلوگیری از آرگومان‌های نامعتبر، مانند یک کد کشور ناشناخته یا یک <strong>API key</strong> بد، قوی‌تر کنید.</p>
+  <p>“آیا این <strong>tests</strong> کند و شکننده نخواهند بود؟”</p>
+  <p>مشکل <strong>integration tests</strong> این است که آنها به دلایلی که خارج از کنترل شما هستند، شکست می‌خورند. شبکه ممکن است قابل اعتماد نباشد، <strong>servers</strong> از <code>vatapi.com</code> گاهی اوقات آفلاین می‌شوند، ممکن است یک روز کسی یک نسخه خراب از <strong>API</strong> را مستقر کند و غیره. این بار دیگر نیاز به <strong>tests</strong> (<strong>unit</strong>) پایدار تا حد امکان را ثابت می‌کند. اما شما هنوز هم باید این <strong>integration tests</strong> را داشته باشید که گاهی اوقات شکست می‌خورند. گزینه‌های مختلفی وجود دارد، که برخی از آنها ممکن است جایگزین کردن <strong>service</strong> خارجی واقعی با یک <strong>service</strong> مشابه باشد که به صورت محلی و با قابلیت اطمینان بیشتری اجرا می‌شود. یک گزینه دیگر این است که این <strong>tests</strong> را به طور خودکار دوباره امتحان کنید، یا به آنها اجازه دهید بدون شکست کل <strong>build</strong> شکست بخورند. شما می‌توانید</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

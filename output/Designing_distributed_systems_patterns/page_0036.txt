@@ -1,0 +1,33 @@
+Using an Ambassador to Shard a Service
+Sometimes the data that you want to store in a storage layer becomes too big for a
+single machine to handle. In such situations, you need to shard your storage layer.
+Sharding splits up the layer into multiple disjoint pieces, each hosted by a separate
+machine. This chapter focuses on a single-node pattern for adapting an existing ser‐
+vice to talk to a sharded service that exists somewhere in the world. It does not dis‐
+cuss how the sharded service came to exist. Sharding and a multi-node sharded
+service design pattern are discussed in great detail in Chapter 6. A diagram of a shar‐
+ded service is shown in Figure 3-2.
+Figure 3-2. A generic sharded service
+When deploying a sharded service, one question that arises is how to integrate it with
+the frontend or middleware code that stores data. Clearly there needs to be logic that
+routes a particular request to a particular shard, but often it is difficult to retrofit such
+a sharded client into existing source code that expects to connect to a single storage
+backend. Additionally, sharded services make it difficult to share configuration
+between development environments (where there is often only a single storage shard)
+and production environments (where there are often many storage shards).
+Once approach is to build all of the sharding logic into the sharded service itself. In
+this approach, the sharded service also has a stateless load balancer that directs traffic
+to the appropriate shard. Effectively, this load balancer is a distributed ambassador as
+a service. This makes a client-side ambassador unnecessary at the expense of a more
+complicated deployment for the sharded service. The alternative is to integrate a
+single-node ambassador on the client side to route traffic to the appropriate shard.
+This makes deploying the client somewhat more complicated but simplifies the
+deployment of the sharded service. As is always the case with trade-offs, it is up to the
+particulars of your specific application to determine which approach makes the most
+sense. Some factors to consider include where team lines fall in your architecture, as
+well as where you are writing code versus simply deploying off-the-shelf software.
+Ultimately, either choice is valid. The following section describes how to use the
+single-node ambassador pattern for client-side sharding.
+22 
+| 
+Chapter 3: Ambassadors

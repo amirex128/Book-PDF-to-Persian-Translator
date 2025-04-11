@@ -1,0 +1,45 @@
+This ensures that a misbehaving monitoring adapter cannot cause problems with a
+user-facing service.
+Hands On: Using Prometheus for Monitoring
+As an example, consider monitoring your containers via the Prometheus open source
+project. Prometheus is a monitoring aggregator, which collects metrics and aggre‐
+gates them into a single time-series database. On top of this database, Prometheus
+provides visualization and query language for introspecting the collected metrics. To
+collect metrics from a variety of different systems, Prometheus expects every con‐
+tainer to expose a specific metrics API. This enables Prometheus to monitor a wide
+variety of different programs through a single interface.
+However, many popular programs, such as the Redis key-value store, do not export
+metrics in a format that is compatible with Prometheus. Consequently, the adapter
+pattern is quite useful for taking an existing service like Redis and adapting it to the
+Prometheus metrics-collection interface.
+Consider a simple Kubernetes pod definition for a Redis server:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: adapter-example
+  namespace: default
+spec:
+  containers:
+  - image: redis
+    name: redis
+At this point, this container is not capable of being monitored by Prometheus because
+it does not export the right interface. However, if we simply add an adapter container
+(in this case, an open source Prometheus exporter), we can modify this pod to export
+the correct interface and thus adapt it to fit Prometheus’s expectations:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: adapter-example
+  namespace: default
+spec:
+  containers:
+  - image: redis
+    name: redis
+ # Provide an adapter that implements the Prometheus interface
+  - image: oliver006/redis_exporter
+    name: adapter
+This example illustrates not only the value of the adapter pattern for ensuring a con‐
+sistent interface, but also the value of container patterns in general for modular con‐
+Monitoring 
+| 
+33

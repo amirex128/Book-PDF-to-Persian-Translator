@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 111</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4><strong>Hands On: Deploying etcd</strong></h4>
+  <p>
+   etcd یک distributed lock server است که توسط CoreOS توسعه داده شده است. این در production و در مقیاس بالا، قوی و ثابت شده است، و توسط انواع پروژه‌ها از جمله Kubernetes استفاده می‌شود.
+  </p>
+  <p>
+   استقرار etcd خوشبختانه به دلیل توسعه دو پروژه متن‌باز (open source) مختلف، بسیار آسان شده است:
+  </p>
+  <ul>
+   <li>Helm: یک package manager از نوع Kubernetes که توسط Microsoft Azure پشتیبانی می‌شود</li>
+   <li>The etcd operator که توسط CoreOS توسعه داده شده است</li>
+  </ul>
+  <p>
+   Operators یک موضوع جالب است که توسط CoreOS بررسی می‌شود. An operator یک program آنلاین است که در داخل container orchestrator شما با هدف صریح اجرای یک یا چند application اجرا می‌شود. operator مسئول ایجاد، scaling و نگهداری از عملکرد موفقیت‌آمیز program است. Users، application را از طریق یک desired state API پیکربندی می‌کنند. به عنوان مثال، the etcd operator مسئول نظارت بر خود etcd است. Operators هنوز یک ایده جدید است اما یک جهت جدید مهم در ساختن systems توزیع‌شده قابل اعتماد را نشان می‌دهد.
+  </p>
+  <p>
+   برای استقرار the etcd operator برای CoreOS، ما از ابزار package management helm استفاده خواهیم کرد. Helm یک package manager متن‌باز (open source) است که بخشی از پروژه Kubernetes است و توسط Deis توسعه داده شده است. Deis توسط Microsoft Azure در سال 2017 خریداری شد و مایکروسافت همچنان از توسعه متن‌باز (open source) بیشتر Helm پشتیبانی می‌کند.
+  </p>
+  <p>
+   اگر این اولین بار است که از helm استفاده می‌کنید، شما نیاز دارید که ابزار helm را نصب کنید، با دنبال کردن دستورالعمل‌های موجود در اینجا: https://github.com/kubernetes/helm/releases.
+  </p>
+  <p>
+   هنگامی که شما ابزار helm را در محیط خود نصب کردید، شما می‌توانید the etcd operator را با استفاده از helm به صورت زیر نصب کنید:
+  </p>
+  <pre>
+   <code class="language-bash"># Initialize helm
+helm init
+# Install the etcd operator
+helm install stable/etcd-operator
+   </code>
+  </pre>
+  <p>
+   پس از نصب operator، یک resource از نوع Kubernetes custom را برای نشان دادن cluster etcd ایجاد می‌کند. operator در حال اجرا است، اما هنوز هیچ cluster etcd وجود ندارد. برای ایجاد یک cluster etcd، شما نیاز دارید که یک configuration declarative را ایجاد کنید:
+  </p>
+  <pre>
+   <code class="language-yaml">apiVersion: "etcd.coreos.com/v1beta1"
+kind: "Cluster"
+metadata:
+  # Whatever name you want here
+  name: "my-etcd-cluster"
+   </code>
+  </pre>
+  <p>
+   The Basics of Master Election
+   | 97
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0111/image_1.png" alt="Image from page 111" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+14. A testing strategy for decoupled applications
+We can now finish our first test as shown in Listing 14.19.
+Listing 14.19. Verifying that the order confirmation email gets sent.
+$container = new TestServiceContainer();
+$orderId = $container->application()->createOrder(
+new CreateOrder(2, 1, 'matthiasnoback@gmail.com')
+);
+self::assertContainsEqual(
+$orderId,
+$container->mailer()->emailsSentFor()
+);
+It may be that this particular setup isn’t useful in your situation, but I’ve
+added this example to give you an impression of the type of setup you need
+to create use case tests for your application.
+“But how do we know if an actual email will be sent?”
+Good point; the use case test we created doesn’t prove that when the code
+runs in production an actual email will be sent. We can be certain that the
+Mailer will be called, because the test does prove that. What we also need
+to prove is that the production implementation of the Mailer interface is
+able to send emails. That would be the job for, you guessed it, an adapter
+test.
+It’s perfectly fine to write use case tests for the same test framework that you
+use for unit and adapter tests, e.g. PHPUnit. However, I’ve found that writing
+them in Gherkin, a language designed for use case tests, makes them really
+stand out from code-level tests. For PHP the go-to tool is Behat5, although
+Codeception6 also has support for scenario-based tests. See Listing 14.20 for
+the Gherkin-version of the test from Listing 14.19.
+Listing 14.20. A Gherkin scenario
+5 https://advwebapparch.com/behat
+6 https://advwebapparch.com/codeception
+348

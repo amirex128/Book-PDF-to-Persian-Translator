@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 213</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Validation</h3>
+  <p>1. آدرس ایمیل ارائه شده باید شبیه یک آدرس ایمیل واقعی باشد.</p>
+  <p>2. تعداد نسخه‌های یک کتاب الکترونیکی سفارش داده شده باید حداقل 1 باشد.</p>
+  <p>3. <strong>IDs</strong> کتاب‌های الکترونیکی ارائه شده باید به کتاب‌های الکترونیکی که در واقع در کاتالوگ ما موجود هستند، اشاره داشته باشد.</p>
+  <p>این یک مجموعه قوانین خوب است که به من کمک می‌کند جنبه‌های مختلفی را نشان دهم که چگونه یک فرآیند <strong>validation</strong> باید در پروژه‌ای که کد اصلی را از زیرساخت جدا می‌کند، پیاده‌سازی شود. در این فصل ما هر قانون را بررسی می‌کنیم و متوجه می‌شویم که چگونه و کجا باید تأیید شود.</p>
+  <h4> 8.1. Protecting entity state</h4>
+  <p>در نهایت، داده‌های ارائه شده توسط یک کاربر از <strong>application</strong> ما، در داخل یک <strong>entity</strong> قرار می‌گیرند. سپس یک <strong>application service</strong>، <strong>entity</strong> را در <strong>database</strong> ذخیره می‌کند. همانطور که احتمالاً می‌دانید، اگر <strong>database</strong> شما حاوی داده‌های بد، ناقص یا ناسازگار باشد، می‌توانید خود را در دردسر زیادی بیندازید. بنابراین ما باید مطمئن شویم که هیچ چیز در <strong>entity</strong> ما ختم نمی‌شود، که هنگام ذخیره در <strong>database</strong>، منجر به یک <strong>database</strong> خراب شود.</p>
+  <p>با این حال، یک رویکرد بسیار رایج برای <strong>validation</strong>، که من سال‌هاست از آن استفاده می‌کنم، به هیچ وجه از این امر جلوگیری نمی‌کند. <strong>Listing</strong> 8.1 نشان می‌دهد که این سبک قدیمی <strong>validation</strong> چگونه به نظر می‌رسد: ما <strong>object</strong> سفارش را ایجاد می‌کنیم و به تدریج <strong>fields</strong> آن را با داده‌ها از <strong>request</strong> پر می‌کنیم. سپس ما یک <strong>validator</strong> را فراخوانی می‌کنیم تا <strong>object</strong> را <strong>validate</strong> کند. اگر <strong>validator</strong> هیچ <strong>error validation</strong> را برنگرداند، همه چیز خوب است، و ما می‌توانیم به جلو برویم و سفارش را ذخیره کنیم.</p>
+  <p><strong>Listing</strong> 8.1. Validating an <strong>object</strong> after populating its <strong>fields</strong></p>
+  <pre><code class="language-php">
+final class OrderController
+{
+    // ...
+    public function createOrder(Request $request): Response
+    {
+        $order = new Order();
+        $order->setEmailAddress($request->get('email'));
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

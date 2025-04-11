@@ -1,0 +1,42 @@
+We can extend the existing Lock that we defined previously to create a renewable lock,
+which enables the lock holder to renew the lock:
+func (Lock l) renew() boolean {
+  locked, _ = compareAndSwap(l.lockName, "1", "1", l.version, ttl)
+  return locked
+}
+Of course, you probably want to do this repeatedly in a separate thread so that you
+hold onto the lock indefinitely. Notice that the lock is renewed every ttl/2 seconds;
+that way there is significantly less risk that the lock will accidentally expire due to tim‐
+ing subtleties:
+for {
+  if !l.renew() {
+    handleLockLost()
+  }
+  sleep(ttl/2)
+}
+Of course, you need to implement the handleLockLost() function so that it termi‐
+nates all activity that required the lock in the first place. In a container orchestration
+system, the easiest way to do this may simply be to terminate the application and let
+the orchestrator restart it. This is safe, because some other replica has grabbed the
+lock in the interim, and when the restarted application comes back online it will
+become a secondary listener waiting for the lock to become free.
+Hands On: Implementing Leases in etcd
+To see how we implement leases using etcd, we will return to our earlier locking
+example and add the --ttl=<seconds> flag to our lock create and update calls. The
+ttl flag defines a time after which the lock that we create is deleted. Because the lock
+disappears after the ttl expires, instead of creating with the value of unlocked, we will
+assume that the absence of the lock means that it is unlocked. To do this, we use the
+mk command instead of the set command. etcdctl mk only succeeds if the key does
+not currently exist.
+Thus, to lock a leased lock, Alice executes:
+kubectl exec my-etcd-cluster-0000 -- \
+    sh -c "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+        --ttl=10 mk my-lock alice"
+This creates a leased lock with a duration of 10 seconds.
+For Alice to continue to hold the lock, she needs to execute:
+kubectl exec my-etcd-cluster-0000 -- \
+    sh -c "ETCD_API=3 etcdctl --endpoints=${ETCD_ENDPOINTS} \
+        set --ttl=10 --swap-with-value alice my-lock alice"
+102 
+| 
+Chapter 9: Ownership Election

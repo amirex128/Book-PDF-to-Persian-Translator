@@ -1,0 +1,29 @@
+Hands On: Building an Event-Driven Flow for New User
+Sign-Up
+A concrete example of a workflow helps show how these patterns can be put together
+to form a complete operating system. The problem this example will consider is a
+new-user signup flow.
+Imagine that our user acquisition funnel has two stages. The first is user verification.
+After a new user signs up, the user then has to receive an email notification to validate
+their email. Once the user validates their email, they are sent a confirmation email.
+Then they are optionally registered for email, text message, both, or neither for notifi‐
+cations.
+The first step in the event-driven workflow is the generation of the verification email.
+To achieve this reliably, we will use the shard pattern to shard users across multiple
+different geographic failure zones. This ensures that we will continue to process new
+user signups, even in the presence of partial failures. Each work queue shard sends a
+verification email to the end user. At this point, this substage of the workflow is com‐
+plete. This first stage of the flow is illustrated in Figure 11-8.
+Figure 11-8. The first stage of the workflow for user sign-up
+The workflow begins again when we receive a verification email from the end user.
+These emails become new events in a separate (but clearly related) workflow that
+sends welcome emails and sets up notifications. The first stage of this workflow is an
+example of the copier pattern, where the user is copied into two work queues. The
+first work queue is responsible for sending the welcome email, and the second work
+queue is responsible for setting up user notifications.
+Once the work items have been duplicated between the queues, the email-sending
+queue simply takes care of sending an email message, and the workflow exits. But
+remember that because of the use of the copier pattern, there is still an additional
+128 
+| 
+Chapter 11: Event-Driven Batch Processing

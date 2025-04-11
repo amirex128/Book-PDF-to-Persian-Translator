@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 191</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Time and randomness</h3>
+  <pre><code class="language-php">
+/**
+     * @test
+     */
+    public function it_can_be_created(): void
+    {
+        $id = Uuid::fromString('77d69702-e3b4-4af5-b40a-c9981d483880');
+        $orderDate = new DateTimeImmutable('2020-06-03 09:53');
+</code></pre>
+  <p>بله، من فکر می‌کنم این راه درستی است. مزیت این است که اکنون خود <strong>test</strong> دیگر از <strong>IO</strong> استفاده نمی‌کند. این به ما یک بهبود عملکرد کوچک می‌دهد، که در درازمدت <strong>test suite</strong> شما را سریع نگه می‌دارد. ما همچنین با انجام این کار، کنترل کاملی بر وضعیت <code>Order</code> به دست می‌آوریم. وضعیت آن همیشه یکسان خواهد بود، و بنابراین <strong>object</strong> همیشه به یک روش یکسان رفتار خواهد کرد.</p>
+  <p>ما با <code>Uuid</code> و کلاس‌های <code>DateTimeImmutable</code> به عنوان <strong>value objects</strong> به جای <strong>factory services</strong> رفتار می‌کنیم. رفتار آنها اکنون فقط توسط آرگومان‌های ورودی تعیین می‌شود. یا، شاید نه... معلوم می‌شود که <code>DateTimeImmutable</code> هنگام <strong>instantiate</strong> کردن آن با یک آرگومان <strong>string</strong>، رفتار جالبی دارد. اگر شما برخی از قسمت‌های تاریخ را ارائه ندهید، مقادیر مربوطه را از زمان فعلی واقعی کپی می‌کند. در مورد ما، ما ثانیه‌ها و میکروثانیه‌ها را ارائه نمی‌دهیم، بنابراین نمونه <code>DateTimeImmutable</code>، تعداد ثانیه‌ها و تعداد میکروثانیه‌ها را از زمان فعلی خواهد داشت. در نتیجه، ما هنوز کنترل کاملی بر تمام وضعیت درگیر در اجرای <strong>test</strong> خود نداریم. و این بدان معناست که <strong>test</strong> کاملاً قطعی نیست، و نمی‌توان آن را یک <strong>unit test</strong> نامید.</p>
+  <p>علاوه بر این واقعیت که این <strong>objects</strong> <strong>value objects</strong> واقعی نیستند، و اینکه آنها می‌توانند به روش‌های نامعینی رفتار کنند که ما ممکن است در مورد آن ندانیم، یک مشکل طراحی دیگر نیز وجود دارد. کلاس‌های شخص ثالث مانند <code>DateTimeImmutable</code> و <code>Uuid</code> برای مفید بودن در بسیاری از پروژه‌ها و موقعیت‌های مختلف طراحی شده‌اند. بنابراین آنها یک <strong>API</strong> دارند که با <strong>use case</strong> خاص شما در نظر گرفته نشده است، بلکه با هر <strong>use case</strong> دیگری در نظر گرفته شده است. به عنوان مثال، <code>DateTimeImmutable</code> فقط یک راه برای نشان دادن یک <strong>timestamp</strong> به عنوان یک <strong>object</strong> نیست، بلکه متدهایی مانند <code>sub()</code>، <code>setDate()</code>، <code>getTimezone()</code> و غیره نیز دارد. این متدها ممکن است در <strong>use case</strong> شما کاملاً نامربوط باشند، اما با این وجود، با معرفی کلاس به <strong>domain model</strong> خود، رفتار آن</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

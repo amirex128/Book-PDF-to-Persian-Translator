@@ -1,0 +1,35 @@
+To create the replicated nginx servers, you use:
+kubectl create -f nginx-deploy.yaml
+Finally, you can expose this nginx SSL server with a service:
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx-ssl
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+To create this load-balancing service run:
+kubectl create -f nginx-service.yaml
+If you create this service on a Kubernetes cluster that supports external load balanc‐
+ers, this will create an externalized, public service that services traffic on a public IP
+address.
+To get this IP address, you can run:
+kubectl get services
+You should then be able to access the service with your web browser.
+Summary
+This chapter began with a simple pattern for replicated stateless services. Then we
+saw how this pattern grows with two additional replicated load-balanced layers to
+provide caching for performance, and SSL termination for secure web serving. This
+complete pattern for stateless replicated serving is shown in Figure 5-8.
+This complete pattern can be deployed into Kubernetes using three Deployments and
+Service load balancers to connect the layers shown in Figure 5-8. The complete
+source for these examples can be found at https://github.com/brendandburns/
+designing-distributed-systems.
+Summary 
+| 
+57

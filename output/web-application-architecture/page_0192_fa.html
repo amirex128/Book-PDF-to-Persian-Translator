@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 192</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Time and randomness</h3>
+  <p>بخش از <strong>domain</strong> شما می‌شود. در برخی موارد، رفتار ممکن است در واقع شما را به دردسر بیندازد، زیرا ایده‌های نویسنده با ایده‌ها یا انتظارات شما در مورد همان مفهوم مطابقت ندارد. بنابراین یک قانون سرانگشتی خوب این است که کلاس‌هایی که شما به عنوان وابستگی‌ها (آرگومان‌های <strong>constructor</strong>، آرگومان‌های متد و انواع بازگشتی) در <strong>domain model</strong> خود استفاده می‌کنید، باید توسط شما نیز طراحی شوند. این یک چیز خوب است که هر جنبه‌ای از طراحی <strong>domain model</strong> خود را صریح و مناسب برای <strong>use case</strong> خاص خود کنید.</p>
+  <p>در مورد استفاده ما از <code>Uuid</code> و <code>DateTimeImmutable</code>، راه‌حل تعریف <strong>value objects</strong> خودمان خواهد بود. این دو مشکل را همزمان حل می‌کند:</p>
+  <ol>
+   <li>ما کنترل کاملی بر <strong>API</strong> از <strong>objects domain</strong> خود خواهیم داشت.</li>
+   <li>ما به طور تصادفی از <strong>IO</strong> در <strong>objects domain</strong> خود، و نه در <strong>unit tests</strong> که برای آنها ایجاد می‌کنیم، استفاده نخواهیم کرد.</li>
+  </ol>
+  <p>دو <strong>value objects</strong> که ما نیاز داریم باید "شناسه یک سفارش" و "تاریخ ایجاد یک سفارش" را نشان دهند. بیایید با شناسه سفارش شروع کنیم و یک <strong>object value OrderId</strong> را معرفی کنیم که می‌تواند این <strong>ID</strong> را نشان دهد. در پشت صحنه ما همچنان از یک <strong>UUID</strong> استفاده خواهیم کرد. ما یک نمونه <strong>OrderId</strong> را از یک <strong>string</strong> که شامل یک <strong>UUID</strong> است ایجاد می‌کنیم، به جای از یک <strong>object Uuid</strong> که از قبل <strong>instantiated</strong> شده است. <strong>Listing</strong> 7.9 یک <strong>object value OrderId</strong> ساده را نشان می‌دهد که باید استفاده‌های موجود از <code>Uuid</code> را در یک نوع پارامتر جایگزین کند.</p>
+  <p><strong>Listing</strong> 7.9. The <strong>OrderId value object class</strong>.</p>
+  <pre><code class="language-php">
+final class OrderId
+{
+    private string $id;
+
+    private function __construct(string $id)
+    {
+        Assertion::uuid($id);
+        $this->id = $id;
+    }
+
+    public static function fromString(string $id): self
+    {
+        return new self($id);
+    }
+}
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

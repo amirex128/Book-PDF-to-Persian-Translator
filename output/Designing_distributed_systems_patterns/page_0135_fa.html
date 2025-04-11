@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 135</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>CHAPTER 11</h3>
+  <h3>Event-Driven Batch Processing</h3>
+  <p>
+   در فصل قبل، ما یک <strong>framework generic</strong> برای پردازش <strong>work queue</strong> و همچنین تعدادی از <strong>example applications</strong> برای پردازش <strong>work queue</strong> ساده را مشاهده کردیم. <strong>Work queues</strong> برای فعال کردن تبدیل‌های فردی از یک ورودی به یک خروجی عالی هستند. با این حال، تعدادی از <strong>batch applications</strong> وجود دارد که در آن شما می‌خواهید بیش از یک عمل انجام دهید، یا ممکن است نیاز داشته باشید که چندین خروجی مختلف را از یک ورودی داده واحد تولید کنید. در این موارد، شما شروع به پیوند دادن <strong>work queues</strong> به یکدیگر می‌کنید تا خروجی یک <strong>work queue</strong> به ورودی یک یا چند <strong>work queue</strong> دیگر تبدیل شود و به همین ترتیب ادامه می‌یابد. این یک سری مراحل پردازش را تشکیل می‌دهد که به <strong>events</strong> پاسخ می‌دهند، <strong>events</strong> تکمیل مرحله قبلی در <strong>work queue</strong> هستند که قبل از آن آمده است.
+  </p>
+  <p>
+   این نوع سیستم‌های پردازش مبتنی بر <strong>event</strong> اغلب سیستم‌های <strong>workflow</strong> نامیده می‌شوند، زیرا جریانی از کار از طریق یک نمودار جهت‌دار و غیر چرخه‌ای وجود دارد که مراحل مختلف و هماهنگی آن‌ها را توصیف می‌کند. یک تصویر اساسی از چنین سیستمی در شکل 11-1 نشان داده شده است.
+  </p>
+  <p>
+   سرراست‌ترین کاربرد این نوع سیستم، به سادگی خروجی یک <strong>queue</strong> را به ورودی <strong>queue</strong> بعدی متصل می‌کند. اما با پیچیده‌تر شدن سیستم‌ها، یک سری الگوهای مختلف برای پیوند دادن یک سری <strong>work queues</strong> به یکدیگر ظاهر می‌شود. درک و طراحی بر اساس این الگوها برای درک چگونگی عملکرد سیستم مهم است. عملکرد یک پردازشگر <strong>batch</strong> مبتنی بر <strong>event</strong> مشابه <strong>event-driven FaaS</strong> است. در نتیجه، بدون یک <strong>blueprint</strong> کلی برای نحوه ارتباط <strong>event queues</strong> مختلف با یکدیگر، درک کامل نحوه عملکرد سیستم می‌تواند دشوار باشد.
+  </p>
+  <p>
+   121
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

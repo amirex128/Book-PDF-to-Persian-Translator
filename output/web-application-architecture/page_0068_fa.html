@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 68</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <ol>
+    <li>
+      <code>Order entity</code> و <code>OrderRepository interface</code> چیزی در مورد <code>client</code> که قرار است آن را فراخوانی یا استفاده کند، نشان نمی‌دهند.
+    </li>
+    <li>
+      خود <code>OrderRepository interface</code> یک <code>abstraction</code> است که با استفاده از آن ما می‌توانیم بعداً کدهای اصلی دیگر را بدون <code>databases</code> واقعی یا سایر وابستگی‌های خارجی اجرا کنیم.
+    </li>
+    <li>
+      در واقع می‌توان از <code>Order entity</code> بدون یک وب سرور، <code>database</code> و غیره استفاده کرد. این یک کلاس <code>PHP</code> ساده قدیمی است که می‌توانید بدون هیچ راه‌اندازی خاصی آن را اجرا کنید.
+    </li>
+  </ol>
+  <p>
+    ما با کد مختلط شروع کردیم و یک <code>entity</code> و یک <code>interface</code> <code>repository</code>، از جمله یک <code>implementation</code> پیش‌فرض، استخراج کردیم. در فصل 4، ما حتی کدهای اصلی بیشتری را از <code>controller</code> استخراج خواهیم کرد و مشکلات باقی‌مانده را برطرف می‌کنیم:
+  </p>
+  <ol>
+    <li>
+      مراحل سناریو برای ایجاد یک <code>e-book order</code> هنوز کاملاً مبهم هستند و با جزئیات <code>implementation</code> سطح پایین ترکیب شده‌اند
+    </li>
+    <li>
+      <code>controller action</code> فقط در یک <code>web application</code> که ورودی از طریق پر کردن یک فرم وب ارائه می‌شود، مفید است.
+    </li>
+  </ol>
+  <p>
+    ابتدا، بیایید نگاهی به مدل‌های خواندن بیندازیم.
+  </p>
+  <p>
+    Exercises
+  </p>
+  <ol>
+    <li>
+      چه ایرادی در مورد <code>abstraction</code> زیر برای ذخیره <code>Order entities</code> وجود دارد؟a
+    </li>
+  </ol>
+  <pre><code class="language-php">
+    interface OrderRepository
+    {
+    public function insert(string $tableName, array $data): void;
+    }
+  </code></pre>
+  <ol start="2">
+    <li>
+      آیا کلاس زیر یک <code>entity</code> است یا یک <code>value object</code>؟b
+    </li>
+  </ol>
+  <pre><code class="language-php">
+    final class OrderId
+    {
+    // ...
+    public static function fromString(string $orderId): self
+  </code></pre>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

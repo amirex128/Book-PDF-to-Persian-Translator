@@ -1,0 +1,35 @@
+14. A testing strategy for decoupled applications
+public function sendOrderConfirmationEmail(OrderId $orderId): void
+{
+$this->emailsSentFor[] = $orderId;
+}
+/**
+* @return array<OrderId>
+*/
+public function emailsSentFor(): array
+{
+return $this->emailsSentFor;
+}
+}
+We can now instantiate the mailer spy inside the TestServiceContainer. This
+makes it automatically available in other tests as well. We have to make its
+factory method public so we have access to emailsSentFor() inside the test
+(see Listing 14.18).
+Listing 14.18. Instantiating the Mailer spy in the container.
+final class TestServiceContainer
+{
+private ?Mailer $mailer = null;
+// ...
+public function mailer(): MailerSpy
+{
+if ($this->mailer === null) {
+$this->mailer = new MailerSpy();
+}
+return $this->mailer;
+}
+}
+Note that I’ve removed the setMailer() method since we don’t need it any-
+more. I’ve also narrowed the return type from Mailer to MailerSpy. Even if
+you have a parent class that returns a Mailer from the mailer() factory, this
+is still allowed (according to the Liskov Substitution Principle that is).
+347

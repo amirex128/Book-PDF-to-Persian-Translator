@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 32</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        همانطور که به تعریف containers های modular و reusable فکر می‌کنید، مهم است که بدانید که همه جنبه‌های نحوه تعامل container شما با دنیای آن، بخشی از API تعریف شده توسط آن container reusable است. همانند دنیای microservices ها، این micro-containers ها برای اطمینان از جدایی clean بین main application container و sidecar به APIs متکی هستند. علاوه بر این API وجود دارد تا اطمینان حاصل شود که همه مصرف‌کنندگان sidecar با انتشار نسخه‌های بعدی، به درستی به کار خود ادامه می‌دهند. به همین ترتیب، داشتن یک API clean برای یک sidecar، developer sidecar را قادر می‌سازد تا سریع‌تر حرکت کند زیرا آن‌ها یک تعریف clear (و امیدواریم unit tests) برای services هایی که به عنوان بخشی از sidecar ارائه می‌دهند، دارند.
+    </p>
+    <p>
+        برای دیدن یک example concrete از اینکه چرا این API surface area مهم است، sidecar configuration management را که قبلاً مورد بحث قرار دادیم، در نظر بگیرید. یک configuration مفید برای این sidecar ممکن است UPDATE_FREQUENCY باشد، که نشان می‌دهد چند وقت یک‌بار configuration باید با filesystem همگام‌سازی شود. واضح است که اگر، در زمانی دیگر، نام parameter به UPDATE_PERIOD تغییر کند، این تغییر نقض API sidecar خواهد بود و به وضوح آن را برای برخی از users ها می‌شکند.
+    </p>
+    <p>
+        در حالی که این example واضح است، حتی تغییرات ظریف‌تر می‌توانند API sidecar را بشکنند. به عنوان مثال تصور کنید که UPDATE_FREQUENCY در ابتدا یک عدد را در seconds دریافت می‌کرد. با گذشت زمان و با بازخورد users، developer sidecar تشخیص داد که مشخص کردن seconds برای مقادیر زمانی بزرگ (به عنوان مثال، minutes) برای usersها آزاردهنده است و parameter را به پذیرش رشته‌ها (10 m، 5 s و غیره) تغییر داد. از آنجایی که مقادیر قدیمی parameter (به عنوان مثال، 10، برای 10 seconds) در این طرح جدید parse نمی‌شوند، این یک تغییر API breaking است.
+    </p>
+    <p>
+        هنوز هم فرض کنید که developer این را پیش‌بینی کرده است، اما valuesهایی را بدون units ایجاد کرده است که به milliseconds parse می‌شوند، جایی که قبلاً به seconds parse می‌شدند. حتی این تغییر، علیرغم عدم منجر شدن به خطا، یک تغییر API breaking برای sidecar است زیرا منجر به بررسی‌های configuration بسیار مکرر و به همان نسبت بار بیشتر بر روی cloud configuration server می‌شود.
+    </p>
+    <p>
+        من امیدوارم که این بحث به شما نشان داده باشد که برای modularity واقعی، شما باید نسبت به API که sidecar شما ارائه می‌دهد، بسیار آگاه باشید، و تغییرات "breaking" در آن API ممکن است همیشه به اندازه تغییر نام یک parameter، آشکار نباشد.
+    </p>
+    <h4 style="font-weight: bold;">Documenting Your Containers</h4>
+    <p>
+        تا کنون، شما دیده‌اید که چگونه می‌توانید containers sidecar خود را parameterize کنید تا آنها را modular و reusable کنید. شما در مورد اهمیت حفظ یک API stable برای اطمینان از اینکه sidecars ها را برای usersهای خود خراب نمی‌کنید، آموخته‌اید. اما یک گام نهایی برای ساخت containers های modular و reusable وجود دارد: اطمینان از اینکه مردم در وهله اول می‌توانند از آنها استفاده کنند.
+    </p>
+    <p>
+        همانند کتابخانه‌های نرم‌افزاری، کلید ساختن چیزی واقعاً مفید، توضیح چگونگی استفاده از آن است. اگر هیچ‌کس نتواند بفهمد که چگونه از آن استفاده کند، در ساخت یک container modular انعطاف‌پذیر و قابل اعتماد، هیچ خوبی وجود ندارد. متأسفانه، ابزارهای رسمی کمی برای doc وجود دارد.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

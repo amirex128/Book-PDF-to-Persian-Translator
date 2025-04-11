@@ -1,0 +1,32 @@
+5. Service locators
+First of all, just like the refactored service itself, it’s completely decoupled
+from framework-specific tooling like:
+1. Auth::shouldReceive()
+2. Container::getInstance()
+3. App::setLocale()
+4. Config::set()
+5. Request::shouldReceive()
+This means that the unit test itself would survive a framework migration, just
+like the service itself.
+Second, there’s no global state that the service relies on, so there’s no global
+state that needs to be prepared before testing or running it. Everything it
+needs is provided as constructor or method arguments. You can test various
+branches of the code by introducing a bit of variation to the constructor or
+method arguments. There are no other, hidden ways in which the behavior
+of the code may change.
+The test proves that the the service is fully portable. It can be used in other
+areas of the application that use a different framework, or no framework at
+all. The framework doesn’t even have to be booted or anything, you only
+need to set up the service with the correct dependencies.
+Knowing that predictability and the ability to run in isolation are desirable
+things when writing a unit test, let’s formulate this as a characteristic of unit-
+testable code:
+The result of calling a method on an object should be determined
+by its own implementation logic, and optionally by the behavior
+of one of its constructor arguments, or the method arguments pro-
+vided to it; and nothing more.
+As an example: the behavior of the original version of the SendIpConfirmationEmail
+service can’t be explained by looking at its constructor arguments or method
+arguments only. In fact, it has no constructor or method arguments. So we
+would expect that its own implementation is able to explain its behavior.
+123

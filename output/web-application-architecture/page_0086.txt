@@ -1,0 +1,30 @@
+3. Read models and view models
+to talk to something outside the application for it.”
+Whether you implement your read model repository to use domain events
+as the source of the data, or the write model’s database, or something else
+entirely, what matters is: any client can use the repository interface to get
+the information it needs. In our controller, we only needed the price of an
+e-book, which we can now retrieve from the e-book read model repository
+(Listing 3.9).
+Listing 3.9. Using the read model inside the controller.
+public function orderEbookAction(Request $request): Response
+{
+$ebook = $this->ebookRepository->getById(
+EbookId::fromString($request->request->get('ebook_id'))
+);
+$ebookPrice = $ebook->price();
+// ...
+return new Response(/* ... */);
+}
+“I want to know more about this event-based approach!”
+Read more about this approach in Greg Young’s “CQRS Documents”a.
+Mathias Verraes, “Patterns for Decoupling in Distributed Systems: Sum-
+mary Event”b.
+Using events for “synchronization” between write and read models can be
+a complicated business. For advice on the topic, I’d recommend Vaughn
+Vernon’s “Implementing Domain-Driven Design” (Addison-Wesley Profes-
+sional, 2013; look for “Integrating bounded contexts”) and Udi Dahan’s blogc.
+a https://advwebapparch.com/cqrs-documents
+b https://advwebapparch.com/patterns-for-decoupling
+c https://advwebapparch.com/udi-dahan-blog
+66

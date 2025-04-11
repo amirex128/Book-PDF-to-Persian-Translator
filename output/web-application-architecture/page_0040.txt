@@ -1,0 +1,37 @@
+2. The domain model
+data as constructor arguments, analyze that data, and throw exceptions when
+any part of it doesn’t look right, or leads to the object ending up in an incon-
+sistent or incomplete state. In our case we would define an Order class (see
+Listing 2.3), which by the presence of its constructor parameters can force its
+creator to provide all the necessary data at once.
+Listing 2.3. The initial version of the Order entity.
+final class Order
+{
+private int $ebookId;
+private string $emailAddress;
+private int $quantityOrdered;
+private int $pricePerUnitInCents;
+private int $orderAmountInCents;
+public function __construct(
+int $ebookId,
+string $emailAddress,
+int $quantityOrdered,
+int $pricePerUnitInCents,
+int $orderAmountInCents
+) {
+$this->ebookId = $ebookId;
+$this->emailAddress = $emailAddress;
+$this->quantityOrdered = $quantityOrdered;
+$this->pricePerUnitInCents = $pricePerUnitInCents;
+$this->orderAmountInCents = $orderAmountInCents;
+}
+}
+// A client has to supply all the required arguments:
+$order = new Order(/* ... */);
+Forcing clients to supply a number of arguments when instantiating the Order
+class is not enough to guarantee consistency. The information that clients
+provide could still be invalid or meaningless. For example, the current im-
+plementation won’t stop you from instantiating an Order in the following,
+obviously invalid way: new Order(-10, 'foobar', 0, 1000000, 25).
+We can improve the constructor by doing some basic checks inside of it, using
+20

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 151</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   در نهایت، در این مثال می‌توانید ببینید که خروجی <strong>reduction</strong> یک خروجی واحد با شمارش تمام کلمات مختلفی که در کتاب وجود دارد، خواهد بود.
+  </p>
+  <h3>Sum</h3>
+  <p>
+   یک شکل مشابه اما کمی متفاوت از <strong>reduction</strong>، جمع‌بندی مجموعه‌ای از مقادیر مختلف است. این شبیه شمارش است، اما به جای اینکه به سادگی برای هر مقدار یک واحد شمارش کنید، در واقع یک مقدار را که در داده‌های خروجی اصلی وجود دارد، با هم جمع می‌کنید.
+  </p>
+  <p>
+   به عنوان مثال، فرض کنید می‌خواهید جمعیت کل ایالات متحده را جمع کنید. فرض کنید که شما این کار را با اندازه‌گیری جمعیت در هر شهر و سپس جمع کردن همه آنها با هم انجام خواهید داد.
+  </p>
+  <p>
+   اولین قدم ممکن است این باشد که کار را به <strong>work queues</strong> شهرها، <strong>sharded</strong> شده بر اساس ایالت، <strong>shard</strong> کنید. این یک <strong>sharding</strong> عالی در ابتدا است، اما واضح است که حتی زمانی که به صورت موازی توزیع شود، زمان زیادی می‌برد تا یک فرد تعداد افراد را در هر شهر بشمارد. در نتیجه، ما یک <strong>sharding</strong> دوم به مجموعه دیگری از <strong>work queues</strong> انجام می‌دهیم، این بار بر اساس شهرستان.
+  </p>
+  <p>
+   در این مرحله، ما ابتدا به سطح ایالت‌ها و سپس به سطح شهرستان‌ها موازی‌سازی کرده‌ایم، و سپس هر <strong>work queue</strong> در هر شهرستان، یک جریان از خروجی‌های <strong>tuples</strong> (شهر، جمعیت) تولید می‌کند.
+  </p>
+  <p>
+   اکنون که در حال تولید خروجی هستیم، <strong>reduce pattern</strong> می‌تواند شروع شود.
+  </p>
+  <p>
+   در این مورد، <strong>reduce</strong> واقعاً نیازی به آگاهی از <strong>sharding</strong> دو سطحی که انجام داده‌ایم ندارد. این برای <strong>reduce</strong> کافی است که به سادگی دو یا چند آیتم خروجی، مانند (سیاتل، 4,000,000) و (نورثهمپتون، 25,000) را دریافت کرده و آن‌ها را با هم جمع کند تا یک خروجی جدید (سیاتل-نورثهمپتون، 4,025,000) تولید شود. واضح است که، مانند شمارش، این <strong>reduction</strong> را می‌توان به تعداد دلخواه بار با اجرای همان کد در هر فاصله انجام داد، و در پایان، فقط یک خروجی واحد وجود خواهد داشت که شامل جمعیت کامل ایالات متحده است. مهمتر از همه، باز هم، تقریباً تمام محاسبات مورد نیاز به صورت موازی در حال انجام است.
+  </p>
+  <h3>Histogram</h3>
+  <p>
+   به عنوان مثال نهایی از <strong>reduce pattern</strong>، در نظر بگیرید که در حالی که ما در حال شمارش جمعیت ایالات متحده از طریق <strong>sharding/mapping</strong> موازی و <strong>reducing</strong> هستیم، می‌خواهیم یک مدل از خانواده متوسط ​​آمریکایی نیز بسازیم. برای انجام این کار، ما می‌خواهیم یک <strong>histogram</strong> از اندازه خانواده ایجاد کنیم. یعنی مدلی که تعداد کل خانواده‌ها را با صفر تا 10 فرزند تخمین می‌زند. ما <strong>sharding</strong> چند سطحی خود را دقیقاً مانند قبل انجام خواهیم داد (در واقع، احتمالاً می‌توانیم از همان <strong>workers</strong> استفاده کنیم).
+  </p>
+  <p>
+   Reduce
+  </p>
+  <p>
+   137
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

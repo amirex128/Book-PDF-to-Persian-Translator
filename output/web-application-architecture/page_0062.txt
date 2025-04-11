@@ -1,0 +1,34 @@
+2. The domain model
+}
+}
+final class Order
+{
+private OrderId $id;
+// ...
+public function __construct(
+OrderId $id
+/* ... */
+) {
+$this->id = $id;
+// ...
+}
+}
+final class SqlOrderRepository implements OrderRepository
+{
+// ...
+public function nextIdentity(): OrderId
+{
+return OrderId::fromUuid(
+Uuid::uuid4()
+);
+}
+}
+The code in the controller is looking great now (see Listing 2.27). It shows all
+the steps involved in creating and saving an order, and none of it is directly
+tied to the particular database that we use.
+Listing 2.27. orderEbookAction() now uses nextIdentity() to determine
+the order ID upfront.
+public function orderEbookAction(Request $request): Response
+{
+// ...
+42

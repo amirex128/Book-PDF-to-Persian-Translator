@@ -1,0 +1,25 @@
+4. Application services
+Figure 4.1. Different types of clients can invoke the same use case.
+final class CreateOrderCommand extends Command
+{
+// ...
+protected function execute(
+InputInterface $input,
+OutputInterface $output
+): int {
+$orderId = $this->container->get('ebook_order_service')
+->create(
+(int)$input->getArgument('ebook_id'),
+(int)$input->getArgument('quantity'),
+$input->getArgument('email_address')
+);
+$output->writeln(
+sprintf(
+'<success>Created a new order with ID %s</success>',
+$orderId->asString()
+)
+);
+return 0;
+}
+}
+94

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 62</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>abstraction برای جدا کردن service replicated از مصرف‌کنندگان service</strong></h3>
+  <p>
+   load balancer همچنین یک نام قابل‌resolve ارائه می‌دهد که مستقل از هر یک از replicas های خاص است.
+  </p>
+  <p>
+   با Kubernetes، شما می‌توانید این load balancer را با یک object از نوع Service ایجاد کنید:
+  </p>
+  <pre>
+   <code class="language-yaml">kind: Service
+apiVersion: v1
+metadata:
+  name: dictionary-server-service
+spec:
+  selector:
+    app: dictionary-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+   </code>
+  </pre>
+  <p>
+   هنگامی که فایل configuration را دارید، می‌توانید service مربوط به dictionary را با دستور زیر ایجاد کنید:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl create -f dictionary-service.yaml
+   </code>
+  </pre>
+  <h4><strong>Session Tracked Services</strong></h4>
+  <p>
+   مثال‌های قبلی از الگوی replicated stateless، requests ها را از همه users به همه replicas های یک service هدایت می‌کرد. در حالی که این امر توزیع بار (load) و fault tolerance را تضمین می‌کند، همیشه راه‌حل ترجیحی نیست. اغلب دلایلی وجود دارد که بخواهید اطمینان حاصل کنید که requests های یک user خاص همیشه به همان machine ختم می‌شوند. گاهی اوقات این به این دلیل است که شما data های آن user را در حافظه cache می‌کنید، بنابراین قرار گرفتن روی همان machine، نرخ hit cache بالاتری را تضمین می‌کند. گاهی اوقات به این دلیل است که تعامل، ماهیت طولانی مدتی دارد، بنابراین مقداری state بین requests حفظ می‌شود. صرف نظر از دلیل، یک تطابق از الگوی service replicated stateless استفاده از session tracked services است، که اطمینان حاصل می‌کند که همه requests ها برای یک user واحد به همان replica نگاشت می‌شوند، همانطور که در Figure 5-3 نشان داده شده است.
+  </p>
+  <p>
+   <em>Figure 5-3. A session tracked service where all requests for a specific user are routed to a single instance</em>
+  </p>
+  <p>
+   48
+   | Chapter 5: Replicated Load-Balanced Services
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0062/image_1.png" alt="Image from page 62" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+5. Service locators
+several reasons for that. Your code will be more future-proof if you don’t rely
+on framework-specific helpers or “syntactic sugar”, which are subject to fash-
+ion. Your code will also be easier to test, and will remain easier to test, even
+when you have migrated to a different framework. In fact, if you depend on
+framework-specific classes and functions, it will be very hard to migrate to
+another framework because you will have to make changes everywhere.
+In this chapter, we’ll rewrite code that relies on framework tools for retriev-
+ing services or configuration values. We’ll make sure that dependencies and
+configuration values are provided as constructor arguments, so objects will
+no longer rely on a special context to run. This is a very effective way to make
+sure that switching frameworks, or upgrading to the next major BC-breaking
+version, doesn’t cause any trouble in the biggest part of your code base.
+5.3. Injecting dependencies
+Instead of retrieving services from some globally available function, we should
+simply inject all of them as required constructor arguments. Listing 5.2 shows
+what this looks like.
+Listing 5.2. Injecting the Mailer as a dependency.
+final class SendIpConfirmationEmail
+{
+private Mailer $mailer;
+public function __construct(Mailer $mailer)
+{
+$this->mailer = $mailer;
+}
+public function send(): void
+{
+// ...
+$this->mailer->send($message);
+}
+}
+113

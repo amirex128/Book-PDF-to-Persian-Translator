@@ -1,0 +1,30 @@
+Figure 7-1. A scatter/gather pattern
+Scatter/Gather with Root Distribution
+The simplest form of scatter/gather is one in which each leaf is entirely homogenous
+but the work is distributed to a number of different leaves in order to improve the
+performance of the request. This pattern is equivalent to solving an “embarassingly
+parallel” problem. The problem can be broken up into many different pieces and each
+piece can be put back together with all of the other pieces to form a complete answer.
+To understand this in more concrete terms, imagine that you need to service a user
+request R and it takes one minute for a single core to produce the answer A to this
+request. If we program a multi-threaded application, we can parallelize this request
+on a single machine by using multiple cores. Given this approach and a 30 core pro‐
+cessor (yes, typically it would be a 32 core processor, but 30 makes the math cleaner),
+we can reduce the time that it takes to process a single request down to 2 seconds (60
+seconds of computation split across 30 threads for computation is equal to 2 sec‐
+onds). But even two seconds is pretty slow to service a user’s web request. Addition‐
+ally, truly achieving a completely parallel speed up on a single process is going to be
+tricky as things like memory, network, or disk bandwidth start to become the bottle‐
+neck. Instead of parallelizing an application across cores on a single machine, we can
+use the scatter/gather pattern to parallelize requests across multiple processes on
+many different machines. In this way, we can improve our overall latency requests,
+since we are no longer bound by the number of cores we can get on a single machine,
+as well as ensure that the bottleneck in our process continues to be CPU, since the
+memory, network, and disk bandwidth are all spread across a number of different
+machines. Additionally, because every machine in the scatter/gather tree is capable of
+handling every request, the root of the tree can dynamically dispatch load to different
+nodes at different times depending on their responsiveness. If, for some reason, a par‐
+ticular leaf node is responding more slowly than other machines (e.g., it has a noisy
+74 
+| 
+Chapter 7: Scatter/Gather

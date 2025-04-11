@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 67</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <pre>
+   <code class="language-yaml">          image: brendanburns/varnish
+        command:
+        - varnishd
+        - -F
+        - -f
+        - /etc/varnish-config/default.vcl
+        - -a
+        - 0.0.0.0:8080
+        - -s
+        # This memory allocation should match the memory request above
+        - malloc,2G
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: varnish
+          mountPath: /etc/varnish-config
+      volumes:
+      - name: varnish
+        configMap:
+          name: varnish-config
+   </code>
+  </pre>
+  <p>
+   شما می‌توانید servers های Varnish replicated را با دستور زیر مستقر کنید:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl create -f varnish-deploy.yaml
+   </code>
+  </pre>
+  <p>
+   و در نهایت یک load balancer برای این Varnish cache مستقر کنید:
+  </p>
+  <pre>
+   <code class="language-yaml">kind: Service
+apiVersion: v1
+metadata:
+  name: varnish-service
+spec:
+  selector:
+    app: varnish-cache
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+   </code>
+  </pre>
+  <p>
+   که می‌توانید با دستور زیر ایجاد کنید:
+  </p>
+  <pre>
+   <code class="language-bash">kubectl create -f varnish-service.yaml
+   </code>
+  </pre>
+  <h4><strong>Expanding the Caching Layer</strong></h4>
+  <p>
+   اکنون که ما یک caching layer را به service stateless و replicated خود وارد کرده‌ایم، بیایید نگاهی به این بیندازیم که این layer می‌تواند فراتر از caching استاندارد ارائه دهد. HTTP reverse proxies مانند Varnish به طور کلی pluggable هستند و می‌توانند تعدادی از ویژگی‌های پیشرفته را ارائه دهند که فراتر از caching مفید هستند.
+  </p>
+  <p>
+   Expanding the Caching Layer
+   | 53
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

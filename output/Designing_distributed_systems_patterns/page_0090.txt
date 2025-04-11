@@ -1,0 +1,29 @@
+Figure 7-2. Example of a term-sharded scatter/gather system
+Scatter/Gather with Leaf Sharding
+While applying the replicated data scatter/gather pattern allows you to reduce the
+processing time required for handling user requests, it doesn’t allow you to scale
+beyond an amount of data that can be held in the memory or disk of a single
+machine. Much like the replicated serving pattern that was previously described, it is
+simple to build a replicated scatter/gather system. But at a certain data size, it is neces‐
+sary to introduce sharding in order to build a system that can hold more data than
+can be stored on a single machine.
+Previously, when sharding was introduced to scale replicated systems, the sharding
+was done at a per-request level. Some part of the request was used to determine
+where the request was sent. That replica then handled all of the processing for the
+request and the response was handed back to the user. Instead, with scatter/gather
+sharding, the request is sent to all of the leaf nodes (or shards) in the system. Each
+leaf node processes the request using the data that it has loaded in its shard. This par‐
+tial response is then returned to the root node that requested data, and that root node
+merges all of the responses together to form a comprehensive response for the user.
+As a concrete example of this sort of architecture, consider implementing search
+across a very large document set (all patents in the world, for example); in such a
+case, the data is too large to fit in the memory of a single machine, so instead the data
+is sharded across multiple replicas. For example, patents 0-100,000 might be on the
+first machine, 100,001-200,000 on the next machine, and so forth. (Note that this is
+not actually a good sharding scheme since it will continually force us to add new
+shards as new patents are registered. In practice, we’d likely use the patent number
+modulo the total number of shards.) When a user submits a request to find a particu‐
+lar word (e.g., “rockets”) in all of the patents in the index, that request is sent to each
+76 
+| 
+Chapter 7: Scatter/Gather

@@ -1,0 +1,29 @@
+6. External services
+$rateCheckResult->rate('electronics')
+);
+}
+}
+Figure 6.2. EbookOrderService depends on VatRateProvider.
+The
+big
+difference
+between
+VatApi::vatRateCheck()
+and
+VatRateProvider::vatRateForSellingEbooksInCountry() is the return value.
+The former returns a VatRateCheckResult object, the latter a VatRate object.
+It has always been an object of type VatRate that we were really looking for,
+and so far, we were only able to create it after jumping through many hoops.
+Now we can get the appropriate VatRate instance in a single call, with a single
+argument.
+Instead of depending on the VatApi class directly, EbookOrderService now
+depends on “anything that can provide us with the correct VAT rate to apply
+when selling e-books in country X”. As long as the dependency implements
+the VatRateProvider interface, the service should be happy. EbookOrderService
+only cares about “what” it needs, not about “how” the real dependency gets
+it. This means that we have successfully introduced an abstraction.
+6.3. Architectural advantages
+Introducing an abstraction is a very helpful technique when you want to
+move low-level implementation details out of sight, and focus instead on the
+higher-level steps of a scenario. It’s a technique that you’ll often use when
+147

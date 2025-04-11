@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 140</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Service locators</h3>
+  <p>5.7. Testing</p>
+  <p>من قبلاً <strong>testability</strong> را به عنوان یک دلیل مهم برای کاهش <strong>framework</strong> ذکر کردم. در تئوری، شما باید بتوانید یک <strong>unit test</strong> برای هر کلاس بنویسید. در عمل، ممکن است نخواهید این کار را انجام دهید، زیرا مناطق مختلف یک <strong>code base</strong> به انواع مختلف <strong>tests</strong> نیاز دارند (ما این موضوع را در فصل 14 پوشش خواهیم داد). در حال حاضر، بیایید بگوییم می‌خواهیم یک <strong>unit test</strong> برای <code>SendIpConfirmationEmail</code> بنویسیم. یک <strong>unit test</strong>، تستی است که از هیچ <strong>IO</strong> استفاده نمی‌کند (از سیستم فایل، یک <strong>database</strong>، یک <strong>service</strong> خارجی و غیره استفاده نمی‌کند) و معمولاً اما نه لزوماً یک واحد کد کوچکتر، مانند یک کلاس واحد را پوشش می‌دهد.</p>
+  <p>بیایید یک <strong>unit test</strong> برای نسخه اولیه <code>SendIpConfirmationEmail</code> بنویسیم. <strong>Listing</strong> 5.8 نشان می‌دهد که این تست چگونه خواهد بود.</p>
+  <p><strong>Listing</strong> 5.8. A test for the initial version of the <strong>SendIpConfirmationEmail service</strong>.</p>
+  <pre><code class="language-php">
+public function it_sends_an_ip_confirmation_email(): void
+{
+    $user = new User(/* ... */);
+    $ip = '123.234.123.234';
+    // Fake the currently logged in user
+    Auth::shouldReceive('user')
+        ->once()
+        ->andReturn($user);
+
+    // Set the user's locale for trans()
+    App::setLocale($user->locale());
+
+    // Configure the default sender email address
+    $sender = 'info@mycompany.com';
+    Config::set('mail.default_sender', $sender);
+
+    // Fake the current request
+    Request::shouldReceive('ip')
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

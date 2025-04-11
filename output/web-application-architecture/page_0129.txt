@@ -1,0 +1,24 @@
+5. Service locators
+This chapter covers:
+• Rewriting service and configuration locator calls
+to dependencies injected as constructor arguments
+• Defining “pure” object-oriented services, which
+require nothing more than construction and method
+invocation
+• Pushing the composition root closer to the appli-
+cation’s entry point
+5.1. From service location to explicit dependencies
+In Chapter 4 we extracted an application service from a web controller. When
+we created the class, we also made its dependencies more explicit. When the
+code was still inside the controller we had to fetch the OrderRepository from
+the service container using $this->container->get('order_repository').
+Once we moved the core logic to the EbookOrderService class, OrderRepository
+became a proper constructor argument:
+// Inside the controller:
+$orderRepository = $this->container->get('order_repository');
+// In the application service:
+final class EbookOrderService
+{
+private OrderRepository $orderRepository;
+public function __construct(
+109

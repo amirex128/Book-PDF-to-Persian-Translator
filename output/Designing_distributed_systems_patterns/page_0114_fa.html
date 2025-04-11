@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 114</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   با اضافه کردن TTL به locks های خود، ما در واقع یک bug را در function unlock خود معرفی کرده‌ایم. سناریوی زیر را در نظر بگیرید:
+  </p>
+  <p>
+   1. Process-1 lock را با TTL t به دست می‌آورد.
+  </p>
+  <p>
+   2. Process-1 به دلایلی بسیار کندتر از t اجرا می‌شود.
+  </p>
+  <p>
+   3. The lock منقضی می‌شود.
+  </p>
+  <p>
+   4. Process-2 lock را به دست می‌آورد، زیرا Process-1 آن را به دلیل TTL از دست داده است.
+  </p>
+  <p>
+   5. Process-1 تمام می‌شود و unlock را فراخوانی می‌کند.
+  </p>
+  <p>
+   6. Process-3 lock را به دست می‌آورد.
+  </p>
+  <p>
+   در این مرحله، Process-1 معتقد است که lock ای را که در ابتدا در اختیار داشت، unlock کرده است. او نمی‌فهمد که در واقع lock را به دلیل TTL از دست داده است، و در واقع lock را که توسط Process-2 در اختیار داشت، unlock کرده است. سپس Process-3 می‌آید و lock را نیز می‌گیرد. اکنون هم Process-2 و هم Process-3 معتقدند که lock را در اختیار دارند، و hilarity ادامه دارد.
+  </p>
+  <p>
+   خوشبختانه، key-value store یک resource version را برای هر write ای که انجام می‌شود، ارائه می‌دهد. function lock ما می‌تواند این resource version را ذخیره کند و compareAnd Swap را افزایش دهد تا اطمینان حاصل شود که نه تنها value همانطور که انتظار می‌رود است، بلکه resource version نیز با زمانی که operation lock رخ داد، یکسان است. این function simple Lock ما را به این صورت تغییر می‌دهد:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) simpleLock() boolean {
+  // compare and swap "1" for "0"
+  locked, l.version, error = compareAndSwap(l.lockName, "1", "0", l.ttl)
+  // lock doesn't exist, try to write "1" with a previous value of
+  // non-existent
+  if error != null {
+    locked, l.version, _ = compareAndSwap(l.lockName, "1", nil, l.ttl)
+  }
+  return locked
+}
+   </code>
+  </pre>
+  <p>
+   و سپس function unlock به این صورت به نظر می‌رسد:
+  </p>
+  <pre>
+   <code class="language-go">func (Lock l) unlock() {
+  compareAndSwap(l.lockName, "0", "1", l.version)
+}
+   </code>
+  </pre>
+  <p>
+   این تضمین می‌کند که lock فقط در صورتی unlock می‌شود که TTL منقضی نشده باشد.
+  </p>
+  <h4><strong>Hands On: Implementing Locks in etcd</strong></h4>
+  <p>
+   برای پیاده‌سازی locks ها در etcd، شما می‌توانید از یک key به عنوان نام lock و pre- condition writes استفاده کنید تا اطمینان حاصل کنید که فقط یک lock holder در یک زمان مجاز است. برای سادگی، ما از command line از نوع etcdctl برای lock و unlock کردن lock استفاده خواهیم کرد. در واقعیت، از
+   100
+   | Chapter 9: Ownership Election
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

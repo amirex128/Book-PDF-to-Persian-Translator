@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 67</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <p>
+    مشکلی که با این رویکرد از بین نمی‌رود این است که کدهایی در داخل <code>AR entity</code> شما وجود خواهد داشت که مخصوص <code>framework</code> یا <code>ORM</code> هستند. این لزوماً یک مشکل نیست. شما همیشه به مقداری کد نیاز دارید تا <code>framework</code> یا <code>ORM</code> را برآورده کنید، چه بر اساس <code>Active Record</code> یا <code>Data Mapper pattern</code> باشد.
+    فقط تا آنجا که می‌توانید، این جزئیات را در داخل <code>object</code> نگه دارید. و <code>entities</code> خود را به گونه‌ای <code>design</code> کنید که بتوانید آنها را <code>instantiate</code> کنید و <code>methods</code> را روی آنها بدون نیاز به هیچ راه‌اندازی خاصی فراخوانی کنید. این به شما امکان می‌دهد تا
+    <code>unit tests</code> واقعی را برای <code>entities</code> خود بنویسید، به جای <code>integration tests</code> که گران‌تر هستند (نوشتن سخت‌تر است، نگهداری سخت‌تر است) و برای اجرا به یک <code>database</code> واقعی نیاز دارند.
+  </p>
+  <p>
+    آیا همه این کارهای اضافی واقعاً ضروری است؟ به نظر می‌رسد که این امر باعث ایجاد لایه‌های اضافی در اطراف <code>functionality</code> خارج از <code>framework</code> می‌شود که قرار بود بیشترین سرعت توسعه ممکن را به شما بدهد.
+    خوب، اگر می‌خواهید کد اصلی را از کد <code>infrastructure</code> جدا کنید، کار اضافی لازم است، که من فرض می‌کنم از آنجایی که این فرض این کتاب است، شما این کار را انجام می‌دهید. از طرف دیگر، اگر شهود متخصص شما به شما می‌گوید که این ممکن است واقعاً کار زیادی برای سود کم باشد،
+    شما نباید آن احساس را نادیده بگیرید. در فصل 15 ما نگاهی دقیق‌تر به خطر <code>over-engineering</code> و چگونگی تصمیم‌گیری در مورد اینکه آیا رویکرد توضیح داده شده در این کتاب یک انتخاب خوب برای موقعیت خاص شما است، خواهیم داشت.
+  </p>
+  <h4>2.9. Summary</h4>
+  <p>
+    در این فصل، ما با یک <code>controller action</code> با منطق <code>domain</code> مختلط و <code>SQL statements</code> شروع کردیم. تلاش برای جداسازی کد اصلی از کد <code>infrastructure</code>، ما یک مرحله <code>refactoring</code> میانی را انجام دادیم و یک <code>table gateway</code> را معرفی کردیم.
+    این ما را با کدی باقی گذاشت که هنوز به یک فناوری خاص - یک <code>database</code> رابطه‌ای - متصل بود. در نهایت ما کد را با استفاده از دو <code>design pattern</code> شناخته شده <code>refactor</code> کردیم:
+    <code>Entity</code> و <code>Repository</code>. پیاده‌سازی اولیه را می‌توان با ارائه <code>entity</code> با یک <code>ID</code> از قبل بهبود بخشید. <code>repository</code> یک مکان خوب برای تولید آن <code>ID</code> بود. با معرفی یک <code>value object</code> برای <code>ID</code> <code>entity</code>، ما توانستیم
+    نوع داده اساسی <code>ID</code> را <code>encapsulate</code> کنیم و آن <code>implementation</code> را به <code>repository</code> واگذار کنیم.
+  </p>
+  <p>
+    اکنون که ما یک کلاس <code>entity</code>، یک کلاس <code>repository</code> و یک <code>interface</code> <code>repository</code> داریم، می‌توانیم تمام کادرها را علامت بزنیم و این کد را به عنوان کد اصلی علامت‌گذاری کنیم:
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Figure 5-4. The operation of a cache server
+For our purposes, we will use Varnish, an open source web cache.
+Deploying Your Cache
+The simplest way to deploy the web cache is alongside each instance of your web
+server using the sidecar pattern (see Figure 5-5).
+Figure 5-5. Adding the web cache server as a sidecar
+Though this approach is simple, it has some disadvantages, namely that you will have
+to scale your cache at the same scale as your web servers. This is often not the
+approach you want. For your cache, you want as few replicas as possible with lots of
+resources for each replica (e.g., rather than 10 replicas with 1 GB of RAM each, you’d
+want two replicas with 5 GB of RAM each). To understand why this is preferable,
+consider that every page will be stored in every replica. With 10 replicas, you will
+store every page 10 times, reducing the overall set of pages that you can keep in mem‐
+ory in the cache. This causes a reduction in the hit rate, the fraction of the time that a
+request can be served out of cache, which in turn decreases the utility of the cache.
+Though you do want a few large caches, you might also want lots of small replicas of
+your web servers. Many languages (e.g., NodeJS) can really only utilize a single core,
+and thus you want many replicas to be able to take advantages of multiple cores, even
+on the same machine. Therefore, it makes the most sense to configure your caching
+layer as a second stateless replicated serving tier above your web-serving tier, as illus‐
+trated in Figure 5-6.
+50 
+| 
+Chapter 5: Replicated Load-Balanced Services

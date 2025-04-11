@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 61</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3><strong>The domain model</strong></h3>
+  <p>
+    1. فناوری در حال تغییر است. همیشه راه‌حل‌های جدیدی برای مشکلات قدیمی وجود خواهد داشت.
+  </p>
+  <p>
+    2. تصمیمات <code>Technical</code> بر بیش از کیفیت <code>design</code> کد ما تأثیر می‌گذارد.
+  </p>
+  <p>
+    به عنوان توسعه‌دهنده-معمار، باید از عواقب انتخاب یک فناوری، مانند <code>UUID</code> نسخه 4 یا <code>ULID</code> آگاه باشیم. ما باید به این سؤال پاسخ دهیم که چگونه انتخاب ما بر عملکرد <code>database</code>، چگونه بر <code>usability</code> و غیره تأثیر می‌گذارد.
+    در عین حال، باید چشم خود را به پیشرفت‌های <code>technological</code> بدوزیم. برای اینکه بهترین تصمیم‌ها را بگیریم، باید بدانیم چه خبر است و آماده باشیم که فردا یک تصمیم بهتر بگیریم. در عین حال، و این کل نکته این کتاب است،
+    ما نباید مجبور شویم کل کد پایه خود را هنگام تغییر برخی از فناوری‌های خارجی به روز کنیم.
+  </p>
+  <h4>2.7. Using a value object for the identifier</h4>
+  <p>
+    اکنون که ما در حال تغییر نوع <code>identifier</code> یک <code>Order</code> هستیم، بیایید <code>identifier</code> را در داخل یک <code>Value object</code><sup>13</sup> قرار دهیم. به این ترتیب، ما می‌توانیم نوع داده واقعی <code>identifier</code> را کاملاً <code>encapsulate</code> کنیم و به آن اجازه دهیم که یک جزئیات <code>implementation</code> داخلی از <code>entity</code> باشد.
+    Listing 2.26 کلاس <code>object</code> <code>OrderId value</code> جدید و تغییراتی را که باید در <code>entity</code> <code>Order</code> و <code>OrderRepository</code> ایجاد کنیم تا از این نوع جدید به جای <code>int</code> یا <code>UuidInterface</code> استفاده کنیم، نشان می‌دهد.
+  </p>
+  <p>
+    <em>Listing 2.26.</em> <code>OrderId</code> نوع <code>ID</code> اساسی را پنهان می‌کند.
+  </p>
+  <pre><code class="language-php">
+    final class OrderId
+    {
+    private UuidInterface $id;
+    private function __construct(UuidInterface $id)
+    {
+    $this->id = $id;
+    }
+    public static function fromUuid(UuidInterface $id): self
+    {
+    return new self($id);
+  </code></pre>
+  <p>
+    <sup>13</sup>Eric Evans, “Domain-Driven Design”, Addison-Wesley Professional (2003).
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

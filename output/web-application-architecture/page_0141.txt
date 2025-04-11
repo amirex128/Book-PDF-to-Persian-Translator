@@ -1,0 +1,37 @@
+5. Service locators
+->once()
+->andReturn($ip);
+// Set up the Mailer mock
+$mailer = $this->createMock(Mailer::class);
+$mailer->expects($this->once())
+->method('send')
+->willReturn(
+function (Message $message) use ($user, $ip, $sender) {
+$this->assertEquals(
+$user->emailAddress(),
+$message->to()
+);
+$this->assertEquals($sender, $message->from());
+$this->assertContains($message->text(), $ip);
+}
+);
+// Make sure the container will return our mock
+Container::getInstance()->instance(
+Mailer::class, $mailer
+);
+$service = new SendIpConfirmationEmail();
+$service->send();
+}
+The framework we’ve used in this example offers convenient methods for
+replacing the requested services, configuration values, and contextual infor-
+mation with test doubles.8. The don’t-use-any-IO rule isn’t actually guaran-
+teed though. If we would forget to set up a correct test double for the Mailer
+service, this test might start sending actual emails. But the Mailer isn’t the
+only problem. Since the class could fetch any service using resolve(), and
+any of those services could use IO, we can’t guarantee that this test is a unit
+test, or remains a unit test.
+Now compare the test for the initial version with the test for the refactored
+service, shown in Listing 5.9.
+Listing 5.9. A test for the refactored service.
+8 https://advwebapparch.com/laravel-mocking
+121

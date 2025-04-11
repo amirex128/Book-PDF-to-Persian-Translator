@@ -1,0 +1,32 @@
+14. A testing strategy for decoupled applications
+1. You can create a hierarchy of containers, e.g. TestServiceContainer
+extends from DevelopmentServiceContainer extends from an abstract
+ServiceContainer, which has a subclass ProductionServiceContainer.
+2. Factory methods should be private when possible.
+3. Within the hierarchy of containers you can override parts by defining
+(abstract) protected methods. This also allows you to widen the scopes
+for testing when needed (e.g. in production the EventDispatcher might
+be a private service, but when testing it could be a public one).
+4. Define services as stateless objects so you can return a new instance
+from the factory method every time it’s requested. If you have to make
+the service stateful or mutable, like the in-memory repositories or the
+event dispatcher, or if instantiation has to happen often, keep an in-
+stance of the service in a property of the container.
+5. The constructor of the container can be used to force certain configura-
+tion values to be provided. It’s recommended to define a configuration
+value object that provides sensible defaults.
+Back to the example: we want to show that, when an order has been created,
+the customer receives an order confirmation email. Listing 14.13 shows what
+such a test looks like.
+Listing 14.13. Using the TestServiceContainer in a test.
+public function the_customer_receives_an_order_confirmation_mail(): void
+{
+$container = new TestServiceContainer();
+$orderId = $container->application()->createOrder(
+new CreateOrder(2, 1, 'matthiasnoback@gmail.com')
+);
+// TODO verify that an email was sent
+}
+We haven’t yet set up an event subscriber that can send the email, so let’s do
+this now (see Listing 14.14).
+343

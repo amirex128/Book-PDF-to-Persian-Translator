@@ -1,0 +1,37 @@
+7. Time and randomness
+When you write a unit test for Order, like the one in Listing 14.1, you’ll expe-
+rience some difficulties caused by the mix of core and infrastructure code.
+Listing 7.2. A test for Order.
+final class OrderTest extends TestCase
+{
+/**
+* @test
+*/
+public function it_can_be_created(): void
+{
+$order = Order::create();
+self::assertEquals(
+[
+new OrderWasCreated(
+Uuid::uuid4(),
+new DateTimeImmutable('now')
+)
+],
+$order->releaseEvents();
+);
+}
+}
+The problem is that this test will never pass. When Order::create() instanti-
+ates a Uuid and a DateTimeImmutable instance, it will definitely not be equal to
+the one we create in the test method. The data that is involved in this unit test
+will be different every time you run the test. That’s very inconvenient and
+makes testing very hard. We want things to be deterministic, predictable.
+Yes, we could ignore the variation, and only verify that the array of events
+contains an instance of OrderWasCreated. That would make the test pass, but
+it would still leave us with an unpredictable entity. Also, since Order::create()
+uses IO, it shouldn’t really be considered a unit test. It still relies on external
+dependencies to run, although they are used implicitly, hidden inside the call
+to Uuid::uuid() and somewhere in DateTimeImmutable’s constructor. This
+means that the test we just wrote is actually an integration test. An integra-
+tion test still tests a single unit of code, but since it uses IO, it can show that
+164

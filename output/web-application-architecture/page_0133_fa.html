@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 133</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3> Service locators</h3>
+  <p>دلایل متعددی برای این امر وجود دارد. کد شما در آینده ایمن‌تر خواهد بود اگر به <strong>helpers</strong> یا "<strong>syntactic sugar</strong>" خاص <strong>framework</strong> متکی نباشید، که در معرض مد هستند. کد شما همچنین آسان‌تر آزمایش می‌شود، و حتی زمانی که به یک <strong>framework</strong> دیگر منتقل شدید، آسان‌تر آزمایش می‌شود. در واقع، اگر به کلاس‌ها و توابع خاص <strong>framework</strong> وابسته باشید، انتقال به <strong>framework</strong> دیگر بسیار دشوار خواهد بود زیرا باید در همه جا تغییراتی ایجاد کنید.</p>
+  <p>در این فصل، کدی را که به ابزارهای <strong>framework</strong> برای بازیابی <strong>services</strong> یا مقادیر <strong>configuration</strong> متکی است، بازنویسی خواهیم کرد. ما اطمینان حاصل خواهیم کرد که وابستگی‌ها و مقادیر <strong>configuration</strong> به عنوان آرگومان‌های <strong>constructor</strong> ارائه می‌شوند، بنابراین <strong>objects</strong> دیگر برای اجرا به یک <strong>context</strong> خاص متکی نخواهند بود. این یک راه بسیار موثر برای اطمینان از این است که تعویض <strong>frameworks</strong> یا ارتقا به نسخه بعدی که <strong>BC-breaking</strong> است، باعث ایجاد هیچ مشکلی در بزرگترین بخش از <strong>code base</strong> شما نمی‌شود.</p>
+  <h4> 5.3. Injecting dependencies</h4>
+  <p>به جای بازیابی <strong>services</strong> از برخی توابع <strong>global</strong> موجود، ما باید به سادگی همه آنها را به عنوان آرگومان‌های <strong>constructor</strong> مورد نیاز تزریق کنیم. <strong>Listing</strong> 5.2 نشان می‌دهد که این چگونه به نظر می‌رسد.</p>
+  <p><strong>Listing</strong> 5.2. تزریق <strong>Mailer</strong> به عنوان یک وابستگی.</p>
+  <pre><code class="language-php">
+final class SendIpConfirmationEmail
+{
+    private Mailer $mailer;
+
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
+    public function send(): void
+    {
+        // ...
+        $this->mailer->send($message);
+    }
+}
+</code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

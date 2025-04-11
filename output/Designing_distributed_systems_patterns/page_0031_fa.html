@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 31</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4 style="font-weight: bold;">Parameterized Containers</h4>
+    <p>
+        Parameterizing your containers مهم‌ترین کاری است که می‌توانید برای modular و reusable کردن containers خود انجام دهید، صرف نظر از اینکه آنها sidecars هستند یا خیر، اگرچه sidecars و سایر add-on containersها برای parameterize کردن، اهمیت ویژه‌ای دارند.
+    </p>
+    <p>
+        منظور من از "parameterize" چیست؟ container خود را به‌عنوان یک function در program خود در نظر بگیرید. چند parameter دارد؟ هر parameter نشان‌دهنده یک ورودی است که می‌تواند یک container generic را برای یک situation خاص، سفارشی کند. به عنوان مثال، sidecar add-on SSL که قبلاً deployed شده را در نظر بگیرید. برای اینکه به طور کلی مفید باشد، احتمالاً به حداقل دو parameter نیاز دارد: اولی نام certificate است که برای ارائه SSL استفاده می‌شود، و دیگری port از application server "legacy" است که روی localhost در حال اجرا است. بدون این parametersها، تصور اینکه این sidecar container برای طیف وسیعی از applications قابل استفاده باشد، دشوار است. parametersهای مشابهی برای همه sidecars های دیگر که در این فصل توضیح داده شده‌اند، وجود دارد.
+    </p>
+    <p>
+        اکنون که parametersهایی را که می‌خواهیم exposed کنیم، می‌دانیم، چگونه آن‌ها را در واقع به کاربران exposed می‌کنیم و چگونه آن‌ها را در داخل container مصرف می‌کنیم. دو راه وجود دارد که در آن چنین parametersهایی را می‌توان به container شما منتقل کرد: از طریق environment variables یا command line. اگرچه هر دو امکان‌پذیر هستند، اما من به طور کلی ترجیح می‌دهم parametersها را از طریق environment variables منتقل کنم. یک مثال از passing چنین parametersهایی به یک sidecar container به این صورت است:
+    </p>
+    <pre><code class="language-bash">docker run -e=PORT=&lt;port&gt; -d &lt;image&gt;</code></pre>
+    <p>
+        البته، تحویل values به داخل container تنها بخشی از نبرد است. بخش دیگر، در واقع استفاده از این variables در داخل container است. به‌طور معمول، برای انجام این کار، از یک shell script ساده استفاده می‌شود که environment variables ارائه شده با sidecar container را بارگذاری می‌کند و یا configuration files را تنظیم می‌کند یا application اساسی را parameterize می‌کند.
+    </p>
+    <p>
+        به عنوان مثال، ممکن است certificate path و port را به‌عنوان environment variables منتقل کنید:
+    </p>
+    <pre><code class="language-bash">docker run -e=PROXY_PORT=8080 -e=CERTIFICATE_PATH=/path/to/cert.crt ...</code></pre>
+    <p>
+        در container خود، از آن variables برای پیکربندی یک فایل nginx.conf استفاده می‌کنید که web server را به فایل صحیح و proxy location اشاره می‌کند.
+    </p>
+    <h4 style="font-weight: bold;">Define Each Container’s API</h4>
+    <p>
+        با توجه به اینکه شما در حال parameterizing کردن containers خود هستید، بدیهی است که containers شما در حال تعریف یک "function" هستند که هر زمان که container اجرا می‌شود، فراخوانی می‌شود. این function به وضوح بخشی از API است که توسط container شما تعریف شده است، اما قسمت‌های دیگری نیز در این API وجود دارد، از جمله calls هایی که container به سایر services ها و همچنین APIs سنتی HTTP یا سایر services ها که container ارائه می‌دهد، انجام می‌دهد.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
