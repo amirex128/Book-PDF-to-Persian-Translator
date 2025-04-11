@@ -18,14 +18,6 @@ def clean_markdown_blocks(text):
     # Remove inline code markers
     text = re.sub(r'`([^`]+)`', r'\1', text)
     
-    # Remove AI response prefixes
-    text = re.sub(r'^(AI:|Assistant:|آنالیز:|ترجمه:)\s*', '', text, flags=re.MULTILINE)
-    
-    # Remove any HTML comments
-    text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
-    
-    # Clean up duplicate newlines
-    text = re.sub(r'\n{3,}', '\n\n', text)
     
     return text
 
@@ -262,7 +254,9 @@ class APIKeyManager:
                 
             10.شما نباید یک قالب کامل html بسازی و برگردانی برای من . بلکه باید یک div ّرگردانی که تمام مواردی که من از تو خواسته ام به شکل تگ های html باشد که من از ان ها در صفحات html خودم استفاده کنم
 
-            11.مستقیم فقط تگ div ای برگردان که داخلش متن من به فارسی ترجمه شده باشد بدون ترجمه اصطلاحات فنی مهندسی نرم افزار و متن را داخل markdown نزاشته باشی و فقط یک تگ div که تمام ترجمه با خواسته های من داخلش باشد
+            11. برای درک بهتر ترجمه که بتوانی به درستی متن انگلیسی را به فارسی ترجمه کنی پیام قبلی من و پاسخ خودت را هم در این ترجمه این صفحه در نظر داشته باش تا بتوانی به درستی ادامه بدی 
+            12.از تگ های بیشتری برای زیبا سازی خروجی ترجمه شده استفاده کن مانند bold کردن italic کردن یا سر خط رفتن یا فاصله گذاشتن یا عنوان ها را درشت کردن تمام این موارد را بر اساس مفهوم متن اعمال کن
+            13. خروجی مارک دان نده و فقط تگ div رو برگردون که داخش محتوای ترجمه شده هستش
             متن برای ترجمه به زبان فارسی با در نظر گرفتن تمام نکات و قواعد قبلی :
                 
             {text}
@@ -275,7 +269,7 @@ class APIKeyManager:
                 self.mark_key_used(current_key)
                 
                 # Return the successful translation
-                return response.text, conversation
+                return clean_markdown_blocks(response.text), conversation
                 
             except Exception as e:
                 error_str = str(e).lower()
@@ -457,7 +451,9 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
                 
             10.شما نباید یک قالب کامل html بسازی و برگردانی برای من . بلکه باید یک div ّرگردانی که تمام مواردی که من از تو خواسته ام به شکل تگ های html باشد که من از ان ها در صفحات html خودم استفاده کنم
 
-            11.مستقیم فقط تگ div ای برگردان که داخلش متن من به فارسی ترجمه شده باشد بدون ترجمه اصطلاحات فنی مهندسی نرم افزار و متن را داخل markdown نزاشته باشی و فقط یک تگ div که تمام ترجمه با خواسته های من داخلش باشد
+            11. برای درک بهتر ترجمه که بتوانی به درستی متن انگلیسی را به فارسی ترجمه کنی پیام قبلی من و پاسخ خودت را هم در این ترجمه این صفحه در نظر داشته باش تا بتوانی به درستی ادامه بدی 
+            12.از تگ های بیشتری برای زیبا سازی خروجی ترجمه شده استفاده کن مانند bold کردن italic کردن یا سر خط رفتن یا فاصله گذاشتن یا عنوان ها را درشت کردن تمام این موارد را بر اساس مفهوم متن اعمال کن
+            13. خروجی مارک دان نده و فقط تگ div رو برگردون که داخش محتوای ترجمه شده هستش
             متن برای ترجمه به زبان فارسی با در نظر گرفتن تمام نکات و قواعد قبلی :
                 
             {text}
@@ -466,7 +462,7 @@ def translate_text_to_persian(text: str, api_key: str, model_name: str = "models
             # Generate response
             response = conversation.send_message(prompt)
             
-            return response.text, conversation
+            return clean_markdown_blocks(response.text), conversation
             
         except Exception as e:
             error_str = str(e).lower()
