@@ -1,0 +1,44 @@
+13.3 Relationships between Tactics and Patterns 
+239
+layered pattern can be seen as the amalgam of several tactics—increase semantic 
+coherence, abstract common services, encapsulate, restrict communication paths, 
+and use an intermediary. For example:
+■
+■Increase semantic coherence. The goal of ensuring that a layer’s respon-
+sibilities all work together without excessive reliance on other layers 
+is achieved by choosing responsibilities that have semantic coherence. 
+Doing so binds responsibilities that are likely to be affected by a change. 
+For example, responsibilities that deal with hardware should be allocated 
+to a hardware layer and not to an application layer; a hardware respon-
+sibility typically does not have semantic coherence with the application 
+responsibilities.
+■
+■Restrict dependencies. Layers define an ordering and only allow a layer to 
+use the services of its adjacent lower layer. The possible communication 
+paths are reduced to the number of layers minus one. This limitation has a 
+great influence on the dependencies between the layers and makes it much 
+easier to limit the side effects of replacing a layer. 
+Without any one of its tactics, the pattern might be ineffective. For example, 
+if the restrict dependencies tactic is not employed, then any function in any layer 
+can call any other function in any other layer, destroying the low coupling that 
+makes the layering pattern effective. If the increase semantic coherence tactic 
+is not employed, then functionality could be randomly sprinkled throughout the 
+layers, destroying the separation of concerns, and hence ease of modification, 
+which is the prime motivation for employing layers in the first place.
+Table 13.12 shows a number of the architectural patterns described in the 
+book Pattern-Oriented Software Architecture Volume 1: A System of Patterns, by 
+Buschmann et al., and shows which modifiability tactics they employ.
+Using Tactics to Augment Patterns
+A pattern is described as a solution to a class of problems in a general context. 
+When a pattern is chosen and applied, the context of its application becomes very 
+specific. A documented pattern is therefore underspecified with respect to apply-
+ing it in a specific situation.
+To make a pattern work in a given architectural context, we need to examine 
+it from two perspectives:
+■
+■The inherent quality attribute tradeoffs that the pattern makes. Patterns exist 
+to achieve certain quality attributes, and we need to compare the ones they 
+promote (and the ones they diminish) with our needs.
+■
+■Other quality attributes that the pattern isn’t directly concerned with, but 
+which it nevertheless affects, and which are important in our application.

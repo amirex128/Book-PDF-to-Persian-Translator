@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 236</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3>13—Architectural Tactics and Patterns</h3>
+  <p>
+    215
+  </p>
+  <p>
+    <em>Part Two Quality Attributes</em>
+  </p>
+  <p>
+    الگوی <em>MVC</em> به‌طور گسترده در کتابخانه‌های <em>user interface</em> مانند کلاس‌های <em>Java Swing</em>، فریم‌ورک <em>ASP.NET</em> مایکروسافت، کیت توسعه نرم‌افزار <em>Adobe’s Flex</em>، فریم‌ورک <em>Nokia’s Qt</em> و بسیاری دیگر استفاده می‌شود. به همین ترتیب، معمول است که یک برنامه واحد شامل نمونه‌های زیادی از <em>MVC</em> باشد (اغلب یکی برای هر <em>user interface object</em>).
+  </p>
+  <h4>Pipe-and-Filter Pattern</h4>
+  <p>
+    <em>Context</em>: بسیاری از سیستم‌ها ملزم به تبدیل جریانی از اقلام داده‌های گسسته، از ورودی به خروجی هستند. بسیاری از انواع تبدیل‌ها به‌طور مکرر در عمل رخ می‌دهند، و بنابراین مطلوب است که آنها را به عنوان بخش‌های مستقل و قابل استفاده مجدد ایجاد کنیم.
+  </p>
+  <p>
+    <em>Problem</em>: چگونه باید این سیستم‌ها را به <em>components</em> قابل استفاده مجدد و <em>loosely coupled</em> با مکانیسم‌های تعامل ساده و عمومی تقسیم کنیم؟ به این ترتیب آنها را می‌توان به طور انعطاف‌پذیر با یکدیگر ترکیب کرد. <em>Components</em>، با عمومی بودن و <em>loosely coupled</em> بودن، به راحتی مورد استفاده مجدد قرار می‌گیرند. <em>Components</em>، با مستقل بودن، می‌توانند به‌صورت موازی اجرا شوند.
+  </p>
+  <p>
+    <em>Solution</em>: الگوی تعامل در الگوی <em>pipe-and-filter</em> با تبدیل‌های پی‌درپی از جریان داده‌ها مشخص می‌شود. داده‌ها به <em>filter’s input port(s)</em> می‌رسند، تبدیل می‌شوند، و سپس از طریق <em>output port(s)</em> آن از طریق یک <em>pipe</em> به <em>filter</em> بعدی منتقل می‌شوند. یک <em>filter</em> واحد می‌تواند داده‌ها را از یک یا چند <em>port</em> مصرف کند یا داده تولید کند.
+  </p>
+  <p>
+    چندین ضعف مرتبط با الگوی <em>pipe-and-filter</em> وجود دارد. به عنوان مثال، این الگو معمولاً انتخاب خوبی برای یک سیستم تعاملی نیست، زیرا چرخه‌ها را ممنوع می‌کند (که برای بازخورد کاربر مهم هستند). همچنین، داشتن تعداد زیادی <em>filters</em> مستقل می‌تواند مقادیر قابل توجهی از <em>computational overhead</em> را اضافه کند، زیرا هر <em>filter</em> به عنوان <em>thread</em> یا فرآیند خود اجرا می‌شود. همچنین، سیستم‌های <em>pipe-and-filter</em> ممکن است برای محاسبات طولانی‌مدت، بدون افزودن نوعی قابلیت <em>checkpoint/restore</em>، مناسب نباشند، زیرا شکست هر <em>filter</em> (یا <em>pipe</em>) می‌تواند باعث شکست کل <em>pipeline</em> شود.
+  </p>
+  <p>
+    راه‌حل الگوی <em>pipe-and-filter</em> در جدول 13.4 خلاصه شده است.
+  </p>
+  <p>
+    Pipes، داده‌ها را در طول ارتباط بافر می‌کنند. به دلیل این ویژگی، <em>filters</em> می‌توانند به‌صورت ناهمزمان و همزمان اجرا شوند. علاوه بر این، یک <em>filter</em> معمولاً هویت <em>upstream</em> یا <em>downstream filters</em> خود را نمی‌داند. به همین دلیل، سیستم‌های <em>pipeline pipe-and-filter</em> این ویژگی را دارند که می‌توان محاسبات کلی را به‌عنوان ترکیب عملکردی محاسبات <em>filters</em> در نظر گرفت، و <em>architect</em> را برای استدلال در مورد رفتار <em>end-to-end</em> آسان‌تر می‌کند.
+  </p>
+  <p>
+    سیستم‌های تبدیل داده معمولاً به عنوان <em>pipes and filters</em> ساختاربندی می‌شوند، که هر <em>filter</em> مسئول یک بخش از تبدیل کلی داده‌های ورودی است. پردازش مستقل در هر مرحله، <em>reuse</em>، موازی‌سازی و استدلال ساده‌تری را در مورد رفتار کلی پشتیبانی می‌کند. اغلب این سیستم‌ها، <em>front end</em> برنامه‌های پردازش سیگنال را تشکیل می‌دهند. این سیستم‌ها داده‌های حسگر را در مجموعه‌ای از <em>initial filters</em> دریافت می‌کنند. هر یک از این <em>filters</em> داده‌ها را فشرده می‌کند و پردازش اولیه را انجام می‌دهد (مانند هموارسازی). <em>Downstream filters</em>، داده‌ها را بیشتر کاهش می‌دهند و
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

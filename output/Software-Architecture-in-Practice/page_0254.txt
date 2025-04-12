@@ -1,0 +1,41 @@
+13.2  Overview of the Patterns Catalog
+233
+called Reduce Instance 2. Reduce Instance 2 is receiving data from all of the 
+Partition 2s produced by the various map instances. It is possible that there are 
+several iterations of reduce for large files, but this is not shown in Figure 13.14.
+A classic teaching problem for map-reduce is counting word occurrences 
+in a document. This example can be carried out with a single map function. The 
+document is the data set. The map function will find every word in the document 
+and output a <word, 1> pair for each. For example, if the document begins with 
+the words “Having a whole book . . . ,” then the first results of map will be
+<Having, 1>
+<a, 1>
+<whole, 1>
+<book, 1>
+In practice, the “a” would be one of the words filtered by map. 
+Pseudocode for map might look like this:
+map(String key, String value):
+// key: document name
+// value: document contents
+for each word w in value:
+Emit (w, “1”);
+Portion i of
+input file
+Portion j of
+input file
+Reduce
+instance 2
+Output 
+from
+instance 2
+Map instance j
+Partition 1 Partition 2 Partition 3
+Partition 1 Partition 2 Partition 3
+Component
+Disk file
+Output
+Key:
+Merge
+Map instance i
+Figure 13.14  A component-and-connector view of map-reduce showing how the 
+data processed by map is partitioned and subsequently processed by reduce

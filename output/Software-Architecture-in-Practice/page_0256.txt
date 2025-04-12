@@ -1,0 +1,52 @@
+13.2  Overview of the Patterns Catalog
+235
+Table 13.10  Map-Reduce Pattern Solution
+Overview
+The map-reduce pattern provides a framework for analyzing a 
+large distributed set of data that will execute in parallel, on a set 
+of processors. This parallelization allows for low latency and high 
+availability. The map performs the extract and transform portions 
+of the analysis and the reduce performs the loading of the results. 
+(Extract-transform-load is sometimes used to describe the functions of 
+the map and reduce.)
+Elements
+Map is a function with multiple instances deployed across multiple 
+processors that performs the extract and transformation portions of 
+the analysis.
+Reduce is a function that may be deployed as a single instance or as 
+multiple instances across processors to perform the load portion of 
+extract-transform-load.
+The infrastructure is the framework responsible for deploying map and 
+reduce instances, shepherding the data between them, and detecting 
+and recovering from failure.
+Relations
+Deploy on is the relation between an instance of a map or reduce 
+function and the processor onto which it is installed.
+Instantiate, monitor, and control is the relation between the 
+infrastructure and the instances of map and reduce. 
+Constraints
+The data to be analyzed must exist as a set of files.
+The map functions are stateless and do not communicate with each 
+other.
+The only communication between the map instances and the reduce 
+instances is the data emitted from the map instances as <key, value> 
+pairs.
+Weaknesses
+If you do not have large data sets, the overhead of map-reduce is not 
+justified.
+If you cannot divide your data set into similar sized subsets, the 
+advantages of parallelism are lost.
+Operations that require multiple reduces are complex to orchestrate.
+Multi-tier Pattern
+The multi-tier pattern is a C&C pattern or an allocation pattern, depending on the 
+criteria used to define the tiers. Tiers can be created to group components of similar 
+functionality, in which case it is a C&C pattern. However, in many, if not most, 
+cases tiers are defined with an eye toward the computing environment on which 
+the software will run: A client tier in an enterprise system will not be running on 
+the computer that hosts the database. That makes it an allocation pattern, mapping 
+software elements—perhaps produced by applying C&C patterns—to computing 
+elements. Because of that reason, we have chosen to list it as an allocation pattern.
+Context: In a distributed deployment, there is often a need to distribute a sys-
+tem’s infrastructure into distinct subsets. This may be for operational or business 
+reasons (for example, different parts of the infrastructure may belong to different 
+organizations).

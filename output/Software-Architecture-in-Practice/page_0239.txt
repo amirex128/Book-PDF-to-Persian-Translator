@@ -1,0 +1,59 @@
+218 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+Table 13.5  Client-Server Pattern Solution
+Overview
+Clients initiate interactions with servers, invoking services as 
+needed from those servers and waiting for the results of those 
+requests.
+Elements
+Client, a component that invokes services of a server 
+component. Clients have ports that describe the services they 
+require. 
+Server, a component that provides services to clients. Servers 
+have ports that describe the services they provide. Important 
+characteristics include information about the nature of the 
+server ports (such as how many clients can connect) and 
+performance characteristics (e.g., maximum rates of service 
+invocation). 
+Request/reply connector, a data connector employing a 
+request/reply protocol, used by a client to invoke services on a 
+server. Important characteristics include whether the calls are 
+local or remote, and whether data is encrypted.
+Relations
+The attachment relation associates clients with servers.
+Constraints
+Clients are connected to servers through request/reply 
+connectors.
+Server components can be clients to other servers. 
+Specializations may impose restrictions:
+■
+■
+Numbers of attachments to a given port
+■
+■
+Allowed relations among servers
+Components may be arranged in tiers, which are logical 
+groupings of related functionality or functionality that will share 
+a host computing environment (covered more later in this 
+chapter).
+Weaknesses
+Server can be a performance bottleneck.
+Server can be a single point of failure.
+Decisions about where to locate functionality (in the client or 
+in the server) are often complex and costly to change after a 
+system has been built.
+Some common examples of systems that use the client-server pattern are these: 
+■
+■Information systems running on local networks where the clients are GUI-
+launched applications and the server is a database management system
+■
+■Web-based applications where the clients are web browsers and the servers 
+are components running on an e-commerce site 
+The computational flow of pure client-server systems is asymmetric: 
+clients initiate interactions by invoking services of servers. Thus, the client must 
+know the identity of a service to invoke it, and clients initiate all interactions. 
+In contrast, servers do not know the identity of clients in advance of a service 
+request and must respond to the initiated client requests. 
+In early forms of client-server, service invocation is synchronous: the 
+requester of a service waits, or is blocked, until a requested service completes its 

@@ -1,0 +1,48 @@
+8.2  Tactics for Performance
+139
+Cost is usually a consideration in the choice of resources, but increasing the 
+resources is definitely a tactic to reduce latency and in many cases is the 
+cheapest way to get immediate improvement. 
+■
+■Introduce concurrency. If requests can be processed in parallel, the blocked 
+time can be reduced. Concurrency can be introduced by processing differ-
+ent streams of events on different threads or by creating additional threads 
+to process different sets of activities. Once concurrency has been intro-
+duced, scheduling policies can be used to achieve the goals you find desir-
+able. Different scheduling policies may maximize fairness (all requests get 
+equal time), throughput (shortest time to finish first), or other goals. (See 
+the sidebar.)
+■
+■Maintain multiple copies of computations. Multiple servers in a client-serv-
+er pattern are replicas of computation. The purpose of replicas is to reduce 
+the contention that would occur if all computations took place on a single 
+server. A load balancer is a piece of software that assigns new work to one 
+of the available duplicate servers; criteria for assignment vary but can be as 
+simple as round-robin or assigning the next request to the least busy server. 
+■
+■Maintain multiple copies of data. Caching is a tactic that involves keeping 
+copies of data (possibly one a subset of the other) on storage with different 
+access speeds. The different access speeds may be inherent (memory versus 
+secondary storage) or may be due to the necessity for network communica-
+tion. Data replication involves keeping separate copies of the data to reduce 
+the contention from multiple simultaneous accesses. Because the data being 
+cached or replicated is usually a copy of existing data, keeping the copies 
+consistent and synchronized becomes a responsibility that the system must 
+assume. Another responsibility is to choose the data to be cached. Some 
+caches operate by merely keeping copies of whatever was recently request-
+ed, but it is also possible to predict users’ future requests based on patterns 
+of behavior, and begin the calculations or prefetches necessary to comply 
+with those requests before the user has made them.
+■
+■Bound queue sizes. This controls the maximum number of queued arrivals 
+and consequently the resources used to process the arrivals. If you adopt 
+this tactic, you need to adopt a policy for what happens when the queues 
+overflow and decide if not responding to lost events is acceptable. This tac-
+tic is frequently paired with the limit event response tactic.
+■
+■Schedule resources. Whenever there is contention for a resource, the 
+resource must be scheduled. Processors are scheduled, buffers are 
+scheduled, and networks are scheduled. Your goal is to understand the 
+characteristics of each resource’s use and choose the scheduling strategy 
+that is compatible with it. (See the sidebar.)
+The tactics for performance are summarized in Figure 8.3.

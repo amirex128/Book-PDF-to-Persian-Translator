@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 235</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3>13—Architectural Tactics and Patterns</h3>
+  <p>
+    214
+  </p>
+  <p>
+    <em>Part Two Quality Attributes</em>
+  </p>
+  <p>
+    در واقع، ممکن است <em>views</em> و <em>controllers</em> زیادی با یک <em>model</em> مرتبط باشند. به عنوان مثال، مجموعه‌ای از داده‌های تجاری ممکن است به صورت ستون‌هایی از اعداد در یک <em>spreadsheet</em>، به عنوان یک <em>scatter plot</em>، یا به عنوان یک نمودار دایره‌ای نشان داده شوند. هر یک از اینها یک <em>view</em> جداگانه است، و این <em>view</em> را می‌توان به‌طور پویا به‌روزرسانی کرد، زیرا <em>model</em> تغییر می‌کند (به عنوان مثال، نشان دادن تراکنش‌های زنده در یک سیستم پردازش تراکنش). یک <em>model</em> ممکن است توسط <em>controllers</em> مختلف به‌روزرسانی شود. به عنوان مثال، یک نقشه را می‌توان از طریق حرکات ماوس، حرکات <em>trackball</em>، کلیک‌های صفحه‌کلید، یا دستورات صوتی بزرگ‌نمایی و <em>pan</em> کرد. هر یک از این اشکال مختلف ورودی باید توسط یک <em>controller</em> مدیریت شوند.
+  </p>
+  <p>
+    <em>MVC components</em> از طریق نوعی <em>notification</em>، مانند رویدادها یا <em>callbacks</em>، به یکدیگر متصل می‌شوند. این <em>notifications</em> حاوی <em>state updates</em> هستند. یک تغییر در <em>model</em> باید به <em>views</em> منتقل شود تا بتوانند به‌روزرسانی شوند. یک رویداد خارجی، مانند ورودی کاربر، باید به <em>controller</em> منتقل شود، که ممکن است به نوبه خود <em>view</em> و/یا <em>model</em> را به‌روزرسانی کند. <em>Notifications</em> ممکن است <em>push</em> یا <em>pull</em> باشند.
+  </p>
+  <p>
+    از آنجایی که این <em>components</em> به‌طور سست <em>coupled</em> هستند، توسعه و <em>test</em> کردن آنها به‌طور موازی آسان است، و تغییرات در یکی از آنها تأثیر کمی بر دیگران دارد. روابط بین <em>components</em> <em>MVC</em> در شکل 13.7 نشان داده شده است.
+  </p>
+  <p>
+    • Encapsulates application state
+    <br>
+    • Responds to state queries
+    <br>
+    • Exposes application functionality
+    <br>
+    • Notifies views of changes
+    <br>
+    Model
+    <br>
+    • Renders the models
+    <br>
+    • Requests updates from models
+    <br>
+    • Sends user gestures to controller
+    <br>
+    • Allows controller to select view
+    <br>
+    View
+    <br>
+    • Defines application behavior
+    <br>
+    • Maps user actions to model updates
+    <br>
+    • Selects view for response
+    <br>
+    • One for each functionality
+    <br>
+    Controller
+  </p>
+  <p>
+    State
+    <br>
+    Query
+    <br>
+    State
+    <br>
+    Change
+    <br>
+    User Gestures
+    <br>
+    View Selection
+    <br>
+    Change
+    <br>
+    Notification
+    <br>
+    Key:
+    <br>
+    Events
+    <br>
+    Method
+    <br>
+    Invocations
+  </p>
+  <p>
+    <img src="mvc_pattern.png" alt="MVC Pattern" width="400">
+  </p>
+  <p>
+    شکل 13.7  الگوی <em>model-view-controller</em>
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0235/image_1.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_2.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_3.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_4.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_5.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_6.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_7.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_8.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_9.png" alt="Image from page 235" /></div>
+<div class="page-image"><img src="page_0235/image_10.png" alt="Image from page 235" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

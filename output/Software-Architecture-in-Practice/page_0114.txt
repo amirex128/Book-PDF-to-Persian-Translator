@@ -1,0 +1,50 @@
+5.2  Tactics for Availability
+93
+redundancy tactics to achieve non-service-affecting upgrades to software 
+and associated schema. In practice, the function patch and class patch are 
+used to deliver bug fixes, while the hitless in-service software upgrade is 
+used to deliver new features and capabilities.
+■
+■Retry. The retry tactic assumes that the fault that caused a failure is tran-
+sient and retrying the operation may lead to success. This tactic is used in 
+networks and in server farms where failures are expected and common. 
+There should be a limit on the number of retries that are attempted before a 
+permanent failure is declared.
+■
+■Ignore faulty behavior. This tactic calls for ignoring messages sent from a 
+particular source when we determine that those messages are spurious. For 
+example, we would like to ignore the messages of an external component 
+launching a denial-of-service attack by establishing Access Control List 
+filters, for example.
+■
+■The degradation tactic maintains the most critical system functions in the 
+presence of component failures, dropping less critical functions. This is 
+done in circumstances where individual component failures gracefully re-
+duce system functionality rather than causing a complete system failure. 
+■
+■Reconfiguration attempts to recover from component failures by reassign-
+ing responsibilities to the (potentially restricted) resources left functioning, 
+while maintaining as much functionality as possible.
+Reintroduction is where a failed component is reintroduced after it has been 
+corrected. Reintroduction tactics include the following:
+■
+■The shadow tactic refers to operating a previously failed or in-service up-
+graded component in a “shadow mode” for a predefined duration of time 
+prior to reverting the component back to an active role. During this duration 
+its behavior can be monitored for correctness and it can repopulate its state 
+incrementally.
+■
+■State resynchronization is a reintroduction partner to the active redun-
+dancy and passive redundancy preparation-and-repair tactics. When used 
+alongside the active redundancy tactic, the state resynchronization occurs 
+organically, because the active and standby components each receive and 
+process identical inputs in parallel. In practice, the states of the active and 
+standby components are periodically compared to ensure synchronization. 
+This comparison may be based on a cyclic redundancy check calculation 
+(checksum) ‎or, for systems providing safety-critical services, a message 
+digest calculation (a one-way hash function). When used alongside the pas-
+sive redundancy (warm spare) tactic, state resynchronization is based solely 
+on periodic state information transmitted from the active component(s) to 
+the standby component(s), typically via checkpointing. A special case of 
+this tactic is found in stateless services, whereby any resource can handle a 
+request from another (failed) resource.

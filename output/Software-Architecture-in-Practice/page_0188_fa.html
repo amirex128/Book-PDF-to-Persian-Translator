@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 188</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h4>10.2  Tactics for Testability</h4>
+  <ul>
+    <li>
+      جایگزینی <em>Component</em>، که به سادگی پیاده‌سازی یک <em>component</em> را با یک پیاده‌سازی متفاوت جایگزین می‌کند که (در مورد <em>testability</em>) ویژگی‌هایی دارد که <em>testing</em> را تسهیل می‌کنند. جایگزینی <em>Component</em> اغلب در <em>build scripts</em> یک سیستم انجام می‌شود.
+    </li>
+    <li>
+      ماکروهای <em>Preprocessor</em> که، در صورت فعال شدن، به کد گزارش‌دهی <em>state</em> گسترش می‌یابند یا عبارات <em>probe</em> را فعال می‌کنند که اطلاعات را برمی‌گردانند یا نمایش می‌دهند، یا کنترل را به یک <em>testing console</em> برمی‌گردانند.
+    </li>
+    <li>
+      <em>Aspects</em> (در برنامه‌های <em>aspect-oriented</em>) که نگرانی‌های متقاطع نحوه گزارش <em>state</em> را مدیریت می‌کنند.
+    </li>
+  </ul>
+  <p>
+    محدود کردن پیچیدگی
+  </p>
+  <p>
+    <em>Complex software</em> <em>test</em> کردن سخت‌تر است. این به این دلیل است که، با تعریف پیچیدگی، فضای <em>operating state</em> آن بسیار بزرگ است و (با فرض برابر بودن سایر شرایط) بازآفرینی یک <em>state</em> دقیق در یک فضای <em>state</em> بزرگتر از انجام این کار در یک فضای <em>state</em> کوچک‌تر دشوارتر است. از آنجایی که <em>testing</em> فقط در مورد شکست دادن نرم‌افزار نیست، بلکه در مورد یافتن خطا است که باعث شکست شد تا بتوان آن را حذف کرد، ما اغلب نگران تکرارپذیر کردن رفتار هستیم. این دسته دارای سه تاکتیک است:
+  </p>
+  <ul>
+    <li>
+      محدود کردن پیچیدگی ساختاری. این تاکتیک شامل اجتناب یا حل وابستگی‌های چرخه‌ای بین <em>components</em>، جداسازی و کپسوله کردن وابستگی‌ها به محیط خارجی و کاهش وابستگی‌ها بین <em>components</em> به طور کلی (به عنوان مثال، کاهش تعداد دسترسی‌های خارجی به داده‌های عمومی یک ماژول) است. در سیستم‌های <em>object-oriented</em>، می‌توانید سلسله مراتب وراثت را ساده کنید: تعداد <em>classes</em> را که یک <em>class</em> از آنها مشتق شده است یا تعداد <em>classes</em> مشتق شده از یک <em>class</em> را محدود کنید. عمق درخت وراثت و تعداد فرزندان یک <em>class</em> را محدود کنید. چندشکلی و فراخوانی‌های پویا را محدود کنید. یک <em>metric</em> ساختاری که به صورت تجربی نشان داده شده است که با <em>testability</em> همبستگی دارد، پاسخ یک <em>class</em> نامیده می‌شود. پاسخ <em>class</em> C، تعداد متدهای C به‌علاوه تعداد متدهای <em>classes</em> دیگر است که توسط متدهای C فراخوانی می‌شوند. کم نگه داشتن این <em>metric</em> می‌تواند <em>testability</em> را افزایش دهد.
+      <br>
+      داشتن انسجام بالا، <em>loose coupling</em> و <em>separation of concerns</em> - همه تاکتیک‌های <em>modifiability</em> (به فصل 7 مراجعه کنید) - نیز می‌تواند به <em>testability</em> کمک کند. آنها نوعی از محدود کردن پیچیدگی عناصر معماری هستند با دادن یک کار متمرکز به هر عنصر با تعامل محدود با عناصر دیگر. <em>Separation of concerns</em> می‌تواند به دستیابی به <em>controllability</em> و <em>observability</em> (و همچنین کاهش اندازه فضای <em>state</em> کلی برنامه) کمک کند. <em>Controllability</em> برای ایجاد <em>testing</em> قابل ردیابی حیاتی است، همانطور که رابرت بایندر اشاره کرده است: "یک <em>component</em> که می‌تواند مستقل از دیگران عمل کند، به راحتی قابل کنترل است. . . . با <em>high coupling</em> در میان <em>classes</em>، معمولاً کنترل <em>class</em> تحت <em>test</em> دشوارتر است، بنابراین <em>testability</em> کاهش می‌یابد. . . . اگر قابلیت‌های <em>user interface</em> با عملکردهای اساسی در هم تنیده باشند، <em>test</em> کردن هر عملکرد دشوارتر خواهد بود" [Binder 94].
+    </li>
+  </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

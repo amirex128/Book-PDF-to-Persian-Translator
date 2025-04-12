@@ -1,0 +1,46 @@
+138 
+Part Two  Quality Attributes	
+8—Performance
+management system may raise a variety of alarms. Life-threatening alarms 
+such as a fire alarm should be given higher priority than informational 
+alarms such as a room is too cold.
+■
+■Reduce overhead. The use of intermediaries (so important for modifiability, 
+as we saw in Chapter 7) increases the resources consumed in processing 
+an event stream, and so removing them improves latency. This is a clas-
+sic modifiability/performance tradeoff. Separation of concerns, another 
+linchpin of modifiability, can also increase the processing overhead nec-
+essary to service an event if it leads to an event being serviced by a chain 
+of components rather than a single component. The context switching and 
+intercomponent communication costs add up, especially when the compo-
+nents are on different nodes on a network. A strategy for reducing compu-
+tational overhead is to co-locate resources. Co-location may mean hosting 
+cooperating components on the same processor to avoid the time delay of 
+network communication; it may mean putting the resources in the same 
+runtime software component to avoid even the expense of a subroutine call. 
+A special case of reducing computational overhead is to perform a periodic 
+cleanup of resources that have become inefficient. For example, hash tables 
+and virtual memory maps may require recalculation and reinitialization. 
+Another common strategy is to execute single-threaded servers (for simplic-
+ity and avoiding contention) and split workload across them. 
+■
+■Bound execution times. Place a limit on how much execution time is used to 
+respond to an event. For iterative, data-dependent algorithms, limiting the 
+number of iterations is a method for bounding execution times. The cost is 
+usually a less accurate computation. If you adopt this tactic, you will need 
+to assess its effect on accuracy and see if the result is “good enough.” This 
+resource management tactic is frequently paired with the manage sampling 
+rate tactic.
+■
+■Increase resource efficiency. Improving the algorithms used in critical areas 
+will decrease latency. 
+Manage Resources
+Even if the demand for resources is not controllable, the management of these re-
+sources can be. Sometimes one resource can be traded for another. For example, 
+intermediate data may be kept in a cache or it may be regenerated depending on 
+time and space resource availability. This tactic is usually applied to the proces-
+sor but is also effective when applied to other resources such as a disk. Here are 
+some resource management tactics:
+■
+■Increase resources. Faster processors, additional processors, additional 
+memory, and faster networks all have the potential for reducing latency. 

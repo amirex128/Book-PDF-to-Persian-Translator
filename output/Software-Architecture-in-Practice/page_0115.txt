@@ -1,0 +1,46 @@
+94 
+Part Two  Quality Attributes	
+5—Availability
+■
+■Escalating restart is a reintroduction tactic that allows the system to recov-
+er from faults by varying the granularity of the component(s) restarted and 
+minimizing the level of service affected. For example, consider a system 
+that supports four levels of restart, as follows. The lowest level of restart 
+(call it Level 0), and hence having the least impact on services, employs 
+passive redundancy (warm spare), where all child threads of the faulty 
+component are killed and recreated. In this way, only data associated with 
+the child threads is freed and reinitialized. The next level of restart (Level 
+1) frees and reinitializes all unprotected memory (protected memory would 
+remain untouched). The next level of restart (Level 2) frees and reinitializes 
+all memory, both protected and unprotected, forcing all applications to re-
+load and reinitialize. And the final level of restart (Level 3) would involve 
+completely reloading and reinitializing the executable image and associated 
+data segments. Support for the escalating restart tactic is particularly useful 
+for the concept of graceful degradation, where a system is able to degrade 
+the services it provides while maintaining support for mission-critical or 
+safety-critical applications.
+■
+■Non-stop forwarding (NSF) is a concept that originated in router design. In 
+this design functionality is split into two parts: supervisory, or control plane 
+(which manages connectivity and routing information), and data plane 
+(which does the actual work of routing packets from sender to receiver). If 
+a router experiences the failure of an active supervisor, it can continue for-
+warding packets along known routes—with neighboring routers—while the 
+routing protocol information is recovered and validated. When the control 
+plane is restarted, it implements what is sometimes called “graceful restart,” 
+incrementally rebuilding its routing protocol database even as the data 
+plane continues to operate.
+Prevent Faults
+Instead of detecting faults and then trying to recover from them, what if your sys-
+tem could prevent them from occurring in the first place? Although this sounds 
+like some measure of clairvoyance might be required, it turns out that in many 
+cases it is possible to do just that.3
+■
+■Removal from service. This tactic refers to temporarily placing a system 
+component in an out-of-service state for the purpose of mitigating potential 
+system failures. One example involves taking a component of a system out 
+of service and resetting the component in order to scrub latent faults (such 
+3.  These tactics deal with runtime means to prevent faults from occurring. Of course, an excellent 
+way to prevent faults—at least in the system you’re building, if not in systems that your system must 
+interact with—is to produce high-quality code. This can be done by means of code inspections, pair 
+programming, solid requirements reviews, and a host of other good engineering practices. 

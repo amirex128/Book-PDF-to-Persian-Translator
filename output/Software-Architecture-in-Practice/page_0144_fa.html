@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 144</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>7.2  Tactics for Modifiability</h4>
+  <p>
+   Reduce the Size of a Module
+  </p>
+  <ul>
+   <li>
+    Split module. اگر ماژولی که در حال اصلاح است شامل مقدار زیادی از <strong>capability</strong> است، هزینه های اصلاح احتمالاً بالا خواهد بود. اصلاح ماژول به چندین ماژول کوچکتر باید میانگین هزینه تغییرات آینده را کاهش دهد.
+   </li>
+  </ul>
+  <p>
+   Increase Cohesion
+  </p>
+  <p>
+   چندین تاکتیک شامل انتقال مسئولیت ها از یک ماژول به ماژول دیگر می شود. هدف از انتقال یک مسئولیت از یک ماژول به ماژول دیگر، کاهش احتمال اثرات جانبی است که بر سایر مسئولیت ها در ماژول اصلی تأثیر می گذارد.
+  </p>
+  <ul>
+   <li>
+    افزایش <strong>semantic coherence</strong>. اگر مسئولیت های A و B در یک ماژول هدف مشابهی را دنبال نمی کنند، باید در ماژول های مختلف قرار گیرند. این ممکن است شامل ایجاد یک ماژول جدید یا انتقال یک مسئولیت به یک ماژول موجود باشد. یک روش برای شناسایی مسئولیت هایی که باید منتقل شوند، فرضیه تغییرات احتمالی است که بر یک ماژول تأثیر می گذارد. اگر برخی از مسئولیت ها تحت تأثیر این تغییرات قرار نگیرند، احتمالاً باید آن مسئولیت ها حذف شوند.
+   </li>
+  </ul>
+  <p>
+   Reduce Coupling
+  </p>
+  <p>
+   ما اکنون به تاکتیک هایی می پردازیم که <strong>coupling</strong> بین ماژول ها را کاهش می دهند.
+  </p>
+  <ul>
+   <li>
+    Encapsulate. <strong>Encapsulation</strong> یک <strong>interface</strong> صریح را به یک ماژول معرفی می کند. این <strong>interface</strong> شامل یک <strong>application programming interface (API)</strong> و مسئولیت های مرتبط با آن، مانند "انجام یک تبدیل نحوی بر روی یک پارامتر ورودی به یک نمایش داخلی" است. شاید رایج ترین تاکتیک <strong>modifiability</strong>، <strong>encapsulation</strong> احتمال اینکه تغییری در یک ماژول به ماژول های دیگر گسترش یابد را کاهش می دهد. نقاط قوت <strong>coupling</strong> که قبلاً به ماژول می رفت اکنون به <strong>interface</strong> برای ماژول می رود. با این حال، این نقاط قوت کاهش می یابد زیرا <strong>interface</strong> راه هایی را که مسئولیت های خارجی می توانند با ماژول تعامل داشته باشند محدود می کند (شاید از طریق یک <strong>wrapper</strong>). مسئولیت های خارجی اکنون فقط می توانند مستقیماً از طریق <strong>interface</strong> در معرض دید، با ماژول تعامل داشته باشند (با این حال، تعاملات غیرمستقیم، مانند وابستگی به کیفیت سرویس، احتمالاً بدون تغییر باقی می مانند). <strong>Interfaces</strong> طراحی شده برای افزایش <strong>modifiability</strong> باید با توجه به جزئیات ماژولی که احتمال تغییر دارند، انتزاعی باشند - یعنی باید آن جزئیات را پنهان کنند.
+   </li>
+   <li>
+    Use an intermediary یک وابستگی را می شکند. با توجه به یک وابستگی بین مسئولیت A و مسئولیت B (به عنوان مثال، انجام A ابتدا مستلزم انجام B است)، وابستگی را می توان با استفاده از یک واسطه شکست. نوع واسطه به نوع وابستگی بستگی دارد. به عنوان مثال، یک واسطه انتشار-اشتراک دانش تولید کننده داده را حذف می کند.
+   </li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

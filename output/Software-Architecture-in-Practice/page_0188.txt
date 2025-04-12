@@ -1,0 +1,47 @@
+10.2  Tactics for Testability
+167
+■
+■Component replacement, which simply swaps the implementation of a 
+component with a different implementation that (in the case of testability) 
+has features that facilitate testing. Component replacement is often 
+accomplished in a system’s build scripts.
+■
+■Preprocessor macros that, when activated, expand to state-reporting code or 
+activate probe statements that return or display information, or return con-
+trol to a testing console.
+■
+■Aspects (in aspect-oriented programs) that handle the cross-cutting concern 
+of how state is reported.
+Limit Complexity
+Complex software is harder to test. This is because, by the definition of complex-
+ity, its operating state space is very large and (all else being equal) it is more dif-
+ficult to re-create an exact state in a large state space than to do so in a small state 
+space. Because testing is not just about making the software fail but about finding 
+the fault that caused the failure so that it can be removed, we are often concerned 
+with making behavior repeatable. This category has three tactics:
+■
+■Limit structural complexity. This tactic includes avoiding or resolving 
+cyclic dependencies between components, isolating and encapsulating 
+dependencies on the external environment, and reducing dependencies 
+between components in general (for example, reduce the number of 
+external accesses to a module’s public data). In object-oriented systems, 
+you can simplify the inheritance hierarchy: Limit the number of classes 
+from which a class is derived, or the number of classes derived from a 
+class. Limit the depth of the inheritance tree, and the number of children of 
+a class. Limit polymorphism and dynamic calls. One structural metric that 
+has been shown empirically to correlate to testability is called the response 
+of a class. The response of class C is a count of the number of methods 
+of C plus the number of methods of other classes that are invoked by the 
+methods of C. Keeping this metric low can increase testability.
+Having high cohesion, loose coupling, and separation of concerns—all 
+modifiability tactics (see Chapter 7)—can also help with testability. They 
+are a form of limiting the complexity of the architectural elements by 
+giving each element a focused task with limited interaction with other ele-
+ments. Separation of concerns can help achieve controllability and observ-
+ability (as well as reducing the size of the overall program’s state space). 
+Controllability is critical to making testing tractable, as Robert Binder has 
+noted: “A component that can act independently of others is more readily 
+controllable. . . . With high coupling among classes it is typically more 
+difficult to control the class under test, thus reducing testability. . . . If user 
+interface capabilities are entwined with basic functions it will be more 
+difficult to test each function” [Binder 94].

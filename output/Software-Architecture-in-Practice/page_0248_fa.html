@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 248</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3>13—Architectural Tactics and Patterns</h3>
+  <p>
+    227
+  </p>
+  <p>
+    <em>Part Two Quality Attributes</em>
+  </p>
+  <p>
+    <em>Problem</em>: چگونه می‌توانیم مکانیسم‌های یکپارچه‌سازی ایجاد کنیم که از توانایی انتقال پیام‌ها در میان تولیدکنندگان و مصرف‌کنندگان به گونه‌ای پشتیبانی کند که آنها از هویت یکدیگر، یا حتی از وجود آنها، بی‌اطلاع باشند؟
+  </p>
+  <p>
+    <em>Solution</em>: در الگوی <em>publish-subscribe</em>، که در جدول 13.8 خلاصه شده است، <em>components</em> از طریق پیام‌های اعلام‌شده یا رویدادها با هم تعامل دارند. <em>Components</em> ممکن است به مجموعه‌ای از رویدادها مشترک شوند. این وظیفه زیرساخت زمان اجرای <em>publish-subscribe</em> است تا اطمینان حاصل شود که هر رویداد منتشر شده به همه مشترکین آن رویداد تحویل داده می‌شود. بنابراین، شکل اصلی <em>connector</em> در این الگوها، یک <em>event bus</em> است. <em>Publisher components</em> با اعلام رویدادها، رویدادها را در <em>bus</em> قرار می‌دهند. سپس <em>connector</em>، آن رویدادها را به <em>subscriber components</em>، که علاقه‌مندی خود را به آن رویدادها ثبت کرده‌اند، تحویل می‌دهد. هر <em>component</em> ممکن است هم <em>publisher</em> و هم <em>subscriber</em> باشد.
+  </p>
+  <p>
+    <em>Publish-subscribe</em> یک لایه از <em>indirection</em> را بین فرستنده‌ها و گیرنده‌ها اضافه می‌کند. این امر تأثیر منفی بر <em>latency</em> و به‌طور بالقوه <em>scalability</em> دارد، بسته به نحوه پیاده‌سازی آن. به‌طور معمول، فرد نمی‌خواهد از <em>publish-subscribe</em> در سیستمی استفاده کند که <em>hard real-time deadlines</em> سختی برای برآورده کردن داشته باشد، زیرا عدم اطمینان را در زمان‌های تحویل پیام معرفی می‌کند.
+  </p>
+  <p>
+    همچنین، الگوی <em>publish-subscribe</em> از این رنج می‌برد که کنترل کمتری بر ترتیب پیام‌ها ارائه می‌دهد، و تحویل پیام‌ها تضمین نمی‌شود (زیرا فرستنده نمی‌تواند بداند که آیا گیرنده‌ای در حال گوش دادن است یا خیر). این امر می‌تواند الگوی <em>publish-subscribe</em> را برای تعاملات پیچیده‌ای که در آن <em>shared state</em> حیاتی است، نامناسب کند.
+  </p>
+  <p>
+    جدول 13.8  <em>Publish-Subscribe Pattern Solution</em>
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Overview</th>
+        <th><em>Components</em> به رویدادها <em>publish</em> و <em>subscribe</em> می‌کنند. هنگامی که یک رویداد توسط یک <em>component</em> اعلام می‌شود، زیرساخت <em>connector</em>، رویداد را به همه <em>subscribers</em> ثبت شده، توزیع می‌کند.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Elements</td>
+        <td>
+          هر <em>C&C component</em> با حداقل یک پورت <em>publish</em> یا <em>subscribe</em>. نگرانی‌ها شامل این است که کدام رویدادها منتشر و مشترک می‌شوند، و <em>granularity</em> رویدادها.
+          <br>
+          <em>The publish-subscribe connector</em>، که دارای نقش‌های اعلام و گوش دادن برای <em>components</em> است که می‌خواهند رویدادها را <em>publish</em> و به آنها <em>subscribe</em> شوند.
+        </td>
+      </tr>
+      <tr>
+        <td>Relations</td>
+        <td>
+          رابطه پیوست، <em>components</em> را با <em>publish-subscribe connector</em> با تجویز اینکه کدام <em>components</em> رویدادها را اعلام می‌کنند و کدام <em>components</em> برای دریافت رویدادها ثبت شده‌اند، مرتبط می‌کند.
+        </td>
+      </tr>
+      <tr>
+        <td>Constraints</td>
+        <td>
+          همه <em>components</em> به یک توزیع‌کننده رویداد متصل هستند که ممکن است به عنوان یک <em>bus</em> - <em>connector</em> - یا یک <em>component</em> مشاهده شود. <em>Publish ports</em> به نقش‌های اعلام متصل می‌شوند و <em>subscribe ports</em> به نقش‌های گوش دادن متصل می‌شوند. محدودیت‌ها ممکن است این را محدود کنند که کدام <em>components</em> می‌توانند به کدام رویدادها گوش دهند، اینکه آیا یک <em>component</em> می‌تواند به رویدادهای خود گوش دهد، و چند <em>publish-subscribe connectors</em> می‌تواند در یک سیستم وجود داشته باشد.
+          <br>
+          یک <em>component</em> ممکن است با داشتن <em>ports</em> از هر دو نوع، هم <em>publisher</em> و هم <em>subscriber</em> باشد.
+        </td>
+      </tr>
+      <tr>
+        <td>Weaknesses</td>
+        <td>
+          به‌طور معمول <em>latency</em> را افزایش می‌دهد و تأثیر منفی بر <em>scalability</em> و قابلیت پیش‌بینی زمان تحویل پیام دارد.
+          <br>
+          کنترل کمتری بر ترتیب پیام‌ها، و تحویل پیام‌ها تضمین نمی‌شود.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

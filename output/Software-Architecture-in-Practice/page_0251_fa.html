@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 251</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3>13—Architectural Tactics and Patterns</h3>
+  <p>
+    230
+  </p>
+  <p>
+    <em>Part Two Quality Attributes</em>
+  </p>
+  <h4>Shared-Data Pattern</h4>
+  <p>
+    <em>Context</em>: <em>Components</em> محاسباتی مختلف نیاز دارند تا مقادیر زیادی از داده‌ها را به اشتراک بگذارند و دستکاری کنند. این داده‌ها منحصراً متعلق به هیچ یک از آن <em>components</em> نیستند.
+  </p>
+  <p>
+    <em>Problem</em>: چگونه می‌توان سیستم‌ها را ذخیره و داده‌های پایدار را دستکاری کرد که توسط چندین <em>component</em> مستقل قابل دسترسی هستند؟
+  </p>
+  <p>
+    <em>Solution</em>: در الگوی <em>shared-data</em>، تعامل تحت سلطه تبادل داده‌های پایدار بین چندین <em>data accessors</em> و حداقل یک <em>shared-data store</em> است. تبادل ممکن است توسط <em>accessors</em> یا <em>data store</em> آغاز شود. نوع <em>connector</em>، خواندن و نوشتن داده‌ها است. مدل محاسباتی کلی مرتبط با سیستم‌های <em>shared-data</em> این است که <em>data accessors</em>، عملیاتی را انجام می‌دهند که به داده‌ها از <em>data store</em> نیاز دارند و نتایج را به یک یا چند <em>data stores</em> می‌نویسند. این داده‌ها را می‌توان توسط سایر <em>data accessors</em> مشاهده و بر روی آنها عمل کرد. در یک سیستم <em>shared-data</em> خالص، <em>data accessors</em> فقط از طریق یک یا چند <em>shared-data stores</em> با هم تعامل دارند. با این حال، در عمل سیستم‌های <em>shared-data</em>، تعاملات مستقیم بین <em>data accessors</em> را نیز مجاز می‌دانند. <em>Data-store components</em> یک سیستم <em>shared-data</em>، دسترسی مشترک به داده‌ها را فراهم می‌کنند، از تداوم داده‌ها پشتیبانی می‌کنند، دسترسی همزمان به داده‌ها را از طریق مدیریت تراکنش‌ها مدیریت می‌کنند، تحمل خطا را فراهم می‌کنند، از <em>access control</em> پشتیبانی می‌کنند، و توزیع و <em>caching</em> مقادیر داده‌ها را مدیریت می‌کنند.
+  </p>
+  <p>
+    <em>Specializations</em> از الگوی <em>shared-data</em> با توجه به ماهیت داده‌های ذخیره‌شده متفاوت است - رویکردهای موجود شامل ساختارهای رابطه‌ای، ساختارهای <em>object</em>، ساختارهای لایه‌ای و سلسله‌مراتبی است.
+  </p>
+  <p>
+    اگرچه به اشتراک‌گذاری داده‌ها یک کار حیاتی برای اکثر سیستم‌های بزرگ و پیچیده است، تعدادی از مشکلات احتمالی مرتبط با این الگو وجود دارد. برای یکی، <em>shared-data store</em> ممکن است یک گلوگاه <em>performance</em> باشد. به همین دلیل، بهینه‌سازی <em>performance</em> یک موضوع رایج در تحقیقات پایگاه داده بوده است. <em>The shared-data store</em> همچنین به‌طور بالقوه یک نقطه شکست واحد است. همچنین، تولیدکنندگان و مصرف‌کنندگان داده‌های مشترک ممکن است از طریق دانش خود از ساختار داده‌های مشترک به‌طور محکم <em>coupled</em> شوند.
+  </p>
+  <p>
+    راه‌حل الگوی <em>shared-data</em> در جدول 13.9 خلاصه شده است.
+  </p>
+  <p>
+    الگوی <em>shared-data</em>، هر زمان که اقلام داده‌های مختلف پایدار هستند و دارای چندین <em>accessors</em> هستند، مفید است. استفاده از این الگو، باعث می‌شود که تولیدکننده داده‌ها از مصرف‌کنندگان داده‌ها جدا شود. از این رو، این الگو از <em>modifiability</em> پشتیبانی می‌کند، زیرا تولیدکنندگان دانش مستقیمی از مصرف‌کنندگان ندارند. ادغام داده‌ها در یک یا چند مکان و دسترسی به آنها به روشی مشترک، <em>performance tuning</em> را تسهیل می‌کند. تجزیه و تحلیل‌های مرتبط با این الگو معمولاً بر روی کیفیت‌هایی مانند <em>data consistency</em>، <em>performance</em>، <em>security</em>، حریم خصوصی، <em>availability</em>، <em>scalability</em> و سازگاری با، به عنوان مثال، مخازن موجود و داده‌های آنها متمرکز است.
+  </p>
+  <p>
+    وقتی یک سیستم بیش از یک <em>data store</em> دارد، یک نگرانی اصلی معماری، نقشه‌برداری داده‌ها و محاسبات به داده‌ها است. استفاده از چندین <em>store</em> ممکن است به این دلیل رخ دهد که داده‌ها به‌طور طبیعی یا از نظر تاریخی به <em>stores</em> جداشونده تقسیم‌بندی شده‌اند. در موارد دیگر، داده‌ها ممکن است بر روی چندین <em>store</em> تکرار شوند تا <em>performance</em> یا <em>availability</em> را از طریق <em>redundancy</em> بهبود بخشند. این انتخاب‌ها می‌توانند به‌شدت بر کیفیت‌های ذکر شده در بالا تأثیر بگذارند.
+  </p>
+  <p>
+    شکل 13.13 نمودار یک نمای <em>shared-data</em> از یک سیستم مدیریت دسترسی سازمانی را نشان می‌دهد. سه نوع <em>accessor components</em> وجود دارد: <em>Windows</em>
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

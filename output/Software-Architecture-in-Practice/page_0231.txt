@@ -1,0 +1,41 @@
+210 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+segmented. Segments of the top layer are not allowed to use each other, 
+but segments of the bottom layer are. If you draw the same diagram with-
+out the arrows, it will be harder to differentiate the different usage rules 
+within segmented layers. Layered diagrams are often a source of hidden 
+ambiguity because the diagram does not make explicit the allowed-to-use 
+relations. 
+Finally, the most important point about layering is that a layer isn’t 
+allowed to use any layer above it. A module “uses” another module when it 
+depends on the answer it gets back. But a layer is allowed to make upward 
+calls, as long as it isn’t expecting an answer from them. This is how the 
+common error-handling scheme of callbacks works. A program in layer A 
+calls a program in a lower layer B, and the parameters include a pointer to 
+an error-handling program in A that the lower layer should call in case of 
+error. The software in B makes the call to the program in A, but cares not in 
+the least what it does. By not depending in any way on the contents of A, B 
+is insulated from changes in A. 
+—PCC
+Other Module Patterns
+Designers in a particular domain often publish “standard” module decomposi-
+tions for systems in that domain. These standard decompositions, if put in the 
+“context, problem, solution” form, constitute module decomposition patterns.
+Similarly in the object-oriented realm, “standard” or published class/object 
+design solutions for a class of system constitute object-oriented patterns.
+Component-and-Connector Patterns
+Broker Pattern
+Context: Many systems are constructed from a collection of services distributed 
+across multiple servers. Implementing these systems is complex because you 
+need to worry about how the systems will interoperate—how they will connect to 
+each other and how they will exchange information—as well as the availability of 
+the component services.
+Problem: How do we structure distributed software so that service users do not 
+need to know the nature and location of service providers, making it easy to dy-
+namically change the bindings between users and providers?
+Solution: The broker pattern separates users of services (clients) from providers 
+of services (servers) by inserting an intermediary, called a broker. When a client 
+needs a service, it queries a broker via a service interface. The broker then for-
+wards the client’s service request to a server, which processes the request. The ser-
+vice result is communicated from the server back to the broker, which then returns 

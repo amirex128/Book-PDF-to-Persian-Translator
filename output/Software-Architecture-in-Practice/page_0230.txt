@@ -1,0 +1,41 @@
+13.2  Overview of the Patterns Catalog
+209
+Third, many architectures that purport to be layered look something 
+like Figure 13.4. This diagram probably means that modules in A, B, or C 
+can use modules in D, but without a key to tell us for sure, it could mean 
+anything. “Sidecars” like this often contain common utilities (sometimes 
+imported), such as error handlers, communication protocols, or database 
+access mechanisms. This kind of diagram makes sense only in the case 
+where no layer bridging is allowed in the main stack. Otherwise, D could 
+simply be made the bottom-most layer in the main stack, and the “sidecar” 
+geometry would be unnecessary. But I’m still surprised at how often I see 
+this layout go unexplained.
+Sometimes layers are divided into segments denoting a finer-grained 
+decomposition of the modules. Sometimes this occurs when a preexisting 
+set of units, such as imported modules, share the same allowed-to-use 
+relation. When this happens, you have to specify what usage rules are in 
+effect among the segments. Many usage rules are possible, but they must 
+be made explicit. In Figure 13.5, the top and the bottom layers are
+A
+B
+C
+D
+Figure 13.4  Layers with a “sidecar” 
+Key:
+Layer
+UI
+Business Logic
+Data Access
+Local Data
+Access
+Remote Data
+Access
+Web UI
+Rich
+Client
+Command
+Line
+Layer
+segment
+Allowed to use
+Figure 13.5  Layered design with segmented layers 

@@ -1,0 +1,46 @@
+230 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+Shared-Data Pattern
+Context: Various computational components need to share and manipulate large 
+amounts of data. This data does not belong solely to any one of those components.
+Problem: How can systems store and manipulate persistent data that is accessed 
+by multiple independent components? 
+Solution: In the shared-data pattern, interaction is dominated by the exchange of 
+persistent data between multiple data accessors and at least one shared-data store. 
+Exchange may be initiated by the accessors or the data store. The connector type is 
+data reading and writing. The general computational model associated with shared-
+data systems is that data accessors perform operations that require data from the data 
+store and write results to one or more data stores. That data can be viewed and acted 
+on by other data accessors. In a pure shared-data system, data accessors interact only 
+through one or more shared-data stores. However, in practice shared-data systems 
+also allow direct interactions between data accessors. The data-store components of 
+a shared-data system provide shared access to data, support data persistence, man-
+age concurrent access to data through transaction management, provide fault toler-
+ance, support access control, and handle the distribution and caching of data values.
+Specializations of the shared-data pattern differ with respect to the nature 
+of the stored data—existing approaches include relational, object structures, lay-
+ered, and hierarchical structures. 
+Although the sharing of data is a critical task for most large, complex sys-
+tems, there are a number of potential problems associated with this pattern. For 
+one, the shared-data store may be a performance bottleneck. For this reason, 
+performance optimization has been a common theme in database research. The 
+shared-data store is also potentially a single point of failure. Also, the producers 
+and consumers of the shared data may be tightly coupled, through their knowl-
+edge of the structure of the shared data.
+The shared-data pattern solution is summarized in Table 13.9.
+The shared-data pattern is useful whenever various data items are persistent and 
+have multiple accessors. Use of this pattern has the effect of decoupling the producer 
+of the data from the consumers of the data; hence, this pattern supports modifiabil-
+ity, as the producers do not have direct knowledge of the consumers. Consolidating 
+the data in one or more locations and accessing it in a common fashion facilitates 
+performance tuning. Analyses associated with this pattern usually center on qualities 
+such as data consistency, performance, security, privacy, availability, scalability, and 
+compatibility with, for example, existing repositories and their data. 
+When a system has more than one data store, a key architecture concern is the 
+mapping of data and computation to the data. Use of multiple stores may occur be-
+cause the data is naturally, or historically, partitioned into separable stores. In other 
+cases data may be replicated over several stores to improve performance or availabil-
+ity through redundancy. Such choices can strongly affect the qualities noted above. 
+Figure 13.13 shows the diagram of a shared-data view of an enterprise access 
+management system. There are three types of accessor components: Windows 

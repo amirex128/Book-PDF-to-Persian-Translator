@@ -1,0 +1,49 @@
+5.2  Tactics for Availability
+89
+malfunctioning components. For example, the system monitor can initiate 
+self-tests, or be the component that detects faulty time stamps or missed 
+heartbeats.1
+■
+■Heartbeat is a fault detection mechanism that employs a periodic message 
+exchange between a system monitor and a process being monitored. A 
+special case of heartbeat is when the process being monitored periodically 
+resets the watchdog timer in its monitor to prevent it from expiring and thus 
+signaling a fault. For systems where scalability is a concern, transport and 
+processing overhead can be reduced by piggybacking heartbeat messages 
+on to other control messages being exchanged between the process being 
+monitored and the distributed system controller. The big difference between 
+heartbeat and ping/echo is who holds the responsibility for initiating the 
+health check—the monitor or the component itself.
+■
+■Time stamp. This tactic is used to detect incorrect sequences of events, pri-
+marily in distributed message-passing systems. A time stamp of an event 
+can be established by assigning the state of a local clock to the event imme-
+diately after the event occurs. Simple sequence numbers can also be used 
+for this purpose, if time information is not important.
+■
+■Sanity checking checks the validity or reasonableness of specific operations 
+or outputs of a component. This tactic is typically based on a knowledge of 
+the internal design, the state of the system, or the nature of the information 
+under scrutiny. It is most often employed at interfaces, to examine a specific 
+information flow. 
+■
+■Condition monitoring involves checking conditions in a process or device, 
+or validating assumptions made during the design. By monitoring condi-
+tions, this tactic prevents a system from producing faulty behavior. The 
+computation of checksums is a common example of this tactic. However, 
+the monitor must itself be simple (and, ideally, provable) to ensure that it 
+does not introduce new software errors. 
+■
+■Voting. The most common realization of this tactic is referred to as triple 
+modular redundancy (TMR), which employs three components that do the 
+same thing, each of which receives identical inputs, and forwards their out-
+put to voting logic, used to detect any inconsistency among the three output 
+states. Faced with an inconsistency, the voter reports a fault. It must also 
+decide what output to use. It can let the majority rule, or choose some com-
+puted average of the disparate outputs. This tactic depends critically on the 
+voting logic, which is usually realized as a simple, rigorously reviewed and 
+tested singleton so that the probability of error is low. 
+1.  When the detection mechanism is implemented using a counter or timer that is periodically reset, 
+this specialization of system monitor is referred to as a “watchdog.” During nominal operation, the 
+process being monitored will periodically reset the watchdog counter/timer as part of its signal that 
+it’s working correctly; this is sometimes referred to as “petting the watchdog.”

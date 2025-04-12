@@ -1,0 +1,45 @@
+242 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+■
+■Security. Because the broker pattern is primarily used when the system 
+spans process and processor boundaries—such as on web-based systems—
+security is a legitimate concern. However, the broker pattern as presented 
+does not offer any means to authenticate or authorize clients or servers, and 
+provides no means of protecting the communication between clients and 
+servers.
+Of these quality attributes, the broker pattern is mainly associated with 
+poor performance (the well-documented price for the loose coupling it brings to 
+systems). It is largely unconcerned with the other quality attributes in this list; 
+they aren’t mentioned in most published descriptions. But as the other bullets 
+show, they can be unacceptable “collateral damage” that come with the broker’s 
+benefits.
+Improving the Broker Pattern with Tactics.  How can we use tactics to 
+plug the gaps between the “out of the box” broker pattern and a version of it that 
+will let us meet the requirements of a demanding distributed system? Here are 
+some options:
+■
+■The increase available resources performance tactic would lead to multiple 
+brokers, to help with performance and availability. 
+■
+■The maintain multiple copies tactic would allow each of these brokers to 
+share state, to ensure that they respond identically to client requests.
+■
+■Load balancing (an application of the scheduling resources tactic) would 
+ensure that one broker is not overloaded while another one sits idle.
+■
+■Heartbeat, exception detection, or ping/echo would give the replicated 
+brokers a way of notifying clients and notifying each other when one of 
+them is out of service, as a means of detecting faults. 
+Of course, each of these tactics brings a tradeoff. Each complicates the de-
+sign, which will now take longer to implement, be more costly to acquire, and 
+be more costly to maintain. Load balancing introduces indirection that will add 
+latency to each transaction, thus giving back some of the performance it was in-
+tended to increase. And the load balancer is a single point of failure, so it too 
+must be replicated, further increasing the design cost and complexity.
+13.4  Using Tactics Together 
+Tactics, as described in Chapters 5–11, are design primitives aimed at managing 
+a single quality attribute response. Of course, this is almost never true in prac-
+tice; every tactic has its main effect—to manage modifiability or performance 
+or safety, and so on—and it has its side effects, its tradeoffs. On the face of it, 
+the situation for an architect sounds hopeless. Whatever you do to improve one 

@@ -1,0 +1,53 @@
+10.2  Tactics for Testability
+165
+■
+■Specialized interfaces. Having specialized testing interfaces allows you 
+to control or capture variable values for a component either through a test 
+harness or through normal execution. Examples of specialized test routines 
+include these:
+■
+■A set and get method for important variables, modes, or attributes 
+(methods that might otherwise not be available except for testing 
+purposes)
+■
+■A report method that returns the full state of the object 
+■
+■A reset method to set the internal state (for example, all the attributes of a 
+class) to a specified internal state
+■
+■A method to turn on verbose output, various levels of event logging, 
+performance instrumentation, or resource monitoring
+Specialized testing interfaces and methods should be clearly identified or 
+kept separate from the access methods and interfaces for required function-
+ality, so that they can be removed if needed. (However, in performance-crit-
+ical and some safety-critical systems, it is problematic to field different 
+code than that which was tested. If you remove the test code, how will you 
+know the code you field has the same behavior, particularly the same timing 
+behavior, as the code you tested? For other kinds of systems, however, this 
+strategy is effective.)
+■
+■Record/playback. The state that caused a fault is often difficult to re-create. 
+Recording the state when it crosses an interface allows that state to be used 
+to “play the system back” and to re-create the fault. Record/playback refers 
+to both capturing information crossing an interface and using it as input for 
+further testing. 
+■
+■Localize state storage. To start a system, subsystem, or module in an arbi-
+trary state for a test, it is most convenient if that state is stored in a single 
+place. By contrast, if the state is buried or distributed, this becomes difficult 
+if not impossible. The state can be fine-grained, even bit-level, or coarse-
+grained to represent broad abstractions or overall operational modes. The 
+choice of granularity depends on how the states will be used in testing. A 
+convenient way to “externalize” state storage (that is, to make it able to be 
+manipulated through interface features) is to use a state machine (or state 
+machine object) as the mechanism to track and report current state.
+■
+■Abstract data sources. Similar to controlling a program’s state, easily con-
+trolling its input data makes it easier to test. Abstracting the interfaces lets 
+you substitute test data more easily. For example, if you have a database of 
+customer transactions, you could design your architecture so that it is easy 
+to point your test system at other test databases, or possibly even to files of 
+test data instead, without having to change your functional code.
+■
+■Sandbox. “Sandboxing” refers to isolating an instance of the system from 
+the real world to enable experimentation that is unconstrained by the worry 

@@ -1,0 +1,59 @@
+13.2  Overview of the Patterns Catalog
+207
+Table 13.1  Layered Pattern Solution
+Overview
+The layered pattern defines layers (groupings of modules that offer 
+a cohesive set of services) and a unidirectional allowed-to-use 
+relation among the layers. The pattern is usually shown graphically 
+by stacking boxes representing layers on top of each other. 
+Elements
+Layer, a kind of module. The description of a layer should define 
+what modules the layer contains and a characterization of the 
+cohesive set of services that the layer provides.
+Relations
+Allowed to use, which is a specialization of a more generic 
+depends-on relation. The design should define what the layer usage 
+rules are (e.g., “a layer is allowed to use any lower layer” or “a layer 
+is allowed to use only the layer immediately below it”) and any 
+allowable exceptions. 
+Constraints
+■
+■
+Every piece of software is allocated to exactly one layer.
+■
+■
+There are at least two layers (but usually there are three or 
+more).
+■
+■
+The allowed-to-use relations should not be circular (i.e., a lower 
+layer cannot use a layer above).
+Weaknesses
+■
+■
+The addition of layers adds up-front cost and complexity to a 
+system.
+■
+■
+Layers contribute a performance penalty.
+Some Finer Points of Layers
+A layered architecture is one of the few places where connections among 
+components can be shown by adjacency, and where “above” and “below” 
+matter. If you turn Figure 13.1 upside-down so that C is on top, this would 
+represent a completely different design. Diagrams that use arrows among 
+the boxes to denote relations retain their semantic meaning no matter the 
+orientation. 
+The layered pattern is one of the most commonly used patterns in all of 
+software engineering, but I’m often surprised by how many people still get 
+it wrong.
+First, it is impossible to look at a stack of boxes and tell whether layer 
+bridging is allowed or not. That is, can a layer use any lower layer, or just 
+the next lower one? It is the easiest thing in the world to resolve this; all the 
+architect has to do is include the answer in the key to the diagram’s nota-
+tion (something we recommend for all diagrams). For example, consider the 
+layered pattern presented in Figure 13.2 on the next page.
+But I’m still surprised at how few architects actually bother to do this. 
+And if they don’t, their layer diagrams are ambiguous.
+Second, any old set of boxes stacked on top of each other does not 
+constitute a layered architecture. For instance, look at the design shown 
+in Figure 13.3, which uses arrows instead of adjacency to indicate the 

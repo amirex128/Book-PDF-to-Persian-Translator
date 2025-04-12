@@ -1,0 +1,48 @@
+256 
+Part Two  Quality Attributes	
+14—Quality Attribute Modeling and Analysis
+illustrates three well-known redundancy tactics from Chapter  5: active redun-
+dancy, passive redundancy, and cold spare. Our goal is to analyze each redun-
+dancy option for its availability, to help us choose one.
+As you recall, each of these tactics introduces a backup copy of a compo-
+nent that will take over in case the primary component suffers a failure. In our 
+case, a broker replica is employed as the redundant spare. The difference among 
+them is how up to date with current events each backup keeps itself:
+■
+■In the case of active redundancy, the active and redundant brokers both 
+receive identical copies of the messages received from the client and server 
+proxies. The internal broker state is synchronously maintained between the 
+active and redundant spare in order to facilitate rapid failover upon detec-
+tion of a fault in the active broker. 
+■
+■For the passive redundancy implementation, only the active broker receives 
+and processes messages from the client and server proxies. When using this 
+tactic, checkpoints of internal broker state are periodically transmitted from 
+the active broker process to the redundant spare, using the checkpoint-based 
+rollback tactic. 
+■
+■Finally, when using the cold spare tactic, only the active broker receives 
+and processes messages from the client and server proxies, because the 
+redundant spare is in a dormant or even powered-off state. Recovery strate-
+gies using this tactic involve powering up, booting, and loading the broker 
+implementation on the spare. In this scenario, the internal broker state is 
+rebuilt organically, rather than via synchronous operation or checkpointing, 
+as described for the other two redundancy tactics.
+Suppose further that we will detect failure with the heartbeat tactic, where 
+each broker (active and spare) periodically transmits a heartbeat message to a 
+separate process responsible for fault detection, correlation, reporting, and recov-
+ery. This fault manager process is responsible for coordinating the transition of 
+the active broker role from the failed broker process to the redundant spare. 
+You can now use the steady state model of availability to assign values for 
+MTBF and MTTR for each of the three redundancy tactics we are considering. 
+Doing so will be an exercise left to the reader (as you’ll see when you reach the 
+discussion questions for this chapter). Because the three tactics differ primarily in 
+how long it takes to bring the backup copy up to speed, MTTR will be where the 
+difference among the tactics shows up.
+More sophisticated models of availability exist, based on probability. In 
+these models, we can express a probability of failure during a period of time. 
+Given a particular MTBF and a time duration T, the probability of failure R is 
+given by
+R(T ) = e(    )
+–T
+MTBF

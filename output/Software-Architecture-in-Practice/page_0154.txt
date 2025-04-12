@@ -1,0 +1,47 @@
+8.1  Performance General Scenario
+133
+to progress on another thread. But because of the interleaving phenome-
+non just described (referred to as a race condition), concurrency must also 
+be carefully managed by the architect.
+As the example shows, race conditions can occur when there are two 
+threads of control and there is shared state. The management of con-
+currency frequently comes down to managing how state is shared. One 
+technique for preventing race conditions is to use locks to enforce sequen-
+tial access to state. Another technique is to partition the state based on the 
+thread executing a portion of code. That is, if there are two instances of x in 
+our example, x is not shared by the two threads and there will not be a race 
+condition.
+Race conditions are one of the hardest types of bugs to discover; the 
+occurrence of the bug is sporadic and depends on (possibly minute) differ-
+ences in timing. I once had a race condition in an operating system that I 
+could not track down. I put a test in the code so that the next time the race 
+condition occurred, a debugging process was triggered. It took over a year 
+for the bug to recur so that the cause could be determined.
+Do not let the difficulties associated with concurrency dissuade you from 
+utilizing this very important technique. Just use it with the knowledge that 
+you must carefully identify critical sections in your code and ensure that 
+race conditions will not occur in those sections.
+—LB
+Events can arrive in predictable patterns or mathematical distributions, or be 
+unpredictable. An arrival pattern for events is characterized as periodic, stochastic, 
+or sporadic:
+■
+■Periodic events arrive predictably at regular time intervals. For instance, an 
+event may arrive every 10 milliseconds. Periodic event arrival is most often 
+seen in real-time systems. 
+■
+■Stochastic arrival means that events arrive according to some probabilistic 
+distribution. 
+■
+■Sporadic events arrive according to a pattern that is neither periodic 
+nor stochastic. Even these can be characterized, however, in certain 
+circumstances. For example, we might know that at most 600 events will 
+occur in a minute, or that there will be at least 200 milliseconds between 
+the arrival of any two events. (This might describe a system in which events 
+correspond to keyboard strokes from a human user.) These are helpful 
+characterizations, even though we don’t know when any single event will 
+arrive. 
+The response of the system to a stimulus can be measured by the following: 
+■
+■Latency. The time between the arrival of the stimulus and the system’s 
+response to it. 

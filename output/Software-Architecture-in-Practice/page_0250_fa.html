@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 250</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+  <h3>13—Architectural Tactics and Patterns</h3>
+  <p>
+    229
+  </p>
+  <p>
+    <em>Part Two Quality Attributes</em>
+  </p>
+  <ul>
+    <li>
+      شبکه‌های اجتماعی، که در آن به "دوستان" اطلاع داده می‌شود که چه زمانی تغییراتی در وب‌سایت یک شخص ایجاد می‌شود
+    </li>
+  </ul>
+  <p>
+    الگوی <em>publish-subscribe</em> برای ارسال رویدادها و پیام‌ها به مجموعه‌ای ناشناخته از گیرندگان استفاده می‌شود. از آنجایی که مجموعه گیرندگان رویداد برای تولیدکننده رویداد ناشناخته است، صحت تولیدکننده، به‌طور کلی، نمی‌تواند به آن گیرندگان وابسته باشد. بنابراین، گیرندگان جدید را می‌توان بدون تغییر در تولیدکنندگان اضافه کرد.
+  </p>
+  <p>
+    نادیده گرفتن هویت یکدیگر توسط <em>components</em> منجر به تغییر آسان سیستم (افزودن یا حذف تولیدکنندگان و مصرف‌کنندگان داده‌ها) می‌شود، اما به بهای <em>runtime performance</em>، زیرا زیرساخت <em>publish-subscribe</em> نوعی <em>indirection</em> است، که <em>latency</em> را اضافه می‌کند. علاوه بر این، اگر <em>publish-subscribe connector</em> کاملاً شکست بخورد، این یک نقطه شکست واحد برای کل سیستم است.
+  </p>
+  <p>
+    الگوی <em>publish-subscribe</em> می‌تواند چندین شکل داشته باشد:
+  </p>
+  <ul>
+    <li>
+      <em>List-based publish-subscribe</em>، پیاده‌سازی الگو است که در آن هر <em>publisher</em> یک لیست <em>subscription</em> را حفظ می‌کند - لیستی از <em>subscribers</em> که علاقه‌مندی خود را به دریافت رویداد ثبت کرده‌اند. این نسخه از الگو نسبت به سایرین کمتر <em>decoupled</em> است، همان‌طور که در زیر خواهیم دید، و از این رو <em>modifiability</em> زیادی را ارائه نمی‌دهد، اما می‌تواند از نظر <em>runtime overhead</em> بسیار کارآمد باشد. همچنین، اگر <em>components</em> توزیع شده باشند، هیچ نقطه شکست واحدی وجود ندارد.
+    </li>
+    <li>
+      <em>Broadcast-based publish-subscribe</em> از <em>list-based publish-subscribe</em> متفاوت است، زیرا <em>publishers</em> دانش کمتری (یا هیچ) در مورد <em>subscribers</em> دارند. <em>Publishers</em> به‌سادگی رویدادها را منتشر می‌کنند، که سپس منتشر می‌شوند. <em>Subscribers</em> (یا در یک سیستم توزیع‌شده، <em>services</em> که از طرف <em>subscribers</em> عمل می‌کنند) هر رویداد را در هنگام رسیدن بررسی می‌کنند و تعیین می‌کنند که آیا رویداد منتشر شده مورد توجه است یا خیر. این نسخه در صورت وجود تعداد زیادی پیام و اکثر پیام‌ها مورد توجه یک <em>subscriber</em> خاص نباشند، پتانسیل بسیار ناکارآمدی را دارد.
+    </li>
+    <li>
+      <em>Content-based publish-subscribe</em> از دو <em>variants</em> قبلی، که به‌طور گسترده به‌عنوان "<em>topic-based</em>" طبقه‌بندی می‌شوند، متمایز می‌شود. <em>Topics</em>، رویدادها، یا پیام‌های از پیش تعریف‌شده هستند، و یک <em>component</em> به همه رویدادها در یک موضوع مشترک می‌شود. از طرف دیگر، محتوا بسیار کلی‌تر است. هر رویداد با مجموعه‌ای از <em>attributes</em> مرتبط است و فقط در صورتی به یک <em>subscriber</em> تحویل داده می‌شود که آن <em>attributes</em> با الگوهای تعریف‌شده توسط <em>subscriber</em> مطابقت داشته باشند.
+    </li>
+  </ul>
+  <p>
+    در عمل، الگوی <em>publish-subscribe</em> معمولاً توسط نوعی از <em>message-oriented middleware</em> محقق می‌شود، که در آن میان‌افزار به‌عنوان یک <em>broker</em> محقق می‌شود و اتصالات و کانال‌های اطلاعات بین تولیدکنندگان و مصرف‌کنندگان را مدیریت می‌کند. این میان‌افزار اغلب مسئول تبدیل پیام‌ها (یا پروتکل‌های پیام) است، علاوه بر مسیریابی و گاهی ذخیره پیام‌ها. بنابراین الگوی <em>publish-subscribe</em>، نقاط قوت و ضعف الگوی <em>broker</em> را به ارث می‌برد.
+  </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

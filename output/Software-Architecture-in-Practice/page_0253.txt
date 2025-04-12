@@ -1,0 +1,45 @@
+232 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+Allocation Patterns
+Map-Reduce Pattern
+Context: Businesses have a pressing need to quickly analyze enormous volumes 
+of data they generate or access, at petabyte scale. Examples include logs of inter-
+actions in a social network site, massive document or data repositories, and pairs 
+of <source, target> web links for a search engine. Programs for the analysis of 
+this data should be easy to write, run efficiently, and be resilient with respect to 
+hardware failure.
+Problem: For many applications with ultra-large data sets, sorting the data and 
+then analyzing the grouped data is sufficient. The problem the map-reduce pat-
+tern solves is to efficiently perform a distributed and parallel sort of a large data 
+set and provide a simple means for the programmer to specify the analysis to be 
+done. 
+Solution: The map-reduce pattern requires three parts: First, a specialized infra-
+structure takes care of allocating software to the hardware nodes in a massively 
+parallel computing environment and handles sorting the data as needed. A node 
+may be a standalone processor or a core in a multi-core chip. Second and third are 
+two programmer-coded functions called, predictably enough, map and reduce. 
+The map function takes as input a key (key1) and a data set. The purpose of 
+the map function is to filter and sort the data set. All of the heavy analysis takes 
+place in the reduce function. The input key in the map function is used to filter 
+the data. Whether a data record is to be involved in further processing is deter-
+mined by the map function. A second key (key2) is also important in the map 
+function. This is the key that is used for sorting. The output of the map function 
+consists of a <key2, value> pair, where the key2 is the sorting value and the value 
+is derived from the input record.
+Sorting is performed by a combination of the map and the infrastructure. 
+Each record output by map is hashed by key2 into a disk partition. The infra-
+structure maintains an index file for key2 on the disk partition. This allows for the 
+values on the disk partition to be retrieved in key2 order.
+The performance of the map phase of map-reduce is enhanced by having 
+multiple map instances, each processing a different portion of the disk file being 
+processed. Figure 13.14 shows how the map portion of map-reduce processes 
+data. An input file is divided into portions, and a number of map instances are 
+created to process each portion. The map function processes its portion into a 
+number of partitions, based on programmer-specified logic.
+The reduce function is provided with all the sets of <key2, value> pairs emit-
+ted by all the map instances in sorted order. Reduce does some programmer-spec-
+ified analysis and then emits the results of that analysis. The output set is almost 
+always much smaller than the input sets, hence the name “reduce.” The term 
+“load” is sometimes used to describe the final set of data emitted. Figure 13.14 
+also shows one instance (of many possible instances) of the reduce processing, 

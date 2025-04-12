@@ -1,0 +1,40 @@
+206 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+Problem: The software needs to be segmented in such a way that the modules 
+can be developed and evolved separately with little interaction among the parts, 
+supporting portability, modifiability, and reuse.
+Solution: To achieve this separation of concerns, the layered pattern divides the 
+software into units called layers. Each layer is a grouping of modules that offers a 
+cohesive set of services. There are constraints on the allowed-to-use relationship 
+among the layers: the relations must be unidirectional. Layers completely parti-
+tion a set of software, and each partition is exposed through a public interface. 
+The layers are created to interact according to a strict ordering relation. If (A,B) 
+is in this relation, we say that the implementation of layer A is allowed to use any 
+of the public facilities provided by layer B. In some cases, modules in one layer 
+might be required to directly use modules in a nonadjacent lower layer; normally 
+only next-lower-layer uses are allowed. This case of software in a higher layer 
+using modules in a nonadjacent lower layer is called layer bridging. If many in-
+stances of layer bridging occur, the system may not meet its portability and modi-
+fiability goals that strict layering helps to achieve. Upward usages are not allowed 
+in this pattern. 
+Of course, none of this comes for free. Someone must design and build the 
+layers, which can often add up-front cost and complexity to a system. Also, if the 
+layering is not designed correctly, it may actually get in the way, by not provid-
+ing the lower-level abstractions that programmers at the higher levels need. And 
+layering always adds a performance penalty to a system. If a call is made to a 
+function in the top-most layer, this may have to traverse many lower layers before 
+being executed by the hardware. Each of these layers adds some overhead of their 
+own, at minimum in the form of context switching.
+Table 13.1 summarizes the solution of the layered pattern.
+Layers are almost always drawn as a stack of boxes. The allowed-to-use 
+relation is denoted by geometric adjacency and is read from the top down, as in 
+Figure 13.1. 
+A
+B
+C
+Key:
+Layer
+A layer is allowed to use 
+the next lower layer.
+Figure 13.1  Stack-of-boxes notation for layered designs

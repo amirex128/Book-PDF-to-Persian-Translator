@@ -1,0 +1,47 @@
+258 
+Part Two  Quality Attributes	
+14—Quality Attribute Modeling and Analysis
+We can apply simple probability arithmetic to an architecture pattern for 
+availability to determine the probability of failure of the pattern given the proba-
+bility of failure of the individual components (and an understanding of their de-
+pendency relations). For example, in an architecture pattern employing the pas-
+sive redundancy tactic, let’s assume that the failure of a component (which at any 
+moment might be acting as either the primary or backup copy) is independent of 
+a failure of its counterpart, and that the probability of failure of either is the same. 
+Then the probability that both will fail is F = (1 – a) **2, where a is the 
+availability of an individual component (assuming that failures are independent). 
+Still other models take into account different levels of failure severity and 
+degraded operating states of the system. Although the derivation of these for-
+mulas is outside the scope of this chapter, you end up with formulas that look 
+like the following for the three redundancy tactics we’ve been discussing, where 
+the values C2 through C5 are references to the MTBF column of Table 14.1, D2 
+through D4 refer to the Active column, E2 through E3 refer to the Passive col-
+umn, and F2 through F3 refer to the Spare column.
+■
+■Active redundancy:
+■
+■Availability(MTTR): 1 –((SUM(C2:C5) + D3) × D2)/((C2 × (C2 + C4 + 
+D3) + ((C2 + C4 + D2) × (C3 + C5)) + ((C2 + C4) × (C2 + C4 + D3))))
+■
+■P(Degraded) = ((C3 + C5) × D2)/((C2 × (C2 + C4 + D3) + ((C2 + C4 + 
+D2) × (C3 + C5)) + ((C2 + C4) × (C2 + C4 + D3))))
+■
+■Passive redundancy:
+■
+■Availability(MTTR_passive) = 1 – ((SUM(C2:C5) + E3) × E2)/((C2 × 
+(C2 + C4 + E3) + ((C2 + C4 + E2) × (C3 + C5)) + ((C2 + C4) × (C2 + 
+C4 + E3))))
+■
+■P(Degraded) = ((C3 + C5) × E2)/((C2 × (C2 + C4 + E3) + ((C2 + C4 + 
+E2) × (C3 + C5)) + ((C2 + C4) × (C2 + C4 + E3))))
+■
+■Spare:
+■
+■Availability(MTTR) = 1 – ((SUM(C2:C5) + F3) × F2)/((C2 × (C2 + C4 + 
+F3) + ((C2 + C4 + F2) × (C3 + C5)) + ((C2 + C4) × (C2 + C4 + F3))))
+■
+■P(Degraded) = ((C3 + C5) × F2)/((C2 × (C2 + C4 + F3) + ((C2 + C4 + 
+F2) × (C3 + C5)) + ((C2 + C4) × (C2 + C4 + F3)))) 
+Plugging in these values for the parameters to the equations listed above 
+results in a table like Table 14.1, which can be easily calculated using any spread-
+sheet tool. Such a calculation can help in the selection of tactics.

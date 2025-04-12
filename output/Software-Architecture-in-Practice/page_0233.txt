@@ -1,0 +1,75 @@
+212 
+Part Two  Quality Attributes	
+13—Architectural Tactics and Patterns
+The broker is, of course, the critical component in this pattern. The pattern 
+provides all of the modifiability benefits of the use-an-intermediary tactic 
+(described in Chapter 7), an availability benefit (because the broker pattern 
+makes it easy to replace a failed server with another), and a performance benefit 
+(because the broker pattern makes it easy to assign work to the least-busy server). 
+However, the pattern also carries with it some liabilities. For example, the use of 
+a broker precludes performance optimizations that you might make if you knew 
+the precise location and characteristics of the server. Also the use of this pattern 
+adds the overhead of the intermediary and thus latency.
+The original version of the broker pattern, as documented by Gamma, Helm, 
+Johnson, and Vlissides [Gamma 94], is given in Figure 13.6.
+The first widely used implementation of the broker pattern was in the 
+Common Object Request Broker Architecture (CORBA). Other common uses 
+of this pattern are found in Enterprise Java Beans (EJB) and Microsoft’s .NET 
+platform—essentially any modern platform for distributed service providers and 
+consumers implements some form of a broker. The service-oriented architecture 
+(SOA) approach depends crucially on brokers, most commonly in the form of an 
+enterprise service bus. 
+Model-View-Controller Pattern
+Context: User interface software is typically the most frequently modified portion 
+of an interactive application. For this reason it is important to keep modifications 
++pack_data()
++unpack_data()
++send_request()
++return()
+Client-S ide Proxy
++initialize()
++enter_main_loop()
++run_service()
++use_Broker_API()
+Server
++call_server()
++start_task()
++use_Broker_API()
+Client
++pack_data()
++unpack_data()
++call_service()
++send_response()
+Server-Side Proxy
++locateServer()
++locateClient()
++registerServer()
++unregisterServer()
+Broker
++pack_data()
++unpack_data()
++forward_message()
++transmit_message()
+Bridge
+-transfers
+*
+1
+*
+-call
+1
+-uses
+*
+1
+0..1
+-call
+1
+-transfers
+*
+1
+*
+-call
+1
+-uses
+*
+1
+Figure 13.6  The broker pattern 

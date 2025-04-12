@@ -1,20 +1,28 @@
+# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
+  # Runs on pushes targeting the default branch
   push:
     branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
+  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -23,48 +31,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick optipng jpegoptim
-
-      - name: Optimize and compress files
-        run: |
-          # Create compressed output directory
-          mkdir -p output_compressed
-          
-          # Copy all files from output to output_compressed
-          cp -r output/* output_compressed/
-          
-          # Optimize PNG files
-          find output_compressed -type f -iname "*.png" -exec optipng -o7 {} \;
-          
-          # Optimize JPEG files
-          find output_compressed -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=70 --strip-all {} \;
-          
-          # Additional compression for large files
-          find output_compressed -type f -size +1M -exec mogrify -strip -quality 60 {} \;
-          
-          # Remove original output folder
-          rm -rf output
-          
-          # Rename compressed folder to output
-          mv output_compressed output
-
-      - name: Check final size
-        run: |
-          du -sh output/
-          echo "If size is still over 1GB, consider splitting the deployment"
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'output/'
-
+          # Upload entire repository
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

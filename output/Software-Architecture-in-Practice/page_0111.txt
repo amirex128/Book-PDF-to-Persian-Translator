@@ -1,0 +1,52 @@
+90 
+Part Two  Quality Attributes	
+5—Availability
+■
+■Replication is the simplest form of voting; here, the components are exact 
+clones of each other. Having multiple copies of identical components can 
+be effective in protecting against random failures of hardware, but this 
+cannot protect against design or implementation errors, in hardware or 
+software, because there is no form of diversity embedded in this tactic. 
+■
+■Functional redundancy is a form of voting intended to address the issue 
+of common-mode failures (design or implementation faults) in hardware 
+or software components. Here, the components must always give the 
+same output given the same input, but they are diversely designed and 
+diversely implemented. 
+■
+■Analytic redundancy permits not only diversity among components’ pri-
+vate sides, but also diversity among the components’ inputs and outputs. 
+This tactic is intended to tolerate specification errors by using separate 
+requirement specifications. In embedded systems, analytic redundancy 
+also helps when some input sources are likely to be unavailable at times. 
+For example, avionics programs have multiple ways to compute aircraft 
+altitude, such as using barometric pressure, the radar altimeter, and geo-
+metrically using the straight-line distance and look-down angle of a point 
+ahead on the ground. The voter mechanism used with analytic redun-
+dancy needs to be more sophisticated than just letting majority rule or 
+computing a simple average. It may have to understand which sensors are 
+currently reliable or not, and it may be asked to produce a higher-fidelity 
+value than any individual component can, by blending and smoothing 
+individual values over time. 
+■
+■Exception detection refers to the detection of a system condition that alters 
+the normal flow of execution. The exception detection tactic can be further 
+refined:
+■
+■System exceptions will vary according to the processor hardware architec-
+ture employed and include faults such as divide by zero, bus and address 
+faults, illegal program instructions, and so forth. 
+■
+■The parameter fence tactic incorporates an a priori data pattern (such as 
+0xDEADBEEF) placed immediately after any variable-length parameters 
+of an object. This allows for runtime detection of overwriting the memory 
+allocated for the object’s variable-length parameters. 
+■
+■Parameter typing employs a base class that defines functions that add, 
+find, and iterate over type-length-value (TLV) formatted message param-
+eters. Derived classes use the base class functions to implement functions 
+that provide parameter typing according to each parameter’s structure. 
+Use of strong typing to build and parse messages results in higher avail-
+ability than implementations that simply treat messages as byte buckets. 
+Of course, all design involves tradeoffs. When you employ strong typing, 
+you typically trade higher availability against ease of evolution.

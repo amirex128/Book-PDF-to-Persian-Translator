@@ -1,0 +1,43 @@
+13.2  Overview of the Patterns Catalog
+215
+The MVC pattern is widely used in user interface libraries such as Java’s 
+Swing classes, Microsoft’s ASP.NET framework, Adobe’s Flex software 
+development kit, Nokia’s Qt framework, and many others. As such, it is common 
+for a single application to contain many instances of MVC (often one per user 
+interface object).
+Pipe-and-Filter Pattern
+Context: Many systems are required to transform streams of discrete data items, 
+from input to output. Many types of transformations occur repeatedly in practice, 
+and so it is desirable to create these as independent, reusable parts. 
+Problem: Such systems need to be divided into reusable, loosely coupled com-
+ponents with simple, generic interaction mechanisms. In this way they can be 
+flexibly combined with each other. The components, being generic and loosely 
+coupled, are easily reused. The components, being independent, can execute in 
+parallel.
+Solution: The pattern of interaction in the pipe-and-filter pattern is characterized 
+by successive transformations of streams of data. Data arrives at a filter’s input 
+port(s), is transformed, and then is passed via its output port(s) through a pipe to 
+the next filter. A single filter can consume data from, or produce data to, one or 
+more ports. 
+There are several weaknesses associated with the pipe-and-filter pattern. For 
+instance, this pattern is typically not a good choice for an interactive system, as 
+it disallows cycles (which are important for user feedback). Also, having large 
+numbers of independent filters can add substantial amounts of computational 
+overhead, because each filter runs as its own thread or process. Also, pipe-and-
+filter systems may not be appropriate for long-running computations, without the 
+addition of some form of checkpoint/restore functionality, as the failure of any 
+filter (or pipe) can cause the entire pipeline to fail.
+The solution of the pipe-and-filter pattern is summarized in Table 13.4. 
+Pipes buffer data during communication. Because of this property, filters can 
+execute asynchronously and concurrently. Moreover, a filter typically does not 
+know the identity of its upstream or downstream filters. For this reason, pipeline 
+pipe-and-filter systems have the property that the overall computation can be 
+treated as the functional composition of the computations of the filters, making it 
+easier for the architect to reason about end-to-end behavior.
+Data transformation systems are typically structured as pipes and filters, 
+with each filter responsible for one part of the overall transformation of the input 
+data. The independent processing at each step supports reuse, parallelization, and 
+simplified reasoning about overall behavior. Often such systems constitute the 
+front end of signal-processing applications. These systems receive sensor data at 
+a set of initial filters; each of these filters compresses the data and performs initial 
+processing (such as smoothing). Downstream filters reduce the data further and 

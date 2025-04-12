@@ -1,0 +1,61 @@
+140 
+Part Two  Quality Attributes	
+8—Performance
+Scheduling Policies
+A scheduling policy conceptually has two parts: a priority assignment 
+and dispatching. All scheduling policies assign priorities. In some cases 
+the assignment is as simple as first-in/first-out (or FIFO). In other cases, 
+it can be tied to the deadline of the request or its semantic importance. 
+Competing criteria for scheduling include optimal resource usage, request 
+importance, minimizing the number of resources used, minimizing latency, 
+maximizing throughput, preventing starvation to ensure fairness, and so 
+forth. You need to be aware of these possibly conflicting criteria and the 
+effect that the chosen tactic has on meeting them.
+A high-priority event stream can be dispatched only if the resource to 
+which it is being assigned is available. Sometimes this depends on pre-
+empting the current user of the resource. Possible preemption options are 
+as follows: can occur anytime, can occur only at specific preemption points, 
+and executing processes cannot be preempted. Some common scheduling 
+policies are these:
+■
+■
+First-in/first-out. FIFO queues treat all requests for resources as equals 
+and satisfy them in turn. One possibility with a FIFO queue is that one 
+request will be stuck behind another one that takes a long time to gener-
+ate a response. As long as all of the requests are truly equal, this is not 
+a problem, but if some requests are of higher priority than others, it is 
+problematic.
+■
+■
+Fixed-priority scheduling. Fixed-priority scheduling assigns each source 
+of resource requests a particular priority and assigns the resources in 
+that priority order. This strategy ensures better service for higher priority 
+requests. But it admits the possibility of a lower priority, but important, 
+request taking an arbitrarily long time to be serviced, because it is stuck 
+behind a series of higher priority requests. Three common prioritization 
+strategies are these:
+■
+■
+Semantic importance. Each stream is assigned a priority statically 
+according to some domain characteristic of the task that generates it. 
+■
+■
+Deadline monotonic. Deadline monotonic. Deadline monotonic is a 
+static priority assignment that assigns higher priority to streams with 
+shorter deadlines. This scheduling policy is used when streams of 
+different priorities with real-time deadlines are to be scheduled. 
+■
+■
+Rate monotonic. Rate monotonic is a static priority assignment 
+for periodic streams that assigns higher priority to streams with 
+shorter periods. This scheduling policy is a special case of deadline 
+monotonic but is better known and more likely to be supported by the 
+operating system. 
+■
+■
+Dynamic priority scheduling. Strategies include these:
+■
+■
+Round-robin. Round-robin is a scheduling strategy that orders 
+the requests and then, at every assignment possibility, assigns 
+the resource to the next request in that order. A special form of 
