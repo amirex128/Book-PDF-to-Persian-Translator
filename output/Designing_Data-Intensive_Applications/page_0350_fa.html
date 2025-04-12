@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 350</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        <em>ensures the recency guarantee</em> که ما قبلاً در مورد آن بحث کردیم: هنگامی که یک value جدید <em>written</em> یا خوانده شده است، تمام <em>reads</em> های بعدی value ای را که نوشته شده است می‌بینند، تا زمانی که دوباره بازنویسی شود.
+    </p>
+    <figure>
+        <img src="figure9-4.png" alt="Figure 9-4. Visualizing the points in time at which the reads and writes appear to have taken effect. The final read by B is not linearizable.">
+        <figcaption>Figure 9-4. Visualizing the points in time at which the reads and writes appear to have taken effect. The final read by B is not linearizable.</figcaption>
+    </figure>
+    <p>
+        چندین جزئیات جالب وجود دارد که باید در شکل 9-4 به آنها اشاره کنیم:
+    </p>
+    <ul>
+        <li>
+            اول، client B یک درخواست برای خواندن x ارسال کرد، سپس client D یک درخواست برای تنظیم x روی 0 ارسال کرد، و سپس client A یک درخواست برای تنظیم x روی 1 ارسال کرد. با این وجود، value بازگردانده شده به <em>read</em> از B، 1 است (value نوشته شده توسط A). این اشکالی ندارد: به این معنی است که database ابتدا <em>write</em> D را پردازش کرد، سپس <em>write</em> A را، و در نهایت <em>read</em> B را. اگرچه این ترتیبی نیست که درخواست‌ها ارسال شده‌اند، اما یک ترتیب قابل قبول است، زیرا سه درخواست همزمان هستند. شاید درخواست <em>read</em> B کمی در شبکه تأخیر داشته باشد، بنابراین فقط پس از دو <em>writes</em> به database رسید.
+        </li>
+        <li>
+            <em>read</em> از client B، 1 را قبل از اینکه client A پاسخ خود را از database دریافت کند، برگرداند، که نشان می‌دهد که <em>write</em> از value 1 موفقیت‌آمیز بود. این نیز اشکالی ندارد: به این معنی نیست که value قبل از نوشته شدن خوانده شده است، فقط به این معنی است که پاسخ ok از database به client A، کمی در شبکه تأخیر داشته است.
+        </li>
+        <li>
+            این مدل هیچ <em>transaction isolation</em> را فرض نمی‌کند: یک client دیگر ممکن است در هر زمانی یک value را تغییر دهد. به عنوان مثال، C ابتدا 1 را می‌خواند و سپس 2 را می‌خواند، زیرا value بین دو <em>reads</em> توسط B تغییر یافته است. یک operation <em>atomic compare-and-set (cas)</em> می‌تواند برای بررسی اینکه آیا value به طور همزمان توسط client دیگری تغییر نکرده است استفاده شود: درخواست‌های cas از B و C موفق می‌شوند، اما درخواست <em>cas</em> از D شکست می‌خورد (تا زمانی که database آن را پردازش کند، value از x دیگر 0 نیست).
+        </li>
+        <li>
+            آخرین <em>read</em> توسط client B (در یک نوار <em>shaded</em>) <em>linearizable</em> نیست. Operation با <em>cas write</em> از C همزمان است، که x را از 2 به 4 به‌روزرسانی می‌کند. در غیاب
+            <br>
+            328
+            <br>
+            |
+            <br>
+            Chapter 9: Consistency and Consensus
+        </li>
+    </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0350/image_1.png" alt="Image from page 350" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

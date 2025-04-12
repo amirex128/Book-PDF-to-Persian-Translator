@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 349</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        برای <em>linearizable</em> کردن system، ما نیاز داریم که یک <em>constraint</em> دیگر را اضافه کنیم، که در شکل 9-3 نشان داده شده است.
+    </p>
+    <figure>
+        <img src="figure9-3.png" alt="Figure 9-3. After any one read has returned the new value, all following reads (on the same or other clients) must also return the new value.">
+        <figcaption>Figure 9-3. After any one read has returned the new value, all following reads (on the same or other clients) must also return the new value.</figcaption>
+    </figure>
+    <p>
+        در یک system <em>linearizable</em> ما تصور می‌کنیم که باید نقطه‌ای در زمان (بین شروع و پایان operation <em>write</em>) وجود داشته باشد که در آن value از x به صورت <em>atomically</em> از 0 به 1 <em>flips</em> شود. بنابراین، اگر <em>read</em> یک client value جدید 1 را برگرداند، تمام <em>reads</em> های بعدی باید value جدید را نیز برگردانند، حتی اگر operation <em>write</em> هنوز تکمیل نشده باشد.
+    </p>
+    <p>
+        این وابستگی زمان‌بندی با یک فلش در شکل 9-3 نشان داده شده است. Client A اولین کسی است که value جدید 1 را می‌خواند. درست بعد از اینکه <em>read</em> A برمی‌گردد، B یک <em>read</em> جدید را شروع می‌کند. از آنجایی که <em>read</em> B دقیقاً بعد از <em>read</em> A رخ می‌دهد، باید 1 را نیز برگرداند، حتی اگر <em>write</em> توسط C همچنان در حال انجام باشد. (این همان وضعیت آلیس و باب در شکل 9-1 است: بعد از اینکه آلیس value جدید را خواند، باب نیز انتظار دارد که value جدید را بخواند.)
+    </p>
+    <p>
+        ما می‌توانیم این نمودار زمان‌بندی را بیشتر اصلاح کنیم تا هر operation به صورت <em>atomically</em> در یک نقطه زمانی، تأثیر بگذارد. یک مثال پیچیده‌تر در شکل 9-4 نشان داده شده است [10].
+    </p>
+    <p>
+        در شکل 9-4 ما یک نوع سوم از operation را علاوه بر <em>read</em> و <em>write</em> اضافه می‌کنیم:
+    </p>
+    <ul>
+        <li>
+            cas(x, vold, vnew) ⇒ r به این معنی است که client یک operation <em>atomic compare-and-set</em> را درخواست کرد (به "Compare-and-set" در صفحه 245 مراجعه کنید). اگر value فعلی از <em>register</em> x با vold برابر باشد، باید به صورت <em>atomically</em> به vnew تنظیم شود. اگر x ≠ vold باشد، سپس operation باید <em>register</em> را بدون تغییر بگذارد و یک <em>error</em> را برگرداند. r پاسخ database است (ok یا <em>error</em>).
+        </li>
+    </ul>
+    <p>
+        هر operation در شکل 9-4 با یک خط عمودی (در داخل نوار برای هر operation) در زمانی که ما فکر می‌کنیم operation اجرا شده است، علامت‌گذاری شده است. آن نشانگرها به ترتیب متوالی متصل می‌شوند، و نتیجه باید یک sequence معتبر از <em>reads</em> و <em>writes</em> برای یک <em>register</em> باشد (هر <em>read</em> باید value تنظیم شده توسط جدیدترین <em>write</em> را برگرداند).
+    </p>
+    <p>
+        requirement از <em>linearizability</em> این است که خطوطی که نشانگرهای operation را به هم متصل می‌کنند، همیشه در زمان به سمت جلو حرکت می‌کنند (از چپ به راست)، هرگز به عقب. این requirement
+        <br>
+        Linearizability
+        <br>
+        |
+        <br>
+        327
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0349/image_1.png" alt="Image from page 349" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

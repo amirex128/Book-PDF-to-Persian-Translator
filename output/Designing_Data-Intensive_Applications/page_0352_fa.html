@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 352</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        iii. به طور دقیق، ZooKeeper و etcd <em>linearizable writes</em> را ارائه می‌دهند، اما <em>reads</em> ها ممکن است <em>stale</em> باشند، زیرا به طور پیش‌فرض می‌توانند توسط هر یک از <em>replicas</em> ها ارائه شوند. شما به‌طور اختیاری می‌توانید یک <em>linearizable read</em> را درخواست کنید: etcd این را یک <em>quorum read</em> [16] می‌نامد، و در ZooKeeper شما نیاز دارید که قبل از <em>read</em>، <em>sync()</em> را فراخوانی کنید [15]؛ به "Implementing linearizable storage using total order broadcast" در صفحه 350 مراجعه کنید.
+    </p>
+    <h4>Relying on Linearizability</h4>
+    <p>
+        در چه شرایطی <em>linearizability</em> مفید است؟ مشاهده نتیجه نهایی یک مسابقه ورزشی شاید یک مثال بی‌اهمیت باشد: بعید است که یک نتیجه که چند ثانیه قدیمی شده است، در این شرایط باعث آسیب واقعی شود. با این حال، در چند مورد، <em>linearizability</em> یک requirement مهم برای عملکرد صحیح system است.
+    </p>
+    <ul>
+        <li>
+            Locking and leader election
+            <br>
+            یک system که از <em>single-leader replication</em> استفاده می‌کند، نیاز دارد اطمینان حاصل کند که واقعاً فقط یک leader وجود دارد، نه چندین (<em>split brain</em>). یک راه برای انتخاب یک leader استفاده از یک <em>lock</em> است: هر node که راه‌اندازی می‌شود، سعی می‌کند <em>lock</em> را به دست آورد، و node ای که موفق می‌شود، leader می‌شود [14]. مهم نیست که این <em>lock</em> چگونه پیاده‌سازی می‌شود، باید <em>linearizable</em> باشد: تمام nodes ها باید موافقت کنند که چه node ای صاحب <em>lock</em> است. در غیر این صورت، بی‌فایده است.
+        </li>
+        <li>
+            Coordination services مانند Apache ZooKeeper [15] و etcd [16] اغلب برای پیاده‌سازی <em>distributed locks</em> و <em>leader election</em> استفاده می‌شوند. آنها از الگوریتم‌های <em>consensus</em> برای پیاده‌سازی operations <em>linearizable</em> به روشی <em>fault-tolerant</em> استفاده می‌کنند (ما در مورد چنین الگوریتم‌هایی در ادامه این فصل، در "Fault-Tolerant Consensus" در صفحه 364 بحث می‌کنیم).iii هنوز هم جزئیات ظریف زیادی برای پیاده‌سازی صحیح <em>locks</em> و <em>leader election</em> وجود دارد (به عنوان مثال، مسئله <em>fencing</em> در "The leader and the lock" در صفحه 301 مراجعه کنید)، و کتابخانه‌هایی مانند Apache Curator [17] با ارائه دستورالعمل‌های سطح بالاتر در بالای ZooKeeper کمک می‌کنند.
+        </li>
+    </ul>
+    <p>
+        با این حال، یک <em>linearizable storage service</em>، پایه اساسی برای این <em>coordination tasks</em> است.
+    </p>
+    <p>
+        <em>Distributed locking</em> در برخی از databases های <em>distributed</em>، مانند Oracle Real Application Clusters (RAC) [18]، در سطح بسیار granularتر نیز استفاده می‌شود. RAC از یک <em>lock per disk page</em>، با چندین node که دسترسی به system ذخیره‌سازی دیسک یکسان را به اشتراک می‌گذارند، استفاده می‌کند. از آنجایی که این <em>linearizable locks</em> در مسیر بحرانی اجرای <strong>Transaction</strong> هستند، <em>RAC deployments</em> معمولاً یک شبکه <em>cluster interconnect</em> اختصاصی برای ارتباط بین nodes های database دارند.
+    </p>
+    <li>
+        Constraints and uniqueness guarantees
+        <br>
+        <em>Uniqueness constraints</em> در databases ها رایج هستند: به عنوان مثال، یک username یا آدرس ایمیل باید به طور <em>unique</em> یک user را شناسایی کند، و در یک <em>file storage service</em>، نمی‌تواند دو فایل با مسیر و نام فایل یکسان وجود داشته باشد. اگر شما می‌خواهید این <em>constraint</em> را در حین <em>written</em> شدن داده‌ها اجرا کنید (به طوری که اگر دو نفر همزمان سعی کنند یک user یا یک فایل را با همان نام ایجاد کنند، یکی از آنها یک <em>error</em> را برمی‌گرداند)، شما نیاز به <em>linearizability</em> دارید.
+    </li>
+    <p>
+        330
+        <br>
+        |
+        <br>
+        Chapter 9: Consistency and Consensus
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

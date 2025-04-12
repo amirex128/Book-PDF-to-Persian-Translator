@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 348</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        i. یک جزئیات ظریف از این نمودار این است که وجود یک ساعت global را فرض می‌کند، که توسط محور افقی نشان داده شده است. حتی اگر سیستم‌های واقعی ساعت‌های دقیقی نداشته باشند (به "Unreliable Clocks" در صفحه 287 مراجعه کنید)، این فرض اشکالی ندارد: برای اهداف تجزیه و تحلیل یک <em>distributed algorithm</em>، ما ممکن است تظاهر کنیم که یک ساعت <em>accurate global</em> وجود دارد، تا زمانی که الگوریتم به آن دسترسی نداشته باشد [47]. در عوض، الگوریتم فقط می‌تواند یک تقریب درهم و برهم از زمان واقعی را ببیند، که توسط یک <em>quartz oscillator</em> و NTP تولید می‌شود.
+    </p>
+    <p>
+        ii. A <em>register</em> که در آن <em>reads</em> ممکن است در صورت همزمان بودن با یک <em>write</em>،value قدیمی یا جدید را برگرداند، به عنوان a <em>regular register</em> [7, 25] شناخته می‌شود.
+    </p>
+    <p>
+        دقیقاً در چه زمانی database درخواست آن را پردازش کرد—فقط می‌داند که باید در زمانی بین ارسال درخواست client و دریافت پاسخ اتفاق افتاده باشد.
+    </p>
+    <p>
+        در این مثال، <em>register</em> دارای دو نوع operation است:
+    </p>
+    <ul>
+        <li>
+            read(x) ⇒ v به این معنی است که client درخواست خواندن value از <em>register</em> x را داد، و database value v را برگرداند.
+        </li>
+        <li>
+            write(x, v) ⇒ r به این معنی است که client درخواست کرد که <em>register</em> x را روی value v تنظیم کند، و database پاسخ r را برگرداند (که می‌تواند ok یا <em>error</em> باشد).
+        </li>
+    </ul>
+    <p>
+        در شکل 9-2، value از x در ابتدا 0 است، و client C یک درخواست <em>write</em> را برای تنظیم آن روی 1 انجام می‌دهد. در حالی که این اتفاق در حال رخ دادن است، clients های A و B به طور مکرر در حال <em>polling</em> database برای خواندن آخرین value هستند. پاسخ‌های ممکن که A و B ممکن است برای درخواست‌های <em>read</em> خود دریافت کنند، چیست؟
+    </p>
+    <ul>
+        <li>
+            اولین operation <em>read</em> توسط client A قبل از شروع <em>write</em> تکمیل می‌شود، بنابراین قطعاً باید value قدیمی 0 را برگرداند.
+        </li>
+        <li>
+            آخرین <em>read</em> توسط client A پس از تکمیل <em>write</em> شروع شد، بنابراین باید قطعاً value جدید 1 را برگرداند اگر database <em>linearizable</em> باشد: ما می‌دانیم که <em>write</em> باید در زمانی بین شروع و پایان operation <em>write</em>، پردازش شده باشد، و <em>read</em> باید در زمانی بین شروع و پایان operation <em>read</em> پردازش شده باشد. اگر <em>read</em> بعد از پایان <em>write</em> شروع شد، در این صورت <em>read</em> باید بعد از <em>write</em> پردازش شده باشد، و بنابراین باید value جدیدی را که نوشته شده است، ببیند.
+        </li>
+        <li>
+            هر operation <em>read</em> که با operation <em>write</em> در زمان همپوشانی دارد، ممکن است 0 یا 1 را برگرداند، زیرا ما نمی‌دانیم که آیا <em>write</em> در زمان پردازش operation <em>read</em>، تأثیر داشته است یا خیر. این operations ها با <em>write</em> همزمان هستند.
+        </li>
+    </ul>
+    <p>
+        با این حال، این هنوز برای توصیف کامل <em>linearizability</em> کافی نیست: اگر <em>reads</em> که با یک <em>write</em> همزمان هستند، می‌توانند value قدیمی یا جدید را برگردانند، پس خوانندگان می‌توانند ببینند که یک value چندین بار بین value قدیمی و جدید در حالی که یک <em>write</em> در حال انجام است، بین آن دو نوسان می‌کند. این چیزی نیست که ما از یک system که یک "single copy of the data" را شبیه‌سازی می‌کند، انتظار داریم.ii
+        <br>
+        326
+        <br>
+        |
+        <br>
+        Chapter 9: Consistency and Consensus
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
