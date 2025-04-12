@@ -24,10 +24,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install ImageMagick
-        run: sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick optipng jpegoptim
 
-      - name: Compress images and reorganize folders
+      - name: Optimize and compress files
         run: |
           # Create compressed output directory
           mkdir -p output_compressed
@@ -35,14 +37,25 @@ jobs:
           # Copy all files from output to output_compressed
           cp -r output/* output_compressed/
           
-          # Find and compress all images (jpg, jpeg, png)
-          find output_compressed -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -exec mogrify -strip -quality 80 {} \;
+          # Optimize PNG files
+          find output_compressed -type f -iname "*.png" -exec optipng -o7 {} \;
+          
+          # Optimize JPEG files
+          find output_compressed -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=70 --strip-all {} \;
+          
+          # Additional compression for large files
+          find output_compressed -type f -size +1M -exec mogrify -strip -quality 60 {} \;
           
           # Remove original output folder
           rm -rf output
           
           # Rename compressed folder to output
           mv output_compressed output
+
+      - name: Check final size
+        run: |
+          du -sh output/
+          echo "If size is still over 1GB, consider splitting the deployment"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
