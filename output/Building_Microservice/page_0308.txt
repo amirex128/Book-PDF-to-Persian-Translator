@@ -1,0 +1,39 @@
+What About Integration Tests?
+You may notice that I haven’t explicitly described integration tests. This is on pur‐
+pose. I’ve found that the term is often used by different people to describe different
+types of tests. For some, an integration test might only look at the interactions
+between two services, or perhaps the binding between code and a database. For oth‐
+ers, integration tests end up being the same as full end-to-end tests. I’ve tried to use
+more explicit terms in this chapter; I hope it will be easy for you to match whatever
+you refer to as an “integration test” to the terms I use here.
+Trade-Offs
+What we are striving for with the different types of tests that the pyramid covers is a
+sensible balance. We want fast feedback, and we want confidence that our system
+works.
+Unit tests are small in scope, so when they fail we can find the problem quickly. They
+are also quick to write and really quick to run. As our tests get larger in scope, we get
+more confidence in our system, but our feedback starts to suffer as the tests take
+longer to run. They are also more costly to write and maintain,
+You’ll frequently be balancing how many of each type of test you need to find that
+sweet spot. Finding that your test suite is taking too long to run? When broader-
+scoped tests like our service or end-to-end tests fail, write a smaller-scoped unit test
+to pick up that breakage sooner. Look to replace some larger-scoped (and slower)
+tests with faster, smaller-scoped unit tests. On the other hand, when a bug slips
+through to production, it may be a sign that you’re missing a test.
+So if these tests all have trade-offs, how many of each test type do you want? A good
+rule of thumb is that you probably want an order of magnitude more tests as you
+descend the pyramid. It’s important to know that you do have different types of auto‐
+mated tests, and it’s important to understand if your current balance gives you a
+problem!
+I worked on one monolithic system, for example, where we had 4,000 unit tests, 1,000
+service tests, and 60 end-to-end tests. We decided that from a feedback point of view,
+we had way too many service and end-to-end tests (the latter of which were the worst
+offenders in impacting feedback loops), so we worked hard to replace the test cover‐
+age with smaller-scoped tests.
+A common antipattern is what is often referred to as a test snow cone, or inverted
+pyramid. Here, there are little to no small-scoped tests, with all the coverage in large-
+scoped tests. These projects often have glacially slow test runs and very long feedback
+cycles. If these tests are run as part of continuous integration, you won’t get many
+282 
+| 
+Chapter 9: Testing

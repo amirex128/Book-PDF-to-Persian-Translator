@@ -1,0 +1,47 @@
+433
+Strategies for refactoring a monolith to microservices
+that you’ll need to make some changes in order to support migration to services. Sec-
+tion 13.3.2 talks about how the monolith often needs to be modified so that it can par-
+ticipate in sagas that maintain data consistency across the monolith and services. The
+problem with making widespread changes to the monolith is that it’s time consuming,
+costly, and risky. After all, that’s probably why you want to migrate to microservices in
+the first place.
+ Fortunately, there are strategies you can use for reducing the scope of the changes
+you need to make. For example, in section 13.2.3, I describe the strategy of replicating
+data from an extracted service back to the monolith’s database. And in section 13.3.2,
+I show how you can carefully sequence the extraction of services to reduce the impact
+on the monolith. By applying these strategies, you can reduce the amount of work
+required to refactor the monolith. 
+TECHNICAL DEPLOYMENT INFRASTRUCTURE: YOU DON’T NEED ALL OF IT YET
+Throughout this book I’ve discussed a lot of shiny new technology, including deploy-
+ment platforms such as Kubernetes and AWS Lambda and service discovery mecha-
+nisms. You might be tempted to begin your migrating to microservices by selecting
+technologies and building out that infrastructure. You might even feel pressure from
+the business people and from your friendly PaaS vendor to start spending money on
+this kind of infrastructure.
+ As tempting as it seems to build out this infrastructure up front, I recommend only
+making a minimal up-front investment in developing it. The only thing you can’t live
+without is a deployment pipeline that performs automating testing. For example, if
+you only have a handful of services, you don’t need a sophisticated deployment and
+observability infrastructure. Initially, you can even get away with just using a hard-
+coded configuration file for service discovery. I suggest deferring any decisions about
+technical infrastructure that involve significant investment until you’ve gained real
+experience with the microservice architecture. It’s only once you have a few services
+running that you’ll have the experience to pick technologies.
+ Let’s now look at the strategies you can use for migrating to a microservice
+architecture. 
+13.2
+Strategies for refactoring a monolith to microservices
+There are three main strategies for strangling the monolith and incrementally replac-
+ing it with microservices:
+1
+Implement new features as services.
+2
+Separate the presentation tier and backend.
+3
+Break up the monolith by extracting functionality into services.
+The first strategy stops the monolith from growing. It’s typically a quick way to
+demonstrate the value of microservices, helping build support for the migration
+effort. The other two strategies break apart the monolith. When refactoring your
+monolith, you might sometimes use the second strategy, but you’ll definitely use the
+ 

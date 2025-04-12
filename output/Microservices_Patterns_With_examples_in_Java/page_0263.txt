@@ -1,0 +1,55 @@
+233
+Using the CQRS pattern
+In a CQRS-based service, the command-side domain model handles CRUD operations
+and is mapped to its own database. It may also handle simple queries, such as non-
+join, primary key-based queries. The command side publishes domain events when-
+ever its data changes. These events might be published using a framework such as
+Eventuate Tram or using event sourcing.
+ A separate query model handles the nontrivial queries. It’s much simpler than the
+command side because it’s not responsible for implementing the business rules. The
+query side uses whatever kind of database makes sense for the queries that it must sup-
+port. The query side has event handlers that subscribe to domain events and update
+the database or databases. There may even be multiple query models, one for each
+type of query. 
+CQRS AND QUERY-ONLY SERVICES
+Not only can CQRS be applied within a service, but you can also use this pattern to
+define query services. A query service has an API consisting of only query opera-
+tions—no command operations. It implements the query operations by querying a
+database that it keeps up-to-date by subscribing to events published by one or more
+other services. A query-side service is a good way to implement a view that’s built by
+Service
+CRUD
+CRUD operations
+R
+Domain model
+Aggregate
+Query
+bypass
+Aggregate
+Database
+One database for creates, updates, and deletes. A
+separate database for queries. It is kept up-to-date
+by using events that are published whenever the
+command-side database changes.
+Single database for all CRUD
+Service
+CUD
+CRUD operations
+R
+Command/domain model
+Events
+CQRS
+Non-CQRS
+Aggregate
+Event
+handler
+Aggregate
+Command-side
+database
+Query database
+Query model
+Figure 7.8
+On the left is the non-CQRS version of the service, and on the right is the CQRS version. 
+CQRS restructures a service into command-side and query-side modules, which have separate 
+databases.
+ 

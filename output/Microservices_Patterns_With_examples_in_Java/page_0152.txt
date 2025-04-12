@@ -1,0 +1,66 @@
+122
+CHAPTER 4
+Managing transactions with sagas
+ To show how orchestration-based sagas work, I’ll first describe an example. Then
+I’ll describe how to model orchestration-based sagas as state machines. I’ll discuss how
+to make use of transactional messaging to ensure reliable communication between
+the saga orchestrator and the saga participants. I’ll then describe the benefits and
+drawbacks of using orchestration-based sagas.
+IMPLEMENTING THE CREATE ORDER SAGA USING ORCHESTRATION
+Figure 4.6 shows the design of the orchestration-based version of the Create Order
+Saga. The saga is orchestrated by the CreateOrderSaga class, which invokes the saga
+participants using asynchronous request/response. This class keeps track of the pro-
+cess and sends command messages to saga participants, such as Kitchen Service and
+Consumer Service. The CreateOrderSaga class reads reply messages from its reply
+channel and then determines the next step, if any, in the saga.
+Accounting
+Service
+Kitchen
+Service
+Consumer
+Service
+Consumer Service
+request channel
+Consumer veriﬁed
+2
+4
+6
+Verify consumer
+1
+Approve
+restaurant
+order
+7
+Approve
+order
+8
+Create
+ticket
+3
+Authorize
+card
+5
+Card
+authorized
+Message broker
+Order Service
+Command message
+Key
+Reply message
+Create order
+saga reply channel
+Kitchen Service
+request channel
+Accounting Service
+request channel
+Order Service
+request channel
+Create
+order saga
+orchestrator
+Ticket created
+Figure 4.6
+Implementing the Create Order Saga using orchestration. Order Service 
+implements a saga orchestrator, which invokes the saga participants using asynchronous request/
+response.
+ 

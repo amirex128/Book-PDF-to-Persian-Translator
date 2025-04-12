@@ -1,0 +1,54 @@
+405
+Deploying the FTGO application with Kubernetes
+One approach is to use a client-side discovery mechanism and install a service registry,
+such as Netflix OSS Eureka. Fortunately, we can avoid doing that by using the service
+discovery mechanism built in to Kubernetes and define a Kubernetes service.
+ A service is a Kubernetes object that provides the clients of one or more pods with a
+stable endpoint. It has an IP address and a DNS name that resolves that IP address.
+The service load balances traffic to that IP address across the pods. Listing 12.5
+shows the Kubernetes service for Restaurant Service. This service routes traffic
+from http://ftgo-restaurant-service:8080 to the pods defined by the deploy-
+ment shown in the listing.
+apiVersion: v1
+kind: Service
+metadata:
+name: ftgo-restaurant-service
+ 
+spec:
+ports:
+- port: 8080
+targetPort: 8080
+selector:
+ app: ftgo-restaurant-service
+  
+---
+The key part of the service definition is selector, which selects the target pods. It selects
+those pods that have a label named app with the value ftgo-restaurant-service. If
+you look closely, you’ll see that the container defined in listing 12.4 has such a label.
+ Once you’ve written the YAML file, you can create the service using this command:
+kubectl apply -f ftgo-restaurant-service-service.yml
+Now that we’ve created the Kubernetes service, any clients of Restaurant Service
+that are running inside the Kubernetes cluster can access its REST API via http://
+ftgo-restaurant-service:8080. Later, I discuss how to upgrade running services,
+but first let’s take a look at how to make the services accessible from outside the
+Kubernetes cluster. 
+12.4.3 Deploying the API gateway
+The Kubernetes service for Restaurant Service, shown in listing 12.5, is only accessi-
+ble from within the cluster. That’s not a problem for Restaurant Service, but what
+about API Gateway? Its role is to route traffic from the outside world to the service. It
+therefore needs to be accessible from outside the cluster. Fortunately, a Kubernetes
+service supports this use case as well. The service we looked at earlier is a ClusterIP
+service, which is the default, but there are, however, two other types of services: Node-
+Port and LoadBalancer.
+Listing 12.5
+The YAML definition of the Kubernetes service for 
+ftgo-restaurant-service
+The name of the service, 
+also the DNS name
+The exposed 
+port
+The container port 
+to route traffic to
+Selects the containers 
+to route traffic to
+ 

@@ -1,0 +1,43 @@
+157
+Designing a domain model using the DDD aggregate pattern
+eliminates the need for transparent lazy loading and its associated problems. Scaling
+the database by sharding aggregates is relatively straightforward.
+RULE #3: ONE TRANSACTION CREATES OR UPDATES ONE AGGREGATE
+Another rule that aggregates must obey is that a transaction can only create or update
+a single aggregate. When I first read about it many years ago, this rule made no sense! At
+the time, I was developing traditional monolithic applications that used an RDBMS, so
+transactions could update multiple aggregates. Today, this constraint is perfect for the
+microservice architecture. It ensures that a transaction is contained within a service.
+This constraint also matches the limited transaction model of most NoSQL databases.
+ This rule makes it more complicated to implement operations that need to create
+or update multiple aggregates. But this is exactly the problem that sagas (described in
+chapter 4) are designed to solve. Each step of the saga creates or updates exactly one
+aggregate. Figure 5.7 shows how this works.
+In this example, the saga consists of three transactions. The first transaction updates
+aggregate X in service A. The other two transactions are both in service B. One transac-
+tion updates aggregate X, and the other updates aggregate Y.
+ An alternative approach to maintaining consistency across multiple aggregates
+within a single service is to cheat and update multiple aggregates within a transaction.
+For example, service B could update aggregates Y and Z in a single transaction. This is
+only possible when using a database, such as an RDBMS, that supports a rich transac-
+tion model. If you’re using a NoSQL database that only has simple transactions,
+there’s no other option except to use sagas.
+ Or is there? It turns out that aggregate boundaries are not set in stone. When
+developing a domain model, you get to choose where the boundaries lie. But like a
+20th century colonial power drawing national boundaries, you need to be careful. 
+Service A
+Saga
+Local transaction 1
+Create/update
+Aggregate X
+Service B
+Local transaction 2
+Aggregate Y
+Local transaction 3
+Aggregate Z
+Create/update
+Create/update
+Figure 5.7
+A transaction can only create or update a single aggregate, so an application uses a saga 
+to update multiple aggregates. Each step of the saga creates or updates one aggregate.
+ 

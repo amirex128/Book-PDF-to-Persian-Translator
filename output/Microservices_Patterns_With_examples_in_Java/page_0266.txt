@@ -1,0 +1,45 @@
+236
+CHAPTER 7
+Implementing queries in a microservice architecture
+high-volume query. A CQRS query service maintains a view by subscribing to the events
+published by the service or services that own the data. 
+7.2.4
+The drawbacks of CQRS
+Even though CQRS has several benefits, it also has significant drawbacks:
+More complex architecture
+Dealing with the replication lag
+Let’s look at these drawbacks, starting with the increased complexity.
+MORE COMPLEX ARCHITECTURE
+One drawback of CQRS is that it adds complexity. Developers must write the query-
+side services that update and query the views. There is also the extra operational com-
+plexity of managing and operating the extra datastores. What’s more, an application
+might use different types of databases, which adds further complexity for both devel-
+opers and operations. 
+DEALING WITH THE REPLICATION LAG
+Another drawback of CQRS is dealing with the “lag” between the command-side and
+the query-side views. As you might expect, there’s delay between when the command
+side publishes an event and when that event is processed by the query side and the
+view updated. A client application that updates an aggregate and then immediately
+queries a view may see the previous version of the aggregate. It must often be written
+in a way that avoids exposing these potential inconsistencies to the user.
+ One solution is for the command-side and query-side APIs to supply the client with
+version information that enables it to tell that the query side is out-of-date. A client
+can poll the query-side view until it’s up-to-date. Shortly I’ll discuss how the service
+APIs can enable a client to do this.
+ A UI application such as a native mobile application or single page JavaScript
+application can handle replication lag by updating its local model once the command
+is successful without issuing a query. It can, for example, update its model using data
+returned by the command. Hopefully, when a user action triggers a query, the view
+will be up-to-date. One drawback of this approach is that the UI code may need to
+duplicate server-side code in order to update its model.
+ As you can see, CQRS has both benefits and drawbacks. As mentioned earlier, you
+should use the API composition whenever possible and use CQRS only when you must.
+ Now that you’ve seen the benefits and drawbacks of CQRS, let’s now look at how to
+design CQRS views. 
+7.3
+Designing CQRS views
+A CQRS view module has an API consisting of one more query operations. It imple-
+ments these query operations by querying a database that it maintains by subscribing
+to events published by one or more services. As figure 7.10 shows, a view module con-
+sists of a view database and three submodules.
+ 

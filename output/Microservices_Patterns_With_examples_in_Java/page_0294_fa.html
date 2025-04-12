@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 294</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>فصل 8</h3>
+  <h3>الگوهای API خارجی</h3>
+  <p>
+   client خاص. لایه مشترک، functionality مشترک، از جمله edge functions ها مانند authentication را پیاده‌سازی می‌کند.
+  </p>
+  <p>
+   در این مثال، API gateway دارای سه ماژول API است:
+  </p>
+  <ul>
+   <li>
+    <strong>Mobile API</strong>—API را برای client موبایل FTGO پیاده‌سازی می‌کند
+   </li>
+   <li>
+    <strong>Browser API</strong>—API را برای application JavaScript که در browser اجرا می‌شود، پیاده‌سازی می‌کند
+   </li>
+   <li>
+    <strong>Public API</strong>—API را برای توسعه‌دهندگان third-party پیاده‌سازی می‌کند
+   </li>
+  </ul>
+  <p>
+   یک ماژول API، هر operation API را به یکی از دو روش پیاده‌سازی می‌کند. برخی از عملیات API مستقیماً به عملیات API single service نگاشت می‌شوند. یک ماژول API این عملیات را با routing requests به عملیات API service مربوطه پیاده‌سازی می‌کند. ممکن است requests را با استفاده از یک ماژول routing عمومی که یک فایل configuration را که قوانین routing را توصیف می‌کند، می‌خواند، route کند.
+  </p>
+  <p>
+   یک ماژول API، عملیات API دیگر، پیچیده‌تر را با استفاده از API composition پیاده‌سازی می‌کند. پیاده‌سازی این operation API از کد سفارشی تشکیل شده است. هر پیاده‌سازی operation API، request ها را با فراخوانی چندین service و ترکیب نتایج مدیریت می‌کند.
+  </p>
+  <p>
+   <strong>API GATEWAY OWNERSHIP MODEL</strong>
+  </p>
+  <p>
+   یک سوال مهم که باید به آن پاسخ دهید این است که چه کسی مسئول توسعه API gateway و operation آن است؟ چند گزینه مختلف وجود دارد. یکی این است که یک تیم جداگانه مسئول API gateway باشد. نقطه ضعف این است که شبیه به SOA است، جایی که یک تیم Enterprise Service Bus (ESB) مسئول تمام توسعه ESB بود. اگر یک developer که روی application موبایل کار می‌کند، نیاز به دسترسی به یک service خاص داشته باشد، باید یک request را به تیم API gateway ارسال کند و منتظر بماند تا API را expose کنند. این نوع centralized bottleneck در سازمان بسیار مخالف فلسفه معماری microservice است که تیم‌های مستقل و loosely coupled را ترویج می‌کند.
+  </p>
+  <p>
+   یک رویکرد بهتر، که توسط Netflix ترویج شده است، این است که تیم‌های client - تیم‌های موبایل، وب و public API - ماژول API را که API آن‌ها را expose می‌کند، داشته باشند. یک تیم API gateway مسئول توسعه ماژول Common و جنبه‌های عملیاتی gateway است. این ownership model، که در شکل 8.6 نشان داده شده است، به تیم‌ها کنترل API هایشان را می‌دهد.
+  </p>
+  <p>
+   هنگامی که یک تیم نیاز به تغییر API خود دارد، تغییرات را در source repository برای API gateway check in می‌کند. برای عملکرد خوب، deployment pipeline API gateway باید کاملاً خودکار باشد. در غیر این صورت، تیم‌های client اغلب برای deploy کردن version جدید منتظر تیم API gateway مسدود می‌شوند.
+  </p>
+  <p>
+   <strong>USING THE BACKENDS FOR FRONTENDS PATTERN</strong>
+  </p>
+  <p>
+   یکی از نگرانی‌ها در مورد API gateway این است که مسئولیت آن مبهم است. چندین تیم به یک code base یکسان کمک می‌کنند. یک تیم API gateway مسئول operation آن است. اگرچه به اندازه SOA ESB بد نیست، اما این blurring of responsibilities، مخالف فلسفه معماری microservice "if you build it, you own it" است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

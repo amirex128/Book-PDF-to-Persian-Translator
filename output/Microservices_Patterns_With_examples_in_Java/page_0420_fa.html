@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 420</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <h4><span style="font-weight: bold;">LACK OF ISOLATION WHEN RUNNING MULTIPLE SERVICE INSTANCES ON THE SAME MACHINE</span></h4>
+  <p>
+   The problem حتی زمانی که multiple instances در همان machine اجرا می‌شود، بدتر است.
+   The lack از isolation به این معنی است که یک service instance که بد رفتار می‌کند می‌تواند بر other ser-
+   vice instances تأثیر بگذارد. As a result، application در معرض خطر غیر قابل اعتماد بودن قرار می‌گیرد، به خصوص when run-
+   ning multiple service instances در همان machine.
+  </p>
+  <h4><span style="font-weight: bold;">AUTOMATICALLY DETERMINING WHERE TO PLACE SERVICE INSTANCES IS CHALLENGING</span></h4>
+  <p>
+   Another challenge با running multiple service instances در همان machine است
+   determining the placement از service instances. Each machine دارای یک set ثابت از
+   resources، CPU، memory و غیره است، و هر service instance به مقداری
+   resources نیاز دارد. It’s important برای assign service instances به machines به گونه‌ای که از the
+   machines به طور موثر بدون overloading آنها استفاده شود. As I explain shortly, VM-based clouds
+   و container orchestration frameworks این را به طور خودکار مدیریت می‌کنند. When deploying
+   services natively، احتمال دارد که شما نیاز داشته باشید که به صورت دستی the placement را تعیین کنید.
+  </p>
+  <p>
+   As you can see, despite its familiarity, the Service as a language-specific package
+   pattern دارای برخی از significant drawbacks است. You should rarely از این رویکرد استفاده کنید، مگر
+   شاید زمانی که کارایی بر همه concerns دیگر غلبه کند.
+  </p>
+  <p>
+   Let’s now look at modern ways از deploying services که از این مشکلات اجتناب می‌کنند.
+  </p>
+  <h4><span style="font-weight: bold;">12.2 Deploying services using the Service as a virtual 
+   machine pattern</span></h4>
+  <p>
+   Once again، imagine شما می‌خواهید FTGO Restaurant Service را مستقر کنید، مگر این
+   time در AWS EC2. One option ایجاد و پیکربندی یک EC2 instance خواهد بود
+   و کپی کردن فایل اجرایی یا WAR روی آن. Although you would get some benefit
+   از استفاده از cloud، این رویکرد از معایب توضیح داده شده در pre-
+   ceding section رنج می‌برد. A better, more modern approach این است که service را به عنوان a Ama-
+   zon Machine Image (AMI) بسته بندی کنید، همانطور که در شکل 12.6 نشان داده شده است. Each service instance یک EC2 است
+   instance که از آن AMI ایجاد شده است. The EC2 instances به طور معمول توسط an مدیریت می‌شوند
+   AWS Auto Scaling group، که تلاش می‌کند تا اطمینان حاصل کند که تعداد مورد نظر از
+   healthy instances همیشه در حال اجرا است.
+  </p>
+  <p>
+   The virtual machine image توسط deployment pipeline از service ساخته شده است. The deploy-
+   ment pipeline، همانطور که شکل 12.6 نشان می‌دهد، یک VM image builder را اجرا می‌کند تا یک VM image ایجاد کند
+   که حاوی service’s code و هر نرم‌افزاری است که برای اجرای آن لازم است. For
+   example, the VM builder برای یک FTGO service JDK و the service’s exe-
+   cutable JAR را نصب می‌کند. The VM image builder machine از VM image را پیکربندی می‌کند تا the
+   application را هنگام boot شدن VM اجرا کند، با استفاده از Linux’s init system، مانند upstart.
+  </p>
+  <p>
+   Pattern: Deploy a service as a VM
+   Deploy services packaged به عنوان VM images در production. Each service instance یک
+   VM است. See http://microservices.io/patterns/deployment/service-per-vm.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

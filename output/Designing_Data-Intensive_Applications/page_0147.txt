@@ -1,0 +1,39 @@
+iv. To be precise, the default value must be of the type of the first branch of the union, although this is a
+specific limitation of Avro, not a general feature of union types.
+In some programming languages, null is an acceptable default for any variable, but
+this is not the case in Avro: if you want to allow a field to be null, you have to use a
+union type. For example, union { null, long, string } field; indicates that
+field can be a number, or a string, or null. You can only use null as a default value if
+it is one of the branches of the union.iv This is a little more verbose than having every‐
+thing nullable by default, but it helps prevent bugs by being explicit about what can
+and cannot be null [22].
+Consequently, Avro doesn’t have optional and required markers in the same way as
+Protocol Buffers and Thrift do (it has union types and default values instead).
+Changing the datatype of a field is possible, provided that Avro can convert the type.
+Changing the name of a field is possible but a little tricky: the reader’s schema can
+contain aliases for field names, so it can match an old writer’s schema field names
+against the aliases. This means that changing a field name is backward compatible but
+not forward compatible. Similarly, adding a branch to a union type is backward com‐
+patible but not forward compatible.
+But what is the writer’s schema?
+There is an important question that we’ve glossed over so far: how does the reader
+know the writer’s schema with which a particular piece of data was encoded? We
+can’t just include the entire schema with every record, because the schema would
+likely be much bigger than the encoded data, making all the space savings from the
+binary encoding futile.
+The answer depends on the context in which Avro is being used. To give a few exam‐
+ples:
+Large file with lots of records
+A common use for Avro—especially in the context of Hadoop—is for storing a
+large file containing millions of records, all encoded with the same schema. (We
+will discuss this kind of situation in Chapter 10.) In this case, the writer of that
+file can just include the writer’s schema once at the beginning of the file. Avro
+specifies a file format (object container files) to do this.
+Database with individually written records
+In a database, different records may be written at different points in time using
+different writer’s schemas—you cannot assume that all the records will have the
+same schema. The simplest solution is to include a version number at the begin‐
+ning of every encoded record, and to keep a list of schema versions in your data‐
+Formats for Encoding Data 
+| 
+125

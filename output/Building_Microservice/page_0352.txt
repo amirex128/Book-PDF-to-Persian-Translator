@@ -1,0 +1,40 @@
+Sampling strategies can be very basic. Google’s Dapper system, which inspired many
+of the distributed tracing tools that came afterwards, performed a highly aggressive
+random sampling. A certain percentage of calls were sampled, and that was it. Jaeger,
+for example, will capture only 1 in 1,000 calls in its default setting. The idea here is to
+capture enough information to understand what our system is doing but not capture
+so much information that the system itself cannot cope. Tools like Honeycomb and
+Lightstep can provide more nuanced, dynamic sampling than this simple random-
+based sampling. An example of dynamic sampling could be where you want more
+samples for certain types of events—for example, you might want to sample anything
+that generates an error but would be happy sampling only 1 in 100 successful opera‐
+tions if they are all pretty similar.
+Implementing distributing tracing
+Getting distributed tracing up and running for your system requires a few things.
+Firstly, you need to capture span information inside your microservices. If you are
+using a standard API like OpenTracing or the newer OpenTelemetry API, you might
+find that some of the third-party libraries and frameworks will come with support for
+these APIs built in and will already send useful information (for example, automati‐
+cally capturing information about HTTP calls). But even if they do, chances are you’ll
+still want to instrument your own code, providing useful information about what
+your microservice is doing at any given point of time.
+Next, you’ll need some way to send this span information to your collector—it may
+be that you send this data directly from your microservice instance to the central col‐
+lector, but it’s much more common to use a local forwarding agent. So as with log
+aggregation, you run an agent locally to your microservice instance, which will peri‐
+odically send the span information to a central collector. The use of a local agent typi‐
+cally allows for some more advanced capabilities, such as changing sampling or
+adding additional tags, and can also more effectively buffer information being sent.
+Lastly, of course, you need a collector able to receive this information and make sense
+of it all.
+In the open source space, Jaeger has emerged as a popular choice for distributed trac‐
+ing. For commercial tooling, I’d start by looking at the already mentioned Lightstep
+and Honeycomb. I’d urge you, though, to pick something that is committed to sup‐
+porting the OpenTelemetry API. OpenTelemetry is an open API specification that
+makes it much easier to have code such as database drivers or web frameworks come
+out of the box with support for tracing, and it can also give you easier portability
+across different vendors on the collection side. Based on work done by the earlier
+OpenTracing and OpenConsensus APIs, this API now has broad industry support.
+326 
+| 
+Chapter 10: From Monitoring to Observability

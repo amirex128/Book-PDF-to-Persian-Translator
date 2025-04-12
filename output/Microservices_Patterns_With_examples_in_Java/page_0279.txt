@@ -1,0 +1,60 @@
+249
+Implementing a CQRS view with AWS DynamoDB
+ For example, suppose an event handler receives a DeliveryPickup event whose ID
+is 123323-343434 from a Delivery aggregate whose ID is 3949384394-039434903.
+The name of the tracking attribute is Delivery3949384394-039434903. The event
+handler should consider the event to be a duplicate if the value of this attribute is
+greater than or equal to 123323-343434. The query() operation invoked by the event
+handler updates the Order item using this condition expression:
+attribute_not_exists(Delivery3949384394-039434903) 
+OR Delivery3949384394-039434903 < :eventId
+Now that I’ve described the DynamoDB data model and query design, let’s take a look
+at OrderHistoryDaoDynamoDb, which defines the methods that update and query the
+ftgo-order-history table. 
+7.4.3
+The OrderHistoryDaoDynamoDb class
+The OrderHistoryDaoDynamoDb class implements methods that read and write items
+in the ftgo-order-history table. Its update methods are invoked by OrderHistory-
+EventHandlers, and its query methods are invoked by OrderHistoryQuery API. Let’s
+take a look at some example methods, starting with the addOrder() method.
+THE ADDORDER() METHOD
+The addOrder() method, which is shown in listing 7.2, adds an order to the ftgo-
+order-history table. It has two parameters: order and sourceEvent. The order
+parameter is the Order to add, which is obtained from the OrderCreated event. The
+sourceEvent parameter contains the eventId and the type and ID of the aggregate
+that emitted the event. It’s used to implement the conditional update.
+public class OrderHistoryDaoDynamoDb ...
+@Override
+public boolean addOrder(Order order, Optional<SourceEvent> eventSource) {
+UpdateItemSpec spec = new UpdateItemSpec()
+.withPrimaryKey("orderId", order.getOrderId())
+  
+.withUpdateExpression("SET orderStatus = :orderStatus, " +  
+"creationDate = :cd, consumerId = :consumerId, lineItems =" +
+" :lineItems, keywords = :keywords, restaurantName = " +
+":restaurantName")
+.withValueMap(new Maps()
+                
+.add(":orderStatus", order.getStatus().toString())
+.add(":cd", order.getCreationDate().getMillis())
+.add(":consumerId", order.getConsumerId())
+.add(":lineItems", mapLineItems(order.getLineItems()))
+.add(":keywords", mapKeywords(order))
+.add(":restaurantName", order.getRestaurantName())
+.map())
+.withReturnValues(ReturnValue.NONE);
+return idempotentUpdate(spec, eventSource);
+}
+Listing 7.2
+The addOrder() method adds or updates an Order
+The primary key of the
+Order item to update
+The update
+expression that
+updates the
+attributes
+The values of the
+placeholders in
+the update
+expression
+ 

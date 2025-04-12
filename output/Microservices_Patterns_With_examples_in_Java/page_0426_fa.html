@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 426</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <pre><code class="language-text">
+  FROM openjdk:8u171-jre-alpine
+  RUN apk --no-cache add curl
+  CMD java ${JAVA_OPTS} -jar ftgo-restaurant-service.jar
+  HEALTHCHECK --start-period=30s --
+  interval=5s CMD curl http://localhost:8080/actuator/health || exit 1
+  COPY build/libs/ftgo-restaurant-service.jar .
+  </code></pre>
+  <p>
+   The base image openjdk:8u171-jre-alpine یک image از نوع Linux minimal است con-
+   taining the JRE. The Dockerfile service’s JAR را به image کپی می‌کند و config-
+   ures image برای execute کردن JAR در startup. It also configures Docker برای به صورت دوره‌ای
+   health check endpoint، که در فصل 11 توضیح داده شد، فراخوانی کند. The HEALTHCHECK direc-
+   tive می‌گوید که health check endpoint API، که در فصل 11 توضیح داده شد، را اجرا کند، هر 5 sec-
+   onds پس از یک initial 30-second delay، که به service زمان می‌دهد تا شروع شود.
+  </p>
+  <p>
+   Once you’ve written the Dockerfile، شما می‌توانید image را build کنید. The following
+   listing نشان می‌دهد که shell commands برای build کردن image برای Restaurant Service. The
+   script JAR file از service را build می‌کند و دستور docker build را برای ایجاد
+   the image اجرا می‌کند.
+  </p>
+  <pre><code class="language-text">
+  cd ftgo-restaurant-service
+  ../gradlew assemble
+  docker build -t ftgo-restaurant-service .
+  </code></pre>
+  <p>
+   The docker build command دارای دو آرگومان است: the -t argument نام را مشخص می‌کند
+   از image، و the . مشخص می‌کند که Docker context را صدا می‌کند. The context، که در
+   این مثال current directory است، متشکل از Dockerfile و فایل‌هایی است که برای
+   build کردن the image استفاده می‌شود. The docker build command context را به Docker dae-
+   mon آپلود می‌کند، که the image را می‌سازد.
+  </p>
+  <h4><span style="font-weight: bold;">PUSHING A DOCKER IMAGE TO A REGISTRY</span></h4>
+  <p>
+   The final step از the build process این است که newly built Docker image را به آنچه است
+   به عنوان a registry شناخته می‌شود، push کنید. A Docker registry معادل یک Java Maven repository برای
+   Java libraries، یا یک NodeJS npm registry برای NodeJS packages است. Docker hub یک exam-
+   ple از یک public Docker registry است و معادل Maven Central یا NpmJS.org است. But
+   برای applications شما احتمالاً می‌خواهید از یک private registry استفاده کنید که توسط ser-
+   vices، مانند Docker Cloud registry یا AWS EC2 Container Registry، ارائه شده است.
+  </p>
+  <p>
+   You must use دو دستور Docker برای push کردن یک image به یک registry. First, you use
+   the docker tag command برای دادن نام image که با hostname پیشوند دارد
+  </p>
+  <p>
+   Listing 12.1
+   The Dockerfile used to build Restaurant Service
+   Listing 12.2
+   The shell commands used to build the container image for
+   Restaurant Service
+   The base image
+   Install curl برای
+   استفاده توسط the
+   health check.
+   Configure Docker
+   برای run java -jar ..
+   when the container
+   is started.
+   Configure Docker to
+   invoke the health
+   check endpoint.
+   Copies the JAR in Gradle’s build
+   directory into the image
+   Change to the
+   service’s directory.
+   Build the
+   service’s JAR.
+   Build the image.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

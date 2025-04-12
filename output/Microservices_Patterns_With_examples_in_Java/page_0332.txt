@@ -1,0 +1,48 @@
+302
+CHAPTER 9
+Testing microservices: Part 1
+ The team that develops the consumer writes a contract test suite and adds it (for
+example, via a pull request) to the provider’s test suite. The developers of other ser-
+vices that invoke Order Service also contribute a test suite, as shown in figure 9.7.
+Each test suite will test those aspects of Order Service’s API that are relevant to each
+consumer. The test suite for Order History Service, for example, verifies that Order
+Service publishes the expected events.
+These test suites are executed by the deployment pipeline for Order Service. If a con-
+sumer contract test fails, that failure tells the producer team that they’ve made a break-
+ing change to the API. They must either fix the API or talk to the consumer team.
+Consumer-driven contract tests typically use testing by example. The interaction
+between a consumer and provider is defined by a set of examples, known as contracts.
+Each contract consists of example messages that are exchanged during one interaction.
+Pattern: Consumer-driven contract test
+Verify that a service meets the expectations of its clients See http://microser-
+vices.io/patterns/testing/service-integration-contract-test.html.
+API gateway team
+Writes
+Order Service deployment pipeline
+Order
+Service
+API gateway -
+Order Service
+contract test
+suite
+Order History Service team
+Writes
+Tests
+Tests
+Tests
+Order History
+Service - Order
+Service contract
+test suite
+... Service team
+Writes
+... Service -
+Order Service
+contract test
+suite
+Figure 9.7
+Each team that develops a service that consumes Order Service’s API contributes 
+a contract test suite. The test suite verifies that the API matches the consumer’s expectations. 
+This test suite, along with those contributed by other teams, is run by Order Service’s 
+deployment pipeline.
+ 

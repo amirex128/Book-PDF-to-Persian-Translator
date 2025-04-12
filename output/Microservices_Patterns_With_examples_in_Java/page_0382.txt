@@ -1,0 +1,70 @@
+352
+CHAPTER 11
+Developing production-ready services
+framework uses the standard Java EE approach of storing the security context in a
+static, thread-local variable, which is readily accessible to any code that’s invoked to han-
+dle the request. A request handler can call SecurityContextHolder.getContext()
+.getAuthentication() to obtain information about the current user, such as their
+identity and roles. In contrast, the Passport framework stores the security context as
+the user attribute of the request.
+The sequence of events shown in Figure 11.2 is as follows:
+1
+The client makes a login request to the FTGO application.
+2
+The login request is handled by LoginHandler, which verifies the credentials, cre-
+ates the session, and stores information about the principal in the session.
+3
+Login Handler returns a session token to the client.
+4
+The client includes the session token in requests that invoke operations.
+5
+These requests are first processed by SessionBasedSecurityInterceptor. The
+interceptor authenticates each request by verifying the session token and estab-
+lishes a security context. The security context describes the principal and its roles.
+User
+database
+Log in with user ID
+and password.
+Initializes
+Provides session cookie
+Establishes
+Reads
+Return session cookie.
+Jane
+Login-based
+client
+SessionBased
+Security
+Interceptor
+OrderDetails
+RequestHandler
+UserId: jane
+rules: [CONSUMER]
+...
+UserId: jane
+rules: [CONSUMER]
+...
+Login
+handler
+POST /login
+userId-Jane&password=..
+HTTP/1.1 200 OK
+Set-cookie: JSESSIONID=...
+...
+GET /orders/order-xyz
+Cookie: JSESSIONID=...
+FTGO application
+Retrieves user information
+from database
+Reads
+Establishes
+Security context
+Session
+Figure 11.2
+When a client of the FTGO application makes a login request, Login Handler authenticates the 
+user, initializes the session user information, and returns a session token cookie, which securely identifies the 
+session. Next, when the client makes a request containing the session token, SessionBasedSecurity-
+Interceptor retrieves the user information from the specified session and establishes the security context. 
+Request handlers, such as OrderDetailsRequestHandler, retrieve the user information from the security 
+context.
+ 

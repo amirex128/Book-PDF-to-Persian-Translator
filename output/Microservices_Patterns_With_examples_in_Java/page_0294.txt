@@ -1,0 +1,44 @@
+264
+CHAPTER 8
+External API patterns
+particular client. The common layer implements shared functionality, including edge
+functions such as authentication.
+ In this example, the API gateway has three API modules:
+Mobile API—Implements the API for the FTGO mobile client
+Browser API—Implements the API for the JavaScript application running in the
+browser
+Public API—Implements the API for third-party developers
+An API module implements each API operation in one of two ways. Some API opera-
+tions map directly to single service API operation. An API module implements these
+operations by routing requests to the corresponding service API operation. It might
+route requests using a generic routing module that reads a configuration file describ-
+ing the routing rules.
+ An API module implements other, more complex API operations using API com-
+position. The implementation of this API operation consists of custom code. Each API
+operation implementation handles requests by invoking multiple services and com-
+bining the results. 
+API GATEWAY OWNERSHIP MODEL
+An important question that you must answer is who is responsible for the develop-
+ment of the API gateway and its operation? There are a few different options. One is
+for a separate team to be responsible for the API gateway. The drawback to that is that
+it’s similar to SOA, where an Enterprise Service Bus (ESB) team was responsible for all
+ESB development. If a developer working on the mobile application needs access to a
+particular service, they must submit a request to the API gateway team and wait for
+them to expose the API. This kind of centralized bottleneck in the organization is very
+much counter to the philosophy of the microservice architecture, which promotes
+loosely coupled autonomous teams.
+ A better approach, which has been promoted by Netflix, is for the client teams—
+the mobile, web, and public API teams—to own the API module that exposes their
+API. An API gateway team is responsible for developing the Common module and for
+the operational aspects of the gateway. This ownership model, shown in figure 8.6,
+gives the teams control over their APIs.
+ When a team needs to change their API, they check in the changes to the source
+repository for the API gateway. To work well, the API gateway’s deployment pipeline
+must be fully automated. Otherwise, the client teams will often be blocked waiting for
+the API gateway team to deploy the new version. 
+USING THE BACKENDS FOR FRONTENDS PATTERN
+One concern with an API gateway is that responsibility for it is blurred. Multiple teams
+contribute to the same code base. An API gateway team is responsible for its opera-
+tion. Though not as bad as a SOA ESB, this blurring of responsibilities is counter to
+the microservice architecture philosophy of “if you build it, you own it.”
+ 

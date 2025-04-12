@@ -1,0 +1,26 @@
+9 Pass-through coupling is my name for what was originally described as “tramp coupling” by Meilir Page-
+Jones in The Practical Guide to Structured Systems Design. I chose to use a different term here due to the fact
+that I found the original term to be somewhat problematic and not terribly meaningful to a wider audience.
+Temporal coupling isn’t always bad; it’s just something to be aware of. As you have
+more microservices, with more complex interactions between them, the challenges of
+temporal coupling can increase to such a point that it becomes more difficult to scale
+your system and keep it working. One of the ways to avoid temporal coupling is to
+use some form of asynchronous communication, such as a message broker.
+Pass-Through Coupling
+“Pass-through coupling”9 describes a situation in which one microservice passes data
+to another microservice purely because the data is needed by some other microser‐
+vice further downstream. In many ways it’s one of the most problematic forms of
+implementation coupling, as it implies not only that the caller knows not just that the
+microservice it is invoking calls yet another microservice, but also that it potentially
+needs to know how that one-step-removed microservice works.
+As an example of pass-through coupling, let’s look more closely now at part of how
+MusicCorp’s order processing works. In Figure 2-4, we have an Order Processor,
+which is sending a request to Warehouse to prepare an order for dispatch. As part of
+the request payload, we send along a Shipping Manifest. This Shipping Manifest
+contains not only the address of the customer but also the shipping type. The Ware
+house just passes this manifest on to the downstream Shipping microservice.
+Figure 2-4. Pass-through coupling, in which data is passed to a microservice purely
+because another downstream service needs it
+Types of Coupling 
+| 
+43

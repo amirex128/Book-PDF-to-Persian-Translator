@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 187</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Designing a domain model (طراحی یک مدل دامنه) using the (با استفاده از) the DDD aggregate pattern (الگوی تجمیع DDD)</strong></h3>
+  <p>lazy loading (بارگذاری تنبل) و مشکلات مرتبط با آن را از بین می‌برد. مقیاس‌بندی database (پایگاه داده) با sharding (تکه تکه کردن) aggregates (تجمیع‌ها) نسبتاً ساده است.</p>
+  <p>RULE #3: ONE TRANSACTION CREATES OR UPDATES ONE AGGREGATE (قاعده شماره 3: یک transaction (تراکنش) فقط یک AGGREGATE (تجمیع) را ایجاد یا به‌روزرسانی می‌کند)</p>
+  <p>قانون دیگری که aggregates (تجمیع‌ها) باید از آن اطاعت کنند این است که یک transaction (تراکنش) فقط می‌تواند یک aggregate (تجمیع) را ایجاد یا به‌روزرسانی کند. وقتی سال‌ها پیش برای اولین بار در مورد آن خواندم، این قانون هیچ منطقی نداشت! در آن زمان، من در حال توسعه traditional monolithic applications (برنامه‌های یکپارچه سنتی) بودم که از یک RDBMS (سیستم مدیریت پایگاه داده رابطه‌ای) استفاده می‌کردند، بنابراین transactions (تراکنش‌ها) می‌توانستند چندین aggregates (تجمیع‌ها) را به‌روزرسانی کنند. امروزه، این محدودیت برای microservice architecture (معماری ریز سرویس) عالی است. این تضمین می‌کند که یک transaction (تراکنش) در یک service (سرویس) گنجانده شده است.</p>
+  <p>این محدودیت همچنین با model (مدل) تراکنش محدود اکثر NoSQL databases (پایگاه‌های داده NoSQL) مطابقت دارد. این قانون، پیاده‌سازی operations (عملیاتی) را که نیاز به ایجاد یا به‌روزرسانی چندین aggregates (تجمیع‌ها) دارند، پیچیده‌تر می‌کند. اما این دقیقاً همان مشکلی است که sagas (حماسه‌ها) (شرح داده شده در فصل 4) برای حل آن طراحی شده‌اند. هر گام از saga (حماسه) دقیقاً یک aggregate (تجمیع) را ایجاد یا به‌روزرسانی می‌کند. شکل 5.7 نحوه عملکرد این را نشان می‌دهد.</p>
+  <p>در این مثال، saga (حماسه) از سه transaction (تراکنش) تشکیل شده است. اولین transaction (تراکنش) aggregate X (تجمیع X) را در service A (سرویس A) به‌روزرسانی می‌کند. دو transaction (تراکنش) دیگر هر دو در service B (سرویس B) هستند. یک transaction (تراکنش) aggregate X (تجمیع X) را به‌روزرسانی می‌کند، و دیگری aggregate Y (تجمیع Y) را به‌روزرسانی می‌کند.</p>
+  <p>یک رویکرد جایگزین برای حفظ consistency (سازگاری) در چندین aggregates (تجمیع‌ها) در یک service (سرویس) واحد این است که تقلب کنید و چندین aggregates (تجمیع‌ها) را در یک transaction (تراکنش) به‌روزرسانی کنید. به عنوان مثال، service B (سرویس B) می‌تواند aggregates Y (تجمیع Y) و Z (تجمیع Z) را در یک transaction (تراکنش) واحد به‌روزرسانی کند. این تنها زمانی امکان‌پذیر است که از یک database (پایگاه داده)، مانند یک RDBMS (سیستم مدیریت پایگاه داده رابطه‌ای) که از یک model (مدل) تراکنش غنی پشتیبانی می‌کند، استفاده کنید. اگر از یک database (پایگاه داده) NoSQL استفاده می‌کنید که فقط تراکنش‌های ساده دارد، هیچ گزینه دیگری جز استفاده از sagas (حماسه‌ها) وجود ندارد.</p>
+  <p>یا آیا وجود دارد؟ معلوم می‌شود که aggregate boundaries (مرزهای تجمیع) در سنگ نوشته نشده‌اند. هنگام توسعه یک model (مدل) domain (دامنه)، شما می‌توانید انتخاب کنید که مرزها کجا قرار دارند. اما مانند یک قدرت استعماری قرن بیستم که مرزهای ملی را ترسیم می‌کند، شما باید مراقب باشید.</p>
+  <br>
+  <p>Service A (سرویس A)</p>
+  <p>Saga (حماسه)</p>
+  <p>Local transaction 1 (تراکنش محلی 1)</p>
+  <p>Create/update (ایجاد/به‌روزرسانی)</p>
+  <p>Aggregate X (تجمیع X)</p>
+  <p>Service B (سرویس B)</p>
+  <p>Local transaction 2 (تراکنش محلی 2)</p>
+  <p>Aggregate Y (تجمیع Y)</p>
+  <p>Local transaction 3 (تراکنش محلی 3)</p>
+  <p>Aggregate Z (تجمیع Z)</p>
+  <p>Create/update (ایجاد/به‌روزرسانی)</p>
+  <p>Create/update (ایجاد/به‌روزرسانی)</p>
+  <br>
+  <img src="figure_5_7.png" alt="Figure 5.7">
+  <p>A transaction (یک تراکنش) can (می‌تواند) only (فقط) create or update (ایجاد یا به‌روزرسانی کند) a single aggregate (یک تجمیع واحد)، so (بنابراین) an application (یک برنامه) uses (استفاده می‌کند) a saga (یک حماسه)</p>
+  <p>to update (برای به‌روزرسانی) multiple aggregates (تجمیع‌های متعدد). Each step (هر گام) of the saga (حماسه) creates or updates (ایجاد یا به‌روزرسانی می‌کند) one (یک) aggregate (تجمیع).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

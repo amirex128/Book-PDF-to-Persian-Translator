@@ -1,0 +1,54 @@
+372
+CHAPTER 11
+Developing production-ready services
+The [ftgo-order-service,8d8fdc37be104cc6,8d8fdc37be104cc6,false] part of the
+log entry (the SLF4J Mapped Diagnostic Context—see www.slf4j.org/manual.html)
+contains information from the distributed tracing infrastructure. It consists of four
+values:
+
+ftgo-order-service—The name of the application
+
+8d8fdc37be104cc6—The traceId
+
+8d8fdc37be104cc6—The spanId
+
+false—Indicates that this span wasn’t exported to the distributed tracing server
+If you search the logs for 8d8fdc37be104cc6, you’ll find all log entries for that request.
+ Figure 11.13 shows how distributed tracing works. There are two parts to distrib-
+uted tracing: an instrumentation library, which is used by each service, and a distributed
+tracing server. The instrumentation library manages the traces and spans. It also adds
+Span ABC: API gateway
+Trace XYZ
+API
+gateway
+GET/orders/1 HTTP/1.1
+....
+GET/orders/1 HTTP/1.1
+X-B3-TraceId: XYZ
+X-B3-ParentSpanId: ABC
+Service: API gateway
+TraceId: XYZ
+ParentSpan: NONE
+Span: ABC
+Views traces
+Service: Order Service
+TraceId: XYZ
+ParentSpan: ABC
+Span: DEF
+Span DEF: Order Service
+Transport
+Distributed tracing server
+Order
+Service
+Instrumentation
+library
+Instrumentation
+library
+User
+Trace
+database
+Figure 11.13
+Each service (including the API gateway) uses an instrumentation library. The 
+instrumentation library assigns an ID to each external request, propagates tracing state between 
+services, and reports spans to the distributed tracing server.
+ 

@@ -1,0 +1,54 @@
+458
+CHAPTER 13
+Refactoring to microservices
+endpoint for querying the customer contact information. Delivery Service calls this
+endpoint when it needs to notify a user that their order cannot be delivered on time.
+Let’s look at the design of each part of the integration, starting with the REST API for
+retrieving customer contact information.
+QUERYING CUSTOMER CONTACT INFORMATION USING CUSTOMERCONTACTINFOREPOSITORY
+As described in section 13.3.1, there are a couple of different ways that a service such
+as Delayed Delivery Service could read the monolith’s data. The simplest option is
+for Delayed Order Service to retrieve data using the monolith’s query API. This
+approach makes sense when retrieving the User contact information. There aren’t
+any latency or performance, issues because Delayed Delivery Service rarely needs to
+retrieve a user’s contact information, and the amount of data is quite small.
+ CustomerContactInfoRepository is an interface that enables Delayed Delivery
+Service to retrieve a consumer’s contact info. It’s implemented by a Customer-
+ContactInfoProxy, which retrieves the user information by invoking the monolith’s
+getCustomerContactInfo() REST endpoint. 
+PUBLISHING AND CONSUMING ORDER AND RESTAURANT DOMAIN EVENTS
+Unfortunately, it isn’t practical for Delayed Delivery Service to query the mono-
+lith for the state of all open Orders and Restaurant hours. That’s because it’s ineffi-
+cient to repeatedly transfer a large amount of data over the network. Consequently,
+Delayed Delivery Service must use the second, more complex option and main-
+tain a replica of Orders and Restaurants by subscribing to events published by the
+monolith. It’s important to remember that the replica isn’t a complete copy of the
+data from the monolith—it just stores a small subset of the attributes of Order and
+Restaurant entities.
+Monolith
+Event
+subscriber
+Delayed Order Service
+Domain
+event
+publisher
+REST
+endpoint
+Customer
+ContactInfo
+Proxy
+<Repository>
+Customer
+ContactInfo
+Repository
+Restaurant events
+getCustomerContactInfo()
+Order events
+Restaurant
+events
+Order
+events
+Figure 13.15
+The integration glue provides Delayed Delivery Service with access to the data owned by 
+the monolith.
+ 

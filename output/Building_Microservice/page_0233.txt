@@ -1,0 +1,29 @@
+scenario in which you have multiple teams all sharing this giant build. Who is in
+charge?
+Arguably, this approach is a form of monorepo. In practice, however, most of the
+monorepo implementations I’ve seen map multiple builds to different parts of the
+repo, something we’ll explore in more depth shortly. So you could see this pattern of
+one repo mapping to a single build as the worst form of monorepo for those wanting
+to build multiple independently deployable microservices.
+In practice, I almost never see this approach used, except in the earliest stages of
+projects. To be honest, either of the two following approaches are significantly pref‐
+erable, so we’ll focus on those instead.
+Pattern: One Repository per Microservice (aka Multirepo)
+With the one repository per microservice pattern (more commonly referred to as the
+multirepo pattern when being compared to the monorepo pattern), the code for each
+microservice is stored in its own source code repository, as we see in Figure 7-6. This
+approach leads to a straightforward mapping between source code changes and CI
+builds.
+Figure 7-6. The source code for each microservice is stored in a separate source code
+repository
+Any change to the User source code repository triggers the matching build, and if
+that passes, I’ll have a new version of my User microservice available for deployment.
+Having a separate repository for each microservice also allows you to change owner‐
+ship on a per-repository basis, something that makes sense if you want to consider a
+strong ownership model for your microservices (more on that shortly).
+The straightforward nature of this pattern does create some challenges, however.
+Specifically, developers may find themselves working with multiple repositories at a
+time, which is especially painful if they are trying to make changes across multiple
+Mapping Source Code and Builds to Microservices 
+| 
+207

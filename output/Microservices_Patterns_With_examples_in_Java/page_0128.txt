@@ -1,0 +1,39 @@
+98
+CHAPTER 3
+Interprocess communication in a microservice architecture
+transaction that creates, updates, and deletes business objects, the service sends mes-
+sages by inserting them into the OUTBOX table. Atomicity is guaranteed because this is a
+local ACID transaction.
+ The OUTBOX table acts a temporary message queue. The MessageRelay is a compo-
+nent that reads the OUTBOX table and publishes the messages to a message broker.
+You can use a similar approach with some NoSQL databases. Each business entity
+stored as a record in the database has an attribute that is a list of messages that need
+to be published. When a service updates an entity in the database, it appends a mes-
+sage to that list. This is atomic because it’s done with a single database operation. The
+challenge, though, is efficiently finding those business entities that have events and
+publishing them.
+ There are a couple of different ways to move messages from the database to the
+message broker. We’ll look at each one. 
+PUBLISHING EVENTS BY USING THE POLLING PUBLISHER PATTERN
+If the application uses a relational database, a very simple way to publish the messages
+inserted into the OUTBOX table is for the MessageRelay to poll the table for unpub-
+lished messages. It periodically queries the table:
+SELECT * FROM OUTBOX ORDERED BY ... ASC
+Next, the MessageRelay publishes those messages to the message broker, sending one
+to its destination message channel. Finally, it deletes those messages from the OUTBOX
+table:
+BEGIN
+DELETE FROM OUTBOX WHERE ID in (....)
+COMMIT
+Polling the database is a simple approach that works reasonably well at low scale. The
+downside is that frequently polling the database can be expensive. Also, whether you
+can use this approach with a NoSQL database depends on its querying capabilities.
+That’s because rather than querying an OUTBOX table, the application must query the
+Pattern: Transactional outbox
+Publish an event or message as part of a database transaction by saving it in an OUT-
+BOX in the database. See http://microservices.io/patterns/data/transactional-out-
+box.html.
+Pattern: Polling publisher
+Publish messages by polling the outbox in the database. See http://microser-
+vices.io/patterns/data/polling-publisher.html.
+ 

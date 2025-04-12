@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 257</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        چند دلیل وجود دارد که چرا جلوگیری از <em>dirty reads</em> مفید است:
+    </p>
+    <ul>
+        <li>
+            اگر یک <em>transaction</em> نیاز به <em>update</em> چندین object دارد، یک <em>dirty read</em> به این معنی است که یک <em>transaction</em> دیگر ممکن است برخی از <em>updates</em> را ببیند اما بقیه را نه. به عنوان مثال، در شکل 7-2، user ایمیل خوانده نشده جدید را می‌بیند، اما counter به‌روزرسانی شده را نمی‌بیند. این یک <em>dirty read</em> از ایمیل است. دیدن database در یک حالت <em>partially updated</em> برای کاربران گیج‌کننده است و ممکن است باعث شود <em>transactions</em> دیگر تصمیمات نادرستی بگیرند.
+        </li>
+        <li>
+            اگر یک <em>transaction aborts</em> شود، هر <em>writes</em> که انجام داده است باید <em>rolled back</em> شود (مانند شکل 7-3). اگر database به <em>dirty reads</em> اجازه دهد، این بدان معنی است که یک <em>transaction</em> ممکن است داده‌هایی را ببیند که بعداً <em>rolled back</em> می‌شوند - به عنوان مثال، که هرگز واقعاً به database <em>committed</em> نمی‌شوند. استدلال در مورد پیامدها به سرعت ذهن را منحرف می‌کند.
+        </li>
+    </ul>
+    <h4>No dirty writes</h4>
+    <p>
+        اگر دو <strong>Transactions</strong> همزمان سعی کنند یک object یکسان را در یک database <em>update</em> کنند، چه اتفاقی می‌افتد؟ ما نمی‌دانیم <em>writes</em> به چه ترتیبی اتفاق می‌افتند، اما معمولاً فرض می‌کنیم که <em>write</em> بعدی، <em>write</em> قبلی را بازنویسی می‌کند.
+    </p>
+    <p>
+        با این حال، اگر <em>write</em> قبلی بخشی از یک <em>transaction</em> باشد که هنوز <em>committed</em> نشده است، چه اتفاقی می‌افتد، بنابراین <em>write</em> بعدی یک مقدار <em>uncommitted</em> را بازنویسی می‌کند؟ به این <em>dirty write</em> می‌گویند [28]. <strong>Transactions</strong> های در حال اجرا در <em>read committed isolation level</em> باید از <em>dirty writes</em> جلوگیری کنند، معمولاً با تاخیر انداختن <em>write</em> دوم تا زمانی که <em>transaction write</em> اول <em>committed</em> یا <em>aborted</em> شود.
+    </p>
+    <p>
+        با جلوگیری از <em>dirty writes</em>، این سطح <em>isolation</em> از برخی از انواع مشکلات <em>concurrency</em> جلوگیری می‌کند:
+    </p>
+    <ul>
+        <li>
+            اگر transactions چندین object را <em>update</em> کنند، <em>dirty writes</em> می‌توانند منجر به نتیجه بدی شوند. به عنوان مثال، شکل 7-5 را در نظر بگیرید، که یک وب‌سایت فروش اتومبیل‌های کارکرده را نشان می‌دهد که در آن دو نفر، آلیس و باب، به طور همزمان در حال تلاش برای خرید یک ماشین یکسان هستند. خرید یک ماشین به دو <em>database writes</em> نیاز دارد: لیست در وب‌سایت باید به‌روزرسانی شود تا خریدار را منعکس کند، و فاکتور فروش باید برای خریدار ارسال شود.
+            <br>
+            در مورد شکل 7-5، فروش به باب اعطا می‌شود (زیرا او <em>update</em> برنده را به جدول فهرست‌ها انجام می‌دهد)، اما فاکتور برای آلیس ارسال می‌شود (زیرا او <em>update</em> برنده را به جدول فاکتورها انجام می‌دهد). <em>Read committed</em> از این حوادث ناگوار جلوگیری می‌کند.
+        </li>
+        <li>
+            با این حال، <em>read committed</em> از <em>race condition</em> بین دو increment counter در شکل 7-1 جلوگیری نمی‌کند. در این مورد، <em>write</em> دوم پس از <em>transaction</em> اول <em>committed</em> اتفاق می‌افتد، بنابراین این یک <em>dirty write</em> نیست. هنوز هم نادرست است، اما به دلیل دیگری—در "Preventing Lost Updates" در صفحه 242، ما در مورد چگونگی ایمن کردن چنین increment counter بحث خواهیم کرد.
+        </li>
+    </ul>
+    <p>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        235
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

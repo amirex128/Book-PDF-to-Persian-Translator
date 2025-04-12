@@ -1,0 +1,30 @@
+common functionality. The idea was for the team that currently managed the shared
+microservice to instead provide a framework, which really just consisted of the exist‐
+ing microservice with only the common functionality. Each country-specific team
+could launch its own instance of the skeleton microservice, plugging in its own cus‐
+tom functionality, as shown in Figure 15-4.
+Figure 15-4. A common framework could allow multiple variations of the same micro‐
+service to be operated by different teams
+The important thing to note here is that although we can share the common func‐
+tionality in this example across each country-specific variation of the microservice,
+this common functionality cannot be updated in all variations of the microservice at
+the same time without requiring a large-scale lockstep release. The core team that
+manages the framework might make a new version available, but it would be up to
+each team to pull in the latest version of the common code and redeploy it. In this
+specific situation, FinanceCo was OK with this restriction.
+It is worth highlighting that this specific situation was pretty rare, and something I’d
+encountered only once or twice before. My initial focus was on finding ways to either
+split apart the responsibilities of this central shared microservice or else reassign
+ownership. My concern was that creating internal frameworks can be a fraught activ‐
+ity. It’s all too easy for the framework to become overly bloated or to constrain the
+development of the teams using it. This is the sort of problem that doesn’t manifest
+itself on day one. When creating an internal framework, it all starts with the best
+intentions. Although in FinanceCo’s situation I felt it was the right way forward, I’d
+caution against adopting this approach too readily unless you’ve exhausted your
+other options.
+External contribution through libraries
+A variation of this approach would be to instead have each country-specific team
+contribute a library with its country-specific functionality inside it, and then have
+514 
+| 
+Chapter 15: Organizational Structures

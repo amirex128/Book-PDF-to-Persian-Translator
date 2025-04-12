@@ -1,0 +1,39 @@
+3 See “Google Uncloaks Once-Secret Server” by Stephen Shankland for more information on this, including an
+interesting overview of why Google thinks this approach can be superior to traditional UPS systems.
+Even for those of us not thinking at extreme scale, if we can embrace the possibility of
+failure we will be better off. For example, if we can handle the failure of a microser‐
+vice gracefully, then it follows that we can also do in-place upgrades of a service, as a
+planned outage is much easier to deal with than an unplanned one.
+We can also spend a bit less of our time trying to stop the inevitable and a bit more of
+our time dealing with it gracefully. I’m amazed at how many organizations put pro‐
+cesses and controls in place to try to stop failure from occurring but put little to no
+thought into actually making it easier to recover from failure in the first place.
+Understanding the things that are likely to fail is key to improving the robustness of
+our system.
+Baking in the assumption that everything can and will fail leads you to think differ‐
+ently about how you solve problems. Remember the story of the Google servers we
+discussed in Chapter 10? The Google systems were built in such a way that if a
+machine failed, it would not lead to interruption of service—improving the robust‐
+ness of the system as a whole. Google goes further in attempting to improve the
+robustness of its servers in other ways—it has discussed how each server contains its
+own local power supply to ensure it can keep operating if the data center has an out‐
+age.3 As you’ll recall from Chapter 10, the hard drives in these servers were attached
+with Velcro rather than screws to make it easy to replace drives—helping Google get
+the machine up and running quickly when a drive failed, and in turn helping that
+component of the system rebound more effectively.
+So let me repeat: at scale, even if you buy the best kit, the most expensive hardware,
+you cannot avoid the fact that things can and will fail. Therefore, you need to assume
+failure can happen. If you build this thinking into everything you do and plan for fail‐
+ure, you can make informed trade-offs. If you know your system can handle the fact
+that a server can and will fail, there may be diminishing returns from spending more
+and more money on individual machines. Instead, having a larger number of cheaper
+machines (perhaps using cheaper components and some Velcro!) like Google did
+may make a lot more sense.
+How Much Is Too Much?
+We touched on the topic of cross-functional requirements in Chapter 9. Understand‐
+ing cross-functional requirements is all about considering aspects like durability of
+data, availability of services, throughput, and acceptable latency of operations. Many
+of the techniques covered in this chapter talk about approaches to implement these
+392 
+| 
+Chapter 12: Resiliency

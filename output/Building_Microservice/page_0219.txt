@@ -1,0 +1,42 @@
+Order Placed event, it knows its job is to reserve the appropriate stock and fire an
+event once that is done. If the stock couldn’t be received, the Warehouse would need
+to raise an appropriate event (an Insufficient Stock event, perhaps), which might
+lead to the order being aborted.
+We also see in this example how events can facilitate parallel processing. When the
+Payment Taken event is fired by the Payment Gateway, it causes reactions in both the
+Loyalty and Warehouse microservices. The Warehouse reacts by dispatching the
+package, while the Loyalty microservice reacts by awarding points.
+Typically, you’d use some sort of message broker to manage the reliable broadcast
+and delivery of events. It’s possible that multiple microservices may react to the same
+event, and that is where you would use a topic. Parties interested in a certain type of
+event would subscribe to a specific topic without having to worry about where these
+events came from, and the broker ensures the durability of the topic and that the
+events on it are successfully delivered to subscribers. As an example, we might have a
+Recommendation service that also listens to Order Placed events and uses that to con‐
+struct a database of music choices you might like.
+In the preceding architecture, no one service knows about any other microservice.
+They need to know only what to do when a certain event is received—we’ve drasti‐
+cally reduced the amount of domain coupling. Inherently, this makes for a much less
+coupled architecture. As the implementation of the process is decomposed and dis‐
+tributed among the three microservices here, we also avoid the concerns about cen‐
+tralization of logic (if you don’t have a place where logic can be centralized, then it
+won’t be centralized!).
+The flip side of this is that it can be harder to work out what is going on. With
+orchestration, our process was explicitly modeled in our orchestrator. Now, with this
+architecture as it is presented, how would you build up a mental model of what the
+process is supposed to be? You’d have to look at the behavior of each service in isola‐
+tion and reconstitute this picture in your own head—far from straightforward, even
+with a simple business process like this one.
+The lack of an explicit representation of our business process is bad enough, but we
+also lack a way of knowing what state a saga is in, which can deny us the chance to
+attach compensating actions when required. We can push some responsibility to the
+individual services for carrying out compensating actions, but fundamentally we
+need a way of knowing what state a saga is in for some kinds of recovery. The lack of
+a central place to interrogate around the status of a saga is a big problem. We get that
+with orchestration, so how do we solve that here?
+One of the easiest ways of doing this is to project a view regarding the state of a saga
+by consuming the events being emitted. If we generate a unique ID for the saga, what
+is known as a correlation ID, we can put it into all of the events that are emitted as
+Sagas 
+| 
+193

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 323</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در یک سناریو کمی وحشتناک‌تر، node نیمه قطع شده ممکن است متوجه شود که پیام‌هایی که ارسال می‌کند، توسط سایر nodes ها تأیید نمی‌شوند، و بنابراین متوجه می‌شود که باید یک <em>fault</em> در شبکه وجود داشته باشد. با این وجود، node به اشتباه توسط سایر nodes ها <em>dead</em> اعلام می‌شود، و node نیمه قطع شده نمی‌تواند در مورد آن کاری انجام دهد.
+    </p>
+    <p>
+        به عنوان یک سناریو سوم، یک node را تصور کنید که یک توقف طولانی <em>stop-the-world garbage collection</em> را تجربه می‌کند. تمام <em>threads</em> های node توسط GC <em>preempted</em> می‌شوند و برای یک دقیقه متوقف می‌شوند، و در نتیجه، هیچ درخواستی پردازش نمی‌شود و هیچ پاسخی ارسال نمی‌شود. سایر nodes ها منتظر می‌مانند، دوباره تلاش می‌کنند، بی‌صبر می‌شوند، و در نهایت node را <em>dead</em> اعلام می‌کنند و آن را روی آمبولانس قرار می‌دهند. سرانجام، GC به پایان می‌رسد و <em>threads</em> های node به گونه‌ای ادامه می‌دهند که گویی هیچ اتفاقی نیفتاده است. سایر nodes ها شگفت‌زده می‌شوند زیرا node که قرار بود <em>dead</em> باشد ناگهان سر خود را از تابوت بلند می‌کند، کاملاً سالم، و شروع به گپ زدن شاد با تماشاگران می‌کند. در ابتدا، node GCing حتی متوجه نمی‌شود که یک دقیقه کامل گذشته است و آن را <em>dead</em> اعلام کرده‌اند—از دیدگاه آن، تقریباً هیچ زمانی از زمانی که آخرین بار با سایر nodes صحبت می‌کرد، نگذشته است.
+    </p>
+    <p>
+        درس اخلاقی این داستان‌ها این است که یک node لزوماً نمی‌تواند به قضاوت خود از یک موقعیت اعتماد کند. یک <em>distributed system</em> نمی‌تواند منحصراً به یک node واحد متکی باشد، زیرا یک node ممکن است در هر زمانی شکست بخورد، که به طور بالقوه system را متوقف و ناتوان از بازیابی کند.
+        <br>
+        در عوض، بسیاری از الگوریتم‌های <em>distributed</em> به یک <em>quorum</em> متکی هستند، یعنی، رأی‌گیری در میان nodes (به "Quorums for reading and writing" در صفحه 179 مراجعه کنید): تصمیم‌گیری‌ها به حداقل تعدادی از آرا از چندین node نیاز دارند تا وابستگی به هر node خاصی را کاهش دهند.
+    </p>
+    <p>
+        این شامل تصمیماتی در مورد اعلام <em>dead</em> شدن nodes است. اگر یک <em>quorum</em> از nodes، node دیگری را <em>dead</em> اعلام کند، پس باید <em>dead</em> در نظر گرفته شود، حتی اگر آن node هنوز هم خیلی احساس زنده بودن کند. node فردی باید از تصمیم <em>quorum</em> پیروی کند و کنار بکشد.
+    </p>
+    <p>
+        رایج‌ترین، <em>quorum</em>، یک اکثریت مطلق از بیش از نیمی از nodes است (اگرچه انواع دیگر quorums امکان‌پذیر است). یک <em>majority quorum</em> به system اجازه می‌دهد تا در صورت شکست nodes های فردی به کار خود ادامه دهد (با سه node، یک <em>failure</em> را می‌توان تحمل کرد. با پنج node، دو <em>failure</em> را می‌توان تحمل کرد). با این حال، هنوز هم ایمن است، زیرا فقط یک اکثریت در system می‌تواند وجود داشته باشد—دو اکثریت با تصمیمات متناقض نمی‌توانند همزمان وجود داشته باشند. ما استفاده از <em>quorums</em> را با جزئیات بیشتری هنگام رسیدن به الگوریتم‌های <em>consensus</em> در فصل 9 مورد بحث قرار خواهیم داد.
+    </p>
+    <h4>The leader and the lock</h4>
+    <p>
+        اغلب، یک system نیاز دارد که فقط یک مورد از چیزی وجود داشته باشد. به عنوان مثال:
+    </p>
+    <ul>
+        <li>
+            فقط به یک node اجازه داده می‌شود که leader برای یک partition database باشد، تا از <em>split brain</em> جلوگیری شود (به "Handling Node Outages" در صفحه 156 مراجعه کنید).
+        </li>
+        <li>
+            فقط به یک transaction یا client اجازه داده می‌شود که <em>lock</em> را برای یک <em>resource</em> یا object خاص نگه دارد، تا از نوشتن همزمان به آن و خراب کردن آن جلوگیری شود.
+            <br>
+            Knowledge, Truth, and Lies
+            <br>
+            |
+            <br>
+            301
+        </li>
+    </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

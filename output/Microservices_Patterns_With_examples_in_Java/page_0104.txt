@@ -1,0 +1,44 @@
+74
+CHAPTER 3
+Interprocess communication in a microservice architecture
+ Many developers claim their HTTP-based APIs are RESTful. But as Roy Fielding
+describes in a blog post, not all of them actually are (http://roy.gbiv.com/untangled/
+2008/rest-apis-must-be-hypertext-driven). To understand why, let’s take a look at the
+REST maturity model.
+THE REST MATURITY MODEL
+Leonard Richardson (no relation to your author) defines a very useful maturity model
+for REST (http://martinfowler.com/articles/richardsonMaturityModel.html) that con-
+sists of the following levels:
+Level 0—Clients of a level 0 service invoke the service by making HTTP POST
+requests to its sole URL endpoint. Each request specifies the action to perform,
+the target of the action (for example, the business object), and any parameters.
+Level 1—A level 1 service supports the idea of resources. To perform an action
+on a resource, a client makes a POST request that specifies the action to per-
+form and any parameters.
+Level 2—A level 2 service uses HTTP verbs to perform actions: GET to retrieve,
+POST to create, and PUT to update. The request query parameters and body, if
+any, specify the actions' parameters. This enables services to use web infrastruc-
+ture such as caching for GET requests.
+Level 3—The design of a level 3 service is based on the terribly named
+HATEOAS (Hypertext As The Engine Of Application State) principle. The
+basic idea is that the representation of a resource returned by a GET request
+contains links for performing actions on that resource. For example, a client
+can cancel an order using a link in the representation returned by the GET
+request that retrieved the order. The benefits of HATEOAS include no longer
+having to hard-wire URLs into client code (www.infoq.com/news/2009/04/
+hateoas-restful-api-advantages).
+I encourage you to review the REST APIs at your organization to see which level they
+correspond to. 
+SPECIFYING REST APIS
+As mentioned earlier in section 3.1, you must define your APIs using an interface defi-
+nition language (IDL). Unlike older communication protocols like CORBA and
+SOAP, REST did not originally have an IDL. Fortunately, the developer community
+has rediscovered the value of an IDL for RESTful APIs. The most popular REST IDL is
+the Open API Specification (www.openapis.org), which evolved from the Swagger
+open source project. The Swagger project is a set of tools for developing and docu-
+menting REST APIs. It includes tools that generate client stubs and server skeletons
+from an interface definition. 
+THE CHALLENGE OF FETCHING MULTIPLE RESOURCES IN A SINGLE REQUEST
+REST resources are usually oriented around business objects, such as Consumer and
+Order. Consequently, a common problem when designing a REST API is how to
+ 

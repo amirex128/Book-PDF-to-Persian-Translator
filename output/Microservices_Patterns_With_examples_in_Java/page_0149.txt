@@ -1,0 +1,57 @@
+119
+Coordinating sagas
+The happy path through this saga is as follows:
+1
+Order Service creates an Order in the APPROVAL_PENDING state and publishes
+an OrderCreated event.
+2
+Consumer Service consumes the OrderCreated event, verifies that the con-
+sumer can place the order, and publishes a ConsumerVerified event.
+3
+Kitchen Service consumes the OrderCreated event, validates the Order, cre-
+ates a Ticket in a CREATE_PENDING state, and publishes the TicketCreated event.
+4
+Accounting Service consumes the OrderCreated event and creates a Credit-
+CardAuthorization in a PENDING state.
+5
+Accounting Service consumes the TicketCreated and ConsumerVerified
+events, charges the consumer’s credit card, and publishes the CreditCard-
+Authorized event.
+6
+Kitchen Service consumes the CreditCardAuthorized event and changes the
+state of the Ticket to AWAITING_ACCEPTANCE.
+7
+Order Service receives the CreditCardAuthorized events, changes the state of
+the Order to APPROVED, and publishes an OrderApproved event.
+The Create Order Saga must also handle the scenario where a saga participant rejects
+the Order and publishes some kind of failure event. For example, the authorization of
+the consumer’s credit card might fail. The saga must execute the compensating trans-
+actions to undo what’s already been done. Figure 4.5 shows the flow of events when
+the AccountingService can’t authorize the consumer’s credit card.
+ The sequence of events is as follows:
+1
+Order Service creates an Order in the APPROVAL_PENDING state and publishes
+an OrderCreated event.
+2
+Consumer Service consumes the OrderCreated event, verifies that the con-
+sumer can place the order, and publishes a ConsumerVerified event.
+3
+Kitchen Service consumes the OrderCreated event, validates the Order, creates
+a Ticket in a CREATE_PENDING state, and publishes the TicketCreated event.
+4
+Accounting Service consumes the OrderCreated event and creates a Credit-
+CardAuthorization in a PENDING state.
+5
+Accounting Service consumes the TicketCreated and ConsumerVerified
+events, charges the consumer’s credit card, and publishes a Credit Card
+Authorization Failed event.
+6
+Kitchen Service consumes the Credit Card Authorization Failed event and
+changes the state of the Ticket to REJECTED.
+7
+Order Service consumes the Credit Card Authorization Failed event and
+changes the state of the Order to REJECTED.
+As you can see, the participants of choreography-based sagas interact using publish/
+subscribe. Let’s take a closer look at some issues you’ll need to consider when imple-
+menting publish/subscribe-based communication for your sagas. 
+ 

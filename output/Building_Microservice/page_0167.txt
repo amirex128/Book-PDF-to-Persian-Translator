@@ -1,0 +1,41 @@
+Personally, though, I am still a fan of XML. Some of the tool support is better. For
+example, if I want to extract only certain parts of the payload (a technique we’ll dis‐
+cuss more in “Handling Change Between Microservices” on page 144), I can use
+XPATH, which is a well-understood standard with lots of tool support, or even CSS
+selectors, which many find even easier. With JSON, I have JSONPath, but this is not
+as widely supported. I find it odd that people pick JSON because it is nice and light‐
+weight but then try to push concepts into it like hypermedia controls that already
+exist in XML. I accept, though, that I am probably in the minority here and that
+JSON is the format of choice for many people!
+Binary Formats
+While textual formats have benefits such as making it easy for humans to read them
+and provide a lot of interoperability with different tools and technologies, the world
+of binary serialization protocols is where you want to be if you start getting worried
+about payload size or about the efficiencies of writing and reading the payloads. Pro‐
+tocol buffers have been around for a while and are often used outside the scope of
+gRPC—they probably represent the most popular binary serialization format for
+microservice-based communication.
+This space is large, however, and a number of other formats have been developed
+with a variety of requirements in mind. Simple Binary Encoding, Cap’n Proto, and
+FlatBuffers all come to mind. Although benchmarks abound for each of these for‐
+mats, highlighting their relevant benefits compared to protocol buffers, JSON, or
+other formats, benchmarks suffer from a fundamental problem in that they may not
+necessarily represent how you are going to use them. If you’re looking to eke the last
+few bytes out of your serialization format, or to shave microseconds off the time
+taken to read or write these payloads, I strongly suggest you carry out your own com‐
+parison of these various formats. In my experience, the vast majority of systems
+rarely have to worry about such optimizations, as they can often achieve the improve‐
+ments they are looking for by sending less data or by not making the call at all. How‐
+ever, if you are building an ultra-low-latency distributed system, make sure you’re
+prepared to dive headfirst into the world of binary serialization formats.
+Schemas
+A discussion that comes up time and again is whether we should use schemas to
+define what our endpoints expose and what they accept. Schemas can come in lots of
+different types, and picking a serialization format will typically define which schema
+technology you can use. If you’re working with raw XML, you’d use XML Schema
+Definition (XSD); if you’re working with raw JSON, you’d use JSON Schema. Some
+of the technology choices we’ve touched on (specifically, a sizable subset of the RPC
+options) require the use of explicit schemas, so if you picked those technologies you’d
+Schemas 
+| 
+141

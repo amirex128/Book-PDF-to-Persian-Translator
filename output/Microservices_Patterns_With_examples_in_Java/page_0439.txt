@@ -1,0 +1,61 @@
+409
+Deploying the FTGO application with Kubernetes
+Telemetry—Captures metrics about network traffic and implements distributed
+tracing
+Policy enforcement—Enforces quotas and rate limits
+This section focuses on Istio’s traffic-management capabilities.
+ Figure 12.11 shows Istio’s architecture. It consists of a control plane and a data
+plane. The control plane implements management functions, including configuring
+the data plane to route traffic. The data plane consists of Envoy proxies, one per ser-
+vice instance.
+ The two main components of the control plane are the Pilot and the Mixer. The Pilot
+extracts information about deployed services from the underlying infrastructure. When
+running on Kubernetes, for example, the Pilot retrieves the services and healthy pods. It
+configures the Envoy proxies to route traffic according to the defined routing rules. The
+Mixer collects telemetry from the Envoy proxies and enforces policies.
+API Gateway
+container
+GET/consumers/1
+GET/consumers/1
+GET/consumers/1
+Host: ftgo-consumer-service
+GET/consumers/1
+Host: ftgo-consumer-service
+Pod
+Service registry
+Consumer
+Service
+container
+Istio Envoy
+container
+Logging
+Server
+Service
+Pod
+Metrics
+Server
+Istio Envoy
+container
+Mixer
+Pilot
+Istio control plane
+Conﬁgures
+Checks
+Telemetry
+Kubernetes
+Pod
+Key
+Conﬁguration
+Requests
+Policy check
+Telemetry
+Monitoring infrastructure
+Istio data plane
+Queries for deployed services
+Figure 12.11
+Istio consists of a control plane, whose components include the Pilot and the Mixer, and a data 
+plane, which consists of Envoy proxy servers. The Pilot extracts information about deployed services from the 
+underlying infrastructure and configures the data plane. The Mixer enforces policies such as quotas and gathers 
+telemetry, reporting it to the monitoring infrastructure servers. The Envoy proxy servers route traffic in and out of 
+services. There’s one Envoy proxy server per service instance.
+ 

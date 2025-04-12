@@ -1,0 +1,45 @@
+130
+CHAPTER 4
+Managing transactions with sagas
+isn’t committed and could potentially change. The flag can either be a lock that prevents
+other transactions from accessing the record or a warning that indicates that other
+transactions should treat that record with suspicion. It’s cleared by either a retriable
+transaction—saga is completing successfully—or by a compensating transaction: the
+saga is rolling back.
+ The Order.state field is a great example of a semantic lock. The *_PENDING states,
+such as APPROVAL_PENDING and REVISION_PENDING, implement a semantic lock. They
+tell other sagas that access an Order that a saga is in the process of updating the Order.
+For instance, the first step of the Create Order Saga, which is a compensatable trans-
+action, creates an Order in an APPROVAL_PENDING state. The final step of the Create
+Order Saga, which is a retriable transaction, changes the field to APPROVED. A compen-
+sating transaction changes the field to REJECTED.
+ Managing the lock is only half the problem. You also need to decide on a case-by-
+case basis how a saga should deal with a record that has been locked. Consider, for
+example, the cancelOrder() system command. A client might invoke this operation
+to cancel an Order that’s in the APPROVAL_PENDING state.
+ There are a few different ways to handle this scenario. One option is for the cancel-
+Order() system command to fail and tell the client to try again later. The main benefit
+of this approach is that it’s simple to implement. The drawback, however, is that it
+makes the client more complex because it has to implement retry logic.
+ Another option is for cancelOrder() to block until the lock is released. A benefit
+of using semantic locks is that they essentially recreate the isolation provided by ACID
+transactions. Sagas that update the same record are serialized, which significantly
+reduces the programming effort. Another benefit is that they remove the burden of
+retries from the client. The drawback is that the application must manage locks. It
+must also implement a deadlock detection algorithm that performs a rollback of a
+saga to break a deadlock and re-execute it. 
+COUNTERMEASURE: COMMUTATIVE UPDATES
+One straightforward countermeasure is to design the update operations to be com-
+mutative. Operations are commutative if they can be executed in any order. An
+Account’s debit() and credit() operations are commutative (if you ignore overdraft
+checks). This countermeasure is useful because it eliminates lost updates.
+ Consider, for example, a scenario where a saga needs to be rolled back after a com-
+pensatable transaction has debited (or credited) an account. The compensating trans-
+action can simply credit (or debit) the account to undo the update. There’s no
+possibility of overwriting updates made by other sagas. 
+COUNTERMEASURE: PESSIMISTIC VIEW
+Another way to deal with the lack of isolation is the pessimistic view countermeasure. It
+reorders the steps of a saga to minimize business risk due to a dirty read. Consider, for
+example, the scenario earlier used to describe the dirty read anomaly. In that scenario,
+the Create Order Saga performed a dirty read of the available credit and created an
+ 

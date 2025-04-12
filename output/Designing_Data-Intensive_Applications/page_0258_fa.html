@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 258</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <figure>
+        <img src="figure7-5.png" alt="Figure 7-5. With dirty writes, conflicting writes from different transactions can be mixed up.">
+        <figcaption>Figure 7-5. With dirty writes, conflicting writes from different transactions can be mixed up.</figcaption>
+    </figure>
+    <p>
+        با <em>dirty writes</em>، <em>writes</em> های متناقض از <strong>Transactions</strong> های مختلف را می‌توان با هم مخلوط کرد.
+    </p>
+    <h4>Implementing read committed</h4>
+    <p>
+        <em>Read committed</em> یک <em>isolation level</em> بسیار محبوب است. این تنظیم پیش‌فرض در Oracle 11g، PostgreSQL، SQL Server 2012، MemSQL و بسیاری دیگر از databases ها است [8].
+    </p>
+    <p>
+        متداول‌ترین، databases ها از <em>row-level locks</em> برای جلوگیری از <em>dirty writes</em> استفاده می‌کنند: وقتی یک transaction می‌خواهد یک object خاص (row یا document) را اصلاح کند، ابتدا باید یک lock روی آن object به دست آورد. سپس باید آن <em>lock</em> را تا زمانی که <em>transaction</em> <em>committed</em> یا <em>aborted</em> شود، نگه دارد. فقط یک <em>transaction</em> می‌تواند <em>lock</em> را برای هر object معینی نگه دارد. اگر یک <em>transaction</em> دیگر بخواهد به همان object بنویسد، باید منتظر بماند تا <em>transaction</em> اول <em>committed</em> یا <em>aborted</em> شود قبل از اینکه بتواند <em>lock</em> را به دست آورد و ادامه دهد. این <em>locking</em> به طور خودکار توسط databases در حالت <em>read committed</em> (یا سطوح <em>isolation</em> قوی‌تر) انجام می‌شود.
+    </p>
+    <p>
+        چگونه از <em>dirty reads</em> جلوگیری کنیم؟ یک گزینه این است که از همان <em>lock</em> استفاده کنیم، و از هر <em>transaction</em> که می‌خواهد یک object را بخواند، بخواهیم که به طور خلاصه <em>lock</em> را به دست آورد و سپس بلافاصله پس از خواندن آن را دوباره آزاد کند. این امر اطمینان حاصل می‌کند که یک <em>read</em> نمی‌تواند در حالی که یک object دارای یک مقدار <em>dirty, uncommitted</em> است، اتفاق بیفتد (زیرا در آن زمان <em>lock</em> توسط <em>transaction</em> که <em>write</em> را انجام داده است، نگه داشته می‌شود).
+    </p>
+    <p>
+        با این حال، رویکرد نیاز به <em>read locks</em> در عمل خوب جواب نمی‌دهد، زیرا یک <em>long-running write transaction</em> می‌تواند <em>read-only transactions</em> های زیادی را مجبور به انتظار کند تا <em>long-running transaction</em> تکمیل شود. این به زمان پاسخگویی <em>read-only transactions</em> آسیب می‌رساند و برای operability بد است: یک کاهش سرعت در یک part از یک application می‌تواند یک اثر ضربه‌ای در یک part کاملاً متفاوت از application داشته باشد، به دلیل انتظار برای locks.
+    </p>
+    <p>
+        236
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0258/image_1.png" alt="Image from page 258" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

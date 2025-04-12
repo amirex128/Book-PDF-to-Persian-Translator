@@ -1,0 +1,40 @@
+Limiting ourselves to testing only in a preproduction environment, though, is ham‐
+stringing us. We are reducing the places in which we can pick up issues, and we’re
+also eliminating the possibility of testing the quality of our software in the most
+important location—where it is going to be used.
+We can and should also look to apply testing in a production environment. This can
+be done in a safe manner, can provide higher-quality feedback than preproduction
+testing, and, as we see, is likely something you’re already doing, whether you realize it
+or not.
+Types of In-Production Testing
+There is a long list of different tests that we can carry out in production, ranging from
+the simple to the complex. To start off with, let’s think about something as simple as
+a ping check to make sure that a microservice is live. Simply checking to see if a
+microservice instance is running is a type of test—we just don’t see it as that, as it is
+an activity that is typically handled by “operations” people. But fundamentally, some‐
+thing as simple as determining whether or not a microservice is up can be viewed as a
+test—one that we run frequently on our software.
+Smoke tests are another example of in-production testing. Typically done as part of
+the deployment activities, a smoke test ensures that the deployed software is operat‐
+ing correctly. These smoke tests will normally be done on the real, running software
+before it is released to the users (more on that shortly).
+Canary releases, which we covered in Chapter 8, are also a mechanism that is argua‐
+bly about testing. We release a new version of our software to a small portion of users
+to “test” that it works correctly. If it does, we can roll out the software to a larger part
+of our user base, perhaps in a fully automated way.
+Another example of in-production testing is injecting fake user behavior into the sys‐
+tem to make sure it works as expected—for example, placing an order for a fake cus‐
+tomer, or registering a new (fake) user in the real production system. This type of test
+can sometimes get pushback, because people are worried about the impact it might
+have on the production system. So if you create tests like this, be sure to make them
+safe.
+Making Testing in Production Safe
+If you decide to do testing in production (and you should!), it’s important that the
+tests not cause production issues, either by introducing system instability or by taint‐
+ing production data. Something as simple as pinging a microservice instance to make
+sure it is live is likely to be a safe operation—if this causes system instability, you
+likely have pretty serious issues that need addressing, unless you’ve accidentally made
+your health check system an internal denial of service attack.
+298 
+| 
+Chapter 9: Testing

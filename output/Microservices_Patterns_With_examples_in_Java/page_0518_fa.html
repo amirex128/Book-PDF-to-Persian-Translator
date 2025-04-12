@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 518</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   زمانی که ما با یک system مبتنی بر service روبرو هستیم، لازم است که به موارد متعددی بپردازیم.
+  </p>
+  <p>
+   همچنین از آنجایی‌که serviceها در یک monolith نگهداری می‌شوند، باید اطمینان حاصل کنیم که
+   به درستی این تعامل‌ها شکل می‌گیرند.
+  </p>
+  <p>
+   در این context، ما در مورد تعامل با service، با استفاده از domain eventsها، بحث خواهیم کرد.
+  </p>
+  <p>
+   API که به service اجازه می‌دهد که به data monolith، دسترسی داشته باشد، باید طراحی شود.
+  </p>
+  <p>
+   برای مثال، ما در حال بررسی یک API هستیم.
+  </p>
+  <p>
+   ما باید در مورد طراحی domain model برای service، اطلاعاتی را جمع‌آوری کنیم.
+  </p>
+  <p>
+   ما به‌طور خاص به این اشاره می‌کنیم که چگونه service باید dataهای monolith را بخواند.
+  </p>
+  <p>
+   بنابراین، ما به یک adapter و یک proxy برای ایجاد تعامل، نیاز داریم.
+  </p>
+  <p>
+   اکنون بیایید به چگونگی ایجاد ارتباط با data که به monolith تعلق دارد، نگاهی بیندازیم.
+  </p>
+  <p>
+   به‌عنوان‌مثال، ما از یک event استفاده می‌کنیم، یعنی یک domain event.
+  </p>
+  <p>
+   با این‌که serviceها در یک environment جداگانه هستند، ما به بررسی این‌که چگونه باید آنها را به
+   monolith متصل کنیم، می‌پردازیم.
+  </p>
+  <p>
+   پس ما به domain eventها نیاز داریم.
+  </p>
+  <p>
+   به‌عنوان‌مثال، ما باید یک OrderCreated event را منتشر کنیم.
+  </p>
+  <p>
+   در این معماری، ما فرض را بر این می‌گیریم که داده‌ها به‌صورت صحیح
+   نگهداری می‌شوند.
+  </p>
+  <p>
+   ما نیازی به بررسی detailsهای بسیار در مورد order نداریم.
+  </p>
+  <p>
+   ما همچنین باید معماری را درک کنیم،
+  </p>
+  <p>
+   به‌عنوان‌مثال، ما باید در مورد یک طراحی برای Order صحبت کنیم.
+  </p>
+  <p>
+   سپس ما به یک API، از یک Service، نیاز داریم.
+  </p>
+  <p>
+   برای آن ما نیاز داریم که یک interface را در نظر بگیریم.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

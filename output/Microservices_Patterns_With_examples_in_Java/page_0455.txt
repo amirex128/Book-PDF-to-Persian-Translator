@@ -1,0 +1,61 @@
+425
+Deploying a RESTful service using AWS Lambda and AWS Gateway
+12.6.3 Deploying lambda functions using the Serverless framework
+Using the tools provided by AWS to deploy lambda functions and configure the API
+gateway is quite tedious. Fortunately, the Serverless open source project makes using
+lambda functions a lot easier. When using Serverless, you write a simple server-
+less.yml file that defines your lambda functions and their RESTful endpoints.
+Serverless then deploys the lambda functions and creates and configures an API gate-
+way that routes requests to them.
+ The following listing is an excerpt of the serverless.yml that deploys Restaurant
+Service as a lambda.
+service: ftgo-application-lambda
+provider:
+name: aws
+  
+runtime: java8
+timeout: 35
+region: ${env:AWS_REGION}
+stage: dev
+environment:
+  
+SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+SPRING_DATASOURCE_URL: ...
+SPRING_DATASOURCE_USERNAME: ...
+SPRING_DATASOURCE_PASSWORD: ...
+package:
+  
+artifact: ftgo-restaurant-service-aws-lambda/build/distributions/
+ftgo-restaurant-service-aws-lambda.zip
+functions:
+  
+create-restaurant:
+handler: net.chrisrichardson.ftgo.restaurantservice.lambda
+.CreateRestaurantRequestHandler
+events:
+- http:
+path: restaurants
+method: post
+find-restaurant:
+handler: net.chrisrichardson.ftgo.restaurantservice.lambda
+.FindRestaurantRequestHandler
+events:
+- http:
+path: restaurants/{restaurantId}
+method: get
+You can then use the serverless deploy command, which reads the serverless.yml
+file, deploys the lambda functions, and configures the AWS API Gateway. After a short
+Listing 12.12
+The serverless.yml deploys Restaurant Service.
+Tells serverless to 
+deploy on AWS
+Supplies the service’s 
+externalized configuration 
+via environment variables
+The ZIP file 
+containing the 
+lambda functions
+Lambda function definitions 
+consisting of the handler 
+function and HTTP endpoint
+ 

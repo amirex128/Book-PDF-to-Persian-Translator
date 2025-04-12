@@ -1,0 +1,24 @@
+Making sure the microservice has the information it needs to assess finer-grained
+authorization requests is worthy of further discussion—we’ll revisit this when we
+look at JWTs in a moment.
+Instead, favor coarse-grained roles modeled around how your organization works.
+Going all the way back to the early chapters, remember that we are building software
+to match how our organization works. So use your roles in this way too.
+The Confused Deputy Problem
+Having a principal authenticate with the system as a whole using something like an
+SSO gateway is simple enough, and this could be enough to control access to a given
+microservice. But what happens if that microservice then needs to make additional
+calls to complete an operation? This can leave us open to a type of vulnerability
+known as the confused deputy problem. This occurs when an upstream party tricks
+an intermediate party into doing things it shouldn’t be doing. Let’s look at a concrete
+example in Figure 11-8, which illustrates MusicCorp’s online shopping site. Our
+browser-based JavaScript UI talks to the server-side Web Shop microservice, which is
+a type of backend for frontend. We’ll explore this in more depth in “Pattern: Backend
+for Frontend (BFF)” on page 480, but for the moment, think of it as a server-side com‐
+ponent that performs call aggregation and filtering for a specific external interface (in
+our case, our browser-based JavaScript UI). Calls made between the browser and the
+Web Shop can be authenticated using OpenID Connect. So far, so good.
+Figure 11-8. An example where a confused deputy could come into play
+380 
+| 
+Chapter 11: Security

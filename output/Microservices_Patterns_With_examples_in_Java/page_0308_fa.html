@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 308</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>فصل 8</h3>
+  <h3>الگوهای API خارجی</h3>
+  <p>
+   ساده و آسان برای درک است. در این مثال، متد getOrderDetails()، چهار service را به صورت موازی فراخوانی می‌کند و نتایج را برای ایجاد یک object از نوع OrderDetails ترکیب می‌کند.
+  </p>
+  <p>
+   متد getOrderDetails() یک ServerRequest را که نشان‌دهنده Spring WebFlux از یک request HTTP است، به عنوان پارامتر می‌گیرد و موارد زیر را انجام می‌دهد:
+  </p>
+  <ol>
+   <li>
+    orderId را از path استخراج می‌کند.
+   </li>
+   <li>
+    چهار service را به صورت asynchronous از طریق proxy هایشان که Monos را برمی‌گردانند، فراخوانی می‌کند.
+    به منظور بهبود availability، getOrderDetails() با نتایج تمام service ها به جز OrderService به عنوان optional رفتار می‌کند. اگر یک Mono که توسط یک service optional برگردانده می‌شود، شامل یک exception باشد، فراخوانی onErrorReturn() آن را به یک Mono شامل یک Optional خالی تبدیل می‌کند.
+   </li>
+   <li>
+    نتایج را به صورت asynchronous با استفاده از Mono.when() ترکیب می‌کند که یک Mono&lt;Tuple4&gt; حاوی چهار value را برمی‌گرداند.
+   </li>
+   <li>
+    با فراخوانی OrderDetails::makeOrderDetails، Mono&lt;Tuple4&gt; را به یک Mono&lt;OrderDetails&gt; تبدیل می‌کند.
+   </li>
+   <li>
+    OrderDetails را به یک ServerResponse، که نشان‌دهنده Spring WebFlux از پاسخ JSON/HTTP است، تبدیل می‌کند.
+   </li>
+  </ol>
+  <p>
+   همانطور که می‌بینید، از آنجایی که getOrderDetails() از Monos استفاده می‌کند، service ها را به طور همزمان فراخوانی می‌کند و نتایج را بدون استفاده از callback های نامرتب و دشوار برای خواندن، ترکیب می‌کند. بیایید نگاهی به یکی از service proxies هایی بیندازیم که نتایج یک call service API را که در یک Mono wrapped شده است، برمی‌گرداند.
+  </p>
+  <p>
+   <strong>THE ORDERSERVICE CLASS</strong>
+  </p>
+  <p>
+   کلاس OrderService، که در فهرست زیر نشان داده شده است، یک proxy remote برای Order Service است. این، Order Service را با استفاده از WebClient، که client HTTP reactive Spring WebFlux است، فراخوانی می‌کند.
+  </p>
+  <pre><code class="language-java">@Service
+public class OrderService {
+private OrderDestinations orderDestinations;
+private WebClient client;
+public OrderService(OrderDestinations orderDestinations, WebClient client)
+{
+this.orderDestinations = orderDestinations;
+this.client = client;
+}
+public Mono&lt;OrderInfo&gt; findOrderById(String orderId) {
+Mono&lt;ClientResponse&gt; response = client
+.get()</code></pre>
+  <p>
+   <strong>Listing 8.5</strong>
+   OrderService class—a remote proxy for Order Service
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

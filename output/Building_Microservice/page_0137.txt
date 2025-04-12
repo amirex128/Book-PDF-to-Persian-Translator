@@ -1,0 +1,42 @@
+Do be wary, though, about the world of middleware, of which the message broker is
+just a small part. Queues in and of themselves are perfectly sensible, useful things.
+However, vendors tend to want to package lots of software with them, which can lead
+to more and more smarts being pushed into the middleware, as evidenced by things
+like the enterprise service bus. Make sure you know what you’re getting: keep your
+middleware dumb, and keep the smarts in the endpoints.
+Another approach is to try to use HTTP as a way of propagating events. Atom is a
+REST-compliant specification that defines semantics (among other things) for pub‐
+lishing feeds of resources. Many client libraries exist that allow us to create and con‐
+sume these feeds. So our customer service could just publish an event to such a feed
+whenever our customer service changes. Our consumers simply poll the feed, looking
+for changes. On one hand, the fact that we can reuse the existing Atom specification
+and any associated libraries is useful, and we know that HTTP handles scale very
+well. However, this use of HTTP is not good at low latency (where some message
+brokers excel), and we still must deal with the fact that the consumers need to keep
+track of what messages they have seen and manage their own polling schedule.
+I have seen people spend ages implementing more and more of the behaviors that
+you get out of the box with an appropriate message broker to make Atom work for
+some use cases. For example, the competing consumer pattern describes a method
+whereby you bring up multiple worker instances to compete for messages, which
+works well for scaling up the number of workers to handle a list of independent jobs
+(we’ll come back to that in the next chapter). However, we want to avoid the case in
+which two or more workers see the same message, as we’ll end up doing the same
+task more than we need to. With a message broker, a standard queue will handle this.
+With Atom, we now need to manage our own shared state among all the workers to
+try to reduce the chances of reproducing effort.
+If you already have a good, resilient message broker available to you, consider using it
+to handle publishing and subscribing to events. If you don’t already have one, give
+Atom a look, but be aware of the sunk cost fallacy. If you find yourself wanting more
+and more of the support that a message broker gives you, at a certain point you might
+want to change your approach.
+In terms of what we actually send over these asynchronous protocols, the same con‐
+siderations apply as with synchronous communication. If you are currently happy
+with encoding requests and responses using JSON, stick with it.
+What’s in an Event?
+In Figure 4-12, we see an event being broadcast from the Customer microservice,
+informing interested parties that a new customer has registered with the system. Two
+of the downstream microservices, Loyalty and Notifications, care about this event.
+The Loyalty microservice reacts to receiving the event by setting up an account for
+Pattern: Event-Driven Communication 
+| 
+111

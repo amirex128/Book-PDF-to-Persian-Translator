@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 67</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        If you were using XSL instead of CSS, you could do something similar:
+    </p>
+    <pre><code class="language-xml">&lt;xsl:template match="li[@class='selected']/p"&gt;
+    &lt;fo:block background-color="blue"&gt;
+        &lt;xsl:apply-templates/&gt;
+    &lt;/fo:block&gt;
+&lt;/xsl:template&gt;
+</code></pre>
+    <p>
+        Here, the XPath expression li[@class='selected']/p is equivalent to the CSS selec‐tor li.selected &gt; p in the previous example. What CSS and XSL have in common is that they are both declarative languages for specifying the styling of a document.
+    </p>
+    <p>
+        تصور کنید اگر مجبور بودید از یک رویکرد imperative استفاده کنید، زندگی چگونه بود. در JavaScript، با استفاده از core Document Object Model (DOM) API، نتیجه ممکن است چیزی شبیه این باشد:
+    </p>
+    <pre><code class="language-javascript">var liElements = document.getElementsByTagName("li");
+for (var i = 0; i &lt; liElements.length; i++) {
+    if (liElements[i].className === "selected") {
+        var children = liElements[i].childNodes;
+        for (var j = 0; j &lt; children.length; j++) {
+            var child = children[j];
+            if (child.nodeType === Node.ELEMENT_NODE &amp;&amp; child.tagName === "P") {
+                child.setAttribute("style", "background-color: blue");
+            }
+        }
+    }
+}
+</code></pre>
+    <p>
+        این JavaScript به طور imperative عنصر &lt;p&gt;Sharks&lt;/p&gt; را تنظیم می‌کند تا دارای پس‌زمینه آبی باشد، اما کد وحشتناک است. نه تنها بسیار طولانی‌تر و دشوارتر از معادل‌های CSS و XSL است، بلکه مشکلات جدی نیز دارد:
+    </p>
+    <ul>
+        <li>اگر selected class حذف شود (به عنوان مثال، به این دلیل که user روی صفحه دیگری کلیک می‌کند)، رنگ آبی حذف نمی‌شود، حتی اگر کد دوباره اجرا شود — و بنابراین item تا زمانی که کل صفحه دوباره بارگیری شود، برجسته باقی می‌ماند. با CSS، browser به طور خودکار تشخیص می‌دهد که چه زمانی rule li.selected &gt; p دیگر اعمال نمی‌شود و به محض حذف selected class، background آبی را حذف می‌کند.</li>
+        <li>اگر می‌خواهید از یک API جدید، مانند document.getElementsBy ClassName("selected") یا حتی document.evaluate()—که ممکن است performance را بهبود بخشد—استفاده کنید، باید کد را دوباره بنویسید. از سوی دیگر، vendors browser می‌توانند performance of CSS و XPath را بدون شکستن compatibility بهبود بخشند.</li>
+    </ul>
+    <p>
+        Query Languages for Data | 45
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

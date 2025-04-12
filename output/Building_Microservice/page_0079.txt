@@ -1,0 +1,39 @@
+translate. Our business analysts were often just spending their time explaining the
+same concepts over and over again as a result.
+By working the real-world language into the code, things became much easier. A
+developer picking up a story written using the terms that had come straight from the
+product owner was much more likely to understand their meaning and work out
+what needed to be done.
+Aggregate
+In DDD, an aggregate is a somewhat confusing concept, with many different defini‐
+tions out there. Is it just an arbitrary collection of objects? The smallest unit that
+should be taken out of a database? The model that has always worked for me is to
+first consider an aggregate as a representation of a real domain concept—think of
+something like an Order, an Invoice, a Stock Item, and so on. Aggregates typically
+have a life cycle around them, which opens them up to being implemented as a state
+machine.
+As an example in the MusicCorp domain, an Order aggregate might contain multiple
+line items that represent the items in the order. Those line items have meaning only
+as part of the overall Order aggregate.
+We want to treat aggregates as self-contained units; we want to ensure that the code
+that handles the state transitions of an aggregate are grouped together, along with the
+state itself. So one aggregate should be managed by one microservice, although a sin‐
+gle microservice might own management of multiple aggregates.
+In general, though, you should think of an aggregate as something that has state,
+identity, a life cycle that will be managed as part of the system. Aggregates typically
+refer to real-world concepts.
+A single microservice will handle the life cycle and data storage of one or more differ‐
+ent types of aggregates. If functionality in another service wants to change one of
+these aggregates, it needs to either directly request a change in that aggregate or else
+have the aggregate itself react to other things in the system to initiate its own state
+transitions, perhaps by subscribing to events issued by other microservices.
+The key thing to understand here is that if an outside party requests a state transition
+in an aggregate, the aggregate can say no. You ideally want to implement your aggre‐
+gates in such a way that illegal state transitions are impossible.
+Aggregates can have relationships with other aggregates. In Figure 2-12, we have a
+Customer aggregate that is associated with one or more Orders and one or more
+Wishlists. These aggregates could be managed by the same microservice or by differ‐
+ent microservices.
+Just Enough Domain-Driven Design 
+| 
+53

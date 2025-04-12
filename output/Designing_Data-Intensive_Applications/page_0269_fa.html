@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 269</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        می‌توانند شیفت‌های خود را (به عنوان مثال، اگر خودشان بیمار هستند) رها کنند، به شرط اینکه حداقل یک همکار در آن شیفت <em>on call</em> باقی بماند [40, 41].
+    </p>
+    <p>
+        حالا تصور کنید که آلیس و باب دو پزشک <em>on-call</em> برای یک شیفت خاص هستند.
+        <br>
+        هر دو احساس ناخوشی می‌کنند، بنابراین هر دو تصمیم می‌گیرند که درخواست مرخصی بدهند. متاسفانه، آنها تقریباً در یک زمان به دکمه رفتن از <em>on call</em> کلیک می‌کنند. آنچه در ادامه رخ می‌دهد در شکل 7-8 نشان داده شده است.
+    </p>
+    <figure>
+        <img src="figure7-8.png" alt="Figure 7-8. Example of write skew causing an application bug.">
+        <figcaption>Figure 7-8. Example of write skew causing an application bug.</figcaption>
+    </figure>
+    <p>
+        در هر transaction، application شما ابتدا بررسی می‌کند که دو یا چند پزشک در حال حاضر <em>on call</em> هستند. اگر بله، فرض می‌کند که برای یک پزشک بی‌خطر است که <em>off call</em> برود. از آنجایی که database از <em>snapshot isolation</em> استفاده می‌کند، هر دو بررسی 2 را برمی‌گردانند، بنابراین هر دو <em>transactions</em> به مرحله بعد ادامه می‌دهند. آلیس رکورد خودش را <em>update</em> می‌کند تا خود را از <em>on call</em> خارج کند، و باب نیز رکورد خود را <em>update</em> می‌کند. هر دو <em>transactions commit</em> می‌کنند، و اکنون هیچ پزشکی در <em>on call</em> نیست.
+    </p>
+    <p>
+        requirement شما مبنی بر داشتن حداقل یک پزشک در <em>on call</em> نقض شده است.
+    </p>
+    <h4>Characterizing write skew</h4>
+    <p>
+        این <em>anomaly</em>، <em>write skew</em> نامیده می‌شود [28]. این نه یک <em>dirty write</em> است و نه یک <em>lost update</em>، زیرا دو <em>transactions</em> در حال به‌روزرسانی دو object مختلف (به ترتیب رکوردهای <em>on-call</em> آلیس و باب) هستند. کمتر مشخص است که یک conflict در اینجا رخ داده است، اما قطعاً یک <em>race condition</em> است: اگر دو <em>transactions</em> یکی پس از دیگری اجرا می‌شدند،
+        <br>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        247
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0269/image_1.png" alt="Image from page 269" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

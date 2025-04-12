@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 288</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 8</mark></h3>
+  <p>
+   <mark>External API patterns</mark>
+  </p>
+  <p>
+   در این طراحی، application موبایل نقش <mark>API composer</mark> را ایفا می‌کند. این، چندین <mark>services</mark> را فراخوانی می‌کند و نتایج را ترکیب می‌کند.
+  </p>
+  <p>
+   به منظور کسب اطلاعات بیشتر در مورد این معایب، بیایید نگاهی به چگونگی بازیابی داده‌ها از <mark>services</mark> توسط application موبایل <mark>FTGO</mark> برای مصرف‌کنندگان بیندازیم.
+  </p>
+  <h5><mark>POOR USER EXPERIENCE DUE TO THE CLIENT MAKING MULTIPLE REQUESTS</mark></h5>
+  <p>
+   اولین مشکل این است که application موبایل، گاهی اوقات باید چندین درخواست برای بازیابی داده‌هایی که می‌خواهد به کاربر نمایش دهد، ارسال کند. تعامل پر سر و صدا بین application و <mark>services</mark> می‌تواند باعث شود که application، پاسخگو به نظر نرسد، به‌ویژه زمانی که از اینترنت یا یک شبکه تلفن همراه استفاده می‌کند. اینترنت، پهنای باند بسیار کمتری و تأخیر بیشتری نسبت به <mark>LAN</mark> دارد، و شبکه‌های تلفن همراه حتی بدتر هستند.
+   <br />
+   تأخیر بالاتر ممکن است هنگام بازیابی جزئیات سفارش مشکلی ایجاد نکند، زیرا application موبایل تأخیر را با اجرای درخواست‌ها به صورت همزمان به حداقل می‌رساند. اما در سناریوهای دیگر، یک <mark>client</mark> ممکن است نیاز داشته باشد که درخواست‌ها را به صورت متوالی اجرا کند، که منجر به یک تجربه کاربری ضعیف می‌شود.
+  </p>
+  <p>
+   علاوه بر این، تجربه کاربری ضعیف به دلیل تأخیر شبکه تنها مشکل یک <mark>API</mark> پر سر و صدا نیست. این امر مستلزم آن است که توسعه‌دهنده موبایل، کد ترکیب <mark>API</mark> بالقوه پیچیده‌ای را بنویسد. این کار یک حواس‌پرتی از وظیفه اصلی آن‌ها یعنی ایجاد یک تجربه کاربری عالی است. همچنین، از آنجایی که هر درخواست شبکه، انرژی مصرف می‌کند، یک <mark>API</mark> پر سر و صدا، باتری دستگاه تلفن همراه را سریع‌تر خالی می‌کند.
+  </p>
+  <h5><mark>LACK OF ENCAPSULATION REQUIRES FRONTEND DEVELOPERS TO CHANGE THEIR CODE IN LOCKSTEP
+   WITH THE BACKEND</mark></h5>
+  <p>
+   یکی دیگر از معایب یک application موبایل که مستقیماً به <mark>services</mark> دسترسی دارد، عدم کپسوله‌سازی است. همانطور که یک application تکامل می‌یابد، توسعه‌دهندگان یک <mark>service</mark>، گاهی اوقات یک <mark>API</mark> را به گونه‌ای تغییر می‌دهند که <mark>clients</mark> موجود را خراب می‌کند. آن‌ها حتی ممکن است نحوه تجزیه سیستم به <mark>services</mark> را تغییر دهند. توسعه‌دهندگان ممکن است <mark>services</mark> جدیدی را اضافه کنند و <mark>services</mark> موجود را تقسیم یا ادغام کنند. اما اگر دانش در مورد <mark>services</mark> در یک application موبایل پخته شود، تغییر <mark>APIs</mark> <mark>services</mark> می‌تواند دشوار باشد.
+  </p>
+  <p>
+   برخلاف به‌روزرسانی یک application سمت سرور، راه‌اندازی یک نسخه جدید از یک application موبایل ساعت‌ها یا شاید حتی روزها طول می‌کشد. <mark>Apple</mark> یا <mark>Google</mark> باید ارتقا را تأیید کرده و آن را برای دانلود در دسترس قرار دهند. کاربران ممکن است ارتقا را فوراً (یا اگر بخواهند) دانلود نکنند. و شما ممکن است نخواهید کاربران بی‌میل را مجبور به ارتقا کنید. استراتژی ارائه <mark>APIs</mark> <mark>service</mark> به موبایل، یک مانع قابل توجه برای تکامل آن <mark>APIs</mark> ایجاد می‌کند.
+  </p>
+  <h5><mark>SERVICES MIGHT USE CLIENT-UNFRIENDLY IPC MECHANISMS</mark></h5>
+  <p>
+   چالش دیگر با یک application موبایل که مستقیماً <mark>services</mark> را فراخوانی می‌کند این است که برخی از <mark>services</mark> می‌توانند از پروتکل‌هایی استفاده کنند که به راحتی توسط یک <mark>client</mark> مصرف نمی‌شوند. applicationهای <mark>client</mark> که در خارج از <mark>firewall</mark> اجرا می‌شوند، معمولاً از پروتکل‌هایی مانند <mark>HTTP</mark> و <mark>WebSockets</mark> استفاده می‌کنند. اما همانطور که در فصل 3 توضیح داده شد، توسعه‌دهندگان <mark>service</mark>، پروتکل‌های زیادی برای انتخاب دارند—نه فقط <mark>HTTP</mark>. برخی از <mark>services</mark> یک application ممکن است از <mark>gRPC</mark> استفاده کنند، در حالی که برخی دیگر می‌توانند از پروتکل پیام‌رسانی <mark>AMQP</mark> استفاده کنند. این نوع پروتکل‌ها به خوبی
+  </p>
+  <h4><mark>8.1.2 API design issues for other kinds of clients</mark></h4>
+  <p>
+   من <mark>client</mark> موبایل را انتخاب کردم زیرا این یک راه عالی برای نشان دادن معایب دسترسی مستقیم <mark>clients</mark> به <mark>services</mark> است. اما مشکلات ایجاد شده با قرار دادن <mark>services</mark> در معرض <mark>clients</mark>، فقط به <mark>clients</mark> موبایل محدود نمی‌شود. انواع دیگر <mark>clients</mark>، به‌ویژه آن‌هایی که در خارج از <mark>firewall</mark> قرار دارند، نیز با این مشکلات مواجه هستند. همانطور که قبلاً توضیح داده شد، <mark>services</mark> application <mark>FTGO</mark> توسط applicationهای وب، applicationهای <mark>JavaScript</mark> مبتنی بر مرورگر و applicationهای شخص ثالث مصرف می‌شوند. بیایید به مسائل طراحی <mark>API</mark> با این <mark>clients</mark> نگاهی بیندازیم.
+  </p>
+  <h5><mark>API DESIGN ISSUES FOR WEB APPLICATIONS</mark></h5>
+  <p>
+   applicationهای وب سنتی سمت سرور، که درخواست‌های <mark>HTTP</mark> را از مرورگرها مدیریت می‌کنند و صفحات <mark>HTML</mark> را برمی‌گردانند، در داخل <mark>firewall</mark> اجرا می‌شوند و از طریق یک <mark>LAN</mark> به <mark>services</mark> دسترسی پیدا می‌کنند. پهنای باند و تأخیر شبکه، مانعی برای پیاده‌سازی ترکیب <mark>API</mark> در یک application وب نیستند. همچنین، applicationهای وب می‌توانند از پروتکل‌های غیر وب‌دوست برای دسترسی به <mark>services</mark> استفاده کنند. تیم‌هایی که applicationهای وب را توسعه می‌دهند، بخشی از یک سازمان واحد هستند و اغلب در همکاری نزدیک با تیم‌هایی که <mark>services backend</mark> را می‌نویسند، کار می‌کنند، بنابراین یک application وب می‌تواند به راحتی هر زمان که <mark>services backend</mark> تغییر کردند، به‌روزرسانی شود. در نتیجه، امکان‌پذیر است که یک application وب مستقیماً به <mark>services backend</mark> دسترسی داشته باشد.
+  </p>
+  <h5><mark>API DESIGN ISSUES FOR BROWSER-BASED JAVASCRIPT APPLICATIONS</mark></h5>
+  <p>
+   applicationهای مرورگر مدرن از مقداری <mark>JavaScript</mark> استفاده می‌کنند. حتی اگر <mark>HTML</mark> در درجه اول توسط یک application وب سمت سرور تولید شود، معمول است که <mark>JavaScript</mark> که در مرورگر اجرا می‌شود، <mark>services</mark> را فراخوانی کند. به عنوان مثال، همه applicationهای وب <mark>FTGO</mark>—مصرف‌کننده، <mark>Restaurant</mark>، و <mark>Admin</mark>— حاوی <mark>JavaScript</mark> هستند که <mark>services backend</mark> را فراخوانی می‌کنند. به عنوان مثال، application وب <mark>Consumer</mark>، صفحه جزئیات سفارش را به صورت پویا با استفاده از <mark>JavaScript</mark> که <mark>APIs</mark> <mark>service</mark> را فراخوانی می‌کند، بازخوانی می‌کند.
+  </p>
+  <p>
+   از یک سو، applicationهای <mark>JavaScript</mark> مبتنی بر مرورگر، هنگام تغییر <mark>APIs</mark> <mark>service</mark>، به‌روزرسانی آن‌ها آسان است. از سوی دیگر، applicationهای <mark>JavaScript</mark> که از طریق اینترنت به <mark>services</mark> دسترسی دارند، همان مشکلات مربوط به تأخیر شبکه را با applicationهای موبایل دارند.
+   <br />
+   برای بدتر کردن اوضاع، <mark>UIs</mark> مبتنی بر مرورگر، به‌ویژه آن‌هایی که برای دسکتاپ هستند، معمولاً پیچیده‌تر هستند و نیاز به ترکیب <mark>services</mark> بیشتری نسبت به applicationهای موبایل دارند.
+   <br />
+   به احتمال زیاد، applicationهای <mark>Consumer</mark> و <mark>Restaurant</mark>، که از طریق اینترنت به <mark>services</mark> دسترسی دارند، نمی‌توانند <mark>APIs</mark> <mark>service</mark> را به طور کارآمد ترکیب کنند.
+  </p>
+  <h5><mark>DESIGNING APIS FOR THIRD-PARTY APPLICATIONS</mark></h5>
+  <p>
+   <mark>FTGO</mark>، مانند بسیاری از سازمان‌های دیگر، یک <mark>API</mark> را به توسعه‌دهندگان شخص ثالث ارائه می‌دهد. توسعه‌دهندگان می‌توانند از <mark>API</mark> <mark>FTGO</mark> برای نوشتن applicationهایی استفاده کنند که سفارش‌ها را ثبت و مدیریت می‌کنند. این applicationهای شخص ثالث از طریق اینترنت به <mark>APIs</mark> دسترسی پیدا می‌کنند، بنابراین ترکیب <mark>API</mark> احتمالاً ناکارآمد است. اما ناکارآمدی ترکیب <mark>API</mark> یک مشکل نسبتاً جزئی در مقایسه با چالش بسیار بزرگتر طراحی یک <mark>API</mark> است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

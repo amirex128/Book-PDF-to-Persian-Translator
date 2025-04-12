@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 245</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Using sagas and event sourcing together</mark></h3>
+  <p>
+   1
+   <mark>Create Order Saga</mark> یک دستور <mark>AuthorizeAccount</mark> را به <mark>Accounting-Service</mark> از طریق یک کانال پیام‌رسانی ارسال می‌کند. <mark>SagaCommand-Dispatcher</mark> فریم‌ورک <mark>Eventuate Saga</mark>، <mark>AccountingServiceCommandHandler</mark> را برای رسیدگی به پیام دستور فراخوانی می‌کند.
+  </p>
+  <p>
+   2
+   <mark>AccountingServiceCommandHandler</mark> دستور را به <mark>Account aggregate</mark> مشخص شده ارسال می‌کند.
+  </p>
+  <p>
+   3
+   <mark>Aggregate</mark> دو <mark>event</mark> منتشر می‌کند، <mark>AccountAuthorized</mark> و <mark>SagaReplyRequested-Event</mark>.
+  </p>
+  <p>
+   4
+   <mark>SagaReplyRequestedEventHandler</mark> با ارسال یک پیام پاسخ به <mark>CreateOrderSaga</mark>، به <mark>SagaReplyRequestedEvent</mark> رسیدگی می‌کند.
+  </p>
+  <p>
+   <mark>AccountingServiceCommandHandler</mark> که در لیست زیر نشان داده شده است، با فراخوانی <mark>AggregateRepository.update()</mark> برای به‌روزرسانی <mark>Account aggregate</mark>، به پیام دستور <mark>AuthorizeAccount</mark> رسیدگی می‌کند.
+  </p>
+  <pre><code class="language-java">public class AccountingServiceCommandHandler {
+ @Autowired
+ private AggregateRepository&lt;Account, AccountCommand&gt; accountRepository;
+ public void authorize(CommandMessage&lt;AuthorizeCommand&gt; cm) {
+  AuthorizeCommand command = cm.getCommand();
+  accountRepository.update(command.getOrderId(),
+  command,
+  replyingTo(cm)
+  .catching(AccountDisabledException.class,
+  () -&gt; withFailure(new AccountDisabledReply()))
+  .build());
+ }
+ ...
+</code></pre>
+  <p>
+   متد <mark>authorize()</mark> یک <mark>AggregateRepository</mark> را برای به‌روزرسانی <mark>Account aggregate</mark> فراخوانی می‌کند. آرگومان سوم به <mark>update()</mark>، که <mark>UpdateOptions</mark> است، توسط این عبارت محاسبه می‌شود:
+  </p>
+  <pre><code>replyingTo(cm)
+ .catching(AccountDisabledException.class,
+ () -&gt; withFailure(new AccountDisabledReply()))
+ .build()
+</code></pre>
+  <p>
+   این <mark>UpdateOptions</mark> متد <mark>update()</mark> را برای انجام موارد زیر پیکربندی می‌کند:
+  </p>
+  <p>
+   1
+   از <mark>message id</mark> به عنوان یک <mark>idempotency key</mark> استفاده کنید تا اطمینان حاصل شود که پیام دقیقاً یک بار پردازش می‌شود. همانطور که قبلاً ذکر شد، فریم‌ورک <mark>Eventuate</mark>، <mark>idempotency key</mark> را در تمام <mark>events</mark> تولید شده ذخیره می‌کند و این امکان را فراهم می‌کند تا تلاش‌های تکراری برای به‌روزرسانی یک <mark>aggregate</mark> را شناسایی و نادیده بگیرد.
+  </p>
+  <p>
+   لیست 6.6
+   <br />
+   رسیدگی به پیام‌های دستور ارسال شده توسط <mark>sagas</mark>
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

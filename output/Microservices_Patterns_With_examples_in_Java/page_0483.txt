@@ -1,0 +1,56 @@
+453
+Designing how the service and the monolith collaborate
+3
+Monolith
+– Validate order details and create a Ticket.
+– Authorize consumer’s credit card.
+4
+Order Service: change state of Order to APPROVED.
+In this saga, the monolith’s transaction is the pivot transaction. Order Service imple-
+ments the compensatable transaction.
+ Now that we’ve extracted Consumer Service, we can extract Kitchen Service. If we
+extract this service, the createOrder() command uses the following saga:
+1
+Order Service: create an Order in an APPROVAL_PENDING state.
+2
+Consumer Service: verify that the consumer can place an order.
+3
+Kitchen Service: validate order details and create a PENDING Ticket.
+4
+Monolith: authorize consumer’s credit card.
+5
+Kitchen Service: change state of Ticket to APPROVED.
+6
+Order Service: change state of Order to APPROVED.
+In this saga, the monolith’s transaction is still the pivot transaction. Order Service and
+Kitchen Service implement the compensatable transactions.
+ We can even continue to refactor the monolith by extracting Accounting Service. If
+we extract this service, the createOrder() command uses the following saga:
+1
+Order Service: create an Order in an APPROVAL_PENDING state.
+2
+Consumer Service: verify that the consumer can place an order.
+3
+Kitchen Service: validate order details and create a PENDING Ticket.
+4
+Accounting Service: authorize consumer’s credit card.
+5
+Kitchen Service: change state of Ticket to APPROVED.
+6
+Order Service: change state of Order to APPROVED.
+As you can see, by carefully sequencing the extractions, you can avoid using sagas that
+require making complex changes to the monolith. Let’s now look at how to handle
+security when migrating to a microservice architecture. 
+13.3.3 Handling authentication and authorization
+Another design issue you need to tackle when refactoring a monolithic application to
+a microservice architecture is adapting the monolith’s security mechanism to support
+the services. Chapter 11 describes how to handle security in a microservice architec-
+ture. A microservices-based application uses tokens, such as JSON Web tokens (JWT),
+to pass around user identity. That’s quite different than a typical traditional, mono-
+lithic application that uses in-memory session state and passes around the user iden-
+tity using a thread local. The challenge when transforming a monolithic application
+to a microservice architecture is that you need to support both the monolithic and
+JWT-based security mechanisms simultaneously.
+ Fortunately, there’s a straightforward way to solve this problem that only requires
+you to make one small change to the monolith’s login request handler. Figure 13.13
+ 

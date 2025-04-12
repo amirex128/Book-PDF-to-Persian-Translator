@@ -1,0 +1,37 @@
+263
+The API gateway pattern
+ The second option is to implement these edge functions in an edge service that’s
+upstream from the API gateway. The edge service is the first point of contact for an
+external client. It authenticates the request and performs other edge processing
+before passing it to the API gateway.
+ An important benefit of using a dedicated edge service is that it separates con-
+cerns. The API gateway focuses on API routing and composition. Another benefit is
+that it centralizes responsibility for critical edge functions such as authentication.
+That’s particularly valuable when an application has multiple API gateways that are
+possibly written using a variety of languages and frameworks. I’ll talk more about that
+later. The drawback of this approach is that it increases network latency because of the
+extra hop. It also adds to the complexity of the application.
+ As a result, it’s often convenient to use the third option and implement these edge
+functions, especially authorization, in the API gateway itself. There’s one less network
+hop, which improves latency. There are also fewer moving parts, which reduces com-
+plexity. Chapter 11 describes how the API gateway and the services collaborate to
+implement security. 
+API GATEWAY ARCHITECTURE
+An API gateway has a layered, modular architecture. Its architecture, shown in figure 8.5,
+consists of two layers: the API layer and a common layer. The API layer consists of
+one or more independent API modules. Each API module implements an API for a
+API gateway
+Mobile client
+Mobile API
+API layer
+Browser JavaScript
+application
+Browser API
+Common layer
+3rd-party application
+Public API
+Figure 8.5
+An API gateway has a layered modular architecture. The API for each client is 
+implemented by a separate module. The common layer implements functionality common to all 
+APIs, such as authentication.
+ 

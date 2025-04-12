@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 320</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        تمام این رخدادها می‌توانند <em>running thread</em> را در هر نقطه‌ای <em>preempt</em> کنند و آن را در زمانی بعدی از سر بگیرند، بدون اینکه <em>thread</em> حتی متوجه شود. این مشکل شبیه به <em>thread-safe</em> کردن کد <em>multi-threaded</em> در یک machine واحد است: شما نمی‌توانید در مورد زمان‌بندی چیزی را فرض کنید، زیرا <em>context switches</em> و <em>parallelism</em> دلخواه ممکن است رخ دهد.
+    </p>
+    <p>
+        هنگام نوشتن کد <em>multi-threaded</em> روی یک machine واحد، ما ابزارهای نسبتاً خوبی برای <em>thread-safe</em> کردن آن داریم: <em>mutexes, semaphores, atomic counters, lock-free data structures, blocking queues</em>، و غیره. متاسفانه، این ابزارها مستقیماً به <em>distributed systems</em> ترجمه نمی‌شوند، زیرا یک <em>distributed system</em> دارای حافظه مشترک نیست—فقط پیام‌هایی که از طریق یک شبکه غیرقابل اعتماد ارسال می‌شوند.
+    </p>
+    <p>
+        یک node در یک <em>distributed system</em> باید فرض کند که اجرای آن می‌تواند برای یک مدت زمان قابل توجهی در هر نقطه‌ای، حتی در میانه یک <em>function</em>، متوقف شود. در طول مکث، بقیه جهان به حرکت خود ادامه می‌دهد و حتی ممکن است node متوقف شده را <em>dead</em> اعلام کند زیرا پاسخگو نیست. سرانجام، node متوقف شده ممکن است به اجرا ادامه دهد، بدون اینکه حتی متوجه شود که تا زمانی که ساعت خود را در زمانی بعداً بررسی می‌کند، در خواب بوده است.
+    </p>
+    <h4>Response time guarantees</h4>
+    <p>
+        در بسیاری از زبان‌های برنامه‌نویسی و <em>operating systems</em> ها، <em>threads</em> و <em>processes</em> ممکن است برای یک مقدار نامحدود زمان مکث کنند، همانطور که مورد بحث قرار گرفت. اگر شما به اندازه کافی سخت تلاش کنید، می‌توان این دلایل مکث را حذف کرد.
+    </p>
+    <p>
+        برخی از نرم‌افزارها در محیط‌هایی اجرا می‌شوند که در آن عدم پاسخگویی در یک زمان مشخص می‌تواند آسیب جدی ایجاد کند: کامپیوترهایی که هواپیما، موشک، روبات‌ها، خودروها و سایر اشیاء فیزیکی را کنترل می‌کنند، باید به ورودی‌های حسگرهای خود به سرعت و به طور قابل پیش‌بینی پاسخ دهند. در این سیستم‌ها، یک مهلت مشخص وجود دارد که نرم‌افزار باید در آن پاسخ دهد. اگر مهلت را رعایت نکند، این ممکن است باعث failure کل system شود.
+    </p>
+    <p>
+        اینها system های <em>hard real-time</em> نامیده می‌شوند.
+    </p>
+    <h4>Is real-time really real?</h4>
+    <p>
+        در embedded systems، <em>real-time</em> به این معنی است که یک system با دقت طراحی و آزمایش شده است تا <em>timing guarantees</em> مشخص شده را در همه شرایط برآورده کند. این معنی در تضاد با استفاده مبهم‌تر از اصطلاح <em>real-time</em> در وب است، که در آن سرورها داده‌ها را به <em>clients</em> و stream processing بدون محدودیت‌های زمان پاسخ سخت، ارسال می‌کنند (به فصل 11 مراجعه کنید).
+    </p>
+    <p>
+        به عنوان مثال، اگر حسگرهای onboard ماشین شما تشخیص دهند که شما در حال حاضر یک تصادف را تجربه می‌کنید، شما نمی‌خواهید که آزادسازی <em>airbag</em> به دلیل یک مکث GC نامناسب در system آزادسازی <em>airbag</em>، به تأخیر بیفتد.
+    </p>
+    <p>
+        ارائه <em>real-time guarantees</em> در یک system نیازمند پشتیبانی از تمام سطوح <em>software stack</em> است: یک <em>real-time operating system (RTOS)</em> که به <em>processes</em> اجازه می‌دهد تا با تخصیص تضمین شده زمان CPU در فواصل زمانی مشخص زمان‌بندی شوند، مورد نیاز است؛ library
+        <br>
+        298
+        <br>
+        |
+        <br>
+        Chapter 8: The Trouble with Distributed Systems
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0320/image_1.png" alt="Image from page 320" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 101</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        log-structured filesystems [11]. Storage engines که بر اساس این اصل از merging و compacting sorted files هستند، اغلب LSM storage engines نامیده می‌شوند.
+    </p>
+    <p>
+        Lucene، یک indexing engine برای full-text search که توسط Elasticsearch و Solr استفاده می‌شود، از یک روش مشابه برای ذخیره term dictionary خود استفاده می‌کند [12, 13]. A full-text index بسیار پیچیده‌تر از یک key-value index است اما بر اساس یک ایده مشابه است: با توجه به یک کلمه در یک query search، تمام documents (صفحات وب، توضیحات محصول و غیره) را پیدا کنید که به آن کلمه اشاره می‌کنند. این با یک ساختار key-value پیاده‌سازی می‌شود که در آن key یک کلمه (یک term) و value list of IDs از تمام documents است که حاوی کلمه (postings list) هستند. در Lucene، این mapping از term به postings list در فایل‌های sorted شبیه به SSTable نگهداری می‌شود، که در صورت نیاز در background merge می‌شوند [14].
+    </p>
+    <h4>Performance optimizations</h4>
+    <p>
+        همانطور که همیشه، جزئیات زیادی برای کارآمد کردن یک storage engine در عمل وجود دارد.
+    </p>
+    <p>
+        به عنوان مثال، الگوریتم LSM-tree می‌تواند هنگام جستجوی keys که در database وجود ندارند، کند باشد: شما باید memtable را بررسی کنید، سپس segments را تا قدیمی‌ترین (احتمالاً مجبور به خواندن از دیسک برای هر کدام) بررسی کنید، قبل از اینکه مطمئن شوید که key وجود ندارد. به منظور بهینه‌سازی این نوع دسترسی، storage engines اغلب از Bloom filters اضافی استفاده می‌کنند [15]. (A Bloom filter یک data structure با حافظه کارآمد برای تخمین محتویات یک set است. این می‌تواند به شما بگوید که آیا یک key در database ظاهر نمی‌شود و بنابراین بسیاری از disk reads غیرضروری را برای keys nonexistent ذخیره می‌کند.)
+    </p>
+    <p>
+        همچنین استراتژی‌های مختلفی برای تعیین ترتیب و زمان‌بندی چگونگی compacted و merged شدن SSTables وجود دارد. رایج‌ترین گزینه‌ها compaction size-tiered و leveled compaction هستند. LevelDB و RocksDB از leveled compaction استفاده می‌کنند (از این رو نام Lev‐elDB)، HBase از size-tiered استفاده می‌کند و Cassandra از هر دو پشتیبانی می‌کند [16]. در compaction size-tiered، SSTables جدیدتر و کوچکتر به طور متوالی در SSTables قدیمی‌تر و بزرگتر merge می‌شوند. در leveled compaction، key range به SSTables کوچکتر تقسیم می‌شود و داده‌های قدیمی‌تر به "levels" جداگانه منتقل می‌شوند، که به compaction اجازه می‌دهد تا به صورت افزایشی‌تری پیش برود و از فضای دیسک کمتری استفاده کند.
+    </p>
+    <p>
+        حتی اگر ظرافت‌های زیادی وجود داشته باشد، ایده اصلی LSM-trees—نگه‌داشتن یک cas‐cade از SSTables که در background merge می‌شوند—ساده و موثر است. حتی زمانی که dataset بسیار بزرگتر از memory موجود است، همچنان به خوبی کار می‌کند.
+    </p>
+    <p>
+        از آنجایی که داده‌ها به ترتیب مرتب شده ذخیره می‌شوند، شما می‌توانید queries range را به طور کارآمد انجام دهید (scanning تمام keys بالاتر از حداقل و تا حداکثر) و از آنجایی که disk writes sequential هستند، LSM-tree می‌تواند throughput write بسیار بالایی را پشتیبانی کند.
+    </p>
+    <h4>B-Trees</h4>
+    <p>
+        Indexes log-structured که ما تا کنون در مورد آن‌ها بحث کردیم، در حال جلب پذیرش هستند، اما آن‌ها رایج‌ترین نوع index نیستند. پرکاربردترین structure indexing کاملاً متفاوت است: the B-tree.
+    </p>
+    <p>
+        Data Structures That Power Your Database | 79
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+319
+Writing integration tests
+entire application. End-to-end tests are at the top of the test pyramid and should,
+therefore, be used sparingly.
+ Let’s start by taking a look at how to write integration tests.
+10.1
+Writing integration tests
+Services typically interact with other services. For example, Order Service, as fig-
+ure 10.1 shows, interacts with several services. Its REST API is consumed by API Gateway,
+and its domain events are consumed by services, including Order History Service.
+Order Service uses several other services. It persists Orders in MySQL. It also sends
+commands to and consumes replies from several other services, such as Kitchen
+Service.
+In order to be confident that a service such as Order Service works as expected, we
+must write tests that verify that the service can properly interact with infrastructure
+services and other application services. One approach is to launch all the services and
+test them through their APIs. This, however, is what’s known as end-to-end testing,
+which is slow, brittle, and costly. As explained in section 10.3, there’s a role for end-to-end
+Order History
+Service
+API
+gateway
+Order
+history
+event
+handlers
+Kitchen
+Service
+Order
+Service
+Kitchen
+Service
+command
+handler
+Class under test
+Legend
+Test
+Test
+Test
+Test
+Database
+Order
+aggregate
+event
+publisher
+Event
+channel
+Command
+channel
+Reply
+channel
+Provider
+Provider
+Consumer
+Consumer
+Provider
+Provider
+Order
+controller
+Order
+Repository
+Kitchen
+Service
+proxy
+Order
+Service
+proxy
+Figure 10.1
+Integration tests must verify that a service can communicate with its clients and 
+dependencies. But rather than testing whole services, the strategy is to test the individual adapter 
+classes that implement the communication.
+ 

@@ -1,0 +1,38 @@
+3 Steve Freeman and Nat Pryce, Growing Object-Oriented Software, Guided by Tests (Upper Saddle River, NJ:
+Addison-Wesley, 2009).
+4 Jason D. Valentino, “Moving One of Capital One’s Largest Customer-Facing Apps to AWS,” Capital One
+Tech, May 24, 2017, https://oreil.ly/5UM5W.
+mocking calls is a delicate one and is just as fraught in service tests as in unit tests. In
+general, though, I use stubs far more than mocks for service tests. For a more in-
+depth discussion of this trade-off, take a look at Growing Object-Oriented Software,
+Guided by Tests by Steve Freeman and Nat Pryce.3
+In general, I rarely use mocks for this sort of testing. But having a tool that can imple‐
+ment both mocks and stubs is useful.
+While I feel that stubs and mocks are actually fairly well differentiated, I know the
+distinction can be confusing to some, especially when some people throw in other
+terms like fakes, spies, and dummies. Gerard Meszaros calls all of these things, includ‐
+ing stubs and mocks, “Test Doubles”.
+A Smarter Stub Service
+Normally, for stub services, I’ve rolled them myself. I’ve used everything from the
+Apache web server or nginx to embedded Jetty containers or even command-line-
+launched Python web servers to launch stub servers for such test cases. I’ve probably
+reproduced the same work time and time again in creating these stubs. An old
+Thoughtworks colleague of mine, Brandon Byars, has potentially saved many of us a
+chunk of work with his stub/mock server called mountebank.
+You can think of mountebank as a small software appliance that is programmable via
+HTTP. The fact that it happens to be written in NodeJS is completely opaque to any
+calling service. When mountebank launches, you send it commands telling it to cre‐
+ate one or more “imposters,” which will respond on a given port with a specific pro‐
+tocol (currently TCP, HTTP, HTTPS, and SMTP are supported), and what responses
+these imposters should send when requests are sent. It also supports setting expecta‐
+tions if you want to use it as a mock. Because a single mountebank instance can sup‐
+port the creation of multiple imposters, you can use it to stub out multiple
+downstream microservices.
+mountebank does have uses outside of automated functional testing. Capital One
+made use of mountebank to replace existing mocking infrastructure for their large-
+scale performance tests, for example.4
+One limitation of mountebank is that it doesn’t support stubbing for messaging pro‐
+tocols—for example, if you wanted to make sure that an event was properly sent (and
+284 
+| 
+Chapter 9: Testing

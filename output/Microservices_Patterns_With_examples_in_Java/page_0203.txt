@@ -1,0 +1,59 @@
+173
+Order Service business logic
+.onMessage(CancelCreateTicket.class,
+this::cancelCreateTicket)
+.build();
+}
+private Message createTicket(CommandMessage<CreateTicket>
+cm) {
+CreateTicket command = cm.getCommand();
+long restaurantId = command.getRestaurantId();
+Long ticketId = command.getOrderId();
+TicketDetails ticketDetails =
+command.getTicketDetails();
+try {
+Ticket ticket =
+   
+kitchenService.createTicket(restaurantId,
+ticketId, ticketDetails);
+CreateTicketReply reply =
+new CreateTicketReply(ticket.getId());
+return withSuccess(reply);
+  
+} catch (RestaurantDetailsVerificationException e) {
+return withFailure();
+}
+}
+private Message confirmCreateTicket
+(CommandMessage<ConfirmCreateTicket> cm) {
+  
+Long ticketId = cm.getCommand().getTicketId();
+kitchenService.confirmCreateTicket(ticketId);
+return withSuccess();
+}
+...
+All the command handler methods invoke KitchenService and reply with either a
+success or a failure reply.
+ Now that you’ve seen the business logic for a relatively simple service, we’ll look at
+a more complex example: Order Service. 
+5.5
+Order Service business logic
+As mentioned in earlier chapters, Order Service provides an API for creating, updat-
+ing, and canceling orders. This API is primarily invoked by the consumer. Figure 5.12
+shows the high-level design of the service. The Order aggregate is the central aggre-
+gate of Order Service. But there’s also a Restaurant aggregate, which is a partial
+replica of data owned by Restaurant Service. It enables Order Service to validate
+and price an Order’s line items.
+ In addition to the Order and Restaurant aggregates, the business logic consists of
+OrderService, OrderRepository, RestaurantRepository, and various sagas such as
+the CreateOrderSaga described in chapter 4. OrderService is the primary entry
+point into the business logic and defines methods for creating and updated Orders
+Invokes KitchenService 
+to create the Ticket
+Sends back a 
+successful reply
+Sends back a 
+failure reply
+Confirms 
+the order
+ 

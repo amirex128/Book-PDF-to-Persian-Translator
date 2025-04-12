@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 372</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 10</span></h3>
+  <h3><span style="font-weight: bold;">Testing microservices: Part 2</span></h3>
+  <p>
+   .forChannel("accountingService")
+   .when(AuthorizeCommand.class).replyWithFailure();
+   else
+   fail("Don't know what to do with this credit card");
+  </p>
+  <p>
+   این متد از کلاس SagaParticipantStubManager استفاده می‌کند، یک کلاس test helper که
+   stubs را برای participants از saga پیکربندی می‌کند. متد useCreditCard() از آن برای پیکربندی
+   Accounting Service stub استفاده می‌کند تا با یک پیام success یا failure پاسخ دهد،
+   بسته به credit card مشخص شده.
+  </p>
+  <p>
+   فهرست زیر متد placeOrder() را نشان می‌دهد، که When I را تعریف می‌کند
+   place an order for Chicken Vindaloo at Ajanta step. این متد Order Service را فراخوانی می‌کند
+   REST API برای ایجاد Order و پاسخ را برای اعتبارسنجی در یک step بعدی ذخیره می‌کند.
+  </p>
+  <pre><code class="language-java">
+  @ContextConfiguration(classes =
+  OrderServiceComponentTestStepDefinitions.TestConfiguration.class)
+  public class OrderServiceComponentTestStepDefinitions {
+  private int port = 8082;
+  private String host = System.getenv("DOCKER_HOST_IP");
+  protected String baseUrl(String path) {
+  return String.format("http://%s:%s%s", host, port, path);
+  }
+  private Response response;
+  @When("I place an order for Chicken Vindaloo at Ajanta")
+  public void placeOrder() {
+  response = given().
+  body(new CreateOrderRequest(consumerId,
+  RestaurantMother.AJANTA_ID, Collections.singletonList(
+  new CreateOrderRequest.LineItem(
+  RestaurantMother.CHICKEN_VINDALOO_MENU_ITEM_ID,
+  OrderDetailsMother.CHICKEN_VINDALOO_QUANTITY)))).
+  contentType("application/json").
+  when().
+  post(baseUrl("/orders"));
+  }
+  </code></pre>
+  <p>
+   متد help baseUrl() ، URL از order service را برمی‌گرداند.
+  </p>
+  <p>
+   Listing 10.15 متد theOrderShouldBe() را نشان می‌دهد، که معنی
+   Then the order should be … step. این تایید می‌کند که Order با موفقیت ایجاد شده است
+   و در state مورد انتظار قرار دارد.
+  </p>
+  <p>
+   Listing 10.14
+   متد placeOrder() ، When I place an order for
+   Chicken Vindaloo at Ajanta step را تعریف می‌کند.
+  </p>
+  <p>
+   Invokes the Order
+   Service REST API
+   to create Order
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

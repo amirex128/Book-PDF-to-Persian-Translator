@@ -1,0 +1,38 @@
+8 COBIT 5: A Business Framework for the Governance and Management of Enterprise IT (Rolling Meadows, IL:
+ISACA, 2012).
+Architectural Safety
+We cannot afford for one badly behaved microservice to ruin the party for everyone.
+We have to ensure that our microservices shield themselves accordingly from unheal‐
+thy, downstream calls. The more microservices we have that do not properly handle
+the potential failure of downstream calls, the more fragile our systems will be. This
+might mean, for example, that you want to mandate certain practices around inter-
+service communication, such as requiring the use of circuit breakers (a topic we
+explored in “Stability Patterns” on page 395).
+Playing by the rules is important when it comes to response codes, too. If your circuit
+breakers rely on HTTP codes, and one microservice decides to send back 2XX codes
+for errors or confuses 4XX codes with 5XX codes, then these safety measures can fall
+apart. Similar concerns would apply even if you’re not using HTTP; we need to know
+the difference between a request that was OK and processed correctly, a request that
+was bad and thus prevented the microservice from doing anything with it, and a
+request that might be OK but we can’t tell because the server was down. Knowing this
+is key to ensuring we can fail fast and track down issues. If our microservices play fast
+and loose with these rules, we end up with a more vulnerable system.
+Governance and the Paved Road
+Part of what architects need to handle is governance. What do I mean by governance?
+It turns out the COBIT (Control Objectives for Information Technologies) frame‐
+work has a pretty good definition:8
+Governance ensures that enterprise objectives are achieved by evaluating stakeholder
+needs, conditions and options; setting direction through prioritization and decision
+making; and monitoring performance, compliance and progress against agreed-on
+direction and objectives.
+In a nutshell, we can consider governance as agreeing how things should be done,
+making sure people know how things should be done, and making sure things are
+done that way. In some environments, governance just happens informally, as part of
+normal software development activities. In other environments, especially within
+larger organizations, this might need to be a more concrete function.
+Governance can apply to multiple things in the forum of IT. We want to focus on the
+aspect of technical governance, something I feel is the job of the architect. If one of
+the architect’s jobs is ensuring there is a technical vision, then governance is about
+544 
+| 
+Chapter 16: The Evolutionary Architect

@@ -1,0 +1,40 @@
+The problem with type 2 virtualization is that the hypervisor here needs to set aside
+resources to do its job. This takes away CPU, I/O, and memory that could be used
+elsewhere. The more hosts the hypervisor manages, the more resources it needs. At a
+certain point, this overhead becomes a constraint in slicing up your physical infra‐
+structure any further. In practice, this means that there are often diminishing returns
+in slicing up a physical box into smaller and smaller parts, as proportionally more
+and more resources go into the overhead of the hypervisor.
+Good for microservices?
+Coming back to our principles, virtual machines do very well in terms of isolation,
+but at a cost. Their ease of automation can vary based on the exact technology being
+used—managed VMs on Google Cloud, Azure, or AWS, for example, are all easy to
+automate via well-supported APIs and an ecosystem of tools that build on these APIs.
+In addition, these platforms provide concepts like autoscaling groups, helping imple‐
+ment desired state management. Implementing zero-downtime deployment is going
+to take more work, but if the VM platform you are using gives you a good API, the
+building blocks are there. The issue is that many people are making use of managed
+VMs provided by traditional virtualization platforms like the ones provided by
+VMware, which, while they may theoretically allow for automation, are typically not
+used in this context. Instead these platforms tend to be under the central control of a
+dedicated operations team, and the ability to directly automate against them can be
+restricted as a result.
+Although containers are proving to be more popular in general for microservice
+workloads, many organizations have used virtual machines for running large-scale
+microservice systems, to great effect. Netflix, one of the poster children for microser‐
+vices, built out much of its microservices on top of AWS’s managed virtual machines
+via EC2. If you need the stricter isolation levels that they can bring, or you don’t have
+the ability to containerize your application, VMs can be a great choice.
+Containers
+Since the first edition of this book, containers have become a dominant concept in
+server-side software deployment and for many are the de facto choice for packaging
+and running microservice architectures. The container concept, popularized by
+Docker, and allied with a supporting container orchestration platform like Kuber‐
+netes, has become many people’s go-to choice for running microservice architectures
+at scale.
+Before we get to why this has happened and to the relationship between containers,
+Kubernetes, and Docker, we should first explore what a container is exactly, and look
+specifically at how it differs from virtual machines.
+Deployment Options 
+| 
+241

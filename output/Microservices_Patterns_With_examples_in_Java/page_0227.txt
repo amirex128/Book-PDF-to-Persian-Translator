@@ -1,0 +1,48 @@
+197
+Developing business logic using event sourcing
+6.1.6
+Idempotent message processing
+Services often consume messages from other applications or other services. A service
+might, for example, consume domain events published by aggregates or command
+messages sent by a saga orchestrator. As described in chapter 3, an important issue
+when developing a message consumer is ensuring that it’s idempotent, because a mes-
+sage broker might deliver the same message multiple times.
+ A message consumer is idempotent if it can safely be invoked with the same mes-
+sage multiple times. The Eventuate Tram framework, for example, implements idem-
+potent message handling by detecting and discarding duplicate messages. It records
+the ids of processed messages in a PROCESSED_MESSAGES table as part of the local
+ACID transaction used by the business logic to create or update aggregates. If the ID
+of a message is in the PROCESSED_MESSAGES table, it’s a duplicate and can be dis-
+carded. Event sourcing-based business logic must implement an equivalent mecha-
+nism. How this is done depends on whether the event store uses an RDBMS or a
+NoSQL database.
+IDEMPOTENT MESSAGE PROCESSING WITH AN RDBMS-BASED EVENT STORE
+If an application uses an RDBMS-based event store, it can use an identical approach to
+detect and discard duplicates messages. It inserts the message ID into the PROCESSED
+_MESSAGES table as part of the transaction that inserts events into the EVENTS table. 
+IDEMPOTENT MESSAGE PROCESSING WHEN USING A NOSQL-BASED EVENT STORE
+A NoSQL-based event store, which has a limited transaction model, must use a different
+mechanism to implement idempotent message handling. A message consumer must
+somehow atomically persist events and record the message ID. Fortunately, there’s a
+simple solution. A message consumer stores the message’s ID in the events that are
+generated while processing it. It detects duplicates by verifying that none of an aggre-
+gate’s events contains the message ID.
+ One challenge with using this approach is that processing a message might not
+generate any events. The lack of events means there’s no record of a message having
+been processed. A subsequent redelivery and reprocessing of the same message might
+result in incorrect behavior. For example, consider the following scenario:
+1
+Message A is processed but doesn’t update an aggregate.
+2
+Message B is processed, and the message consumer updates the aggregate.
+3
+Message A is redelivered, and because there’s no record of it having been pro-
+cessed, the message consumer updates the aggregate.
+4
+Message B is processed again….
+In this scenario, the redelivery of events results in a different and possibly erroneous
+outcome.
+ One way to avoid this problem is to always publish an event. If an aggregate doesn’t
+emit an event, an application saves a pseudo event solely to record the message ID.
+Event consumers must ignore these pseudo events. 
+ 

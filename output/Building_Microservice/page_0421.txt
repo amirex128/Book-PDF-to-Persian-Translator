@@ -1,0 +1,30 @@
+Stability Patterns
+There are a few patterns we can make use of to ensure that if something does go
+wrong, it doesn’t cause nasty ripple-out effects. It is essential you understand these
+ideas, and you should strongly consider making use of them in your system to ensure
+that one bad citizen doesn’t bring the whole world crashing down around your ears.
+In a moment, we’ll take a look at a few key safety measures you should consider, but
+before we do, I’d like to share a brief story to outline the sort of thing that can go
+wrong.
+Many years ago, I was a technical lead on a project for AdvertCorp. AdvertCorp (the
+company name and details are changed to protect the innocent!) provided online
+classified ads through a very popular website. The website itself handled fairly high
+volumes and generated a good deal of income for the business. The project I was
+working on was tasked with consolidating a number of existing services that were
+used to deliver similar functionality for different types of advertisements. Existing
+functionality for the different types of ads was slowly being migrated into the new
+system we were building, with a number of different types of ads still served up from
+older services. To make this transition transparent to the end customer, we intercep‐
+ted all calls to the different types of ads in our new system, diverting them to the old
+systems where required, as outlined in Figure 12-1. This is actually an example of a
+strangler fig pattern, which we discussed briefly in “Useful Decompositional Patterns”
+on page 79.
+Figure 12-1. A strangler fig pattern being used to direct calls to older legacy systems
+We had just moved over the highest-volume and biggest-earning product to the new
+system, but much of the rest of the ads were still being served by a number of older
+applications. In terms of both the number of searches and the money made by these
+applications, there was a very long tail—many of these older applications received
+small amounts of traffic and generated small amounts of revenue. The new system
+Stability Patterns 
+| 
+395

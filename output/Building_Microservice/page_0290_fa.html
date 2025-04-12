@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 290</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   5 <span style="color:blue">Daniel Bryant</span>، "ساخت مجدد سرویس‌های <span style="color:blue">Backend</span> <span style="color:blue">Siri</span> با استفاده از <span style="color:blue">Apache Mesos</span>،" <span style="color:blue">InfoQ</span>، 3 مه 2015،
+   <span style="color:blue">https://oreil.ly/NLUMX</span>.
+  </p>
+  <h4>زمینه ای پشت <span style="color:blue">Kubernetes</span></h4>
+  <p>
+   <span style="color:blue">Kubernetes</span> به عنوان یک پروژه منبع باز در <span style="color:blue">Google</span> آغاز شد، که الهام خود را دریافت کرد
+   از سیستم های مدیریت کانتینر قبلی <span style="color:blue">Omega</span> و <span style="color:blue">Borg</span>. بسیاری از هسته
+   مفاهیم در <span style="color:blue">Kubernetes</span> بر اساس مفاهیمی در مورد نحوه اداره بارهای کاری کانتینر هستند
+   در داخل <span style="color:blue">Google</span> مدیریت می شود، اگرچه با یک هدف کمی متفاوت در ذهن. <span style="color:blue">Borg</span> اجرا می شود
+   سیستم ها در مقیاس جهانی عظیم، که ده ها یا صدها هزار نفر را مدیریت می کنند
+   کانتینرها در سراسر مراکز داده در سطح جهانی. اگر جزئیات بیشتری در مورد چگونگی تفاوت می خواهید
+   ذهنیت های مختلف پشت این سه پلتفرم <span style="color:blue">Google</span> را مقایسه کنید، اگرچه از نظر <span style="color:blue">Google</span>-محور
+   دیدگاه، من "Borg، <span style="color:blue">Omega</span>، و <span style="color:blue">Kubernetes</span>" اثر <span style="color:blue">Brendan Burns</span> و همکاران را به عنوان a توصیه می کنم
+   مرور کلی خوب
+  </p>
+  <p>
+   در حالی که <span style="color:blue">Kubernetes</span> مقداری <span style="color:blue">DNA</span> را با <span style="color:blue">Borg</span> و <span style="color:blue">Omega</span> به اشتراک می گذارد، کار در مقیاس عظیم
+   یک محرک اصلی در پشت این پروژه نبوده است. هر دو <span style="color:blue">Nomad</span> و <span style="color:blue">Mesos</span> (هر کدام از
+   که از <span style="color:blue">Borg</span> نشانه‌ای گرفت) در شرایطی که در آن خوشه‌هایی از
+   هزاران دستگاه مورد نیاز است، همانطور که در استفاده <span style="color:blue">Apple</span> از <span style="color:blue">Mesos</span> برای <span style="color:blue">Siri</span> نشان داده شد5
+   یا استفاده <span style="color:blue">Roblox</span> از <span style="color:blue">Nomad</span>.
+  </p>
+  <p>
+   <span style="color:blue">Kubernetes</span> می خواست ایده هایی را از <span style="color:blue">Google</span> بگیرد اما یک <span style="color:blue">developer</span>-دوستانه تر ارائه دهد
+   تجربه ای از آنچه توسط <span style="color:blue">Borg</span> یا <span style="color:blue">Omega</span> ارائه شده است. می‌توان به <span style="color:blue">Google</span> نگاه کرد
+   تصمیم به سرمایه گذاری مقدار زیادی تلاش مهندسی در ایجاد یک ابزار منبع باز در a
+   نور صرفاً بشردوستانه، و در حالی که من مطمئن هستم که این نیت برخی از مردم بود،
+   واقعیت این است که این به همان اندازه در مورد خطری است که <span style="color:blue">Google</span> از رقابت در حال مشاهده بود
+   فضای ابر عمومی، به طور خاص <span style="color:blue">AWS</span>.
+  </p>
+  <p>
+   در بازار ابر عمومی، <span style="color:blue">Google Cloud</span> به دست آورده است اما هنوز از آن دور است
+   سومین رتبه پس از <span style="color:blue">Azure</span> و <span style="color:blue">AWS</span> (که در جلو هستند)، و برخی از تحلیل ها باعث شده است که آن را
+   توسط <span style="color:blue">Alibaba Cloud</span> به مقام چهارم سوق داده شد. با وجود سهم بازار در حال بهبود، آن است
+   هنوز هم تقریباً به جایی که <span style="color:blue">Google</span> می خواهد، نزدیک نیست.
+  </p>
+  <p>
+   به نظر می رسد که یک نگرانی اصلی این بود که رهبر بازار، <span style="color:blue">AWS</span>، می تواند
+   در نهایت یک انحصار نزدیک در فضای محاسبات ابری داشته باشید. علاوه بر این، نگرانی ها
+   مربوط به هزینه مهاجرت از یک ارائه دهنده به ارائه دهنده دیگر به این معنی بود که چنین موضعی
+   تسلط بر بازار به سختی می تواند تغییر کند. و سپس <span style="color:blue">Kubernetes</span> می آید،
+   با وعده خود برای توانایی ارائه یک پلتفرم استاندارد برای اجرای کانتینر
+   بارهای کاری که می تواند توسط چندین فروشنده اجرا شود. امید این بود که این
+   امکان مهاجرت از یک ارائه دهنده به دیگری و اجتناب از آینده فقط <span style="color:blue">AWS</span> را فراهم می کند.
+  </p>
+  <p>
+   بنابراین شما می توانید <span style="color:blue">Kubernetes</span> را به عنوان یک مشارکت سخاوتمندانه از <span style="color:blue">Google</span> به گسترده تر
+   صنعت فناوری اطلاعات، یا به عنوان تلاشی از سوی <span style="color:blue">Google</span> برای مرتبط ماندن در حال حرکت سریع
+   فضای ابر عمومی من مشکلی ندارم که هر دو چیز را به یک اندازه درست ببینم.
+  </p>
+  <p>
+   264
+   |
+   فصل 8: استقرار
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

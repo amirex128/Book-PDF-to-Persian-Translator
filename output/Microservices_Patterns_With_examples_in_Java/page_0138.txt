@@ -1,0 +1,44 @@
+108
+CHAPTER 3
+Interprocess communication in a microservice architecture
+ After the Order has been validated, Order Service completes the rest of the order-
+creation process, discussed in the next chapter. What’s nice about this approach is
+that even if Consumer Service is down, for example, Order Service still creates orders
+and responds to its clients. Eventually, Consumer Service will come back up and pro-
+cess any queued messages, and orders will be validated.
+ A drawback of a service responding before fully processing a request is that it
+makes the client more complex. For example, Order Service makes minimal guaran-
+tees about the state of a newly created order when it returns a response. It creates the
+order and returns immediately before validating the order and authorizing the con-
+sumer’s credit card. Consequently, in order for the client to know whether the order
+was successfully created, either it must periodically poll or Order Service must send it
+a notification message. As complex as it sounds, in many situations this is the pre-
+ferred approach—especially because it also addresses the distributed transaction man-
+agement issues I discuss in the next chapter. In chapters 4 and 5, for example, I
+describe how Order Service uses this approach. 
+Summary
+The microservice architecture is a distributed architecture, so interprocess
+communication plays a key role.
+It’s essential to carefully manage the evolution of a service’s API. Backward-
+compatible changes are the easiest to make because they don’t impact clients. If
+you make a breaking change to a service’s API, it will typically need to support
+both the old and new versions until its clients have been upgraded.
+There are numerous IPC technologies, each with different trade-offs. One key
+design decision is to choose either a synchronous remote procedure invocation
+pattern or the asynchronous Messaging pattern. Synchronous remote proce-
+dure invocation-based protocols, such as REST, are the easiest to use. But ser-
+vices should ideally communicate using asynchronous messaging in order to
+increase availability.
+In order to prevent failures from cascading through a system, a service client
+that uses a synchronous protocol must be designed to handle partial failures,
+which are when the invoked service is either down or exhibiting high latency. In
+particular, it must use timeouts when making requests, limit the number of out-
+standing requests, and use the Circuit breaker pattern to avoid making calls to a
+failing service.
+An architecture that uses synchronous protocols must include a service discov-
+ery mechanism in order for clients to determine the network location of a ser-
+vice instance. The simplest approach is to use the service discovery mechanism
+implemented by the deployment platform: the Server-side discovery and 3rd
+party registration patterns. But an alternative approach is to implement service
+discovery at the application level: the Client-side discovery and Self registration
+ 

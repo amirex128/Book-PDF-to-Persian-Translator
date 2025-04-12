@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 396</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   Distributed tracing—هر external request را به یک unique ID اختصاص دهید و requests را
+   همانطور که بین services جریان دارند، ردیابی کنید.
+  </p>
+  <p>
+   Exception tracking—Exceptions را به یک exception tracking service گزارش دهید، که
+   exceptions را de-duplicates می‌کند، به developers هشدار می‌دهد و resolution هر را ردیابی می‌کند
+   exception.
+  </p>
+  <p>
+   Application metrics—Services metrics را نگهداری می‌کنند، مانند counters و gauges، و
+   آنها را به یک metrics server نشان می‌دهند.
+  </p>
+  <p>
+   Audit logging—Log user actions.
+  </p>
+  <p>
+   A distinctive feature از اکثر این patterns این است که هر pattern یک developer دارد
+   component و یک operations component. Consider, for example, the Health check
+   API pattern. The developer مسئول اطمینان از این است که service آنها یک
+   health check endpoint را پیاده‌سازی می‌کند. Operations مسئول the monitoring system است که peri-
+   odically health check API را فراخوانی می‌کند. Similarly, for the Log aggregation pattern، a
+   developer مسئول اطمینان از این است که services آنها اطلاعات مفید را log می‌کنند،
+   در حالی که operations مسئول log aggregation است.
+  </p>
+  <p>
+   Let’s take a look at each از این patterns، شروع با Health check API pattern.
+  </p>
+  <h4><span style="font-weight: bold;">11.3.1 Using the Health check API pattern</span></h4>
+  <p>
+   Sometimes a service ممکن است در حال اجرا باشد اما قادر به handle کردن requests نباشد. For instance, a
+   newly started service instance ممکن است آماده پذیرش requests نباشد. The FTGO Con-
+   sumer Service، به عنوان مثال، حدود 10 ثانیه طول می‌کشد تا messaging را مقداردهی اولیه کند و
+   database adapters. It would be pointless برای زیرساخت استقرار برای route کردن
+   HTTP requests به یک service instance تا زمانی که آماده پردازش آنها شود.
+  </p>
+  <p>
+   Also, a service instance می‌تواند بدون خاتمه یافتن، شکست بخورد. For example, a bug ممکن است
+   باعث شود که یک instance از Consumer Service از database connections خارج شود و
+   قادر به دسترسی به database نباشد. The deployment infrastructure نباید route
+   requests را به یک service instance که شکست خورده است اما همچنان در حال اجرا است. And, if the service
+   instance بازیابی نمی‌شود، the deployment infrastructure باید آن را خاتمه دهد و ایجاد کند
+   یک instance جدید.
+  </p>
+  <p>
+   A service instance نیاز دارد تا بتواند به زیرساخت استقرار بگوید که آیا
+   قادر به handle کردن requests است یا خیر. A good solution این است که یک service a را implement کند
+   health check endpoint، که در شکل 11.10 نشان داده شده است. The Spring Boot Actuator Java library,
+   به عنوان مثال، a GET /actuator/health endpoint را پیاده‌سازی می‌کند، که 200 را برمی‌گرداند if and
+   only if the service is healthy, و 503 otherwise. Similarly, the HealthChecks .NET
+   Pattern: Health check API
+   A service exposes a health check API endpoint, such as GET /health, که
+   health از service را برمی‌گرداند. See http://microservices.io/patterns/observability/health-
+   check-api.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

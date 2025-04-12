@@ -1,0 +1,39 @@
+Hide Internal Implementation Detail
+We don’t want our consumers to be bound to our internal implementation, as it leads
+to increased coupling; that in turn means that if we want to change something inside
+our microservice, we can break our consumers by requiring them to also change.
+That increases the cost of change—exactly what we are trying to avoid. It also means
+we are less likely to want to make a change for fear of having to upgrade our consum‐
+ers, which can lead to increased technical debt within the service. So any technology
+that pushes us to expose internal representation detail should be avoided.
+Technology Choices
+There is a whole host of technology we could look at, but rather than looking broadly
+at a long list of options, I will highlight some of the most popular and interesting
+choices. Here are the options we’ll be looking at:
+Remote procedure calls
+Frameworks that allow for local method calls to be invoked on a remote process.
+Common options include SOAP and gRPC.
+REST
+An architectural style where you expose resources (Customer, Order, etc.) that
+can be accessed using a common set of verbs (GET, POST). There is a bit more
+to REST than this, but we’ll get to that shortly.
+GraphQL
+A relatively new protocol that allows consumers to define custom queries that
+can fetch information from multiple downstream microservices, filtering the
+results to return only what is needed.
+Message brokers
+Middleware that allows for asynchronous communication via queues or topics.
+Remote Procedure Calls
+Remote procedure call (RPC) refers to the technique of making a local call and having
+it execute on a remote service somewhere. There are a number of different RPC
+implementations in use. Most of the technology in this space requires an explicit
+schema, such as SOAP or gRPC. In the context of RPC, the schema is often referred
+to as an interface definition language (IDL), with SOAP referring to its schema for‐
+mat as a web service definition language (WSDL). The use of a separate schema
+makes it easier to generate client and server stubs for different technology stacks—so,
+for example, I could have a Java server exposing a SOAP interface, and a .NET client
+generated from the same WSDL definition of the interface. Other technology, such as
+Java RMI, calls for a tighter coupling between the client and the server, requiring that
+Technology Choices 
+| 
+123

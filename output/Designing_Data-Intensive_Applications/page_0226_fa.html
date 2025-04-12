@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 226</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        شکل 6-3. Partitioning توسط hash از key.
+    </p>
+    <p>
+        این تکنیک در توزیع keys به طور منصفانه در میان partitions، خوب است. the partition boundaries می‌توانند به طور مساوی فاصله‌گذاری شوند، یا می‌توانند به صورت pseudorandom انتخاب شوند (که در این صورت تکنیک، گاهی اوقات consistent hashing نامیده می‌شود).
+    </p>
+    <h4>Consistent Hashing</h4>
+    <p>
+        Consistent hashing، همانطور که توسط Karger و همکاران [7] تعریف شده است، یک راه برای توزیع مساوی load در یک سیستم از caches در سراسر اینترنت، مانند یک content delivery network (CDN)، است.
+        این از partition boundaries که به طور تصادفی انتخاب شده‌اند، استفاده می‌کند تا از نیاز به کنترل مرکزی یا distributed consensus اجتناب کند. توجه داشته باشید که consistent در اینجا هیچ ارتباطی با replica consis‐tency (فصل 5 را ببینید) یا ACID consistency (فصل 7 را ببینید)، ندارد، بلکه یک رویکرد خاص را برای rebalancing توصیف می‌کند.
+    </p>
+    <p>
+        همانطور که در "Rebalancing Partitions" در صفحه 209 خواهیم دید، این رویکرد خاص، در واقع برای databases بسیار خوب عمل نمی‌کند [8]، بنابراین در عمل به ندرت استفاده می‌شود (documentation از برخی از databases هنوز به consistent hashing اشاره دارد، اما اغلب نادرست است). از آنجایی که این بسیار گیج‌کننده است، بهتر است از اصطلاح consistent hashing اجتناب کنید و به جای آن، آن را hash partitioning بنامید.
+    </p>
+    <p>
+        متاسفانه با استفاده از hash از key برای partitioning ما یک property خوب از key-range partitioning را از دست می‌دهیم: توانایی انجام efficient range queries. Keys که زمانی مجاور بودند، اکنون در تمام partitions پراکنده شده‌اند، بنابراین sort order آن‌ها از بین می‌رود. در MongoDB، اگر شما حالت sharding مبتنی بر hash را فعال کرده باشید، هر query range باید به تمام partitions ارسال شود [4]. Range queries روی primary key توسط Riak [9], Couchbase [10] یا Voldemort پشتیبانی نمی‌شوند.
+    </p>
+    <p>
+        Cassandra یک compromise را بین دو strategy partitioning به دست می‌آورد [11, 12, 13]. A table در Cassandra می‌تواند با یک primary key compound declaration شود که شامل چندین column است. فقط قسمت اول آن key، hash می‌شود تا partition را تعیین کند، اما columns دیگر به عنوان یک concatenated index برای sorting the data در SSTables از Cassandra استفاده می‌شوند. بنابراین یک query نمی‌تواند به دنبال یک range از values در داخل
+    </p>
+    <p>
+        204 | Chapter 6: Partitioning
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0226/image_1.png" alt="Image from page 226" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

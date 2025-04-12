@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 166</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <ul>
+   <li>CreateOrderSagaState (حالت حماسه ایجاد سفارش) - state (حالت) پایدار یک saga (حماسه)، که command messages (پیام‌های دستور) را ایجاد می‌کند.</li>
+   <li>Saga participant proxy classes (کلاس‌های پراکسی شرکت‌کننده saga)، مانند KitchenServiceProxy (پراکسی سرویس آشپزخانه) - هر کلاس proxy (پراکسی) API (رابط برنامه‌نویسی) messaging (پیام‌رسانی) یک participant (شرکت‌کننده) saga (حماسه) را تعریف می‌کند، که شامل command channel (کانال دستور)، انواع command message (پیام دستور) و انواع reply (پاسخ) است.</li>
+  </ul>
+  <p>این کلاس‌ها با استفاده از Eventuate Tram Saga framework (فریم‌ورک حماسه Eventuate Tram) نوشته شده‌اند.</p>
+  <p>The Eventuate Tram Saga framework (فریم‌ورک حماسه Eventuate Tram) یک domain-specific language (DSL) (زبان مخصوص دامنه) برای تعریف state machine (ماشین حالت) یک saga (حماسه) ارائه می‌دهد. این state machine (ماشین حالت) saga (حماسه) را اجرا می‌کند و با استفاده از Eventuate Tram framework (فریم‌ورک Eventuate Tram) با saga participants (شرکت‌کنندگان حماسه) پیام‌ها را تبادل می‌کند. این فریم‌ورک همچنین state (حالت) saga (حماسه) را در database (پایگاه داده) ذخیره می‌کند.</p>
+  <p>بیایید نگاهی دقیق‌تر به پیاده‌سازی Create Order Saga (حماسه ایجاد سفارش) بیندازیم، با کلاس CreateOrderSaga شروع می‌کنیم.</p>
+  <p>THE CREATEORDERSAGA ORCHESTRATOR (ارکستراتور CREATEORDERSAGA)</p>
+  <p>کلاس CreateOrderSaga state machine (ماشین حالت) را که قبلاً در شکل 4.7 نشان داده شد، پیاده‌سازی می‌کند. این کلاس SimpleSaga را پیاده‌سازی می‌کند، که یک base interface (رابط پایه) برای sagas (حماسه‌ها) است. قلب کلاس CreateOrderSaga تعریف saga (حماسه) است که در فهرست زیر نشان داده شده است. این از DSL (زبان مخصوص دامنه) ارائه شده توسط Eventuate Tram Saga framework (فریم‌ورک حماسه Eventuate Tram) برای تعریف مراحل Create Order Saga (حماسه ایجاد سفارش) استفاده می‌کند.</p>
+  <pre><code class="language-java">public class CreateOrderSaga implements SimpleSaga&lt;CreateOrderSagaState&gt; {
+ private SagaDefinition&lt;CreateOrderSagaState&gt; sagaDefinition;
+ public CreateOrderSaga(OrderServiceProxy orderService,
+ ConsumerServiceProxy consumerService,
+ KitchenServiceProxy kitchenService,
+ AccountingServiceProxy accountingService) {
+  this.sagaDefinition =
+  step()
+  .withCompensation(orderService.reject,
+  CreateOrderSagaState::makeRejectOrderCommand)
+  .step()
+  .invokeParticipant(consumerService.validateOrder,
+  CreateOrderSagaState::makeValidateOrderByConsumerCommand)
+  .step()
+  .invokeParticipant(kitchenService.create,
+  CreateOrderSagaState::makeCreateTicketCommand)
+  .onReply(CreateTicketReply.class,
+  CreateOrderSagaState::handleCreateTicketReply)
+  .withCompensation(kitchenService.cancel,
+  CreateOrderSagaState::makeCancelCreateTicketCommand)
+  .step()
+  .invokeParticipant(accountingService.authorize,
+  CreateOrderSagaState::makeAuthorizeCommand)
+  .step()
+  .invokeParticipant(kitchenService.confirmCreate,
+  CreateOrderSagaState::makeConfirmCreateTicketCommand)
+ </code></pre>
+  <p>Listing (فهرست) 4.2</p>
+  <p>The definition (تعریف) of the CreateOrderSaga (حماسه ایجاد سفارش)</p>
+  <br>
+  <p>Ensure (اطمینان حاصل کنید) that (که) service (سرویس)</p>
+  <p>methods (متدها) are transactional (تراکنشی) هستند.</p>
+  <p>Create (ایجاد) the (the)</p>
+  <p>Order (سفارش).</p>
+  <p>Persist (پایدار کنید) the (the)</p>
+  <p>Order (سفارش) in the (در) database (پایگاه داده).</p>
+  <p>Publish (انتشار) domain (دامنه)</p>
+  <p>events (رویدادها).</p>
+  <p>Create (ایجاد) a (یک)</p>
+  <p>CreateOrderSaga (حماسه ایجاد سفارش).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

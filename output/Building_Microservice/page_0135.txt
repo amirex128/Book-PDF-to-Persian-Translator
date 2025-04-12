@@ -1,0 +1,28 @@
+microservices to use the event, and indeed it may not even be aware that other micro‐
+services exist. It emits the event when required, and that is the end of its responsibili‐
+ties.
+In Figure 4-11, we see the Warehouse emitting events related to the process of packag‐
+ing up an order. These events are received by two microservices, Notifications and
+Inventory, and they react accordingly. The Notifications microservice sends an
+email to update our customer about changes in order status, while the Inventory
+microservice can update stock levels as items are packaged into the customer’s order.
+Figure 4-11. The Warehouse emits events that some downstream microservices
+subscribe to
+The Warehouse is just broadcasting events, assuming that interested parties will react
+accordingly. It is unaware of who the recipients of the events are, making event-
+driven interactions much more loosely coupled in general. When you compare this to
+a request-response call, it may take you a while to get your head around the inversion
+of responsibility. With request-response, we might instead expect Warehouse to tell
+the Notifications microservice to send emails when appropriate. In such a model,
+Warehouse would need to know what events require customer notification. With an
+event-driven interaction, we are instead pushing that responsibility into the Notifica
+tions microservice.
+The intent behind an event could be considered the opposite of a request. The event
+emitter is leaving it up to the recipients to decide what to do. With request-response,
+the microservice sending the request knows what should be done and is telling the
+other microservice what it thinks needs to happen next. This of course means that in
+request-response, the requester has to have knowledge of what the downstream
+recipient can do, implying a greater degree of domain coupling. With event-driven
+Pattern: Event-Driven Communication 
+| 
+109

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 117</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the Asynchronous messaging pattern</h3>
+  <p>
+   منطق کسب‌وکار. هر تعدادی از <strong>senders</strong> می‌توانند پیام‌ها را به یک کانال ارسال کنند. به طور مشابه، هر
+   تعداد از <strong>receivers</strong> می‌توانند پیام‌ها را از یک کانال دریافت کنند.
+  </p>
+  <p>
+   دو نوع کانال وجود دارد: نقطه به نقطه (<strong>www.enterpriseintegrationpatterns</strong>
+   .com/PointToPointChannel.html) و انتشار-اشتراک (<strong>www.enterpriseintegration-</strong>
+   <strong>patterns.com/PublishSubscribeChannel.html</strong>):
+  </p>
+  <ul>
+   <li>
+    یک کانال نقطه به نقطه یک پیام را دقیقاً به یکی از مصرف‌کنندگانی تحویل می‌دهد که
+    از کانال می‌خواند. سرویس‌ها از کانال‌های نقطه به نقطه برای سبک‌های تعامل یک به
+    یک که قبلاً توضیح داده شد، استفاده می‌کنند. به عنوان مثال، یک پیام <strong>command</strong> است
+    اغلب از طریق یک کانال نقطه به نقطه ارسال می‌شود.
+   </li>
+   <li>
+    یک کانال انتشار-اشتراک، هر پیام را به همه <strong>consumers</strong> متصل شده تحویل می‌دهد.
+    سرویس‌ها از کانال‌های انتشار-اشتراک برای سبک‌های تعامل یک به چند
+    که قبلاً توضیح داده شد، استفاده می‌کنند. به عنوان مثال، یک پیام <strong>event</strong> معمولاً از طریق یک
+    کانال انتشار-اشتراک ارسال می‌شود.
+   </li>
+  </ul>
+  <h4>3.3.2 Implementing the interaction styles using messaging</h4>
+  <p>
+   یکی از ویژگی‌های ارزشمند پیام‌رسانی این است که به اندازه‌ای انعطاف‌پذیر است که از همه
+   سبک‌های تعامل توضیح داده شده در بخش 3.1.1 پشتیبانی کند. برخی از سبک‌های تعامل مستقیماً پیاده‌سازی می‌شوند.
+   توسط پیام‌رسانی. دیگران باید بر اساس پیام‌رسانی پیاده‌سازی شوند.
+  </p>
+  <p>
+   بیایید نگاهی بیندازیم به نحوه پیاده‌سازی هر سبک تعامل، با شروع از <strong>request/response</strong>
+   و <strong>asynchronous request/response</strong>.
+  </p>
+  <p>
+   <strong>IMPLEMENTING REQUEST/RESPONSE AND ASYNCHRONOUS REQUEST/RESPONSE</strong>
+  </p>
+  <p>
+   هنگامی که یک کلاینت و سرویس با استفاده از <strong>request/response</strong> یا <strong>asynchronous</strong> تعامل دارند
+   <strong>request/response</strong>، کلاینت یک <strong>request</strong> ارسال می‌کند و سرویس یک <strong>reply</strong> را برمی‌گرداند.
+  </p>
+  <p>
+   کسب‌وکار
+   منطق
+   فراخوانی می‌کند
+   فراخوانی می‌کند
+   منطق کسب‌وکار
+   <strong>Sending port</strong>
+   <strong>Receiving port</strong>
+   <strong>Sender</strong>
+   <strong>Receiver</strong>
+   پیام
+   <strong>sender</strong>
+   پیام
+   پیام
+   کانال
+   دریافت می‌کند
+   ارسال می‌کند
+   <strong>Header</strong>
+   <strong>Body</strong>
+   پیام‌رسانی
+   زیرساخت
+   <strong>Message</strong>
+   <strong>handler</strong>
+   سرویس
+  </p>
+  <p>
+   شکل 3.7
+   منطق کسب‌وکار در <strong>sender</strong> یک <strong>sending port interface</strong> را فراخوانی می‌کند که توسط یک <strong>message</strong>
+   <strong>sender adapter</strong> پیاده‌سازی شده است. <strong>message sender</strong>، یک پیام را به یک <strong>receiver</strong> از طریق یک کانال پیام ارسال می‌کند. <strong>message channel</strong>، یک انتزاع از زیرساخت پیام‌رسانی است. یک <strong>message handler adapter</strong> در <strong>receiver</strong> فراخوانی می‌شود تا پیام را مدیریت کند. این <strong>receiving port interface</strong> را فراخوانی می‌کند که توسط منطق کسب‌وکار <strong>receiver</strong> پیاده‌سازی شده است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

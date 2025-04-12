@@ -1,0 +1,43 @@
+In this interface, createCustomer takes the first name, surname, and email address.
+What happens if we decide to allow the Customer object to also be created with just
+an email address? We could add a new method at this point pretty easily, like so:
+...
+public Customer createCustomer(String emailAddress) throws RemoteException;
+...
+The problem is that now we need to regenerate the client stubs too. Clients that want
+to consume the new method need the new stubs, and depending on the nature of the
+changes to the specification, consumers that don’t need the new method may also
+need to have their stubs upgraded. This is manageable, of course, but only to a point.
+The reality is that changes like this are fairly common. RPC endpoints often end up
+having a large number of methods for different ways of creating or interacting with
+objects. This is due in part to the fact that we are still thinking of these remote calls as
+local ones.
+There is another sort of brittleness, though. Let’s take a look at what our Customer
+object looks like:
+public class Customer implements Serializable {
+  private String firstName;
+  private String surname;
+  private String emailAddress;
+  private String age;
+}
+What if it turns out that, although we expose the age field in our Customer objects,
+none of our consumers ever use it? We decide we want to remove this field. But if the
+server implementation removes age from its definition of this type, and we don’t do
+the same to all the consumers, then even though they never used the field, the code
+associated with deserializing the Customer object on the consumer side will break. To
+roll out this change, we’d need to make changes to the client code to support the new
+definition and deploy these updated clients at the same time as we roll out the new
+version of the server. This is a key challenge with any RPC mechanism that promotes
+the use of binary stub generation: you don’t get to separate client and server deploy‐
+ments. If you use this technology, lockstep releases may be in your future.
+Similar problems occur if we want to restructure the Customer object, even if we
+didn’t remove fields—for example, if we wanted to encapsulate firstName and sur
+name into a new naming type to make it easier to manage. We could, of course, fix this
+by passing around dictionary types as the parameters of our calls, but at that point,
+we lose many of the benefits of the generated stubs because we’ll still have to man‐
+ually match and extract the fields we want.
+In practice, objects used as part of binary serialization across the wire can be thought
+of as “expand-only” types. This brittleness results in the types being exposed over the
+126 
+| 
+Chapter 5: Implementing Microservice Communication

@@ -1,0 +1,40 @@
+Since then, I’m happy to say, this space has matured. The churn to some extent has
+slowed, but we still have a (healthy) plurality of vendors. That said, service meshes
+aren’t for everyone. Firstly, if you aren’t on Kubernetes, your options are limited. Sec‐
+ondly, they do add complexity. If you have five microservices, I don’t think you can
+easily justify a service mesh (it’s arguable as to whether you can justify Kubernetes if
+you only have five microservices!). For organizations that have more microservices,
+especially if they want the option for those microservices to be written in different
+programming languages, service meshes are well worth a look. Do your homework,
+though—switching between service meshes is painful!
+Monzo is one organization that has spoken openly about how its use of a service
+mesh was essential in allowing it to run its architecture at the scale it does. Its use of
+version 1 of Linkerd to help manage inter-microservice RPC calls proved hugely ben‐
+eficial. Interestingly, Monzo had to handle the pain of a service mesh migration to
+help it achieve the scale it needed when the older architecture of Linkerd v1 no longer
+met its requirements. In the end it moved effectively to an in-house service mesh
+making use of the Envoy proxy.
+What About Other Protocols?
+API gateways and service meshes are primarily used to handle HTTP-related calls. So
+REST, SOAP, gRPC, and the like can be managed via these products. Things get a bit
+more murky, though, when you start looking at communication via other protocols,
+like the use of message brokers such as Kafka. Typically, at this point the service mesh
+gets bypassed—communication is done directly with the broker itself. This means
+that you cannot assume your service mesh is able to work as an intermediary for all
+calls between microservices.
+Documenting Services
+By decomposing our systems into finer-grained microservices, we’re hoping to
+expose lots of seams in the form of APIs that people can use to do many hopefully
+wonderful things. If you get our discovery right, we know where things are. But how
+do we know what those things do or how to use them? One option is obviously to
+have documentation about the APIs. Of course, documentation can often be out of
+date. Ideally, we’d ensure that our documentation is always up to date with the
+microservice API and make it easy to see this documentation when we know where a
+service endpoint is.
+Explicit Schemas
+Having explicit schemas does go a long way toward making it easier to understand
+what any given endpoint exposes, but by themselves they are often not enough. As
+we’ve already discussed, schemas help show the structure, but they don’t go very far
+Documenting Services 
+| 
+169

@@ -1,0 +1,42 @@
+applications, VMs, Hadoop jobs, and more. It may be worth a look if you want a plat‐
+form for managing mixed workloads that still makes use of concepts like desired state
+management.
+These platforms are aware of the underlying availability of resources and are able to
+match the requests for desired state to the available resources (or else tell you this
+isn’t possible). As an operator, you are distanced from the low-level configuration—
+you can say something simple like “I want four instances spread across both data cen‐
+ters” and rely on your platform to ensure this is done for you. Different platforms
+provide different levels of control—you can get much more complex with your
+desired state definition if you want.
+The use of desired state management can occasionally cause you problems if you for‐
+get you’re making use of it. I remember a situation in which I was shutting down a
+development cluster on AWS before I went home. I was shutting down the managed
+virtual machine instances (provided by AWS’s EC2 product) to save money—they
+weren’t going to be used overnight. However, I found that as soon as I killed one of
+the instances, another instance popped back up. It took me a while to realize that I
+had configured an autoscaling group to ensure that there was a minimum number of
+machines. AWS was seeing an instance die and spinning up a replacement. It took
+me 15 minutes of playing whack-a-mole like this before I realized what was up. The
+problem was that we were charged for EC2 on a per-hour basis. Even if an instance
+ran for only a minute, we got charged for the full hour. So my flailing around at the
+end of the day ended up being quite costly. In a way, this was a sign of success (at
+least that’s what I told myself)—we’d set up the autoscaling group some time before,
+and they had just worked to the point that we had forgotten they were there. It was
+simply a matter of writing a script to disable the autoscaling group as part of the clus‐
+ter shutdown to fix the problem in the future.
+Prerequisites
+To take advantage of desired state management, the platform needs some way to
+automatically launch instances of your microservice. So having a fully automated
+deployment for microservice instances is a clear prerequisite for desired state man‐
+agement. You may also need to give careful thought to how long it takes your instan‐
+ces to launch. If you are using desired state management to ensure there are enough
+computing resources to handle user load, then if an instance dies, you’ll want a
+replacement instance as quickly as possible to fill the gap. If provisioning a new
+instance takes a long time, you may need to have excess capacity in place to handle
+the load in the event of an instance dying so as to give yourself enough breathing
+room to bring up a new copy.
+Although you could hack together a desired state management solution for yourself,
+I’m not convinced it’s a good use of your time. If you want to embrace this concept, I
+236 
+| 
+Chapter 8: Deployment

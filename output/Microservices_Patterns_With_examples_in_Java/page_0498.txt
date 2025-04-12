@@ -1,0 +1,41 @@
+468
+CHAPTER 13
+Refactoring to microservices
+Eventually, we’ll implement this interface with a proxy that sends messages to the
+delivery service. But initially, we’ll implement this API with a class that calls the deliv-
+ery management code.
+ The DeliveryService interface is a coarse-grained interface that’s well suited to
+being implemented by an IPC mechanism. It defines schedule(), reschedule(), and
+cancel() methods, which correspond to the notification message types defined earlier. 
+REFACTORING THE MONOLITH TO CALL THE DELIVERYSERVICE INTERFACE
+Next, as figure 13.22 shows, we need to identify all the places in the FTGO monolith
+that invoke delivery management and change them to use the DeliveryService inter-
+face. This may take some time and is one of the most challenging aspects of extracting
+a service from the monolith.
+It certainly helps if the monolith is written in a statically typed language, such as Java,
+because the tools do a better job of identifying dependencies. If not, then hopefully
+you have some automated tests with sufficient coverage of the parts of the code that
+need to be changed. 
+IMPLEMENTING THE DELIVERYSERVICE INTERFACE
+The final step is to replace the DeliveryServiceImpl class with a proxy that sends
+notification messages to the standalone Delivery Service. But rather than discard
+the existing implementation right away, we’ll use a design, shown in figure 13.23, that
+enables the monolith to dynamically switch between the existing implementation and
+Delivery Service. We’ll implement the DeliveryService interface with a class that
+uses a dynamic feature toggle to determine whether to invoke the existing implemen-
+tation or Delivery Service.
+«interface»
+DeliveryService
+DeliveryServiceImpl
+void schedule(...)
+void reschedule(...)
+void cancel(...)
+Delivery
+management
+Delivery
+management
+client
+Figure 13.22
+The second step is to change the FTGO monolith to 
+invoke delivery management via the DeliveryService interface.
+ 

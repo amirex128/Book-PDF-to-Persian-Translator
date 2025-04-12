@@ -1,0 +1,45 @@
+254
+CHAPTER 8
+External API patterns
+ The task of designing an application’s external API is made even more challenging
+by the diversity of its clients. Different clients typically require different data. A desktop
+browser-based UI usually displays far more information than a mobile application. Also,
+different clients access the services over different kinds of networks. The clients within
+the firewall use a high-performance LAN, and the clients outside of the firewall use the
+internet or mobile network, which will have lower performance. Consequently, as you’ll
+learn, it often doesn’t make sense to have a single, one-size-fits-all API.
+ This chapter begins by describing various external API design issues. I then
+describe the external API patterns. I cover the API gateway pattern and then the Back-
+ends for frontends pattern. After that, I discuss how to design and implement an API
+gateway. I review the various options that are available, which include off-the-shelf API
+gateway products and frameworks for developing your own. I describe the design and
+implementation of an API gateway that’s built using the Spring Cloud Gateway frame-
+work. I also describe how to build an API gateway using GraphQL, a framework that
+provides graph-based query language.
+8.1
+External API design issues
+In order to explore the various API-related issues, let’s consider the FTGO application.
+As figure 8.1 shows, this application’s services are consumed by a variety of clients. Four
+kinds of clients consume the services’ APIs:
+Web applications, such as Consumer web application, which implements the
+browser-based UI for consumers, Restaurant web application, which imple-
+ments the browser-based UI for restaurants, and Admin web application, which
+implements the internal administrator UI
+JavaScript applications running in the browser
+Mobile applications, one for consumers and the other for couriers
+Applications written by third-party developers
+The web applications run inside the firewall, so they access the services over a high-
+bandwidth, low-latency LAN. The other clients run outside the firewall, so they access
+the services over the lower-bandwidth, higher-latency internet or mobile network.
+ One approach to API design is for clients to invoke the services directly. On the
+surface, this sounds quite straightforward—after all, that’s how clients invoke the API
+of a monolithic application. But this approach is rarely used in a microservice archi-
+tecture because of the following drawbacks:
+The fine-grained service APIs require clients to make multiple requests to
+retrieve the data they need, which is inefficient and can result in a poor user
+experience.
+The lack of encapsulation caused by clients knowing about each service and its
+API makes it difficult to change the architecture and the APIs.
+Services might use IPC mechanisms that aren’t convenient or practical for cli-
+ents to use, especially those clients outside the firewall.
+ 

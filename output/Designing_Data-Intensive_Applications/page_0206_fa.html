@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 206</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        نامیده می‌شود hinted handoff. (هنگامی که دوباره کلیدهای خانه‌تان را پیدا می‌کنید، همسایه‌تان مودبانه از شما می‌خواهد که از کاناپه آن‌ها بلند شوید و به خانه بروید.)
+    </p>
+    <p>
+        Sloppy quorums به ویژه برای افزایش write availability مفید هستند: تا زمانی که w nodes در دسترس باشند، database می‌تواند writes را بپذیرد. با این حال، این بدان معناست که حتی when w + r &gt; n، شما نمی‌توانید مطمئن باشید که latest value را برای یک key می‌خوانید، زیرا the latest value ممکن است به طور موقت به برخی از nodes خارج از n نوشته شده باشد [47].
+    </p>
+    <p>
+        بنابراین، یک sloppy quorum در واقع یک quorum در sense سنتی نیست. این فقط یک اطمینان از durability است، یعنی اینکه داده‌ها در w nodes در جایی ذخیره شده‌اند.
+        هیچ تضمینی وجود ندارد که یک read از r nodes آن را ببیند تا زمانی که hinted handoff کامل شود.
+    </p>
+    <p>
+        Sloppy quorums در همه پیاده‌سازی‌های رایج Dynamo اختیاری هستند. در Riak آن‌ها به طور پیش‌فرض فعال هستند و در Cassandra و Voldemort به طور پیش‌فرض غیرفعال هستند [46, 49, 50].
+    </p>
+    <h4>Multi-datacenter operation</h4>
+    <p>
+        ما قبلاً در مورد cross-datacenter replication به عنوان یک use case برای multi-leader replication بحث کردیم ("Multi-Leader Replication" در صفحه 168 را ببینید). Leaderless replication همچنین برای multi-datacenter operation مناسب است، زیرا برای تحمل conflicting concurrent writes، network interruptions و latency spikes طراحی شده است.
+    </p>
+    <p>
+        Cassandra و Voldemort از پشتیبانی multi-datacenter خود در داخل the nor‐mal leaderless model استفاده می‌کنند: تعداد replicas n شامل nodes در همه datacenters است و در configuration شما می‌توانید مشخص کنید که چند تا از n replicas را می‌خواهید در هر datacenter داشته باشید. هر write از یک client به همه replicas ارسال می‌شود، صرف نظر از datacenter، اما client معمولاً فقط منتظر acknowledgment از یک quorum از nodes در داخل datacenter محلی خود می‌ماند تا تحت تأثیر delays و interruptions در inter-datacenter link قرار نگیرد. The higher-latency writes به other datacenters اغلب به صورت asynchronous پیکربندی می‌شوند، اگرچه در configuration مقداری انعطاف‌پذیری وجود دارد [50, 51].
+    </p>
+    <p>
+        Riak تمام ارتباطات بین clients و database nodes را local به یک data‐center نگه می‌دارد، بنابراین n تعداد replicas را در یک datacenter توصیف می‌کند. Cross-datacenter replication بین database clusters به طور asynchronous در background اتفاق می‌افتد، به سبکی که شبیه به multi-leader replication است [52].
+    </p>
+    <h4>Detecting Concurrent Writes</h4>
+    <p>
+        databases Dynamo-style به چندین client اجازه می‌دهند تا به طور همزمان در یک key یکسان بنویسند، که به این معنی است که conflicts حتی اگر strict quorums استفاده شود نیز رخ خواهد داد. این وضعیت مشابه multi-leader replication است ("Handling Write Conflicts" در صفحه 171 را ببینید)، اگرچه در databases Dynamo-style conflicts می‌توانند در طول read repair یا hinted handoff نیز ایجاد شوند.
+    </p>
+    <p>
+        184 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

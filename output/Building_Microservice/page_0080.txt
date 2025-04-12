@@ -1,0 +1,25 @@
+12 I know some people object to the use of templated URIs in REST systems, and I understand why—I just want
+to keep things simple for this example.
+Figure 2-12. One Customer aggregate may be associated with one or more Order or
+Wishlist aggregates
+If these relationships between aggregates exist inside the scope of a single microser‐
+vice, they could easily be stored using something like a foreign key relationship if
+using a relational database. If the relationships between these aggregates span micro‐
+service boundaries, though, we need some way to model the relationships.
+Now, we could simply store the ID of the aggregate directly in our local database. For
+example, consider a Finance microservice that manages a financial ledger, which
+stores transactions against a customer. Locally, within the Finance microservice’s
+database we could have a CustID column that contains the ID of that customer. If we
+wanted to get more information about that customer, we’d have to do a lookup
+against the Customer microservice using that ID.
+The problem with this concept is that it isn’t very explicit—in fact, the relationship
+between the CustID column and the remote customer is entirely implicit. To know
+how that ID was being used, we’d have to look at the code of the Finance microser‐
+vice itself. It would be nice if we could store a reference to a foreign aggregate in a
+way that is more obvious.
+In Figure 2-13, we have changed things to make the relationship explicit. Rather than
+a vanilla ID for the customer reference, we instead store a URI, which we might use if
+building a REST-based system.12
+54 
+| 
+Chapter 2: How to Model Microservices

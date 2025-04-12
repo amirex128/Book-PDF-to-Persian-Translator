@@ -1,0 +1,60 @@
+423
+Deploying a RESTful service using AWS Lambda and AWS Gateway
+DEPENDENCY INJECTION USING THE ABSTRACTAUTOWIRINGHTTPREQUESTHANDLER CLASS
+An AWS Lambda function is neither a web application nor an application with a
+main() method. But it would be a shame to not be able to use the features of Spring
+Boot that we’ve been accustomed to. The AbstractAutowiringHttpRequestHandler
+class, shown in the following listing, implements dependency injection for request han-
+dlers. It creates an ApplicationContext using SpringApplication.run() and autowires
+dependencies prior to handling the first request. Subclasses such as FindRestaurant-
+RequestHandler must implement the getApplicationContextClass() method.
+public abstract class AbstractAutowiringHttpRequestHandler 
+extends AbstractHttpHandler {
+private static ConfigurableApplicationContext ctx;
+private ReentrantReadWriteLock ctxLock = new ReentrantReadWriteLock();
+private boolean autowired = false;
+protected synchronized ApplicationContext getAppCtx() {   
+ctxLock.writeLock().lock();
+try {
+if (ctx == null) {
+ctx =
+SpringApplication.run(getApplicationContextClass());
+}
+return ctx;
+} finally {
+ctxLock.writeLock().unlock();
+}
+}
+@Override
+protected void
+beforeHandling(APIGatewayProxyRequestEvent request, Context context) {
+super.beforeHandling(request, context);
+if (!autowired) {
+getAppCtx().getAutowireCapableBeanFactory().autowireBean(this);  
+autowired = true;
+}
+}
+protected abstract Class<?> getApplicationContextClass();
+  
+}
+This class overrides the beforeHandling() method defined by AbstractHttpHandler.
+Its beforeHandling() method injects dependencies using autowiring before handling
+the first request. 
+THE ABSTRACTHTTPHANDLER CLASS
+The request handlers for Restaurant Service ultimately extend AbstractHttpHandler,
+shown in listing 12.11. This class implements RequestHandler<APIGatewayProxy-
+RequestEvent and APIGatewayProxyResponseEvent>. Its key responsibility is to catch
+exceptions thrown when handling a request and throw a 500 error code. 
+Listing 12.10
+An abstract RequestHandler that implements dependency injection
+Creates the Spring 
+Boot application 
+context just once
+Injects dependencies into
+the request handler using
+autowiring before handling
+the first request
+Returns the @Configuration
+class used to create
+ApplicationContext
+ 

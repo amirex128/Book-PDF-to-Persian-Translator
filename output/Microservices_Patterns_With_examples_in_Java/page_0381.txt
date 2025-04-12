@@ -1,0 +1,45 @@
+351
+Developing secure services
+One key part of the security architecture is the session, which stores the principal’s ID
+and roles. The FTGO application is a traditional Java EE application, so the session is
+an HttpSession in-memory session. A session is identified by a session token, which the
+client includes in each request. It’s usually an opaque token such as a cryptographi-
+cally strong random number. The FTGO application’s session token is an HTTP
+cookie called JSESSIONID.
+ The other key part of the security implementation is the security context, which
+stores information about the user making the current request. The Spring Security
+Using a security framework
+Implementing authentication and authorization correctly is challenging. It’s best to
+use a proven security framework. Which framework to use depends on your applica-
+tion’s technology stack. Some popular frameworks include the following:
+Spring Security (https://projects.spring.io/spring-security/)—A popular frame-
+work for Java applications. It’s a sophisticated framework that handles authen-
+tication and authorization.
+Apache Shiro (https://shiro.apache.org)—Another Java framework.
+Passport (http://www.passportjs.org)—A popular security framework for NodeJS
+applications that’s focused on authentication.
+Log in to obtain session
+token, which is a cookie.
+Include session token cookie,
+which identiﬁes the user, in
+subsequent requests.
+Consumer
+restaurant
+courier
+Browser
+or mobile
+application
+POST /login
+id=...
+password=...
+HTTP/1.1 200 OK
+Set-cookie: JSESSIONID=...
+...
+GET /orders/order-xyz
+Cookie: JSESSIONID=...
+FTGO
+application
+Figure 11.1
+A client of the FTGO application first logs in to obtain a session token, which is often a 
+cookie. The client includes the session token in each subsequent request it makes to the application.
+ 

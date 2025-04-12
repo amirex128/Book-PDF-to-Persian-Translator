@@ -1,0 +1,62 @@
+106
+CHAPTER 3
+Interprocess communication in a microservice architecture
+replication is that it doesn’t solve the problem of how a service updates data owned by
+other services.
+ One way to solve that problem is for a service to delay interacting with other ser-
+vices until after it responds to its client. We’ll next look at how that works.
+FINISH PROCESSING AFTER RETURNING A RESPONSE
+Another way to eliminate synchronous communication during request processing is
+for a service to handle a request as follows:
+1
+Validate the request using only the data available locally.
+2
+Update its database, including inserting messages into the OUTBOX table.
+3
+Return a response to its client.
+While handling a request, the service doesn’t synchronously interact with any other
+services. Instead, it asynchronously sends messages to other services. This approach
+ensures that the services are loosely coupled. As you’ll learn in the next chapter, this is
+often implemented using a saga.
+ For example, if Order Service uses this approach, it creates an order in a PENDING
+state and then validates the order asynchronously by exchanging messages with other
+services. Figure 3.18 shows what happens when the createOrder() operation is
+invoked. The sequence of events is as follows:
+1
+Order Service creates an Order in a PENDING state.
+2
+Order Service returns a response to its client containing the order ID.
+3
+Order Service sends a ValidateConsumerInfo message to Consumer Service.
+Services publish events
+when their data changes.
+Replicated data enables Order Service to
+handle the createOrder() request without
+synchronously invoking services.
+Restaurant
+Service
+Consumer event
+channel
+Restaurant event
+channel
+Order
+Service
+Consumer
+Service
+Consumer Service database
+«table»
+CONSUMERS
+createOrder()
+Restaurant Service database
+«table»
+RESTAURANTS
+Order Service database
+«table»
+ORDERS
+«table»
+CONSUMERS
+«table»
+RESTAURANTS
+Figure 3.17
+Order Service is self-contained because it has replicas of the consumer and restaurant data.
+ 

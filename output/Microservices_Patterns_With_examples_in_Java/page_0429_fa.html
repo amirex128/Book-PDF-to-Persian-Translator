@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 429</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <h4><span style="font-weight: bold;">12.3.3 Drawbacks of deploying services as containers</span></h4>
+  <p>
+   One significant drawback از containers این است که شما مسئول the undifferenti-
+   ated heavy lifting از administering the container images هستید. You must patch the operat-
+   ing system و runtime. Also, unless شما از یک hosted container solution مانند
+   Google Container Engine یا AWS ECS استفاده می‌کنید، شما باید the container infrastruc-
+   ture و احتمالاً the VM infrastructure را که بر روی آن اجرا می‌شود، مدیریت کنید.
+  </p>
+  <h4><span style="font-weight: bold;">12.4 Deploying the FTGO application with Kubernetes</span></h4>
+  <p>
+   Now that we’ve looked at containers و their trade-offs، let’s look at how to deploy
+   the FTGO application’s Restaurant Service با استفاده از Kubernetes. Docker Compose،
+   توضیح داده شده در بخش 12.3.1، برای توسعه و تست عالی است. But to reliably run
+   containerized services در production، شما نیاز دارید که از یک con-
+   tainer runtime بسیار پیچیده‌تر، مانند Kubernetes، استفاده کنید. Kubernetes یک Docker orchestration framework است،
+   a layer از نرم‌افزار در بالای Docker که یک set از machines را به یک pool واحد از
+   resources برای running services تبدیل می‌کند. It endeavors برای حفظ تعداد مورد نظر از instances
+   از هر service که در همه زمان‌ها در حال اجراست، حتی زمانی که service instances یا machines crash می‌کنند.
+  </p>
+  <p>
+   The agility از containers combined با the sophistication از Kubernetes یک compel-
+   ling way برای deploy کردن services است.
+  </p>
+  <p>
+   In this section, من ابتدا یک overview از Kubernetes، functionality و آن را ارائه می‌دهم
+   architecture. After that، من نشان می‌دهم که چگونه یک service را با استفاده از Kubernetes مستقر کنید. Kubernetes است
+   یک topic پیچیده، و covering آن به طور جامع فراتر از scope از این کتاب است، بنابراین من فقط
+   نشان می‌دهم که چگونه از Kubernetes از perspective از یک developer استفاده کنید. For more informa-
+   tion, من توصیه می‌کنم Kubernetes in Action توسط Marko Luksa (Manning, 2018).
+  </p>
+  <h4><span style="font-weight: bold;">12.4.1 Overview of Kubernetes</span></h4>
+  <p>
+   Kubernetes یک Docker orchestration framework است. A Docker orchestration framework رفتار می‌کند
+   a set از machines که Docker را به عنوان یک pool از resources اجرا می‌کنند. You tell the Docker orches-
+   tration framework برای اجرای N instances از service شما، و آن بقیه را مدیریت می‌کند. Figure 12.9
+   the architecture از a Docker orchestration framework را نشان می‌دهد.
+  </p>
+  <p>
+   A Docker orchestration framework، مانند Kubernetes، دارای سه function اصلی است:
+  </p>
+  <p>
+   Resource management—Treats یک cluster از machines به عنوان a pool از CPU، memory،
+   و storage volumes، turning the collection از machines به یک machine واحد.
+  </p>
+  <p>
+   Scheduling—انتخاب machine برای اجرای container شما. By default, scheduling
+   the resource requirements از container و available از هر node را در نظر می‌گیرد
+   resources. It might also implement affinity، که containers را در same node قرار می‌دهد، و anti-affinity، که
+   containers را در nodes مختلف قرار می‌دهد.
+  </p>
+  <p>
+   Service management—Implements مفهوم از named و versioned services
+   that map مستقیماً به services در microservice architecture. The orchestration
+   framework تضمین می‌کند که تعداد مورد نظر از healthy instances در حال اجرا است
+   در همه زمان‌ها. It load balances requests در سراسر آنها. The orchestration framework
+   rolling upgrades از services را انجام می‌دهد و به شما امکان می‌دهد به یک نسخه قدیمی بازگردید.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

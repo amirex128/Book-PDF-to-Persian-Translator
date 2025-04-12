@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 237</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Implementing an event store</strong></h3>
+  <pre><code class="language-java">...
+}
+</code></pre>
+  <p>
+   دو type parameter که به ReflectiveMutableCommandProcessingAggregate منتقل می‌شوند، Order و OrderCommand هستند، که رابط پایه برای commands از Order است.
+  </p>
+  <h4><strong style="color:darkblue">DEFINING AGGREGATE COMMANDS</strong></h4>
+  <p>
+   classهای command از یک aggregate، باید یک interface پایه aggregate-specific را گسترش دهند، که خود باید interface به نام Command را گسترش دهد. به عنوان مثال، commands از Order aggregate، OrderCommand را گسترش می‌دهند:
+  </p>
+  <pre><code class="language-java">public interface OrderCommand extends Command {
+}
+public class CreateOrderCommand implements OrderCommand { ... }
+</code></pre>
+  <p>
+   The OrderCommand interface، Command را گسترش می‌دهد و class command به نام CreateOrderCommand، OrderCommand را گسترش می‌دهد.
+  </p>
+  <h4><strong style="color:darkblue">DEFINING DOMAIN EVENTS</strong></h4>
+  <p>
+   classهای event از یک aggregate باید interface به نام Event را گسترش دهند، که یک marker interface بدون method است. همچنین تعریف یک interface مشترک پایه، که Event را برای تمام classهای event از یک aggregate گسترش می‌دهد، مفید است. به عنوان مثال، در اینجا تعریف از OrderCreated event آمده است:
+  </p>
+  <pre><code class="language-java">interface OrderEvent extends Event {
+}
+public class OrderCreated extends OrderEvent { ... }
+</code></pre>
+  <p>
+   class به نام OrderCreated event، OrderEvent را گسترش می‌دهد، که رابط پایه برای classهای event از Order aggregate است. The OrderEvent interface، Event را گسترش می‌دهد.
+  </p>
+  <h4><strong style="color:darkblue">CREATING, FINDING, AND UPDATING AGGREGATES WITH THE AGGREGATEREPOSITORY CLASS</strong></h4>
+  <p>
+   فریم‌ورک چندین راه برای ایجاد، یافتن و update کردن aggregates فراهم می‌کند. ساده‌ترین رویکرد، که من در اینجا توضیح می‌دهم، استفاده از یک AggregateRepository است. AggregateRepository یک generic class است که توسط class aggregate و base command class از aggregate پارامتریزه شده است. این سه method overload شده را فراهم می‌کند:
+  </p>
+  <ul>
+   <li>save()—یک aggregate را ایجاد می‌کند</li>
+   <li>find()—یک aggregate را پیدا می‌کند</li>
+   <li>update()—یک aggregate را update می‌کند</li>
+  </ul>
+  <p>
+   The save () و update() methods به ویژه مناسب هستند زیرا کد boilerplate مورد نیاز برای ایجاد و update کردن aggregates را کپسوله می‌کنند. به عنوان مثال، save() یک command object را به عنوان یک پارامتر می‌گیرد و مراحل زیر را انجام می‌دهد:
+  </p>
+  <ol>
+   <li>Instantiates the aggregate using its default constructor</li>
+   <li>Invokes process() to process the command</li>
+  </ol>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

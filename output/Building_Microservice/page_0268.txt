@@ -1,0 +1,36 @@
+Isolated, differently
+Containers first emerged on UNIX-style operating systems and for many years were
+really only a viable prospect on those operating systems, such as Linux. Although
+Windows containers are very much a thing, it has been Linux operating systems that
+containers have had the biggest impact on so far.
+On Linux, processes are run by a given user and have certain capabilities based on
+how the permissions are set. Processes can spawn other processes. For example, if I
+launch a process in a terminal, that process is generally considered a child of the ter‐
+minal process. The Linux kernel’s job is maintaining this tree of processes, ensuring
+that only permitted users can access the processes. Additionally, the Linux kernel is
+capable of assigning resources to these different processes—this is all part and parcel
+of building a viable multiuser operating system, where you don’t want the activities of
+one user to kill the rest of the system.
+Containers running on the same machine make use of the same underlying kernel
+(although there are exceptions to this rule that we’ll explore shortly). Rather than
+managing processes directly, you can think of a container as an abstraction over a
+subtree of the overall system process tree, with the kernel doing all the hard work.
+These containers can have physical resources allocated to them, something the kernel
+handles for us. This general approach has been around in many forms, such as Solaris
+Zones and OpenVZ, but it was with LXC that this idea made its way into the main‐
+stream of Linux operating systems. The concept of Linux containers was further
+advanced when Docker provided yet a higher level of abstraction over containers, ini‐
+tially using LXC under the hood and then replacing it altogether.
+If we look at the stack diagram for a host running a container in Figure 8-14, we see a
+few differences when comparing it with type 2 virtualization. First, we don’t need a
+hypervisor. Second, the container doesn’t seem to have a kernel—that’s because it
+makes use of the kernel of the underlying machine. In Figure 8-15 we see this more
+clearly. A container can run its own operating system, but that operating system
+makes use of a part of the shared kernel—it’s in this kernel that the process tree for
+each container lives. This means that our host operating system could run Ubuntu,
+and our containers CentOS, as long as they could both run as part of the same under‐
+lying kernel.
+Figure 8-15. Normally, containers on the same machine share the same kernel
+242 
+| 
+Chapter 8: Deployment

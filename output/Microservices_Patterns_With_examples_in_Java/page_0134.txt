@@ -1,0 +1,50 @@
+104
+CHAPTER 3
+Interprocess communication in a microservice architecture
+The sequence of steps for creating an order is as follows:
+1
+Client makes an HTTP POST /orders request to the Order Service.
+2
+Order Service retrieves consumer information by making an HTTP GET
+/consumers/id request to the Consumer Service.
+3
+Order Service retrieves restaurant information by making an HTTP GET
+/restaurant/id request to the Restaurant Service.
+4
+Order Taking validates the request using the consumer and restaurant infor-
+mation.
+5
+Order Taking creates an Order.
+6
+Order Taking sends an HTTP response to the client.
+Because these services use HTTP, they must all be simultaneously available in order
+for the FTGO application to process the CreateOrder request. The FTGO application
+couldn’t create orders if any one of these three services is down. Mathematically
+speaking, the availability of a system operation is the product of the availability of the
+services that are invoked by that operation. If the Order Service and the two services
+that it invokes are 99.5% available, the overall availability is 99.5%3 = 98.5%, which is
+significantly less. Each additional service that participates in handling a request fur-
+ther reduces availability.
+ This problem isn’t specific to REST-based communication. Availability is reduced
+whenever a service can only respond to its client after receiving a response from
+another service. This problem exists even if services communicate using request/
+response style interaction over asynchronous messaging. For example, the availability
+of the Order Service would be reduced if it sent a message to the Consumer Service
+via a message broker and then waited for a response.
+ If you want to maximize availability, you must minimize the amount of synchro-
+nous communication. Let’s look at how to do that. 
+3.4.2
+Eliminating synchronous interaction
+There are a few different ways to reduce the amount of synchronous communication
+with other services while handling synchronous requests. One solution is to avoid the
+problem entirely by defining services that only have asynchronous APIs. That’s not
+always possible, though. For example, public APIs are commonly RESTful. Services
+are therefore sometimes required to have synchronous APIs.
+ Fortunately, there are ways to handle synchronous requests without making syn-
+chronous requests. Let’s talk about the options.
+USE ASYNCHRONOUS INTERACTION STYLES
+Ideally, all interactions should be done using the asynchronous interaction styles
+described earlier in this chapter. For example, say a client of the FTGO application
+used an asynchronous request/asynchronous response style of interaction to create
+orders. A client creates an order by sending a request message to the Order Service.
+ 

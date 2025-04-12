@@ -1,0 +1,61 @@
+181
+Order Service business logic
+List<OrderLineItem> orderLineItems =
+  
+makeOrderLineItems(lineItems, restaurant);
+ResultWithDomainEvents<Order, OrderDomainEvent> orderAndEvents =
+Order.createOrder(consumerId, restaurant, orderLineItems);
+Order order = orderAndEvents.result;
+orderRepository.save(order);
+orderAggregateEventPublisher.publish(order, orderAndEvents.events);  
+OrderDetails orderDetails =
+new OrderDetails(consumerId, restaurantId, orderLineItems,
+order.getOrderTotal());
+CreateOrderSagaState data = new CreateOrderSagaState(order.getId(),
+orderDetails);
+createOrderSagaManager.create(data, Order.class, order.getId());  
+return order;
+}
+public Order reviseOrder(Long orderId, Long expectedVersion,
+OrderRevision orderRevision)
+{
+public Order reviseOrder(long orderId, OrderRevision orderRevision) {
+Order order = orderRepository.findById(orderId)
+  
+.orElseThrow(() -> new OrderNotFoundException(orderId));
+ReviseOrderSagaData sagaData =
+new ReviseOrderSagaData(order.getConsumerId(), orderId,
+null, orderRevision);
+reviseOrderSagaManager.create(sagaData);   
+return order;
+}
+}
+The createOrder() method first creates and persists an Order aggregate. It then pub-
+lishes the domain events emitted by the aggregate. Finally, it creates a CreateOrder-
+Saga. The reviseOrder() retrieves the Order and then creates a ReviseOrderSaga.
+ In many ways, the business logic for a microservices-based application is not that
+different from that of a monolithic application. It’s comprised of classes such as ser-
+vices, JPA-backed entities, and repositories. There are some differences, though. A
+domain model is organized as a set of DDD aggregates that impose various design
+constraints. Unlike in a traditional object model, references between classes in differ-
+ent aggregates are in terms of primary key value rather than object references. Also, a
+transaction can only create or update a single aggregate. It’s also useful for aggregates
+to publish domain events when their state changes.
+ Another major difference is that services often use sagas to maintain data consis-
+tency across multiple services. For example, Kitchen Service merely participates in
+sagas, it doesn’t initiate them. In contrast, Order Service relies heavily on sagas when
+Creates the Order 
+aggregate
+Persists the Order 
+in the database
+Publishes
+domain
+events
+Creates the Create
+Order Saga
+Retrieves
+the Order
+Creates the 
+Revise Order 
+Saga
+ 

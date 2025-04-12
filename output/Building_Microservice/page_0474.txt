@@ -1,0 +1,40 @@
+Treat caching primarily as a performance optimization. Cache in as
+few places as possible to make it easier to reason about the fresh‐
+ness of data.
+Freshness Versus Optimization
+Coming back to our example of TTL-based invalidation, I explained earlier that if we
+request a fresh copy of the data that has a five-minute TTL, and a second later the
+data at the origin changes, then our cache will be operating on out-of-date data for
+the remaining four minutes and 59 seconds. If this is unacceptable, one solution
+would be to reduce the TTL, thereby reducing the duration in which we could oper‐
+ate on stale data. So perhaps we reduce the TTL to one minute. This means that our
+window of staleness is reduced to one-fifth of what it was, but we’ve made five times
+as many calls to the origin, so we have to consider the associated latency and load
+impact.
+Balancing these forces is going to come down to understanding the requirements of
+the end user and of the wider system. Users will obviously always want to operate on
+the freshest data, but not if that means the system falls down under load. Likewise,
+sometimes the safest thing to do is to turn off features if a cache fails, in order to
+avoid an overload on the origin causing more serious issues. When it comes to fine-
+tuning what, where, and how to cache, you’ll often find yourself having to balance
+along a number of axes. This is just another reason to try to keep things as simple as
+possible—the fewer the caches, the easier it can be to reason about the system.
+Cache Poisoning: A Cautionary Tale
+With caching, we often think that if we get it wrong, the worst thing that can happen
+is we serve stale data for a bit. But what happens if you end up serving stale data for‐
+ever? Back in Chapter 12 I introduced AdvertCorp, where I was working to help
+migrate a number of existing legacy applications over to a new platform making use
+of the strangler fig pattern. This involved intercepting calls to multiple legacy applica‐
+tions and, where these applications had been moved to the new platform, diverting
+the calls. Our new application operated effectively as a proxy. Traffic for the older
+legacy applications that we hadn’t yet migrated was routed through our new applica‐
+tion to the downstream legacy applications. For the calls to legacy applications, we
+did a few housekeeping things; for example, we made sure that the results from the
+legacy application had proper HTTP cache headers applied.
+One day, shortly after a normal routine release, something odd started happening. A
+bug had been introduced whereby a small subset of pages were falling through a logic
+condition in our cache header insertion code, resulting in us not changing the header
+at all. Unfortunately, this downstream application had also been changed sometime
+448 
+| 
+Chapter 13: Scaling

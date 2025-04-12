@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 203</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        If fewer than the required w or r nodes are available, writes or reads return an error.
+    </p>
+    <p>
+        A node could be unavailable for many reasons: because the node is down (crashed, powered down)، به دلیل یک error اجرای operation (نمی‌تواند بنویسد زیرا دیسک پر است)، به دلیل یک network interruption بین client و node، یا به هر دلیل دیگری. ما فقط نگران این هستیم که آیا node یک response موفقیت‌آمیز را برگردانده است و نیازی به تمایز بین انواع مختلف fault نداریم.
+    </p>
+    <h4>Limitations of Quorum Consistency</h4>
+    <p>
+        If you have n replicas، و شما w و r را طوری انتخاب کنید که w + r &gt; n، شما به طور کلی انتظار دارید که هر read، recent value نوشته شده برای یک key را برگرداند. این حالت به این دلیل است که مجموعه nodes که شما به آن‌ها نوشته‌اید و مجموعه nodes که شما از آن‌ها خوانده‌اید، باید با هم overlap داشته باشند. یعنی، در میان nodes که شما خواندید باید حداقل یک node با latest value وجود داشته باشد (که در شکل 5-11 نشان داده شده است).
+    </p>
+    <p>
+        اغلب، r و w به عنوان یک majority (بیشتر از n/2) از nodes انتخاب می‌شوند، زیرا این اطمینان را می‌دهد که w + r &gt; n در حالی که همچنان تا n/2 node failures را تحمل می‌کند. اما quorums لزوماً majorities نیستند—فقط این مهم است که مجموعه‌های nodes که توسط عمليات read و write استفاده می‌شوند، حداقل در یک node با هم overlap داشته باشند. Other quorum assignments ممکن است، که اجازه انعطاف‌پذیری در طراحی از algorithms distributed را می‌دهد [45].
+    </p>
+    <p>
+        You may also set w and r to smaller numbers, so that w + r ≤ n (i.e., the quorum con‐dition is not satisfied). In this case, reads and writes will still be sent to n nodes, but a smaller number of successful responses is required for the operation to succeed.
+    </p>
+    <p>
+        With a smaller w and r شما به احتمال زیاد values stale را می‌خوانید، زیرا احتمال بیشتری وجود دارد که read شما node را با latest value شامل نشود. در جنبه مثبت، این configuration به latency کمتر و availability بالاتر اجازه می‌دهد: اگر یک network inter‐ruption وجود داشته باشد و بسیاری از replicas غیرقابل دسترس شوند، احتمال بیشتری وجود دارد که شما بتوانید به پردازش reads و writes ادامه دهید.
+        Only after the number of reachable replicas falls below w or r does the database become unavailable for writing or reading, respectively.
+    </p>
+    <p>
+        با این حال، حتی با w + r &gt; n، احتمالاً موارد لبه وجود دارد که در آن‌ها values stale برگردانده می‌شوند. این‌ها به پیاده‌سازی بستگی دارند، اما سناریوهای ممکن شامل موارد زیر هستند:
+    </p>
+    <ul>
+        <li>If a sloppy quorum is used (see “Sloppy Quorums and Hinted Handoff” on page 183)، w writes ممکن است در نهایت در nodes مختلفی نسبت به r reads قرار بگیرند، بنابراین دیگر یک overlap تضمین شده بین r nodes و w nodes وجود ندارد [46].</li>
+        <li>If two writes occur concurrently، مشخص نیست که کدام یک اول رخ داده است. در این مورد، تنها راه‌حل ایمن این است که writes concurrent را merge کنید (به "Handling Write Conflicts" در صفحه 171 مراجعه کنید). اگر یک برنده بر اساس یک timestamp انتخاب شود (last write wins)، writes می‌توانند به دلیل clock skew از بین بروند [35]. ما در این مورد در "Detecting Concurrent Writes" در صفحه 184 باز خواهیم گشت.</li>
+    </ul>
+    <p>
+        Leaderless Replication | 181
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

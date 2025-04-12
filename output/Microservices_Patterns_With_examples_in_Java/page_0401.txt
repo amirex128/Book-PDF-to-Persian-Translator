@@ -1,0 +1,39 @@
+371
+Designing observable services
+interact during the handling of external requests, including a breakdown of where
+the time is spent.
+ Figure 11.12 shows an example of how a distributed tracing server displays what
+happens when the API gateway handles a request. It shows the inbound request to the
+API gateway and the request that the gateway makes to Order Service. For each
+request, the distributed tracing server shows the operation that’s performed and the
+timing of the request.
+Figure 11.12 shows what in distributed tracing terminology is called a trace. A trace
+represents an external request and consists of one or more spans. A span represents
+an operation, and its key attributes are an operation name, start timestamp, and end
+time. A span can have one or more child spans, which represent nested operations.
+For example, a top-level span might represent the invocation of the API gateway, as
+is the case in figure 11.12. Its child spans represent the invocations of services by the
+API gateway.
+ A valuable side effect of distributed tracing is that it assigns a unique ID to each
+external request. A service can include the request ID in its log entries. When com-
+bined with log aggregation, the request ID enables you to easily find all log entries
+for a particular external request. For example, here’s an example log entry from
+Order Service:
+2018-03-04 17:38:12.032 DEBUG [ftgo-order-
+service,8d8fdc37be104cc6,8d8fdc37be104cc6,false]
+7 --- [nio-8080-exec-6] org.hibernate.SQL
+:
+select order0_.id as id1_3_0_, order0_.consumer_id as consumer2_3_0_, order
+0_.city as city3_3_0_,
+order0_.delivery_state as delivery4_3_0_, order0_.street1 as street5_3_0_,
+order0_.street2 as street6_3_0_, order0_.zip as zip7_3_0_,
+order0_.delivery_time as delivery8_3_0_, order0_.a
+Parent span
+Child span
+Trace
+Figure 11.12
+The Zipkin server shows how the FTGO application handles a request that’s routed 
+by the API gateway to Order Service. Each request is represented by a trace. A trace is a set of 
+spans. Each span, which can contain child spans, is the invocation of a service. Depending on the 
+level of detail collected, a span can also represent the invocation of an operation inside a service.
+ 

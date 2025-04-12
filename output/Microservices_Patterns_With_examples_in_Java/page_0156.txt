@@ -1,0 +1,44 @@
+126
+CHAPTER 4
+Managing transactions with sagas
+4.3
+Handling the lack of isolation
+The I in ACID stands for isolation. The isolation property of ACID transactions ensures
+that the outcome of executing multiple transactions concurrently is the same as if they
+were executed in some serial order. The database provides the illusion that each ACID
+transaction has exclusive access to the data. Isolation makes it a lot easier to write busi-
+ness logic that executes concurrently.
+ The challenge with using sagas is that they lack the isolation property of ACID
+transactions. That’s because the updates made by each of a saga’s local transactions
+are immediately visible to other sagas once that transaction commits. This behavior
+can cause two problems. First, other sagas can change the data accessed by the saga
+while it’s executing. And other sagas can read its data before the saga has completed
+its updates, and consequently can be exposed to inconsistent data. You can, in fact,
+consider a saga to be ACD:
+Atomicity—The saga implementation ensures that all transactions are executed
+or all changes are undone.
+Consistency—Referential integrity within a service is handled by local databases.
+Referential integrity across services is handled by the services.
+Durability—Handled by local databases.
+This lack of isolation potentially causes what the database literature calls anomalies. An
+anomaly is when a transaction reads or writes data in a way that it wouldn’t if transac-
+tions were executed one at time. When an anomaly occurs, the outcome of executing
+sagas concurrently is different than if they were executed serially.
+ On the surface, the lack of isolation sounds unworkable. But in practice, it’s com-
+mon for developers to accept reduced isolation in return for higher performance. An
+RDBMS lets you specify the isolation level for each transaction (https://dev.mysql
+.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html). The default iso-
+lation level is usually an isolation level that’s weaker than full isolation, also known as
+serializable transactions. Real-world database transactions are often different from
+textbook definitions of ACID transactions.
+ The next section discusses a set of saga design strategies that deal with the lack of
+isolation. These strategies are known as countermeasures. Some countermeasures imple-
+ment isolation at the application level. Other countermeasures reduce the business
+risk of the lack of isolation. By using countermeasures, you can write saga-based busi-
+ness logic that works correctly.
+ I’ll begin the section by describing the anomalies that are caused by the lack of iso-
+lation. After that, I’ll talk about countermeasures that either eliminate those anoma-
+lies or reduce their business risk.
+ 
+ 
+ 

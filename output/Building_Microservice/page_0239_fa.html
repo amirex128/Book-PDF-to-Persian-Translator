@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 239</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   پروژه — اگرچه این البته باعث می شود که من نقشه برداری <span style="color:blue">build</span> پیچیده تری داشته باشم.
+  </p>
+  <h4>تعریف مالکیت</h4>
+  <p>
+   با اندازه تیم های کوچکتر و اندازه کدبیس های کوچک، <span style="color:blue">monorepo</span> ها احتمالاً می توانند به خوبی
+   با ابزارهای سنتی مدیریت <span style="color:blue">build</span> و کد منبع که به آن ها عادت کرده اید، کار کنند.
+   با این حال، با بزرگتر شدن <span style="color:blue">monorepo</span> شما، احتمالاً باید شروع به نگاه کردن به موارد مختلف کنید
+   انواع ابزارها. ما مدل های مالکیت را با جزئیات بیشتر در فصل 15 بررسی خواهیم کرد، اما در
+   در این میان، ارزش دارد که به طور خلاصه نحوه عملکرد این موضوع را هنگام فکر کردن بررسی کنیم
+   کنترل منبع
+  </p>
+  <p>
+   <span style="color:blue">Martin Fowler</span> قبلاً در مورد مدل های مالکیت مختلف نوشته است و یک
+   مقیاس لغزنده از مالکیت از مالکیت قوی از طریق مالکیت ضعیف و به
+   مالکیت جمعی. از آنجایی که <span style="color:blue">Martin</span> این اصطلاحات را ثبت کرده است، شیوه های توسعه
+   تغییر کرده اند، بنابراین شاید ارزش داشته باشد که این اصطلاحات را دوباره بررسی و تعریف کنیم.
+  </p>
+  <p>
+   با مالکیت قوی، مقداری کد متعلق به یک گروه خاص از افراد است. اگر مقداری
+   از خارج از آن گروه می خواهد تغییری ایجاد کند، باید از صاحبان درخواست کنند که
+   تغییر را برای آنها ایجاد کنید. مالکیت ضعیف هنوز مفهوم صاحبان تعریف شده را دارد،
+   اما به افرادی که خارج از گروه مالکیت هستند اجازه داده می شود که تغییراتی ایجاد کنند، اگرچه هر
+   از این تغییرات باید توسط شخصی در گروه مالکیت بررسی و پذیرفته شود.
+   این درخواست <span style="color:blue">pull</span> را پوشش می دهد که برای بررسی به تیم اصلی مالکیت ارسال می شود،
+   قبل از اینکه درخواست <span style="color:blue">pull</span> ادغام شود. با مالکیت جمعی، هر توسعه دهنده می تواند
+   هر قطعه کد را تغییر دهید.
+  </p>
+  <p>
+   با تعداد کمی از توسعه دهندگان (20 یا کمتر، به عنوان یک راهنمای کلی)، می توانید
+   از مالکیت جمعی استفاده کنید - جایی که هر توسعه دهنده می تواند هر <span style="color:blue">micro</span>-
+   <span style="color:blue">service</span>. با این حال، با داشتن افراد بیشتر، احتمالاً می خواهید به سمت آن حرکت کنید
+   یا یک مدل مالکیت قوی یا ضعیف برای ایجاد مرزهای تعریف شده تر
+   مسئولیت. این می تواند یک چالش برای تیم هایی که از <span style="color:blue">monorepo</span> استفاده می کنند ایجاد کند، اگر منبع آنها
+   ابزار کنترل از کنترل های مالکیت دقیق تر پشتیبانی نمی کند.
+  </p>
+  <p>
+   برخی از ابزارهای کد منبع به شما اجازه می دهند مالکیت دایرکتوری های خاص یا حتی
+   مسیرهای فایل خاص را در داخل یک <span style="color:blue">repository</span> واحد مشخص کنید. <span style="color:blue">Google</span> در ابتدا این سیستم را پیاده سازی کرد
+   در بالای <span style="color:blue">Perforce</span> برای <span style="color:blue">monorepo</span> خود قبل از توسعه کنترل منبع خود
+   سیستم، و این همچنین چیزی است که <span style="color:blue">GitHub</span> از سال 2016 از آن پشتیبانی می کند. با <span style="color:blue">GitHub</span>،
+   شما یک فایل <span style="color:blue">CODEOWNERS</span> ایجاد می کنید، که به شما امکان می دهد صاحبان را به دایرکتوری ها یا مسیرهای فایل نگاشت کنید.
+   می توانید چند نمونه را در مثال 7-1 ببینید که از سند خود <span style="color:blue">GitHub</span> گرفته شده است
+   که نشان می دهد این نوع سیستم ها چه انعطاف پذیری را می توانند به ارمغان بیاورند.
+  </p>
+  <p>
+   نقشه برداری کد منبع و <span style="color:blue">Build</span> ها به <span style="color:blue">Microservice</span> ها
+   |
+   213
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+How it works
+Although the exact implementations vary, broadly speaking, distributed tracing tools
+all work in a similar way. Local activity within a thread is captured in a span. These
+individual spans are correlated using some unique identifier. The spans are then sent
+to a central collector, which is able to construct these related spans into a single trace.
+In Figure 10-7, we see a picture from Honeycomb that shows a trace across a micro‐
+service architecture.
+Figure 10-7. A distributed trace shown in Honeycomb, allowing you to identify where
+time is being spent for operations that can span multiple microservices
+These spans allow you to collect a host of information. Exactly what data you collect
+will depend on the protocol you are using, but in the case of the OpenTracing API,
+each span contains a start and end time, a set of logs associated with the span, and an
+arbitrary set of key-value pairs to help with later querying (these could be used to
+send things like a customer ID, an order ID, a hostname, a build number, and the
+like).
+Collecting enough information to allow us to trace calls in our system can have a
+direct impact on the system itself. This results in the need for some form of sampling,
+in which some information is explicitly excluded from our trace collection to ensure
+the system can still operate. The challenge is ensuring that the right information is
+dropped, and that we still collect sufficient samples to allow us to correctly extrapo‐
+late observations.
+Building Blocks for Observability 
+| 
+325

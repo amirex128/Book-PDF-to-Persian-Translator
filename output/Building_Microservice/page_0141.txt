@@ -1,0 +1,37 @@
+more widely. This adds complexity in terms of managing visibility of different events
+and ensuring that both events actually get fired. What happens when a microservice
+sends the first type of event but dies before the second event can be sent?
+Another consideration is that once we put data into an event, it becomes part of our
+contract with the outside world. We have to be aware that if we remove a field from
+an event, we may break external parties. Information hiding is still an important con‐
+cept in event-driven collaboration—the more data we put into an event, the more
+assumptions external parties will have about the event. My general rule is that I am
+OK putting information into an event if I’d be happy sharing the same data over a
+request-response API.
+Where to Use It
+Event-driven collaboration thrives in situations in which information wants to be
+broadcast, and in situations in which you are happy to invert intent. Moving away
+from a model of telling other things what to do and instead letting downstream
+microservices work this out for themselves has a great deal of attraction.
+In a situation in which you are focusing on loose coupling more than other factors,
+event-driven collaboration is going to have obvious appeal.
+The cautionary note is that there are often new sources of complexity that come to
+the fore with this style of collaboration, especially if you’ve had limited exposure to it.
+If you are unsure about this form of communication, remember that our microser‐
+vice architecture can (and likely will) contain a mix of different styles of interaction.
+You don’t have to go all in with event-driven collaboration; perhaps start with just
+one event and take it from there.
+Personally, I find myself gravitating toward event-driven collaboration almost as a
+default. My brain seems to have rewired itself in such a way that these types of com‐
+munication just seem obvious to me. This isn’t entirely helpful, as it can be tricky to
+try and explain why this is the case, other than to say it feels right. But that is just my
+own built-in bias—I naturally gravitate to what I know, based on my own experien‐
+ces. There is a strong possibility that my attraction to this form of interaction is
+driven almost entirely by my previous bad experiences with overly coupled systems. I
+might just be the general fighting the last battle over and over again without consid‐
+ering that perhaps this time it really is different.
+What I will say, putting my own biases aside, is that I see far more teams replacing
+request-response interactions with event-driven interactions than the reverse.
+Pattern: Event-Driven Communication 
+| 
+115

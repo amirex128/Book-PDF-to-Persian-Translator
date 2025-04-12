@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 62</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        databases، جایی که schema صریح است و database تضمین می‌کند که همه داده‌های نوشته شده با آن مطابقت دارند) [21].
+    </p>
+    <p>
+        Schema-on-read شبیه به dynamic (runtime) type checking در زبان‌های برنامه‌نویسی است، در حالی که schema-on-write شبیه به static (compile-time) type checking است.
+    </p>
+    <p>
+        درست همانطور که طرفداران static و dynamic type checking بحث‌های بزرگی در مورد شایستگی‌های نسبی خود دارند [22]، اجرای schemas در database یک موضوع بحث‌انگیز است و به طور کلی هیچ پاسخ درست یا غلطی وجود ندارد.
+    </p>
+    <p>
+        تفاوت بین رویکردها، به‌ویژه در موقعیت‌هایی که یک application می‌خواهد format داده‌های خود را تغییر دهد، قابل توجه است. به عنوان مثال، فرض کنید شما در حال حاضر نام کامل هر user را در یک فیلد ذخیره می‌کنید و در عوض می‌خواهید first name و last name را جداگانه ذخیره کنید [23]. در یک document database، شما فقط شروع به نوشتن documents جدید با فیلدهای جدید می‌کنید و کدی در application دارید که case را زمانی که documents قدیمی خوانده می‌شوند، مدیریت می‌کند. به عنوان مثال:
+    </p>
+    <pre><code class="language-java">if (user && user.name && !user.first_name) {
+    // Documents written before Dec 8, 2013 don't have first_name
+    user.first_name = user.name.split(" ")[0];
+}
+</code></pre>
+    <p>
+        از طرف دیگر، در یک schema database "statically typed"، شما معمولاً یک migration را در امتداد خطوط زیر انجام می‌دهید:
+    </p>
+    <pre><code class="language-sql">ALTER TABLE users ADD COLUMN first_name text;
+UPDATE users SET first_name = split_part(name, ' ', 1);      -- PostgreSQL
+UPDATE users SET first_name = substring_index(name, ' ', 1);      -- MySQL
+</code></pre>
+    <p>
+        تغییرات Schema شهرت بدی برای slow بودن و نیاز به downtime دارند. این شهرت کاملاً سزاوار نیست: اکثر systems relational database دستور ALTER TABLE را در چند میلی‌ثانیه اجرا می‌کنند. MySQL یک استثنا قابل توجه است — این جدول کامل را در ALTER TABLE کپی می‌کند، که می‌تواند به معنای minutes یا حتی hours of downtime هنگام تغییر یک table بزرگ باشد—اگرچه ابزارهای مختلفی برای دور زدن این محدودیت وجود دارد [24, 25, 26].
+    </p>
+    <p>
+        اجرای دستور UPDATE بر روی یک table بزرگ احتمالاً در هر database کند خواهد بود، زیرا هر ردیف باید دوباره نوشته شود. اگر این قابل قبول نیست، application می‌تواند first_name را روی مقدار پیش‌فرض NULL خود بگذارد و آن را در زمان خواندن پر کند، مانند document database.
+    </p>
+    <p>
+        رویکرد schema-on-read در صورتی که items در collection به دلایلی ساختار یکسانی نداشته باشند (به عنوان مثال، داده‌ها ناهمگن هستند) مزیت دارد - به عنوان مثال، به دلیل:
+    </p>
+    <ul>
+        <li>انواع مختلفی از objects وجود دارد و قرار دادن هر type of object در table خود عملی نیست.</li>
+    </ul>
+    <p>
+        40 | Chapter 2: Data Models and Query Languages
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

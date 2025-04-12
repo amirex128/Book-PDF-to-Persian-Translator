@@ -1,0 +1,53 @@
+185
+Developing business logic using event sourcing
+6.1.1
+The trouble with traditional persistence
+The traditional approach to persistence maps classes to database tables, fields of those
+classes to table columns, and instances of those classes to rows in those tables. For
+example, figure 6.1 shows how the Order aggregate, described in chapter 5, is mapped
+to the ORDER table. Its OrderLineItems are mapped to the ORDER_LINE_ITEM table.
+The application persists an order instance as rows in the ORDER and ORDER_LINE_ITEM
+tables. It might do that using an ORM framework such as JPA or a lower-level frame-
+work such as MyBATIS.
+ This approach clearly works well because most enterprise applications store data
+this way. But it has several drawbacks and limitations:
+Object-Relational impedance mismatch.
+Lack of aggregate history.
+Implementing audit logging is tedious and error prone.
+Event publishing is bolted on to the business logic.
+Let’s look at each of these problems, starting with the Object-Relational impedance
+mismatch problem.
+OBJECT-RELATIONAL IMPEDANCE MISMATCH
+One age-old problem is the so-called Object-Relational impedance mismatch problem.
+There’s a fundamental conceptual mismatch between the tabular relational schema
+and the graph structure of a rich domain model with its complex relationships.
+Some aspects of this problem are reflected in polarized debates over the suitability of
+Object/Relational mapping (ORM) frameworks. For example, Ted Neward has said
+that “Object-Relational mapping is the Vietnam of Computer Science” (http://blogs
+.tedneward.com/post/the-vietnam-of-computer-science/). To be fair, I’ve used
+«class»
+Order
+ID
+1234
+CUSTOMER_ID
+customer-abc
+ORDER_TOTAL
+1234.56
+...
+...
+«class»
+OrderLineItem
+ID
+567
+ORDER_ID
+1234
+ORDER table
+ORDER_LINE_ITEM table
+QUANTITY
+2
+...
+...
+Figure 6.1
+The traditional approach to persistence maps classes to tables and objects to rows in 
+those tables.
+ 

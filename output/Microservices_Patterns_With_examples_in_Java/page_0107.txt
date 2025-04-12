@@ -1,0 +1,44 @@
+77
+Communicating using the synchronous Remote procedure invocation pattern
+rpc cancelOrder(CancelOrderRequest) returns (CancelOrderReply) {}
+rpc reviseOrder(ReviseOrderRequest) returns (ReviseOrderReply) {}
+...
+}
+message CreateOrderRequest {
+int64 restaurantId = 1;
+int64 consumerId = 2;
+repeated LineItem lineItems = 3;
+...
+}
+message LineItem {
+string menuItemId = 1;
+int32 quantity = 2;
+}
+message CreateOrderReply {
+int64 orderId = 1;
+}
+...
+CreateOrderRequest and CreateOrderReply are typed messages. For example, Create-
+OrderRequest message has a restaurantId field of type int64. The field’s tag value is 1.
+ gRPC has several benefits:
+It’s straightforward to design an API that has a rich set of update operations.
+It has an efficient, compact IPC mechanism, especially when exchanging large
+messages.
+Bidirectional streaming enables both RPI and messaging styles of communication.
+It enables interoperability between clients and services written in a wide range
+of languages.
+gRPC also has several drawbacks:
+It takes more work for JavaScript clients to consume gRPC-based API than
+REST/JSON-based APIs.
+Older firewalls might not support HTTP/2.
+gRPC is a compelling alternative to REST, but like REST, it’s a synchronous communi-
+cation mechanism, so it also suffers from the problem of partial failure. Let’s take a
+look at what that is and how to handle it. 
+3.2.3
+Handling partial failure using the Circuit breaker pattern
+In a distributed system, whenever a service makes a synchronous request to another
+service, there is an ever-present risk of partial failure. Because the client and the ser-
+vice are separate processes, a service may not be able to respond in a timely way to a
+client’s request. The service could be down because of a failure or for maintenance.
+Or the service might be overloaded and responding extremely slowly to requests.
+ 

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 192</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p><em>proxy</em> در حال انجام است. <em>Service meshes</em>، که در ادامه به بررسی آن‌ها می‌پردازیم، در حل این مشکل بسیار بهتر هستند.</p>
+  <h4>Service Meshes</h4>
+  <p>با یک <em>service mesh</em>، عملکرد مشترک مرتبط با ارتباطات بین <em>microservice</em>، وارد <em>mesh</em> می‌شود. این امر باعث کاهش عملکردی می‌شود که یک <em>microservice</em> باید به صورت داخلی پیاده‌سازی کند، در حالی که همچنین ثبات را در نحوه انجام کارهای خاص ارائه می‌دهد.</p>
+  <p>ویژگی‌های رایج پیاده‌سازی شده توسط <em>service meshes</em> شامل <em>mutual TLS</em>، <em>correlation IDs</em>، <em>service discovery</em> و <em>load balancing</em> و موارد دیگر است. اغلب این نوع عملکرد از یک <em>microservice</em> به <em>microservice</em> بعدی نسبتاً عمومی است، بنابراین ما در نهایت از یک <em>shared library</em> برای مدیریت آن استفاده می‌کنیم. اما سپس شما باید با این موضوع مقابله کنید که اگر <em>microservices</em> مختلف نسخه‌های متفاوتی از <em>libraries</em> را اجرا کنند، یا اگر <em>microservices</em> شما در <em>runtimes</em> مختلف نوشته شده‌اند، چه اتفاقی می‌افتد.</p>
+  <p>حداقل از نظر تاریخی، <em>Netflix</em> دستور می‌داد که همه ارتباطات شبکه غیرمحلی باید <em>JVM to JVM</em> انجام شود. این برای اطمینان از این بود که <em>common libraries</em> که امتحان شده و آزمایش شده‌اند و بخش حیاتی از مدیریت ارتباطات مؤثر بین <em>microservices</em> هستند، می‌توانند دوباره مورد استفاده قرار گیرند. با این حال، با استفاده از یک <em>service mesh</em>، ما این امکان را داریم که از عملکرد مشترک بین <em>microservice</em> در <em>microservices</em> نوشته شده در زبان‌های برنامه‌نویسی مختلف، استفاده مجدد کنیم. <em>Service meshes</em> همچنین می‌توانند در پیاده‌سازی رفتار استاندارد در سراسر <em>microservices</em> ایجاد شده توسط تیم‌های مختلف، بسیار مفید باشند—و استفاده از یک <em>service mesh</em>، به‌ویژه در <em>Kubernetes</em>، به طور فزاینده‌ای به بخشی فرض شده از هر پلتفرمی که ممکن است برای استقرار و مدیریت خودکار <em>microservices</em> ایجاد کنید، تبدیل شده است.</p>
+  <p>آسان کردن پیاده‌سازی رفتار مشترک در سراسر <em>microservices</em> یکی از مزایای بزرگ یک <em>service mesh</em> است. اگر این عملکرد مشترک فقط از طریق <em>shared libraries</em> پیاده‌سازی می‌شد، تغییر این رفتار مستلزم این بود که هر <em>microservice</em> یک نسخه جدید از <em>libraries</em> گفته شده را دریافت کند و قبل از اینکه آن تغییر فعال شود، مستقر شود. با یک <em>service mesh</em>، شما در مورد راه‌اندازی تغییرات در ارتباط بین <em>microservice</em>، انعطاف‌پذیری بیشتری دارید، بدون اینکه نیازی به بازسازی و <em>redeploy</em> داشته باشید.</p>
+  <h4>How they work</h4>
+  <p>به طور کلی، ما انتظار داریم که ترافیک شمال-جنوب کمتری نسبت به ترافیک شرق-غرب با معماری <em>microservice</em> داشته باشیم. یک <em>north-south call</em> واحد—به عنوان مثال، ثبت سفارش—می‌تواند منجر به چندین <em>east-west calls</em> شود. این بدان معناست که هنگام در نظر گرفتن هر نوع <em>proxy</em> برای <em>in-perimeter calls</em>، ما باید از سربار این <em>additional calls</em> آگاه باشیم، و این یک ملاحظه اصلی از نظر نحوه ساخت <em>service meshes</em> است.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

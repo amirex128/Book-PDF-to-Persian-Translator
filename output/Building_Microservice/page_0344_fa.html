@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 344</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        4 Leslie Lamport, “Time, Clocks, and the Ordering of Events in a Distributed System,” Communications of the ACM 21, no. 7 (July 1978): 558–65, https://oreil.ly/qzYmh.
+    </p>
+    <h4>Timing</h4>
+    <p>
+        هنگام نگاه کردن به لیستی از خطوط <strong>log</strong>، ما می‌توانیم فریب بخوریم و فکر کنیم که در حال دیدن یک ترتیب زمانی دقیق هستیم که به ما در درک آنچه اتفاق افتاده است و به چه ترتیبی کمک می‌کند. از این گذشته، هر خط از <strong>logs</strong> ما شامل تاریخ و زمان است—پس چرا ما نمی‌توانیم از این به عنوان راهی برای تعیین ترتیب وقوع رویدادها استفاده کنیم؟ در دنباله‌ای از تماس‌ها در مثال 10-2، ما یک خط <strong>log</strong> از <strong>Gateway</strong>، به دنبال آن <strong>logs</strong> از <strong>Streaming, Customer, Email</strong>، و سپس <strong>microservice Payment</strong> را می‌بینیم. ما ممکن است اینطور نتیجه‌گیری کنیم که این ترتیبی است که در آن تماس‌ها واقعاً اتفاق افتاده‌اند. متأسفانه، ما همیشه نمی‌توانیم روی این حساب کنیم که درست باشد.
+    </p>
+    <p>
+        خطوط <strong>log</strong> در ماشین‌هایی ایجاد می‌شوند که این نمونه‌های <strong>microservice</strong> در آنها در حال اجرا هستند. این <strong>logs</strong>ها پس از نوشته شدن به صورت محلی، در نقطه‌ای به جلو فرستاده می‌شوند. این بدان معناست که برچسب‌های تاریخ در خطوط <strong>log</strong> در ماشین‌هایی ایجاد می‌شوند که <strong>microservices</strong> در حال اجرا هستند. متأسفانه، ما نمی‌توانیم تضمین کنیم که ساعت‌های این ماشین‌های مختلف با هم همگام هستند. این بدان معناست که ساعت روی ماشینی که <strong>microservice Email</strong> در آن در حال اجرا است، ممکن است چند ثانیه جلوتر از ساعت ماشینی باشد که <strong>Payment</strong> در آن در حال اجرا است—این می‌تواند منجر به این شود که به نظر برسد چیزی در <strong>microservice Email</strong> قبل از وقوع آن در <strong>microservice Payment</strong> رخ داده است، اما این فقط می‌تواند به دلیل این <strong>clock skew</strong> باشد.
+    </p>
+    <p>
+        مشکل <strong>clock skew</strong> باعث ایجاد انواع مسائل در سیستم‌های توزیع‌شده می‌شود. پروتکل‌هایی برای تلاش و کاهش <strong>clock skew</strong> در سیستم‌ها وجود دارد—پروتکل زمان شبکه (<strong>NTP</strong>) که پرکاربردترین نمونه است. با این حال، <strong>NTP</strong> تضمین شده نیست که کار می‌کند، و حتی زمانی که کار می‌کند، تنها کاری که می‌تواند انجام دهد، کاهش <strong>skew</strong> است، نه حذف آن. اگر شما دنباله‌ای از تماس‌ها دارید که بسیار نزدیک به هم اتفاق می‌افتند، ممکن است متوجه شوید که حتی یک ثانیه <strong>skew</strong> در ماشین‌ها برای اینکه درک شما از توالی تماس‌ها کاملاً تغییر کند، کافی است.
+    </p>
+    <p>
+        اساساً، این بدان معناست که ما دو محدودیت در مورد زمان در <strong>logs</strong> داریم. ما نمی‌توانیم اطلاعات زمان‌بندی کاملاً دقیقی را برای جریان کلی تماس‌ها دریافت کنیم، و همچنین نمی‌توانیم علیت را درک کنیم.
+    </p>
+    <p>
+        از نظر کمک به حل این مشکل تا بتوانیم ترتیب واقعی امور را درک کنیم، <strong>Leslie Lamport</strong><sup>4</sup> یک سیستم ساعت منطقی را پیشنهاد کرده است، که در آن از یک شمارنده برای پیگیری ترتیب تماس‌ها استفاده می‌شود. شما می‌توانید یک طرح مشابه را پیاده‌سازی کنید، اگر می‌خواهید، و تعدادی از تغییرات در این طرح وجود دارد. اما شخصاً، اگر می‌خواستم اطلاعات دقیق‌تری در مورد ترتیب تماس‌ها داشته باشم، و همچنین زمان‌بندی دقیق‌تری می‌خواستم، تمایل بیشتری به استفاده از یک ابزار <strong>distributed tracing</strong> داشتم، که هر دو مشکل را برای من برطرف می‌کند. ما در ادامه این فصل با جزئیات بیشتری به <strong>distributed tracing</strong> خواهیم پرداخت.
+    </p>
+    <p>
+        318 | Chapter 10: From Monitoring to Observability
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

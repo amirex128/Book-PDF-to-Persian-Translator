@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 161</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Handling the lack of isolation (مدیریت فقدان انزوا)</strong></h3>
+  <p>order (سفارشی) که از credit limit (محدودیت اعتباری) مصرف‌کننده فراتر رفت. برای کاهش ریسک وقوع این اتفاق، این countermeasure (اقدام متقابل) Cancel Order Saga (حماسه لغو سفارش) را reorder (تغییر ترتیب) می‌دهد:</p>
+  <ol>
+   <li>Order Service (سرویس سفارش) - تغییر state (وضعیت) Order (سفارش) به cancelled (لغو شده).</li>
+   <li>Delivery Service (سرویس تحویل) - لغو تحویل.</li>
+   <li>Customer Service (سرویس مشتری) - افزایش available credit (اعتبار موجود).</li>
+  </ol>
+  <p>در این نسخه reordered (تغییر ترتیب داده شده) از saga (حماسه)، available credit (اعتبار موجود) در یک retriable transaction (تراکنش قابل تلاش مجدد) افزایش می‌یابد، که احتمال dirty read (خواندن کثیف) را از بین می‌برد.</p>
+  <p>COUNTERMEASURE: REREAD VALUE (اقدام متقابل: مقدار دوباره خوانده شده)</p>
+  <p>The reread value countermeasure (اقدام متقابل مقدار دوباره خوانده شده) از lost updates (به‌روزرسانی‌های از دست رفته) جلوگیری می‌کند. یک saga (حماسه) که از این countermeasure (اقدام متقابل) استفاده می‌کند، یک record (رکورد) را قبل از به‌روزرسانی، دوباره می‌خواند، تأیید می‌کند که بدون تغییر است، و سپس record (رکورد) را به‌روزرسانی می‌کند. اگر record (رکورد) تغییر کرده باشد، saga (حماسه) aborts (متوقف می‌شود) و احتمالاً restart (راه‌اندازی مجدد) می‌شود. این countermeasure (اقدام متقابل) شکلی از pattern (الگوی) Optimistic Offline Lock (قفل آفلاین خوشبینانه) است (https://martinfowler .com/eaaCatalog/optimisticOfflineLock.html).</p>
+  <p>Create Order Saga (حماسه ایجاد سفارش) می‌تواند از این countermeasure (اقدام متقابل) برای handling (مدیریت) سناریویی استفاده کند که در آن Order (سفارش) در حین approved (تایید) شدن لغو می‌شود. transaction (تراکنشی) که Order (سفارش) را تأیید می‌کند، تأیید می‌کند که Order (سفارش) از زمانی که در اوایل saga (حماسه) ایجاد شده، بدون تغییر باقی مانده است. اگر بدون تغییر باقی مانده باشد، transaction (تراکنش) Order (سفارش) را تأیید می‌کند. اما اگر Order (سفارش) لغو شده باشد، transaction (تراکنش) saga (حماسه) را aborts (متوقف) می‌کند، که باعث می‌شود compensating transactions (تراکنش‌های جبرانی) آن اجرا شوند.</p>
+  <p>COUNTERMEASURE: VERSION FILE (اقدام متقابل: فایل نسخه)</p>
+  <p>The version file countermeasure (اقدام متقابل فایل نسخه) به این نام نامگذاری شده است زیرا عملیاتی را که بر روی یک record (رکورد) انجام می‌شود، ثبت می‌کند تا بتواند آنها را reorder (تغییر ترتیب) دهد. این یک راه برای تبدیل عملیات non-commutative (غیر جابجایی) به عملیات commutative (جابجایی) است. برای دیدن نحوه عملکرد این countermeasure (اقدام متقابل)، سناریویی را در نظر بگیرید که در آن Create Order Saga (حماسه ایجاد سفارش) به طور همزمان با یک Cancel Order Saga (حماسه لغو سفارش) اجرا می‌شود. اگر sagas (حماسه‌ها) از semantic lock countermeasure (اقدام متقابل قفل معنایی) استفاده نکنند، این امکان وجود دارد که Cancel Order Saga (حماسه لغو سفارش) authorization (مجوز) credit card (کارت اعتباری) مصرف‌کننده را قبل از اینکه Create Order Saga (حماسه ایجاد سفارش) کارت را authorize (مجوز) کند، لغو کند.</p>
+  <p>یک راه برای Accounting Service (سرویس حسابداری) برای handling (مدیریت) این requests (درخواست‌های) out-of-order (خارج از ترتیب) این است که operations (عملیات‌ها) را به محض رسیدن ثبت کند و سپس آنها را به ترتیب صحیح اجرا کند. در این سناریو، ابتدا request (درخواست) Cancel Authorization (لغو مجوز) را ثبت می‌کند. سپس، هنگامی که Accounting Service (سرویس حسابداری) request (درخواست) Authorize Card (مجوز کارت) را دریافت می‌کند، متوجه می‌شود که قبلاً request (درخواست) Cancel Authorization (لغو مجوز) را دریافت کرده است و از authorization (مجوز) credit card (کارت اعتباری) صرف نظر می‌کند.</p>
+  <p>COUNTERMEASURE: BY VALUE (اقدام متقابل: با مقدار)</p>
+  <p>countermeasure (اقدام متقابل) نهایی، by value countermeasure (اقدام متقابل با مقدار) است. این یک strategy (استراتژی) برای انتخاب مکانیسم‌های concurrency (همزمانی) بر اساس ریسک business (تجاری) است. یک application (برنامه) که از این countermeasure (اقدام متقابل) استفاده می‌کند، از ویژگی‌های هر request (درخواست) برای تصمیم‌گیری بین استفاده از sagas (حماسه‌ها) و distributed transactions (تراکنش‌های توزیع شده) استفاده می‌کند. درخواست‌های کم‌خطر را با استفاده از sagas (حماسه‌ها) اجرا می‌کند، شاید با اعمال countermeasures (اقدامات متقابل) شرح داده شده در بخش قبل. اما درخواست‌های پرخطر، که به عنوان مثال، شامل مقادیر زیادی پول می‌شود، با استفاده از distributed transactions (تراکنش‌های توزیع شده) اجرا می‌شود.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

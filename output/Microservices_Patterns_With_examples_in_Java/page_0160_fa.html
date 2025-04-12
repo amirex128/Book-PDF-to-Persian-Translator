@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 160</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>isn’t (نیست) committed (تعهد) شده و به طور بالقوه می‌تواند تغییر کند. flag (پرچم) می‌تواند یا یک lock (قفل) باشد که از دسترسی سایر transactions (تراکنش‌ها) به record (رکورد) جلوگیری می‌کند یا یک warning (هشدار) که نشان می‌دهد سایر transactions (تراکنش‌ها) باید با سوء ظن با آن record (رکورد) رفتار کنند. این توسط یک retriable transaction (تراکنش قابل تلاش مجدد) - saga (حماسه) با موفقیت در حال تکمیل است - یا توسط یک compensating transaction (تراکنش جبرانی) پاک می‌شود: saga (حماسه) در حال بازگشت است.</p>
+  <p>فیلد Order.state یک مثال عالی از یک semantic lock (قفل معنایی) است. states (حالت‌های) *_PENDING، مانند APPROVAL_PENDING (در انتظار تایید) و REVISION_PENDING (در انتظار تجدید نظر)، یک semantic lock (قفل معنایی) را پیاده‌سازی می‌کنند. آنها به سایر sagas (حماسه‌ها) که به یک Order (سفارش) دسترسی دارند، می‌گویند که یک saga (حماسه) در حال به‌روزرسانی Order (سفارش) است. به عنوان مثال، اولین گام از Create Order Saga (حماسه ایجاد سفارش)، که یک compensatable transaction (تراکنش قابل جبران) است، یک Order (سفارش) را در یک state (وضعیت) APPROVAL_PENDING (در انتظار تایید) ایجاد می‌کند. گام نهایی Create Order Saga (حماسه ایجاد سفارش)، که یک retriable transaction (تراکنش قابل تلاش مجدد) است، فیلد را به APPROVED (تایید شده) تغییر می‌دهد. یک compensating transaction (تراکنش جبرانی) فیلد را به REJECTED (رد شده) تغییر می‌دهد.</p>
+  <p>مدیریت lock (قفل) تنها نیمی از مشکل است. شما همچنین باید در مورد اینکه چگونه یک saga (حماسه) باید با یک record (رکورد) که locked (قفل) شده است، بر اساس هر مورد تصمیم بگیرید. به عنوان مثال، system command (دستور سیستم) cancelOrder() (لغو سفارش) را در نظر بگیرید. یک client (مشتری) ممکن است این operation (عملیات) را برای لغو یک Order (سفارش) که در state (وضعیت) APPROVAL_PENDING (در انتظار تایید) است، فراخوانی کند.</p>
+  <p>چندین راه مختلف برای handling (مدیریت) این سناریو وجود دارد. یک گزینه این است که system command (دستور سیستم) cancelOrder() (لغو سفارش) شکست بخورد و به client (مشتری) بگوید که بعداً دوباره امتحان کند. مزیت اصلی این رویکرد این است که پیاده‌سازی آن ساده است. با این حال، drawback (نقص) این است که client (مشتری) را پیچیده‌تر می‌کند زیرا باید منطق retry (تلاش مجدد) را پیاده‌سازی کند.</p>
+  <p>یک گزینه دیگر این است که cancelOrder() (لغو سفارش) تا زمان آزاد شدن lock (قفل) block (مسدود) شود. یک مزیت استفاده از semantic locks (قفل‌های معنایی) این است که آنها اساساً isolation (انزوا) ارائه شده توسط ACID transactions (تراکنش‌های اتمی) را بازآفرینی می‌کنند. Sagas (حماسه‌هایی) که همان record (رکورد) را به‌روزرسانی می‌کنند، serialized (سریالی) هستند، که تلاش برنامه‌نویسی را به میزان قابل توجهی کاهش می‌دهد. مزیت دیگر این است که آنها بار retry (تلاش مجدد) را از client (مشتری) حذف می‌کنند. drawback (نقص) این است که application (برنامه) باید locks (قفل‌ها) را مدیریت کند. همچنین باید یک الگوریتم تشخیص deadlock (بن‌بست) را پیاده‌سازی کند که rollback (بازگشت) یک saga (حماسه) را برای شکستن یک deadlock (بن‌بست) و اجرای مجدد آن انجام می‌دهد.</p>
+  <p>COUNTERMEASURE: COMMUTATIVE UPDATES (اقدام متقابل: به‌روزرسانی‌های جابجایی)</p>
+  <p>یکی از countermeasures (اقدامات متقابل) ساده، طراحی operations (عملیات‌های) به‌روزرسانی برای commutative (جابجایی) بودن است. operations (عملیات‌ها) در صورت اجرا به هر ترتیبی commutative (جابجایی) هستند. عملیات debit() (بدهی) و credit() (اعتبار) یک Account (حساب) commutative (جابجایی) هستند (اگر از overdraft (اضافه‌برداشت) چشم‌پوشی کنید). این countermeasure (اقدام متقابل) مفید است زیرا lost updates (به‌روزرسانی‌های از دست رفته) را حذف می‌کند.</p>
+  <p>به عنوان مثال، سناریویی را در نظر بگیرید که در آن یک saga (حماسه) نیاز به بازگشت بعد از اینکه یک compensatable transaction (تراکنش قابل جبران) یک حساب را debited (بدهکار) (یا credited (بستانکار)) کرده است. compensating transaction (تراکنش جبرانی) می‌تواند به سادگی حساب را credit (بستانکار) (یا debit (بدهکار)) کند تا به‌روزرسانی را undo (واگردانی) کند. هیچ امکانی برای overwriting (بازنویسی) به‌روزرسانی‌های انجام شده توسط سایر sagas (حماسه‌ها) وجود ندارد.</p>
+  <p>COUNTERMEASURE: PESSIMISTIC VIEW (اقدام متقابل: دیدگاه بدبینانه)</p>
+  <p>راه دیگری برای handling (مدیریت) فقدان isolation (انزوا) countermeasure (اقدام متقابل) pessimistic view (دیدگاه بدبینانه) است. این steps (مراحل) یک saga (حماسه) را reorders (تغییر ترتیب) می‌دهد تا ریسک business (تجاری) را به دلیل یک dirty read (خواندن کثیف) به حداقل برساند. به عنوان مثال، سناریویی را در نظر بگیرید که قبلاً برای توصیف anomaly (ناهنجاری) dirty read (خواندن کثیف) استفاده شد. در آن سناریو، Create Order Saga (حماسه ایجاد سفارش) یک dirty read (خواندن کثیف) از اعتبار موجود انجام داد و یک</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+So in our example, when we think about the Customer microservice, unit tests would
+cover small parts of the code in isolation, as shown in Figure 9-4.
+Figure 9-4. Scope of unit tests on our example system
+The primary goal of these tests is to give us very fast feedback about whether our
+functionality is good. Unit tests are also important for supporting refactoring of code,
+allowing us to restructure our code as we go secure in the knowledge that our small-
+scoped tests will catch us if we make a mistake.
+Service Tests
+Service tests are designed to bypass the user interface and test our microservices
+directly. In a monolithic application, we might just be testing a collection of classes
+that provide a service to the UI. For a system comprising a number of microservices, a
+service test would test an individual microservice’s capabilities.
+By running tests against a single microservice in this way, we get increased confi‐
+dence that the service will behave as we expect, but we still keep the scope of the test
+somewhat isolated. The cause of the test failure should be limited to just the micro‐
+service under test. To achieve this isolation, we need to stub out all external collabo‐
+rators so only the microservice itself is in scope, as Figure 9-5 shows.
+Some of these tests could be as fast as our small-scoped unit tests, but if you decide to
+test against a real database or to go over networks to stubbed downstream collabora‐
+tors, test times can increase. These tests also cover more scope than a simple unit test,
+so when they fail, it can be harder to detect what is broken than with a unit test. How‐
+ever, they have considerably fewer moving parts and are therefore less brittle than
+larger-scoped tests.
+280 
+| 
+Chapter 9: Testing

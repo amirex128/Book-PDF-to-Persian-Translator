@@ -1,0 +1,55 @@
+358
+CHAPTER 11
+Developing production-ready services
+
+Refresh Token—A long-lived yet revocable token that a Client uses to obtain a
+new AccessToken.
+
+Resource Server—A service that uses an access token to authorize access. In a
+microservice architecture, the services are resource servers.
+
+Client—A client that wants to access a Resource Server. In a microservice
+architecture, API Gateway is the OAuth 2.0 client.
+Later in this section, I describe how to support login-based clients. But first, let’s talk
+about how to authenticate API clients.
+ Figure 11.4 shows how the API gateway authenticates a request from an API client.
+The API gateway authenticate the API client by making a request to the OAuth 2.0
+authorization server, which returns an access token. The API gateway then makes one
+or more requests containing the access token to the services.
+ The sequence of events shown in figure 11.4 is as follows:
+1
+The client makes a request, supplying its credentials using basic authentication.
+2
+The API gateway makes an OAuth 2.0 Password Grant request (www.oauth.com/
+oauth2-servers/access-tokens/password-grant/) to the OAuth 2.0 authentication
+server.
+Order
+Service
+User
+database
+Contains the user
+ID and their roles
+Password grant request
+API gateway
+Spring OAuth2
+Authentication
+Server
+GET /orders/1
+Authorization: Basic...
+....
+POST/oauth/token
+userid=...&password=...
+GET /orders/1
+Authorization: Bearer AccessToken
+HTTP/1.1 200 OK
+...
+{
+"access_token": "AccessToken"
+...
+}
+API client
+Figure 11.4
+An API gateway authenticates an API client by making a Password Grant request to the OAuth 2.0 
+authentication server. The server returns an access token, which the API gateway passes to the services. A service 
+verifies the token’s signature and extracts information about the user, including their identity and roles.
+ 

@@ -1,0 +1,48 @@
+178
+CHAPTER 5
+Designing business logic in a microservice architecture
+public class Order { ...
+public static ResultWithDomainEvents<Order, OrderDomainEvent>
+ createOrder(long consumerId, Restaurant restaurant,
+List<OrderLineItem> orderLineItems) {
+Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
+List<OrderDomainEvent> events = singletonList(new OrderCreatedEvent(
+new OrderDetails(consumerId, restaurant.getId(), orderLineItems,
+order.getOrderTotal()),
+restaurant.getName()));
+return new ResultWithDomainEvents<>(order, events);
+}
+public Order(OrderDetails orderDetails) {
+this.orderLineItems = new OrderLineItems(orderDetails.getLineItems());
+this.orderMinimum = orderDetails.getOrderMinimum();
+this.state = APPROVAL_PENDING;
+}
+...
+public List<DomainEvent> noteApproved() {
+switch (state) {
+case APPROVAL_PENDING:
+this.state = APPROVED;
+return singletonList(new OrderAuthorized());
+...
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public List<DomainEvent> noteRejected() {
+switch (state) {
+case APPROVAL_PENDING:
+this.state = REJECTED;
+return singletonList(new OrderRejected());
+...
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+The createOrder() method is a static factory method that creates an Order and pub-
+lishes an OrderCreatedEvent. The OrderCreatedEvent is enriched with the details of
+the Order, including the line items, the total amount, the restaurant ID, and the
+restaurant name. Chapter 7 discusses how Order History Service uses Order events,
+including OrderCreatedEvent, to maintain an easily queried replica of Orders.
+Listing 5.15
+The methods that are invoked during order creation
+ 

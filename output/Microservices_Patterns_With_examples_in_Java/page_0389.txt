@@ -1,0 +1,60 @@
+359
+Developing secure services
+3
+The authentication server validates the API client’s credentials and returns an
+access token and a refresh token.
+4
+The API gateway includes the access token in the requests it makes to the ser-
+vices. A service validates the access token and uses it to authorize the request.
+An OAuth 2.0-based API gateway can authenticate session-oriented clients by using an
+OAuth 2.0 access token as a session token. What’s more, when the access token
+expires, it can obtain a new access token using the refresh token. Figure 11.5 shows
+how an API gateway can use OAuth 2.0 to handle session-oriented clients. An API cli-
+ent initiates a session by POSTing its credentials to the API gateway’s /login end-
+point. The API gateway returns an access token and a refresh token to the client. The
+API client then supplies both tokens when it makes requests to the API gateway.
+The sequence of events is as follows:
+1
+The login-based client POSTs its credentials to the API gateway.
+2
+The API gateway’s Login Handler makes an OAuth 2.0 Password Grant request
+(www.oauth.com/oauth2-servers/access-tokens/password-grant/) to the OAuth
+2.0 authentication server.
+Order
+Service
+User
+database
+Password grant request
+API gateway
+Spring OAuth2
+Authentication
+Server
+POST/login
+userId=...&password=...
+GET/orders/1
+Cookie: access_token=...;refresh_token...
+HTTP/1.1 200 OK
+Set-Cookie: access_token=...
+Set-Cookie:refresh_token=...
+POST/oauth/token
+userid=...&password=...
+GET /orders/1
+Authorization: Bearer AccessToken
+HTTP/1.1 200 OK
+...
+{
+"access_token": "AccessToken"
+...
+}
+Login-based
+client
+Login
+handler
+Session
+authentication
+interceptor
+Figure 11.5
+A client logs in by POSTing its credentials to the API gateway. The API gateway authenticates the 
+credentials using the OAuth 2.0 authentication server and returns the access token and refresh token as cookies. 
+A client includes these tokens in the requests it makes to the API gateway.
+ 

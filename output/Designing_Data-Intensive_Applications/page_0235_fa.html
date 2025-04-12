@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 235</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در هر دو مورد، تعداد partitions، اندازه هر partition متناسب با اندازه dataset است.
+        یک گزینه سوم، که توسط Cassandra و Ketama استفاده می‌شود، این است که تعداد partitions را متناسب با تعداد nodes قرار دهید—به عبارت دیگر، یک تعداد ثابت از par‐titions per node داشته باشید [23, 27, 28]. در این حالت، اندازه هر partition متناسب با اندازه dataset رشد می‌کند در حالی که تعداد nodes بدون تغییر باقی می‌ماند، اما وقتی شما تعداد nodes را افزایش می‌دهید، partitions دوباره کوچکتر می‌شوند. از آنجایی که یک حجم داده بزرگتر به طور کلی نیاز به تعداد بیشتری از nodes برای ذخیره دارد، این رویکرد نیز اندازه هر partition را نسبتاً ثابت نگه می‌دارد.
+    </p>
+    <p>
+        When a new node joins the cluster، آن به طور تصادفی یک تعداد ثابت از partitions موجود را برای split کردن انتخاب می‌کند و سپس مالکیت یک نیمه از هر یک از آن split parti‐tions را می‌پذیرد در حالی که نیمه دیگر از هر partition را در جای خود باقی می‌گذارد. The randomization می‌تواند splits ناعدالتی را تولید کند، اما هنگامی که روی تعداد زیادی از partitions متوسط‌گیری می‌شود (در Cassandra، 256 partitions per node به طور پیش‌فرض)، node جدید در نهایت یک سهم منصفانه از load از nodes موجود دریافت می‌کند. Cassandra 3.0 یک الگوریتم rebalanc‐ing جایگزین را معرفی کرد که از splits ناعدالتی اجتناب می‌کند [29].
+    </p>
+    <p>
+        انتخاب partition boundaries به طور تصادفی نیاز دارد که hash-based partitioning استفاده شود (بنابراین boundaries می‌توانند از range از اعداد تولید شده توسط hash function انتخاب شوند). در واقع، این رویکرد بیشترین تطابق را با تعریف اصلی از consistent hashing [7] دارد ("Consistent Hashing" در صفحه 204 را ببینید). Hash functions جدیدتر می‌توانند یک effect مشابه را با overhead metadata کمتری به دست آورند [8].
+    </p>
+    <h4>Operations: Automatic or Manual Rebalancing</h4>
+    <p>
+        یک سؤال مهم در رابطه با rebalancing وجود دارد که ما از آن چشم‌پوشی کرده‌ایم: آیا rebalancing به طور خودکار انجام می‌شود یا دستی؟
+    </p>
+    <p>
+        یک gradient بین rebalancing کاملاً خودکار (سیستم به طور خودکار تصمیم می‌گیرد که چه زمانی partitions را از یک node به node دیگر منتقل کند، بدون هیچ تعامل administrator) و کاملاً دستی (تخصیص partitions به nodes به طور صریح توسط یک administrator پیکربندی می‌شود و فقط زمانی تغییر می‌کند که administrator به طور صریح آن را دوباره پیکربندی می‌کند) وجود دارد. به عنوان مثال، Couchbase، Riak و Voldemort یک تخصیص partition پیشنهادی را به طور خودکار ایجاد می‌کنند، اما نیاز به یک administrator دارند که آن را قبل از اینکه اجرا شود، committed کند.
+    </p>
+    <p>
+        Rebalancing کاملاً خودکار می‌تواند راحت باشد، زیرا برای maintenance عادی، کار عملیاتی کمتری وجود دارد. با این حال، می‌تواند غیرقابل پیش‌بینی باشد. Rebalancing یک operation گران قیمت است، زیرا نیاز به rerouting requests و انتقال مقدار زیادی داده از یک node به node دیگر دارد. اگر این کار با دقت انجام نشود، این فرآیند می‌تواند network یا nodes را overload کند و به performance از سایر requests در حین انجام rebalancing آسیب برساند.
+    </p>
+    <p>
+        Rebalancing Partitions | 213
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

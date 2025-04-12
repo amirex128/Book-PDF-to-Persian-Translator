@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 272</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   در جهت اطمینان، <mark>event handler</mark> باید <mark>event ID</mark> را ثبت کند و <mark>datastore</mark> را به‌طور اتمی به‌روزرسانی کند.
+  </p>
+  <p>
+   برای قابل اطمینان بودن، <mark>event handler</mark> باید <mark>event ID</mark> را ثبت کند و <mark>datastore</mark> را به‌طور اتمی به‌روزرسانی کند. نحوه انجام این کار به نوع <mark>database</mark> بستگی دارد. اگر فروشگاه <mark>database view</mark> یک <mark>SQL database</mark> باشد، <mark>event handler</mark> می‌تواند <mark>events</mark> پردازش شده را به عنوان بخشی از <mark>transaction</mark> که <mark>view</mark> را به‌روزرسانی می‌کند، در یک جدول <mark>PROCESSED_EVENTS</mark> درج کند. اما اگر <mark>datastore view</mark> یک <mark>database NoSQL</mark> باشد که دارای یک مدل <mark>transaction</mark> محدود است، <mark>event handler</mark> باید <mark>event</mark> را در "رکورد" <mark>datastore</mark> (به عنوان مثال، یک سند <mark>MongoDB</mark> یا آیتم جدول <mark>DynamoDB</mark>) که به‌روزرسانی می‌کند، ذخیره کند.
+  </p>
+  <p>
+   توجه به این نکته مهم است که <mark>event handler</mark> نیازی به ثبت <mark>ID</mark> هر <mark>event</mark> ندارد. اگر، همانطور که در مورد <mark>Eventuate</mark> وجود دارد، <mark>events</mark> دارای یک <mark>ID</mark> منحصراً افزایشی هستند، در این صورت هر رکورد فقط باید <mark>max(eventId)</mark> را که از یک نمونه <mark>aggregate</mark> داده شده دریافت شده است، ذخیره کند.
+  </p>
+  <p>
+   به منظور قابل اطمینان بودن، <mark>event handler</mark> باید <mark>event ID</mark> را ثبت کند و <mark>datastore</mark> را به‌طور اتمی به‌روزرسانی کند.
+  </p>
+  <p>
+   افزودن و به‌روزرسانی <mark>views</mark> نیز از نظر مفهومی ساده است: شما <mark>event handlers</mark> را تغییر می‌دهید و <mark>view</mark> را از ابتدا بازسازی می‌کنید. با این حال، مشکل این است که این رویکرد بعید است در عمل کار کند. بیایید به مسائل نگاهی بیندازیم.
+  </p>
+  <h5><mark>BUILD CQRS VIEWS USING ARCHIVED EVENTS</mark></h5>
+  <p>
+   یک مشکل این است که <mark>message brokers</mark> نمی‌توانند پیام‌ها را برای مدت نامحدود ذخیره کنند. <mark>message brokers</mark> سنتی مانند <mark>RabbitMQ</mark>، یک پیام را پس از پردازش توسط یک مصرف‌کننده، حذف می‌کنند. حتی <mark>brokers</mark> مدرن‌تر مانند <mark>Apache Kafka</mark>، که پیام‌ها را برای یک دوره نگهداری قابل تنظیم نگه می‌دارند، برای ذخیره <mark>events</mark> برای مدت نامحدود در نظر گرفته نشده‌اند. در نتیجه، یک <mark>view</mark> را نمی‌توان فقط با خواندن تمام <mark>events</mark> مورد نیاز از <mark>message broker</mark> ساخت. در عوض، یک application باید <mark>events</mark> قدیمی‌تر را که در <mark>archive</mark> شده‌اند، برای مثال، <mark>AWS S3</mark>، نیز بخواند. شما می‌توانید این کار را با استفاده از یک فناوری <mark>big data</mark> مقیاس‌پذیر مانند <mark>Apache Spark</mark> انجام دهید.
+  </p>
+  <h5><mark>BUILD CQRS VIEWS INCREMENTALLY</mark></h5>
+  <p>
+   یکی دیگر از مشکلات ایجاد <mark>view</mark> این است که زمان و منابع مورد نیاز برای پردازش تمام <mark>events</mark> با گذشت زمان به رشد خود ادامه می‌دهند. در نهایت، ایجاد <mark>view</mark> بیش از حد کند و پرهزینه خواهد شد. راه‌حل استفاده از یک الگوریتم افزایشی دو مرحله‌ای است. گام اول، دوره‌ای یک <mark>snapshot</mark> از هر نمونه <mark>aggregate</mark> براساس <mark>snapshot</mark> قبلی و <mark>events</mark>ی که از زمان ایجاد آن <mark>snapshot</mark> رخ داده است، محاسبه می‌کند. گام دوم یک <mark>view</mark> را با استفاده از <mark>snapshots</mark> و هر <mark>events</mark> بعدی ایجاد می‌کند.
+  </p>
+  <h4><mark>7.4 Implementing a CQRS view with AWS DynamoDB</mark></h4>
+  <p>
+   اکنون که به مسائل مختلف طراحی که هنگام استفاده از <mark>CQRS</mark> باید به آن‌ها رسیدگی کنید، نگاهی انداختیم، بیایید به یک مثال بپردازیم. این بخش نحوه پیاده‌سازی یک <mark>CQRS view</mark> برای عملیات <mark>findOrderHistory()</mark> با استفاده از <mark>DynamoDB</mark> را شرح می‌دهد. <mark>AWS DynamoDB</mark> یک <mark>database NoSQL</mark> مقیاس‌پذیر است که به عنوان یک سرویس در فضای ابری <mark>Amazon</mark> در دسترس است. مدل <mark>data</mark> <mark>DynamoDB</mark> از جداولی تشکیل شده است که شامل مواردی است که، مانند اشیاء <mark>JSON</mark>، مجموعه‌ای از جفت‌های نام-مقدار سلسله مراتبی هستند. <mark>AWS DynamoDB</mark> یک <mark>database</mark> کاملاً مدیریت شده است و می‌توانید ظرفیت توان عملیاتی یک جدول را به صورت پویا افزایش و کاهش دهید.
+  </p>
+  <p>
+   <mark>CQRS view</mark> برای <mark>findOrderHistory()</mark>، <mark>events</mark> را از چندین <mark>services</mark> مصرف می‌کند، بنابراین به عنوان یک <mark>Order View Service</mark> مستقل پیاده‌سازی می‌شود. این <mark>service</mark> دارای یک <mark>API</mark> است که دو عملیات را پیاده‌سازی می‌کند: <mark>findOrderHistory()</mark> و <mark>findOrder()</mark>. اگرچه <mark>findOrder()</mark> را می‌توان با استفاده از ترکیب <mark>API</mark> پیاده‌سازی کرد، اما این <mark>view</mark> این عملیات را به صورت رایگان ارائه می‌دهد. شکل 7.12 طراحی این <mark>service</mark> را نشان می‌دهد. <mark>Order History Service</mark> به عنوان مجموعه‌ای از ماژول‌ها ساختار یافته است که هر یک مسئولیت خاصی را برای ساده‌سازی توسعه و تست بر عهده دارد. مسئولیت هر ماژول به شرح زیر است:
+  </p>
+  <ul>
+   <li>
+    <mark>OrderHistoryEventHandlers</mark>— به <mark>events</mark> منتشر شده توسط <mark>services</mark> مختلف مشترک می‌شود و <mark>OrderHistoryDAO</mark> را فراخوانی می‌کند
+   </li>
+   <li>
+    ماژول <mark>OrderHistoryQuery API</mark>— <mark>REST endpoints</mark> را که قبلاً شرح داده شد، پیاده‌سازی می‌کند
+   </li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

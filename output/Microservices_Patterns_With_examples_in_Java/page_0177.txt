@@ -1,0 +1,49 @@
+147
+Business logic organization patterns
+address two key challenges. First, a typical domain model is a tangled web of intercon-
+nected classes. Although this isn’t a problem in a monolithic application, in a micro-
+service architecture, where classes are scattered around different services, you need to
+eliminate object references that would otherwise span service boundaries. The second
+challenge is designing business logic that works within the transaction management
+constraints of a microservice architecture. Your business logic can use ACID transac-
+tions within services, but as described in chapter 4, it must use the Saga pattern to
+maintain data consistency across services.
+ Fortunately, we can address these issues by using the Aggregate pattern from
+DDD. The Aggregate pattern structures a service’s business logic as a collection of
+aggregates. An aggregate is a cluster of objects that can be treated as a unit. There are
+two reasons why aggregates are useful when developing business logic in a micro-
+service architecture:
+Aggregates avoid any possibility of object references spanning service boundar-
+ies, because an inter-aggregate reference is a primary key value rather than an
+object reference.
+Because a transaction can only create or update a single aggregate, aggregates
+fit the constraints of the microservices transaction model.
+As a result, an ACID transaction is guaranteed to be within a single service.
+ I begin this chapter by describing the different ways of organizing business logic:
+the Transcription script pattern and the Domain model pattern. Next I introduce the
+concept of a DDD aggregate and explain why it’s a good building block for a service’s
+business logic. After that, I describe the Domain event pattern events and explain why
+it’s useful for a service to publish events. I end this chapter with a couple of examples
+of business logic from Kitchen Service and Order Service.
+ Let’s now look at business logic organization patterns.
+5.1
+Business logic organization patterns
+Figure 5.1 shows the architecture of a typical service. As described in chapter 2, the
+business logic is the core of a hexagonal architecture. Surrounding the business logic
+are the inbound and outbound adapters. An inbound adapter handles requests from cli-
+ents and invokes the business logic. An outbound adapter, which is invoked by the busi-
+ness logic, invokes other services and applications.
+ This service consists of the business logic and the following adapters:
+
+REST API adapter—An inbound adapter that implements a REST API which
+invokes the business logic
+
+OrderCommandHandlers—An inbound adapter that consumes command mes-
+sages from a message channel and invokes the business logic
+
+Database Adapter—An outbound adapter that’s invoked by the business logic
+to access the database
+
+Domain Event Publishing Adapter—An outbound adapter that publishes events
+to a message broker
+ 

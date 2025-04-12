@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 180</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 5 (فصل 5)</strong></h3>
+  <h3><strong>Designing (طراحی) business logic (منطق تجاری) in (در) a microservice architecture (معماری ریز سرویس)</strong></h3>
+  <p>از استفاده از یک design (طراحی) procedural (رویه‌ای) زمانی که مناسب است، شرمنده نباشید. این رویکرد برای business logic (منطق تجاری) ساده به خوبی کار می‌کند. با این حال، drawback (نقص) این است که این روش تمایل ندارد که یک راه خوب برای پیاده‌سازی business logic (منطق تجاری) پیچیده باشد.</p>
+  <h4><strong>5.1.2 Designing business logic (طراحی منطق تجاری) using the Domain model pattern (با استفاده از الگوی Domain model)</strong></h4>
+  <p>سادگی رویکرد procedural (رویه‌ای) می‌تواند بسیار اغواکننده باشد. شما می‌توانید کد را بدون نیاز به در نظر گرفتن دقیق چگونگی سازماندهی کلاس‌ها، بنویسید. مشکل این است که اگر business logic (منطق تجاری) شما پیچیده شود، ممکن است به کدی برسید که نگهداری آن یک کابوس باشد. در واقع، به همان روشی که یک monolithic application (برنامه یکپارچه) عادت دارد که دائماً رشد کند، transaction scripts (اسکریپت‌های تراکنش) نیز همین مشکل را دارند. در نتیجه، مگر اینکه یک application (برنامه) بسیار ساده می‌نویسید، باید در برابر وسوسه نوشتن کد procedural (رویه‌ای) مقاومت کنید و در عوض الگوی Domain model (مدل دامنه) را اعمال کنید و یک design (طراحی) object-oriented (شی‌گرا) را توسعه دهید.</p>
+  <p>در یک design (طراحی) object-oriented (شی‌گرا)، business logic (منطق تجاری) از یک object model (مدل شی)، یک شبکه از کلاس‌های نسبتاً کوچک تشکیل شده است. این کلاس‌ها معمولاً مستقیماً با مفاهیم domain (دامنه) مشکل مطابقت دارند. در چنین design (طراحی)، برخی از کلاس‌ها فقط state (حالت) یا رفتار دارند، اما بسیاری از آنها هر دو را دارند، که نشانه یک کلاس با design (طراحی) خوب است. شکل 5.3 یک example (نمونه) از الگوی Domain model (مدل دامنه) را نشان می‌دهد.</p>
+  <p>Pattern (الگو): Domain model (مدل دامنه)</p>
+  <p>Organize (سازماندهی) the business logic (منطق تجاری) as an object model (به عنوان یک مدل شی) consisting of (شامل) classes (کلاس‌هایی) that (که) have state (حالت) and (و) behavior (رفتار).</p>
+  <br>
+  <p>createOrder() (ایجاد سفارش)</p>
+  <p>reviseOrder() (بازبینی سفارش)</p>
+  <p>cancelOrder() (لغو سفارش)</p>
+  <p>... (و...)</p>
+  <p>OrderService (سرویس سفارش)</p>
+  <p>deliveryTime (زمان تحویل)</p>
+  <p>deliveryAddress (آدرس تحویل)</p>
+  <p>DeliveryInformation (اطلاعات تحویل)</p>
+  <p>ﬁndOrderById() (پیدا کردن سفارش با شناسه)</p>
+  <p>... (و...)</p>
+  <p>OrderRepository (مخزن سفارش)</p>
+  <p>Some classes (برخی از کلاس‌ها) have only state (فقط حالت دارند).</p>
+  <p>Many classes (بسیاری از کلاس‌ها) have (دارند)</p>
+  <p>state (حالت) and (و) behavior (رفتار).</p>
+  <p>Uses (استفاده می‌کند)</p>
+  <p>Some classes (برخی از کلاس‌ها) have only behavior (فقط رفتار دارند).</p>
+  <p>«private» (خصوصی)</p>
+  <p>orderId (شناسه سفارش)</p>
+  <p>orderLineItems (آیتم‌های خط سفارش)</p>
+  <p>... (و...)</p>
+  <p>revise() (بازبینی)</p>
+  <p>cancel() (لغو)</p>
+  <p>«static» (ایستا)</p>
+  <p>create() (ایجاد)</p>
+  <p>Order (سفارش)</p>
+  <br>
+  <img src="figure_5_3.png" alt="Figure 5.3">
+  <p>Organizing business logic (سازماندهی business logic (منطق تجاری)) as (به عنوان) a domain model (یک مدل دامنه). The (the) majority (اکثریت) of (از)</p>
+  <p>the business logic (منطق تجاری) consists of (شامل می‌شود) classes (کلاس‌هایی) that (که) have (دارند) state (حالت) and (و) behavior (رفتار).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

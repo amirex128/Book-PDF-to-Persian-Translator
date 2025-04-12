@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 292</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>فصل 8</h3>
+  <h3>الگوهای API خارجی</h3>
+  <p>
+   <strong>PROTOCOL TRANSLATION</strong>
+  </p>
+  <p>
+   یک API gateway همچنین ممکن است protocol translation را انجام دهد. ممکن است یک API از نوع RESTful را به client های خارجی ارائه دهد، حتی اگر service های application به صورت داخلی از ترکیبی از پروتکل‌ها، از جمله REST و gRPC، استفاده کنند. در صورت نیاز، پیاده‌سازی برخی از عملیات API بین API خارجی RESTful و API های داخلی مبتنی بر gRPC ترجمه می‌کند.
+  </p>
+  <p>
+   <strong>THE API GATEWAY PROVIDES EACH CLIENT WITH CLIENT-SPECIFIC API</strong>
+  </p>
+  <p>
+   یک API gateway می‌تواند یک API واحد (OSFA) one-size-fits-all را ارائه دهد. مشکل API واحد این است که client های مختلف اغلب نیازهای متفاوتی دارند. به عنوان مثال، یک application third-party ممکن است نیاز داشته باشد که عملیات API Get Order Details، جزئیات کامل Order را برگرداند، در حالی که یک client موبایل فقط به زیرمجموعه‌ای از داده‌ها نیاز دارد.
+  </p>
+  <p>
+   یک راه حل برای این مشکل این است که به client ها این گزینه را بدهید که در یک request مشخص کنند که چه فیلدها و objects مرتبطی را server باید برگرداند. این رویکرد برای یک API عمومی که باید طیف وسیعی از application های third-party را سرویس دهد، مناسب است، اما اغلب کنترل مورد نیاز را به client ها نمی دهد.
+  </p>
+  <p>
+   یک رویکرد بهتر این است که API gateway، هر client را با API خود ارائه دهد.
+   به عنوان مثال، API gateway FTGO می‌تواند API ای را به client موبایل FTGO ارائه دهد که به طور خاص برای برآورده کردن requirements های آن طراحی شده است. حتی ممکن است API های مختلفی برای applications های موبایل Android و iPhone داشته باشد. API gateway همچنین یک API عمومی برای استفاده توسعه‌دهندگان third-party پیاده‌سازی خواهد کرد. بعداً، من الگوی Backends for frontends را توضیح خواهم داد که این مفهوم API-per-client را با تعریف یک API gateway جداگانه برای هر client، بیشتر پیش می‌برد.
+  </p>
+  <p>
+   <strong>IMPLEMENTING EDGE FUNCTIONS</strong>
+  </p>
+  <p>
+   اگرچه مسئولیت‌های اصلی یک API gateway، API routing و composition است، اما ممکن است عملکردهایی را نیز پیاده‌سازی کند که به عنوان edge functions شناخته می‌شوند. همانطور که از نامش پیداست، یک edge function، یک function پردازش request است که در edge یک application پیاده‌سازی می‌شود. نمونه‌هایی از edge functions که یک application ممکن است پیاده‌سازی کند عبارتند از:
+  </p>
+  <ul>
+   <li>
+    <strong>Authentication</strong>—تأیید هویت client که request را انجام می‌دهد.
+   </li>
+   <li>
+    <strong>Authorization</strong>—تأیید اینکه آیا client مجاز به انجام آن operation خاص است یا خیر.
+   </li>
+   <li>
+    <strong>Rate limiting</strong> —محدود کردن تعداد request ها در ثانیه از یک client خاص و/یا از همه client ها.
+   </li>
+   <li>
+    <strong>Caching</strong>—Cache کردن پاسخ‌ها برای کاهش تعداد request هایی که به service ها داده می‌شوند.
+   </li>
+   <li>
+    <strong>Metrics collection</strong>—جمع‌آوری metrics در مورد استفاده از API برای اهداف تجزیه و تحلیل صورتحساب.
+   </li>
+   <li>
+    <strong>Request logging</strong>—Log کردن request ها.
+   </li>
+  </ul>
+  <p>
+   سه مکان مختلف در application شما وجود دارد که می‌توانید این edge functions را پیاده‌سازی کنید. ابتدا، می‌توانید آن‌ها را در service های backend پیاده‌سازی کنید. این ممکن است برای برخی از functions، مانند caching، metrics collection و احتمالاً authorization منطقی باشد. اما به طور کلی امن‌تر است اگر application درخواست‌ها را در edge قبل از رسیدن به service ها احراز هویت کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

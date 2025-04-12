@@ -1,0 +1,22 @@
+10 OK, more than once or twice. A lot more than once or twice…
+Figure 2-10. Both Order Processor and Warehouse can request that changes be made
+to an order, but the Order microservice decides which requests are acceptable
+Sources of common coupling are also potential sources of resource contention. Mul‐
+tiple microservices making use of the same filesystem or database could overload that
+shared resource, potentially causing significant problems if the shared resource
+becomes slow or even entirely unavailable. A shared database is especially prone to
+this problem, as multiple consumers can run arbitrary queries against the database
+itself, which in turn can have wildly different performance characteristics. I’ve seen
+more than one database brought to its knees by an expensive SQL query—I may have
+even been the culprit once or twice.10
+So common coupling is sometimes OK, but often it’s not. Even when it’s benign, it
+means that we are limited in what changes can be made to the shared data, but it
+often speaks to a lack of cohesion in our code. It can also cause us problems in terms
+of operational contention. It’s for those reasons that we consider common coupling
+to be one of the least desirable forms of coupling—but it can get worse.
+Content Coupling
+Content coupling describes a situation in which an upstream service reaches into the
+internals of a downstream service and changes its internal state. The most common
+Types of Coupling 
+| 
+49

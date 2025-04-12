@@ -1,0 +1,41 @@
+with so many options. Products like Red Hat’s OpenShift partly take this choice away
+from us, as they give us a ready-made platform with some decisions already made
+for us.
+What this means is that although at the base level Kubernetes offers a portable
+abstraction for container execution, in practice it’s not as simple as taking an applica‐
+tion that works on one cluster and expecting it will work elsewhere. Your application,
+your operations and developer workflow, may well rely on your own custom plat‐
+form. Moving from one Kubernetes cluster to another may well also require that you
+rebuild that platform on your new destination. I’ve spoken to many organizations
+that have adopted Kubernetes primarily because they’re worried about being locked
+in to a single vendor, but these organizations haven’t understood this nuance—appli‐
+cations built on Kubernetes are portable across Kubernetes clusters in theory, but not
+always in practice.
+Helm, Operators, and CRDs, Oh My!
+One area of continuing confusion in the space of Kubernetes is how to manage the
+deployment and life cycle of third-party applications and subsystems. Consider the
+need to run Kafka on your Kubernetes cluster. You could create your own pod, ser‐
+vice, and deployment specifications and run them yourself. But what about managing
+an upgrade to your Kafka setup? What about other common maintenance tasks you
+might want to deal with, like upgrading running stateful software?
+A number of tools have emerged that aim to give you the ability to manage these
+types of applications at a more sensible level of abstraction. The idea is that someone
+creates something akin to a package for Kafka, and you run it on your Kubernetes
+cluster in a more black-box manner. Two of the best-known solutions in this space
+are Operator and Helm. Helm bills itself as “the missing package manager” for
+Kubernetes, and while Operator can manage initial installation, it seems to be
+focused more on the ongoing management of the application. Confusingly, while you
+can see Operator and Helm as being alternatives to one another, you can also use
+both of them together in some situations (Helm for initial install, Operator for life-
+cycle operations).
+A more recent evolution in this space is something called custom resource defini‐
+tions, or CRDs. With CRDs you can extend the core Kubernetes APIs, allowing you
+to plug in new behavior to your cluster. The nice thing about CRDs is that they inte‐
+grate fairly seamlessly into the existing command-line interface, access controls, and
+more—so your custom extension doesn’t feel like an alien addition. They basically
+allow you to implement your own Kubernetes abstractions. Think of the pod, replica
+set, service, and deployment abstractions we discussed earlier—with CRDs, you could
+add your own into the mix.
+266 
+| 
+Chapter 8: Deployment

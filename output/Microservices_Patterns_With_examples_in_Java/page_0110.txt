@@ -1,0 +1,64 @@
+80
+CHAPTER 3
+Interprocess communication in a microservice architecture
+the API gateway should return either a cached version of its data or omit it from the
+response.
+ It’s essential that you design your services to handle partial failure, but that’s not
+the only problem you need to solve when using RPI. Another problem is that in order
+for one service to invoke another service using RPI, it needs to know the network
+location of a service instance. On the surface this sounds simple, but in practice it’s
+a challenging problem. You must use a service discovery mechanism. Let’s look at
+how that works. 
+3.2.4
+Using service discovery
+Say you’re writing some code that invokes a service that has a REST API. In order to
+make a request, your code needs to know the network location (IP address and port)
+of a service instance. In a traditional application running on physical hardware, the
+network locations of service instances are usually static. For example, your code could
+read the network locations from a configuration file that’s occasionally updated. But
+in a modern, cloud-based microservices application, it’s usually not that simple. As is
+shown in figure 3.4, a modern application is much more dynamic.
+ Service instances have dynamically assigned network locations. Moreover, the set of
+service instances changes dynamically because of autoscaling, failures, and upgrades.
+Consequently, your client code must use a service discovery.
+API
+gateway
+How to handle each
+unresponsive service?
+Unresponsive
+service
+Mobile
+app
+Get
+order
+endpoint
+Get/orders/xyz
+Order
+Service
+Order
+Service
+proxy
+GET/orders/xyz
+Kitchen
+Service
+Kitchen
+Service
+proxy
+GET/tickets?orderId=xyz
+Delivery
+Service
+Delivery
+Service
+proxy
+GET/deliveries?orderId-xyz
+...
+Service
+...
+Service
+proxy
+Figure 3.3
+The API gateway implements the GET /orders/{orderId} endpoint using API 
+composition. It calls several services, aggregates their responses, and sends a response to the 
+mobile app. The code that implements the endpoint must have a strategy for handling the failure 
+of each service that it calls.
+ 

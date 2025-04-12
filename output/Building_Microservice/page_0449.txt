@@ -1,0 +1,24 @@
+3 Gregor Hohpe and Bobby Woolf, Enterprise Integration Patterns (Boston: Addison-Wesley, 2003).
+Implementations
+Probably the most obvious form of horizontal duplication that comes to mind is
+making use of a load balancer to distribute requests across multiple copies of your
+functionality, as we see in Figure 13-1, where we are load balancing across multiple
+instances of MusicCorp’s Catalog microservice. Load balancer capabilities differ, but
+you’d expect them all to have some mechanism to distribute load across the nodes,
+and to detect when a node is unavailable and remove it from the load balancer pool.
+From the consumer’s point of view, the load balancer is an entirely transparent
+implementation concern—we can view it as part of the logical boundary of the
+microservice in this regard. Historically, load balancers would be thought of primar‐
+ily in terms of dedicated hardware, but this has long since ceased to be common—
+instead, more load balancing is done in software, often running on the client side.
+Figure 13-1. The Catalog microservice deployed as multiple instances, with a load bal‐
+ancer to spread requests
+Another example of horizontal duplication could be the competing consumer pat‐
+tern, as detailed in Enterprise Integration Patterns.3 In Figure 13-2, we see new songs
+being uploaded to MusicCorp. These new songs need to be transcoded into different
+files to be used as part of MusicCorp’s new streaming offering. We have a common
+queue of work in which these jobs are placed, and a set of Song Transcoder instances
+all consume from the queue—the different instances are competing over the jobs. To
+The Four Axes of Scaling 
+| 
+423

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 182</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        When the follower processes this log, it builds a copy of the exact same data struc‐tures as found on the leader.
+    </p>
+    <p>
+        این method از replication در PostgreSQL و Oracle و موارد دیگر استفاده می‌شود [16]. The main disadvantage این است که log داده‌ها را در یک سطح بسیار پایین توصیف می‌کند: a WAL حاوی جزئیات از اینکه کدام bytes در کدام disk blocks تغییر کرده‌اند. این باعث می‌شود replication به storage engine نزدیک‌تر شود. اگر database format storage خود را از یک نسخه به نسخه دیگر تغییر دهد، معمولاً اجرای نسخه‌های مختلف از software database روی leader و followers امکان‌پذیر نیست.
+    </p>
+    <p>
+        این ممکن است یک جزئیات پیاده‌سازی جزئی به نظر برسد، اما می‌تواند یک impact عملیاتی بزرگ داشته باشد. اگر the replication protocol به follower اجازه می‌دهد تا از یک نسخه software جدیدتر از leader استفاده کند، شما می‌توانید یک zero-downtime upgrade از software database را با ارتقای first the followers و سپس انجام یک failover برای تبدیل یکی از nodes ارتقا یافته به leader جدید انجام دهید. اگر the replication protocol این version mismatch را مجاز نمی‌کند، که اغلب در مورد WAL shipping صدق می‌کند، چنین upgrades نیاز به downtime دارند.
+    </p>
+    <h4>Logical (row-based) log replication</h4>
+    <p>
+        یک جایگزین این است که از formats log متفاوتی برای replication و برای storage engine استفاده کنید، که به log replication اجازه می‌دهد تا از internals storage engine جدا شود. این نوع replication log یک logical log نامیده می‌شود تا آن را از representation data (physical) storage engine متمایز کند.
+    </p>
+    <p>
+        یک logical log برای یک relational database معمولاً یک sequence از records است که writes را به جداول database در granularity از یک ردیف توصیف می‌کند:
+    </p>
+    <ul>
+        <li>For an inserted row، log حاوی values جدید از تمام columns است.</li>
+        <li>For a deleted row، log حاوی اطلاعات کافی برای شناسایی منحصر به فرد ردیفی است که حذف شده است. معمولاً این primary key خواهد بود، اما اگر هیچ primary key روی جدول وجود نداشته باشد، باید values قدیمی از تمام columns را log کرد.</li>
+        <li>For an updated row، log حاوی اطلاعات کافی برای شناسایی منحصر به فرد ردیف به‌روزرسانی شده و values جدید از تمام columns است (یا حداقل values جدید از تمام columns که تغییر کرده‌اند).</li>
+    </ul>
+    <p>
+        یک transaction که چندین ردیف را اصلاح می‌کند، چندین record log از این دست را تولید می‌کند، و به دنبال آن یک record که نشان می‌دهد transaction committed شده است. binlog از MySQL (هنگامی که برای استفاده از replication row-based پیکربندی شده است) از این رویکرد استفاده می‌کند [17].
+    </p>
+    <p>
+        از آنجایی که یک logical log از internals storage engine جدا شده است، می‌تواند با سهولت بیشتری backward compatible باقی بماند، و به leader و the follower اجازه می‌دهد تا نسخه‌های مختلفی از software database، یا حتی storage engines مختلف را اجرا کنند.
+    </p>
+    <p>
+        A logical log format همچنین برای applications خارجی راحت‌تر parse می‌شود. این جنبه مفید است اگر شما می‌خواهید محتویات یک database را به یک سیستم خارجی، مانند یک data
+    </p>
+    <p>
+        160 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

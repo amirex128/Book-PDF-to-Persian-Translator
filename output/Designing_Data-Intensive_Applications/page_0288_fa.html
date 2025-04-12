@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 288</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        <em>The rate of aborts</em> به طور قابل توجهی بر <em>overall performance</em> از SSI تأثیر می‌گذارد. به عنوان مثال، یک <strong>Transaction</strong> که داده‌ها را برای مدت طولانی می‌خواند و می‌نویسد، احتمالاً با <em>conflicts</em> مواجه می‌شود و <em>aborted</em> می‌شود، بنابراین SSI نیاز دارد که <em>read-write transactions</em> نسبتاً کوتاه باشند (<em>long-running read-only transactions</em> ممکن است اشکالی نداشته باشد). با این حال، SSI احتمالاً نسبت به <em>slow transactions</em>، کمتر از <em>two-phase locking</em> یا اجرای سریال حساس است.
+    </p>
+    <h4>Summary</h4>
+    <p>
+        <strong>Transactions</strong> یک <em>abstraction layer</em> هستند که به یک application اجازه می‌دهند تا وانمود کند که مشکلات <em>concurrency</em> خاص و انواع خاصی از <em>hardware</em> و <em>software faults</em> وجود ندارند. یک کلاس بزرگ از <em>errors</em> به یک <em>transaction abort</em> ساده کاهش می‌یابد، و application فقط باید دوباره تلاش کند.
+    </p>
+    <p>
+        در این فصل ما مثال‌های زیادی از مشکلاتی را که <strong>Transactions</strong> به جلوگیری از آنها کمک می‌کنند، دیدیم.
+        <br>
+        همه applications ها در معرض این مشکلات نیستند: یک application با الگوهای دسترسی بسیار ساده، مانند خواندن و نوشتن فقط یک رکورد، احتمالاً می‌تواند بدون <strong>Transactions</strong> مدیریت کند. با این حال، برای الگوهای دسترسی پیچیده‌تر، <strong>Transactions</strong> می‌توانند تعداد موارد <em>error</em> بالقوه را که نیاز دارید به آنها فکر کنید، بسیار کاهش دهند.
+    </p>
+    <p>
+        بدون <strong>Transactions</strong>، سناریوهای مختلف <em>error</em> (<em>processes crashing, network interruptions, power outages, disk full, unexpected concurrency</em>، و غیره) به این معنی است که داده‌ها می‌توانند به روش‌های مختلفی ناسازگار شوند. به عنوان مثال، داده‌های <em>denormalized</em> می‌توانند به راحتی از داده‌های منبع خارج از <em>sync</em> شوند. بدون <strong>Transactions</strong>، استدلال در مورد تأثیراتی که دسترسی‌های متقابل پیچیده می‌توانند بر database داشته باشند، بسیار دشوار می‌شود.
+    </p>
+    <p>
+        در این فصل، ما به طور خاص در مورد <em>concurrency control</em> عمیق شدیم. ما چندین <em>isolation levels</em> که به طور گسترده استفاده می‌شوند، به ویژه <em>read committed</em>، <em>snapshot isolation</em> (که گاهی اوقات <em>repeatable read</em> نامیده می‌شود) و <em>serializable</em> را مورد بحث قرار دادیم. ما آن <em>isolation levels</em> را با بحث در مورد مثال‌های مختلف <em>race conditions</em> مشخص کردیم:
+    </p>
+    <ul>
+        <li>
+            Dirty reads
+            <br>
+            یک client داده‌های <em>writes</em> یک client دیگر را قبل از اینکه <em>committed</em> شده باشند، می‌خواند. سطح <em>read committed isolation</em> و سطوح قوی‌تر از <em>dirty reads</em> جلوگیری می‌کنند.
+        </li>
+        <li>
+            Dirty writes
+            <br>
+            یک client داده‌هایی را که client دیگری نوشته است، اما هنوز <em>committed</em> نکرده است، بازنویسی می‌کند. تقریباً تمام پیاده‌سازی‌های <strong>Transaction</strong> از <em>dirty writes</em> جلوگیری می‌کنند.
+        </li>
+        <li>
+            Read skew (nonrepeatable reads)
+            <br>
+            یک client قسمت‌های مختلف database را در زمان‌های مختلف می‌بیند. این مسئله معمولاً با <em>snapshot isolation</em>، که به یک <strong>Transaction</strong> اجازه می‌دهد از یک <em>consistent snapshot</em> در یک نقطه زمانی بخواند، جلوگیری می‌شود. معمولاً با <em>multi-version concurrency control (MVCC)</em> پیاده‌سازی می‌شود.
+            <br>
+            266
+            <br>
+            |
+            <br>
+            Chapter 7: Transactions
+        </li>
+    </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

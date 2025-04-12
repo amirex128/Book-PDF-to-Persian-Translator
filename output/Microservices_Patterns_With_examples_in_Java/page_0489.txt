@@ -1,0 +1,45 @@
+459
+Breaking apart the monolith: extracting delivery management
+ As described earlier in section 13.3.1, there are a couple of different ways that we
+can change the FTGO monolith so that it publishes Order and Restaurant domain
+events. One option is to modify all the places in the monolith that update Orders and
+Restaurants to publish high-level domain events. The second option is to tail the
+transaction log to replicate the changes as events. In this particular scenario, we need
+to synchronize the two databases. We don’t require the FTGO monolith to publish
+high-level domain events, so either approach is fine.
+ Delayed Order Service implements event handlers that subscribe to events from
+the monolith and update its Order and Restaurant entities. The details of the event
+handlers depend on whether the monolith publishes specific high-level events or low-
+level change events. In either case, you can think of an event handler as translating an
+event in the monolith’s bounded context to the update of an entity in the service’s
+bounded context.
+ An important benefit of using a replica is that it enables Delayed Order Service
+to efficiently query the orders and the restaurant opening hours. One drawback,
+however, is that it’s more complex. Another drawback is that it requires the mono-
+lith to publish the necessary Order and Restaurant events. Fortunately, because
+Delayed Delivery Service only needs what’s essentially a subset of the columns of
+the ORDERS and RESTAURANT tables, we shouldn’t encounter the problems described
+in section 13.3.1.
+ Implementing a new feature such as delayed order management as a standalone
+service accelerates its development, testing, and deployment. What’s more, it enables
+you to implement the feature using a brand new technology stack instead of the
+monolith’s older one. It also stops the monolith from growing. Delayed order man-
+agement is just one of many new features planned for the FTGO application. The
+FTGO team can implement many of these features as separate services.
+ Unfortunately, you can’t implement all changes as new services. Quite often you
+must make extensive changes to the monolith to implement new features or change
+existing features. Any development involving the monolith will mostly likely be slow
+and painful. If you want to accelerate the delivery of these features, you must break up
+the monolith by migrating functionality from the monolith into services. Let’s look at
+how to do that. 
+13.5
+Breaking apart the monolith: extracting delivery 
+management
+To accelerate the delivery of features that are implemented by a monolith, you need
+to break up the monolith into services. For example, let’s imagine that you want to
+enhance FTGO delivery management by implementing a new routing algorithm. A
+major obstacle to developing delivery management is that it’s entangled with order
+management and is part of the monolithic code base. Developing, testing, and deploy-
+ing delivery management is likely to be slow. In order to accelerate its development,
+you need to extract delivery management into a Delivery Service.
+ 

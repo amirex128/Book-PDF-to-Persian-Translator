@@ -1,0 +1,50 @@
+326
+CHAPTER 10
+Testing microservices: Part 2
+private int port;
+private OrderDestinations orderDestinations;
+private OrderServiceProxy orderService;
+@Before
+public void setUp() throws Exception {
+orderDestinations = new OrderDestinations();
+String orderServiceUrl = "http://localhost:" + port;
+orderDestinations.setOrderServiceUrl(orderServiceUrl);
+orderService = new OrderServiceProxy(orderDestinations,
+  
+WebClient.create());
+}
+@Test
+public void shouldVerifyExistingCustomer() {
+OrderInfo result = orderService.findOrderById("1223232").block();
+assertEquals("1223232", result.getOrderId());
+assertEquals("APPROVAL_PENDING", result.getState());
+}
+@Test(expected = OrderNotFoundException.class)
+public void shouldFailToFindMissingOrder() {
+orderService.findOrderById("555").block();
+}
+}
+Each test method invokes OrderServiceProxy and verifies that either it returns the
+correct values or throws the expected exception. The shouldVerifyExisting-
+Customer() test method verifies that findOrderById() returns values equal to those
+specified in the contract’s response. The shouldFailToFindMissingOrder() attempts
+to retrieve a nonexistent Order and verifies that OrderServiceProxy throws an Order-
+NotFoundException. Testing both the REST client and the REST service using the
+same contracts ensures that they agree on the API.
+ Let’s now look at how to do the same kind of testing for services that interact using
+messaging. 
+10.1.3 Integration testing publish/subscribe-style interactions
+Services often publish domain events that are consumed by one or more other ser-
+vices. Integration testing must verify that the publisher and its consumers agree on the
+message channel and the structure of the domain events. Order Service, for example,
+publishes Order* events whenever it creates or updates an Order aggregate. Order
+History Service is one of the consumers of those events. We must, therefore, write
+tests that verify that these services can interact.
+ Figure 10.4 shows the approach to integration testing publish/subscribe interac-
+tions. Its quite similar to the approach used for testing REST interactions. As before,
+the interactions are defined by a set of contracts. What’s different is that each contract
+specifies a domain event.
+Create an OrderServiceProxy
+configured to make requests
+to WireMock.
+ 

@@ -1,0 +1,54 @@
+142
+CHAPTER 4
+Managing transactions with sagas
+4
+CreateOrderSagaState is invoked to generate a command message.
+5
+SagaManager sends the command message to the specified saga participant
+(Kitchen Service).
+6
+SagaManager saves the update saga instance in the database.
+If a saga participant fails, SagaManager executes the compensating transactions in
+reverse order.
+ The other part of the Eventuate Tram Saga framework is the saga participant
+package. It provides the SagaCommandHandlersBuilder and SagaCommandDispatcher
+classes for writing saga participants. These classes route command messages to han-
+dler methods, which invoke the saga participants’ business logic and generate reply
+messages. Let’s take a look at how these classes are used by Order Service. 
+4.4.3
+The OrderCommandHandlers class
+Order Service participates in its own sagas. For example, CreateOrderSaga invokes
+Order Service to either approve or reject an Order. The OrderCommandHandlers class,
+shown in figure 4.15, defines the handler methods for the command messages sent by
+these sagas.
+ Each handler method invokes OrderService to update an Order and makes a
+reply message. The SagaCommandDispatcher class routes the command messages to
+the appropriate handler method and sends the reply.
+approveOrder()
+rejectOrder()
+...
+OrderCommandHandlers
+Eventuate
+Tram Sagas
+approveOrder()
+rejectOrder()
+...
+OrderService
+Invokes
+Invokes
+Uses
+Reads
+Sends
+SagaCommand
+Dispatcher
+Eventuate tram
+OrderService
+requests
+CreateOrderSaga
+replies
+Routes command messages to
+handlers and sends replies
+Figure 4.15
+OrderCommandHandlers implements command handlers for the commands that are 
+sent by the various Order Service sagas.
+ 

@@ -1,0 +1,32 @@
+Instead, the authors of the paper suggest we should break down these LLTs into a
+sequence of transactions, each of which can be handled independently. The idea is
+that the duration of each of these “sub” transactions will be shorter, and will modify
+only part of the data affected by the entire LLT. As a result, there will be far less con‐
+tention in the underlying database as the scope and duration of locks is greatly
+reduced.
+While sagas were originally envisaged as a mechanism to help with LLTs acting
+against a single database, the model works just as well for coordinating change across
+multiple services. We can break a single business process into a set of calls that will be
+made to collaborating services—this is what constitutes a saga.
+Before we go any further, you need to understand that a saga does
+not give us atomicity in ACID terms such as we are used to with a
+normal database transaction. As we break the LLT into individual
+transactions, we don’t have atomicity at the level of the saga itself.
+We do have atomicity for each individual transaction inside the
+overall saga, as each one of them can relate to an ACID transac‐
+tional change if needed. What a saga gives us is enough informa‐
+tion to reason about which state it’s in; it’s up to us to handle the
+implications of this.
+Let’s take a look at a simple order fulfillment flow for MusicCorp, outlined in
+Figure 6-5, which we can use to further explore sagas in the context of a microservice
+architecture.
+Here, the order fulfillment process is represented as a single saga, with each step in
+this flow representing an operation that can be carried out by a different service.
+Within each service, any state change can be handled within a local ACID transac‐
+tion. For example, when we check and reserve stock using the Warehouse service,
+internally the Warehouse service might create a row in its local Reservation table
+recording the reservation; this change would be handled within a normal database
+transaction.
+Sagas 
+| 
+183

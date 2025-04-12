@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 280</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        مسدود کردن <em>readers</em> و <em>writers</em> با داشتن یک <em>lock</em> روی هر object در database پیاده‌سازی می‌شود. <em>Lock</em> می‌تواند در حالت shared یا در حالت <em>exclusive</em> باشد. <em>Lock</em> به شرح زیر استفاده می‌شود:
+    </p>
+    <ul>
+        <li>
+            اگر یک <em>transaction</em> می‌خواهد یک object را بخواند، ابتدا باید <em>lock</em> را در حالت <em>shared</em> به دست آورد. به چندین <strong>Transactions</strong> اجازه داده می‌شود که <em>lock</em> را در حالت <em>shared</em> به طور همزمان نگه دارند، اما اگر یک <em>transaction</em> دیگر در حال حاضر دارای یک <em>exclusive lock</em> روی object است، این <strong>Transactions</strong> ها باید منتظر بمانند.
+        </li>
+        <li>
+            اگر یک <em>transaction</em> می‌خواهد به یک object بنویسد، ابتدا باید <em>lock</em> را در حالت <em>exclusive</em> به دست آورد. هیچ <strong>Transaction</strong> دیگری نباید همزمان <em>lock</em> را نگه دارد (چه در حالت <em>shared</em> و چه در حالت <em>exclusive</em>)، بنابراین اگر هر <em>lock</em> موجودی روی object وجود داشته باشد، <em>transaction</em> باید منتظر بماند.
+        </li>
+        <li>
+            اگر یک <em>transaction</em> ابتدا object را می‌خواند و سپس به آن <em>writes</em> می‌کند، ممکن است <em>shared lock</em> خود را به یک <em>exclusive lock</em> ارتقا دهد. ارتقا به همان صورت که مستقیماً یک <em>exclusive lock</em> دریافت می‌کند، عمل می‌کند.
+        </li>
+        <li>
+            پس از اینکه یک <em>transaction</em> <em>lock</em> را به دست آورد، باید <em>lock</em> را تا پایان <strong>Transaction</strong> (<em>commit</em> یا <em>abort</em>) نگه دارد. این جایی است که نام "دو فاز" از آن می‌آید: فاز اول (در حالی که <strong>Transaction</strong> در حال اجرا است) زمانی است که <em>locks</em> به دست می‌آیند، و فاز دوم (در پایان <strong>Transaction</strong>) زمانی است که تمام <em>locks</em> آزاد می‌شوند.
+        </li>
+    </ul>
+    <p>
+        از آنجایی که <em>locks</em> زیادی در حال استفاده هستند، ممکن است به راحتی اتفاق بیفتد که <em>transaction</em> A در انتظار <em>transaction</em> B برای آزاد کردن <em>lock</em> خود گیر کند، و بالعکس. این وضعیت <em>deadlock</em> نامیده می‌شود. database به طور خودکار <em>deadlocks</em> را بین <strong>Transactions</strong> تشخیص می‌دهد و یکی از آنها را <em>aborts</em> می‌کند تا دیگران بتوانند پیشرفت کنند. <strong>Transaction</strong> <em>aborted</em> شده نیاز به تکرار توسط application دارد.
+    </p>
+    <h4>Performance of two-phase locking</h4>
+    <p>
+        <em>Downside</em> بزرگ <em>two-phase locking</em>، و دلیل اینکه چرا همه از دهه 1970 از آن استفاده نکرده‌اند، <em>performance</em> است: <em>transaction throughput</em> و زمان پاسخگویی <em>queries</em> تحت <em>two-phase locking</em> به طور قابل توجهی بدتر از <em>weak isolation</em> است.
+    </p>
+    <p>
+        این تا حدی به دلیل سربار به دست آوردن و آزاد کردن تمام آن <em>locks</em> است، اما مهمتر از آن به دلیل کاهش <em>concurrency</em> است. با طراحی، اگر دو <strong>Transactions</strong> همزمان سعی کنند کاری را انجام دهند که ممکن است به هر نحوی منجر به یک <em>race condition</em> شود، یکی باید منتظر بماند تا دیگری تکمیل شود.
+    </p>
+    <p>
+        relational databases سنتی، مدت زمان یک <strong>Transaction</strong> را محدود نمی‌کنند، زیرا برای applications تعاملی طراحی شده‌اند که منتظر ورودی انسان هستند. در نتیجه، وقتی یک <strong>Transaction</strong> باید منتظر دیگری باشد، محدودیتی در مورد مدت زمانی که ممکن است منتظر بماند وجود ندارد. حتی اگر مطمئن شوید که همه <strong>Transactions</strong> خود را کوتاه نگه می‌دارید،
+        <br>
+        258
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

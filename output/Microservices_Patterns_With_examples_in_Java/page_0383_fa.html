@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 383</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Developing secure services</span></h3>
+  <p>
+   6
+   A request handler از security context برای تعیین اینکه آیا به یک
+   user اجازه داده شود که operation درخواستی را انجام دهد و identity آنها را به دست آورد، استفاده می‌کند.
+  </p>
+  <p>
+   The FTGO application از role-based authorization استفاده می‌کند. این چندین role را تعریف می‌کند corre-
+   sponding to the different kinds of users، از جمله CONSUMER, RESTAURANT, COURIER,
+   و ADMIN. It uses Spring Security’s declarative security mechanism برای محدود کردن دسترسی به
+   URLs و service methods به roles خاص. Roles همچنین در business logic در هم تنیده شده‌اند. به عنوان مثال، یک consumer فقط می‌تواند به orders خود دسترسی داشته باشد، در حالی که یک adminis-
+   trator می‌تواند به همه orders دسترسی داشته باشد.
+  </p>
+  <p>
+   The security design مورد استفاده توسط monolithic FTGO application تنها یک راه ممکن است
+   برای پیاده‌سازی security. به عنوان مثال، یک نقطه ضعف استفاده از یک in-memory session
+   این است که به همه requests برای یک session خاص نیاز دارد که به همان applica-
+   tion instance هدایت شوند. این requirement load balancing و operations را پیچیده می‌کند. شما باید،
+   به عنوان مثال، یک session draining mechanism را پیاده‌سازی کنید که منتظر می‌ماند تا همه sessions
+   منقضی شوند قبل از خاموش کردن یک application instance. A alternative approach، که
+   از این مشکلات اجتناب می‌کند، این است که session را در یک database ذخیره کنید.
+  </p>
+  <p>
+   You can sometimes eliminate the server-side session entirely. به عنوان مثال، بسیاری
+   applications دارای API clients هستند که credentials خود را ارائه می‌دهند، مانند یک API key و
+   secret, in every request. در نتیجه، نیازی به نگهداری از یک server-side session نیست.
+   Alternatively, the application می‌تواند session state را در session token ذخیره کند. Later in
+   این بخش، من یک راه برای استفاده از session token برای ذخیره session state را توضیح می‌دهم. But
+   let’s begin by looking at the challenges of implementing security in a microservice
+   architecture.
+  </p>
+  <h4><span style="font-weight: bold;">11.1.2 Implementing security in a microservice architecture</span></h4>
+  <p>
+   A microservice architecture یک distributed architecture است. Each external request است
+   توسط API gateway و حداقل یک service مدیریت می‌شود. به عنوان مثال، get-
+   OrderDetails() query، که در فصل 8 مورد بحث قرار گرفت. The API gateway این query را با
+   فراخوانی چندین service، از جمله Order Service, Kitchen Service و Accounting
+   Service. Each service باید برخی از جنبه‌های security را پیاده‌سازی کند. به عنوان مثال، Order
+   Service باید فقط به یک consumer اجازه دهد تا orders آنها را ببیند، که نیاز به ترکیبی از authentication و authorization دارد. In order to implement security in a micros-
+   ervice architecture ما باید تعیین کنیم که چه کسی مسئول authenticating است
+   user و چه کسی مسئول authorization است.
+  </p>
+  <p>
+   One challenge با implementing security در یک microservices application این است که ما
+   فقط نمی‌توانیم design را از یک monolithic application کپی کنیم. That’s because two aspects of
+   the monolithic application’s security architecture برای یک microservice nonstarters است
+   architecture:
+  </p>
+  <p>
+   In-memory security context—استفاده از یک in-memory security context، مانند یک thread-
+   local, to pass around user identity. Services نمی‌توانند memory را به اشتراک بگذارند، بنابراین نمی‌توانند
+   از یک in-memory security context، مانند یک thread-local، برای انتقال استفاده کنید
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

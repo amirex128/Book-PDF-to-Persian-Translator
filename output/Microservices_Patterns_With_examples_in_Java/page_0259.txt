@@ -1,0 +1,46 @@
+229
+Using the CQRS pattern
+CQRS is a generalization of this kind of architecture. It maintains one or more view
+databases—not just text search databases—that implement one or more of the appli-
+cation’s queries. To understand why this is useful, we’ll look at some queries that can’t
+be efficiently implemented using the API composition pattern. I’ll explain how CQRS
+works and then talk about the benefits and drawbacks of CQRS. Let’s take a look at
+when you need to use CQRS.
+7.2.1
+Motivations for using CQRS
+The API composition pattern is a good way to implement many queries that must
+retrieve data from multiple services. Unfortunately, it’s only a partial solution to the
+problem of querying in a microservice architecture. That’s because there are multiple
+service queries the API composition pattern can’t implement efficiently.
+ What’s more, there are also single service queries that are challenging to imple-
+ment. Perhaps the service’s database doesn’t efficiently support the query. Alterna-
+tively, it sometimes makes sense for a service to implement a query that retrieves data
+owned by a different service. Let’s take a look at these problems, starting with a multi-
+service query that can’t be efficiently implemented using API composition.
+IMPLEMENTING THE FINDORDERHISTORY() QUERY OPERATION
+The findOrderHistory() operation retrieves a consumer’s order history. It has sev-
+eral parameters:
+
+consumerId—Identifies the consumer
+
+pagination—Page of results to return
+
+filter—Filter criteria, including the max age of the orders to return, an
+optional order status, and optional keywords that match the restaurant name and
+menu items
+This query operation returns an OrderHistory object that contains a summary of the
+matching orders sorted by increasing age. It’s called by the module that implements
+the Order History view. This view displays a summary of each order, which includes
+the order number, order status, order total, and estimated delivery time.
+ On the surface, this operation is similar to the findOrder() query operation. The
+only difference is that it returns multiple orders instead of just one. It may appear that
+the API composer only has to execute the same query against each Provider service and
+combine the results. Unfortunately, it’s not that simple.
+ That’s because not all services store the attributes that are used for filtering or
+sorting. For example, one of the findOrderHistory() operation’s filter criteria is a
+keyword that matches against a menu item. Only two of the services, Order Service
+and Kitchen Service, store an Order’s menu items. Neither Delivery Service nor
+Accounting Service stores the menu items, so can’t filter their data using this key-
+word. Similarly, neither Kitchen Service nor Delivery Service can sort by the
+orderCreationDate attribute.
+ 

@@ -1,0 +1,41 @@
+can be undermined if the broker isn’t set up correctly. As an example, RabbitMQ
+requires instances in a cluster to communicate over relatively low-latency networks;
+otherwise the instances can start to get confused about the current state of messages
+being handled, resulting in data loss. I’m not highlighting this particular limitation as
+a way of saying that RabbitMQ is in any way bad—all brokers have restrictions as to
+how they need to be run to deliver the promise of guaranteed delivery. If you plan to
+run your own broker, make sure you read the documentation carefully.
+It’s also worth noting that what any given broker means by guaranteed delivery can
+vary. Again, reading the documentation is a great start.
+Trust
+One of the big draws of a broker is the property of guaranteed delivery. But for this to
+work, you need to trust not only the people who created the broker but also the way
+that broker has operated. If you’ve built a system that is based on the assumption that
+delivery is guaranteed, and that turns out not to be the case due to an issue with the
+underlying broker, it can cause significant issues. The hope, of course, is that you are
+offloading that work to software created by people who can do that job better than
+you can. Ultimately, you have to decide how much you want to trust the broker you
+are making use of.
+Other characteristics
+Besides guaranteed delivery, brokers can provide other characteristics that you may
+find useful.
+Most brokers can guarantee the order in which messages will be delivered, but this
+isn’t universal, and even then the scope of this guarantee can be limited. With Kafka,
+for example, ordering is guaranteed only within a single partition. If you can’t be cer‐
+tain that messages will be received in order, your consumer may need to compensate,
+perhaps by deferring processing of messages that are received out of order until any
+missing messages are received.
+Some brokers provide transactions on write—for instance, Kafka allows you to write
+to multiple topics in a single transaction. Some brokers can also provide read transac‐
+tionality, something I’ve taken advantage of when using a number of brokers via the
+Java Message Service (JMS) APIs. This can be useful if you want to ensure the mes‐
+sage can be processed by the consumer before removing it from the broker.
+Another, somewhat controversial feature promised by some brokers is that of exactly
+once delivery. One of the easier ways to provide guaranteed delivery is allowing the
+message to be resent. This can result in a consumer seeing the same message more
+than once (even if this is a rare situation). Most brokers will do what they can to
+reduce the chance of this, or hide this fact from the consumer, but some brokers go
+further by guaranteeing exactly once delivery. This is a complex topic, as I’ve spoken
+138 
+| 
+Chapter 5: Implementing Microservice Communication

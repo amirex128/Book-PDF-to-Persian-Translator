@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 483</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <ol>
+   <li>
+    Order Service: create an Order in an APPROVAL_PENDING state.
+   </li>
+   <li>
+    Consumer Service: verify that the consumer can place an order.
+   </li>
+   <li>
+    Monolith
+    <ul>
+     <li>
+      – Validate order details and create a Ticket.
+     </li>
+     <li>
+      – Authorize consumer’s credit card.
+     </li>
+    </ul>
+   </li>
+   <li>
+    Order Service: change state of Order to APPROVED.
+   </li>
+  </ol>
+  <p>
+   در این saga، transaction monolith، pivot transaction است. Order Service imple-
+   ments، the compensatable transaction.
+  </p>
+  <p>
+   اکنون که ما Consumer Service را استخراج کردیم، می‌توانیم Kitchen Service را استخراج کنیم. اگر ما
+   این service را استخراج کنیم، command createOrder() از saga زیر استفاده می‌کند:
+  </p>
+  <ol>
+   <li>
+    Order Service: create an Order in an APPROVAL_PENDING state.
+   </li>
+   <li>
+    Consumer Service: verify that the consumer can place an order.
+   </li>
+   <li>
+    Kitchen Service: validate order details and create a PENDING Ticket.
+   </li>
+   <li>
+    Monolith: authorize consumer’s credit card.
+   </li>
+   <li>
+    Kitchen Service: change state of Ticket to APPROVED.
+   </li>
+   <li>
+    Order Service: change state of Order to APPROVED.
+   </li>
+  </ol>
+  <p>
+   In this saga، transaction monolith هنوز هم pivot transaction است. Order Service و
+   Kitchen Service، compensating transactionsها را پیاده‌سازی می‌کنند.
+  </p>
+  <p>
+   ما حتی می‌توانیم با استخراج Accounting Service به refactor کردن monolith ادامه دهیم. اگر
+   ما این service را استخراج کنیم، command createOrder() از saga زیر استفاده می‌کند:
+  </p>
+  <ol>
+   <li>
+    Order Service: create an Order in an APPROVAL_PENDING state.
+   </li>
+   <li>
+    Consumer Service: verify that the consumer can place an order.
+   </li>
+   <li>
+    Kitchen Service: validate order details and create a PENDING Ticket.
+   </li>
+   <li>
+    Accounting Service: authorize consumer’s credit card.
+   </li>
+   <li>
+    Kitchen Service: change state of Ticket to APPROVED.
+   </li>
+   <li>
+    Order Service: change state of Order to APPROVED.
+   </li>
+  </ol>
+  <p>
+   همانطور که مشاهده می‌کنید، با sequencing دقیق extractionsها، شما می‌توانید از استفاده از sagasها اجتناب کنید
+   که نیاز به ایجاد تغییرات پیچیده در monolith دارند. بیایید اکنون به نحوه handle کردن نگاهی بیندازیم
+   security هنگامی که به یک microservice architecture مهاجرت می‌کنید.
+  </p>
+  <h3><strong>13.3.3 Handling authentication and authorization</strong></h3>
+  <p>
+   یکی دیگر از مسائل طراحی که شما باید هنگام refactoring یک application monolithic به
+   یک microservice architecture رسیدگی کنید، تطبیق mechanism security monolith برای پشتیبانی از
+   servicesها است. فصل 11 نحوه handle کردن security را در یک microservice architec-
+   ture شرح می‌دهد. یک application مبتنی بر microservices از tokensهایی مانند JSON Web tokens (JWT) استفاده می‌کند،
+   برای انتقال user identity. این بسیار متفاوت از یک application traditional، mono-
+   lithic معمولی است که از session state درون حافظه استفاده می‌کند و user iden-
+   tity را با استفاده از یک thread local انتقال می‌دهد. چالش هنگام تبدیل یک application monolithic
+   به یک microservice architecture این است که شما نیاز دارید که از هر دو mechanism security مبتنی بر monolith و
+   JWT به طور همزمان پشتیبانی کنید.
+  </p>
+  <p>
+   خوشبختانه، یک راه ساده برای حل این مشکل وجود دارد که فقط به آن نیاز دارد
+   شما فقط یک تغییر کوچک در login request handler monolith ایجاد کنید. شکل 13.13
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

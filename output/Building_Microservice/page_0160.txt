@@ -1,0 +1,42 @@
+problems for a database and potentially have a large impact on the wider system. The
+same problem applies with GraphQL. The difference is that with SQL we at least have
+tools like query planners for our databases, which can help us diagnose problematic
+queries, whereas a similar problem with GraphQL can be harder to track down.
+Server-side throttling of requests is one potential solution, but as the execution of the
+call may be spread across multiple microservices, this is far from straightforward.
+Compared with normal REST-based HTTP APIs, caching is also more complex.
+With REST-based APIs, I can set one of many response headers to help client-side
+devices, or intermediate caches like content delivery networks (CDNs), cache respon‐
+ses so they don’t need to be requested again. This isn’t possible in the same way with
+GraphQL. The advice I’ve seen on this issue seems to revolve around just associating
+an ID with every returned resource (and remember, a GraphQL query could contain
+multiple resources) and then having the client device cache the request against that
+ID. As far as I can tell, this makes using CDNs or caching reverse proxies incredibly
+difficult without additional work.
+Although I’ve seen some implementation-specific solutions to this problem (such as
+those found in the JavaScript Apollo implementation), caching feels like it was either
+consciously or unconsciously ignored as part of the initial development of GraphQL.
+If the queries you are issuing are highly specific in nature to a particular user, then
+this lack of request-level caching may not be a deal breaker, of course, as your cache-
+hit ratio is likely to be low. I do wonder, though, if this limitation means that you’ll
+still end up with a hybrid solution for client devices, with some (more generic)
+requests going over normal REST-based HTTP APIs and other requests going over
+GraphQL.
+Another issue is that while GraphQL theoretically can handle writes, it doesn’t seem
+to fit as well as for reads. This leads to situations in which teams are using GraphQL
+for read but REST for writes.
+The last issue is something that may be entirely subjective, but I still think it’s worth
+raising. GraphQL makes it feel like you are just working with data, which can rein‐
+force the idea that the microservices you are talking to are just wrappers over data‐
+bases. In fact, I’ve seen multiple people compare GraphQL to OData, a technology
+that is designed as a generic API for accessing data from databases. As we’ve already
+discussed at length, the idea of treating microservices just as wrappers over databases
+can be very problematic. Microservices expose functionality over networked inter‐
+faces. Some of that functionality might require or result in data being exposed, but
+they should still have their own internal logic and behavior. Just because you are
+using GraphQL, don’t slip into thinking of your microservices as little more than an
+API on a database—it’s essential that your GraphQL API isn’t coupled to the under‐
+lying datastores of your microservices.
+134 
+| 
+Chapter 5: Implementing Microservice Communication

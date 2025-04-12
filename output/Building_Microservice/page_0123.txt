@@ -1,0 +1,32 @@
+For me, these types of calls begin to be problematic when you start having more
+chains of calls—in Figure 4-3, for instance, we have an example flow from
+MusicCorp, where we are checking a payment for potentially fraudulent activity. The
+Order Processor calls the Payment service to take payment. The Payment service in
+turn wants to check with the Fraud Detection microservice as to whether or not this
+should be allowed. The Fraud Detection microservice in turn needs to get informa‐
+tion from the Customer microservice.
+Figure 4-3. Checking for potentially fraudulent behavior as part of order processing
+flow
+If all of these calls are synchronous and blocking, there are a number of issues we
+might face. An issue in any of the four involved microservices, or in the network calls
+between them, could cause the whole operation to fail. This is quite aside from the
+fact that these kinds of long chains can cause significant resource contention. Behind
+the scenes, the Order Processor likely has a network connection open waiting to
+hear back from Payment. Payment in turn has a network connection open waiting for
+a response from Fraud Detection, and so on. Having a lot of connections that need
+to be kept open can have an impact on the running system—you are much more
+likely to experience issues in which you run out of available connections or suffer
+from increased network congestion as a result.
+To improve this situation, we could reexamine the interactions between the micro‐
+services in the first place. For example, maybe we take the use of Fraud Detection
+out of the main purchase flow, as shown in Figure 4-4, and instead have it run in the
+background. If it finds a problem with a specific customer, their records are updated
+accordingly, and this is something that could be checked earlier in the payment pro‐
+cess. Effectively, this means we’re doing some of this work in parallel. By reducing the
+length of the call chain, we’ll see the overall latency of the operation improve, and
+we’ll take one of our microservices (Fraud Detection) out of the critical path for the
+purchase flow, giving us one fewer dependency to worry about for what is a critical
+operation.
+Pattern: Synchronous Blocking 
+| 
+97

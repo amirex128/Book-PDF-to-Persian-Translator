@@ -1,0 +1,46 @@
+440
+CHAPTER 13
+Refactoring to microservices
+One issue with replacing object references with primary keys is that although this is a
+minor change to the class, it can potentially have a large impact on the clients of the
+class, which expect an object reference. Later in this section, I describe how to reduce
+the scope of the change by replicating data between the service and monolith. Delivery
+Service, for example, could define a Restaurant class that’s a replica of the mono-
+lith’s Restaurant class.
+ Extracting a service is often much more involved than moving entire classes into a
+service. An even greater challenge with splitting a domain model is extracting func-
+tionality that’s embedded in a class that has other responsibilities. This problem often
+occurs in god classes, described in chapter 2, that have an excessive number of responsi-
+bilities. For example, the Order class is one of the god classes in the FTGO applica-
+tion. It implements multiple business capabilities, including order management,
+delivery management, and so on. Later in section 13.5, I discuss how extracting the
+delivery management into a service involves extracting a Delivery class from the
+Order class. The Delivery entity implements the delivery management functionality
+that was previously bundled with other functionality in the Order class. 
+REFACTORING THE DATABASE
+Splitting a domain model involves more than just changing code. Many classes in a
+domain model are persistent. Their fields are mapped to a database schema. Conse-
+quently, when you extract a service from the monolith, you’re also moving data. You
+need to move tables from the monolith’s database to the service’s database.
+ Also, when you split an entity you need to split the corresponding database table
+and move the new table to the service. For example, when extracting delivery manage-
+ment into a service, you split the Order entity and extract a Delivery entity. At the
+database level, you split the ORDERS table and define a new DELIVERY table. You then
+move the DELIVERY table to the service.
+ The book Refactoring Databases by Scott W. Ambler and Pramod J. Sadalage (Addison-
+Wesley, 2011) describes a set of refactorings for a database schema. For example, it
+describes the Split Table refactoring, which splits a table into two or more tables.
+Many of the technique in that book are useful when extracting services from the
+monolith. One such technique is the idea of replicating data in order to allow you to
+incrementally update clients of the database to use the new schema. We can adapt
+that idea to reduce the scope of the changes you must make to the monolith when
+extracting a service.
+REPLICATE DATA TO AVOID WIDESPREAD CHANGES
+As mentioned, extracting a service requires you to change to the monolith’s domain
+model. For example, you replace object references with primary keys and split classes.
+These types of changes can ripple through the code base and require you to make
+widespread changes to the monolith. For example, if you split the Order entity and
+extract a Delivery entity, you’ll have to change every place in the code that references
+the fields that have been moved. Making these kinds of changes can be extremely
+time consuming and can become a huge barrier to breaking up the monolith.
+ 

@@ -1,0 +1,40 @@
+are distributed across multiple different physical boxes to reduce the chance of this
+happening.
+For internal virtualization platforms, it is a common practice to have the virtual
+machine’s root partition mapped to a single SAN (storage area network). If that SAN
+goes down, it can take down all connected VMs. SANs are big, expensive, and
+designed not to fail. That said, I have had big, expensive SANs fail on me at least
+twice in the last 10 years, and each time the results were fairly serious.
+Another common form of separation to reduce failure is to ensure that not all your
+services are running in a single rack in the data center, or that your services are dis‐
+tributed across more than one data center. If you’re using an underlying service pro‐
+vider, it is important to know if an SLA is offered and to plan accordingly. If you
+need to ensure your services are down for no more than four hours every quarter, but
+your hosting provider can only guarantee a maximum downtime of eight hours per
+quarter, you have to change the SLA or else come up with an alternative solution.
+AWS, for example, is split into regions, which you can think of as distinct clouds.
+Each region is in turn split into two or more availability zones, as we discussed ear‐
+lier. These availability zones are AWS’s equivalent of a data center. It is essential to
+have services distributed across multiple availability zones, as AWS does not offer
+any guarantees about the availability of a single node, or even an entire availability
+zone. For its compute service, it offers only a 99.95% uptime over a given monthly
+period of the region as a whole, so you’ll want to distribute your workloads across
+multiple availability zones inside a single region. For some people, this isn’t good
+enough, and they run their services across multiple regions as well.
+It should be noted, of course, that because providers give you an SLA “guarantee,”
+they will tend to limit their liability! If them missing their targets results in you losing
+customers and a large amount of money, you might find yourself searching through
+contracts to see if you can claw anything back from them. Therefore, I would strongly
+suggest you understand the impact of a supplier failing in its obligations to you, and
+work out if you need to have a plan B (or C) in your pocket. More than one client I’ve
+worked with has had a disaster recovery hosting platform with a different supplier,
+for example, to ensure they weren’t too vulnerable to the mistakes of one company.
+CAP Theorem
+We’d like to have it all, but unfortunately we know we can’t. And when it comes to
+distributed systems like those we build using microservice architectures, we even
+have a mathematical proof that tells us we can’t. You may well have heard about the
+CAP theorem, especially in discussions about the merits of various different types of
+data stores. At its heart it tells us that in a distributed system, we have three things we
+408 
+| 
+Chapter 12: Resiliency

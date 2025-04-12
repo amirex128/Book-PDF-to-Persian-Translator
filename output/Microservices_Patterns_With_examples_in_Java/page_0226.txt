@@ -1,0 +1,91 @@
+196
+CHAPTER 6
+Developing business logic with event sourcing
+an aggregate by loading the most recent snapshot and only those events that have
+occurred since the snapshot was created.
+ In this example, the snapshot version is N. The application only needs to load the
+snapshot and the two events that follow it in order to restore the state of the aggre-
+gate. The previous N events are not loaded from the event store.
+ When restoring the state of an aggregate from a snapshot, an application first creates
+an aggregate instance from the snapshot and then iterates through the events, applying
+them. For example, the Eventuate Client framework, described in section 6.2.2, uses
+code similar to the following to reconstruct an aggregate:
+Class aggregateClass = ...;
+Snapshot snapshot = ...;
+Aggregate aggregate = recreateFromSnapshot(aggregateClass, snapshot);
+for (Event event : events) {
+aggregate = aggregate.applyEvent(event);
+}
+// use aggregate...
+When using snapshots, the aggregate instance is recreated from the snapshot instead
+of being created using its default constructor. If an aggregate has a simple, easily seri-
+alizable structure, the snapshot can be, for example, its JSON serialization. More com-
+plex aggregates can be snapshotted using the Memento pattern (https://en.wikipedia
+.org/wiki/Memento_pattern).
+ The Customer aggregate in the online store example has a very simple structure:
+the customer’s information, their credit limit, and their credit reservations. A snap-
+shot of a Customer is the JSON serialization of its state. Figure 6.8 shows how to recre-
+ate a Customer from a snapshot corresponding to the state of a Customer as of event
+#103. The Customer Service needs to load the snapshot and the events that have
+occurred after event #103.
+The Customer Service recreates the Customer by deserializing the snapshot’s JSON
+and then loading and applying events #104 through #106. 
+event_id
+...
+103
+104
+105
+106
+EVENTS
+event_type
+...
+...
+Credit
+Reserved
+Address
+Changed
+Credit
+Reserved
+entity_type
+...
+Customer
+Customer
+Customer
+Customer
+entity_id
+...
+101
+101
+101
+101
+event_data
+...
+{...}
+{...}
+{...}
+{...}
+event_id
+...
+103
+...
+...
+SNAPSHOTS
+entity_type
+...
+Customer
+...
+...
+snapshot_data
+...
+{name: “...” , ...}
+...
+...
+event_id
+...
+101
+...
+...
+Figure 6.8
+The Customer Service recreates the Customer by deserializing the snapshot’s JSON and then 
+loading and applying events #104 through #106.
+ 

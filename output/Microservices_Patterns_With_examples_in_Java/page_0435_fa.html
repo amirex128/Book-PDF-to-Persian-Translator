@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 435</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <h4><span style="font-weight: bold;">Deploying the FTGO application with Kubernetes</span></h4>
+  <p>
+   One approach استفاده از یک client-side discovery mechanism و نصب یک service registry است،
+   مانند Netflix OSS Eureka. Fortunately, ما می‌توانیم با استفاده از service از این کار اجتناب کنیم
+   discovery mechanism که در Kubernetes ساخته شده است و یک Kubernetes service را تعریف کنیم.
+  </p>
+  <p>
+   A service یک Kubernetes object است که به clients از one یا بیشتر pods با یک
+   stable endpoint ارائه می‌دهد. It has یک IP address و یک DNS name که به آن IP
+   address متصل می‌شود. The service load balances traffic به آن IP address در سراسر pods. Listing 12.5
+   Kubernetes service را برای Restaurant Service نشان می‌دهد. This service routes traffic
+   از http://ftgo-restaurant-service:8080 به pods که توسط the deploy-
+   ment نشان داده شده در listing تعریف شده‌اند.
+  </p>
+  <pre><code class="language-text">
+  apiVersion: v1
+  kind: Service
+  metadata:
+  name: ftgo-restaurant-service
+  spec:
+  ports:
+  - port: 8080
+  targetPort: 8080
+  selector:
+  app: ftgo-restaurant-service
+  ---
+  </code></pre>
+  <p>
+   The key part از service definition selector است، که the target pods را انتخاب می‌کند. It selects
+   those pods که یک label به نام app با مقدار ftgo-restaurant-service دارند. If
+   شما از نزدیک نگاه کنید، خواهید دید که the container که در listing 12.4 تعریف شده است، دارای چنین label است.
+  </p>
+  <p>
+   Once you’ve written the YAML file، شما می‌توانید service را با استفاده از این command ایجاد کنید:
+  </p>
+  <pre><code class="language-text">
+  kubectl apply -f ftgo-restaurant-service-service.yml
+  </code></pre>
+  <p>
+   Now that we’ve created the Kubernetes service، هر client از Restaurant Service
+   که در داخل Kubernetes cluster در حال اجرا است، می‌تواند به REST API آن از طریق http:// دسترسی داشته باشد
+   ftgo-restaurant-service:8080. Later, I discuss how to upgrade running services،
+   but first let’s take a look at how to make the services accessible from outside the
+   Kubernetes cluster.
+  </p>
+  <h4><span style="font-weight: bold;">12.4.3 Deploying the API gateway</span></h4>
+  <p>
+   The Kubernetes service برای Restaurant Service، که در listing 12.5 نشان داده شده است، فقط accessi-
+   ble از داخل cluster است. That’s not a problem برای Restaurant Service، اما what
+   about API Gateway? The role آن این است که traffic را از دنیای بیرون به service هدایت کند. It
+   به همین دلیل باید از خارج از cluster قابل دسترسی باشد. Fortunately, a Kubernetes
+   service از این use case نیز پشتیبانی می‌کند. The service ما قبلاً به آن نگاه کردیم یک ClusterIP است
+   service، که the default است، اما، there are, however, two other types از services: Node-
+   Port و LoadBalancer.
+  </p>
+  <p>
+   Listing 12.5
+   The YAML definition از the Kubernetes service برای
+   ftgo-restaurant-service
+   The name از the service،
+   همچنین the DNS name
+   The exposed
+   port
+   The container port
+   برای route کردن traffic به
+   Selects the containers
+   برای route کردن traffic به
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

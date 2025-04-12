@@ -1,0 +1,42 @@
+Implementing the ability for zero-downtime deployment can be a huge step up in
+allowing microservices to be developed and deployed. Without zero-downtime
+deployment, I may have to coordinate with upstream consumers when I release soft‐
+ware to alert them of a potential outage.
+Sarah Wells at the Financial Times cites the ability to implement zero-downtime
+deployment as being the single biggest benefit in terms of improving the speed of
+delivery. With the confidence that releases wouldn’t interrupt its users, the Financial
+Times was able to drastically increase the frequency of releases. In addition, a zero-
+downtime release can be much more easily done during working hours. Quite aside
+from the fact that doing so improves the quality of life of the people involved with the
+release (compared to working evenings and weekends), a well-rested team working
+during the day is less likely to make mistakes and will have support from many of
+their colleagues when they need to fix issues.
+The goal here is that upstream consumers shouldn’t notice at all when you do a
+release. Making this possible can depend greatly on the nature of your microservice.
+If you’re already making use of middleware-backed asynchronous communication
+between your microservice and your consumers, this might be trivial to implement—
+messages sent to you will be delivered when you are back up. If you’re making use of
+synchronous-based communication, though, this can be more problematic.
+Concepts like rolling upgrades can be handy here, and this is one area where the use
+of a platform like Kubernetes makes your life much easier. With a rolling upgrade,
+your microservice isn’t totally shut down before the new version is deployed, instead
+instances of your microservice are slowly ramped down as new instances running
+new versions of your software are ramped up. It’s worth noting, though, that if the
+only thing you are looking for is something to help with zero-downtime deploy‐
+ments, then implementing Kubernetes is likely huge overkill. Something simple like a
+blue-green deployment mechanism (which we’ll explore more in “Separating Deploy‐
+ment from Release” on page 270) can work just as effectively.
+There can be additional challenges in terms of dealing with problems like long-lived
+connections and the like. It’s certainly true that if you build a microservice with zero-
+downtime deployment in mind, you’ll likely have a much easier time of it than if you
+took an existing systems architecture and attempted to retrofit this concept after‐
+wards. Whether or not you are able to implement a zero-downtime deployment for
+your services initially, if you can get there you’ll certainly appreciate that increased
+level of independence.
+Desired State Management
+Desired state management is the ability to specify the infrastructure requirements you
+have for your application, and for those requirements to be maintained without man‐
+ual intervention. If the running system changes in such a way that your desired state
+234 
+| 
+Chapter 8: Deployment

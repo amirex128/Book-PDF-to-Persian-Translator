@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 63</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <ul>
+        <li>The structure of the data is determined by external systems over which you have no control and which may change at any time.</li>
+    </ul>
+    <p>
+        در موقعیت‌هایی مانند این‌ها، یک schema ممکن است بیشتر از اینکه کمک کند، آسیب برساند و documents schemaless می‌تواند یک data model بسیار طبیعی‌تر باشد. اما در مواردی که انتظار می‌رود همه records ساختار یکسانی داشته باشند، schemas یک مکانیزم مفید برای مستندسازی و اجرای آن structure هستند. ما در مورد schemas و schema evolution با جزئیات بیشتر در فصل 4 بحث خواهیم کرد.
+    </p>
+    <h4>Data locality for queries</h4>
+    <p>
+        یک document معمولاً به عنوان یک string پیوسته واحد ذخیره می‌شود که به صورت JSON, XML یا یک variant باینری از آن (مانند BSON از MongoDB) رمزگذاری شده است. اگر application شما اغلب نیاز به دسترسی به کل document دارد (به عنوان مثال، برای render کردن آن در یک صفحه وب)، یک مزیت performance برای این storage locality وجود دارد. اگر data در tables متعدد تقسیم شود، مانند شکل 2-1، به چندین index lookups برای بازیابی همه آن‌ها نیاز است، که ممکن است به disk seeks بیشتری نیاز داشته باشد و زمان بیشتری ببرد.
+    </p>
+    <p>
+        مزیت locality تنها در صورتی اعمال می‌شود که شما به بخش‌های بزرگی از document در همان زمان نیاز داشته باشید. database معمولاً نیاز به بارگذاری کل document دارد، حتی اگر شما فقط به یک بخش کوچکی از آن دسترسی داشته باشید، که می‌تواند در documents بزرگ هدر رفت باشد. در مورد updates به یک document، کل document معمولاً نیاز به بازنویسی دارد—فقط modifications که اندازه encoded یک document را تغییر نمی‌دهند، می‌توانند به راحتی در محل انجام شوند [19]. به همین دلایل، عموماً توصیه می‌شود که documents را نسبتاً کوچک نگه دارید و از write هایی که اندازه یک document را افزایش می‌دهند، اجتناب کنید [9].
+    </p>
+    <p>
+        این limitations performance به طور قابل توجهی مجموعه موقعیت‌هایی را که در آن‌ها document databases مفید هستند، کاهش می‌دهد.
+    </p>
+    <p>
+        شایان ذکر است که ایده گروه‌بندی داده‌های مرتبط با هم برای locality به document model محدود نمی‌شود. به عنوان مثال، database Spanner از Google همان properties locality را در یک relational data model ارائه می‌دهد و به schema اجازه می‌دهد اعلام کند که ردیف‌های یک جدول باید در داخل یک table parent interleaved (nested) شوند [27].
+    </p>
+    <p>
+        Oracle همین کار را با استفاده از یک ویژگی به نام multi-table index cluster tables [28] مجاز می‌کند.
+    </p>
+    <p>
+        مفهوم column-family در data model Bigtable (که در Cassandra و HBase استفاده می‌شود) هدف مشابهی از مدیریت locality دارد [29].
+    </p>
+    <p>
+        ما همچنین در فصل 3 اطلاعات بیشتری در مورد locality خواهیم دید.
+    </p>
+    <h4>Convergence of document and relational databases</h4>
+    <p>
+        اکثر relational database systems (به غیر از MySQL) از اواسط دهه 2000 از XML پشتیبانی می‌کنند. این شامل توابعی برای ایجاد modifications local به XML documents و توانایی index و query در داخل XML documents است که به applications اجازه می‌دهد از data models بسیار مشابه با آنچه هنگام استفاده از یک document data‐base انجام می‌دهند، استفاده کنند.
+    </p>
+    <p>
+        Relational Model Versus Document Model | 41
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

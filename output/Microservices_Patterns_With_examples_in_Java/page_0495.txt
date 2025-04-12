@@ -1,0 +1,41 @@
+465
+Breaking apart the monolith: extracting delivery management
+13.5.4 The design of the Delivery Service integration glue
+The FTGO monolith needs to invoke Delivery Service to manage deliveries. The
+monolith also needs to exchange data with Delivery Service. This collaboration is
+enabled by the integration glue. Figure 13.20 shows the design of the Delivery Ser-
+vice integration glue. Delivery Service has a delivery management API. It also pub-
+lishes Delivery and Courier domain events. The FTGO monolith publishes Courier
+domain events.
+ Let’s look at the design of each part of the integration glue, starting with Delivery
+Service’s API for managing deliveries.
+THE DESIGN OF THE DELIVERY SERVICE API
+Delivery Service must provide an API that enables the monolith to schedule, revise,
+and cancel deliveries. As you’ve seen throughout this book, the preferred approach is
+to use asynchronous messaging, because it promotes loose coupling and increases
+availability. One approach is for Delivery Service to subscribe to Order domain
+events published by the monolith. Depending on the type of the event, it creates,
+Delivery Service
+DeliveryServiceImpl
+«interface»
+DeliveryService
+void schedule(...)
+void reschedule(...)
+void cancel(...)
+«interface»
+CourierService
+noteCourierLocationUpdated(...)
+noteCourierAvailabilityUpdated(...)
+«entity»
+Courier
+«entity»
+Delivery
+«value object»
+Plan
+DeliveryService
+EventsHandlers
+DeliveryService
+NotiﬁcationHandlers
+Figure 13.19
+The design of the Delivery Service's domain model
+ 

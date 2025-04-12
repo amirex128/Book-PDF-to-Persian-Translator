@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 126</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        Finishing off the OLTP side، ما یک تور مختصر را از طریق برخی از structures indexing پیچیده‌تر، و databases که برای نگه‌داشتن همه داده‌ها در memory بهینه شده‌اند، انجام دادیم.
+    </p>
+    <p>
+        سپس ما از internals of storage engines به معماری high-level از یک data warehouse معمولی نگاه کردیم. این background نشان داد که چرا analytic workloads با OLTP بسیار متفاوت هستند: وقتی queries شما نیاز به scan کردن به صورت sequential در یک تعداد زیادی از rows دارند، indexes بسیار کم‌اهمیت‌تر هستند. در عوض این مهم می‌شود که data را بسیار compact رمزگذاری کنید، تا مقدار داده‌ای که query نیاز دارد از دیسک بخواند، به حداقل برسد. ما در مورد اینکه چگونه column-oriented storage به دستیابی به این هدف کمک می‌کند، بحث کردیم.
+    </p>
+    <p>
+        به عنوان یک application developer، اگر شما مجهز به این دانش در مورد internals of storage engines هستید، شما در موقعیت بسیار بهتری قرار دارید تا بدانید کدام ابزار برای application خاص شما مناسب است. اگر شما نیاز به تنظیم پارامترهای tuning از یک database دارید، این درک به شما اجازه می‌دهد تا تصور کنید که یک value بالاتر یا پایین‌تر چه تأثیری می‌تواند داشته باشد.
+    </p>
+    <p>
+        اگرچه این فصل نمی‌توانست شما را به یک expert در تنظیم هر storage engine خاصی تبدیل کند، اما امیدواریم که شما را با لغات و ایده‌های کافی مجهز کرده باشد تا بتوانید اسناد database مورد نظر خود را درک کنید.
+    </p>
+    <h4>References</h4>
+    <p>
+        [1] Alfred V. Aho, John E. Hopcroft, and Jeffrey D. Ullman: Data Structures and Algorithms. Addison-Wesley, 1983. ISBN: 978-0-201-00023-8
+    </p>
+    <p>
+        [2] Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein: Introduction to Algorithms, 3rd edition. MIT Press, 2009. ISBN: 978-0-262-53305-8
+    </p>
+    <p>
+        [3] Justin Sheehy and David Smith: “Bitcask: A Log-Structured Hash Table for Fast Key/Value Data,” Basho Technologies, April 2010.
+    </p>
+    <p>
+        [4] Yinan Li, Bingsheng He, Robin Jun Yang, et al.: “Tree Indexing on Solid State Drives,” Proceedings of the VLDB Endowment, volume 3, number 1, pages 1195–1206, September 2010.
+    </p>
+    <p>
+        [5] Goetz Graefe: “Modern B-Tree Techniques,” Foundations and Trends in Databases, volume 3, number 4, pages 203–402, August 2011. doi:10.1561/1900000028
+    </p>
+    <p>
+        [6] Jeffrey Dean and Sanjay Ghemawat: “LevelDB Implementation Notes,” leveldb.googlecode.com.
+    </p>
+    <p>
+        [7] Dhruba Borthakur: “The History of RocksDB,” rocksdb.blogspot.com, November 24, 2013.
+    </p>
+    <p>
+        [8] Matteo Bertozzi: “Apache HBase I/O – HFile,” blog.cloudera.com, June, 29 2012.
+    </p>
+    <p>
+        104 | Chapter 3: Storage and Retrieval
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

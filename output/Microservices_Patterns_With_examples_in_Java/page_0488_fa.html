@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 488</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   endpoint برای querying اطلاعات تماس مشتری. Delivery Service این را فراخوانی می‌کند
+   endpoint زمانی که نیاز دارد به یک user اطلاع دهد که سفارش آنها به موقع تحویل داده نمی‌شود.
+  </p>
+  <p>
+   بیایید به طراحی هر بخش از integration، با شروع از REST API برای
+   بازیابی اطلاعات تماس مشتری، نگاهی بیندازیم.
+  </p>
+  <h3><strong>QUERYING CUSTOMER CONTACT INFORMATION USING CUSTOMERCONTACTINFOREPOSITORY</strong></h3>
+  <p>
+   همانطور که در بخش 13.3.1 توضیح داده شد، چند روش مختلف وجود دارد که یک service، مانند
+   Delayed Delivery Service می‌تواند data monolith را بخواند. ساده‌ترین گزینه این است که
+   Delayed Order Service data را با استفاده از query API monolith بازیابی کند. این
+   رویکرد، هنگام بازیابی اطلاعات تماس User، منطقی است. آنجا نیست
+   هیچ مسئله latency یا performance، وجود دارد زیرا Delayed Delivery Service به ندرت نیاز دارد که
+   اطلاعات تماس یک user را بازیابی کند، و میزان data کاملاً کوچک است.
+  </p>
+  <p>
+   CustomerContactInfoRepository یک interface است که Delayed Delivery را فعال می‌کند
+   Service برای بازیابی contact info یک consumer. این توسط یک Customer-
+   ContactInfoProxy پیاده‌سازی شده است، که با فراخوانی monolith’s، اطلاعات user را بازیابی می‌کند
+   getCustomerContactInfo() REST endpoint.
+  </p>
+  <h3><strong>PUBLISHING AND CONSUMING ORDER AND RESTAURANT DOMAIN EVENTS</strong></h3>
+  <p>
+   متاسفانه، برای Delayed Delivery Service عملی نیست که monolith را برای
+   state of همه Ordersهای باز و ساعات کار رستوران query کند. این به این دلیل است که ineffi-
+   cient است که مکرراً مقدار زیادی data را از طریق شبکه منتقل کنید. در نتیجه،
+   Delayed Delivery Service باید از گزینه دوم و پیچیده‌تر استفاده کند و a main-
+   tain یک replica از Orders و Restaurants با subscribing به eventsهایی که توسط
+   monolith منتشر می‌شوند. مهم است به یاد داشته باشید که replica یک کپی کامل از
+   data از monolith نیست—فقط یک زیرمجموعه کوچک از attributesهای Order و
+   Restaurant entities را ذخیره می‌کند.
+  </p>
+  <p>
+   Monolith
+   <br/>
+   Event
+   <br/>
+   subscriber
+   <br/>
+   Delayed Order Service
+   <br/>
+   Domain
+   <br/>
+   event
+   <br/>
+   publisher
+   <br/>
+   REST
+   <br/>
+   endpoint
+   <br/>
+   Customer
+   <br/>
+   ContactInfo
+   <br/>
+   Proxy
+   <br/>
+   &lt;Repository&gt;
+   <br/>
+   Customer
+   <br/>
+   ContactInfo
+   <br/>
+   Repository
+   <br/>
+   Restaurant events
+   <br/>
+   getCustomerContactInfo()
+   <br/>
+   Order events
+   <br/>
+   Restaurant
+   <br/>
+   events
+   <br/>
+   Order
+   <br/>
+   events
+  </p>
+  <p>
+   <strong>Figure 13.15</strong>
+   <br/>
+   The integration glue provides Delayed Delivery Service with access to the data owned by
+   the monolith.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

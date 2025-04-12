@@ -1,0 +1,41 @@
+Now let’s think about what happens when something fails. Imagine that something as
+simple as the network link between the two data centers stops working. The synchro‐
+nization at this point fails. Writes made to the primary database in DC1 will not
+propagate to DC2, and vice versa. Most databases that support these setups also sup‐
+port some sort of queuing technique to ensure that we can recover from this after‐
+ward, but what happens in the meantime?
+Sacrificing Consistency
+Let’s assume that we don’t shut the Inventory microservice down entirely. If I make
+a change now to the data in DC1, the database in DC2 doesn’t see it. This means any
+requests made to our inventory node in DC2 see potentially stale data. In other
+words, our system is still available in that both nodes are able to serve requests, and
+we have kept the system running despite the partition, but we have lost consistency;
+we don’t get to keep all three traits. This is often called an AP system, because of its
+availability and partition tolerance.
+During this partition, if we keep accepting writes, then we accept the fact that at some
+point in the future they have to be resynchronized. The longer the partition lasts, the
+more difficult this resynchronization can become.
+The reality is that even if we don’t have a network failure between our database
+nodes, replication of data is not instantaneous. As touched on earlier, systems that
+are happy to cede consistency to keep partition tolerance and availability are said to
+be eventually consistent; that is, we expect at some point in the future that all nodes
+will see the updated data, but it won’t happen at once, so we have to live with the
+possibility that users see old data.
+Sacrificing Availability
+What happens if we need to keep consistency and want to drop something else
+instead? Well, to keep consistency, each database node needs to know the copy of the
+data it has is the same as the other database node. Now in the partition, if the data‐
+base nodes can’t talk to each other, they cannot coordinate to ensure consistency. We
+are unable to guarantee consistency, so our only option is to refuse to respond to the
+request. In other words, we have sacrificed availability. Our system is consistent and
+partition tolerant, or CP. In this mode our service would have to work out how to
+degrade functionality until the partition is healed and the database nodes can be
+resynchronized.
+Consistency across multiple nodes is really hard. There are few things (perhaps noth‐
+ing) harder in distributed systems. Think about it for a moment. Imagine I want to
+read a record from the local database node. How do I know it is up to date? I have to
+go and ask the other node. But I also have to ask that database node to not allow it to
+be updated while the read completes; in other words, I need to initiate a transactional
+410 
+| 
+Chapter 12: Resiliency

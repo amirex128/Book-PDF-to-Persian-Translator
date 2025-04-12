@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 406</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <pre><code class="language-text">
+  placed_orders_total{service="ftgo-order-service",} 1.0
+  # HELP approved_orders_total
+  # TYPE approved_orders_total counter
+  approved_orders_total{service="ftgo-order-service",} 1.0
+  </code></pre>
+  <p>
+   The placed_orders counter، به عنوان مثال، به عنوان یک metric از نوع counter گزارش می‌شود.
+  </p>
+  <p>
+   The Prometheus server به طور دوره‌ای این endpoint را برای بازیابی metrics poll می‌کند. Once
+   the metrics در Prometheus هستند، شما می‌توانید آنها را با استفاده از Grafana، یک data visualization
+   tool (https://grafana.com) مشاهده کنید. You can also set up alerts برای این metrics، مانند زمانی که
+   the rate از change برای placed_orders_total به زیر یک threshold می‌رسد.
+  </p>
+  <p>
+   Application metrics insights ارزشمندی را در رفتار application شما ارائه می‌دهند.
+   Alerts که توسط metrics فعال می‌شوند، به شما امکان می‌دهند تا به سرعت به یک issue در production پاسخ دهید، per-
+   haps قبل از اینکه بر کاربران تأثیر بگذارد. Let’s now look at how to observe و پاسخ دادن به another
+   source از alerts: exceptions.
+  </p>
+  <h4><span style="font-weight: bold;">11.3.5 Using the Exception tracking pattern</span></h4>
+  <p>
+   A service باید به ندرت یک exception را log کند، و when it does، این مهم است که شما
+   علت اصلی را شناسایی کنید. The exception ممکن است یک symptom از a failure یا a program-
+   ming bug باشد. The traditional way برای view exceptions این است که در logs نگاه کنید. You might even
+   the logging server را پیکربندی کنید تا به شما هشدار دهد اگر یک exception در log file ظاهر شود. There
+   are, however, several problems با این رویکرد:
+  </p>
+  <p>
+   Log files are oriented around single-line log entries، در حالی که exceptions متشکل از
+   چندین خط است.
+  </p>
+  <p>
+   There’s no mechanism برای ردیابی the resolution از exceptions که در log
+   files رخ می‌دهند. You would have to manually copy/paste the exception into an issue tracker.
+  </p>
+  <p>
+   There are likely to be duplicate exceptions، اما هیچ mecha-
+   nism خودکاری برای رفتار با آنها به عنوان یک وجود ندارد.
+  </p>
+  <p>
+   A better approach استفاده از یک exception tracking service است. As figure 11.15 نشان می‌دهد، شما
+   service خود را برای گزارش exceptions به یک exception tracking service از طریق، برای
+   به عنوان مثال، a REST API، پیکربندی می‌کنید. The exception tracking service de-duplicates exceptions، gener-
+   ates alerts و the resolution از exceptions را مدیریت می‌کند.
+  </p>
+  <p>
+   There are a couple از راه‌ها برای ادغام the exception tracking service در your
+   application. Your service می‌تواند API از exception tracking service را مستقیماً فراخوانی کند. A
+   better approach استفاده از یک client library ارائه شده توسط the exception tracking service است.
+   For example, HoneyBadger’s client library چندین integration آسان برای استفاده را فراهم می‌کند
+   mechanisms، از جمله یک Servlet Filter که exceptions را می‌گیرد و گزارش می‌دهد.
+  </p>
+  <p>
+   Pattern: Exception tracking
+   Services exceptions را به یک central service گزارش می‌دهند که exceptions را de-duplicates می‌کند، gener-
+   ates alerts و the resolution از exceptions را مدیریت می‌کند. See http://microservices.io/
+   patterns/observability/audit-logging.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

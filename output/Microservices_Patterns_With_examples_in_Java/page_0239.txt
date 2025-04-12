@@ -1,0 +1,44 @@
+209
+Using sagas and event sourcing together
+An event handler has a parameter of type EventHandlerContext, which contains the
+event and its metadata.
+ Now that we’ve looked at how to write event sourcing-based business logic using
+the Eventuate client framework, let’s look at how to use event sourcing-based business
+logic with sagas. 
+6.3
+Using sagas and event sourcing together
+Imagine you’ve implemented one or more services using event sourcing. You’ve prob-
+ably written services similar to the one shown in listing 6.4. But if you’ve read chapter 4,
+you know that services often need to initiate and participate in sagas, sequences of
+local transactions used to maintain data consistency across services. For example,
+Order Service uses a saga to validate an Order. Kitchen Service, Consumer Service,
+and Accounting Service participate in that saga. Consequently, you must integrate
+sagas and event sourcing-based business logic.
+ Event sourcing makes it easy to use choreography-based sagas. The participants
+exchange the domain events emitted by their aggregates. Each participant’s aggre-
+gates handle events by processing commands and emitting new events. You need to
+write the aggregates and the event handler classes, which update the aggregates.
+ But integrating event sourcing-based business logic with orchestration-based sagas
+can be more challenging. That’s because the event store’s concept of a transaction
+might be quite limited. When using some event stores, an application can only create
+or update a single aggregate and publish the resulting event(s). But each step of a
+saga consists of several actions that must be performed atomically:
+Saga creation—A service that initiates a saga must atomically create or update an
+aggregate and create the saga orchestrator. For example, Order Service’s
+createOrder() method must create an Order aggregate and a CreateOrderSaga.
+Saga orchestration—A saga orchestrator must atomically consume replies, update
+its state, and send command messages.
+Saga participants—Saga participants, such as Kitchen Service and Order Service,
+must atomically consume messages, detect and discard duplicates, create or
+update aggregates, and send reply messages.
+Because of this mismatch between these requirements and the transactional capabili-
+ties of an event store, integrating orchestration-based sagas and event sourcing poten-
+tially creates some interesting challenges.
+ A key factor in determining the ease of integrating event sourcing and orchestration-
+based sagas is whether the event store uses an RDBMS or a NoSQL database. The
+Eventuate Tram saga framework described in chapter 4 and the underlying Tram mes-
+saging framework described in chapter 3 rely on flexible ACID transactions provided
+by the RDBMS. The saga orchestrator and the saga participants use ACID transactions
+to atomically update their databases and exchange messages. If the application uses
+an RDBMS-based event store, such as Eventuate Local, then it can cheat and invoke the
+ 

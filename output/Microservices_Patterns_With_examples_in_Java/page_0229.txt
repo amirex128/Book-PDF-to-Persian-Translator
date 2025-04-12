@@ -1,0 +1,43 @@
+199
+Developing business logic using event sourcing
+emitted by a particular aggregate can change. Developers can change the structure of
+an event type by adding, removing, and changing the name or type of a field.
+ Fortunately, many of these types of changes are backward-compatible changes. For
+example, adding a field to an event is unlikely to impact consumers. A consumer
+ignores unknown fields. Other changes, though, aren’t backward compatible. For
+example, changing the name of an event or the name of a field requires consumers of
+that event type to be changed. 
+MANAGING SCHEMA CHANGES THROUGH UPCASTING
+In the SQL database world, changes to a database schema are commonly handled
+using schema migrations. Each schema change is represented by a migration, a SQL
+script that changes the schema and migrates the data to a new schema. The schema
+migrations are stored in a version control system and applied to a database using a
+tool such as Flyway.
+ An event sourcing application can use a similar approach to handle non-backward-
+compatible changes. But instead of migrating events to the new schema version in
+situ, event sourcing frameworks transform events when they’re loaded from the event
+store. A component commonly called an upcaster updates individual events from an
+old version to a newer version. As a result, the application code only ever deals with
+the current event schema.
+ Now that we’ve looked at how event sourcing works, let’s consider its benefits and
+drawbacks. 
+6.1.8
+Benefits of event sourcing
+Event sourcing has both benefits and drawbacks. The benefits include the following:
+Reliably publishes domain events
+Preserves the history of aggregates
+Mostly avoids the O/R impedance mismatch problem
+Provides developers with a time machine
+Let’s examine each benefit in more detail.
+RELIABLY PUBLISHES DOMAIN EVENTS
+A major benefit of event sourcing is that it reliably publishes events whenever the state
+of an aggregate changes. That’s a good foundation for an event-driven microservice
+architecture. Also, because each event can store the identity of the user who made the
+change, event sourcing provides an audit log that’s guaranteed to be accurate. The
+stream of events can be used for a variety of other purposes, including notifying users,
+application integration, analytics, and monitoring. 
+PRESERVES THE HISTORY OF AGGREGATES
+Another benefit of event sourcing is that it stores the entire history of each aggregate.
+You can easily implement temporal queries that retrieve the past state of an aggregate.
+To determine the state of an aggregate at a given point in time, you fold the events
+ 

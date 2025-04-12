@@ -1,0 +1,61 @@
+206
+CHAPTER 6
+Developing business logic with event sourcing
+The framework provides base classes for aggregates, commands, and events. There’s
+also an AggregateRepository class that provides CRUD functionality. And the frame-
+work has an API for subscribing to events.
+ Let’s briefly look at each of the types shown in figure 6.10.
+DEFINING AGGREGATES WITH THE REFLECTIVEMUTABLECOMMANDPROCESSINGAGGREGATE CLASS
+ReflectiveMutableCommandProcessingAggregate is the base class for aggregates. It’s
+a generic class that has two type parameters: the first is the concrete aggregate class,
+and the second is the superclass of the aggregate’s command classes. As its rather
+long name suggests, it uses reflection to dispatch command and events to the appro-
+priate method. Commands are dispatched to a process() method, and events to an
+apply() method.
+ The Order class you saw earlier extends ReflectiveMutableCommandProcessing-
+Aggregate. The following listing shows the Order class.
+public class Order extends ReflectiveMutableCommandProcessingAggregate<Order,
+OrderCommand> {
+public List<Event> process(CreateOrderCommand command) { ... }
+public void apply(OrderCreatedEvent event) { ... }
+Listing 6.3
+The Eventuate version of the Order class
+OrderService
+EventHandlers
+creditReserved()
+«interface»
+OrderEvent
+«interface»
+OrderCommand
+«event»
+OrderCreated
+«command»
+CreateOrder
+Order
+process()
+apply()
+Order
+Service
+createOrder()
+«annotation»
+Event
+Subscriber
+«interface»
+Event
+«interface»
+Command
+«abstract»
+ReﬂectiveMutableCommand
+ProcessingAggregate
+Aggregate
+Repository
+Eventuate client framework
+Order Service
+save()
+ﬁnd()
+update()
+Abstract classes and interfaces that
+application classes extend or implement
+Figure 6.10
+The main classes and interfaces provided by the Eventuate client framework for Java
+ 

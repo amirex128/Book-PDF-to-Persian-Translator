@@ -1,0 +1,63 @@
+411
+Deploying the FTGO application with Kubernetes
+apiVersion: v1
+kind: Service
+metadata:
+name: ftgo-consumer-service
+spec:
+ports:
+- name: http
+  
+port: 8080
+targetPort: 8080
+selector:
+app: ftgo-consumer-service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: ftgo-consumer-service-v2
+  
+spec:
+replicas: 1
+template:
+metadata:
+labels:
+app: ftgo-consumer-service
+  
+version: v2
+spec:
+containers:
+- image: image: ftgo-consumer-service:v2
+  
+...
+By now, you may be wondering how to run the Envoy proxy container in the service’s
+pod. Fortunately, Istio makes that remarkably easy by automating modifying the pod
+definition to include the Envoy proxy. There are two ways to do that. The first is to use
+manual sidecar injection  and run the istioctl kube-inject command:
+istioctl kube-inject -f ftgo-consumer-service/src/deployment/kubernetes/ftgo-
+consumer-service.yml | kubectl apply -f -
+This command reads a Kubernetes YAML file and outputs the modified configura-
+tion containing the Envoy proxy. The modified configuration is then piped into
+kubectl apply.
+ The second way to add the Envoy sidecar to the pod is to use automatic sidecar injec-
+tion. When this feature is enabled, you deploy a service using kubectl apply. Kubernetes
+automatically invokes Istio to modify the pod definition to include the Envoy proxy.
+ If you describe your service’s pod, you’ll see that it consists of more than your ser-
+vice’s container:
+$ kubectl describe po ftgo-consumer-service-7db65b6f97-q9jpr
+Name:
+ftgo-consumer-service-7db65b6f97-q9jpr
+Namespace:
+default
+...
+Listing 12.7
+Deploying Consumer Service with Istio
+Named port
+Versioned 
+deployment
+Recommended 
+labels
+Image 
+version
+ 

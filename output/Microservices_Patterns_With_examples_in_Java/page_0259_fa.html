@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 259</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Using the CQRS pattern</mark></h3>
+  <p>
+   <mark>CQRS</mark> یک تعمیم از این نوع معماری است. این الگو یک یا چند <mark>view databases</mark>— نه فقط <mark>text search databases</mark>— را حفظ می‌کند که یک یا چند <mark>queries</mark> application را پیاده‌سازی می‌کنند. برای درک دلیل مفید بودن این موضوع، به برخی از <mark>queries</mark> که نمی‌توانند با استفاده از الگوی ترکیب <mark>API</mark> به طور کارآمد پیاده‌سازی شوند، نگاهی می‌اندازیم. من توضیح خواهم داد که <mark>CQRS</mark> چگونه کار می‌کند و سپس در مورد مزایا و معایب <mark>CQRS</mark> صحبت خواهم کرد. بیایید نگاهی بیندازیم به زمانی که شما نیاز به استفاده از <mark>CQRS</mark> دارید.
+  </p>
+  <h4><mark>7.2.1 Motivations for using CQRS</mark></h4>
+  <p>
+   الگوی ترکیب <mark>API</mark> یک راه خوب برای پیاده‌سازی بسیاری از <mark>queries</mark> است که باید داده‌ها را از چندین <mark>services</mark> بازیابی کنند. متأسفانه، این فقط یک راه‌حل جزئی برای مشکل <mark>querying</mark> در یک معماری <mark>microservice</mark> است. این به این دلیل است که چندین <mark>service queries</mark> وجود دارد که الگوی ترکیب <mark>API</mark> نمی‌تواند آن‌ها را به طور کارآمد پیاده‌سازی کند.
+  </p>
+  <p>
+   علاوه بر این، <mark>single service queries</mark> نیز وجود دارد که پیاده‌سازی آن‌ها چالش‌برانگیز است. شاید <mark>database</mark> سرویس، <mark>query</mark> را به طور کارآمد پشتیبانی نکند. از طرف دیگر، گاهی اوقات منطقی است که یک <mark>service</mark> یک <mark>query</mark> را پیاده‌سازی کند که داده‌های متعلق به یک <mark>service</mark> دیگر را بازیابی می‌کند. بیایید به این مشکلات نگاهی بیندازیم، با یک <mark>query</mark> چند <mark>service</mark> شروع می‌کنیم که نمی‌تواند با استفاده از ترکیب <mark>API</mark> به طور کارآمد پیاده‌سازی شود.
+  </p>
+  <h5><mark>IMPLEMENTING THE FINDORDERHISTORY() QUERY OPERATION</mark></h5>
+  <p>
+   عملیات <mark>findOrderHistory()</mark>، تاریخچه سفارش یک مصرف‌کننده را بازیابی می‌کند. این چندین پارامتر دارد:
+  </p>
+  <ul>
+   <li>
+    <mark>consumerId</mark>— مصرف‌کننده را شناسایی می‌کند
+   </li>
+   <li>
+    <mark>pagination</mark>— صفحه نتایج برای بازگشت
+   </li>
+   <li>
+    <mark>filter</mark>— معیارهای فیلتر، از جمله حداکثر سن سفارش‌ها برای بازگشت، یک وضعیت سفارش اختیاری، و کلمات کلیدی اختیاری که با نام رستوران و موارد منو مطابقت دارند
+   </li>
+  </ul>
+  <p>
+   این عملیات <mark>query</mark> یک شی <mark>OrderHistory</mark> را برمی‌گرداند که شامل خلاصه‌ای از سفارش‌های منطبق است که بر اساس افزایش سن مرتب شده‌اند. این توسط ماژولی فراخوانی می‌شود که نمای تاریخچه سفارش را پیاده‌سازی می‌کند. این نما خلاصه‌ای از هر سفارش را نمایش می‌دهد که شامل شماره سفارش، وضعیت سفارش، کل سفارش و زمان تحویل تخمینی است.
+  </p>
+  <p>
+   در ظاهر، این عملیات شبیه به عملیات <mark>query</mark> <mark>findOrder()</mark> است. تنها تفاوت این است که چندین سفارش را برمی‌گرداند، نه فقط یک سفارش. ممکن است به نظر برسد که <mark>API composer</mark> فقط باید همان <mark>query</mark> را در برابر هر <mark>Provider service</mark> اجرا کند و نتایج را ترکیب کند. متأسفانه، این به آن سادگی نیست.
+  </p>
+  <p>
+   این به این دلیل است که همه <mark>services</mark>، ویژگی‌هایی را که برای فیلتر کردن یا مرتب‌سازی استفاده می‌شوند، ذخیره نمی‌کنند. به عنوان مثال، یکی از معیارهای فیلتر عملیات <mark>findOrderHistory()</mark>، یک کلمه کلیدی است که با یک مورد منو مطابقت دارد. فقط دو <mark>services</mark>، <mark>Order Service</mark> و <mark>Kitchen Service</mark>، موارد منوی یک <mark>Order</mark> را ذخیره می‌کنند. نه <mark>Delivery Service</mark> و نه <mark>Accounting Service</mark> موارد منو را ذخیره نمی‌کنند، بنابراین نمی‌توانند داده‌های خود را با استفاده از این کلمه کلیدی فیلتر کنند. به طور مشابه، نه <mark>Kitchen Service</mark> و نه <mark>Delivery Service</mark> نمی‌توانند بر اساس ویژگی <mark>orderCreationDate</mark> مرتب‌سازی کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

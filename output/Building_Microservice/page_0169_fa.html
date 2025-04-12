@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 169</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>1 <em>Martin Fowler</em> این موضوع را در مورد <em>schemaless data storage</em> با جزئیات بیشتری بررسی می‌کند.</p>
+  <h4>Should You Use Schemas?</h4>
+  <p>با استفاده از <em>schemas</em> و مقایسه نسخه‌های مختلف <em>schemas</em>، می‌توانیم <em>structural breakages</em> را تشخیص دهیم. تشخیص <em>semantic breakages</em> نیازمند استفاده از <em>testing</em> است. اگر شما <em>schemas</em> ندارید، یا اگر <em>schemas</em> دارید اما تصمیم می‌گیرید که تغییرات <em>schema</em> را برای سازگاری مقایسه نکنید، در این صورت بار تشخیص <em>structural breakages</em> قبل از رسیدن به <em>production</em> نیز بر عهده <em>testing</em> خواهد بود. مسلماً، وضعیت تا حدودی با <em>static versus dynamic typing</em> در زبان‌های برنامه‌نویسی مشابه است. با یک زبان <em>statically typed</em>، انواع در زمان <em>compile time</em> ثابت هستند—اگر کد شما کاری را با یک نمونه از یک <em>type</em> انجام دهد که مجاز نیست (مانند فراخوانی یک متد که وجود ندارد)، در این صورت <em>compiler</em> می‌تواند آن اشتباه را تشخیص دهد. این می‌تواند شما را وا دارد که تلاش‌های <em>testing</em> را بر روی انواع دیگر مشکلات متمرکز کنید. با این حال، با یک زبان <em>dynamically typed</em>، برخی از <em>testing</em> شما باید اشتباهاتی را تشخیص دهد که یک <em>compiler</em> برای زبان‌های <em>statically typed</em> تشخیص می‌دهد.</p>
+  <p>اکنون، من در مورد زبان‌های <em>static versus dynamically typed</em> نسبتاً راحت هستم، و من متوجه شده‌ام که در هر دو بسیار مولد هستم (نسبتاً). مطمئناً، زبان‌های <em>dynamically typed</em> برخی از مزایای قابل توجه را به شما می‌دهند که برای بسیاری از افراد توجیهی برای رها کردن ایمنی <em>compile-time</em> دارد. با این حال، شخصاً، اگر بحث را به تعاملات <em>microservice</em> برگردانیم، من متوجه نشده‌ام که یک <em>trade-off</em> متعادل مشابه در مورد <em>schema versus “schemaless” communication</em> وجود دارد. به زبان ساده، من فکر می‌کنم داشتن یک <em>explicit schema</em> بیش از هر سود قابل درکی برای داشتن <em>schemaless communication</em> است.</p>
+  <p>واقعاً، سؤال این نیست که آیا شما <em>schema</em> دارید یا خیر—این است که آیا آن <em>schema</em> صریح است یا خیر. اگر شما در حال مصرف داده‌ها از یک <em>schemaless API</em> هستید، همچنان انتظاراتی دارید که چه داده‌هایی باید در آنجا وجود داشته باشند و چگونه آن داده‌ها باید ساختاردهی شوند. کد شما که داده‌ها را مدیریت می‌کند، با مجموعه‌ای از فرض‌ها در مورد چگونگی ساختاردهی آن داده‌ها نوشته می‌شود. در چنین حالتی، من استدلال می‌کنم که شما <em>schema</em> دارید، اما فقط کاملاً ضمنی است، نه صریح.1 بسیاری از میل من برای یک <em>explicit schema</em> ناشی از این واقعیت است که من فکر می‌کنم مهم است که تا حد امکان در مورد آنچه یک <em>microservice</em> انجام می‌دهد (یا نمی‌دهد) صریح باشیم.</p>
+  <p>به نظر می‌رسد استدلال اصلی برای <em>schemaless endpoints</em> این است که <em>schemas</em> به کار بیشتری نیاز دارند و ارزش کافی نمی‌دهند. این، به نظر من، تا حدی شکست تخیل و تا حدی شکست ابزار خوب است تا به <em>schemas</em> کمک کند ارزش بیشتری داشته باشند، وقتی صحبت از استفاده از آن‌ها برای تشخیص <em>structural breakages</em> می‌شود.</p>
+  <p>در نهایت، بسیاری از آنچه <em>schemas</em> ارائه می‌دهند، یک <em>explicit representation</em> از بخشی از <em>structure contract</em> بین یک <em>client</em> و یک <em>server</em> است. آن‌ها به صریح کردن مسائل کمک می‌کنند و می‌توانند تا حد زیادی به ارتباط بین تیم‌ها کمک کنند و همچنین به عنوان یک <em>safety net</em> عمل کنند. در موقعیت‌هایی که هزینه تغییر کاهش می‌یابد—به عنوان مثال، زمانی که هم <em>client</em> و هم <em>server</em> متعلق به یک تیم هستند—من در مورد نداشتن <em>schemas</em> راحت‌تر هستم.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

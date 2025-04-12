@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 266</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        This technique is sometimes known as <em>cursor stability</em> [36, 37]. Another option is to simply force all atomic operations to be executed on a single thread.
+    </p>
+    <p>
+        متاسفانه، فریم‌ورک‌های <em>object-relational mapping</em>، نوشتن کد را که به طور تصادفی چرخه‌های <em>read-modify-write</em> ناامن را انجام می‌دهد، آسان می‌کنند به جای استفاده از <em>atomic operations</em> ارائه شده توسط database [38]. اگر بدانید چه می‌کنید، این یک مشکل نیست، اما به طور بالقوه منبع باگ‌های ظریفی است که یافتن آنها با تست دشوار است.
+    </p>
+    <h4>Explicit locking</h4>
+    <p>
+        اگر operations atomic داخلی database عملکرد لازم را ارائه ندهند، یک گزینه دیگر برای جلوگیری از <em>lost updates</em>، این است که application objects را که قرار است <em>updated</em> شوند، صریحاً lock کند. سپس application می‌تواند یک <em>read-modify-write cycle</em> را انجام دهد، و اگر هر <em>transaction</em> دیگری همزمان سعی کند همان object را بخواند، مجبور می‌شود منتظر بماند تا <em>read-modify-write cycle</em> اول کامل شود.
+    </p>
+    <p>
+        به عنوان مثال، یک بازی چندنفره را در نظر بگیرید که در آن چندین player می‌توانند به طور همزمان یک شکل یکسان را حرکت دهند. در این حالت، یک operation atomic ممکن است کافی نباشد، زیرا application همچنین باید اطمینان حاصل کند که حرکت player از قوانین بازی پیروی می‌کند، که شامل برخی از logic است که شما نمی‌توانید آن را به طور منطقی به عنوان یک <em>database query</em> پیاده‌سازی کنید. در عوض، ممکن است از یک lock برای جلوگیری از حرکت همزمان دو player روی یک قطعه یکسان استفاده کنید، همانطور که در مثال 7-1 نشان داده شده است.
+    </p>
+    <p>
+        Example 7-1. Explicitly locking rows to prevent lost updates
+    </p>
+    <pre><code class="language-sql">BEGIN TRANSACTION;
+SELECT * FROM figures
+  WHERE name = 'robot' AND game_id = 222
+  FOR UPDATE; 
+-- Check whether move is valid, then update the position
+-- of the piece that was returned by the previous SELECT.
+UPDATE figures SET position = 'c4' WHERE id = 1234;
+COMMIT;
+</code></pre>
+    <p>
+        عبارت <em>FOR UPDATE</em> نشان می‌دهد که database باید یک <em>lock</em> روی تمام <em>rows</em> برگشت داده شده توسط این query اعمال کند.
+    </p>
+    <p>
+        این کار می‌کند، اما برای درست انجام دادن آن، باید با دقت در مورد logic application خود فکر کنید. فراموش کردن افزودن یک <em>lock</em> لازم در جایی از کد آسان است، و بنابراین یک <em>race condition</em> ایجاد می‌شود.
+    </p>
+    <p>
+        244
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

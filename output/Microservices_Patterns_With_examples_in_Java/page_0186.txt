@@ -1,0 +1,57 @@
+156
+CHAPTER 5
+Designing business logic in a microservice architecture
+RULE #1: REFERENCE ONLY THE AGGREGATE ROOT
+The previous example illustrated the perils of updating OrderLineItems directly. The
+goal of the first aggregate rule is to eliminate this problem. It requires that the root
+entity be the only part of an aggregate that can be referenced by classes outside of the
+aggregate. A client can only update an aggregate by invoking a method on the aggre-
+gate root.
+ A service, for example, uses a repository to load an aggregate from the database
+and obtain a reference to the aggregate root. It updates an aggregate by invoking a
+method on the aggregate root. This rule ensures that the aggregate can enforce its
+invariant.
+RULE #2: INTER-AGGREGATE REFERENCES MUST USE PRIMARY KEYS
+Another rule is that aggregates reference each other by identity (for example, primary
+key) instead of object references. For example, as figure 5.6 shows, an Order refer-
+ences its Consumer using a consumerId rather than a reference to the Consumer object.
+Similarly, an Order references a Restaurant using a restaurantId.
+This approach is quite different from traditional object modeling, which considers
+foreign keys in the domain model to be a design smell. It has a number of benefits.
+The use of identity rather than object references means that the aggregates are loosely
+coupled. It ensures that the aggregate boundaries between aggregates are well
+defined and avoids accidentally updating a different aggregate. Also, if an aggregate is
+part of another service, there isn’t a problem of object references that span services.
+ This approach also simplifies persistence since the aggregate is the unit of storage.
+It makes it easier to store aggregates in a NoSQL database such as MongoDB. It also
+consumerId
+restaurantId
+...
+«
+»
+aggregate root
+Order
+quantity
+OrderLineItem
+DeliveryInfo
+...
+«
+»
+aggregate root
+Consumer
+Order aggregate
+Consumer aggregate
+...
+«
+»
+aggregate root
+Restaurant
+Restaurant aggregate
+PaymentInfo
+DeliveryInfo
+PaymentInfo
+Figure 5.6
+References between aggregates are by primary key rather than by object reference. The 
+Order aggregate has the IDs of the Consumer and Restaurant aggregates. Within an aggregate, 
+objects have references to one another.
+ 

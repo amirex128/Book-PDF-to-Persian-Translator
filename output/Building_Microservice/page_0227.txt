@@ -1,0 +1,31 @@
+3 For more details, see Jez Humble and David Farley, Continuous Delivery: Reliable Software Releases Through
+Build, Test, and Deployment Automation (Upper Saddle River, NJ: Addison-Wesley, 2010).
+Build Pipelines and Continuous Delivery
+Very early on in doing CI, my then-colleagues at Thoughtworks and I realized the
+value in sometimes having multiple stages inside a build. Tests are a very common
+case in which this comes into play. I may have a lot of fast, small-scoped tests, and a
+small number of slow, large-scoped tests. If we run all the tests together, and if we’re
+waiting for our large-scoped slow tests to finish, we may not be able to get fast feed‐
+back when our fast tests fail. And if the fast tests fail, there probably isn’t much sense
+in running the slower tests anyway! A solution to this problem is to have different
+stages in our build, creating what is known as a build pipeline. So we can have a dedi‐
+cated stage for all the fast tests, which we run first, and if they all pass, we then run a
+separate stage for the slower tests.
+This build pipeline concept gives us a nice way of tracking the progress of our soft‐
+ware as it clears each stage, helping give us insight into the quality of our software.
+We create a deployable artifact, the thing that will ultimately be deployed into pro‐
+duction, and use this artifact throughout the pipeline. In our context, this artifact will
+relate to a microservice we want to deploy. In Figure 7-1, we see this happening—the
+same artifact is used in each stage of the pipeline, giving us more and more confi‐
+dence that the software will work in production.
+Figure 7-1. A simple release process for our Catalog service modeled as a build pipeline
+Continuous delivery (CD) builds on this concept, and then some. As outlined in Jez
+Humble and Dave Farley’s book of the same name,3 CD is the approach whereby we
+get constant feedback on the production readiness of each and every check-in, and
+furthermore treat each and every check-in as a release candidate.
+To fully embrace this concept, we need to model all the processes involved in getting
+our software from check-in to production, and we need to know where any given
+version of the software is in terms of being cleared for release. In CD, we do this by
+Build Pipelines and Continuous Delivery 
+| 
+201

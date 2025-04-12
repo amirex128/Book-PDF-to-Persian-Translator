@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 161</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <ul>
+        <li>Akka از serialization داخلی Java به طور پیش‌فرض استفاده می‌کند، که forward یا backward compatibility را ارائه نمی‌دهد. با این حال، شما می‌توانید آن را با چیزی مانند Protocol Buffers جایگزین کنید، و در نتیجه توانایی انجام rolling upgrades را به دست آورید [50].</li>
+        <li>Orleans به طور پیش‌فرض از یک custom data encoding format استفاده می‌کند که از deployments rolling upgrade پشتیبانی نمی‌کند. برای deploy کردن یک نسخه جدید از application خود، شما نیاز به راه‌اندازی یک cluster جدید، انتقال traffic از cluster قدیمی به new one و خاموش کردن old one دارید [51, 52]. مانند Akka، می‌توان از plug-ins serialization custom استفاده کرد.</li>
+        <li>In Erlang OTP، تغییر schema records به طرز شگفت‌انگیزی دشوار است (علیرغم داشتن features زیادی که برای high availability طراحی شده است). rolling upgrades امکان‌پذیر هستند اما نیاز به برنامه‌ریزی دقیق دارند [53]. یک datatype maps جدید آزمایشی (یک ساختار شبیه به JSON، که در Erlang R17 در سال 2014 معرفی شد) ممکن است این کار را در آینده آسان‌تر کند [54].</li>
+    </ul>
+    <h4>Summary</h4>
+    <p>
+        در این فصل ما به راه‌های مختلف تبدیل data structures به bytes در شبکه یا bytes روی دیسک نگاه کردیم. ما دیدیم که چگونه جزئیات این encodings، نه تنها بر کارایی آن‌ها، بلکه مهمتر از آن، بر معماری applications و گزینه‌های شما برای deploy کردن آن‌ها تأثیر می‌گذارد.
+    </p>
+    <p>
+        به طور خاص، بسیاری از services نیاز به پشتیبانی از rolling upgrades دارند، جایی که یک نسخه جدید از یک service به تدریج به چند node در یک زمان deploy می‌شود، به جای deploy کردن به همه nodes به طور همزمان. Rolling upgrades به نسخه‌های جدید از یک service اجازه می‌دهد تا بدون downtime منتشر شوند (بنابراین releases کوچک و مکرر را به جای releases بزرگ و نادر تشویق می‌کند) و deployments را کم‌خطرتر می‌کند (اجازه دادن به releases معیوب برای شناسایی و rollback شدن قبل از اینکه بر تعداد زیادی از users تأثیر بگذارد). این properties برای evolvability، سهولت ایجاد تغییرات در یک application، بسیار مفید هستند.
+    </p>
+    <p>
+        در طول rolling upgrades، یا به دلایل مختلف دیگر، ما باید فرض کنیم که nodes مختلف در حال اجرای نسخه‌های مختلف از کد application ما هستند. بنابراین، این مهم است که همه data که در اطراف سیستم جریان دارد، به گونه‌ای encoding شده باشد که backward compatibility (کد جدید می‌تواند داده‌های قدیمی را بخواند) و forward compatibility (کد قدیمی می‌تواند داده‌های جدید را بخواند) را فراهم کند.
+    </p>
+    <p>
+        ما در مورد چندین data encoding formats و properties compatibility آن‌ها بحث کردیم:
+    </p>
+    <ul>
+        <li>encodings language-specific به یک زبان برنامه‌نویسی محدود شده‌اند و اغلب در ارائه forward و backward compatibility fail می‌شوند.</li>
+        <li>Formats textual مانند JSON, XML و CSV گسترده هستند و compatibility آن‌ها به نحوه استفاده شما از آن‌ها بستگی دارد. آن‌ها schema languages اختیاری دارند که گاهی اوقات مفید و گاهی اوقات یک مانع هستند. این formats تا حدودی</li>
+    </ul>
+    <p>
+        Summary | 139
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

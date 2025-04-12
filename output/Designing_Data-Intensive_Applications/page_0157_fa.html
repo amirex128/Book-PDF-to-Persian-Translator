@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 157</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        need to be encoded into a sequence of bytes که می‌توانند از طریق شبکه ارسال شوند.
+        That’s okay if the parameters are primitives like numbers or strings, but quickly becomes problematic with larger objects.
+    </p>
+    <ul>
+        <li>The client و service ممکن است در زبان‌های برنامه‌نویسی مختلف پیاده‌سازی شوند، بنابراین framework RPC باید datatypes را از یک زبان به زبان دیگر ترجمه کند. این می‌تواند زشت تمام شود، زیرا همه زبان‌ها دارای types یکسانی نیستند—به یاد داشته باشید مشکلات JavaScript با اعداد بزرگتر از 253، به عنوان مثال ("JSON, XML, and Binary Variants" در صفحه 114 را ببینید). این مشکل در یک فرآیند واحد که در یک زبان واحد نوشته شده است، وجود ندارد.</li>
+    </ul>
+    <p>
+        همه این عوامل به این معنی است که هیچ فایده‌ای در تلاش برای ایجاد یک service remote وجود ندارد تا بیش از حد شبیه به یک object محلی در زبان برنامه‌نویسی شما باشد، زیرا این یک چیز اساساً متفاوت است. بخشی از جذابیت REST این است که سعی نمی‌کند این واقعیت را پنهان کند که این یک network protocol است (اگرچه به نظر می‌رسد که این امر مانع از ساختن libraries RPC بر روی REST نمی‌شود).
+    </p>
+    <h4>Current directions for RPC</h4>
+    <p>
+        علیرغم همه این مشکلات، RPC از بین نمی‌رود. Frameworks مختلف RPC بر روی همه encodings که در این فصل ذکر شد، ساخته شده‌اند: به عنوان مثال، Thrift و Avro با پشتیبانی RPC همراه هستند، gRPC یک پیاده‌سازی RPC با استفاده از Protocol Buffers است، Finagle همچنین از Thrift استفاده می‌کند، و Rest.li از JSON over HTTP استفاده می‌کند.
+    </p>
+    <p>
+        این نسل جدید از framework‌های RPC در مورد این واقعیت که یک request remote با یک function call محلی متفاوت است، صریح‌تر است. به عنوان مثال، Finagle و Rest.li از futures (promises) برای کپسوله کردن actions asynchronous که ممکن است fail شوند، استفاده می‌کنند. Futures همچنین موقعیت‌هایی را ساده می‌کنند که در آن‌ها شما نیاز به ایجاد requests به services متعدد به صورت موازی دارید و نتایج آن‌ها را ترکیب می‌کنید [45]. gRPC از streams پشتیبانی می‌کند، جایی که یک call شامل فقط یک request و یک response نیست، بلکه یک سری از requests و responses در طول زمان است [46].
+    </p>
+    <p>
+        برخی از این frameworks همچنین service discovery را ارائه می‌دهند—یعنی، اجازه دادن به یک client برای یافتن اینکه در کدام IP address و port number می‌تواند یک service خاص را پیدا کند. ما به این موضوع در "Request Routing" در صفحه 214 باز خواهیم گشت.
+    </p>
+    <p>
+        پروتکل‌های RPC سفارشی با یک binary encoding format می‌توانند performance بهتری نسبت به چیزی generic مانند JSON over REST داشته باشند. با این حال، یک API RESTful مزایای مهم دیگری دارد: برای آزمایش و debugging خوب است (شما به سادگی می‌توانید درخواست‌هایی را با استفاده از یک web browser یا ابزار command-line curl، بدون هیچ code generation یا نصب software انجام دهید)، توسط همه زبان‌های برنامه‌نویسی و پلتفرم‌های اصلی پشتیبانی می‌شود و یک اکوسیستم وسیع از ابزارهای موجود وجود دارد (servers، caches، load balancers، proxies، firewalls، monitoring، debugging tools، testing tools و غیره).
+    </p>
+    <p>
+        Modes of Dataflow | 135
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

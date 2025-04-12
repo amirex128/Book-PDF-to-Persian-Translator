@@ -1,0 +1,44 @@
+241
+Designing CQRS views
+ In order to be reliable, the event handler must record the event ID and update the
+datastore atomically. How to do this depends on the type of database. If the view data-
+base store is a SQL database, the event handler could insert processed events into a
+PROCESSED_EVENTS table as part of the transaction that updates the view. But if the
+view datastore is a NoSQL database that has a limited transaction model, the event
+handler must save the event in the datastore “record” (for example, a MongoDB doc-
+ument or DynamoDB table item) that it updates.
+ It’s important to note that the event handler doesn’t need to record the ID of
+every event. If, as is the case with Eventuate, events have a monotonically increasing
+ID, then each record only needs to store the max(eventId) that’s received from a
+given aggregate instance. Furthermore, if the record corresponds to a single aggre-
+gate instance, then the event handler only needs to record max(eventId). Only
+records that represent joins of events from multiple aggregates must contain a map
+from [aggregate type, aggregate id] to max(eventId).
+ For example, you’ll soon see that the DynamoDB implementation of the Order
+History view contains items that have attributes for tracking events that look like this:
+{...
+"Order3949384394-039434903" : "0000015e0c6fc18f-0242ac1100e50002",
+"Delivery3949384394-039434903" : "0000015e0c6fc264-0242ac1100e50002",
+}
+This view is a join of events published by various services. The name of each of these
+event-tracking attributes is «aggregateType»«aggregateId», and the value is the
+eventId. Later on, I describe how this works in more detail. 
+ENABLING A CLIENT APPLICATION TO USE AN EVENTUALLY CONSISTENT VIEW
+As I said earlier, one issue with using CQRS is that a client that updates the command
+side and then immediately executes a query might not see its own update. The view is
+eventually consistent because of the unavoidable latency of the messaging infrastructure.
+ The command and query module APIs can enable the client to detect an inconsis-
+tency using the following approach. A command-side operation returns a token con-
+taining the ID of the published event to the client. The client then passes the token to
+a query operation, which returns an error if the view hasn’t been updated by that
+event. A view module can implement this mechanism using the duplicate event-
+detection mechanism. 
+7.3.3
+Adding and updating CQRS views
+CQRS views will be added and updated throughout the lifetime of an application.
+Sometimes you need to add a new view to support a new query. At other times you
+might need to re-create a view because the schema has changed or you need to fix a
+bug in code that updates the view.
+ Adding and updating views is conceptually quite simple. To create a new view, you
+develop the query-side module, set up the datastore, and deploy the service. The query
+ 

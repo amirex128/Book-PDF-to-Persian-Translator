@@ -1,0 +1,51 @@
+127
+Handling the lack of isolation
+4.3.1
+Overview of anomalies
+The lack of isolation can cause the following three anomalies:
+Lost updates—One saga overwrites without reading changes made by another saga.
+Dirty reads—A transaction or a saga reads the updates made by a saga that has
+not yet completed those updates.
+Fuzzy/nonrepeatable reads—Two different steps of a saga read the same data and
+get different results because another saga has made updates.
+All three anomalies can occur, but the first two are the most common and the most
+challenging. Let’s take a look at those two types of anomaly, starting with lost updates.
+LOST UPDATES
+A lost update anomaly occurs when one saga overwrites an update made by another
+saga. Consider, for example, the following scenario:
+1
+The first step of the Create Order Saga creates an Order.
+2
+While that saga is executing, the Cancel Order Saga cancels the Order.
+3
+The final step of the Create Order Saga approves the Order.
+In this scenario, the Create Order Saga ignores the update made by the Cancel Order
+Saga and overwrites it. As a result, the FTGO application will ship an order that the
+customer had cancelled. Later in this section, I’ll show how to prevent lost updates. 
+DIRTY READS
+A dirty read occurs when one saga reads data that’s in the middle of being updated by
+another saga. Consider, for example, a version of the FTGO application store where
+consumers have a credit limit. In this application, a saga that cancels an order consists
+of the following transactions:
+
+Consumer Service—Increase the available credit.
+
+Order Service—Change the state of the Order to cancelled.
+
+Delivery Service—Cancel the delivery.
+Let’s imagine a scenario that interleaves the execution of the Cancel Order and Create
+Order Sagas, and the Cancel Order Saga is rolled back because it’s too late to cancel
+the delivery. It’s possible that the sequence of transactions that invoke the Consumer
+Service is as follows:
+1
+Cancel Order Saga—Increase the available credit.
+2
+Create Order Saga—Reduce the available credit.
+3
+Cancel Order Saga—A compensating transaction that reduces the available credit.
+In this scenario, the Create Order Saga does a dirty read of the available credit that
+enables the consumer to place an order that exceeds their credit limit. It’s likely that
+this is an unacceptable risk to the business.
+ Let’s look at how to prevent this and other kinds of anomalies from impacting an
+application. 
+ 

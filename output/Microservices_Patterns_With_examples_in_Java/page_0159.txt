@@ -1,0 +1,64 @@
+129
+Handling the lack of isolation
+Retriable transactions—Transactions that follow the pivot transaction and are guar-
+anteed to succeed.
+In the Create Order Saga, the createOrder(), verifyConsumerDetails(), and create-
+Ticket() steps are compensatable transactions. The createOrder() and create-
+Ticket() transactions have compensating transactions that undo their updates. The
+verifyConsumerDetails() transaction is read-only, so doesn’t need a compensating
+transaction. The authorizeCreditCard() transaction is this saga’s pivot transaction. If
+the consumer’s credit card can be authorized, this saga is guaranteed to complete. The
+approveTicket() and approveOrder() steps are retriable transactions that follow the
+pivot transaction.
+ The distinction between compensatable transactions and retriable transactions is
+especially important. As you’ll see, each type of transaction plays a different role in the
+countermeasures. Chapter 13 states that when migrating to microservices, the mono-
+lith must sometimes participate in sagas and that it’s significantly simpler if the mono-
+lith only ever needs to execute retriable transactions.
+ Let’s now look at each countermeasure, starting with the semantic lock counter-
+measure.
+COUNTERMEASURE: SEMANTIC LOCK
+When using the semantic lock countermeasure, a saga’s compensatable transaction
+sets a flag in any record that it creates or updates. The flag indicates that the record
+Step
+1
+2
+3
+4
+5
+6
+Service
+Order Service
+Consumer Service
+Kitchen Service
+Accounting Service
+Restaurant Order Service
+Order Service
+Transaction
+createOrder()
+verifyConsumerDetails()
+createTicket()
+authorizeCreditCard()
+approveRestaurantOrder()
+approveOrder()
+Compensation Transaction
+rejectOrder()
+-
+rejectTicket()
+-
+-
+-
+Compensatable transactions:
+Must support roll back
+Pivot transactions:
+The saga’s go/no-go transaction.
+If it succeeds, then the saga runs
+to completion.
+Retriable transactions:
+Guaranteed to complete
+Figure 4.8
+A saga consists of three different types of transactions: compensatable transactions, 
+which can be rolled back, so have a compensating transaction, a pivot transaction, which is the 
+saga’s go/no-go point, and retriable transactions, which are transactions that don’t need to be 
+rolled back and are guaranteed to complete.
+ 

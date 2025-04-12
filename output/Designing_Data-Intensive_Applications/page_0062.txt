@@ -1,0 +1,40 @@
+databases, where the schema is explicit and the database ensures all written data con‐
+forms to it) [21].
+Schema-on-read is similar to dynamic (runtime) type checking in programming lan‐
+guages, whereas schema-on-write is similar to static (compile-time) type checking.
+Just as the advocates of static and dynamic type checking have big debates about their
+relative merits [22], enforcement of schemas in database is a contentious topic, and in
+general there’s no right or wrong answer.
+The difference between the approaches is particularly noticeable in situations where
+an application wants to change the format of its data. For example, say you are cur‐
+rently storing each user’s full name in one field, and you instead want to store the
+first name and last name separately [23]. In a document database, you would just
+start writing new documents with the new fields and have code in the application that
+handles the case when old documents are read. For example:
+if (user && user.name && !user.first_name) {
+    // Documents written before Dec 8, 2013 don't have first_name
+    user.first_name = user.name.split(" ")[0];
+}
+On the other hand, in a “statically typed” database schema, you would typically per‐
+form a migration along the lines of:
+ALTER TABLE users ADD COLUMN first_name text;
+UPDATE users SET first_name = split_part(name, ' ', 1);      -- PostgreSQL
+UPDATE users SET first_name = substring_index(name, ' ', 1);      -- MySQL
+Schema changes have a bad reputation of being slow and requiring downtime. This
+reputation is not entirely deserved: most relational database systems execute the
+ALTER TABLE statement in a few milliseconds. MySQL is a notable exception—it
+copies the entire table on ALTER TABLE, which can mean minutes or even hours of
+downtime when altering a large table—although various tools exist to work around
+this limitation [24, 25, 26].
+Running the UPDATE statement on a large table is likely to be slow on any database,
+since every row needs to be rewritten. If that is not acceptable, the application can
+leave first_name set to its default of NULL and fill it in at read time, like it would with
+a document database.
+The schema-on-read approach is advantageous if the items in the collection don’t all
+have the same structure for some reason (i.e., the data is heterogeneous)—for exam‐
+ple, because:
+• There are many different types of objects, and it is not practical to put each type
+of object in its own table.
+40 
+| 
+Chapter 2: Data Models and Query Languages

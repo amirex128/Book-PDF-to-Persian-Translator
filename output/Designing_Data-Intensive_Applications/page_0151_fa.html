@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 151</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        That’s a fairly abstract idea—there are many ways data can flow from one process to another. Who encodes the data, and who decodes it? In the rest of this chapter we will explore some of the most common ways how data flows between processes:
+    </p>
+    <ul>
+        <li>Via databases (see “Dataflow Through Databases” on page 129)</li>
+        <li>Via service calls (see “Dataflow Through Services: REST and RPC” on page 131)</li>
+        <li>Via asynchronous message passing (see “Message-Passing Dataflow” on page 136)</li>
+    </ul>
+    <h4>Dataflow Through Databases</h4>
+    <p>
+        در یک database، فرآیندی که به database می‌نویسد، داده‌ها را encoding می‌کند و فرآیندی که از database می‌خواند، آن را decoding می‌کند. ممکن است فقط یک فرآیند واحد وجود داشته باشد که به database دسترسی دارد، که در این صورت reader به سادگی یک نسخه بعدی از همان فرآیند است—در آن صورت شما می‌توانید به ذخیره کردن چیزی در database به عنوان ارسال یک message به خود آینده‌تان فکر کنید.
+    </p>
+    <p>
+        Backward compatibility در اینجا به وضوح ضروری است. در غیر این صورت، خود آینده شما قادر به decode کردن آنچه قبلاً نوشته‌اید، نخواهد بود.
+    </p>
+    <p>
+        به طور کلی، دسترسی چندین فرآیند مختلف به یک database در یک زمان، رایج است. آن فرآیندها ممکن است چندین application یا سرویس مختلف باشند، یا ممکن است به سادگی چندین نمونه از یک سرویس (که به موازات برای scal‐ability یا fault tolerance در حال اجرا هستند) باشند. به هر حال، در محیطی که application در حال تغییر است، احتمال دارد که برخی از فرآیندهای دسترسی به database در حال اجرای کد جدیدتر باشند و برخی در حال اجرای کد قدیمی‌تر باشند—به عنوان مثال، به این دلیل که یک نسخه جدید در حال حاضر در یک rolling upgrade deployment است، بنابراین برخی از نمونه‌ها به‌روزرسانی شده‌اند در حالی که بقیه هنوز نشده‌اند.
+    </p>
+    <p>
+        این بدان معناست که یک value در database ممکن است توسط یک نسخه جدیدتر از code نوشته شده باشد و متعاقباً توسط یک نسخه قدیمی‌تر از code که هنوز در حال اجرا است، خوانده شود.
+    </p>
+    <p>
+        بنابراین، forward compatibility نیز اغلب برای databases مورد نیاز است.
+    </p>
+    <p>
+        با این حال، یک snag اضافی وجود دارد. فرض کنید شما یک فیلد را به یک record schema اضافه می‌کنید و the newer code یک value را برای آن فیلد جدید به database می‌نویسد. متعاقباً، یک نسخه قدیمی‌تر از code (که هنوز در مورد فیلد جدید چیزی نمی‌داند) record را می‌خواند، آن را update می‌کند و دوباره می‌نویسد. در این شرایط، رفتار مطلوب معمولاً این است که کد قدیمی، فیلد جدید را دست نخورده نگه دارد، حتی اگر نتواند آن را تفسیر کند.
+    </p>
+    <p>
+        The encoding formats که قبلاً مورد بحث قرار گرفت، از چنین preservation of unknown fields پشتیبانی می‌کنند، اما گاهی اوقات شما نیاز دارید در سطح application مراقبت کنید، همانطور که در شکل 4-7 نشان داده شده است. به عنوان مثال، اگر شما یک database value را به objects model در application decode می‌کنید و بعداً آن objects model را دوباره encoding می‌کنید، فیلد unknown ممکن است در آن فرآیند translation از دست برود. حل این مشکل سختی نیست. شما فقط باید از آن آگاه باشید.
+    </p>
+    <p>
+        Modes of Dataflow | 129
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

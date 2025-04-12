@@ -1,0 +1,41 @@
+It’s worth noting that some communication protocols that use HTTP under the hood
+can take advantage of HTTPS—so we can easily run SOAP or gRPC over HTTPS
+without issue. HTTPS also gives us additional protections over and above simply
+confirming that we are talking to whom we expect. We’ll come to that shortly.
+Client identity
+When we refer to client identity in this context, we are referring to the microservice
+making a call—so we are trying to confirm and authenticate the identity of the
+upstream microservice. We will be looking at how we authenticate humans (users!) a
+bit later on.
+We can verify the identity of a client in a number of ways. We could ask that the cli‐
+ent send us some information in the request telling us who they are. An example
+might be to use some sort of shared secret or a client-side certificate to sign the
+request. When the server has to verify the client identity, we want this to be as effi‐
+cient as possible—I’ve seen some solutions (including those pushed by API gateway
+vendors) that involve the server having to make calls to central services to check cli‐
+ent identity, which is pretty nuts when you consider the latency implications.
+I struggle to think of a situation in which I would verify client identity without also
+verifying server identity—to verify both, you would typically end up implementing
+some form of mutual authentication. With mutual authentication, both parties
+authenticate each other. So in Figure 11-6, the Order Processor authenticates the
+Payment microservice, and the Payment microservice authenticates the Order
+Processor.
+We can do this through the use of mutual TLS, in which case both the client and
+server make use of certificates. On the public internet, verifying the identity of a cli‐
+ent device is typically less important than verifying the identity of the human using
+that device. As such, mutual TLS is rarely used. In our microservice architecture,
+though, especially where we might be operating in a zero-trust environment, this is
+much more common.
+The challenge with implementing schemes like mutual TLS has historically been tool‐
+ing. Nowadays this is less of an issue. Tools like Vault can make distributing certifi‐
+cates much easier, and wanting to simplify the use of mutual TLS is one of the main
+reasons for people to implement service meshes, which we explored in “Service
+Meshes and API Gateways” on page 162.
+Visibility of data
+When we send data from one microservice to another, can someone view the data?
+For some information, such as the price of Peter Andre albums, we might not care
+much since the data is already in the public domain. On the other hand, some data
+might include PII, which we need to make sure is protected.
+Securing Data 
+| 
+371

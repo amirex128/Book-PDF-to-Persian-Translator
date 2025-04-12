@@ -1,0 +1,46 @@
+462
+CHAPTER 13
+Refactoring to microservices
+13.5.2 Overview of Delivery Service
+The proposed new Delivery Service is responsible for scheduling, rescheduling, and
+canceling deliveries. Figure 13.17 shows a high-level view of the architecture of the
+FTGO application after extracting Delivery Service. The architecture consists of
+the FTGO monolith and Delivery Service. They collaborate using the integration
+glue, which consists of APIs in both the service and monolith. Delivery Service has
+its own domain model and database.
+In order to flesh out this architecture and determine the service’s domain model, we
+need to answer the following questions:
+Which behavior and data are moved to Delivery Service?
+What API does Delivery Service expose to the monolith?
+What API does the monolith expose to Delivery Service?
+These issues are interrelated because the distribution of responsibilities between the
+monolith and the service affects the APIs. For instance, Delivery Service will need to
+invoke an API provided by the monolith to access the data in the monolith’s data-
+base and vice versa. Later, I’ll describe the design of the integration glue that enables
+Monolith
+domain model
+Integration glue
+What API does the Delivery Service
+expose to the monolith?
+Delivery Service
+domain model
+FTGO Monolith
+Delivery Service
+Delivery
+Service
+database
+Monolith
+database
+Adapter
+Adapter
+What API does the monolith
+expose to the Delivery Service?
+Which behavior and
+data is moved to the
+Delivery Service?
+Figure 13.17
+The high-level view of the FTGO application after extracting Delivery Service. The FTGO 
+monolith and Delivery Service collaborate using the integration glue, which consists of APIs in each of them. 
+The two key decisions that need to be made are which functionality and data are moved to Delivery Service 
+and how do the monolith and Delivery Service collaborate via APIs?
+ 

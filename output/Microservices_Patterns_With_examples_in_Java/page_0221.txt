@@ -1,0 +1,53 @@
+191
+Developing business logic using event sourcing
+In this example, the reviseOrder() method is replaced by a process() method and
+an apply() method. The process() method takes a ReviseOrder command as a
+parameter. This command class is defined by applying Introduce Parameter Object refactor-
+ing (https://refactoring.com/catalog/introduceParameterObject.html) to the revise-
+Order() method. The process() method either returns an OrderRevisionProposed
+event, or throws an exception if it’s too late to revise the Order or if the proposed revi-
+sion doesn’t meet the order minimum. The apply() method for the OrderRevision-
+Proposed event changes the state of the Order to REVISION_PENDING.
+ An aggregate is created using the following steps:
+1
+Instantiate aggregate root using its default constructor.
+2
+Invoke process() to generate the new events.
+3
+Update the aggregate by iterating through the new events, calling its apply().
+4
+Save the new events in the event store.
+An aggregate is updated using the following steps:
+1
+Load aggregate’s events from the event store.
+2
+Instantiate the aggregate root using its default constructor.
+3
+Iterate through the loaded events, calling apply() on the aggregate root.
+4
+Invoke its process() method to generate new events.
+5
+Update the aggregate by iterating through the new events, calling apply().
+6
+Save the new events in the event store.
+To see this in action, let’s now look at the event sourcing version of the Order aggregate. 
+EVENT SOURCING-BASED ORDER AGGREGATE
+Listing 6.1 shows the Order aggregate’s fields and the methods responsible for creat-
+ing it. The event sourcing version of the Order aggregate has some similarities to the
+JPA-based version shown in chapter 5. Its fields are almost identical, and it emits simi-
+lar events. What’s different is that its business logic is implemented in terms of pro-
+cessing commands that emit events and applying those events, which updates its state.
+Each method that creates or updates the JPA-based aggregate, such as createOrder()
+and reviseOrder(), is replaced in the event sourcing version by process() and
+apply() methods.
+public class Order {
+private OrderState state;
+private Long consumerId;
+private Long restaurantId;
+private OrderLineItems orderLineItems;
+private DeliveryInformation deliveryInformation;
+private PaymentInformation paymentInformation;
+private Money orderMinimum;
+Listing 6.1
+The Order aggregate’s fields and its methods that initialize an instance
+ 

@@ -1,0 +1,43 @@
+73
+Communicating using the synchronous Remote procedure invocation pattern
+gRPC. I cover how to improve the availability of your services by properly handling
+partial failure and explain why a microservices-based application that uses RPI must
+use a service discovery mechanism.
+ Let’s first take a look at REST.
+3.2.1
+Using REST
+Today, it’s fashionable to develop APIs in the RESTful style (https://en.wikipedia
+.org/wiki/Representational_state_transfer). REST is an IPC mechanism that (almost
+always) uses HTTP. Roy Fielding, the creator of REST, defines REST as follows:
+REST provides a set of architectural constraints that, when applied as a whole, emphasizes
+scalability of component interactions, generality of interfaces, independent deployment of
+components, and intermediary components to reduce interaction latency, enforce security,
+and encapsulate legacy systems.
+www.ics.uci.edu/~fielding/pubs/dissertation/top.htm
+A key concept in REST is a resource, which typically represents a single business
+object, such as a Customer or Product, or a collection of business objects. REST
+uses the HTTP verbs for manipulating resources, which are referenced using a
+URL. For example, a GET request returns the representation of a resource, which is
+often in the form of an XML document or JSON object, although other formats
+such as binary can be used. A POST request creates a new resource, and a PUT
+request updates a resource. The Order Service, for example, has a POST /orders
+endpoint for creating an Order and a GET /orders/{orderId} endpoint for retriev-
+ing an Order.
+Business logic
+invokes
+Business logic
+Proxy interface
+Service interface
+Client
+Service
+RPI
+proxy
+Request
+Reply
+RPI
+server
+Figure 3.1
+The client’s business logic invokes an interface that is implemented by an RPI proxy 
+adapter class. The RPI proxy class makes a request to the service. The RPI server adapter class 
+handles the request by invoking the service’s business logic.
+ 

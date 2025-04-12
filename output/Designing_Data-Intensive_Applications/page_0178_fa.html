@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 178</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <ol>
+        <li>Take a consistent snapshot of the leader’s database at some point in time—if pos‐sible, without taking a lock on the entire database. Most databases have this fea‐ture, as it is also required for backups. In some cases, third-party tools are needed, such as innobackupex for MySQL [12].</li>
+        <li>Copy the snapshot to the new follower node.</li>
+        <li>The follower connects to the leader and requests all the data changes that have happened since the snapshot was taken. This requires that the snapshot is associ‐ated with an exact position in the leader’s replication log. That position has vari‐ous names: for example, PostgreSQL calls it the log sequence number, and MySQL calls it the binlog coordinates.</li>
+        <li>When the follower has processed the backlog of data changes since the snapshot, we say it has caught up. It can now continue to process data changes from the leader as they happen.</li>
+    </ol>
+    <p>
+        The practical steps of setting up a follower vary significantly by database. In some systems the process is fully automated, whereas in others it can be a somewhat arcane multi-step workflow that needs to be manually performed by an administrator.
+    </p>
+    <h4>Handling Node Outages</h4>
+    <p>
+        هر node در سیستم می‌تواند از کار بیفتد، شاید به طور غیرمنتظره به دلیل یک fault، اما به همان اندازه محتمل است که به دلیل maintenance برنامه‌ریزی شده (به عنوان مثال، راه‌اندازی مجدد یک machine برای نصب a ker‐nel security patch). توانایی reboot کردن nodes مجزا بدون downtime یک مزیت بزرگ برای operations و maintenance است. بنابراین، هدف ما این است که سیستم را به عنوان یک whole running نگه داریم، علیرغم individual node failures، و تأثیر یک node out‐age را تا حد امکان کوچک نگه داریم.
+    </p>
+    <p>
+        چگونه شما به high availability با leader-based replication دست می‌یابید؟
+    </p>
+    <h4>Follower failure: Catch-up recovery</h4>
+    <p>
+        On its local disk، هر follower یک log از data changes که از leader دریافت کرده است، نگه می‌دارد. اگر یک follower crash کند و دوباره راه‌اندازی شود، یا اگر network بین leader و follower به طور موقت قطع شود، follower می‌تواند کاملاً راحت بازیابی شود: از log خود، آخرین transaction را که قبل از وقوع fault پردازش شده است، می‌داند. بنابراین، the follower می‌تواند به leader متصل شود و تمام data changes را که در طول زمانی که follower قطع شده بود، درخواست کند. وقتی این تغییرات را اعمال کرد، آن را به leader catch up کرده است و می‌تواند به دریافت یک stream از data changes مانند قبل ادامه دهد.
+    </p>
+    <p>
+        156 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

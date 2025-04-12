@@ -1,0 +1,54 @@
+195
+Developing business logic using event sourcing
+In this scenario, Transaction A inserts an event with an EVENT_ID of 1010. Next, trans-
+action B inserts an event with an EVENT_ID of 1020 and then commits. If the event
+publisher were now to query the EVENTS table, it would find event 1020. Later on, after
+transaction A committed and event 1010 became visible, the event publisher would
+ignore it.
+ One solution to this problem is to add an extra column to the EVENTS table that
+tracks whether an event has been published. The event publisher would then use the
+following process:
+1
+Find unpublished events by executing this SELECT statement: SELECT * FROM
+EVENTS where PUBLISHED = 0 ORDER BY event_id ASC.
+2
+Publish events to the message broker.
+3
+Mark the events as having been published: UPDATE EVENTS SET PUBLISHED = 1
+WHERE EVENT_ID in.
+This approach prevents the event publisher from skipping events. 
+USING TRANSACTION LOG TAILING TO RELIABLY PUBLISH EVENTS
+More sophisticated event stores use transaction log tailing, which, as chapter 3 describes,
+guarantees that events will be published and is also more performant and scalable.
+For example, Eventuate Local, an open source event store, uses this approach. It reads
+events inserted into an EVENTS table from the database transaction log and pub-
+lishes them to the message broker. Section 6.2 discusses how Eventuate Local works
+in more detail. 
+6.1.5
+Using snapshots to improve performance
+An Order aggregate has relatively few state transitions, so it only has a small number of
+events. It’s efficient to query the event store for those events and reconstruct an Order
+aggregate. Long-lived aggregates, though, can have a large number of events. For
+example, an Account aggregate potentially has a large number of events. Over time, it
+would become increasingly inefficient to load and fold those events.
+ A common solution is to periodically persist a snapshot of the aggregate’s state.
+Figure 6.7 shows an example of using a snapshot. The application restores the state of
+The application only needs
+to retrieve the snapshot and
+events that occur after it.
+Event 1
+Event 2
+Event ...
+Event N
+Event
++1
+N
+Snapshot
+version N
+Event
++2
+N
+Figure 6.7
+Using a snapshot improves performance by eliminating the need to load all 
+events. An application only needs to load the snapshot and the events that occur after it.
+ 

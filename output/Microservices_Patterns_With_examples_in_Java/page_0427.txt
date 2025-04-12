@@ -1,0 +1,58 @@
+397
+Deploying services using the Service as a container pattern
+and optional port of the registry. The image name is also suffixed with the version,
+which will be important when you make a new release of the service. For example, if
+the hostname of the registry is registry.acme.com, you would use this command to
+tag the image:
+docker tag ftgo-restaurant-service registry.acme.com/ftgo-restaurant-
+service:1.0.0.RELEASE
+Next you use the docker push command to upload that tagged image to the registry:
+docker push registry.acme.com/ftgo-restaurant-service:1.0.0.RELEASE
+This command often takes much less time than you might expect. That’s because a
+Docker image has what’s known as a layered file system, which enables Docker to only
+transfer part of the image over the network. An image’s operating system, Java run-
+time, and the application are in separate layers. Docker only needs to transfer those
+layers that don’t exist in the destination. As a result, transferring an image over a net-
+work is quite fast when Docker only has to move the application’s layers, which are a
+small fraction of the image.
+ Now that we’ve pushed the image to a registry, let’s look at how to create a
+container. 
+RUNNING A DOCKER CONTAINER
+Once you’ve packaged your service as a container image, you can then create one or
+more containers. The container infrastructure will pull the image from the registry
+onto a production server. It will then create one or more containers from that image.
+Each container is an instance of your service.
+ As you might expect, Docker provides a docker run command that creates and
+starts a container. Listing 12.3 shows how to use this command to run Restaurant
+Service. The docker run command has several arguments, including the container
+image and a specification of environment variables to set in the runtime container.
+These are used to pass an externalized configuration, such as the database’s network
+location and more.
+docker run \
+-d
+\
+  
+--name ftgo-restaurant-service
+\
+   
+-p 8082:8080
+\
+   
+-e SPRING_DATASOURCE_URL=... -e SPRING_DATASOURCE_USERNAME=...
+\  
+-e SPRING_DATASOURCE_PASSWORD=... \
+registry.acme.com/ftgo-restaurant-service:1.0.0.RELEASE
+  
+Listing 12.3
+Using docker run to run a containerized service
+Runs it as a 
+background daemon
+The name of 
+the container
+Binds port 8080 of the 
+container to port 8082 
+of the host machine
+Environment 
+variables
+Image to run
+ 

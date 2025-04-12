@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 158</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <h4><strong>4.3.2 Countermeasures for handling the lack of isolation (اقدامات متقابل برای مدیریت فقدان انزوا)</strong></h4>
+  <p>model (مدل) تراکنش saga (حماسه) ACD است، و فقدان isolation (انزوا) آن می‌تواند منجر به anomalies (ناهنجاری‌ها) شود که باعث می‌شود applications (برنامه‌ها) بد عمل کنند. این مسئولیت developer (توسعه‌دهنده) است که sagas (حماسه‌ها) را به گونه‌ای بنویسد که یا از anomalies (ناهنجاری‌ها) جلوگیری کند یا تأثیر آنها را بر business (تجارت) به حداقل برساند. این ممکن است یک کار دلهره‌آور به نظر برسد، اما شما قبلاً یک example (نمونه) از یک strategy (استراتژی) را دیده‌اید که از anomalies (ناهنجاری‌ها) جلوگیری می‌کند. استفاده Order (سفارش) از states (حالت‌های) *_PENDING، مانند APPROVAL _PENDING، نمونه‌ای از یک چنین strategy (استراتژی) است. Sagas (حماسه‌ها) که Orders (سفارش‌ها) را به‌روزرسانی می‌کنند، مانند Create Order Saga (حماسه ایجاد سفارش)، با تنظیم state (وضعیت) یک Order (سفارش) به *_PENDING شروع می‌شوند. state (وضعیت) *_PENDING به سایر transactions (تراکنش‌ها) می‌گوید که Order (سفارش) توسط یک saga (حماسه) در حال به‌روزرسانی است و بر این اساس عمل کنند.</p>
+  <p>استفاده Order (سفارش) از states (حالت‌های) *_PENDING نمونه‌ای از چیزی است که مقاله 1998 «Seman-tic ACID properties (ویژگی‌های اتمی، سازگاری، انزوا، پایداری معنایی) در multidatabases (چند پایگاه داده) با استفاده از remote procedure calls (فراخوانی رویه‌ای از راه دور) و update prop-agations (انتشار به‌روزرسانی‌ها)» توسط Lars Frank (لارس فرانک) و Torben U. Zahle (توربن یو. زاله) آن را یک semantic lock countermeasure (اقدام متقابل قفل معنایی) می‌نامد (https://dl.acm.org/citation.cfm?id=284472.284478). این مقاله نحوه برخورد با فقدان isolation (انزوا) transaction (تراکنش) در architectures (معماری‌های) multi-database (چند پایگاه داده) را که از distributed transactions (تراکنش‌های توزیع شده) استفاده نمی‌کنند، شرح می‌دهد. بسیاری از ایده‌های آن هنگام طراحی sagas (حماسه‌ها) مفید هستند. این مقاله مجموعه‌ای از countermeasures (اقدامات متقابل) را برای رسیدگی به anomalies (ناهنجاری‌ها) ناشی از فقدان isolation (انزوا) توضیح می‌دهد که یا از یک یا چند anomaly (ناهنجاری) جلوگیری می‌کنند یا تأثیر آنها را بر business (تجارت) به حداقل می‌رسانند. countermeasures (اقدامات متقابل) شرح داده شده در این مقاله به شرح زیر است:</p>
+  <ul>
+   <li>Semantic lock (قفل معنایی) - یک lock (قفل) در سطح application (برنامه).</li>
+   <li>Commutative updates (به‌روزرسانی‌های جابجایی) - طراحی operations (عملیات‌های) به‌روزرسانی برای اجرا به هر ترتیبی.</li>
+   <li>Pessimistic view (دیدگاه بدبینانه) - reorder (تغییر ترتیب) مراحل یک saga (حماسه) برای به حداقل رساندن ریسک business (تجاری).</li>
+   <li>Reread value (مقدار دوباره خوانده شده) - جلوگیری از dirty writes (نوشتن‌های کثیف) با rereading (دوباره خواندن) داده‌ها برای تأیید اینکه قبل از بازنویسی، بدون تغییر باقی مانده است.</li>
+   <li>Version file (فایل نسخه) - به‌روزرسانی‌ها را در یک record (رکورد) ثبت کنید تا بتوانند reorder (تغییر ترتیب) شوند.</li>
+   <li>By value (با مقدار) - از ریسک business (تجاری) هر request (درخواست) برای انتخاب پویا mechanism (مکانیسم) concurrency (همزمانی) استفاده کنید.</li>
+  </ul>
+  <p>در ادامه این بخش، من هر یک از این countermeasures (اقدامات متقابل) را شرح می‌دهم، اما ابتدا می‌خواهم اصطلاحاتی را برای توصیف ساختار یک saga (حماسه) معرفی کنم که هنگام بحث در مورد countermeasures (اقدامات متقابل) مفید است.</p>
+  <p>THE STRUCTURE OF A SAGA (ساختار یک حماسه)</p>
+  <p>مقاله countermeasures (اقدامات متقابل) که در بخش آخر ذکر شد، یک model (مدل) مفید برای ساختار یک saga (حماسه) تعریف می‌کند. در این model (مدل)، که در شکل 4.8 نشان داده شده است، یک saga (حماسه) از سه نوع transactions (تراکنش‌ها) تشکیل شده است:</p>
+  <ul>
+   <li>Compensatable transactions (تراکنش‌های قابل جبران) - تراکنش‌هایی که به طور بالقوه می‌توانند با استفاده از یک compensating transaction (تراکنش جبرانی) بازگردانده شوند.</li>
+   <li>Pivot transaction (تراکنش محوری) - نقطه go/no-go (برو/نرو) در یک saga (حماسه). اگر pivot transaction (تراکنش محوری) commit (تعهد) شود، saga (حماسه) تا تکمیل اجرا می‌شود. یک pivot transaction (تراکنش محوری) می‌تواند یک transaction (تراکنشی) باشد که نه قابل جبران است و نه قابل بازیابی. از طرف دیگر، می‌تواند آخرین transaction (تراکنش) قابل جبران یا اولین transaction (تراکنش) retriable (قابل تلاش مجدد) باشد.</li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

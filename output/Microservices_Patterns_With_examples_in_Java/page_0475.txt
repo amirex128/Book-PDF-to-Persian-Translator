@@ -1,0 +1,45 @@
+445
+Designing how the service and the monolith collaborate
+The monolith’s business logic invokes this API without knowing how it’s implemented
+by the integration glue.
+ Now that we’ve seen interface design, let’s look at interaction styles and IPC
+mechanisms. 
+PICKING AN INTERACTION STYLE AND IPC MECHANISM
+An important design decision you must make when designing the integration glue is
+selecting the interaction styles and IPC mechanisms that enable the service and the
+monolith to collaborate. As described in chapter 3, there are several interaction
+styles and IPC mechanisms to choose from. Which one you should use depends on
+what one party—the service or monolith—needs in order to query or update the
+other party.
+ If one party needs to query data owned by the other party, there are several
+options. One option is, as figure 13.9 shows, for the adapter that implements the
+repository interface to invoke an API of the data provider. This API will typically use a
+request/response interaction style, such as REST or gRPC. For example, Delayed
+Delivery Service might retrieve the customer contact info by invoking a REST API
+implemented by the FTGO monolith.
+In this example, the Delayed Delivery Service’s domain logic retrieves the customer
+contact info by invoking the CustomerContactInfoRepository interface. The imple-
+mentation of this interface invokes the monolith’s REST API.
+ An important benefit of querying data by invoking a query API is its simplicity. The
+main drawback is that it’s potentially inefficient. A consumer might need to make a
+large number of requests. A provider might return a large amount of data. Another
+drawback is that it reduces availability because it’s synchronous IPC. As a result, it
+might not be practical to use a query API.
+Delayed
+Delivery Service
+Customer
+ContactInfo
+Repository
+GET/customers/{customerId}
+FTGO
+monolith
+Monolith
+database
+REST
+API
+REST
+client
+Figure 13.9
+The adapter that implements the CustomerContactInfoRepository interface invokes the 
+monolith’s REST API to retrieve the customer information.
+ 

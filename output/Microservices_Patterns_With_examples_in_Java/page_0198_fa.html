@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 198</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 5: طراحی منطق کسب‌وکار در معماری microservice</strong></h3>
+  <pre><code class="language-java">.build();
+}
+public void reviseMenu(DomainEventEnvelope&lt;RestaurantMenuRevised&gt; de) {
+long id = Long.parseLong(de.getAggregateId());
+RestaurantMenu revisedMenu = de.getEvent().getRevisedMenu();
+restaurantService.reviseMenu(id, revisedMenu);
+}
+</code></pre>
+  <p>
+   method به نام reviseMenu()، events به نام RestaurantMenuRevised را handle می‌کند. این restaurantService.reviseMenu() را فراخوانی می‌کند، که menu رستوران را update می‌کند. آن method یک list از domain events را برمی‌گرداند که توسط event handler منتشر می‌شوند.
+  </p>
+  <p>
+   اکنون که ما به aggregates و domain events نگاهی انداختیم، زمان آن رسیده است که به برخی از business logicهای مثال که با استفاده از aggregates پیاده‌سازی شده‌اند، بپردازیم.
+  </p>
+  <h4><strong style="color:darkblue">5.4: منطق کسب‌وکار Kitchen Service</strong></h4>
+  <p>
+   اولین مثال، Kitchen Service است که به یک رستوران این امکان را می‌دهد تا orders خود را مدیریت کند. دو aggregate اصلی در این service، aggregates به نام Restaurant و Ticket هستند. Restaurant aggregate، menu و ساعات کاری رستوران را می‌داند و می‌تواند orders را اعتبار سنجی کند. یک Ticket نشان‌دهنده یک order است که یک رستوران باید آن را برای تحویل توسط پیک آماده کند. شکل 5.11 این aggregates و سایر بخش‌های کلیدی از business logic از service و همچنین adapters از service را نشان می‌دهد.
+  </p>
+  <p>
+   علاوه بر aggregates، سایر بخش‌های اصلی از business logic در Kitchen Service عبارتند از KitchenService، TicketRepository و RestaurantRepository. KitchenService، ورودی business logic است. این methods را برای ایجاد و update کردن aggregates به نام Restaurant و Ticket تعریف می‌کند. TicketRepository و RestaurantRepository methods را برای persist کردن Tickets و Restaurants به ترتیب تعریف می‌کنند.
+  </p>
+  <p>
+   The Kitchen Service service دارای سه inbound adapter است:
+  </p>
+  <ul>
+   <li>
+    REST API—The REST API که توسط user interface استفاده شده توسط کارگران در رستوران فراخوانی می‌شود. این KitchenService را برای ایجاد و update کردن Tickets فراخوانی می‌کند.
+   </li>
+   <li>
+    KitchenServiceCommandHandler—The asynchronous request/response-based API که توسط sagas فراخوانی می‌شود. این KitchenService را برای ایجاد و update کردن Tickets فراخوانی می‌کند.
+   </li>
+   <li>
+    KitchenServiceEventConsumer—به events منتشر شده توسط Restaurant Service مشترک می‌شود. این KitchenService را برای ایجاد و update کردن Restaurants فراخوانی می‌کند.
+   </li>
+  </ul>
+  <p>
+   The service همچنین دارای دو outbound adapter است:
+  </p>
+  <ul>
+   <li>
+    DB adapter—The TicketRepository و interfaces به نام RestaurantRepository را پیاده‌سازی می‌کند و به database دسترسی دارد.
+   </li>
+   <li>
+    DomainEventPublishingAdapter—The DomainEventPublisher interface را پیاده‌سازی می‌کند و domain events از نوع Ticket را منتشر می‌کند.
+   </li>
+  </ul>
+  <p>
+   An event handler for the
+   <br>
+   RestaurantMenuRevised
+   <br>
+   event
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

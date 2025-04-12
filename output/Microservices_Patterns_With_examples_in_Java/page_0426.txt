@@ -1,0 +1,65 @@
+396
+CHAPTER 12
+Deploying microservices
+FROM openjdk:8u171-jre-alpine
+RUN apk --no-cache add curl
+  
+CMD java ${JAVA_OPTS} -jar ftgo-restaurant-service.jar
+  
+HEALTHCHECK --start-period=30s --
+interval=5s CMD curl http://localhost:8080/actuator/health || exit 1      
+COPY build/libs/ftgo-restaurant-service.jar .
+  
+The base image openjdk:8u171-jre-alpine is a minimal footprint Linux image con-
+taining the JRE. The Dockerfile copies the service’s JAR into the image and config-
+ures the image to execute the JAR on startup. It also configures Docker to periodically
+invoke the health check endpoint, described in chapter 11. The HEALTHCHECK direc-
+tive says to invoke the health check endpoint API, described in chapter 11, every 5 sec-
+onds after an initial 30-second delay, which gives the service time to start.
+ Once you’ve written the Dockerfile, you can then build the image. The following
+listing shows the shell commands to build the image for Restaurant Service. The
+script builds the service’s JAR file and executes the docker build command to create
+the image.
+cd ftgo-restaurant-service
+../gradlew assemble
+  
+docker build -t ftgo-restaurant-service .
+  
+The docker build command has two arguments: the -t argument specifies the name
+of the image, and the . specifies what Docker calls the context. The context, which in
+this example is the current directory, consists of Dockerfile and the files used to
+build the image. The docker build command uploads the context to the Docker dae-
+mon, which builds the image. 
+PUSHING A DOCKER IMAGE TO A REGISTRY
+The final step of the build process is to push the newly built Docker image to what is
+known as a registry. A Docker registry is the equivalent of a Java Maven repository for
+Java libraries, or a NodeJS npm registry for NodeJS packages. Docker hub is an exam-
+ple of a public Docker registry and is equivalent to Maven Central or NpmJS.org. But
+for your applications you’ll probably want to use a private registry provided by ser-
+vices, such as Docker Cloud registry or AWS EC2 Container Registry.
+ You must use two Docker commands to push an image to a registry. First, you use
+the docker tag command to give the image a name that’s prefixed with the hostname
+Listing 12.1
+The Dockerfile used to build Restaurant Service
+Listing 12.2
+The shell commands used to build the container image for 
+Restaurant Service
+The base image
+Install curl for 
+use by the 
+health check.
+Configure Docker 
+to run java -jar .. 
+when the container 
+is started.
+Configure Docker to
+invoke the health
+check endpoint.
+Copies the JAR in Gradle’s build
+directory into the image
+Change to the 
+service’s directory.
+Build the 
+service’s JAR.
+Build the image.
+ 

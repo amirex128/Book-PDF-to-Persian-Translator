@@ -1,0 +1,43 @@
+235
+Using the CQRS pattern
+types—not just a text search engine. Also, CQRS query-side views are updated in near
+real time by subscribing to events.
+ Let’s now look at the benefits and drawbacks of CQRS. 
+7.2.3
+The benefits of CQRS
+CQRS has both benefits and drawbacks. The benefits are as follows:
+Enables the efficient implementation of queries in a microservice architecture
+Enables the efficient implementation of diverse queries
+Makes querying possible in an event sourcing-based application
+Improves separation of concerns
+ENABLES THE EFFICIENT IMPLEMENTATION OF QUERIES IN A MICROSERVICE ARCHITECTURE
+One benefit of the CQRS pattern is that it efficiently implements queries that retrieve
+data owned by multiple services. As described earlier, using the API composition pat-
+tern to implement queries sometimes results in expensive, inefficient in-memory joins
+of large datasets. For those queries, it’s more efficient to use an easily queried CQRS
+view that pre-joins the data from two or more services.
+ENABLES THE EFFICIENT IMPLEMENTATION OF DIVERSE QUERIES
+Another benefit of CQRS is that it enables an application or service to efficiently
+implement a diverse set of queries. Attempting to support all queries using a single
+persistent data model is often challenging and in some cases impossible. Some
+NoSQL databases have very limited querying capabilities. Even when a database has
+extensions to support a particular kind of query, using a specialized database is often
+more efficient. The CQRS pattern avoids the limitations of a single datastore by defin-
+ing one or more views, each of which efficiently implements specific queries. 
+ENABLES QUERYING IN AN EVENT SOURCING-BASED APPLICATION
+CQRS also overcomes a major limitation of event sourcing. An event store only sup-
+ports primary key-based queries. The CQRS pattern addresses this limitation by defin-
+ing one or more views of the aggregates, which are kept up-to-date, by subscribing to
+the streams of events that are published by the event sourcing-based aggregates. As a
+result, an event sourcing-based application invariably uses CQRS. 
+IMPROVES SEPARATION OF CONCERNS
+Another benefit of CQRS is that it separates concerns. A domain model and its corre-
+sponding persistent data model don’t handle both commands and queries. The CQRS
+pattern defines separate code modules and database schemas for the command and
+query sides of a service. By separating concerns, the command side and query side are
+likely to be simpler and easier to maintain.
+ Moreover, CQRS enables the service that implements a query to be different than
+the service that owns the data. For example, earlier I described how even though
+Restaurant Service owns the data that’s queried by the findAvailableRestaurants
+query operation, it makes sense for another service to implement such a critical,
+ 

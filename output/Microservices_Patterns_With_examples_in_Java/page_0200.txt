@@ -1,0 +1,46 @@
+170
+CHAPTER 5
+Designing business logic in a microservice architecture
+STRUCTURE OF THE TICKET CLASS
+The following listing shows an excerpt of the code for this class. The Ticket class is
+similar to a traditional domain class. The main difference is that references to other
+aggregates are by primary key.
+@Entity(table="tickets")
+public class Ticket {
+@Id
+private Long id;
+private TicketState state;
+private Long restaurantId;
+@ElementCollection
+@CollectionTable(name="ticket_line_items")
+private List<TicketLineItem> lineItems;
+private ZonedDateTime readyBy;
+private ZonedDateTime acceptTime;
+private ZonedDateTime preparingTime;
+private ZonedDateTime pickedUpTime;
+private ZonedDateTime readyForPickupTime;
+...
+This class is persisted with JPA and is mapped to the TICKETS table. The restaurantId
+field is a Long rather than an object reference to a Restaurant. The readyBy field
+stores the estimate of when the order will be ready for pickup. The Ticket class has
+several fields that track the history of the order, including acceptTime, preparing-
+Time, and pickupTime. Let’s look at this class’s methods. 
+BEHAVIOR OF THE TICKET AGGREGATE
+The Ticket aggregate defines several methods. As you saw earlier, it has a static create()
+method, which is a factory method that creates a Ticket. There are also some meth-
+ods that are invoked when the restaurant updates the state of the order:
+
+accept()—The restaurant has accepted the order.
+
+preparing()—The restaurant has started preparing the order, which means the
+order can no longer be changed or cancelled.
+
+readyForPickup()—The order can now be picked up.
+The following listing shows some of its methods.
+ 
+ 
+ 
+ 
+Listing 5.10
+Part of the Ticket class, which is a JPA entity
+ 

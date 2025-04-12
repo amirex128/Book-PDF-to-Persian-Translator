@@ -1,0 +1,71 @@
+174
+CHAPTER 5
+Designing business logic in a microservice architecture
+and Restaurants. OrderRepository defines methods for persisting Orders, and
+RestaurantRepository has methods for persisting Restaurants. Order Service has
+several inbound adapters:
+
+REST API—The REST API invoked by the user interface used by consumers. It
+invokes OrderService to create and update Orders.
+Restaurant Events
+channel
+Order Service
+command channel
+Consumer Service
+command channel
+Kitchen Service
+command channel
+Accounting Service
+command channel
+Create order saga
+reply channel
+Cancel order saga
+reply channel
+Revise order saga
+reply channel
+Ticket events
+channel
+createOrder()
+cancelOrder()
+reviseOrder()
+REST API
+Consumer
+OrderService
+Domain event
+publisher
+Command
+producer
+«aggregate»
+Restaurant
+«aggregate»
+Order
+«repository»
+OrderRepository
+«repository»
+Restaurant
+Repository
+OrderEvent
+consumer
+Order
+command
+handlers
+SagaReply
+message
+adapter
+Database
+adapter
+Outbound
+command
+message
+adapter
+«saga»
+*OrderSaga
+Order Service
+database
+Domain event
+publishing
+adapter
+Figure 5.12
+The design of the Order Service. It has a REST API for managing orders. It exchanges messages 
+and events with other services via several message channels.
+ 

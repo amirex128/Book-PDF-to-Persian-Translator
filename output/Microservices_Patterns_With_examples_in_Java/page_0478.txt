@@ -1,0 +1,46 @@
+448
+CHAPTER 13
+Refactoring to microservices
+ An event subscriber, which consumes domain events, also has an ACL. Domain
+events are part of the publisher’s domain model. An event handler must translate
+domain events to the subscriber’s domain model. For example, as figure 13.12 shows,
+the FTGO monolith publishes Order domain events. Delivery Service has an event
+handler that subscribes to those events.
+The event handler must translate domain events from the monolith’s domain lan-
+guage to that of Delivery Service. It might need to map class and attribute names
+and potentially attribute values.
+ It’s not just services that use an anti-corruption layer. A monolith also uses an ACL
+when invoking the service and when subscribing to domain events published by a ser-
+vice. For example, the FTGO monolith schedules a delivery by sending a notification
+message to Delivery Service. It sends the notification by invoking a method on the
+DeliveryService interface. The implementation class translates its parameters into a
+message that Delivery Service understands. 
+HOW THE MONOLITH PUBLISHES AND SUBSCRIBES TO DOMAIN EVENTS
+Domain events are an important collaboration mechanism. It’s straightforward for a
+newly developed service to publish and consume events. It can use one of the mech-
+anisms described in chapter 3, such as the Eventuate Tram framework. A service
+might even publish events using event sourcing, described in chapter 6. It’s poten-
+tially challenging, though, to change the monolith to publish and consume events.
+Let’s look at why.
+ There are a couple of different ways that a monolith can publish domain events.
+One approach is to use the same domain event publishing mechanism used by the
+Delayed
+Delivery
+Service
+FTGO
+monolith
+Event handler
+Translation layer
+Messaging client
+Ubiquitous language of service
+Ubiquitous language of monolith
+Anti-corruption layer
+Event channel
+Order
+event
+Event
+publisher
+Figure 13.12
+An event handler must translate from the event publisher’s domain model to the subscriber’s domain 
+model.
+ 

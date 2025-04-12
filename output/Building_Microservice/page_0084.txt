@@ -1,0 +1,41 @@
+and the warehouse need to know something about our customer. Finance needs to
+know about the financial payments made to a customer, whereas the warehouse
+needs to know about the customer to the extent that it knows what packages have
+been sent so as to allow for deliveries to be traced.
+When you have a situation like this, a shared model like customer can have different
+meanings in the different bounded contexts and therefore might be called different
+things. We might be happy to keep the name “customer” in finance, but in the ware‐
+house we might call them a “recipient,” as that is the role they play in that context.
+We store information about the customer in both locations, but the information is
+different. Finance stores information about the customer’s financial payments (or
+refunds); the warehouse stores information related to the goods shipped. We still
+may need to link both local concepts to a global customer, and we may want to look
+up common, shared information about that customer like their name or email
+address—we could use a technique like that shown in Figure 2-13 to achieve this.
+Mapping Aggregates and Bounded Contexts to Microservices
+Both the aggregate and the bounded context give us units of cohesion with well-
+defined interfaces with the wider system. The aggregate is a self-contained state
+machine that focuses on a single domain concept in our system, with the bounded
+context representing a collection of associated aggregates, again with an explicit
+interface to the wider world.
+Both can therefore work well as service boundaries. When starting out, as I’ve already
+mentioned, you want to reduce the number of services you work with. As a result,
+you should probably target services that encompass entire bounded contexts. As you
+find your feet and decide to break these services into smaller services, you need to
+remember that aggregates themselves don’t want to be split apart—one microservice
+can manage one or more aggregates, but we don’t want one aggregate to be managed
+by more than one microservice.
+Turtles all the way down
+At the start, you will probably identify a number of coarse-grained bounded contexts.
+But these bounded contexts can in turn contain further bounded contexts. For exam‐
+ple, you could decompose the warehouse into capabilities associated with order ful‐
+fillment, inventory management, or goods receiving. When considering the
+boundaries of your microservices, first think in terms of the larger, coarser-grained
+contexts, and then subdivide along these nested contexts when you’re looking for the
+benefits of splitting out these seams.
+A trick here is that even if you decide to split a service that models an entire bounded
+context into smaller services later on, you can still hide this decision from the outside
+world—perhaps by presenting a coarser-grained API to consumers. The decision to
+58 
+| 
+Chapter 2: How to Model Microservices

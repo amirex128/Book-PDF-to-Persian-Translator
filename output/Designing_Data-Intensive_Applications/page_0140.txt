@@ -1,0 +1,21 @@
+iii. Actually, it has three—BinaryProtocol, CompactProtocol, and DenseProtocol—although DenseProtocol
+is only supported by the C++ implementation, so it doesn’t count as cross-language [18]. Besides those, it also
+has two different JSON-based encoding formats [19]. What fun!
+The equivalent schema definition for Protocol Buffers looks very similar:
+message Person {
+    required string user_name       = 1;
+    optional int64  favorite_number = 2;
+    repeated string interests       = 3;
+}
+Thrift and Protocol Buffers each come with a code generation tool that takes a
+schema definition like the ones shown here, and produces classes that implement the
+schema in various programming languages [18]. Your application code can call this
+generated code to encode or decode records of the schema.
+What does data encoded with this schema look like? Confusingly, Thrift has two dif‐
+ferent binary encoding formats,iii called BinaryProtocol and CompactProtocol, respec‐
+tively. Let’s look at BinaryProtocol first. Encoding Example 4-1 in that format takes
+59 bytes, as shown in Figure 4-2 [19].
+Figure 4-2. Example record encoded using Thrift’s BinaryProtocol.
+118 
+| 
+Chapter 4: Encoding and Evolution

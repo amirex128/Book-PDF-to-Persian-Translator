@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 325</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Fencing tokens</h4>
+    <p>
+        هنگام استفاده از یک <em>lock</em> یا <em>lease</em> برای محافظت از دسترسی به برخی از <em>resource</em> ها، مانند <em>file storage</em> در شکل 8-4، ما باید اطمینان حاصل کنیم که یک node که تحت یک باور غلط از اینکه "انتخابی" است، نمی‌تواند بقیه system را مختل کند. یک تکنیک نسبتاً ساده که این هدف را محقق می‌کند، <em>fencing</em> نامیده می‌شود، و در شکل 8-5 نشان داده شده است.
+    </p>
+    <figure>
+        <img src="figure8-5.png" alt="Figure 8-5. Making access to storage safe by allowing writes only in the order of increasing fencing tokens.">
+        <figcaption>Figure 8-5. Making access to storage safe by allowing writes only in the order of increasing fencing tokens.</figcaption>
+    </figure>
+    <p>
+        بیایید فرض کنیم که هر بار سرور <em>lock</em> یک <em>lock</em> یا <em>lease</em> را اعطا می‌کند، یک <em>fencing token</em> نیز برمی‌گرداند، که عددی است که هر بار که یک <em>lock</em> اعطا می‌شود، افزایش می‌یابد (به عنوان مثال، توسط <em>lock service</em> افزایش می‌یابد). سپس ما می‌توانیم نیاز داشته باشیم که هر بار که یک client یک درخواست <em>write</em> را به <em>storage service</em> ارسال می‌کند، باید <em>fencing token</em> فعلی خود را شامل شود.
+    </p>
+    <p>
+        در شکل 8-5، client 1 <em>lease</em> را با یک <em>token</em> از 33 به دست می‌آورد، اما سپس به یک مکث طولانی می‌رود و <em>lease</em> منقضی می‌شود. Client 2، <em>lease</em> را با یک <em>token</em> از 34 (عدد همیشه افزایش می‌یابد) به دست می‌آورد و سپس درخواست <em>write</em> خود را به <em>storage service</em> ارسال می‌کند، که شامل <em>token</em> 34 است. بعداً، client 1 دوباره به زندگی بازمی‌گردد و <em>write</em> خود را به <em>storage service</em> ارسال می‌کند، که شامل مقدار <em>token</em> 33 است. با این حال، <em>storage server</em> به خاطر می‌آورد که قبلاً یک <em>write</em> را با یک شماره <em>token</em> بالاتر (34) پردازش کرده است، و بنابراین درخواست با <em>token</em> 33 را رد می‌کند.
+    </p>
+    <p>
+        اگر ZooKeeper به عنوان <em>lock service</em> استفاده شود، <em>transaction ID zxid</em> یا <em>the node version cversion</em> را می‌توان به عنوان <em>fencing token</em> استفاده کرد. از آنجایی که آنها تضمین می‌شوند که به طور <em>monotonically increasing</em> باشند، آنها دارای خواص مورد نیاز هستند [74].
+    </p>
+    <p>
+        توجه داشته باشید که این مکانیسم، نیاز دارد که خود <em>resource</em> یک نقش فعال در بررسی <em>tokens</em> داشته باشد با رد هر <em>writes</em> با یک <em>token</em> قدیمی‌تر از موردی که قبلاً پردازش شده است—اتکا به clients برای بررسی وضعیت <em>lock</em> خودشان کافی نیست.
+    </p>
+    <p>
+        برای <em>resources</em> هایی که صریحاً از <em>fencing tokens</em> پشتیبانی نمی‌کنند، شما هنوز هم ممکن است بتوانید از محدودیت‌ها استفاده کنید (به عنوان مثال، در مورد یک <em>file storage service</em> می‌توانید <em>fencing token</em> را در نام فایل قرار دهید). با این حال، برای جلوگیری از پردازش درخواست‌ها در خارج از حفاظت از <em>lock</em>، برخی از انواع بررسی ضروری است.
+        <br>
+        Knowledge, Truth, and Lies
+        <br>
+        |
+        <br>
+        303
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0325/image_1.png" alt="Image from page 325" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

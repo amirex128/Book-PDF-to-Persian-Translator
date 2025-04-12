@@ -1,0 +1,39 @@
+Bounded Context
+A bounded context typically represents a larger organizational boundary. Within the
+scope of that boundary, explicit responsibilities need to be carried out. That’s all a bit
+woolly, so let’s look at another specific example.
+At MusicCorp, our warehouse is a hive of activity—managing orders being shipped
+out (and the odd return), taking delivery of new stock, having forklift truck races, and
+so on. Elsewhere, the finance department is perhaps less fun-loving but still has an
+important function inside our organization, handling payroll, paying for shipments,
+and the like.
+Bounded contexts hide implementation detail. There are internal concerns—for
+example, the types of forklift trucks used are of little interest to anyone other than the
+folks in the warehouse. These internal concerns should be hidden from the outside
+world, which doesn’t need to know, nor should it care.
+From an implementation point of view, bounded contexts contain one or more
+aggregates. Some aggregates may be exposed outside the bounded context; others
+may be hidden internally. As with aggregates, bounded contexts may have relation‐
+ships with other bounded contexts—when mapped to services, these dependencies
+become inter-service dependencies.
+Let’s return for a moment to the MusicCorp business. Our domain is the whole busi‐
+ness in which we are operating. It covers everything from the warehouse to the recep‐
+tion desk, from finance to ordering. We may or may not model all of that in our
+software, but that is nonetheless the domain in which we are operating. Let’s think
+about parts of that domain that look like the bounded contexts to which Eric Evans
+refers.
+Hidden models
+For MusicCorp, we can consider the finance department and the warehouse to be
+two separate bounded contexts. They both have an explicit interface to the outside
+world (in terms of inventory reports, pay slips, etc.), and they have details that only
+they need to know about (forklift trucks, calculators).
+The finance department doesn’t need to know about the detailed inner workings of
+the warehouse. It does need to know some things, however; for example, it needs to
+know about stock levels to keep the accounts up to date. Figure 2-14 shows an exam‐
+ple context diagram. We see concepts that are internal to the warehouse, like a picker
+(someone who picks orders), shelves that represent stock locations, and so on. Like‐
+wise, entries in the general ledger are integral to finance but are not shared externally
+here.
+56 
+| 
+Chapter 2: How to Model Microservices

@@ -1,0 +1,41 @@
+faster approach to start with. My concerns about the complexity of implementation
+extend to event sourcing—there are some situations it fits really well, but it comes
+with a host of headaches that need to be accommodated. Both patterns require quite a
+shift in thinking for developers, which always makes things more challenging. If you
+decide to use either of these patterns, just make sure this increased cognitive load on
+your developers is worth it.
+One final note on CQRS and event sourcing: from the point of view of a microservice
+architecture, the decision to use or not use these techniques is an internal implemen‐
+tation detail of a microservice. If you’ve decided to implement a microservice by split‐
+ting responsibility for reads and writes across different processes and models, for
+example, this should be invisible to consumers of the microservice. If inbound
+requests need to be redirected to the appropriate model based on the request being
+made, make this the responsibility of the microservice implementing CQRS. Keeping
+these implementation details hidden from consumers gives you a lot of flexibility to
+change your mind later, or to change how you are using these patterns.
+Caching
+Caching is a commonly used performance optimization whereby the previous result
+of some operation is stored so that subsequent requests can use this stored value
+rather than spending time and resources recalculating the value.
+As an example, consider a Recommendation microservice that needs to check stock
+levels before recommending an item—there isn’t any point in recommending some‐
+thing we don’t have in stock! But we’ve decided to keep a local copy of stock levels in
+Recommendation (a form of client-side caching) to improve the latency of our opera‐
+tions—we avoid the need to check stock levels whenever we need to recommend
+something. The source of truth for stock levels is the Inventory microservice, which
+is considered to be the origin for the client cache in the Recommendation microser‐
+vice. When Recommendation needs to look up a stock level, it can first look in its local
+cache. If the entry it needs is found, this is considered a cache hit. If the data is not
+found, it’s a cache miss, which results in the need to fetch information from the
+downstream Inventory microservice. As the data in the origin can of course change,
+we need some way to invalidate entries in Recommendation’s cache so we know when
+the locally cached data is so out of date that it can no longer be used.
+Caches can store the results of simple lookups, as in this example, but really they can
+store any piece of data, such as the result of a complex calculation. We can cache to
+help improve the performance of our system as part of helping reduce latency, to
+scale our application, and in some cases even to improve the robustness of our sys‐
+tem. Taken together with the fact that there are a number of invalidation mechanisms
+we could use, and multiple places where we can cache, it means we have a lot of
+Caching 
+| 
+435

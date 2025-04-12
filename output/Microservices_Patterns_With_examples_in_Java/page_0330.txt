@@ -1,0 +1,61 @@
+300
+CHAPTER 9
+Testing microservices: Part 1
+Other services interact through request/asynchronous reply or publish/subscribe
+using asynchronous messaging. For instance, figure 9.6 shows how some of the ser-
+vices in the FTGO application communicate. Each arrow points from a consumer ser-
+vice to a producer service.
+The arrow points in the direction of the dependency, from the consumer of the API
+to the provider of the API. The assumptions that a consumer makes about an API
+depend on the nature of the interaction:
+REST client  service—The API gateway routes requests to services and imple-
+ments API composition.
+Domain event consumer  publisher—Order History Service consumes events pub-
+lished by Order Service.
+Command message requestor  replier—Order Service sends command messages
+to various services and consumes the replies.
+REST client
+REST service
+Key
+Subscriber
+Domain event
+publisher
+(Command message)
+requestor
+Replier
+E
+E
+E
+E
+E
+C
+C
+C
+C
+Restaurant
+Service
+Consumer
+Service
+Order History
+Service
+Delivery
+Service
+API
+gateway
+Invokes services
+using HTTP
+Subscribes to
+order* events
+Order Service saga
+sends commands
+to various services.
+Accounting
+Service
+Order
+Service
+Kitchen
+Service
+Figure 9.6
+Some of the interservice communication in the FTGO application. Each arrow points 
+from a consumer service to a producer service.
+ 

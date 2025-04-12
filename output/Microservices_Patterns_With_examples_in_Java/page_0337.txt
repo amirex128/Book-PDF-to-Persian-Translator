@@ -1,0 +1,48 @@
+307
+Writing unit tests for a service
+product would release the new version of the service. Later on, the released services
+would be packaged into a product release and shipped to customers.
+ Now that we’ve looked at the organization of the deployment pipeline and when it
+executes the different types of tests, let’s head to the bottom of the test pyramid and
+look at how to write unit tests for a service. 
+9.2
+Writing unit tests for a service
+Imagine that you want to write a test that verifies that the FTGO application’s Order
+Service correctly calculates the subtotal of an Order. You could write tests that run
+Order Service, invoke its REST API to create an Order, and check that the HTTP
+response contains the expected values. The drawback of this approach is that not only
+is the test complex, it’s also slow. If these tests were the compile-time tests for the
+Order class, you’d waste a lot of time waiting for it to finish. A much more productive
+approach is to write unit tests for the Order class.
+ As figure 9.10 shows, unit tests are the lowest level of the test pyramid. They’re
+technology-facing tests that support development. A unit test verifies that a unit, which
+is a very small part of a service, works correctly. A unit is typically a class, so the goal of
+unit testing is to verify that it behaves as expected.
+End-to-end
+Component
+Integration
+Unit
+Stub/mock
+dependency 1
+Stub/mock
+dependency 2
+Stub/mock
+dependency
+...
+Dependency 1
+Dependency 2
+Dependency
+...
+Solitary
+unit test
+Tests
+Class
+Social
+unit test
+Tests
+Class
+Figure 9.10
+Unit tests are the base of the pyramid. They’re fast running, easy to write, and reliable. 
+A solitary unit test tests a class in isolation, using mocks or stubs for its dependencies. A sociable 
+unit test tests a class and its dependencies.
+ 

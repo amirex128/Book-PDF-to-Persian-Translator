@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 449</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>12.5.5 Drawbacks of using lambda functions</strong></h3>
+  <p>همانطور که مشاهده می‌کنید، AWS Lambda یک روش بسیار مناسب برای deploy کردن services است، اما
+  دارای محدودیت‌ها و معایب قابل توجهی است:</p>
+  <ul>
+   <li>
+    <strong>Long-tail latency</strong>—از آنجایی که AWS Lambda به صورت پویا کد شما را اجرا می‌کند، برخی
+    requestsها دارای latency بالایی هستند، زیرا مدتی طول می‌کشد تا AWS یک instance از
+    application شما را فراهم کند و application شروع به کار کند. این امر به ویژه زمانی چالش برانگیز است که
+    services مبتنی بر Java اجرا می‌شوند، زیرا معمولاً حداقل چند ثانیه طول می‌کشد تا شروع شوند. به عنوان
+    مثال، lambda function نمونه‌ای که در بخش بعدی توضیح داده شده است، مدتی طول می‌کشد تا راه‌اندازی شود. در نتیجه، AWS Lambda ممکن است برای servicesهایی که به latency حساس هستند، مناسب نباشد.
+   </li>
+   <li>
+    <strong>Limited event/request-based programming model</strong>—AWS Lambda برای
+    deploy کردن servicesهای طولانی مدت، مانند serviceای که messages را از یک third-party message broker دریافت می‌کند، در نظر گرفته نشده است.
+   </li>
+  </ul>
+  <p>به دلیل این معایب و محدودیت‌ها، AWS Lambda برای همه servicesها مناسب نیست. اما هنگام انتخاب یک deployment pattern، توصیه می‌کنم ابتدا ارزیابی کنید که آیا deployment serverless از requirementsهای service شما پشتیبانی می‌کند یا خیر، قبل از اینکه جایگزین‌ها را در نظر بگیرید.</p>
+  <h3><strong>12.6 Deploying a RESTful service using AWS Lambda و AWS Gateway</strong></h3>
+  <p>بیایید نگاهی به نحوه deploy کردن Restaurant Service با استفاده از AWS Lambda بیندازیم. این یک ser-
+  vice است که دارای یک REST API برای ایجاد و مدیریت restaurants است. به عنوان مثال، اتصالات طولانی مدتی به Apache Kafka ندارد، بنابراین برای AWS lambda مناسب است. Fig-
+  ure 12.13 معماری deployment را برای این service نشان می‌دهد. این service شامل
+  چندین lambda function است، یکی برای هر REST endpoint. یک AWS API Gateway مسئول
+  routing HTTP requests به lambda functions است.</p>
+  <p>
+   هر lambda function دارای یک request handler class است. ftgo-create-restaurant
+   lambda function، کلاس CreateRestaurantRequestHandler را فراخوانی می‌کند و ftgo-
+   find-restaurant lambda function، FindRestaurantRequestHandler را فراخوانی می‌کند. از آنجایی که
+   این request handler classes جنبه‌های مرتبط با service را پیاده‌سازی می‌کنند،
+   آنها در یک فایل ZIP به نام restaurant-service-aws-lambda
+   .zip بسته‌بندی شده‌اند. بیایید نگاهی به طراحی service، از جمله آن handler classes بیندازیم.
+  </p>
+  <h3><strong>12.6.1 The design of the AWS Lambda version of Restaurant Service</strong></h3>
+  <p>معماری service، که در شکل 12.14 نشان داده شده است، بسیار شبیه به یک service سنتی است.
+  تفاوت اصلی این است که Spring MVC controllersها با AWS Lambda request handler classes جایگزین شده‌اند. بقیه منطق business بدون تغییر باقی مانده است.</p>
+  <p>
+   این service از یک presentation tier متشکل از request handlers تشکیل شده است که
+   توسط AWS Lambda برای handle کردن HTTP requests فراخوانی می‌شوند، و یک business سنتی
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

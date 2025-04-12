@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 404</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   Metrics به طور دوره‌ای sample می‌شوند. A metric sample دارای سه property زیر است:
+  </p>
+  <p>
+   Name—The name از metric، مانند jvm_memory_max_bytes یا placed_orders
+  </p>
+  <p>
+   Value—A numeric value
+  </p>
+  <p>
+   Timestamp—The time از sample
+  </p>
+  <p>
+   In addition، برخی از monitoring systems از مفهوم dimensions پشتیبانی می‌کنند، که
+   arbitrary name-value pairs هستند. For example, jvm_memory_max_bytes با dimen-
+   sions مانند area="heap",id="PS Eden Space" و area="heap",id="PS Old Gen" گزارش می‌شود.
+  </p>
+  <p>
+   Dimensions اغلب برای ارائه اطلاعات اضافی، مانند machine استفاده می‌شود
+   name یا service name، یا یک service instance identifier. A monitoring system معمولاً
+   metric samples را در امتداد یک یا چند dimension جمع‌آوری (جمع یا میانگین‌گیری) می‌کند.
+  </p>
+  <p>
+   Many aspects از monitoring the responsibility از operations است. But a service
+   developer مسئول دو جنبه از metrics است. First, they must instrument their
+   service تا metrics را در مورد behavior خود جمع‌آوری کند. Second، آنها باید those را expose کنند
+   service metrics، به همراه metrics از JVM و the application framework، to
+   the metrics server.
+  </p>
+  <p>
+   Let’s first look at how a service collects metrics.
+  </p>
+  <h4><span style="font-weight: bold;">COLLECTING SERVICE-LEVEL METRICS</span></h4>
+  <p>
+   How much work شما نیاز دارید تا metrics را جمع‌آوری کنید به frameworks که بستگی دارد
+   application شما استفاده می‌کند و the metrics که می‌خواهید جمع‌آوری کنید. A Spring Boot-based service
+   می‌تواند، به عنوان مثال، gather (و expose) basic metrics، مانند JVM metrics، با شامل کردن
+   View
+   Notify
+   Metrics
+   Service
+   User
+   Service instance
+   Deployment infrastructure
+   Metrics sample:
+   name=cpu_percent
+   value=68
+   timestamp=34938934893
+   dimensions:
+   machine=node1
+   ...
+   Application framework
+   Language runtime
+   Application code
+   Metrics library
+   Visualization
+   Metrics
+   ingestion
+   Alerts
+   Metrics
+   database
+  </p>
+  <p>
+   Figure 11.14
+   Metrics در هر level از stack جمع‌آوری و در یک metrics service ذخیره می‌شوند، که
+   visualization و alerting را فراهم می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

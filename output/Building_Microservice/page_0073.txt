@@ -1,0 +1,27 @@
+in this way. Common coupling becomes more problematic, though, if the structure of
+the common data changes more frequently, or if multiple microservices are reading
+and writing to the same data.
+Figure 2-8 shows us a situation in which the Order Processor and Warehouse service
+are both reading and writing from a shared Order table to help manage the process of
+dispatching CDs to MusicCorp’s customers. Both microservices are updating the
+Status column. The Order Processor can set the PLACED, PAID, and COMPLETED sta‐
+tuses, whereas the Warehouse will apply PICKING or SHIPPED statuses.
+Figure 2-8. An example of common coupling in which both Order Processor and Ware
+house are updating the same order record
+Although you might consider Figure 2-8 to be somewhat contrived, this nonetheless
+straightforward example of common coupling helps illustrate a core problem. Con‐
+ceptually, we have both the Order Processor and Warehouse microservices manag‐
+ing different aspects of the life cycle of an order. When making changes in Order
+Processor, can I be sure that I am not changing the order data in such a way that it
+breaks Warehouse’s view of the world, or vice versa?
+One way to ensure that the state of something is changed in a correct fashion would
+be to create a finite state machine. A state machine can be used to manage the transi‐
+tion of some entity from one state to another, ensuring invalid state transitions are
+prohibited. In Figure 2-9, you can see the allowed transitions of state for an order in
+MusicCorp. An order can go directly from PLACED to PAID, but not straight from
+PLACED to PICKING (this state machine likely wouldn’t be sufficient for the real-world
+business processes involved in full end-to-end buying and shipping of goods, but I
+wanted to give a simple example to illustrate the idea).
+Types of Coupling 
+| 
+47

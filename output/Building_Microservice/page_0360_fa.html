@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 360</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>در سازمان تحویل، اینجاست که <em>product owner</em> (مالک محصول) باید وارد عمل شود—اما ممکن است وظیفه شما به عنوان اپراتور باشد که اطمینان حاصل کنید که بحث با <em>product owner</em> واقعاً انجام می‌شود.</p>
+    <p>هنگامی که در مورد مدل خود تصمیم گرفتید، سپس نوبت به این می‌رسد که بررسی کنید آیا رفتار سیستم فعلی با این مدل مطابقت دارد یا خیر. به طور کلی، ما دو روش اصلی برای انجام این کار داریم—<em>real user monitoring</em> (پایش کاربران واقعی) و <em>synthetic transactions</em> (تراکنش‌های مصنوعی). ما در لحظاتی به <em>synthetic transactions</em> نگاه خواهیم کرد، زیرا آنها تحت پوشش <em>testing in production</em> (تست در تولید) قرار می‌گیرند، اما بیایید ابتدا به <em>real user monitoring</em> نگاهی بیندازیم.</p>
+    <h4>Real user monitoring (پایش کاربران واقعی)</h4>
+    <p>با <em>real user monitoring</em>، ما به آنچه در سیستم تولیدی ما در حال وقوع است نگاه می‌کنیم و آن را با مدل معنایی خود مقایسه می‌کنیم. در <em>MusicCorp</em>، به تعداد مشتریانی که ثبت‌نام کرده‌اند، تعداد سفارشاتی که ارسال کرده‌ایم و غیره نگاه خواهیم کرد</p>
+    <p>چالش <em>real user monitoring</em> این است که اغلب اطلاعات مورد نیاز ما به موقع در دسترس ما نیست. انتظارات <em>MusicCorp</em> را در نظر بگیرید که باید حداقل 20000 دلار محصول در ساعت بفروشد. اگر این اطلاعات در جایی در یک <em>database</em> (پایگاه داده) قفل شده باشد، ممکن است نتوانیم این اطلاعات را جمع‌آوری کرده و بر اساس آن عمل کنیم. به همین دلیل است که ممکن است نیاز داشته باشید در معرض قرار دادن دسترسی به اطلاعاتی که قبلاً آنها را به عنوان معیارهای "تجاری" برای <em>tooling</em> (ابزارسازی) تولید خود در نظر می‌گرفتید، بهتر شوید. اگر می‌توانید یک نرخ <em>CPU</em> را به <em>metrics store</em> (مخزن معیارها) خود ارسال کنید، و این <em>metric store</em> می‌تواند برای هشدار در مورد این شرایط استفاده شود، پس چرا نمی‌توانید یک فروش و یک مقدار دلاری را در همین <em>store</em> ثبت کنید؟</p>
+    <p>یکی از معایب اصلی <em>real user monitoring</em> این است که اساساً پر سر و صدا است. شما مقدار زیادی اطلاعات دریافت می‌کنید—غربال کردن آنها برای فهمیدن اینکه آیا مشکلی وجود دارد یا خیر می‌تواند دشوار باشد. همچنین ارزش دارد بدانید که <em>real user monitoring</em> به شما می‌گوید که قبلاً چه اتفاقی افتاده است، و در نتیجه ممکن است یک مشکل را تا بعد از وقوع آن متوجه نشوید. اگر یک مشتری نتوانست ثبت‌نام کند، این یک مشتری ناراضی است. با <em>synthetic transactions</em>، نوع دیگری از <em>testing in production</em> که در لحظاتی به آن نگاه خواهیم کرد، ما این فرصت را داریم که نه تنها نویز را کاهش دهیم، بلکه مشکلات را قبل از اینکه کاربران ما از آنها آگاه شوند، شناسایی کنیم.</p>
+    <p><em>334 | Chapter 10: From Monitoring to Observability</em></p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

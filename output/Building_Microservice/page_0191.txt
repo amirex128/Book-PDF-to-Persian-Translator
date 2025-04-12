@@ -1,0 +1,42 @@
+In this chapter we’ve already briefly looked at the usefulness of a protocol like
+GraphQL to help us in a situation in which we need to make a number of calls and
+then aggregate and filter the results, but people are often tempted to solve this prob‐
+lem in API gateway layers too. It starts off innocently enough: you combine a couple
+of calls and return a single payload. Then you start making another downstream call
+as part of the same aggregated flow. Then you start wanting to add conditional logic,
+and before long you realize that you’ve baked core business processes into a third-
+party tool that is ill suited to the task.
+If you find yourself needing to do call aggregation and filtering, then look at the
+potential of GraphQL or the BFF pattern, which we’ll cover in Chapter 14. If the call
+aggregation you are performing is fundamentally a business process, then this is bet‐
+ter done through an explicitly modeled saga, which we’ll cover in Chapter 6.
+Aside from the aggregation angle, protocol rewriting is also often pushed as some‐
+thing API gateways should be used for. I remember one unnamed vendor very
+aggressively promoting the idea that its product could “change any SOAP API into a
+REST API.” Firstly, REST is an entire architectural mindset that cannot simply be
+implemented in a proxy layer. Secondly, protocol rewriting, which is fundamentally
+what this is trying to do, shouldn’t be done in intermediate layers, as it’s pushing too
+much behavior to the wrong place.
+The main problem with both the protocol rewriting capability and the implementa‐
+tion of call aggregation inside API gateways is that we are violating the rule of keep‐
+ing the pipes dumb, and the endpoints smart. The “smarts” in our system want to live
+in our code, where we can have full control over them. The API gateway in this
+example is a pipe—we want it as simple as possible. With microservices, we are push‐
+ing for a model in which changes can be made and more easily released through
+independent deployability. Keeping smarts in our microservices helps this. If we now
+also have to make changes in intermediate layers, things become more problematic.
+Given the criticality of API gateways, changes to them are often tightly controlled. It
+seems unlikely that individual teams will be given free rein to self-service change
+these often centrally managed services. What does that mean? Tickets. To roll out a
+change to your software, you end up having the API gateway team make changes for
+you. The more behavior you leak into API gateways (or into enterprise service buses),
+the more you run the risk of handoffs, increased coordination, and slowed delivery.
+The last issue is the use of an API gateway as an intermediary for all inter-
+microservice calls. This can be extremely problematic. If we insert an API gateway or
+a normal network proxy between two microservices, then we have normally added at
+least a single network hop. A call from microservice A to microservice B first goes
+from A to the API gateway and then from the API gateway to B. We have to consider
+the latency impact of the additional network call and the overhead of whatever the
+Service Meshes and API Gateways 
+| 
+165

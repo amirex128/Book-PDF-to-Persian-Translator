@@ -1,0 +1,51 @@
+286
+CHAPTER 8
+External API patterns
+when using the Apollo GraphQL server. You create a doubly nested JavaScript object.
+Each top-level property corresponds to an object type, such as Query and Order. Each
+second-level property, such as Order.consumer, defines a field’s resolver function.
+const resolvers = {
+Query: {
+orders: resolveOrders,
+consumer: resolveConsumer,
+order: resolveOrder
+},
+Order: {
+consumer: resolveOrderConsumer,
+  
+restaurant: resolveOrderRestaurant,
+deliveryInfo: resolveOrderDeliveryInfo
+...
+};
+A resolver function has three parameters:
+Object—For a top-level query field, such as resolveOrders, object is a root
+object that’s usually ignored by the resolver function. Otherwise, object is the
+value returned by the resolver for the parent object. For example, the resolver
+function for the Order.consumer field is passed the value returned by the Order’s
+resolver function.
+Query arguments—These are supplied by the query document.
+Context—Global state of the query execution that’s accessible by all resolvers. It’s
+used, for example, to pass user information and dependencies to the resolvers.
+A resolver function might invoke a single service or it might implement the API com-
+position pattern and retrieve data from multiple services. An Apollo GraphQL server
+resolver function returns a Promise, which is JavaScript’s version of Java’s Completable-
+Future. The promise contains the object (or a list of objects) that the resolver func-
+tion retrieved from the data store. GraphQL engine includes the return value in the
+result object.
+ Let’s look at a couple of examples. Here’s the resolveOrders() function, which is
+the resolver for the orders query:
+function resolveOrders(_, { consumerId }, context) {
+return context.orderServiceProxy.findOrders(consumerId);
+}
+This function obtains the OrderServiceProxy from the context and invokes it to
+fetch a consumer’s orders. It ignores its first parameter. It passes the consumerId argu-
+ment, provided by the query document, to OrderServiceProxy.findOrders(). The
+findOrders() method retrieves the consumer’s orders from OrderHistoryService.
+Listing 8.8
+Attaching the resolver functions to fields of the GraphQL schema
+The resolver for 
+the orders query
+The resolver for 
+the consumer field 
+of an Order
+ 

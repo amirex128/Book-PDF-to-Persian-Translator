@@ -1,0 +1,41 @@
+So for use at the perimeter, it works fantastically well, and for synchronous request-
+response-based communication between microservices, it’s great.
+GraphQL
+In recent years, GraphQL has gained more popularity, due in large part to the fact
+that it excels in one specific area. Namely, it makes it possible for a client-side device
+to define queries that can avoid the need to make multiple requests to retrieve the
+same information. This can offer significant improvements in terms of the perfor‐
+mance of constrained client-side devices and can also avoid the need to implement
+bespoke server-side aggregation.
+To take a simple example, imagine a mobile device that wants to display a page show‐
+ing an overview of a customer’s latest orders. The page needs to contain some infor‐
+mation about the customer, along with information about the customer’s five most
+recent orders. The screen needs only a few fields from the customer record, and only
+the date, value, and shipped status of each order. The mobile device could issue calls
+to two downstream microservices to retrieve the required information, but this
+would involve making multiple calls, including pulling back information that isn’t
+actually required. Especially with mobile devices, this can be wasteful—it uses up
+more of a mobile device’s data plan than is needed, and it can take longer.
+GraphQL allows the mobile device to issue a single query that can pull back all the
+required information. For this to work, you need a microservice that exposes a
+GraphQL endpoint to the client device. This GraphQL endpoint is the entry for all
+client queries and exposes a schema for the client devices to use. This schema exposes
+the types available to the client, and a nice graphical query builder is also available to
+make creating these queries easier. By reducing the number of calls and the amount
+of data retrieved by the client device, you can deal neatly with some of the challenges
+that occur when building user interfaces with microservice architectures.
+Challenges
+Early on, one challenge was lack of language support for the GraphQL specification,
+with JavaScript being your only choice initially. This has improved greatly, with all
+major technologies now having support for the specification. In fact, there have been
+significant improvements in GraphQL and the various implementations across the
+board, making GraphQL a much less risky prospect than it might have been a few
+years ago. That said, you might want to be aware of a few remaining challenges with
+the technology.
+For one, the client device can issue dynamically changing queries, and I’ve heard of
+teams who have had issues with GraphQL queries causing significant load on the
+server side as a result of this capability. When we compare GraphQL with something
+like SQL, we see a similar issue. An expensive SQL statement can cause significant
+Technology Choices 
+| 
+133

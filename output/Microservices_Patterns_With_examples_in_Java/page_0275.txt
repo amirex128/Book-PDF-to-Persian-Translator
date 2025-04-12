@@ -1,0 +1,56 @@
+245
+Implementing a CQRS view with AWS DynamoDB
+Implementing the findOrderHistory query
+Paginating the query results
+Updating orders
+Detecting duplicate events
+We’ll look at each one in turn.
+DESIGNING THE FTGO-ORDER-HISTORY TABLE
+The DynamoDB storage model consists of tables, which contain items, and indexes,
+which provide alternative ways to access a table’s items (discussed shortly). An item is a
+collection of named attributes. An attribute value is either a scalar value such as a string,
+a multivalued collection of strings, or a collection of named attributes. Although an item
+is the equivalent to a row in an RDBMS, it’s a lot more flexible and can store an entire
+aggregate.
+ This flexibility enables the OrderHistoryDataAccess module to store each Order
+as a single item in a DynamoDB table called ftgo-order-history. Each field of the
+Order class is mapped to an item attribute, as shown in figure 7.13. Simple fields such
+as orderCreationTime and status are mapped to single-value item attributes. The
+lineItems field is mapped to an attribute that is a list of maps, one map per time line.
+It can be considered to be a JSON array of objects.
+An important part of the definition of a table is its primary key. A DynamoDB applica-
+tion inserts, updates, and retrieves a table’s items by primary key. It would seem to
+make sense for the primary key to be orderId. This enables Order History Service
+to insert, update, and retrieve an order by orderId. But before finalizing this decision,
+let’s first explore how a table’s primary key impacts the kinds of data access operations
+it supports. 
+DEFINING AN INDEX FOR THE FINDORDERHISTORY QUERY
+This table definition supports primary key-based reads and writes of Orders. But it
+doesn’t support a query such as findOrderHistory() that returns multiple matching
+orders sorted by increasing age. That’s because, as you will see later in this section,
+this query uses the DynamoDB query() operation, which requires a table to have a
+orderId
+...
+...
+Primary key
+ftgo-order-history table
+consumerId
+xyz-abc
+...
+orderCreationTime
+22939283232
+...
+status
+CREATED
+...
+lineItems
+[{...}.
+{...},
+....]
+....
+...
+...
+...
+Figure 7.13
+Preliminary structure of the DynamoDB OrderHistory table
+ 

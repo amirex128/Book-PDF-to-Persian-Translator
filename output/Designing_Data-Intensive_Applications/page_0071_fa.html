@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 71</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Graph-Like Data Models</h4>
+    <p>
+        ما قبلاً دیدیم که relationships many-to-many یک distinguishing fea‐ture مهم بین data models مختلف هستند. اگر application شما عمدتاً دارای relationships one-to-many (داده‌های tree-structured) یا هیچ relationships بین records نیست، document model مناسب است.
+    </p>
+    <p>
+        اما اگر relationships many-to-many در داده‌های شما بسیار رایج باشد، چه؟ relational model می‌تواند موارد ساده relationships many-to-many را مدیریت کند، اما با پیچیده‌تر شدن connections در داده‌های شما، طبیعی‌تر است که شروع به مدل‌سازی داده‌های خود به عنوان یک graph کنید.
+    </p>
+    <p>
+        یک graph از دو نوع object تشکیل شده است: vertices (که به عنوان nodes یا entities نیز شناخته می‌شوند) و edges (که به عنوان relationships یا arcs نیز شناخته می‌شوند). بسیاری از انواع داده‌ها را می‌توان به عنوان یک graph مدل‌سازی کرد. نمونه‌های معمولی عبارتند از:
+    </p>
+    <ul>
+        <li>Social graphs</li>
+        <li>Vertices افراد هستند و edges نشان می‌دهند که کدام افراد یکدیگر را می‌شناسند.</li>
+        <li>The web graph</li>
+        <li>Vertices صفحات وب هستند و edges نشان‌دهنده HTML links به صفحات دیگر هستند.</li>
+        <li>Road or rail networks</li>
+        <li>Vertices تقاطع‌ها هستند و edges نشان‌دهنده جاده‌ها یا خطوط راه‌آهن بین آن‌ها هستند.</li>
+    </ul>
+    <p>
+        الگوریتم‌های well-known می‌توانند روی این graphs عمل کنند: به عنوان مثال، سیستم‌های car navigation به دنبال کوتاه‌ترین path بین دو نقطه در یک road network می‌گردند و PageRank می‌تواند در web graph برای تعیین محبوبیت یک web page و در نتیجه رتبه‌بندی آن در نتایج جستجو استفاده شود.
+    </p>
+    <p>
+        در مثال‌هایی که به‌تازگی ارائه شد، همه vertices در یک graph نشان‌دهنده همان نوع چیز (به ترتیب، افراد، صفحات وب یا تقاطع‌های جاده) هستند. با این حال، graphs به چنین داده‌های homogeneous محدود نمی‌شوند: استفاده به همان اندازه قدرتمند از graphs این است که یک راه سازگار برای ذخیره انواع کاملاً متفاوتی از objects در یک datastore واحد ارائه می‌دهد. به عنوان مثال، Facebook یک graph واحد را با انواع مختلفی از vertices و edges حفظ می‌کند: vertices نشان‌دهنده افراد، مکان‌ها، رویدادها، checkins و نظراتی هستند که توسط users ایجاد شده‌اند. edges نشان می‌دهند که کدام افراد با یکدیگر دوست هستند، کدام checkin در کدام location اتفاق افتاده است، چه کسی در مورد کدام post نظر داده است، چه کسی در کدام event شرکت کرده است و غیره [35].
+    </p>
+    <p>
+        در این بخش ما از مثال نشان داده شده در شکل 2-5 استفاده خواهیم کرد. این می‌تواند از یک social network یا یک database genealogical گرفته شود: دو نفر را نشان می‌دهد، Lucy از آیداهو و Alain از Beaune، France. آن‌ها ازدواج کرده‌اند و در لندن زندگی می‌کنند.
+    </p>
+    <p>
+        Graph-Like Data Models | 49
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+394
+CHAPTER 12
+Deploying microservices
+When you create a container, you can specify its CPU, memory resources, and, depend-
+ing on the container implementation, perhaps the I/O resources. The container run-
+time enforces these limits and prevents a container from hogging the resources of its
+machine. When using a Docker orchestration framework such as Kubernetes, it’s espe-
+cially important to specify a container’s resources. That’s because the orchestration
+framework uses a container’s requested resources to select the machine to run the
+container and thereby ensure that machines aren’t overloaded.
+ Figure 12.8 shows the process of deploying a service as a container. At build-time,
+the deployment pipeline uses a container image-building tool, which reads the ser-
+vice’s code and a description of the image, to create the container image and stores it
+in a registry. At runtime, the container image is pulled from the registry and used to
+create containers.
+ Let’s take a look at build-time and runtime steps in more detail.
+ 
+ 
+Container
+Machine
+Service
+process
+Container
+Container runtime, such as Docker
+Service
+process
+Container
+Service
+process
+Operating System
+Each container is a sandbox
+that isolates the processes.
+Shared by all of the containers
+Figure 12.7
+A container consists of one or more processes 
+running in an isolated sandbox. Multiple containers usually run 
+on a single machine. The containers share the operating system.
+ 

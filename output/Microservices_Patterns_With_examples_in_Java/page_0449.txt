@@ -1,0 +1,42 @@
+419
+Deploying a RESTful service using AWS Lambda and AWS Gateway
+12.5.5 Drawbacks of using lambda functions
+As you can see, AWS Lambda is an extremely convenient way to deploy services, but
+there are some significant drawbacks and limitations:
+Long-tail latency—Because AWS Lambda dynamically runs your code, some
+requests have high latency because of the time it takes for AWS to provision an
+instance of your application and for the application to start. This is particularly
+challenging when running Java-based services because they typically take at least
+several seconds to start. For instance, the example lambda function described in
+the next section takes a while to start up. Consequently, AWS Lambda may not
+be suited for latency-sensitive services.
+Limited event/request-based programming model—AWS Lambda isn’t intended to be
+used to deploy long-running services, such as a service that consumes messages
+from a third-party message broker.
+Because of these drawbacks and limitations, AWS Lambda isn’t a good fit for all
+services. But when choosing a deployment pattern, I recommend first evaluating
+whether serverless deployment supports your service’s requirements before consid-
+ering alternatives. 
+12.6
+Deploying a RESTful service using AWS Lambda 
+and AWS Gateway
+Let’s take a look at how to deploy Restaurant Service using AWS Lambda. It’s a ser-
+vice that has a REST API for creating and managing restaurants. It doesn’t have long-
+lived connections to Apache Kafka, for example, so it’s a good fit for AWS lambda. Fig-
+ure 12.13 shows the deployment architecture for this service. The service consists of
+several lambda functions, one for each REST endpoint. An AWS API Gateway is
+responsible for routing HTTP requests to the lambda functions.
+ Each lambda function has a request handler class. The ftgo-create-restaurant
+lambda function invokes the CreateRestaurantRequestHandler class, and the ftgo-
+find-restaurant lambda function invokes FindRestaurantRequestHandler. Because
+these request handler classes implement closely related aspects of the same service,
+they’re packaged together in the same ZIP file, restaurant-service-aws-lambda
+.zip. Let’s look at the design of the service, including those handler classes.
+12.6.1 The design of the AWS Lambda version of Restaurant Service
+The architecture of the service, shown in figure 12.14, is quite similar to that of a tra-
+ditional service. The main difference is that Spring MVC controllers have been
+replaced by AWS Lambda request handler classes. The rest of the business logic is
+unchanged.
+ The service consists of a presentation tier consisting of the request handlers, which
+are invoked by AWS Lambda to handle the HTTP requests, and a traditional business
+ 

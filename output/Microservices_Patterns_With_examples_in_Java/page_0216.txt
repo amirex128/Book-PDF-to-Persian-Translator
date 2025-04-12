@@ -1,0 +1,45 @@
+186
+CHAPTER 6
+Developing business logic with event sourcing
+Hibernate successfully to develop applications where the database schema has been
+derived from the object model. But the problems are deeper than the limitations of
+any particular ORM framework. 
+LACK OF AGGREGATE HISTORY
+Another limitation of traditional persistence is that it only stores the current state of
+an aggregate. Once an aggregate has been updated, its previous state is lost. If an
+application must preserve the history of an aggregate, perhaps for regulatory pur-
+poses, then developers must implement this mechanism themselves. It is time con-
+suming to implement an aggregate history mechanism and involves duplicating code
+that must be synchronized with the business logic. 
+IMPLEMENTING AUDIT LOGGING IS TEDIOUS AND ERROR PRONE
+Another issue is audit logging. Many applications must maintain an audit log that
+tracks which users have changed an aggregate. Some applications require auditing for
+security or regulatory purposes. In other applications, the history of user actions is an
+important feature. For example, issue trackers and task-management applications
+such as Asana and JIRA display the history of changes to tasks and issues. The chal-
+lenge of implementing auditing is that besides being a time-consuming chore, the
+auditing logging code and the business logic can diverge, resulting in bugs. 
+EVENT PUBLISHING IS BOLTED ON TO THE BUSINESS LOGIC
+Another limitation of traditional persistence is that it usually doesn’t support publishing
+domain events. Domain events, discussed in chapter 5, are events that are published by
+an aggregate when its state changes. They’re a useful mechanism for synchronizing data
+and sending notifications in microservice architecture. Some ORM frameworks, such
+as Hibernate, can invoke application-provided callbacks when data objects change.
+But there’s no support for automatically publishing messages as part of the transac-
+tion that updates the data. Consequently, as with history and auditing, developers
+must bolt on event-generation logic, which risks not being synchronized with the busi-
+ness logic. Fortunately, there’s a solution to these issues: event sourcing. 
+6.1.2
+Overview of event sourcing
+Event sourcing is an event-centric technique for implementing business logic and per-
+sisting aggregates. An aggregate is stored in the database as a series of events. Each
+event represents a state change of the aggregate. An aggregate’s business logic is struc-
+tured around the requirement to produce and consume these events. Let’s see how
+that works.
+EVENT SOURCING PERSISTS AGGREGATES USING EVENTS
+Earlier, in section 6.1.1, I discussed how traditional persistence maps aggregates to
+tables, their fields to columns, and their instances to rows. Event sourcing is a very
+different approach to persisting aggregates that builds on the concept of domain
+events. It persists each aggregate as a sequence of events in the database, known as
+an event store.
+ 

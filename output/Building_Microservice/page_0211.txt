@@ -1,0 +1,35 @@
+Depending on the nature of the business process being modeled, you may expect that
+any failure mode triggers a backward recovery, a forward recovery, or perhaps a mix
+of the two.
+It’s really important to note that a saga allows us to recover from business failures, not
+technical failures. For example, if we try and take payment from the customer but the
+customer has insufficient funds, then this is a business failure that the saga should be
+expected to handle. On the other hand, if the Payment Gateway times out or throws a
+500 Internal Service Error, then this is a technical failure that we need to handle
+separately. The saga assumes the underlying components are working properly—that
+the underlying system is reliable, and that we are then coordinating the work of relia‐
+ble components. We’ll explore some of the ways we can make our technical compo‐
+nents more reliable in Chapter 12, but for more on this limitation of sagas, I
+recommend “The Limits of the Saga Pattern” by Uwe Friedrichsen.
+Saga rollbacks
+With an ACID transaction, if we hit a problem, we trigger a rollback before a commit
+occurs. After the rollback, it is like nothing ever happened: the change we were trying
+to make didn’t take place. With our saga, though, we have multiple transactions
+involved, and some of those may have already committed before we decide to roll
+back the entire operation. So how can we roll back transactions after they have
+already been committed?
+Let’s come back to our example of processing an order, as outlined in Figure 6-5.
+Consider a potential failure mode. We’ve gotten as far as trying to package the item,
+only to find the item can’t be found in the warehouse, as shown in Figure 6-6. Our
+system thinks the item exists, but it’s just not on the shelf!
+Now, let’s assume that we decide we want to just roll back the entire order, rather
+than giving the customer the option for the item to be placed on back order. The
+problem is that we’ve already taken payment and awarded loyalty points for the
+order.
+If these steps had all been done in a single database transaction, a simple rollback
+would clean it all up. However, each step in the order fulfillment process was handled
+by a different service call, each of which operated in a different transactional scope.
+There is no simple “rollback” for the entire operation.
+Sagas 
+| 
+185

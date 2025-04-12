@@ -1,0 +1,47 @@
+314
+CHAPTER 9
+Testing microservices: Part 1
+OrderController, for instance, invokes OrderService and OrderRepository. An
+effective testing strategy for controllers is solitary unit tests that mock the services
+and repositories.
+ You could write a test class similar to the OrderServiceTest class to instantiate a
+controller class and invoke its methods. But this approach doesn’t test some import-
+ant functionality, such as request routing. It’s much more effective to use a mock MVC
+testing framework, such as Spring Mock Mvc, which is part of the Spring Framework,
+or Rest Assured Mock MVC, which builds on Spring Mock Mvc. Tests written using
+one of these frameworks make what appear to be HTTP requests and make assertions
+about HTTP responses. These frameworks enable you to test HTTP request routing
+and conversion of Java objects to and from JSON without having to make real network
+calls. Under the covers, Spring Mock Mvc instantiates just enough of the Spring MVC
+classes to make this possible.
+Listing 9.6 shows the OrderControllerTest class, which tests Order Service’s Order-
+Controller. It defines solitary unit tests that use mocks for OrderController’s depen-
+dencies. It’s written using Rest Assured Mock MVC , which provides a simple DSL that
+abstracts away the details of interacting with controllers. Rest Assured makes it easy to
+send a mock HTTP request to a controller and verify the response. OrderController-
+Test creates a controller that’s injected with Mockito mocks for OrderService and
+OrderRepository. Each test configures the mocks, makes an HTTP request, verifies that
+the response is correct, and possibly verifies that the controller invoked the mocks.
+public class OrderControllerTest {
+private OrderService orderService;
+private OrderRepository orderRepository;
+@Before
+public void setUp() throws Exception {
+orderService = mock(OrderService.class);
+      
+orderRepository = mock(OrderRepository.class);
+Are these really unit tests?
+Because these tests use the Spring Framework, you might argue that they’re not unit
+tests. They’re certainly more heavyweight than the unit tests I’ve described so far.
+The Spring Mock Mvc documentation refers to these as out-of-servlet-container inte-
+gration tests (https://docs.spring.io/spring/docs/current/spring-framework-reference/
+testing.html#spring-mvc-test-vs-end-to-end-integration-tests). Yet Rest Assured Mock
+MVC describes these tests as unit tests (https://github.com/rest-assured/rest-
+assured/wiki/Usage#spring-mock-mvc-module). Regardless of the debate over termi-
+nology, these are important tests to write.
+Listing 9.6
+A simple, fast-running unit test for the OrderController class
+Create mocks for 
+OrderController’s 
+dependencies.
+ 

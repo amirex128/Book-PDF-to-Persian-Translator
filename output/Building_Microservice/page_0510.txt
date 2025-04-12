@@ -1,0 +1,38 @@
+As I have said before, I am fairly relaxed about duplicated code across microservices.
+Which is to say that, while in a single microservice boundary I will typically do what‐
+ever I can to refactor out duplication into suitable abstractions, I don’t have the same
+reaction when confronted by duplication across microservices. This is mostly because
+I am often more worried about the potential for the extraction of shared code to lead
+to tight coupling between services (a topic we explored in “DRY and the Perils of
+Code Reuse in a Microservice World” on page 154). That said, there are certainly
+cases where this is warranted.
+When the time does arise to extract common code to enable reuse between BFFs,
+there are two obvious options. The first, which is often cheaper but more fraught, is
+to extract a shared library of some sort. The reason this can be problematic is that
+shared libraries are a prime source of coupling, especially when used to generate cli‐
+ent libraries for calling downstream services. Nonetheless, there are situations in
+which this feels right—especially when the code being abstracted is purely a concern
+inside the service.
+The other option is to extract the shared functionality into a new microservice. This
+can work well if the functionality being extracted represents business domain func‐
+tionality. A variation of this approach might be to push aggregation responsibilities
+to microservices further downstream. Let’s consider a situation in which we want to
+display a list of the items in a customer’s wishlist, along with information about
+whether or not those items are in stock and the current price, as shown in Table 14-1.
+Table 14-1. Displaying the wishlist for a customer of MusicCorp
+The Brakes, Give Blood
+In Stock!
+$5.99
+Blue Juice, Retrospectable
+Out of Stock
+$7.50
+Hot Chip, Why Make Sense?
+Going Fast! (2 left) $9.99
+The Customer microservice stores information about the wishlist and the ID of each
+item. The Catalog microservice stores the name and price of each item, and the stock
+levels are stored in our Inventory microservice. To display this same control on both
+the iOS and Android applications, each BFF would need to make the same three calls
+to the supporting microservices, as shown in Figure 14-14.
+484 
+| 
+Chapter 14: User Interfaces

@@ -1,0 +1,78 @@
+203
+Implementing an event store
+6.2.1
+How the Eventuate Local event store works
+Eventuate Local is an open source event store. Figure 6.9 shows the architecture.
+Events are stored in a database, such as MySQL. Applications insert and retrieve
+aggregate events by primary key. Applications consume events from a message broker,
+such as Apache Kafka. A transaction log tailing mechanism propagates events from
+the database to the message broker.
+Let’s look at the different Eventuate Local components, starting with the database
+schema.
+THE SCHEMA OF EVENTUATE LOCAL’S EVENT DATABASE
+The event database consists of three tables:
+
+events—Stores the events
+
+entities—One row per entity
+
+snapshots—Stores snapshots
+The central table is the events table. The structure of this table is very similar to the
+table shown in figure 6.2. Here’s its definition:
+event_id
+102
+103
+...
+EVENTS
+Event database
+Event broker
+Order topic
+Event relay
+Event relay
+Application
+Customer topic
+event_type
+Order
+Created
+Order
+Approved
+...
+entity_type
+Order
+Order
+...
+entity_id
+101
+101
+...
+event_data
+{...}
+{...}
+...
+ENTITIES
+entity_type
+...
+entity_version
+...
+entity_id
+...
+...
+...
+SNAPSHOTS
+entity_type
+...
+entity_version
+...
+entity_id
+...
+...
+...
+Stores the events
+Publishes events stored
+in the database to
+the message broker
+Figure 6.9
+The architecture of Eventuate Local. It consists of an event database (such as MySQL) 
+that stores the events, an event broker (like Apache Kafka) that delivers events to subscribers, and an 
+event relay that publishes events stored in the event database to the event broker.
+ 

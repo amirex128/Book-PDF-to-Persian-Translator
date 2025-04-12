@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 350</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>distributed tracing</strong> (که ما در ادامه بیشتر به آن خواهیم پرداخت)، در ذخیره‌سازی، فیلتر کردن، و پرس‌وجو از داده‌های با <strong>high-cardinality</strong> بسیار توانمند هستند.
+    </p>
+    <h4>Monitoring and Observability Systems Are Production Systems</h4>
+    <p>
+        با مجموعه رو به رشدی از ابزارها برای کمک به ما در مدیریت معماری <strong>microservice</strong> خود، ما باید به یاد داشته باشیم که این ابزارها خودشان سیستم‌های <strong>production</strong> هستند. پلتفرم‌های <strong>log aggregation</strong>، ابزارهای <strong>distributed tracing</strong>، سیستم‌های هشدار—همه آنها برنامه‌هایی با مأموریت حیاتی هستند که اگر نه بیشتر، به اندازه نرم‌افزار خودمان حیاتی هستند. همان درجه دقت باید از نظر حفظ ابزارهای نظارت بر <strong>production</strong> ما اعمال شود، همانطور که ما برای نرم‌افزاری که می‌نویسیم و نگهداری می‌کنیم، اعمال می‌کنیم.
+    </p>
+    <p>
+        ما همچنین باید تشخیص دهیم که این ابزارها می‌توانند به ابزارهای بالقوه حمله از طرف اشخاص خارجی تبدیل شوند. در زمان نگارش این مقاله، دولت ایالات متحده و سایر سازمان‌های سراسر جهان در حال رسیدگی به کشف یک <strong>breach</strong> در نرم‌افزار مدیریت شبکه از <strong>SolarWinds</strong> هستند. اگرچه ماهیت دقیق این <strong>breach</strong> هنوز در حال بررسی است، اما اعتقاد بر این است که این همان چیزی است که به عنوان یک حمله زنجیره تأمین شناخته می‌شود. این نرم‌افزار که یک بار در سایت‌های مشتری نصب شد (و <strong>SolarWinds</strong> توسط 425 شرکت از 500 شرکت برتر <strong>US Fortune</strong> استفاده می‌شود)، به طرف‌های مخرب اجازه داد تا به شبکه‌های مشتریان، از جمله شبکه <strong>US Treasury</strong>، دسترسی خارجی پیدا کنند.
+    </p>
+    <h4>Distributed Tracing</h4>
+    <p>
+        تاکنون، من در درجه اول در مورد جمع‌آوری اطلاعات به صورت ایزوله صحبت کرده‌ام. بله، ما آن اطلاعات را تجمیع می‌کنیم، اما درک زمینه گسترده‌تری که در آن این اطلاعات ثبت شده‌اند، می‌تواند کلیدی باشد. اساساً، یک معماری <strong>microservice</strong> مجموعه‌ای از فرآیندها است که با هم کار می‌کنند تا نوعی کار را انجام دهند—ما راه‌های مختلفی را که می‌توانیم این فعالیت‌ها را در فصل 6 هماهنگ کنیم، بررسی کردیم.
+    </p>
+    <p>
+        بنابراین منطقی است که، هنگام تمایل به درک نحوه رفتار سیستم ما در یک محیط <strong>production</strong>، بتوانیم روابط بین <strong>microservices</strong>های خود را ببینیم. این می‌تواند به ما کمک کند تا نحوه رفتار سیستم خود را بهتر درک کنیم، تأثیر یک مشکل را ارزیابی کنیم، یا در تعیین اینکه دقیقاً چه چیزی آنطور که انتظار داریم کار نمی‌کند، بهتر شویم.
+    </p>
+    <p>
+        بنابراین، با پیچیده‌تر شدن سیستم‌های ما، مهم می‌شود که راهی برای دیدن این <strong>traces</strong> در سراسر سیستم‌های خود داشته باشیم. ما باید بتوانیم این داده‌های پراکنده را بیرون بکشیم تا یک نمای ترکیبی از مجموعه‌ای از تماس‌های مرتبط را به ما ارائه دهد. همانطور که قبلاً دیده‌ایم، انجام کاری ساده مانند قرار دادن <strong>correlation IDs</strong> در فایل‌های <strong>logfile</strong> ما یک شروع خوب است، اما این یک راه‌حل نسبتاً ساده است، به‌ویژه از آنجایی که ما در نهایت مجبور خواهیم شد ابزارهای سفارشی خودمان را برای کمک به تجسم، برش و تقسیم این داده‌ها ایجاد کنیم. اینجاست که <strong>distributed tracing</strong> وارد عمل می‌شود.
+    </p>
+    <p>
+        324 | Chapter 10: From Monitoring to Observability
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

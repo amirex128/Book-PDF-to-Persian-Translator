@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 302</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>فصل 8</h3>
+  <h3>الگوهای API خارجی</h3>
+  <p>
+   gateway برای تبدیل request و response با استفاده از یک مکانیزم مبتنی بر template.
+   AWS API gateway همچنین می‌تواند requests را احراز هویت کند.
+  </p>
+  <p>
+   AWS API gateway، برخی از requirements ها را برای یک API gateway که قبلاً فهرست کردم، برآورده می‌کند. API gateway توسط AWS ارائه شده است، بنابراین شما مسئول نصب و operations نیستید. شما API gateway را پیکربندی می‌کنید و AWS بقیه موارد از جمله scaling را مدیریت می‌کند.
+  </p>
+  <p>
+   متأسفانه، AWS API gateway دارای چندین نقطه ضعف و محدودیت است که باعث می‌شود سایر requirements ها را برآورده نکند. از API composition پشتیبانی نمی‌کند، بنابراین شما باید API composition را در service های backend پیاده‌سازی کنید. AWS API gateway تنها از HTTP(S) با تأکید زیاد بر JSON پشتیبانی می‌کند. این فقط از الگوی Server-side discovery، که در فصل 3 توضیح داده شد، پشتیبانی می‌کند. یک application معمولاً از یک AWS Elastic Load Balancer برای load balance کردن requests در سراسر مجموعه ای از instances های EC2 یا containers های ECS استفاده می‌کند. با وجود این محدودیت‌ها، مگر اینکه به API composition نیاز داشته باشید، AWS API gateway یک پیاده‌سازی خوب از الگوی API gateway است.
+  </p>
+  <p>
+   <strong>AWS APPLICATION LOAD BALANCER</strong>
+  </p>
+  <p>
+   یکی دیگر از service های AWS که functionality شبیه به API gateway را ارائه می‌دهد، AWS Application Load Balancer است که یک load balancer برای HTTP، HTTPS، WebSocket و HTTP/2 است (https://aws.amazon.com/blogs/aws/new-aws-application-load-balancer/).
+   هنگام پیکربندی یک Application Load Balancer، شما قوانین routing را تعریف می‌کنید که requests را به service های backend route می‌کند که باید روی instances های AWS EC2 اجرا شوند.
+  </p>
+  <p>
+   مانند AWS API gateway، AWS Application Load Balancer، برخی از requirements ها را برای یک API gateway برآورده می‌کند. این functionality routing اساسی را پیاده‌سازی می‌کند. میزبانی می‌شود، بنابراین شما مسئول نصب یا operations نیستید. متاسفانه، کاملاً محدود است. این، routing مبتنی بر متد HTTP را پیاده‌سازی نمی‌کند. همچنین API composition یا authentication را پیاده‌سازی نمی‌کند. در نتیجه، AWS Application Load Balancer، requirements های یک API gateway را برآورده نمی‌کند.
+  </p>
+  <p>
+   <strong>USING AN API GATEWAY PRODUCT</strong>
+  </p>
+  <p>
+   یک گزینه دیگر استفاده از یک product API gateway مانند Kong یا Traefik است. اینها بسته های open source هستند که شما خودتان نصب و operate می‌کنید. Kong بر اساس سرور HTTP NGINX است و Traefik در GoLang نوشته شده است. هر دو product به شما اجازه می‌دهند تا قوانین routing انعطاف‌پذیری را پیکربندی کنید که از متد HTTP، headers و path برای انتخاب service backend استفاده می‌کنند. Kong به شما این امکان را می‌دهد که plugins هایی را پیکربندی کنید که edge functions ها مانند authentication را پیاده‌سازی می‌کنند. Traefik حتی می‌تواند با برخی از service registries ها، که در فصل 3 توضیح داده شده‌اند، ادغام شود.
+  </p>
+  <p>
+   اگرچه این products، edge functions و قابلیت‌های routing قدرتمند را پیاده‌سازی می‌کنند، اما دارای برخی معایب هستند. شما باید آن‌ها را خودتان نصب، پیکربندی و operate کنید. از API composition پشتیبانی نمی‌کنند. و اگر می‌خواهید API gateway، API composition را انجام دهد، باید API gateway خود را توسعه دهید.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

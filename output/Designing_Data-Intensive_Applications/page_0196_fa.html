@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 196</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Automatic Conflict Resolution</h4>
+    <p>
+        Conflict resolution rules می‌تواند به سرعت پیچیده شود و application code custom می‌تواند مستعد error باشد. Amazon یک مثال از اثرات شگفت‌انگیز به دلیل a con‐flict resolution handler است: برای مدتی، منطق conflict resolution در shopping cart آیتم‌های اضافه شده به cart را حفظ می‌کرد، اما آیتم‌های حذف شده از cart را حفظ نمی‌کرد.
+        بنابراین، customers گاهی اوقات آیتم‌هایی را در carts خود دوباره می‌دیدند، حتی اگر قبلاً آن‌ها را حذف کرده بودند [37].
+    </p>
+    <p>
+        تحقیقات جالبی در مورد حل خودکار conflicts که ناشی از data modifications concurrent هستند، وجود داشته است. چند خط از تحقیقات ارزش ذکر کردن را دارند:
+    </p>
+    <ul>
+        <li>Conflict-free replicated datatypes (CRDTs) [32, 38] یک family از data structures برای sets، maps، lists مرتب شده، counters و غیره هستند که می‌توانند به طور همزمان توسط multiple users ویرایش شوند و که به طور خودکار conflicts را به روش‌های معقول حل می‌کنند. برخی از CRDTs در Riak 2.0 پیاده‌سازی شده‌اند [39, 40].</li>
+        <li>Mergeable persistent data structures [41] تاریخچه را صریحاً ردیابی می‌کنند، مشابه system کنترل version Git، و از یک تابع merge سه طرفه استفاده می‌کنند (در حالی که CRDTs از merges دو طرفه استفاده می‌کنند).</li>
+        <li>Operational transformation [42] الگوریتم conflict resolution پشت application‌های collaborative editing مانند Etherpad [30] و Google Docs [31] است. این به ویژه برای editing همزمان از یک list مرتب شده از آیتم‌ها، مانند list of characters که یک document text را تشکیل می‌دهند، طراحی شده است.</li>
+    </ul>
+    <p>
+        Implementations از این الگوریتم‌ها در databases هنوز جوان هستند، اما احتمال دارد که آن‌ها در آینده در systems data replicated بیشتری ادغام شوند. Automatic conflict resolution می‌تواند synchronization data multi-leader را برای application‌ها بسیار ساده‌تر کند.
+    </p>
+    <h4>What is a conflict?</h4>
+    <p>
+        برخی از انواع conflict مشخص هستند. در مثال شکل 5-7، دو writes به طور همزمان همان فیلد را در همان record اصلاح کردند و آن را به دو value متفاوت تنظیم کردند. هیچ شکی وجود ندارد که این یک conflict است.
+    </p>
+    <p>
+        سایر انواع conflict می‌توانند تشخیص آن‌ها ظریف‌تر باشند. به عنوان مثال، یک سیستم رزرو اتاق جلسه را در نظر بگیرید: این ردیابی می‌کند که کدام اتاق توسط کدام گروه از افراد در چه زمانی رزرو شده است. این application نیاز دارد که اطمینان حاصل کند که هر اتاق فقط توسط یک گروه از افراد در هر زمان رزرو می‌شود (یعنی، نباید هیچ overlapping bookings برای همان اتاق وجود داشته باشد). در این مورد، یک conflict ممکن است ایجاد شود اگر دو booking متفاوت برای همان اتاق در همان زمان ایجاد شوند. حتی اگر application availability را قبل از
+    </p>
+    <p>
+        Problems with Replication Lag | 174
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

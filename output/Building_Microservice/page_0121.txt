@@ -1,0 +1,33 @@
+second choice to make. If picking an event-driven collaboration style, however, my
+implementation choices will be limited to nonblocking asynchronous choices.
+A host of other considerations come into play when picking the right technology that
+go beyond the style of communication—for example, the need for lower-latency
+communication, security-related aspects, or the ability to scale. It’s unlikely that you
+can make a reasoned technology choice without taking into account the requirements
+(and constraints) of your specific problem space. When we look at technology
+options in Chapter 5, we’ll discuss some of these issues.
+Mix and Match
+It’s important to note that a microservice architecture as a whole may have a mix of
+styles of collaboration, and this is typically the norm. Some interactions just make
+sense as request-response, while others make sense as event-driven. In fact, it’s com‐
+mon for a single microservice to implement more than one form of collaboration.
+Consider an Order microservice that exposes a request-response API that allows for
+orders to be placed or changed and then fires events when these changes are made.
+With that said, let’s look at these different styles of communication in more detail.
+Pattern: Synchronous Blocking
+With a synchronous blocking call, a microservice sends a call of some kind to a
+downstream process (likely another microservice) and blocks until the call has com‐
+pleted, and potentially until a response has been received. In Figure 4-2, the Order
+Processor sends a call to the Loyalty microservice to inform it that some points
+should be added to a customer’s account.
+Figure 4-2. Order Processor sends a synchronous call to the Loyalty microservice,
+blocks, and waits for a response
+Typically, a synchronous blocking call is one that is waiting for a response from the
+downstream process. This may be because the result of the call is needed for some
+further operation, or just because it wants to make sure the call worked and to carry
+out some sort of retry if not. As a result, virtually every synchronous blocking call I
+see would also constitute being a request-response call, something we’ll look at
+shortly.
+Pattern: Synchronous Blocking 
+| 
+95

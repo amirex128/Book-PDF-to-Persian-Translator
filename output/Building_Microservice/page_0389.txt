@@ -1,0 +1,34 @@
+At the very top of this set of layers, of course, is our application code. Is that up to
+date? It’s not just the code we write; what about the third-party code we use? A bug in
+a third-party library can leave our application vulnerable to attack. In the case of the
+Equifax breach, the unpatched vulnerability was actually in Struts—a Java web
+framework.
+At scale, working out which microservices are linking to libraries with known vulner‐
+abilities can be incredibly difficult. This is an area in which I strongly recommend the
+use of tools like Snyk or GitHub code scanning, which is able to automatically scan
+your third-party dependencies and alert you if you are linking to libraries with
+known vulnerabilities. If it finds any, it can send you a pull request to help update to
+the latest patched versions. You can even build this into your CI process and have a
+microservice build fail if it links to libraries with issues.
+Backups
+So I sometimes think that taking backups is like flossing, in that lots more people say
+they do it than actually do. I don’t feel the need to restate the argument for backups
+too much here, other than to say: you should take backups, because data is valuable,
+and you don’t want to lose it.
+Data is more valuable than ever, and yet I sometimes wonder if improvements in
+technology have caused us to deprioritize backups. Disks are more reliable than they
+used to be. Databases are more likely to have built-in replication to avoid data loss.
+With such systems, we may convince ourselves that we don’t need backups. But what
+if a catastrophic error occurs and your entire Cassandra cluster is wiped out? Or what
+if a coding bug means your application actually deletes valuable data? Backups are as
+important as ever. So please, back up your critical data.
+With the deployment of our microservices being automated, we don’t need to take
+full machine backups, as we can rebuild our infrastructure from source code. So we’re
+not trying to copy the state of entire machines; we instead target our backups to the
+state that is most valuable. This means that our focus for backups is limited to things
+like the data in our databases, or perhaps our application logs. With the right filesys‐
+tem technology, it’s possible to take near-instantaneous block-level clones of a data‐
+base’s data without noticeably interrupting service.
+Foundations of Application Security 
+| 
+363

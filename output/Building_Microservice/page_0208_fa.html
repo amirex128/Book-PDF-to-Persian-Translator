@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 208</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>3 <em>Robert Kubis, “Google Cloud Spanner: Global Consistency at Scale,” Devoxx, November 7, 2017, YouTube</em>
+  <p><em>video, 33:22, https://oreil.ly/XHvY5.</em></p>
+  <p>4 <em>Hector Garcia-Molina and Kenneth Salem, “Sagas,” ACM Sigmod Record 16, no. 3 (1987): 249–59.</em></p>
+  <h4>Database Distributed Transactions</h4>
+  <p>من در حال بحث در مورد استفاده کلی از <em>distributed transactions</em> برای هماهنگی تغییرات حالت در سراسر <em>microservices</em> هستم. در چنین شرایطی، هر <em>microservice</em> در حال مدیریت <em>local durable state</em> خود (به عنوان مثال، در <em>database</em> خود) است. <em>Distributed transactional algorithms</em> با موفقیت برای برخی از <em>databases</em> در مقیاس بزرگ، مانند <em>Google’s Spanner</em>، استفاده می‌شوند. در این وضعیت، <em>distributed transaction</em> به طور شفاف از دیدگاه یک <em>application</em> توسط <em>underling database</em> اعمال می‌شود، و <em>distributed transaction</em> فقط برای هماهنگی تغییرات حالت در یک <em>single logical database</em> استفاده می‌شود (اگرچه ممکن است در چندین دستگاه توزیع شده باشد، و به طور بالقوه در سراسر چندین <em>data centers</em> نیز باشد).</p>
+  <p>آنچه <em>Google</em> موفق به دستیابی به آن با <em>Spanner</em> شده است، چشمگیر است، اما همچنین شایان ذکر است که کاری که آن‌ها برای کارکردن آن انجام دادند، ایده‌ای از چالش‌های موجود به شما می‌دهد. بیایید فقط بگوییم که شامل <em>data centers</em> بسیار گران‌قیمت و ساعت‌های اتمی مبتنی بر ماهواره است (واقعاً). برای یک نمای کلی خوب از نحوه عملکرد <em>Spanner</em>، من ارائه "<em>Google Cloud Spanner: Global Consistency at Scale</em>" را توصیه می‌کنم.3</p>
+  <h4>Sagas</h4>
+  <p>برخلاف یک <em>two-phase commit</em>، یک <em>saga</em>، طبق طراحی، الگوریتمی است که می‌تواند چندین تغییر در حالت را هماهنگ کند، اما از نیاز به قفل کردن منابع برای مدت‌های طولانی اجتناب می‌کند. یک <em>saga</em> این کار را با مدل‌سازی مراحل درگیر به عنوان فعالیت‌های مجزایی که می‌توانند به‌طور مستقل اجرا شوند، انجام می‌دهد. استفاده از <em>sagas</em> با مزیت اضافه کردن ما را مجبور می‌کند که فرآیندهای تجاری خود را صریحاً مدل کنیم، که می‌تواند مزایای قابل توجهی داشته باشد.
+  <p>ایده اصلی، که برای اولین بار در "<em>Sagas</em>" توسط <em>Hector Garcia-Molina</em> و <em>Kenneth Salem</em>4 مطرح شد، نحوه رسیدگی به عملیاتی را که به عنوان <em>long lived transactions (LLTs)</em> شناخته می‌شوند، نشان می‌دهد. این <em>transactions</em> ممکن است زمان زیادی (چند دقیقه، ساعت‌ها، یا شاید حتی روزها) طول بکشد و به عنوان بخشی از آن فرآیند، نیاز به ایجاد تغییراتی در یک <em>database</em> دارند.
+  <p>اگر شما مستقیماً یک <em>LLT</em> را به یک <em>normal database transaction</em> نگاشتید، یک <em>single database transaction</em> کل چرخه عمر <em>LLT</em> را در بر می‌گرفت. این می‌تواند منجر به قفل شدن چندین ردیف یا حتی جداول کامل برای مدت‌های طولانی در حالی که <em>LLT</em> در حال انجام است، شود، که اگر فرآیندهای دیگر در تلاش برای خواندن یا تغییر این منابع قفل شده باشند، باعث ایجاد مشکلات قابل توجهی می‌شود.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

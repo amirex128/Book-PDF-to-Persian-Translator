@@ -1,0 +1,40 @@
+both use the same underlying technology but avoid the need for an explicit service
+definition, as the service definition is implicitly provided by the Java type definitions.
+All these technologies, however, have the same core characteristic: they make a
+remote call look like a local call.
+Typically, using an RPC technology means you are buying into a serialization proto‐
+col. The RPC framework defines how data is serialized and deserialized. For instance,
+gRPC uses the protocol buffer serialization format for this purpose. Some implemen‐
+tations are tied to a specific networking protocol (like SOAP, which makes nominal
+use of HTTP), whereas others might allow you to use different types of networking
+protocols, which can provide additional features. For example, TCP offers guarantees
+about delivery, whereas UDP doesn’t but has a much lower overhead. This can allow
+you to use different networking technology for different use cases.
+RPC frameworks that have an explicit schema make it very easy to generate client
+code. This can avoid the need for client libraries, as any client can just generate their
+own code against this service specification. For client-side code generation to work,
+though, the client needs some way to get the schema out of band—in other words,
+the consumer needs to have access to the schema before it plans to make calls. Avro
+RPC is an interesting outlier here, as it has the option to send the full schema along
+with the payload, allowing clients to dynamically interpret the schema.
+The ease of generation of client-side code is one of the main selling points of RPC.
+The fact that I can just make a normal method call and theoretically ignore the rest is
+a huge boon.
+Challenges
+As we’ve seen, RPC offers some great advantages, but it’s not without its downsides—
+and some RPC implementations can be more problematic than others. Many of these
+issues can be dealt with, but they deserve further exploration.
+Technology coupling.    Some RPC mechanisms, like Java RMI, are heavily tied to a spe‐
+cific platform, which can limit which technology can be used in the client and server.
+Thrift and gRPC have an impressive amount of support for alternative languages,
+which can reduce this downside somewhat, but be aware that RPC technology some‐
+times comes with restrictions on interoperability.
+In a way, this technology coupling can be a form of exposing internal technical
+implementation details. For example, the use of RMI ties not only the client to the
+JVM but the server as well.
+To be fair, there are a number of RPC implementations that don’t have this restric‐
+tion—gRPC, SOAP, and Thrift are all examples that allow for interoperability
+between different technology stacks.
+124 
+| 
+Chapter 5: Implementing Microservice Communication

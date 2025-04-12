@@ -1,0 +1,24 @@
+7 Emily Bache, “End-to-End Automated Testing in a Microservices Architecture—Emily Bache,” NDC Confer‐
+ences, July 5, 2017, YouTube video, 56:48, NDC Oslo 2017, https://oreil.ly/QX3EK.
+culminating in the test snow cone we talked about earlier. I have also seen situations
+in which, because there was no real obvious ownership of these tests, their results get
+ignored. When they break, everyone assumes it is someone else’s problem, so they
+don’t care whether the tests are passing.
+One solution I’ve seen here is to designate certain end-to-end tests as being the
+responsibility of a given team, even though they might cut across microservices being
+worked on by multiple different teams. I first learned of this approach from Emily
+Bache.7 The idea is that even though we make use of a “fan in” stage in our pipeline,
+they would then split the end-to-end test suite into groups of functionality that were
+owned by different teams, as we’ll see in Figure 9-9.
+Figure 9-9. A standard way to handle end-to-end tests across services
+In this particular example, a change to the Web Shop that passes the service test stage
+would trigger the associated end-to-end tests, with the suite being owned by the same
+team that owns the Web Shop. Likewise, any changes to the Helpdesk only will trigger
+the associated end-to-end tests. But changes to either Customer or Loyalty trigger
+both sets of tests. This can lead us to a situation in which a change made to the Loy
+alty microservice could break both sets of end-to-end tests, potentially requiring the
+teams who own these two test suites to chase the owner of the Loyalty microservice
+for a fix. Although this model helped in Emily’s case, as we can see, it still has its
+288 
+| 
+Chapter 9: Testing

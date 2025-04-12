@@ -1,0 +1,58 @@
+169
+Kitchen Service business logic
+Let’s take a closer look at the design of KitchenService, starting with the Ticket
+aggregate.
+5.4.1
+The Ticket aggregate
+Ticket is one of the aggregates of Kitchen Service. As described in chapter 2, when
+talking about the concept of a Bounded Context, this aggregate represents the restau-
+rant kitchen’s view of an order. It doesn’t contain information about the consumer,
+such as their identity, the delivery information, or payment details. It’s focused on
+enabling a restaurant’s kitchen to prepare the Order for pickup. Moreover, Kitchen-
+Service doesn’t generate a unique ID for this aggregate. Instead, it uses the ID sup-
+plied by OrderService.
+ Let’s first look at the structure of this class and then we’ll examine its methods.
+Kitchen Service
+command channel
+Restaurant Events
+channel
+Ticket events
+channel
+Kitchen Service
+database
+Create ticket
+Conﬁrm create ticket
+Restaurant created
+Restaurant menu revised
+accept
+reject
+preparing
+readyForPickup
+pickedUp
+REST API
+Restaurant
+Kitchen
+Service
+Domain event
+publisher
+«aggregate»
+Ticket
+«aggregate»
+restaurant
+«repository»
+Ticket
+Repository
+«repository»
+Restaurant
+Repository
+KitchenService
+CommandHandler
+KitchenService
+EventConsumer
+Database
+adapter
+Domain event
+publishing adapter
+Figure 5.11
+The design of Kitchen Service
+ 

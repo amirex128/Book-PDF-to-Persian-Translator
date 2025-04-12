@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 153</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Coordinating sagas (هماهنگ‌سازی حماسه‌ها)</strong></h3>
+  <p>Order Service (سرویس سفارش) ابتدا یک Order (سفارش) و یک Create Order Saga orchestrator (ارکستراتور حماسه ایجاد سفارش) ایجاد می‌کند. پس از آن، جریان برای مسیر happy (خوشحال) به شرح زیر است:</p>
+  <ol>
+   <li>The saga orchestrator (ارکستراتور حماسه) یک command (دستور) Verify Consumer (تایید مصرف‌کننده) را به Consumer Service (سرویس مصرف‌کننده) ارسال می‌کند.</li>
+   <li>Consumer Service (سرویس مصرف‌کننده) با یک message (پیام) Consumer Verified (مصرف‌کننده تایید شد) پاسخ می‌دهد.</li>
+   <li>The saga orchestrator (ارکستراتور حماسه) یک command (دستور) Create Ticket (ایجاد بلیت) را به Kitchen Service (سرویس آشپزخانه) ارسال می‌کند.</li>
+   <li>Kitchen Service (سرویس آشپزخانه) با یک message (پیام) Ticket Created (بلیت ایجاد شد) پاسخ می‌دهد.</li>
+   <li>The saga orchestrator (ارکستراتور حماسه) یک message (پیام) Authorize Card (مجوز کارت) را به Accounting Service (سرویس حسابداری) ارسال می‌کند.</li>
+   <li>Accounting Service (سرویس حسابداری) با یک message (پیام) Card Authorized (کارت تایید شد) پاسخ می‌دهد.</li>
+   <li>The saga orchestrator (ارکستراتور حماسه) یک command (دستور) Approve Ticket (تایید بلیت) را به Kitchen Service (سرویس آشپزخانه) ارسال می‌کند.</li>
+   <li>The saga orchestrator (ارکستراتور حماسه) یک command (دستور) Approve Order (تایید سفارش) را به Order Service (سرویس سفارش) ارسال می‌کند.</li>
+  </ol>
+  <p>توجه داشته باشید که در گام آخر، the saga orchestrator (ارکستراتور حماسه) یک command message (پیام دستور) را به Order Service (سرویس سفارش) ارسال می‌کند، حتی اگر این یک component (مولفه) از Order Service (سرویس سفارش) باشد. در اصل، Create Order Saga (حماسه ایجاد سفارش) می‌تواند Order (سفارش) را با به‌روزرسانی مستقیم آن تأیید کند. اما برای consistent (سازگار) بودن، saga (حماسه) با Order Service (سرویس سفارش) مانند یک participant (شرکت‌کننده) دیگر رفتار می‌کند.</p>
+  <p>Diagrams (نمودارهایی) مانند شکل 4.6 هر کدام یک سناریو برای یک saga (حماسه) را نشان می‌دهند، اما یک saga (حماسه) احتمالاً سناریوهای متعددی دارد. به عنوان مثال، Create Order Saga (حماسه ایجاد سفارش) دارای چهار سناریو است. علاوه بر مسیر happy (خوشحال)، saga (حماسه) می‌تواند به دلیل failure (شکست) در Consumer Service (سرویس مصرف‌کننده)، Kitchen Service (سرویس آشپزخانه) یا Accounting Service (سرویس حسابداری) شکست بخورد. بنابراین، model (مدل‌سازی) یک saga (حماسه) به عنوان یک state machine (ماشین حالت) مفید است، زیرا تمام سناریوهای ممکن را توصیف می‌کند.</p>
+  <h4><strong>MODELING SAGA ORCHESTRATORS AS STATE MACHINES (مدل‌سازی ORCHESTRATORS (ارکستراتورها) SAGA (حماسه) به عنوان STATE MACHINES (ماشین‌های حالت))</strong></h4>
+  <p>یک راه خوب برای model (مدل‌سازی) یک saga orchestrator (ارکستراتور حماسه) به عنوان یک state machine (ماشین حالت) است. یک state machine (ماشین حالت) از یک مجموعه از states (حالت‌ها) و یک مجموعه از transitions (تغییرات) بین states (حالت‌ها) تشکیل شده است که توسط events (رویدادها) trigger (راه‌اندازی) می‌شوند. هر transition (تغییر) می‌تواند یک action (عمل) داشته باشد، که برای یک saga (حماسه) فراخوانی یک participant (شرکت‌کننده) saga (حماسه) است. transitions (تغییرات) بین states (حالت‌ها) با تکمیل یک local transaction (تراکنش محلی) که توسط یک participant (شرکت‌کننده) saga (حماسه) انجام می‌شود، trigger (راه‌اندازی) می‌شوند. current state (حالت فعلی) و specific outcome (نتیجه خاص) local transaction (تراکنش محلی) transition (تغییر) state (حالت) و چه action (عملی)، در صورت وجود، را تعیین می‌کند. همچنین استراتژی‌های testing (آزمایش) موثری برای state machines (ماشین‌های حالت) وجود دارد. در نتیجه، استفاده از یک model (مدل) state machine (ماشین حالت)، طراحی، پیاده‌سازی و testing (آزمایش) sagas (حماسه‌ها) را آسان‌تر می‌کند.</p>
+  <p>شکل 4.7 model (مدل) state machine (ماشین حالت) را برای Create Order Saga (حماسه ایجاد سفارش) نشان می‌دهد. این state machine (ماشین حالت) از numerous states (حالت‌های متعدد) تشکیل شده است، از جمله موارد زیر:</p>
+  <ul>
+   <li>Verifying Consumer (تایید مصرف‌کننده) - the initial state (حالت اولیه). هنگامی که در این state (حالت) قرار دارد، saga (حماسه) منتظر است تا Consumer Service (سرویس مصرف‌کننده) تأیید کند که مصرف‌کننده می‌تواند order (سفارش) را ثبت کند.</li>
+   <li>Creating Ticket (ایجاد بلیت) - saga (حماسه) منتظر یک reply (پاسخ) به command (دستور) Create Ticket (ایجاد بلیت) است.</li>
+   <li>Authorizing Card (مجوز کارت) - منتظر Accounting Service (سرویس حسابداری) برای authorize (مجوز) credit card (کارت اعتباری) مصرف‌کننده.</li>
+   <li>Order Approved (سفارش تایید شده) - یک final state (حالت نهایی) نشان می‌دهد که saga (حماسه) با موفقیت تکمیل شده است.</li>
+   <li>Order Rejected (سفارش رد شده) - یک final state (حالت نهایی) نشان می‌دهد که Order (سفارش) توسط یکی از participants (شرکت‌کنندگان) رد شده است.</li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

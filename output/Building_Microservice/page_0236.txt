@@ -1,0 +1,39 @@
+making changes across multiple microservices, then your service boundaries might
+not be in the right place, and it could imply too much coupling between your serv‐
+ices. As we’ve already discussed, we’re trying to optimize our architecture, and our
+microservice boundaries, so that changes are more likely going to apply within a
+microservice boundary. Cross-cutting changes should be the exception, not the
+norm.
+In fact, I’d argue that the pain of working across multiple repos can be useful in help‐
+ing enforce microservice boundaries, as it forces you to think carefully about where
+these boundaries are, and about the nature of the interactions between them.
+If you are constantly making changes across multiple microservi‐
+ces, it’s likely that your microservice boundaries are in the wrong
+place. It may be worth considering merging microservices back
+together if you spot this happening.
+Then there is the hassle of having to pull from multiple repos and push to multiple
+repos as part of your normal workflow. In my experience, this can be simplified
+either by using an IDE that supports multiple repositories (this is something that all
+IDEs I’ve used over the last five years can handle) or by writing simple wrapper
+scripts to simplify things when working on the command line.
+Where to use this pattern
+Using the one repository per microservice approach works just as well for small
+teams as it does for large teams, but if you find yourself making lots of changes across
+microservice boundaries, then it may not be for you, and the monorepo pattern we
+discuss next may be a better fit—although making lots of changes across service
+boundaries can be considered a warning sign that something isn’t right, as we’ve dis‐
+cussed previously. It can also make code reuse more complex than using a monorepo
+approach, as you need to depend on code being packaged into version artifacts.
+Pattern: Monorepo
+With a monorepo approach, code for multiple microservices (or other types of
+projects) is stored in the same source code repository. I have seen situations in which
+a monorepo is used just by one team to manage source control for all its services,
+although the concept has been popularized by some very large tech companies where
+multiple teams and hundreds if not thousands of developers can all work on the same
+source code repository.
+By having all the source code in the same repository, you allow for source code
+changes to be made across multiple projects in an atomic fashion, and for finer-
+grained reuse of code from one project to the next. Google is probably the
+210 
+| 
+Chapter 7: Build

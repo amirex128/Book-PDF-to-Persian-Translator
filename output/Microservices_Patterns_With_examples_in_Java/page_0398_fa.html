@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 398</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   infrastructure service. The health check code می‌تواند، به عنوان مثال، تأیید کند که
+   به یک RDBMS متصل است با به دست آوردن یک database connection و اجرای یک test query.
+   A more elaborate approach این است که یک synthetic transaction را اجرا کنید که
+   فراخوانی API از service را توسط یک client شبیه‌سازی می‌کند. This kind of health check جامع‌تر است،
+   اما احتمالاً زمان بیشتری برای پیاده‌سازی می‌برد و اجرای آن بیشتر طول می‌کشد.
+  </p>
+  <p>
+   A great example از یک health check library Spring Boot Actuator است. As mentioned
+   earlier، it implements a /actuator/health endpoint. The code که این را پیاده‌سازی می‌کند
+   endpoint نتیجه اجرای یک set از health checks را برمی‌گرداند. By using convention
+   over configuration, Spring Boot Actuator یک set از health checks را پیاده‌سازی می‌کند
+   بر اساس infrastructure services که توسط service استفاده می‌شود. If, for example, a service uses
+   a JDBC DataSource, Spring Boot Actuator یک health check را پیکربندی می‌کند که یک
+   test query را اجرا می‌کند. Similarly, if the service از RabbitMQ message broker استفاده می‌کند، به طور خودکار
+   یک health check را پیکربندی می‌کند که تأیید می‌کند که سرور RabbitMQ فعال است.
+  </p>
+  <p>
+   You can also این رفتار را با implement additional health checks برای
+   service خود سفارشی کنید. You implement a custom health check با تعریف یک class که imple-
+   ments the HealthIndicator interface. This interface یک health() method را تعریف می‌کند،
+   که توسط implementation از /actuator/health endpoint فراخوانی می‌شود. It returns
+   the outcome از health check.
+  </p>
+  <h4><span style="font-weight: bold;">INVOKING THE HEALTH CHECK ENDPOINT</span></h4>
+  <p>
+   A health check endpoint، اگر کسی آن را فراخوانی نکند، استفاده زیادی ندارد. When you deploy your ser-
+   vice, شما باید deployment infrastructure را پیکربندی کنید تا endpoint را فراخوانی کنید. How
+   you do that به جزئیات خاص از deployment infrastructure شما بستگی دارد. For
+   example, as described در فصل 3، شما می‌توانید برخی از service registries، مانند
+   Netflix Eureka، را پیکربندی کنید تا health check endpoint را فراخوانی کنید تا تعیین کنید که آیا
+   traffic باید به service instance هدایت شود. فصل 12 در مورد نحوه پیکربندی بحث می‌کند
+   Docker و Kubernetes برای فراخوانی a health check endpoint.
+  </p>
+  <h4><span style="font-weight: bold;">11.3.2 Applying the Log aggregation pattern</span></h4>
+  <p>
+   Logs یک ابزار troubleshooting ارزشمند هستند. If you want to know که مشکل application چیست، یک مکان خوب برای شروع، log files است. But using logs در یک microservice archi-
+   tecture چالش برانگیز است. For example, imagine شما در حال debugging یک مشکل با
+   getOrderDetails() query هستید. As described در فصل 8، the FTGO application imple-
+   ments این query با استفاده از API composition. As a result، log entries که شما نیاز دارید پراکنده هستند
+   across the log files از API gateway و چندین services، از جمله Order
+   Service و Kitchen Service.
+  </p>
+  <p>
+   Pattern: Log aggregation
+   Aggregate the logs از همه services در یک database متمرکز که از searching پشتیبانی می‌کند
+   و alerting. See http://microservices.io/patterns/observability/application-logging
+   .html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

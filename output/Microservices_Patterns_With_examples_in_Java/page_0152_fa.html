@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 152</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>برای نشان دادن نحوه عملکرد sagas (حماسه‌های) مبتنی بر orchestration (ارکستراسیون)، ابتدا یک مثال را شرح می‌دهم. سپس نحوه model (مدل‌سازی) sagas (حماسه‌های) مبتنی بر orchestration (ارکستراسیون) را به عنوان state machines (ماشین‌های حالت) توضیح می‌دهم. من در مورد چگونگی استفاده از transactional messaging (پیام‌رسانی تراکنشی) برای اطمینان از ارتباط قابل اعتماد بین saga orchestrator (ارکستراتور حماسه) و participants (شرکت‌کنندگان) saga (حماسه) بحث خواهم کرد. سپس مزایا و معایب استفاده از sagas (حماسه‌های) مبتنی بر orchestration (ارکستراسیون) را شرح خواهم داد.</p>
+  <p>IMPLEMENTING THE CREATE ORDER SAGA USING ORCHESTRATION (پیاده‌سازی Create Order Saga (حماسه ایجاد سفارش) با استفاده از ORCHESTRATION (ارکستراسیون))</p>
+  <p>شکل 4.6 طراحی نسخه مبتنی بر orchestration (ارکستراسیون) Create Order Saga (حماسه ایجاد سفارش) را نشان می‌دهد. saga (حماسه) توسط کلاس CreateOrderSaga، که participants (شرکت‌کنندگان) saga (حماسه) را با استفاده از request/response (درخواست/پاسخ) asynchronous (ناهمزمان) فراخوانی می‌کند، orchestrated (ارکستر) می‌شود. این کلاس فرآیند را پیگیری می‌کند و پیام‌های command (دستور) را به participants (شرکت‌کنندگان) saga (حماسه)، مانند Kitchen Service (سرویس آشپزخانه) و Consumer Service (سرویس مصرف‌کننده) ارسال می‌کند. کلاس CreateOrderSaga پیام‌های reply (پاسخ) را از کانال reply (پاسخ) خود می‌خواند و سپس گام بعدی، در صورت وجود، را در saga (حماسه) تعیین می‌کند.</p>
+  <br>
+  <p>Accounting (حسابداری)</p>
+  <p>Service (سرویس)</p>
+  <p>Kitchen (آشپزخانه)</p>
+  <p>Service (سرویس)</p>
+  <p>Consumer (مصرف‌کننده)</p>
+  <p>Service (سرویس)</p>
+  <p>Consumer Service (سرویس مصرف‌کننده)</p>
+  <p>request channel (کانال درخواست)</p>
+  <p>Consumer (مصرف‌کننده) veriﬁed (تایید شده)</p>
+  <p>2</p>
+  <p>4</p>
+  <p>6</p>
+  <p>Verify consumer (تایید مصرف کننده)</p>
+  <p>1</p>
+  <p>Approve (تایید) restaurant (رستوران)</p>
+  <p>order (سفارش)</p>
+  <p>7</p>
+  <p>Approve (تایید)</p>
+  <p>order (سفارش)</p>
+  <p>8</p>
+  <p>Create (ایجاد)</p>
+  <p>ticket (بلیت)</p>
+  <p>3</p>
+  <p>Authorize (مجوز)</p>
+  <p>card (کارت)</p>
+  <p>5</p>
+  <p>Card (کارت)</p>
+  <p>authorized (مجاز)</p>
+  <br>
+  <p>Message broker (واسطه پیام)</p>
+  <p>Order (سفارش)</p>
+  <p>Service (سرویس)</p>
+  <p>Command message (پیام دستور)</p>
+  <p>Key (کلید)</p>
+  <p>Reply message (پیام پاسخ)</p>
+  <p>Create (ایجاد)</p>
+  <p>order saga (سفارش حماسه)</p>
+  <p>reply channel (کانال پاسخ)</p>
+  <p>Kitchen (آشپزخانه)</p>
+  <p>Service (سرویس)</p>
+  <p>request channel (کانال درخواست)</p>
+  <p>Accounting (حسابداری)</p>
+  <p>Service (سرویس)</p>
+  <p>request channel (کانال درخواست)</p>
+  <p>Order (سفارش)</p>
+  <p>Service (سرویس)</p>
+  <p>request channel (کانال درخواست)</p>
+  <p>Create (ایجاد)</p>
+  <p>order saga (سفارش حماسه)</p>
+  <p>orchestrator (ارکستراتور)</p>
+  <p>Ticket (بلیت) created (ایجاد شده)</p>
+  <br>
+  <img src="figure_4_6.png" alt="Figure 4.6">
+  <p>Implementing the Create Order Saga using orchestration (پیاده‌سازی Create Order Saga (حماسه ایجاد سفارش) با استفاده از orchestration (ارکستراسیون)). Order Service (سرویس سفارش)</p>
+  <p>یک saga orchestrator (ارکستراتور حماسه) را پیاده‌سازی می‌کند، که participants (شرکت‌کنندگان) saga (حماسه) را با استفاده از request/response (درخواست/پاسخ) asynchronous (ناهمزمان) فراخوانی می‌کند.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

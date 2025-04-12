@@ -1,0 +1,42 @@
+It boils down, essentially, to the metric. The metric is a dot of data, a single number
+with a name and some identifying tags. All of the context you can get has to be stuffed
+into those tags. But the write explosion of writing all those tags is expensive because of
+how metrics are stored on disk. Storing a metric is dirt cheap, but storing a tag is
+expensive; and storing lots of tags per metric will bring your storage engine to a halt
+fast.
+Practically speaking, systems built with low cardinality in mind will struggle greatly if
+you try to put higher-cardinality data into them. Systems like Prometheus, for exam‐
+ple, were built to store fairly simple pieces of information, such as the CPU rate for a
+given machine. In many ways, we can see Prometheus and similar tools as being a
+great implementation of traditional metrics storage and querying. But the lack of
+ability to support higher-cardinality data can be a limiting factor. The Prometheus
+devs are quite open about this limitation:
+Remember that every unique combination of key-value label pairs represents a new
+time series, which can dramatically increase the amount of data stored. Do not use
+labels to store dimensions with high cardinality (many different label values), such as
+user IDs, email addresses, or other unbounded sets of values.
+Systems that are capable of handling high cardinality are more able to allow you to
+ask a host of different questions of your systems—often questions you didn’t know
+you needed to ask beforehand. Now, this might be a hard concept to grasp, especially
+if you’ve been managing your single-process monolithic system quite happily with
+more “conventional” tools. Even those people with larger systems have made do with
+lower-cardinality systems, often because they had no choice. But as your system
+increases in complexity, you’ll need to improve the quality of the outputs your system
+provides to allow you to improve its observability. This means collecting more infor‐
+mation and having tooling that allows you to slice and dice this data.
+Implementations
+Since the first edition of this book, Prometheus has become a popular open source
+tool for the use of gathering and aggregating metrics, and in cases in which I might
+have previously recommended the use of Graphite (which got my recommendation
+in the first edition), Prometheus can be a sensible replacement. The commercial
+space has also greatly expanded in this area, with new vendors and old vendors alike
+building or retooling existing solutions to target microservice users.
+Bear in mind, though, my concerns regarding low- versus high-cardinality data. Sys‐
+tems built to handle low-cardinality data will be very difficult to retrofit to support
+high-cardinality storage and processing. If you are looking for systems that are able to
+store and manage high cardinality data, allowing for much more sophisticated obser‐
+vation (and questioning) of your system’s behavior, I’d strongly suggest looking at
+either Honeycomb or Lightstep. Although these tools are often seen as solutions to
+Building Blocks for Observability 
+| 
+323

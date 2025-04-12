@@ -1,0 +1,43 @@
+269
+The API gateway pattern
+On one hand, as you would expect, using NIO reduced the cost of each network con-
+nection, due to the fact that there’s no longer a dedicated thread for each one. Also, a
+Zuul cluster that ran I/O-intensive logic—such as request routing—had a 25% increase
+in throughput and a 25% reduction in CPU utilization. On the other hand, a Zuul clus-
+ter that ran CPU-intensive logic—such as decryption and compression—showed no
+improvement. 
+USE REACTIVE PROGRAMMING ABSTRACTIONS
+As mentioned earlier, API composition consists of invoking multiple backend services.
+Some backend service requests depend entirely on the client request’s parameters.
+Others might depend on the results of other service requests. One approach is for an
+API endpoint handler method to call the services in the order determined by the depen-
+dencies. For example, the following listing shows the handler for the findOrder()
+request that’s written this way. It calls each of the four services, one after the other.
+@RestController
+public class OrderDetailsController {
+@RequestMapping("/order/{orderId}")
+public OrderDetails getOrderDetails(@PathVariable String orderId) {
+OrderInfo orderInfo = orderService.findOrderById(orderId);
+TicketInfo ticketInfo = kitchenService
+.findTicketByOrderId(orderId);
+DeliveryInfo deliveryInfo = deliveryService
+.findDeliveryByOrderId(orderId);
+BillInfo billInfo = accountingService
+.findBillByOrderId(orderId);
+OrderDetails orderDetails =
+OrderDetails.makeOrderDetails(orderInfo, ticketInfo,
+deliveryInfo, billInfo);
+return orderDetails;
+}
+...
+The drawback of calling the services sequentially is that the response time is the sum
+of the service response times. In order to minimize response time, the composition
+logic should, whenever possible, invoke services concurrently. In this example, there
+are no dependencies between the service calls. All services should be invoked concur-
+rently, which significantly reduces response time. The challenge is to write concurrent
+code that’s maintainable.
+ This is because the traditional way to write scalable, concurrent code is to use
+callbacks. Asynchronous, event-driven I/O is inherently callback-based. Even a Servlet
+Listing 8.1
+Fetching the order details by calling the backend services sequentially
+ 

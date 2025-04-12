@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 102</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <p>
+   ویژگی‌های <strong>attributes</strong> علاوه بر مقادیرشان. نقطه ضعف دیگر سربار تجزیه
+   متن، به خصوص زمانی که پیام‌ها بزرگ هستند، است. در نتیجه، اگر کارایی و عملکرد
+   مهم هستند، ممکن است بخواهید از یک فرمت باینری استفاده کنید.
+  </p>
+  <p>
+   <strong>BINARY MESSAGE FORMATS</strong>
+  </p>
+  <p>
+   چندین فرمت باینری مختلف برای انتخاب وجود دارد. فرمت‌های محبوب شامل
+   <strong>Protocol Buffers</strong> (https://developers.google.com/protocol-buffers/docs/overview)
+   و <strong>Avro</strong> (https://avro.apache.org) هستند. هر دو فرمت یک <strong>typed IDL</strong> برای تعریف ارائه می‌دهند
+   ساختار پیام‌های شما. سپس یک کامپایلر کدی را تولید می‌کند که پیام‌ها را سریال‌سازی و
+   <strong>deserialize</strong> می‌کند. شما مجبور هستید که یک رویکرد <strong>API-first</strong> را در طراحی سرویس در نظر بگیرید! علاوه بر این، اگر
+   شما کلاینت خود را در یک زبان <strong>statically typed</strong> بنویسید، کامپایلر بررسی می‌کند که
+   به درستی از <strong>API</strong> استفاده می‌کند.
+  </p>
+  <p>
+   یک تفاوت بین این دو فرمت باینری این است که <strong>Protocol Buffers</strong> از
+   <strong>tagged fields</strong> استفاده می‌کند، در حالی که یک مصرف‌کننده <strong>Avro</strong> برای <strong>inter</strong>-
+   پیام‌ها را تفسیر می‌کند. در نتیجه، رسیدگی به تکامل <strong>API</strong> با <strong>Protocol Buffers</strong> آسان‌تر است
+   تا با <strong>Avro</strong>. این پست وبلاگ (http://martin.kleppmann.com/2012/12/05/schema-
+   <strong>evolution-in-avro-protocol-buffers-thrift.html</strong>) یک مقایسه عالی از <strong>Thrift</strong>،
+   <strong>Protocol Buffers</strong> و <strong>Avro</strong> است.
+  </p>
+  <p>
+   اکنون که به فرمت‌های پیام نگاه کردیم، بیایید به مکانیسم‌های <strong>IPC</strong> خاص نگاهی بیندازیم
+   که پیام‌ها را منتقل می‌کنند، با الگوی <strong>Remote procedure invocation</strong> (<strong>RPI</strong>) شروع می‌کنیم.
+  </p>
+  <h4>3.2 Communicating using the synchronous Remote procedure invocation pattern</h4>
+  <p>
+   هنگام استفاده از یک مکانیسم <strong>IPC</strong> مبتنی بر <strong>remote procedure invocation</strong>، یک کلاینت یک
+   <strong>request</strong> را به یک سرویس ارسال می‌کند، و سرویس <strong>request</strong> را پردازش می‌کند و یک <strong>response</strong> را برمی‌گرداند.
+   برخی از کلاینت‌ها ممکن است منتظر <strong>response block</strong> شوند، و دیگران ممکن است یک <strong>reactive, non-</strong>
+   معماری <strong>blocking</strong> داشته باشند. اما برخلاف زمانی که از پیام‌رسانی استفاده می‌کنید، کلاینت فرض می‌کند که
+   <strong>response</strong> به موقع خواهد رسید.
+  </p>
+  <p>
+   شکل 3.1 نحوه عملکرد <strong>RPI</strong> را نشان می‌دهد. منطق کسب‌وکار در کلاینت یک
+   <strong>proxy interface</strong> را فراخوانی می‌کند، که توسط یک کلاس <strong>RPI proxy adapter</strong> پیاده‌سازی شده است. <strong>RPI proxy</strong> یک <strong>request</strong> را به
+   سرویس ارسال می‌کند. <strong>request</strong> توسط یک کلاس <strong>RPI server adapter</strong> که منطق کسب‌وکار سرویس را از طریق یک <strong>interface</strong> فراخوانی می‌کند،
+   مدیریت می‌شود. سپس یک <strong>reply</strong> به <strong>RPI proxy</strong> بازمی‌گرداند، که نتیجه را به منطق کسب‌وکار کلاینت برمی‌گرداند.
+  </p>
+  <p>
+   <strong>proxy interface</strong> معمولاً پروتکل ارتباطی اساسی را کپسوله می‌کند.
+   پروتکل‌های متعددی برای انتخاب وجود دارد. در این بخش، من <strong>REST</strong> را توصیف می‌کنم و
+   الگو: <strong>Remote procedure invocation</strong>
+  </p>
+  <p>
+   یک کلاینت با استفاده از یک پروتکل مبتنی بر <strong>synchronous, remote procedure invocation</strong>، مانند <strong>REST</strong> (http://microservices.io/patterns/communication-style/
+   پیام‌رسانی.html) یک سرویس را فراخوانی می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

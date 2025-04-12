@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 76</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        traverse a variable number of edges قبل از اینکه vertex مورد نظر خود را پیدا کنید—یعنی، تعداد joins از قبل ثابت نیست.
+    </p>
+    <p>
+        در مثال ما، این در rule () -[:WITHIN*0..]-&gt; () در query Cypher اتفاق می‌افتد. The LIVES_IN edge یک فرد ممکن است به هر نوع location اشاره کند: یک خیابان، یک شهر، یک district، یک region، یک state و غیره. یک شهر ممکن است WITHIN یک region باشد، یک region WITHIN یک state باشد، یک state WITHIN یک country و غیره. The LIVES_IN edge ممکن است مستقیماً به location ver‐tex که شما به دنبال آن هستید اشاره کند، یا ممکن است چندین سطح در hierarchy location حذف شود.
+    </p>
+    <p>
+        در Cypher، :WITHIN*0.. این واقعیت را بسیار مختصر بیان می‌کند: به این معنی است "follow a WITHIN edge، zero or more times." این مانند عملگر * در یک regular expression است.
+    </p>
+    <p>
+        از زمان SQL:1999، این ایده از variable-length traversal paths در یک query می‌تواند با استفاده از چیزی به نام recursive common table expressions (syntax WITH RECURSIVE) بیان شود. Example 2-5 همان query—یافتن نام افرادی که از ایالات متحده به اروپا مهاجرت کرده‌اند—را نشان می‌دهد که با استفاده از این تکنیک در SQL بیان شده است (که در PostgreSQL، IBM DB2، Oracle و SQL Server پشتیبانی می‌شود). با این حال، syntax در مقایسه با Cypher بسیار دست و پا چلفتی است.
+    </p>
+    <p>
+        Example 2-5. The same query as Example 2-4, expressed in SQL using recursive common table expressions
+    </p>
+    <pre><code class="language-sql">WITH RECURSIVE
+  -- in_usa is the set of vertex IDs of all locations within the United States
+  in_usa(vertex_id) AS (
+      SELECT vertex_id FROM vertices WHERE properties-&gt;&gt;'name' = 'United States' 
+    UNION
+      SELECT edges.tail_vertex FROM edges 
+        JOIN in_usa ON edges.head_vertex = in_usa.vertex_id
+        WHERE edges.label = 'within'
+  ),
+  -- in_europe is the set of vertex IDs of all locations within Europe
+  in_europe(vertex_id) AS (
+      SELECT vertex_id FROM vertices WHERE properties-&gt;&gt;'name' = 'Europe' 
+    UNION
+      SELECT edges.tail_vertex FROM edges
+        JOIN in_europe ON edges.head_vertex = in_europe.vertex_id
+        WHERE edges.label = 'within'
+  ),
+  -- born_in_usa is the set of vertex IDs of all people born in the US
+  born_in_usa(vertex_id) AS ( 
+    SELECT edges.tail_vertex FROM edges
+      JOIN in_usa ON edges.head_vertex = in_usa.vertex_id
+      WHERE edges.label = 'born_in'
+  ),
+</code></pre>
+    <p>
+        54 | Chapter 2: Data Models and Query Languages
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

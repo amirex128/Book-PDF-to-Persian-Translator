@@ -1,0 +1,46 @@
+188
+CHAPTER 6
+Developing business logic with event sourcing
+ It may be strange and unfamiliar to reconstruct the in-memory state of an aggre-
+gate by loading the events and replaying events. But in some ways, it’s not all that dif-
+ferent from how an ORM framework such as JPA or Hibernate loads an entity. An
+ORM framework loads an object by executing one or more SELECT statements to
+retrieve the current persisted state, instantiating objects using their default construc-
+tors. It uses reflection to initialize those objects. What’s different about event sourcing
+is that the reconstruction of the in-memory state is accomplished using events.
+ Let’s now look at the requirements event sourcing places on domain events. 
+EVENTS REPRESENT STATE CHANGES
+Chapter 5 defines domain events as a mechanism for notifying subscribers of changes
+to aggregates. Events can either contain minimal data, such as just the aggregate ID,
+or can be enriched to contain data that’s useful to a typical consumer. For example,
+the Order Service can publish an OrderCreated event when an order is created. An
+OrderCreated event may only contain the orderId. Alternatively, the event could con-
+tain the complete order so consumers of that event don’t have to fetch the data from
+the Order Service. Whether events are published and what those events contain are
+driven by the needs of the consumers. With event sourcing, though, it’s primarily the
+aggregate that determines the events and their structure.
+ Events aren’t optional when using event sourcing. Every state change of an aggre-
+gate, including its creation, is represented by a domain event. Whenever the aggregate’s
+state changes, it must emit an event. For example, an Order aggregate must emit an
+OrderCreated event when it’s created, and an Order* event whenever it is updated.
+This is a much more stringent requirement than before, when an aggregate only emit-
+ted events that were of interest to consumers.
+ What’s more, an event must contain the data that the aggregate needs to perform
+the state transition. The state of an aggregate consists of the values of the fields of the
+objects that comprise the aggregate. A state change might be as simple as changing
+the value of the field of an object, such as Order.state. Alternatively, a state change
+can involve adding or removing objects, such as revising an Order’s line items.
+ Suppose, as figure 6.3 shows, that the current state of the aggregate is S and the
+new state is S'. An event E that represents the state change must contain the data such
+that when an Order is in state S, calling order.apply(E) will update the Order to state
+S'. In the next section you’ll see that apply() is a method that performs the state
+change represented by an event.
+ Some events, such as the Order Shipped event, contain little or no data and just
+represent the state transition. The apply() method handles an Order Shipped event
+by changing the Order’s status field to SHIPPED. Other events, however, contain a lot
+of data. An OrderCreated event, for example, must contain all the data needed by the
+apply() method to initialize an Order, including its line items, payment information,
+delivery information, and so on. Because events are used to persist an aggregate, you
+no longer have the option of using a minimal OrderCreated event that contains the
+orderId. 
+ 

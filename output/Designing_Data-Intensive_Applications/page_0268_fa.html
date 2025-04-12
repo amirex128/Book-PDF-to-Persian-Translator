@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 268</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Conflict resolution and replication</h4>
+    <p>
+        در databases های replicated (به فصل 5 مراجعه کنید)، جلوگیری از <em>lost updates</em> بعد دیگری به خود می‌گیرد: از آنجایی که آنها کپی‌هایی از داده‌ها را در چندین node دارند، و داده‌ها به طور بالقوه می‌توانند به طور همزمان در nodes مختلف اصلاح شوند، برای جلوگیری از <em>lost updates</em> باید مراحل اضافی انجام شود.
+    </p>
+    <p>
+        <em>Locks</em> و operations <em>compare-and-set</em> فرض می‌کنند که یک کپی واحد و به‌روز از داده‌ها وجود دارد. با این حال، databases ها با <em>multi-leader</em> یا <em>leaderless replication</em> معمولاً به چندین <em>writes</em> اجازه می‌دهند تا به طور همزمان اتفاق بیفتند و آنها را به‌صورت ناهمزمان <em>replicate</em> می‌کنند، بنابراین آنها نمی‌توانند تضمین کنند که یک کپی واحد و به‌روز از داده‌ها وجود دارد. بنابراین، تکنیک‌های مبتنی بر <em>locks</em> یا <em>compare-and-set</em> در این زمینه اعمال نمی‌شوند. (ما این موضوع را با جزئیات بیشتر در "Linearizability" در صفحه 324 دوباره بررسی خواهیم کرد.)
+    </p>
+    <p>
+        در عوض، همانطور که در "Detecting Concurrent Writes" در صفحه 184 مورد بحث قرار گرفت، یک رویکرد رایج در چنین databases های <em>replicated</em> این است که به <em>concurrent writes</em> اجازه دهیم چندین نسخه متناقض از یک value ایجاد کنند (که به عنوان <em>siblings</em> نیز شناخته می‌شوند)، و از کد application یا ساختارهای داده ویژه برای حل و ادغام این نسخه‌ها پس از fact استفاده شود.
+    </p>
+    <p>
+        Operations Atomic می‌توانند در یک context <em>replicated</em> به خوبی کار کنند، به خصوص اگر <em>commutative</em> باشند (یعنی، شما می‌توانید آنها را به ترتیب متفاوتی در <em>replicas</em> های مختلف اعمال کنید، و همچنان همان نتیجه را بگیرید). به عنوان مثال، افزایش یک counter یا افزودن یک عنصر به یک set عملیات <em>commutative</em> هستند. این ایده پشت <em>datatypes</em> از Riak 2.0 است، که از <em>lost updates</em> در سراسر replicas جلوگیری می‌کند. هنگامی که یک value به طور همزمان توسط clients مختلف به‌روزرسانی می‌شود، Riak به طور خودکار <em>updates</em> را به گونه‌ای ادغام می‌کند که هیچ <em>updates</em> از دست نرود [39].
+    </p>
+    <p>
+        از سوی دیگر، روش <em>last write wins (LWW) conflict resolution</em> مستعد <em>lost updates</em> است، همانطور که در "Last write wins (discarding concurrent writes)" در صفحه 186 مورد بحث قرار گرفت. متأسفانه، LWW پیش‌فرض در بسیاری از databases های replicated است.
+    </p>
+    <h4>Write Skew and Phantoms</h4>
+    <p>
+        در بخش‌های قبلی ما <em>dirty writes</em> و <em>lost updates</em> را دیدیم، دو نوع از <em>race conditions</em> که می‌توانند زمانی رخ دهند که <strong>Transactions</strong> های مختلف به طور همزمان سعی در <em>write</em> به یک object یکسان داشته باشند. به منظور جلوگیری از <em>data corruption</em>، باید از آن <em>race conditions</em> جلوگیری شود—یا به طور خودکار توسط database، یا با اقدامات احتیاطی دستی مانند استفاده از <em>locks</em> یا operations atomic <em>write</em>.
+    </p>
+    <p>
+        با این حال، این پایان لیست <em>potential race conditions</em> که می‌تواند بین <em>concurrent writes</em> رخ دهد، نیست. در این بخش ما به برخی از مثال‌های ظریف‌تر از <em>conflicts</em> خواهیم پرداخت.
+    </p>
+    <p>
+        برای شروع، این مثال را تصور کنید: شما در حال نوشتن یک application برای پزشکان هستید تا شیفت‌های <em>on-call</em> خود را در یک بیمارستان مدیریت کنند. بیمارستان معمولاً سعی می‌کند در هر زمانی چندین پزشک را در <em>on-call</em> داشته باشد، اما قطعاً باید حداقل یک پزشک در <em>on-call</em> داشته باشد. پزشکان
+        <br>
+        246
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

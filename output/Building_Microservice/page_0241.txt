@@ -1,0 +1,39 @@
+6 See Git Virtual File System Design History.
+or resources. Put another way, whatever monorepo you end up with probably won’t
+be Google’s.
+Microsoft experienced similar issues with scale. It adopted Git to help manage the
+main source code repository for Windows. A full working directory for this codebase
+is around 270 GB of source files.6 Downloading all of that would take an age, and it’s
+also not necessary—developers will end up working on just one small part of the
+overall system. So Microsoft had to create a dedicated virtual file system, VFS for Git
+(previously known as GVFS), that ensures only the source files that a developer needs
+are actually downloaded.
+VFS for Git is an impressive achievement, as is Google’s own toolchain, although jus‐
+tifying these kinds of investments in this sort of technology is much easier for compa‐
+nies like this. It’s also worth pointing out that although VFS for Git is open source,
+I’ve yet to meet a team outside Microsoft using it—and the vast bulk of Google’s own
+toolchain supporting its monorepo is closed source (Bazel is a notable exception, but
+it’s unclear to what extent the open source Bazel actually mirrors what is used inside
+Google itself).
+Markus Oberlehner’s piece “Monorepos in the Wild” introduced me to Lerna, a tool
+created by the team behind the Babel JavaScript compiler. Lerna is designed to make
+it easier to produce multiple versioned artifacts from the same source code reposi‐
+tory. I can’t speak directly to how effective Lerna is at this task (in addition to a num‐
+ber of other notable deficiencies, I am not an experienced JavaScript developer), but
+it seems from a surface examination to simplify this approach somewhat.
+How “mono” is mono?
+Google doesn’t store all of its code in a monorepo. There are some projects, especially
+those being developed in the open, that are held elsewhere. Nonetheless, at least
+based on the previously mentioned ACM article, 95% of Google’s code was stored in
+the monorepo as of 2016. In other organizations, a monorepo may be scoped to only
+one system, or to a small number of systems. This means a company could have a
+small number of monorepos for different parts of the organization.
+I’ve also spoken to teams that practice per-team monorepos. While technically speak‐
+ing this probably doesn’t match up to the original definition of this pattern (which
+typically talks in terms of multiple teams sharing the same repository), I still think it’s
+more “monorepo” than anything else. In this situation, each team has its own mono‐
+repo that is fully under its control. All microservices owned by that team have their
+code stored in that team’s monorepo, as shown in Figure 7-11.
+Mapping Source Code and Builds to Microservices 
+| 
+215

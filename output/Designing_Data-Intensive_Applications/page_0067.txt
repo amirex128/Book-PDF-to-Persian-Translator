@@ -1,0 +1,39 @@
+If you were using XSL instead of CSS, you could do something similar:
+<xsl:template match="li[@class='selected']/p">
+    <fo:block background-color="blue">
+        <xsl:apply-templates/>
+    </fo:block>
+</xsl:template>
+Here, the XPath expression li[@class='selected']/p is equivalent to the CSS selec‐
+tor li.selected > p in the previous example. What CSS and XSL have in common
+is that they are both declarative languages for specifying the styling of a document.
+Imagine what life would be like if you had to use an imperative approach. In Java‐
+Script, using the core Document Object Model (DOM) API, the result might look
+something like this:
+var liElements = document.getElementsByTagName("li");
+for (var i = 0; i < liElements.length; i++) {
+    if (liElements[i].className === "selected") {
+        var children = liElements[i].childNodes;
+        for (var j = 0; j < children.length; j++) {
+            var child = children[j];
+            if (child.nodeType === Node.ELEMENT_NODE && child.tagName === "P") {
+                child.setAttribute("style", "background-color: blue");
+            }
+        }
+    }
+}
+This JavaScript imperatively sets the element <p>Sharks</p> to have a blue back‐
+ground, but the code is awful. Not only is it much longer and harder to understand
+than the CSS and XSL equivalents, but it also has some serious problems:
+• If the selected class is removed (e.g., because the user clicks a different page),
+the blue color won’t be removed, even if the code is rerun—and so the item will
+remain highlighted until the entire page is reloaded. With CSS, the browser auto‐
+matically detects when the li.selected > p rule no longer applies and removes
+the blue background as soon as the selected class is removed.
+• If you want to take advantage of a new API, such as document.getElementsBy
+ClassName("selected") or even document.evaluate()—which may improve
+performance—you have to rewrite the code. On the other hand, browser vendors
+can improve the performance of CSS and XPath without breaking compatibility.
+Query Languages for Data 
+| 
+45

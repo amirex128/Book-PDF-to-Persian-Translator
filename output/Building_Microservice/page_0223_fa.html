@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 223</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>CHAPTER 7</h3>
+  <h3>Build</h3>
+  <p>ما زمان زیادی را صرف پوشش جنبه‌های طراحی <em>microservices</em> کرده‌ایم، اما ما باید شروع به ورود به این موضوع کنیم که چگونه فرآیند توسعه شما ممکن است نیاز به تغییر داشته باشد تا این سبک جدید معماری را در خود جای دهد. در فصل‌های بعدی، ما به این نگاه خواهیم کرد که چگونه <em>microservices</em> خود را استقرار و آزمایش می‌کنیم، اما قبل از آن باید به این نگاه کنیم که چه چیزی اول می‌آید—چه اتفاقی می‌افتد وقتی یک توسعه‌دهنده تغییری را برای <em>check in</em> آماده کرده است؟</p>
+  <p>ما این بررسی را با بررسی برخی از مفاهیم بنیادی—<em>continuous integration</em> و <em>continuous delivery</em>—آغاز خواهیم کرد. آن‌ها مفاهیم مهمی هستند، مهم نیست که شما از چه نوع معماری سیستمی استفاده می‌کنید، اما <em>microservices</em> تعداد زیادی سؤالات منحصربه‌فرد را باز می‌کند. از آنجا ما به <em>pipelines</em> و راه‌های مختلف مدیریت <em>source code</em> برای <em>services</em> شما نگاه خواهیم کرد.</p>
+  <h4>A Brief Introduction to Continuous Integration</h4>
+  <p><em>Continuous integration (CI)</em> سال‌هاست که وجود دارد. با این حال، ارزش دارد که کمی وقت خود را صرف بررسی اصول اولیه کنیم، زیرا گزینه‌های مختلفی برای بررسی وجود دارد، به خصوص وقتی در مورد نقشه‌برداری بین <em>microservices</em>، <em>builds</em> و مخازن کنترل نسخه فکر می‌کنیم.</p>
+  <p>با <em>CI</em>، هدف اصلی این است که همه را با یکدیگر همگام نگه داریم، که ما با اطمینان از اینکه کد تازه وارد شده به درستی با کد موجود ادغام می‌شود، به آن دست می‌یابیم. برای انجام این کار، یک <em>CI server</em> تشخیص می‌دهد که کد <em>committed</em> شده است، آن را <em>checks out</em> می‌کند، و برخی از تأییدها را انجام می‌دهد، مانند اطمینان از اینکه کد <em>compiles</em> می‌شود و <em>tests pass</em> می‌شوند. حداقل، ما انتظار داریم که این ادغام به صورت روزانه انجام شود، اگرچه در عمل من در چندین تیم کار کرده‌ام که در آن یک توسعه‌دهنده در واقع چندین بار در روز تغییرات خود را ادغام کرده است.</p>
+  <p>به عنوان بخشی از این فرآیند، ما اغلب مصنوعاتی ایجاد می‌کنیم که برای اعتبارسنجی بیشتر استفاده می‌شوند، مانند استقرار یک <em>running service</em> برای اجرای <em>tests</em> در برابر آن (ما در</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

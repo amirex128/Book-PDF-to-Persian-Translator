@@ -1,0 +1,21 @@
+combines the results into a single response, and throws away any data that the user
+interface doesn’t require (Figure 14-9).
+Figure 14-9. The server-side central gateway handles filtering and aggregation of calls
+to downstream microservices
+Such a gateway could also help batch calls as well. For example, rather than needing
+to look up 10 order IDs via separate calls, I could send one batch request to the aggre‐
+gating gateway, and it could handle the rest.
+Fundamentally, having some sort of aggregating gateway can reduce the number of
+calls that the external client needs to make and reduce the amount of data that needs
+to be sent back. This can lead to significant benefits in terms of reducing bandwidth
+use and improving the latency of the application.
+Ownership
+As more user interfaces make use of the central gateway, and as more microservices
+need call aggregation and filtering logic for those user interfaces, the gateway
+becomes a potential source of contention. Who owns the gateway? Is it owned by the
+people creating the user interfaces, or by the people who own the microservices?
+Often I find that the central aggregating gateway does so much that it ends up being
+owned by a dedicated team. Hello, siloed layered architecture!
+476 
+| 
+Chapter 14: User Interfaces

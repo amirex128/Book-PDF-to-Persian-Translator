@@ -1,0 +1,28 @@
+Advantages
+With nonblocking asynchronous communication, the microservice making the initial
+call and the microservice (or microservices) receiving the call are decoupled tem‐
+porarily. The microservices that receive the call do not need to be reachable at the
+same time the call is made. This means we avoid the concerns of temporal decoupling
+that we discussed in Chapter 2 (see “A Brief Note on Temporal Coupling” on page
+42).
+This style of communication is also beneficial if the functionality being triggered by a
+call will take a long time to process. Let’s come back to our example of MusicCorp,
+and specifically the process of sending out a package. In Figure 4-5, the Order Pro
+cessor has taken payment and has decided that it is time to dispatch the package, so
+it sends a call to the Warehouse microservice. The process of finding the CDs, taking
+them off the shelf, packaging them up, and having them picked up could take many
+hours, and potentially even days, depending on how the actual dispatch process
+works. It makes sense, therefore, for the Order Processor to issue a nonblocking
+asynchronous call to the Warehouse and have the Warehouse call back later to inform
+the Order Processor of its progress. This is a form of asynchronous request-
+response communication.
+Figure 4-5. The Order Processor kicks off the process to package and ship an order,
+which is done in an asynchronous fashion
+If we tried doing something similar with synchronous blocking calls, then we’d have
+to restructure the interactions between Order Processor and Warehouse—it
+wouldn’t be feasible for Order Processor to open a connection, send a request, block
+any further operations in calling the thread, and wait for a response for what might
+be hours or days.
+Pattern: Asynchronous Nonblocking 
+| 
+99

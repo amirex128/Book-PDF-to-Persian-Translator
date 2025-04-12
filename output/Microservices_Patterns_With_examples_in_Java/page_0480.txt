@@ -1,0 +1,48 @@
+450
+CHAPTER 13
+Refactoring to microservices
+Fortunately, many sagas are straightforward to implement. As covered in chapter 4, if
+the monolith’s transactions are either pivot transactions or retriable transactions, then
+implementing sagas should be straightforward. You may even be able to simplify
+implementation by carefully ordering the sequence of service extractions so that the
+monolith’s transactions never need to be compensatable. Or it may be relatively diffi-
+cult to change the monolith to support compensating transactions. To understand
+why implementing compensating transactions in the monolith is sometimes challeng-
+ing, let’s look at some examples, beginning with a particularly troublesome one.
+THE CHALLENGE OF CHANGING THE MONOLITH TO SUPPORT COMPENSATABLE TRANSACTIONS
+Let’s dig into the problem of compensating transactions that you’ll need to solve when
+extracting Kitchen Service from the monolith. This refactoring involves splitting the
+Order entity and creating a Ticket entity in Kitchen Service. It impacts numerous
+commands implemented by the monolith, including createOrder().
+ The monolith implements the createOrder() command as a single ACID transac-
+tion consisting of the following steps:
+1
+Validate order details.
+2
+Verify that the consumer can place an order.
+3
+Authorize consumer’s credit card.
+4
+Create an Order.
+You need to replace this ACID transaction with a saga consisting of the following steps:
+1
+In the monolith
+– Create an Order in an APPROVAL_PENDING state.
+– Verify that the consumer can place an order.
+Key saga terminology
+I cover sagas in chapter 4. Here are some key terms:
+Saga—A sequence of local transactions coordinated through asynchronous
+messaging.
+Compensating transaction—A transaction that undoes the updates made by a
+local transaction.
+Countermeasure—A design technique used to handle the lack of isolation
+between sagas.
+Semantic lock—A countermeasure that sets a flag in a record that is being
+updated by a saga.
+Compensatable transaction—A transaction that needs a compensating trans-
+action because one of the transactions that follows it in the saga can fail.
+Pivot transaction—A transaction that is the saga’s go/no-go point. If it suc-
+ceeds, then the saga will run to completion.
+Retriable transaction—A transaction that follows the pivot transaction and is
+guaranteed to succeed.
+ 

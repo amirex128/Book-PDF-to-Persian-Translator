@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 344</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   <strong>Part 1</strong>
+  </p>
+  <p>
+   به عنوان مثال، OrderController، OrderService و OrderRepository را فراخوانی می‌کند. یک استراتژی testing مؤثر برای controllers، solitary unit tests است که service ها و repositories را mock می‌کند.
+  </p>
+  <p>
+   شما می‌توانید یک test class را مشابه کلاس OrderServiceTest بنویسید تا یک کلاس controller را نمونه‌سازی کنید و متدهای آن را فراخوانی کنید. اما این رویکرد، برخی از functionality های مهم، مانند request routing را تست نمی‌کند. استفاده از یک فریم‌ورک testing mock MVC، مانند Spring Mock Mvc که بخشی از Spring Framework است، یا Rest Assured Mock MVC که بر اساس Spring Mock Mvc ساخته شده است، بسیار مؤثرتر است. تست هایی که با استفاده از یکی از این فریم‌ورک‌ها نوشته شده‌اند، چیزی را که به نظر می‌رسد request های HTTP هستند، ایجاد می‌کنند و در مورد response های HTTP assertion هایی ایجاد می‌کنند. این فریم‌ورک‌ها شما را قادر می‌سازند تا request routing HTTP و تبدیل objects جاوا به و از JSON را بدون نیاز به برقراری calls های شبکه واقعی، تست کنید. Spring Mock Mvc، در زیر ساختارهای خود، به اندازه کافی از کلاس‌های Spring MVC را نمونه‌سازی می‌کند تا این امکان را فراهم کند.
+  </p>
+  <p>
+   Listing 9.6 کلاس OrderControllerTest را نشان می‌دهد که OrderController از Order Service را تست می‌کند. این solitary unit tests هایی را تعریف می‌کند که از mocks ها برای dependencies های OrderController استفاده می‌کنند. این با استفاده از Rest Assured Mock MVC نوشته شده است که یک DSL ساده ارائه می‌دهد که جزئیات تعامل با controllers را انتزاع می‌کند. Rest Assured، ارسال یک request HTTP mock را به یک controller و تأیید response را آسان می‌کند. OrderControllerTest یک controller را ایجاد می‌کند که با Mockito mocks ها برای OrderService و OrderRepository تزریق می‌شود. هر تست، mocks ها را پیکربندی می‌کند، یک request HTTP ایجاد می‌کند، تأیید می‌کند که response درست است و احتمالاً تأیید می‌کند که controller، mocks ها را فراخوانی کرده است.
+  </p>
+  <pre><code class="language-java">public class OrderControllerTest {
+private OrderService orderService;
+private OrderRepository orderRepository;
+@Before
+public void setUp() throws Exception {
+orderService = mock(OrderService.class);
+      
+orderRepository = mock(OrderRepository.class);</code></pre>
+  <p>
+   <strong>Are these really unit tests?</strong>
+  </p>
+  <p>
+   از آنجایی که این تست ها از Spring Framework استفاده می‌کنند، ممکن است استدلال کنید که آنها unit tests نیستند. آنها مطمئناً سنگین‌تر از unit tests هایی هستند که تاکنون توضیح داده‌ام.
+   مستندات Spring Mock Mvc به این موارد به عنوان out-of-servlet-container integration tests اشاره دارد (https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html#spring-mvc-test-vs-end-to-end-integration-tests). با این حال Rest Assured Mock MVC، این تست ها را به عنوان unit tests توصیف می‌کند (https://github.com/rest-assured/rest-assured/wiki/Usage#spring-mock-mvc-module). صرف نظر از بحث در مورد اصطلاحات، اینها تست های مهمی هستند که باید نوشته شوند.
+  </p>
+  <p>
+   <strong>Listing 9.6</strong>
+   A simple, fast-running unit test for the OrderController class
+  </p>
+  <p>
+   Create mocks for
+   OrderController’s
+   dependencies.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

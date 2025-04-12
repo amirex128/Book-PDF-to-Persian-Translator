@@ -1,0 +1,39 @@
+handle six weeks of logging for one of its products, causing the team to constantly
+have to shift data around to keep things manageable. Part of the reason I like Humio
+is that this was something its developers built for—rather than maintaining an index,
+they focus on efficient and scalable ingestion of data with some smart solutions to try
+and keep query times down.
+Even if you do have a solution that can store the volume of logs you want, these logs
+can end up containing a lot of valuable and sensitive information. This means that
+you might have to limit access to the logs (which could further complicate your
+efforts to have collective ownership of your microservices in production), and the
+logs could be a target for malicious parties. You might therefore need to consider not
+logging certain types of information (as we’ll touch on in “Be frugal” on page 373, if
+you don’t store data, it can’t be stolen) to reduce the impact of access by unauthor‐
+ized parties.
+Metrics Aggregation
+As with the challenge of looking at logs for different hosts, we need to look at better
+ways to gather and view data about our systems. It can be hard to know what “good”
+looks like when we’re looking at metrics for a more complex system. Our website is
+seeing nearly 50 4XX HTTP error codes per second. Is that bad? The CPU load on
+the catalog service has increased by 20% since lunch; has something gone wrong? The
+secret to knowing when to panic and when to relax is to gather metrics about how
+your system behaves over a long-enough period of time that clear patterns emerge.
+In a more complex environment, we’ll be provisioning new instances of our micro‐
+services pretty frequently, so we want the system we pick to make it very easy to col‐
+lect metrics from new hosts. We’ll want to be able to look at a metric aggregated for
+the whole system—for example, the average CPU load—but we’ll also want to aggre‐
+gate that metric for all the instances of a given service, or even for a single instance of
+that service. That means we’ll need to be able to associate metadata with the metric to
+allow us to infer this structure.
+Another key benefit of understanding your trends is when it comes to capacity plan‐
+ning. Are we reaching our limit? How long until we need more hosts? In the past
+when we bought physical hosts, this was often an annual job. In the new age of on-
+demand computing provided by infrastructure as a service (IaaS) vendors, we can
+scale up or down in minutes, if not seconds. This means that if we understand our
+usage patterns, we can make sure we have just enough infrastructure to serve our
+needs. The smarter we are in tracking our trends and knowing what to do with them,
+the more cost effective and responsive our systems can be.
+Building Blocks for Observability 
+| 
+321

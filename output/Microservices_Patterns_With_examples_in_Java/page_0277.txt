@@ -1,0 +1,43 @@
+247
+Implementing a CQRS view with AWS DynamoDB
+include the primary key attributes, consumerId and orderCreationTime, and non-key
+attributes, including orderId and status.
+ The ftgo-order-history-by-consumer-id-and-creation-time index enables
+the OrderHistoryDaoDynamoDb to efficiently retrieve a consumer’s orders sorted by
+increasing age.
+ Let’s now look at how to retrieve only those orders that match the filter criteria. 
+IMPLEMENTING THE FINDORDERHISTORY QUERY
+The findOrderHistory() query operation has a filter parameter that specifies the
+search criteria. One filter criterion is the maximum age of the orders to return. This is
+easy to implement because the DynamoDB Query operation’s key condition expression
+supports a range restriction on the sort key. The other filter criteria correspond to
+non-key attributes and can be implemented using a filter expression , which is a Boolean
+expression. A DynamoDB Query operation returns only those items that satisfy the filter
+expression. For example, to find Orders that are CANCELLED, the OrderHistoryDao-
+DynamoDb uses a query expression orderStatus = :orderStatus, where :orderStatus
+is a placeholder parameter.
+ The keyword filter criteria is more challenging to implement. It selects orders
+whose restaurant name or menu items match one of the specified keywords. The
+OrderHistoryDaoDynamoDb enables the keyword search by tokenizing the restaurant
+name and menu items and storing the set of keywords in a set-valued attribute called
+keywords. It finds the orders that match the keywords by using a filter expression
+that uses the contains() function, for example contains(keywords, :keyword1)
+OR contains(keywords, :keyword2), where :keyword1 and :keyword2 are placehold-
+ers for the specified keywords. 
+PAGINATING THE QUERY RESULTS
+Some consumers will have a large number of orders. It makes sense, therefore, for the
+findOrderHistory() query operation to use pagination. The DynamoDB Query oper-
+ation has an operation pageSize parameter, which specifies the maximum number of
+items to return. If there are more items, the result of the query has a non-null Last-
+EvaluatedKey attribute. A DAO can retrieve the next page of items by invoking the
+query with the exclusiveStartKey parameter set to LastEvaluatedKey.
+ As you can see, DynamoDB doesn’t support position-based pagination. Conse-
+quently, Order History Service returns an opaque pagination token to its client. The
+client uses this pagination token to request the next page of results.
+ Now that I’ve described how to query DynamoDB for orders, let’s look at how to
+insert and update them. 
+UPDATING ORDERS
+DynamoDB supports two operations for adding and updating items: PutItem() and
+UpdateItem(). The PutItem() operation creates or replaces an entire item by its
+primary key. In theory, OrderHistoryDaoDynamoDb could use this operation to insert
+ 

@@ -1,0 +1,42 @@
+Not perfect
+Linux containers aren’t without some problems, however. Imagine I have lots of
+microservices running in their own containers on a host. How does the outside world
+see them? You need some way to route the outside world through to the underlying
+containers, something many of the hypervisors do for you with normal virtualization.
+With earlier technology like LXC, this was something you had to handle yourself—
+this is one area where Docker’s take on containers has helped hugely.
+Another point to bear in mind is that these containers can be considered isolated
+from a resource point of view—I can allocate ring-fenced sets of CPU, memory, and
+so on to each container—but this is not necessarily the same degree of isolation as
+you get from virtual machines, or for that matter by having separate physical
+machines. Early on, there were a number of documented and known ways in which a
+process from one container could bust out and interact with other containers or the
+underlying host.
+A huge amount of work has gone into resolving these issues, and the container
+orchestration systems and underlying container runtimes have done a good job of
+examining how to better run container workloads so this isolation is improved, but
+you will need to give due thought to the sorts of workloads you want to run. My own
+guidance here is that in general you should view containers as a great way of isolating
+execution of trusted software. If you are running code written by others and are con‐
+cerned about a malicious party trying to bypass container-level isolation, then you’ll
+want to do some deeper examination yourself regarding the current state of the art
+for handling such situations—some of which we’ll touch on in a moment.
+Windows containers
+Historically, Windows users would look longingly at their Linux-using contempora‐
+ries, as containers were something denied to the Windows operating system. Over
+the last few years, however, this has changed, with containers now being a fully sup‐
+ported concept. The delay was really about the underlying Windows operating sys‐
+tem and kernel supporting the same kinds of capabilities as existed in the land of
+Linux to make containers work. It was with the delivery of Windows Server 2016 that
+a lot of this changed, and since then Windows containers have continued to evolve.
+One of the initial stumbling blocks in the adoption of Windows containers has been
+the size of the Windows operating system itself. Remember that you need to run an
+operating system inside each container, so when downloading a container image,
+you’re also downloading an operating system. Windows, though, is big—so big that it
+made containers very heavy, not just in terms of the size of the images but also in
+terms of the resources required to run them.
+Microsoft reacted to this by creating a cut-down operating system called Windows
+Nano Server. The idea is that Nano Server should have a small-footprint OS and be
+244 
+| 
+Chapter 8: Deployment

@@ -1,0 +1,29 @@
+Figure 4-6. One microservice writes out a file that other microservices make use of
+This pattern is in some ways the most common general inter-process communication
+pattern that you’ll see, and yet we sometimes fail to see it as a communication pattern
+at all—I think largely because the communication between processes is often so indi‐
+rect as to be hard to spot.
+Implementation
+To implement this pattern, you need some sort of persistent store for the data. A file‐
+system in many cases can be enough. I’ve built many systems that just periodically
+scan a filesystem, note the presence of a new file, and react on it accordingly. You
+could use some sort of robust distributed memory store as well, of course. It’s worth
+noting that any downstream microservice that is going to act on this data will need its
+own mechanism to identify that new data is available—polling is a frequent solution
+to this problem.
+Two common examples of this pattern are the data lake and the data warehouse. In
+both cases, these solutions are typically designed to help process large volumes of
+data, but arguably they exist at opposite ends of the spectrum regarding coupling.
+With a data lake, sources upload raw data in whatever format they see fit, and down‐
+stream consumers of this raw data are expected to know how to process the informa‐
+tion. With a data warehouse, the warehouse itself is a structured data store.
+Microservices pushing data to the data warehouse need to know the structure of the
+data warehouse—if the structure changes in a backward-incompatible way, then
+these producers will need to be updated.
+With both the data warehouse and the data lake, the assumption is that the flow of
+information is in a single direction. One microservice publishes data to the common
+data store, and downstream consumers read that data and carry out appropriate
+actions. This unidirectional flow can make it easier to reason about the flow of
+102 
+| 
+Chapter 4: Microservice Communication Styles

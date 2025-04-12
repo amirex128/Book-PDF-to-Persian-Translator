@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 390</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   3
+   The authentication server credentials از client را تأیید می‌کند و access
+   token و یک refresh token را برمی‌گرداند.
+  </p>
+  <p>
+   4
+   The API gateway access و refresh tokens را به client - به عنوان cookies، برمی‌گرداند،
+   به عنوان مثال.
+  </p>
+  <p>
+   5
+   The client access و refresh tokens را در requests که به API
+   gateway انجام می‌دهد، قرار می‌دهد.
+  </p>
+  <p>
+   6
+   The API gateway’s Session Authentication Interceptor the access را تأیید می‌کند
+   token و آن را در requests که به services انجام می‌دهد، قرار می‌دهد.
+  </p>
+  <p>
+   If the access token منقضی شده است یا در شرف منقضی شدن است، API gateway یک new
+   access token را با انجام یک OAuth 2.0 Refresh Grant request (www.oauth.com/
+   oauth2-servers/access-tokens/refreshing-access-tokens/)، که حاوی refresh است
+   token, to the authorization server. If the refresh token منقضی نشده است یا revok شده است،
+   the authorization server یک access token جدید را برمی‌گرداند. API Gateway the new را منتقل می‌کند
+   access token به services و آن را به client برمی‌گرداند.
+  </p>
+  <p>
+   An important benefit از استفاده از OAuth 2.0 این است که یک standard security اثبات شده است.
+   Using an off-the-shelf OAuth 2.0 Authentication Server یعنی شما مجبور نیستید
+   زمان را با دوباره اختراع کردن چرخ یا ریسک توسعه یک design ناامن تلف کنید. But OAuth
+   2.0 تنها راه برای پیاده‌سازی security در یک microservice architecture نیست. Regardless
+   از اینکه از کدام رویکرد استفاده می‌کنید، سه ایده کلیدی به شرح زیر است:
+  </p>
+  <p>
+   The API gateway مسئول authenticating clients است.
+  </p>
+  <p>
+   The API gateway و services از یک transparent token، مانند یک JWT، برای انتقال استفاده می‌کنند
+   اطلاعات در مورد principal.
+  </p>
+  <p>
+   A service از token برای به دست آوردن identity و roles از principal استفاده می‌کند.
+  </p>
+  <p>
+   اکنون که نحوه ایمن‌سازی services را بررسی کردیم، بیایید ببینیم چگونه آنها را
+   configurable کنیم.
+  </p>
+  <h4><span style="font-weight: bold;">11.2 Designing configurable services</span></h4>
+  <p>
+   Imagine که شما مسئول Order History Service هستید. As figure 11.6 نشان می‌دهد، the
+   service events را از Apache Kafka مصرف می‌کند و items از جدول AWS DynamoDB را می‌خواند و می‌نویسد.
+   In order for this service to run، به properties configuration مختلف نیاز دارد،
+   از جمله network location از Apache Kafka و credentials و network loca-
+   tion برای AWS DynamoDB.
+  </p>
+  <p>
+   The values از این configuration properties به این بستگی دارد که service در کدام environment در حال اجرا است.
+   For example, the developer و production environments will
+   از different Apache Kafka brokers و credentials مختلف AWS استفاده کنید. It doesn’t make
+   sense to hard-wire a particular environment’s configuration property values into the
+   deployable service because that would require it to be rebuilt for each environment.
+   Instead, a service باید یک بار توسط deployment pipeline ساخته شود و در آن مستقر شود
+   محیط‌های متعدد
+  </p>
+  <p>
+   Nor does it make sense to hard-wire sets مختلفی از configuration properties into
+   the source code و استفاده از، به عنوان مثال، Spring Framework’s profile mechanism برای
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

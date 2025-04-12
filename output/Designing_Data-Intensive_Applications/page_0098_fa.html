@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 98</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>SSTables و LSM-Trees</h4>
+    <p>
+        در شکل 3-3، هر log-structured storage segment یک دنباله از key-value pairs است.
+        این pairs به ترتیبی که نوشته شده‌اند ظاهر می‌شوند و values در log بعدی بر values برای همان key در log قبلی مقدم هستند. جدا از این، ترتیب key-value pairs در فایل مهم نیست.
+    </p>
+    <p>
+        اکنون می‌توانیم یک تغییر ساده در format از فایل‌های segment خود ایجاد کنیم: ما نیاز داریم که دنباله key-value pairs بر اساس key مرتب شود. در نگاه اول، به نظر می‌رسد که این requirement توانایی ما را برای استفاده از writes sequential از بین می‌برد، اما ما در یک لحظه به آن خواهیم رسید.
+    </p>
+    <p>
+        ما این format را Sorted String Table یا به اختصار SSTable می‌نامیم. ما همچنین نیاز داریم که هر key فقط یک بار در هر فایل segment merged ظاهر شود (the compaction process از قبل این را تضمین می‌کند). SSTables چندین مزیت بزرگ نسبت به log segments با hash indexes دارند:
+    </p>
+    <ol>
+        <li>ادغام segments ساده و کارآمد است، حتی اگر فایل‌ها بزرگ‌تر از memory موجود باشند. این رویکرد مانند رویکردی است که در الگوریتم mergesort استفاده می‌شود و در شکل 3-4 نشان داده شده است: شما شروع به خواندن فایل‌های ورودی در کنار هم می‌کنید، به اولین key در هر فایل نگاه می‌کنید، کمترین key را (با توجه به sort order) به فایل خروجی کپی می‌کنید و تکرار می‌کنید. این یک فایل segment merged جدید تولید می‌کند، که همچنین بر اساس key مرتب شده است.</li>
+    </ol>
+    <p>
+        شکل 3-4. Merging چندین segment SSTable، نگه‌داشتن فقط most recent value برای هر key.
+    </p>
+    <p>
+        76 | Chapter 3: Storage and Retrieval
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0098/image_1.png" alt="Image from page 98" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

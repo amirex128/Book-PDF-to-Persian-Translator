@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 269</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Designing CQRS views</mark></h3>
+  <p>
+   <mark>handler</mark> یک رکورد را در <mark>database view</mark> با استفاده از <mark>primary key</mark> آن به‌روزرسانی یا حذف می‌کند. به عنوان مثال، به زودی طراحی یک <mark>CQRS view</mark> را برای <mark>query</mark> <mark>findOrderHistory()</mark> شرح خواهم داد. این، هر <mark>Order</mark> را با استفاده از <mark>orderId</mark> به عنوان <mark>primary key</mark>، به عنوان یک رکورد <mark>database</mark> ذخیره می‌کند. هنگامی که این <mark>view</mark> یک <mark>event</mark> را از <mark>Order Service</mark> دریافت می‌کند، می‌تواند به‌طور مستقیم رکورد مربوطه را به‌روزرسانی کند.
+  </p>
+  <p>
+   اما، گاهی اوقات، لازم است که یک رکورد را با استفاده از معادل یک <mark>foreign key</mark> به‌روزرسانی یا حذف کنید. به عنوان مثال، <mark>event handlers</mark> برای <mark>Delivery* events</mark> را در نظر بگیرید. اگر بین یک <mark>Delivery</mark> و یک <mark>Order</mark>، یک رابطه یک به یک وجود داشته باشد، در این صورت <mark>Delivery.id</mark> ممکن است همان <mark>Order.id</mark> باشد. اگر اینطور باشد، در این صورت <mark>Delivery* event handlers</mark> می‌تواند به راحتی رکورد <mark>database</mark> سفارش را به‌روزرسانی کند.
+  </p>
+  <p>
+   اما فرض کنید یک <mark>Delivery</mark>، <mark>primary key</mark> خود را دارد یا یک رابطه یک به چند بین یک <mark>Order</mark> و یک <mark>Delivery</mark> وجود دارد. برخی از <mark>Delivery* events</mark>، مانند <mark>Delivery-Created event</mark>، شامل <mark>orderId</mark> خواهند بود. اما <mark>events</mark> دیگر، مانند یک <mark>DeliveryPickedUp event</mark>، ممکن است شامل این مقدار نباشند. در این سناریو، یک <mark>event handler</mark> برای <mark>DeliveryPickedUp</mark> باید رکورد سفارش را با استفاده از <mark>deliveryId</mark> به عنوان معادل یک <mark>foreign key</mark> به‌روزرسانی کند.
+  </p>
+  <p>
+   برخی از انواع <mark>database</mark> عملیات به‌روزرسانی مبتنی بر <mark>foreign-key</mark> را به طور کارآمد پشتیبانی می‌کنند. به عنوان مثال، اگر از یک <mark>RDBMS</mark> یا <mark>MongoDB</mark> استفاده می‌کنید، یک <mark>index</mark> بر روی ستون‌های لازم ایجاد می‌کنید. با این حال، به‌روزرسانی‌های مبتنی بر غیر <mark>primary key</mark> هنگام استفاده از سایر <mark>NOSQL databases</mark> ساده نیستند. application باید نوعی نگاشت خاص <mark>database</mark> از یک <mark>foreign key</mark> به یک <mark>primary key</mark> را حفظ کند تا مشخص کند کدام رکورد را باید به‌روزرسانی کرد. به عنوان مثال، یک application که از <mark>DynamoDB</mark> استفاده می‌کند، که فقط از به‌روزرسانی‌ها و حذف‌های مبتنی بر <mark>primary key</mark> پشتیبانی می‌کند، ابتدا باید یک <mark>DynamoDB secondary index</mark> (که به زودی مورد بحث قرار می‌گیرد) را <mark>query</mark> کند تا کلیدهای <mark>primary</mark> موارد را برای به‌روزرسانی یا حذف مشخص کند.
+  </p>
+  <h4><mark>7.3.2 Data access module design</mark></h4>
+  <p>
+   ماژول‌های <mark>event handlers</mark> و <mark>query API</mark> مستقیماً به <mark>datastore</mark> دسترسی ندارند.
+   <br />
+   در عوض آن‌ها از ماژول دسترسی به <mark>data</mark> استفاده می‌کنند، که از یک <mark>data access object</mark> (<mark>DAO</mark>) و کلاس‌های کمکی آن تشکیل شده است. <mark>DAO</mark> مسئولیت‌های متعددی دارد. این عملیات به‌روزرسانی فراخوانی شده توسط <mark>event handlers</mark> و عملیات <mark>query</mark> فراخوانی شده توسط ماژول <mark>query</mark> را پیاده‌سازی می‌کند. <mark>DAO</mark> بین انواع <mark>data</mark> مورد استفاده توسط کد سطح بالاتر و <mark>database API</mark> نگاشت می‌کند. همچنین باید به‌روزرسانی‌های همزمان را مدیریت کند و اطمینان حاصل کند که به‌روزرسانی‌ها <mark>idempotent</mark> هستند.
+  </p>
+  <p>
+   بیایید به این مسائل نگاهی بیندازیم، با نحوه رسیدگی به به‌روزرسانی‌های همزمان شروع می‌کنیم.
+  </p>
+  <h5><mark>HANDLING CONCURRENCY</mark></h5>
+  <p>
+   گاهی اوقات یک <mark>DAO</mark> باید احتمال به‌روزرسانی‌های همزمان متعدد را برای یک رکورد <mark>database</mark> یکسان مدیریت کند. اگر یک <mark>view</mark> به <mark>events</mark> منتشر شده توسط یک نوع <mark>aggregate</mark> واحد مشترک شود، هیچ مسئله همزمانی وجود نخواهد داشت. این به این دلیل است که <mark>events</mark> منتشر شده توسط یک نمونه <mark>aggregate</mark> خاص به صورت متوالی پردازش می‌شوند. در نتیجه، یک رکورد مربوط به یک نمونه <mark>aggregate</mark> به‌طور همزمان به‌روزرسانی نمی‌شود. اما اگر یک <mark>view</mark> به <mark>events</mark> منتشر شده توسط انواع <mark>aggregate</mark> متعدد مشترک شود، در این صورت ممکن است چندین <mark>event handlers</mark> رکورد یکسان را به‌طور همزمان به‌روزرسانی کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

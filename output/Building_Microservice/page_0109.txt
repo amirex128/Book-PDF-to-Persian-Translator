@@ -1,0 +1,22 @@
+Figure 3-7. Replacing a database join operation with service calls
+Next, we need to call the Catalog microservice, requesting information on each of
+these SKUs. This request in turn will cause the Catalog microservice to make its own
+local SELECT on its own database.
+Logically, the join operation is still happening, but it is now happening inside the
+Finance microservice rather than in the database. The join has gone from the data
+tier to the application code tier. Unfortunately, this operation isn’t going to be any‐
+where near as efficient as it would have been had the join remained in the database.
+We’ve gone from a world in which we have a single SELECT statement, to a new world
+in which we have a SELECT query against the Ledger table, followed by a call to the
+Catalog microservice, which in turn triggers a SELECT statement against the Albums
+table, as we see in Figure 3-7.
+In this situation, I’d be very surprised if the overall latency of this operation didn’t
+increase. That may not be a significant problem in this particular case, as this report
+is generated monthly and could therefore be aggressively cached (we’ll explore this
+topic in more detail in “Caching” on page 435). But if this is a frequent operation, that
+could be more problematic. We can mitigate the likely impact of this increase in
+latency by allowing for SKUs to be looked up in the Catalog microservice in bulk, or
+perhaps even by caching the required album information locally.
+Data Decomposition Concerns 
+| 
+83

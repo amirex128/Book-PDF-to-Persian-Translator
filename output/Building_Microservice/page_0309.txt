@@ -1,0 +1,39 @@
+builds, and the nature of the build times means that the build can stay broken for a
+long period when something does break.
+Implementing Service Tests
+Implementing unit tests is a fairly simple affair in the grand scheme of things, and
+there is plenty of documentation out there explaining how to write them. The service
+and end-to-end tests are the ones that are more interesting, especially in the context
+of microservices, so that’s what we’ll focus on next.
+Our service tests want to test a slice of functionality across the whole microservice,
+and only that microservice. So if we wanted to write a service test for the Customer
+microservice from Figure 9-3, we would deploy an instance of the Customer micro‐
+service—and as discussed earlier, we would want to stub out the Loyalty microser‐
+vice to better ensure that a test breakage can be mapped to an issue with the Customer
+microservice itself.
+As we explored in Chapter 7, once we check in our software, one of the first things
+our automated build will do is create a binary artifact for our microservice—
+for example, creating a container image for that version of the software. So deploying
+that is pretty straightforward. But how do we handle faking the downstream
+collaborators?
+Our service test suite needs to stub out downstream collaborators and configure the
+microservice under test to connect to the stub services. We then need to configure
+the stubs to send back responses to mimic the real-world microservices.
+Mocking or Stubbing
+When I talk about stubbing downstream collaborators, I mean that we create a stub
+microservice that responds with canned responses to known requests from the
+microservice under test. For example, I might tell my stubbed Loyalty microservice
+that when asked for the balance of customer 123, it should return 15,000. The test
+doesn’t care if the stub is called 0, 1, or 100 times. A variation on this is to use a mock
+instead of a stub.
+When using a mock, I actually go further and make sure the call was made. If the
+expected call is not made, the test fails. Implementing this approach requires more
+smarts in the fake collaborators that we create, and if overused it can cause tests to
+become brittle. As noted, however, a stub doesn’t care if it is called 0, 1, or many
+times.
+Sometimes, though, mocks can be very useful to ensure that the expected side effects
+happen. For example, I might want to check that when I create a customer, a
+new points balance is set up for that customer. The balance between stubbing and
+Implementing Service Tests 
+| 
+283

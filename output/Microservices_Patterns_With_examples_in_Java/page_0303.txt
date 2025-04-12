@@ -1,0 +1,44 @@
+273
+Implementing an API gateway
+8.3.2
+Developing your own API gateway
+Developing an API gateway isn’t particularly difficult. It’s basically a web application
+that proxies requests to other services. You can build one using your favorite web
+framework. There are, however, two key design problems that you’ll need to solve:
+Implementing a mechanism for defining routing rules in order to minimize the
+complex coding
+Correctly implementing the HTTP proxying behavior, including how HTTP
+headers are handled
+Consequently, a better starting point for developing an API gateway is to use a frame-
+work designed for that purpose. Its built-in functionality significantly reduces the
+amount of code you need to write.
+ We’ll take a look at Netflix Zuul, an open source project by Netflix, and then con-
+sider the Spring Cloud Gateway, an open source project from Pivotal.
+USING NETFLIX ZUUL
+Netflix developed the Zuul framework to implement edge functions such as routing,
+rate limiting, and authentication (https://github.com/Netflix/zuul). The Zuul frame-
+work uses the concept of filters, reusable request interceptors that are similar to servlet
+filters or NodeJS Express middleware. Zuul handles an HTTP request by assembling a
+chain of applicable filters that then transform the request, invoke backend services,
+and transform the response before it’s sent back to the client. Although you can use
+Zuul directly, using Spring Cloud Zuul, an open source project from Pivotal, is far eas-
+ier. Spring Cloud Zuul builds on Zuul and through convention-over-configuration
+makes developing a Zuul-based server remarkably easy.
+ Zuul handles the routing and edge functionality. You can extend Zuul by defining
+Spring MVC controllers that implement API composition. But a major limitation of
+Zuul is that it can only implement path-based routing. For example, it’s incapable of
+routing GET /orders to one service and POST /orders to a different service. Conse-
+quently, Zuul doesn’t support the query architecture described in chapter 7. 
+ABOUT SPRING CLOUD GATEWAY
+None of the options I’ve described so far meet all the requirements. In fact, I had
+given up in my search for an API gateway framework and had started developing an
+API gateway based on Spring MVC. But then I discovered the Spring Cloud Gate-
+way project (https://cloud.spring.io/spring-cloud-gateway/). It’s an API gateway
+framework built on top of several frameworks, including Spring Framework 5,
+Spring Boot 2, and Spring Webflux, which is a reactive web framework that's part of
+Spring Framework 5 and built on Project Reactor. Project Reactor is an NIO-based
+reactive framework for the JVM that provides the Mono abstraction used a little
+later in this chapter.
+ 
+ 
+ 

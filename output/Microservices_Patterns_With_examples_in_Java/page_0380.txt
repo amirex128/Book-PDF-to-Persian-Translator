@@ -1,0 +1,44 @@
+350
+CHAPTER 11
+Developing production-ready services
+ An application developer is primarily responsible for implementing four different
+aspects of security:
+Authentication—Verifying the identity of the application or human (a.k.a. the
+principal) that’s attempting to access the application. For example, an applica-
+tion typically verifies a principal’s credentials, such as a user ID and password or
+an application’s API key and secret.
+Authorization—Verifying that the principal is allowed to perform the requested
+operation on the specified data. Applications often use a combination of role-
+based security and access control lists (ACLs). Role-based security assigns each
+user one or more roles that grant them permission to invoke particular opera-
+tions. ACLs grant users or roles permission to perform an operation on a partic-
+ular business object, or aggregate.
+Auditing—Tracking the operations that a principal performs in order to detect
+security issues, help customer support, and enforce compliance.
+Secure interprocess communication—Ideally, all communication in and out of ser-
+vices should be over Transport Layer Security (TLS). Interservice communica-
+tion may even need to use authentication.
+I describe auditing in detail in section 11.3 and touch on securing interservice com-
+munication when discussing service meshes in section 11.4.1. This section focuses on
+implementing authentication and authorization.
+ I begin by first describing how security is implemented in the FTGO monolith
+application. I then describe the challenges with implementing security in a microser-
+vice architecture and how techniques that work well in a monolithic architecture can’t
+be used in a microservice architecture. After that I cover how to implement security in
+a microservice architecture.
+ Let’s start by reviewing how the monolithic FTGO application handles security.
+11.1.1 Overview of security in a traditional monolithic application
+The FTGO application has several kinds of human users, including consumers, cou-
+riers, and restaurant staff. They access the application using browser-based web
+applications and mobile applications. All FTGO users must log in to access the appli-
+cation. Figure 11.1 shows how the clients of the monolithic FTGO application authen-
+ticate and make requests.
+ When a user logs in with their user ID and password, the client makes a POST
+request containing the user’s credentials to the FTGO application. The FTGO appli-
+cation verifies the credentials and returns a session token to the client. The client
+includes the session token in each subsequent request to the FTGO application.
+ Figure 11.2 shows a high-level view of how the FTGO application implements secu-
+rity. The FTGO application is written in Java and uses the Spring Security framework,
+but I’ll describe the design using generic terms that are applicable to other frame-
+works, such as Passport for NodeJS.
+ 

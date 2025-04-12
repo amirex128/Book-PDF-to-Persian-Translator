@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 453</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Deploying a RESTful service using AWS Lambda and AWS Gateway</strong></h3>
+  <h3><strong>DEPENDENCY INJECTION USING THE ABSTRACTAUTOWIRINGHTTPREQUESTHANDLER CLASS</strong></h3>
+  <p>
+   یک AWS Lambda function نه یک web application است و نه یک application با یک
+   main() method. اما شرم‌آور خواهد بود که نتوانیم از featuresهای Spring
+   Boot که به آنها عادت کرده‌ایم، استفاده کنیم. کلاس AbstractAutowiringHttpRequestHandler، که در listing زیر نشان داده شده است، dependency injection را برای request han-
+   dlersها پیاده‌سازی می‌کند. این کلاس یک ApplicationContext را با استفاده از SpringApplication.run() ایجاد می‌کند و
+   dependenciesها را قبل از handle کردن اولین request، autowires می‌کند. زیرکلاس‌هایی مانند FindRestaurant-
+   RequestHandler باید متد getApplicationContextClass() را پیاده‌سازی کنند.
+  </p>
+  <pre><code class="language-java">
+public abstract class AbstractAutowiringHttpRequestHandler 
+extends AbstractHttpHandler {
+private static ConfigurableApplicationContext ctx;
+private ReentrantReadWriteLock ctxLock = new ReentrantReadWriteLock();
+private boolean autowired = false;
+protected synchronized ApplicationContext getAppCtx() {   
+ctxLock.writeLock().lock();
+try {
+if (ctx == null) {
+ctx =
+SpringApplication.run(getApplicationContextClass());
+}
+return ctx;
+} finally {
+ctxLock.writeLock().unlock();
+}
+}
+@Override
+protected void
+beforeHandling(APIGatewayProxyRequestEvent request, Context context) {
+super.beforeHandling(request, context);
+if (!autowired) {
+getAppCtx().getAutowireCapableBeanFactory().autowireBean(this);  
+autowired = true;
+}
+}
+protected abstract Class<?> getApplicationContextClass();
+  
+}
+  </code></pre>
+  <p>
+   این کلاس، متد beforeHandling() را که توسط AbstractHttpHandler تعریف شده است، override می‌کند.
+   متد beforeHandling() آن، dependencies را با استفاده از autowiring قبل از handling
+   اولین request، inject می‌کند.
+  </p>
+  <h3><strong>THE ABSTRACTHTTPHANDLER CLASS</strong></h3>
+  <p>
+   Request handlersها برای Restaurant Service در نهایت، AbstractHttpHandler را گسترش می‌دهند،
+   که در listing 12.11 نشان داده شده است. این کلاس RequestHandler&lt;APIGatewayProxy را پیاده‌سازی می‌کند.
+   RequestEvent and APIGatewayProxyResponseEvent&gt;. مسئولیت اصلی آن، catch کردن
+   exceptionsها است که هنگام handling یک request پرتاب می‌شوند و یک error code 500 را پرتاب می‌کنند.
+  </p>
+  <p>
+   <strong>Listing 12.10</strong>
+   <br/>
+   An abstract RequestHandler that implements dependency injection
+   <br/>
+   Creates the Spring
+   <br/>
+   Boot application
+   <br/>
+   context just once
+   <br/>
+   Injects dependencies into
+   <br/>
+   the request handler using
+   <br/>
+   autowiring before handling
+   <br/>
+   the first request
+   <br/>
+   Returns the @Configuration
+   <br/>
+   class used to create
+   <br/>
+   ApplicationContext
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

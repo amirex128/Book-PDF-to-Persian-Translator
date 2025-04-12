@@ -1,0 +1,44 @@
+303
+Testing strategies for microservice architectures
+For instance, a contract for a REST API consists of an example HTTP request and
+response. On the surface, it may seem better to define the interaction using schemas
+written using, for example, OpenAPI or JSON schema. But it turns out schemas aren’t
+that useful when writing tests. A test can validate the response using the schema but it
+still needs to invoke the provider with an example request.
+ What’s more, consumer tests also need example responses. That’s because even
+though the focus of consumer-driven contract testing is to test a provider, contracts
+are also used to verify that the consumer conforms to the contract. For instance, a
+consumer-side contract test for a REST client uses the contract to configure an HTTP
+stub service that verifies that the HTTP request matches the contract’s request and
+sends back the contract’s HTTP response. Testing both sides of interaction ensures
+that the consumer and provider agree on the API. Later on we’ll look at examples of
+how to write this kind of testing, but first let’s see how to write consumer contract tests
+using Spring Cloud Contract.
+TESTING SERVICES USING SPRING CLOUD CONTRACT
+Two popular contract testing frameworks are Spring Cloud Contract (https://cloud
+.spring.io/spring-cloud-contract/), which is a consumer contract testing framework
+for Spring applications, and the Pact family of frameworks (https://github.com/pact-
+foundation), which support a variety of languages. The FTGO application is a Spring
+framework-based application, so in this chapter I’m going to describe how to use
+Spring Cloud Contract. It provides a Groovy domain-specific language (DSL) for writ-
+ing contracts. Each contract is a concrete example of an interaction between a con-
+sumer and a provider, such as an HTTP request and response. Spring Cloud Contract
+code generates contract tests for the provider. It also configures mocks, such as a
+mock HTTP server, for consumer integration tests.
+ Say, for example, you’re working on API Gateway and want to write a consumer
+contract test for Order Service. Figure 9.8 shows the process, which requires you to col-
+laborate with Order Service teams. You write contracts that define how API Gateway
+interacts with Order Service. The Order Service team uses these contracts to test Order
+Service, and you use them to test API Gateway. The sequence of steps is as follows:
+1
+You write one or more contracts, such as the one shown in listing 9.1. Each con-
+tract consists of an HTTP request that API Gateway might send to Order Service
+and an expected HTTP response. You give the contracts, perhaps via a Git pull
+request, to the Order Service team.
+2
+The Order Service team tests Order Service using consumer contract tests,
+which Spring Cloud Contract code generates from contracts.
+Pattern: Consumer-side contract test
+Verify that the client of a service can communicate with the service. See https://
+microservices.io/patterns/testing/consumer-side-contract-test.html. 
+ 

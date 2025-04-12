@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 133</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3><strong>استفاده از پیام‌رسانی ناهمگام برای بهبود در دسترس بودن</strong></h3>
+    <p>
+        <code>CommandDispatcher</code> (متمرکز کننده دستور) dispatcher = new <code>CommandDispatcher</code>("subscribeId",
+        commandHandlers, messageConsumer, messageProducer);
+    </p>
+    <p>
+        در سراسر این کتاب، نمونه‌های کدی را خواهید دید که از این APIها (رابط‌های برنامه‌نویسی) برای ارسال و دریافت پیام‌ها استفاده می‌کنند.
+    </p>
+    <p>
+        همانطور که دیده‌اید، فریمورک <abbr title="چارچوب">Eventuate Tram</abbr>، پیام‌رسانی تراکنشی را برای برنامه‌های جاوا پیاده‌سازی می‌کند. این فریمورک یک API سطح پایین برای ارسال و دریافت پیام‌ها به صورت تراکنشی فراهم می‌کند. همچنین APIهای سطح بالاتری را برای انتشار و مصرف رویدادهای دامنه و برای ارسال و پردازش دستورات ارائه می‌دهد.
+    </p>
+    <p>
+        بیایید اکنون به یک رویکرد طراحی سرویس نگاهی بیندازیم که از پیام‌رسانی ناهمگام برای بهبود در دسترس بودن استفاده می‌کند.
+    </p>
+    <h4><strong>3.4 استفاده از پیام‌رسانی ناهمگام برای بهبود در دسترس بودن</strong></h4>
+    <p>
+        همانطور که دیده‌اید، انواع مختلفی از مکانیسم‌های <abbr title="ارتباط بین فرآیندی">IPC</abbr> (ارتباط بین فرآیندی) دارای ملاحظات متفاوتی هستند. یک نکته‌ی خاص این است که انتخاب شما از مکانیسم IPC چگونه بر در دسترس بودن تأثیر می‌گذارد. در این بخش، یاد خواهید گرفت که ارتباط همزمان با سرویس‌های دیگر به عنوان بخشی از رسیدگی به درخواست، در دسترس بودن برنامه را کاهش می‌دهد. در نتیجه، باید سرویس‌های خود را طوری طراحی کنید که در صورت امکان از پیام‌رسانی ناهمگام استفاده کنند.
+    </p>
+    <p>
+        بیایید ابتدا به مشکل ارتباط همزمان و چگونگی تأثیر آن بر در دسترس بودن نگاهی بیندازیم.
+    </p>
+    <h5><strong>3.4.1 ارتباط همزمان در دسترس بودن را کاهش می‌دهد</strong></h5>
+    <p>
+        <abbr title="انتقال حالت بازنمودی">REST</abbr> (انتقال حالت بازنمودی) یک مکانیسم بسیار محبوب <abbr title="ارتباط بین فرآیندی">IPC</abbr> است. ممکن است وسوسه شوید که از آن برای ارتباط بین سرویس‌ها استفاده کنید. اما مشکل <abbr title="انتقال حالت بازنمودی">REST</abbr> این است که یک پروتکل همزمان است: یک کلاینت HTTP (مشتری) باید منتظر بماند تا سرویس، پاسخی را ارسال کند. هر زمان که سرویس‌ها با استفاده از یک پروتکل همزمان ارتباط برقرار می‌کنند، در دسترس بودن برنامه کاهش می‌یابد.
+    </p>
+    <p>
+        برای اینکه متوجه شوید چرا اینطور است، سناریوی نشان داده شده در شکل 3.15 را در نظر بگیرید. سرویس Order (سفارش) یک <abbr title="رابط برنامه‌نویسی نرم‌افزار">REST API</abbr> برای ایجاد یک Order (سفارش) دارد. این سرویس، Consumer Service (سرویس مصرف کننده) و Restaurant Service (سرویس رستوران) را برای اعتبارسنجی Order (سفارش) فراخوانی می‌کند. هر دوی این سرویس‌ها نیز <abbr title="رابط برنامه‌نویسی نرم‌افزار">REST APIs</abbr> دارند.
+    </p>
+    <p>
+        Client (مشتری)
+        <br>
+        Order (سفارش) Service (سرویس)
+        <br>
+        Consumer (مصرف کننده) Service (سرویس)
+        <br>
+        Restaurant (رستوران) Service (سرویس)
+        <br>
+        POST/orders
+        <br>
+        GET/consumers/id
+        <br>
+        GET/restaurant/id
+        <br>
+        Figure 3.15
+    </p>
+    <p>
+        سرویس Order (سفارش) با استفاده از <abbr title="انتقال حالت بازنمودی">REST</abbr> سرویس‌های دیگر را فراخوانی می‌کند. این روش ساده است، اما نیازمند این است که همه سرویس‌ها به طور همزمان در دسترس باشند، که این امر در دسترس بودن <abbr title="رابط برنامه‌نویسی نرم‌افزار">API</abbr> را کاهش می‌دهد.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+136
+CHAPTER 4
+Managing transactions with sagas
+
+CreateOrderSagaState—A saga’s persistent state, which creates command
+messages.
+Saga participant proxy classes, such as KitchenServiceProxy—Each proxy class
+defines a saga participant’s messaging API, which consists of the command
+channel, the command message types, and the reply types.
+These classes are written using the Eventuate Tram Saga framework.
+ The Eventuate Tram Saga framework provides a domain-specific language (DSL) for
+defining a saga’s state machine. It executes the saga’s state machine and exchanges mes-
+sages with saga participants using the Eventuate Tram framework. The framework also
+persists the saga’s state in the database.
+ Let’s take a closer look at the implementation of Create Order Saga, starting with
+the CreateOrderSaga class.
+THE CREATEORDERSAGA ORCHESTRATOR
+The CreateOrderSaga class implements the state machine shown earlier in figure 4.7.
+This class implements SimpleSaga, a base interface for sagas. The heart of the Create-
+OrderSaga class is the saga definition shown in the following listing. It uses the DSL
+provided by the Eventuate Tram Saga framework to define the steps of the Create
+Order Saga.
+public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
+private SagaDefinition<CreateOrderSagaState> sagaDefinition;
+public CreateOrderSaga(OrderServiceProxy orderService,
+ConsumerServiceProxy consumerService,
+KitchenServiceProxy kitchenService,
+AccountingServiceProxy accountingService) {
+this.sagaDefinition =
+step()
+.withCompensation(orderService.reject,
+CreateOrderSagaState::makeRejectOrderCommand)
+.step()
+.invokeParticipant(consumerService.validateOrder,
+CreateOrderSagaState::makeValidateOrderByConsumerCommand)
+.step()
+.invokeParticipant(kitchenService.create,
+CreateOrderSagaState::makeCreateTicketCommand)
+.onReply(CreateTicketReply.class,
+CreateOrderSagaState::handleCreateTicketReply)
+.withCompensation(kitchenService.cancel,
+CreateOrderSagaState::makeCancelCreateTicketCommand)
+.step()
+.invokeParticipant(accountingService.authorize,
+CreateOrderSagaState::makeAuthorizeCommand)
+.step()
+.invokeParticipant(kitchenService.confirmCreate,
+CreateOrderSagaState::makeConfirmCreateTicketCommand)
+Listing 4.2
+The definition of the CreateOrderSaga
+ 

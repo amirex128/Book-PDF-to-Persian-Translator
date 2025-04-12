@@ -1,0 +1,39 @@
+templates, but on the other hand, this approach does make things very obvious and
+can simplify request routing.
+For RPC, things can be a little trickier. I have handled this with protocol buffers by
+putting my methods in different namespaces—for example, v1.createCustomer and
+v2.createCustomer—but when you are trying to support different versions of the
+same types being sent over the network, this approach can become really painful.
+Which Approach Do I Prefer?
+For situations in which the same team manages both the microservice and all con‐
+sumers, I am somewhat relaxed about a lockstep release in limited situations. Assum‐
+ing it really is a one-off situation, then doing this when the impact is limited to a
+single team can be justifiable. I am very cautious about this, though, as there is the
+danger that a one-off activity becomes business as usual, and there goes independent
+deployability. Use lockstep deployments too often, and you’ll end up with a dis‐
+tributed monolith before long.
+Coexisting different versions of the same microservice can be problematic, as we dis‐
+cussed. I’d consider doing this only in situations in which we planned to run the
+microservice versions side by side for only a short period of time. The reality is that
+when you need to give consumers time to upgrade, you could be looking at weeks or
+more. In other situations in which you might coexist microservice versions, perhaps
+as part of a blue-green deployment or canary release, the durations involved are
+much shorter, offsetting the downsides of this approach.
+My general preference is to use emulation of old endpoints wherever possible. The
+challenges of implementing emulation are in my opinion much easier to deal with
+than those of coexisting microservice versions.
+The Social Contract
+Which approach you pick will be due in large part to the expectations consumers
+have of how these changes will be made. Keeping the old interface lying around can
+have a cost, and ideally you’d like to turn it off and remove associated code and
+infrastructure as soon as possible. On the other hand, you want to give consumers as
+much time as possible to make a change. And remember, in many cases the
+backward-incompatible changes you are making are often things that have been
+asked for by the consumers and/or will actually end up benefiting them. There is a
+balancing act, of course, between the needs of the microservice maintainers and those
+of the consumers, and this needs to be discussed.
+I’ve found that in many situations, how these changes will be handled has never been
+discussed, leading to all sorts of challenges. As with schemas, having some degree of
+152 
+| 
+Chapter 5: Implementing Microservice Communication

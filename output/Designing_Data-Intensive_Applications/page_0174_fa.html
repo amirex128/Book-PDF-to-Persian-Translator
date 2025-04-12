@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 174</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        i. Different people have different definitions for hot, warm, and cold standby servers. In PostgreSQL, for example, hot standby is used to refer to a replica that accepts reads from clients, whereas a warm standby processes changes from the leader but doesn’t process any queries from clients. For purposes of this book, the difference isn’t important.
+    </p>
+    <p>
+        Trade-offs زیادی برای در نظر گرفتن با replication وجود دارد: به عنوان مثال، اینکه آیا از replication synchronous یا asynchronous استفاده شود و چگونه replicas fail شده را مدیریت کنیم. آن‎ها اغلب configuration options در databases هستند و اگرچه جزئیات با database متفاوت است، اما اصول کلی در بسیاری از پیاده‌سازی‌های مختلف مشابه است. ما در این فصل در مورد عواقب این انتخاب‌ها بحث خواهیم کرد.
+    </p>
+    <p>
+        Replication از databases یک موضوع قدیمی است—اصول از زمانی که در دهه 1970 مورد مطالعه قرار گرفتند، چندان تغییر نکرده است [1]، زیرا constraints اساسی از شبکه‌ها یکسان باقی مانده‌اند. با این حال، خارج از تحقیق، بسیاری از developers برای مدت طولانی فرض می‌کردند که یک database فقط از یک node تشکیل شده است. استفاده جریان اصلی از databases distributed اخیراً بیشتر است. از آنجایی که بسیاری از application developers در این زمینه تازه‌وارد هستند، سوءتفاهم‌های زیادی در مورد مسائلی مانند eventual consistency وجود داشته است. در "Problems with Replication Lag" در صفحه 161 ما در مورد eventual consistency دقیق‌تر خواهیم شد و در مورد چیزهایی مانند read-your-writes و mono‐tonic reads guarantees بحث خواهیم کرد.
+    </p>
+    <h4>Leaders and Followers</h4>
+    <p>
+        هر node که یک کپی از database را ذخیره می‌کند، یک replica نامیده می‌شود. با multiple replicas، یک سوال به ناچار مطرح می‌شود: چگونه اطمینان حاصل کنیم که همه داده‌ها در همه replicas قرار می‌گیرند؟
+    </p>
+    <p>
+        Every write به database نیاز دارد که توسط هر replica پردازش شود. در غیر این صورت، the rep‐licas دیگر شامل همان data نخواهند بود. The most common solution for this به نام leader-based replication (همچنین به عنوان active/passive یا master–slave replica‐tion شناخته می‌شود) نامیده می‌شود و در شکل 5-1 نشان داده شده است. این به شرح زیر عمل می‌کند:
+    </p>
+    <ol>
+        <li>One of the replicas is designated the leader (also known as master or primary). When clients want to write to the database, they must send their requests to the leader, which first writes the new data to its local storage.</li>
+        <li>The other replicas are known as followers (read replicas, slaves, secondaries, or hot standbys).i Whenever the leader writes new data to its local storage, it also sends the data change to all of its followers as part of a replication log or change stream. Each follower takes the log from the leader and updates its local copy of the data‐base accordingly, by applying all writes in the same order as they were processed on the leader.</li>
+    </ol>
+    <p>
+        152 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

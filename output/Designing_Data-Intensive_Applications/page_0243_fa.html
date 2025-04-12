@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 243</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3>CHAPTER 7</h3>
+    <h4>Transactions</h4>
+    <p>
+        برخی از نویسندگان ادعا کرده‌اند که <em>General two-phase commit</em> بیش از حد گران است و به دلیل مشکلات performance یا availability که به همراه دارد، نمی‌توان از آن پشتیبانی کرد. ما بر این باوریم که بهتر است برنامه‌نویسان application با مشکلات performance ناشی از استفاده بیش از حد از <strong>Transactions</strong> در زمان بروز bottleneck ها سروکار داشته باشند، تا اینکه همیشه به جای نداشتن <strong>Transactions</strong> کدنویسی کنند.
+        <br>
+        —James Corbett et al., <em>Spanner: Google’s Globally-Distributed Database</em> (2012)
+    </p>
+    <p>
+        در واقعیت سخت‌گیرانه <em>data systems</em>، بسیاری از موارد می‌توانند اشتباه پیش بروند:
+    </p>
+    <ul>
+        <li>
+            نرم‌افزار یا سخت‌افزار database ممکن است در هر زمانی (از جمله در میان یک عملیات <em>write</em>) دچار خرابی شود.
+        </li>
+        <li>
+            application ممکن است در هر زمانی (از جمله در میانه یک سری از operations) <em>crash</em> کند.
+        </li>
+        <li>
+            <em>Interruptions</em> در شبکه می‌تواند به طور غیرمنتظره‌ای application را از database یا یک node database را از node دیگر قطع کند.
+        </li>
+        <li>
+            چندین client ممکن است همزمان به database <em>write</em> کنند و تغییرات یکدیگر را بازنویسی کنند.
+        </li>
+        <li>
+            یک client ممکن است داده‌هایی را بخواند که منطقی نیستند، زیرا فقط به‌طور جزئی به‌روزرسانی شده‌اند.
+        </li>
+        <li>
+            <em>Race conditions</em> بین clients می‌تواند باعث باگ‌های غافلگیرکننده شود.
+        </li>
+    </ul>
+    <p>
+        به منظور reliable بودن، یک system باید با این faults مقابله کند و اطمینان حاصل کند که باعث شکست فاجعه‌بار کل system نمی‌شوند. با این حال، پیاده‌سازی مکانیسم‌های <em>fault-tolerance</em> کار زیادی می‌طلبد. این امر مستلزم تفکر دقیق در مورد تمام مواردی است که می‌توانند اشتباه پیش بروند و همچنین آزمایش‌های فراوان برای اطمینان از عملکرد واقعی solution است.
+    </p>
+    <p>
+        221
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

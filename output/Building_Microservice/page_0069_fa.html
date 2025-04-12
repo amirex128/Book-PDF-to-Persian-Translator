@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 69</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   9 <strong>Pass-through coupling</strong> نام من برای چیزی است که در اصل توسط <strong>Meilir Page-Jones</strong> در <em>The Practical Guide to Structured Systems Design</em> به عنوان "tramp coupling" توصیف شد. من تصمیم گرفتم از یک اصطلاح متفاوت در اینجا استفاده کنم زیرا متوجه شدم که اصطلاح اصلی تا حدودی مشکل‌ساز است و برای مخاطبان گسترده‌تر معنی چندانی ندارد.
+  </p>
+  <p>
+   <strong>Temporal coupling</strong> همیشه بد نیست. فقط چیزی است که باید از آن آگاه باشید. با داشتن microservices بیشتر، با تعاملات پیچیده‌تر بین آنها، چالش‌های <strong>temporal coupling</strong> می‌تواند به حدی افزایش یابد که مقیاس‌بندی سیستم شما و حفظ عملکرد آن دشوارتر شود. یکی از راه‌های اجتناب از <strong>temporal coupling</strong> استفاده از نوعی ارتباط ناهمزمان، مانند یک <strong>message broker</strong> است.
+  </p>
+  <h4>Pass-Through Coupling</h4>
+  <p>
+   "<strong>Pass-through coupling</strong>"9 موقعیتی را توصیف می‌کند که در آن یک microservice داده‌ها را به microservice دیگری منتقل می‌کند، صرفاً به این دلیل که داده‌ها توسط microservice دیگری در پایین‌دست مورد نیاز است. از بسیاری جهات این یکی از مشکل‌سازترین اشکال <em>implementation coupling</em> است، زیرا نه تنها به این معنی است که تماس‌گیرنده نه تنها می‌داند که microservice که آن را فراخوانی می‌کند، microservice دیگری را فراخوانی می‌کند، بلکه به طور بالقوه باید بداند که این microservice که یک مرحله حذف شده است، چگونه کار می‌کند.
+  </p>
+  <p>
+   به عنوان مثالی از <strong>pass-through coupling</strong>، بیایید اکنون با دقت بیشتری به بخشی از نحوه عملکرد پردازش سفارش <strong>MusicCorp</strong> نگاه کنیم. در شکل 2-4، ما یک <strong>Order Processor</strong> داریم، که در حال ارسال درخواستی به <strong>Warehouse</strong> برای آماده‌سازی یک سفارش برای ارسال است. به عنوان بخشی از <strong>request payload</strong>، یک <strong>Shipping Manifest</strong> ارسال می‌کنیم. این <strong>Shipping Manifest</strong> نه تنها شامل آدرس مشتری بلکه نوع حمل و نقل را نیز شامل می‌شود. <strong>Warehouse</strong> فقط این <strong>manifest</strong> را به <strong>Shipping microservice</strong> پایین‌دست منتقل می‌کند.
+  </p>
+  <p>
+   شکل 2-4. <strong>Pass-through coupling</strong>، که در آن داده‌ها صرفاً به این دلیل که یک <strong>service</strong> دیگر در پایین‌دست به آن نیاز دارد، به یک microservice منتقل می‌شوند
+  </p>
+  <p>Types of Coupling | 43</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0069/image_1.png" alt="Image from page 69" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 479</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   services. شما تمام مکان‌هایی را در کد پیدا می‌کنید که یک entity خاص را تغییر می‌دهند و یک
+   call به یک event publishing API وارد می‌کنید. مشکل این رویکرد این است که تغییر یک
+   monolith همیشه آسان نیست. ممکن است زمان‌بر و مستعد خطا باشد که تمام
+   مکان‌ها را پیدا کرده و callsها را برای publish کردن events وارد کنید. برای بدتر کردن اوضاع، برخی از
+   business logic monolith ممکن است از stored proceduresهایی تشکیل شده باشد که نمی‌توانند به راحتی
+   domain eventsها را publish کنند.
+  </p>
+  <p>
+   یک رویکرد دیگر، publish کردن domain eventsها در سطح database است. شما می‌توانید، برای
+   به عنوان مثال، از transaction logic tailing یا polling استفاده کنید، که در فصل 3 توضیح داده شده است. یک
+   benefit اصلی استفاده از transaction tailing این است که شما مجبور نیستید که monolith را تغییر دهید. the
+   معایب اصلی publish کردن eventsها در سطح database این است که اغلب مشکل است که
+   دلیل update را شناسایی کرده و event business سطح بالا را publish کنید. در نتیجه، service
+   معمولاً eventsهایی را که نشان دهنده تغییرات در
+   tablesها هستند، به جای business entitiesها، publish می‌کند.
+  </p>
+  <p>
+   خوشبختانه، معمولاً برای monolith، subscribe کردن به domain eventsها
+   published as servicesها آسان‌تر است. اغلب اوقات، شما می‌توانید event handlersها را با استفاده از یک framework بنویسید، مانند
+   Eventuate Tram. اما گاهی اوقات، حتی برای monolith، subscribe کردن به
+   eventsها چالش برانگیز است. به عنوان مثال، monolith ممکن است به زبانی نوشته شود که نداشته باشد
+   a message broker client. در آن موقعیت، شما نیاز دارید که یک application "helper" کوچک بنویسید-
+   tion که به eventsها subscribe می‌کند و database monolith را مستقیماً آپدیت می‌کند.
+  </p>
+  <p>
+   اکنون که ما به نحوه طراحی integration glue نگاه کردیم که یک ser-
+   vice و monolith را قادر می‌سازد تا با هم همکاری کنند، بیایید نگاهی به یک چالش دیگر بیندازیم که ممکن است با آن روبرو شوید
+   هنگام migrating به microservicesها: حفظ data consistency در یک service و
+   monolith.
+  </p>
+  <h3><strong>13.3.2 Maintaining data consistency across a service and a monolith</strong></h3>
+  <p>
+   هنگامی که شما یک service را توسعه می‌دهید، ممکن است حفظ data consis-
+   tency در service و monolith را چالش برانگیز بدانید. یک service operation ممکن است نیاز به update
+   data در monolith داشته باشد، یا یک monolith operation ممکن است نیاز به آپدیت کردن data در ser-
+   vice داشته باشد. به عنوان مثال، تصور کنید که شما Kitchen Service را از monolith استخراج کردید. شما
+   نیاز دارید که عملیات order-management monolith، مانند create-
+   Order() و cancelOrder() را تغییر دهید، تا از sagasها استفاده کنید تا Ticket را با
+   Order، consistent نگه دارید.
+  </p>
+  <p>
+   با این حال، مشکل استفاده از sagasها این است که monolith ممکن است a will-
+   ing participant نباشد. همانطور که در فصل 4 توضیح داده شد، sagasها باید از compensating transactionsها
+   برای undo کردن تغییرات استفاده کنند. به عنوان مثال، Create Order Saga، شامل یک compensating transac-
+   tion است که یک Order را در صورت رد شدن توسط Kitchen Service رد شده نشان می‌دهد. prob-
+   lem با compensating transactionsها در monolith این است که شما ممکن است نیاز داشته باشید
+   تغییرات متعددی و زمان‌بری را در monolith ایجاد کنید تا از آنها پشتیبانی کنید.
+   <br/>
+   monolith ممکن است همچنین نیاز به پیاده‌سازی countermeasuresها برای handle کردن کمبود
+   isolation بین sagasها. هزینه این تغییرات کد می‌تواند یک مانع بزرگ برای
+   استخراج یک service باشد.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

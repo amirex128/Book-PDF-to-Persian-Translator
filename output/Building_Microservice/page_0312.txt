@@ -1,0 +1,27 @@
+Here’s another problem: if we have a set of Customer end-to-end tests that deploy lots
+of microservices and run tests against them, what about the end-to-end tests that the
+other microservices run? If they are testing the same thing, we may find ourselves
+covering lots of the same ground and may duplicate much of the effort to deploy all
+those microservices in the first place.
+We can deal with both of these problems elegantly by having multiple pipelines “fan-
+in” to a single end-to-end test stage. Here, when one of a number of different builds is
+triggered, it can result in shared build steps being triggered. For example, in
+Figure 9-8, a successful build for any of the four microservices would end up trigger‐
+ing the shared end-to-end tests stage. Some CI tools with better build pipeline sup‐
+port will enable fan-in models like this out of the box.
+Figure 9-8. A standard way to handle end-to-end tests across services
+So any time one of our services changes, we run the tests local to that service. If those
+tests pass, we trigger our integration tests. Great, eh? Well, there are unfortunately
+many disadvantages to end-to-end testing.
+Flaky and Brittle Tests
+As test scope increases, so too does the number of moving parts. These moving parts
+can introduce test failures that do not show that the functionality under test is broken
+but indicate that some other problem has occurred. As an example, if we have a test
+to verify that we can place an order for a single CD and we are running that test
+against four or five microservices, if any of them is down, we could get a failure that
+has nothing to do with the nature of the test itself. Likewise, a temporary network
+glitch could cause a test to fail without saying anything about the functionality under
+test.
+286 
+| 
+Chapter 9: Testing

@@ -1,0 +1,41 @@
+server creates different representations of this Customer on request. How a resource
+is shown externally is completely decoupled from how it is stored internally. A client
+might ask for a JSON representation of a Customer, for example, even if it is stored in
+a completely different format. Once a client has a representation of this Customer, it
+can then make requests to change it, and the server may or may not comply with
+them.
+There are many different styles of REST, and I touch only briefly on them here. I
+strongly recommend you take a look at the Richardson Maturity Model, where the
+different styles of REST are compared.
+REST itself doesn’t really talk about underlying protocols, although it is most com‐
+monly used over HTTP. I have seen implementations of REST using very different
+protocols before, although this can require a lot of work. Some of the features that
+HTTP gives us as part of the specification, such as verbs, make implementing REST
+over HTTP easier, whereas with other protocols you’ll have to handle these features
+yourself.
+REST and HTTP
+HTTP itself defines some useful capabilities that play very well with the REST style.
+For instance, the HTTP verbs (e.g., GET, POST, and PUT) already have well-
+understood meanings in the HTTP specification as to how they should work with
+resources. The REST architectural style actually tells us that these verbs should
+behave the same way on all resources, and the HTTP specification happens to define
+a bunch of verbs we can use. GET retrieves a resource in an idempotent way, for
+example, and POST creates a new resource. This means we can avoid lots of different
+createCustomer or editCustomer methods. Instead, we can simply POST a customer
+representation to request that the server create a new resource, and then we can ini‐
+tiate a GET request to retrieve a representation of a resource. Conceptually, there is
+one endpoint in the form of a Customer resource in these cases, and the operations we
+can carry out on it are baked into the HTTP protocol.
+HTTP also brings a large ecosystem of supporting tools and technology. We get to
+use HTTP caching proxies like Varnish and load balancers like mod_proxy, and many
+monitoring tools already have lots of support for HTTP out of the box. These build‐
+ing blocks allow us to handle large volumes of HTTP traffic and route them smartly,
+and in a fairly transparent way. We also get to use all the available security controls
+with HTTP to secure our communications. From basic auth to client certs, the HTTP
+ecosystem gives us lots of tools to make the security process easier, and we’ll explore
+that topic more in Chapter 11. That said, to get these benefits, you have to use HTTP
+well. Use it badly, and it can be as insecure and hard to scale as any other technology
+out there. Use it right, though, and you get a lot of help.
+128 
+| 
+Chapter 5: Implementing Microservice Communication

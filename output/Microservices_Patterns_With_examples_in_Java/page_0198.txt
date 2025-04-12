@@ -1,0 +1,51 @@
+168
+CHAPTER 5
+Designing business logic in a microservice architecture
+.build();
+}
+public void reviseMenu(DomainEventEnvelope<RestaurantMenuRevised> de) {  
+long id = Long.parseLong(de.getAggregateId());
+RestaurantMenu revisedMenu = de.getEvent().getRevisedMenu();
+restaurantService.reviseMenu(id, revisedMenu);
+}
+}
+The reviseMenu() method handles RestaurantMenuRevised events. It calls restaurant-
+Service.reviseMenu(), which updates the restaurant’s menu. That method returns a
+list of domain events, which are published by the event handler.
+ Now that we’ve looked at aggregates and domain events, it’s time to consider some
+example business logic that’s implemented using aggregates. 
+5.4
+Kitchen Service business logic
+The first example is Kitchen Service, which enables a restaurant to manage their
+orders. The two main aggregates in this service are the Restaurant and Ticket aggre-
+gates. The Restaurant aggregate knows the restaurant’s menu and opening hours
+and can validate orders. A Ticket represents an order that a restaurant must prepare
+for pickup by a courier. Figure 5.11 shows these aggregates and other key parts of the
+service’s business logic, as well as the service’s adapters.
+ In addition to the aggregates, the other main parts of Kitchen Service’s business
+logic are KitchenService, TicketRepository, and RestaurantRepository. Kitchen-
+Service is the business logic’s entry. It defines methods for creating and updating
+the Restaurant and Ticket aggregates. TicketRepository and RestaurantRepository
+define methods for persisting Tickets and Restaurants respectively.
+ The Kitchen Service service has three inbound adapters:
+
+REST API—The REST API invoked by the user interface used by workers at the
+restaurant. It invokes KitchenService to create and update Tickets.
+
+KitchenServiceCommandHandler—The asynchronous request/response-based
+API that’s invoked by sagas. It invokes KitchenService to create and update
+Tickets.
+
+KitchenServiceEventConsumer—Subscribes to events published by Restaurant
+Service. It invokes KitchenService to create and update Restaurants.
+The service also has two outbound adapters:
+
+DB adapter—Implements the TicketRepository and the RestaurantRepository
+interfaces and accesses the database.
+
+DomainEventPublishingAdapter—Implements the DomainEventPublisher inter-
+face and publishes Ticket domain events.
+An event handler for the
+RestaurantMenuRevised
+event
+ 

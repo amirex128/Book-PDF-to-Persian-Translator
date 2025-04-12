@@ -1,0 +1,42 @@
+368
+CHAPTER 11
+Developing production-ready services
+infrastructure service. The health check code can, for example, verify that it’s con-
+nected to an RDBMS by obtaining a database connection and executing a test query.
+A more elaborate approach is to execute a synthetic transaction that simulates the
+invocation of the service’s API by a client. This kind of health check is more thorough,
+but it’s likely to be more time consuming to implement and take longer to execute.
+ A great example of a health check library is Spring Boot Actuator. As mentioned
+earlier, it implements a /actuator/health endpoint. The code that implements this
+endpoint returns the result of executing a set of health checks. By using convention
+over configuration, Spring Boot Actuator implements a sensible set of health checks
+based on the infrastructure services used by the service. If, for example, a service uses
+a JDBC DataSource, Spring Boot Actuator configures a health check that executes a
+test query. Similarly, if the service uses the RabbitMQ message broker, it automatically
+configures a health check that verifies that the RabbitMQ server is up.
+ You can also customize this behavior by implementing additional health checks for
+your service. You implement a custom health check by defining a class that imple-
+ments the HealthIndicator interface. This interface defines a health() method,
+which is called by the implementation of the /actuator/health endpoint. It returns
+the outcome of the health check. 
+INVOKING THE HEALTH CHECK ENDPOINT
+A health check endpoint isn’t much use if nobody calls it. When you deploy your ser-
+vice, you must configure the deployment infrastructure to invoke the endpoint. How
+you do that depends on the specific details of your deployment infrastructure. For
+example, as described in chapter 3, you can configure some service registries, such as
+Netflix Eureka, to invoke the health check endpoint in order to determine whether
+traffic should be routed to the service instance. Chapter 12 discusses how to configure
+Docker and Kubernetes to invoke a health check endpoint. 
+11.3.2 Applying the Log aggregation pattern
+Logs are a valuable troubleshooting tool. If you want to know what’s wrong with your
+application, a good place to start is the log files. But using logs in a microservice archi-
+tecture is challenging. For example, imagine you’re debugging a problem with the
+getOrderDetails() query. As described in chapter 8, the FTGO application imple-
+ments this query using API composition. As a result, the log entries you need are scat-
+tered across the log files of the API gateway and several services, including Order
+Service and Kitchen Service.
+Pattern: Log aggregation
+Aggregate the logs of all services in a centralized database that supports searching
+and alerting. See http://microservices.io/patterns/observability/application-logging
+.html.
+ 

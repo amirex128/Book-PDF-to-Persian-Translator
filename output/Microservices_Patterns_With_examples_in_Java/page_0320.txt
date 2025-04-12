@@ -1,0 +1,56 @@
+290
+CHAPTER 8
+External API patterns
+This example doesn’t handle concerns such as security, but those would be straight-
+forward to implement. The API gateway could, for example, authenticate users using
+Passport, a NodeJS security framework described in chapter 11. The makeContext-
+WithDependencies() function would pass the user information to each repository’s
+constructor so that they can propagate the user information to the services.
+ Let’s now look at how a client can invoke this server to execute GraphQL queries. 
+WRITING A GRAPHQL CLIENT
+There are a couple of different ways a client application can invoke the GraphQL
+server. Because the GraphQL server has an HTTP-based API, a client application
+could use an HTTP library to make requests, such as GET http://localhost:3000/
+graphql?query={orders(consumerId:1){orderId,restaurant{id}}}'. It’s easier,
+though, to use a GraphQL client library, which takes care of properly formatting
+requests and typically provides features such as client-side caching.
+ The following listing shows the FtgoGraphQLClient class, which is a simple
+GraphQL-based client for the FTGO application. Its constructor instantiates Apollo-
+Client, which is provided by the Apollo GraphQL client library. The FtgoGraphQL-
+Client class defines a findConsumer() method that uses the client to retrieve the
+name of a consumer.
+class FtgoGraphQLClient {
+constructor(...) {
+this.client = new ApolloClient({ ... });
+}
+findConsumer(consumerId) {
+return this.client.query({
+variables: { cid: consumerId},
+  
+query: gql`
+query foo($cid : Int!) {
+  
+consumer(consumerId: $cid)
+{
+  
+id
+firstName
+lastName
+}
+} `,
+})
+}
+}
+The FtgoGraphQLClient class can define a variety of query methods, such as find-
+Consumer(). Each one executes a query that retrieves exactly the data needed by the
+client.
+Listing 8.11
+Using the Apollo GraphQL client to execute queries
+Supply the value 
+of the $cid.
+Define $cid as a 
+variable of type Int.
+Set the value of 
+query parameter 
+consumerid to $cid.
+ 

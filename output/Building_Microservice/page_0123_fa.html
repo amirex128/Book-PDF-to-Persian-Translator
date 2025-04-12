@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 123</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   برای من، این نوع <strong>calls</strong> زمانی مشکل‌ساز می‌شوند که شما شروع به داشتن زنجیره‌های بیشتری از <strong>calls</strong> می‌کنید—به عنوان مثال، در شکل 4-3، ما یک جریان مثال از <strong>MusicCorp</strong> داریم، که در آن ما در حال بررسی یک پرداخت برای فعالیت‌های بالقوه کلاهبرداری هستیم. <strong>Order Processor</strong>، microservice <strong>Payment</strong> را فراخوانی می‌کند تا پرداخت را انجام دهد. microservice <strong>Payment</strong> به نوبه خود می‌خواهد با microservice <strong>Fraud Detection</strong> بررسی کند که آیا این باید مجاز باشد یا خیر. microservice <strong>Fraud Detection</strong> به نوبه خود نیاز به دریافت اطلاعات از microservice <strong>Customer</strong> دارد.
+  </p>
+  <p>
+   شکل 4-3. بررسی رفتار بالقوه کلاهبرداری به عنوان بخشی از جریان پردازش سفارش
+  </p>
+  <p>
+   اگر همه این <strong>calls</strong> <strong>synchronous</strong> و <strong>blocking</strong> باشند، تعدادی مشکل وجود دارد که ممکن است با آنها مواجه شویم. یک مشکل در هر یک از چهار microservices درگیر، یا در <strong>network calls</strong> بین آنها، می‌تواند باعث شکست کل عملیات شود. این جدا از این واقعیت است که این نوع زنجیره‌های طولانی می‌تواند باعث <strong>resource contention</strong> قابل توجهی شود. در پشت صحنه، <strong>Order Processor</strong> احتمالاً یک اتصال شبکه باز دارد که منتظر است تا از <strong>Payment</strong> پاسخ دریافت کند. <strong>Payment</strong> به نوبه خود یک اتصال شبکه باز دارد که منتظر پاسخ از <strong>Fraud Detection</strong> است، و غیره. داشتن تعداد زیادی اتصال که باید باز نگه داشته شوند می‌تواند بر سیستم در حال اجرا تأثیر بگذارد—شما احتمالاً بیشتر مشکلاتی را تجربه خواهید کرد که در آن اتصالات در دسترس شما تمام می‌شود یا در نتیجه از ازدحام شبکه افزایش یافته رنج می‌برید.
+  </p>
+  <p>
+   برای بهبود این وضعیت، ما می‌توانیم در وهله اول تعاملات بین microservicesها را دوباره بررسی کنیم. به عنوان مثال، شاید ما از استفاده از <strong>Fraud Detection</strong> از جریان خرید اصلی، همانطور که در شکل 4-4 نشان داده شده است، صرف نظر کنیم، و در عوض آن را در پس‌زمینه اجرا کنیم. اگر مشکلی را با یک مشتری خاص پیدا کرد، سوابق آنها بر این اساس به‌روزرسانی می‌شود، و این چیزی است که می‌تواند در اوایل فرآیند پرداخت بررسی شود. در واقع، این بدان معناست که ما مقداری از این کار را به صورت موازی انجام می‌دهیم. با کاهش طول زنجیره <strong>call</strong>، ما بهبود <strong>latency</strong> کلی عملیات را خواهیم دید، و ما یکی از microservicesهای خود (<strong>Fraud Detection</strong>) را از مسیر بحرانی برای جریان خرید خارج می‌کنیم، که یکی وابستگی کمتر را به ما می‌دهد تا در مورد آن نگران باشیم برای آنچه یک عملیات حیاتی است.
+  </p>
+  <p>Pattern: Synchronous Blocking | 97</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0123/image_1.png" alt="Image from page 123" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

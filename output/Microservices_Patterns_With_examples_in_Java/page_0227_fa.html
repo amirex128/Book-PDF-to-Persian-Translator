@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 227</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Developing business logic with event sourcing</strong></h3>
+  <h4><strong style="color:darkblue">6.1.6: Idempotent message processing</strong></h4>
+  <p>
+   Services اغلب messages را از applicationsهای دیگر یا servicesهای دیگر consume می‌کنند. یک service ممکن است، به عنوان مثال، domain events منتشر شده توسط aggregates یا command messages ارسال شده توسط یک saga orchestrator را consume کند. همانطور که در فصل 3 توضیح داده شد، یک issue مهم هنگام developing یک message consumer این است که اطمینان حاصل شود که idempotent است، زیرا یک message broker ممکن است همان message را چندین بار تحویل دهد.
+  </p>
+  <p>
+   یک message consumer idempotent است اگر بتواند با خیال راحت با همان message چندین بار فراخوانی شود. به عنوان مثال، فریم‌ورک Eventuate Tram، message handling idempotent را با تشخیص و دور انداختن messagesهای تکراری پیاده‌سازی می‌کند. این، ids از messagesهای پردازش شده را در یک جدول به نام PROCESSED_MESSAGES به عنوان بخشی از local ACID transaction که توسط business logic برای ایجاد یا update کردن aggregates استفاده می‌شود، ثبت می‌کند. اگر ID از یک message در جدول PROCESSED_MESSAGES باشد، این یک duplicate است و می‌تواند دور انداخته شود. business logic مبتنی بر event sourcing باید یک mechanism معادل را پیاده‌سازی کند. نحوه انجام این کار بستگی به این دارد که آیا event store از یک RDBMS یا یک NoSQL database استفاده می‌کند.
+  </p>
+  <h4><strong style="color:darkblue">IDEMPOTENT MESSAGE PROCESSING WITH AN RDBMS-BASED EVENT STORE</strong></h4>
+  <p>
+   اگر یک application از یک event store مبتنی بر RDBMS استفاده می‌کند، می‌تواند از یک رویکرد یکسان برای تشخیص و دور انداختن messagesهای تکراری استفاده کند. ID از message را به عنوان بخشی از transaction که events را به جدول EVENTS درج می‌کند، در جدول PROCESSED_MESSAGES درج می‌کند.
+  </p>
+  <h4><strong style="color:darkblue">IDEMPOTENT MESSAGE PROCESSING WHEN USING A NOSQL-BASED EVENT STORE</strong></h4>
+  <p>
+   یک event store مبتنی بر NoSQL، که دارای یک transaction model محدود است، باید از یک mechanism متفاوت برای پیاده‌سازی idempotent message handling استفاده کند. یک message consumer، باید به نوعی events را به صورت atomic persist کند و ID از message را ثبت کند. خوشبختانه، یک راه‌حل ساده وجود دارد. یک message consumer، ID از message را در events که در حین processing آن generate می‌شوند، ذخیره می‌کند. این duplicateها را با تأیید اینکه هیچ یک از events از یک aggregate، ID از message را شامل نمی‌شود، تشخیص می‌دهد.
+  </p>
+  <p>
+   یک چالش با استفاده از این رویکرد این است که processing یک message ممکن است هیچ eventای را generate نکند. کمبود events به این معنی است که هیچ رکوردی از یک message که پردازش شده است، وجود ندارد. یک redelivery بعدی و reprocessing از همان message ممکن است منجر به رفتار نادرست شود. به عنوان مثال، سناریوی زیر را در نظر بگیرید:
+  </p>
+  <ol>
+   <li>Message A is processed but doesn’t update an aggregate.</li>
+   <li>Message B is processed, and the message consumer updates the aggregate.</li>
+   <li>Message A is redelivered, and because there’s no record of it having been processed, the message consumer updates the aggregate.</li>
+   <li>Message B is processed again….</li>
+  </ol>
+  <p>
+   در این سناریو، redelivery از events منجر به یک نتیجه متفاوت و احتمالاً اشتباه می‌شود.
+  </p>
+  <p>
+   یک راه برای اجتناب از این مشکل این است که همیشه یک event را منتشر کنید. اگر یک aggregate یک event را emit نمی‌کند، یک application، یک pseudo event را منحصراً برای ثبت ID از message ذخیره می‌کند. Event consumers باید این pseudo eventsها را ignore کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

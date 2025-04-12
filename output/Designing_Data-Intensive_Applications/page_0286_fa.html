@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 286</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        به منظور جلوگیری از این <em>anomaly</em>، database باید پیگیری کند که چه زمانی یک <strong>Transaction</strong> <em>writes</em> های <strong>Transaction</strong> دیگری را به دلیل قوانین <em>MVCC visibility</em> نادیده می‌گیرد. وقتی <strong>Transaction</strong> می‌خواهد <em>commit</em> شود، database بررسی می‌کند که آیا هر یک از <em>writes</em> های نادیده گرفته شده در حال حاضر <em>committed</em> شده‌اند یا خیر. اگر چنین است، <strong>Transaction</strong> باید <em>aborted</em> شود.
+    </p>
+    <p>
+        چرا باید تا زمان <em>committing</em> صبر کنیم؟ چرا <em>transaction</em> 43 را بلافاصله هنگامی که <em>stale read</em> تشخیص داده شد، <em>abort</em> نکنیم؟ خب، اگر <em>transaction</em> 43 یک <em>read-only transaction</em> بود، نیازی به <em>aborted</em> شدن نداشت، زیرا هیچ خطری از <em>write skew</em> وجود ندارد. در زمانی که <em>transaction</em> 43 <em>read</em> خود را انجام می‌دهد، database هنوز نمی‌داند که آیا آن <strong>Transaction</strong> قرار است بعداً یک <em>write</em> را انجام دهد یا خیر. علاوه بر این، <em>transaction</em> 42 ممکن است هنوز <em>abort</em> شود یا ممکن است هنوز در زمان <em>committing</em> <em>transaction</em> 43 <em>uncommitted</em> باشد، و بنابراین <em>read</em> ممکن است اصلاً <em>stale</em> نباشد. با اجتناب از <em>aborts</em> های غیرضروری، SSI از پشتیبانی <em>snapshot isolation</em> برای <em>long-running reads</em> از یک <em>consistent snapshot</em> محافظت می‌کند.
+    </p>
+    <h4>Detecting writes that affect prior reads</h4>
+    <p>
+        مورد دوم که باید در نظر گرفت این است که <strong>Transaction</strong> دیگری داده‌ها را پس از خواندن آن تغییر می‌دهد. این مورد در شکل 7-11 نشان داده شده است.
+    </p>
+    <figure>
+        <img src="figure7-11.png" alt="Figure 7-11. In serializable snapshot isolation, detecting when one transaction modifies another transaction’s reads.">
+        <figcaption>Figure 7-11. In serializable snapshot isolation, detecting when one transaction modifies another transaction’s reads.</figcaption>
+    </figure>
+    <p>
+        در زمینه <em>two-phase locking</em>، ما در مورد <em>index-range locks</em> بحث کردیم (به "Index-range locks" در صفحه 260 مراجعه کنید)، که به database اجازه می‌دهد تا دسترسی به تمام <em>rows</em> هایی که با یک query جستجوی خاص، مانند WHERE shift_id = 1234، مطابقت دارند، را <em>lock</em> کند. ما می‌توانیم از یک تکنیک مشابه در اینجا استفاده کنیم، با این تفاوت که <em>SSI locks</em>، <em>transactions</em> های دیگر را مسدود نمی‌کنند.
+        <br>
+        264
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0286/image_1.png" alt="Image from page 286" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

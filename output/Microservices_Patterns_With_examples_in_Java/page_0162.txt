@@ -1,0 +1,62 @@
+132
+CHAPTER 4
+Managing transactions with sagas
+This strategy enables an application to dynamically make trade-offs about business
+risk, availability, and scalability.
+ It’s likely that you’ll need to use one or more of these countermeasures when
+implementing sagas in your application. Let’s look at the detailed design and imple-
+mentation of the Create Order Saga, which uses the semantic lock countermeasure. 
+4.4
+The design of the Order Service and 
+the Create Order Saga
+Now that we’ve looked at various saga design and implementation issues, let’s see an
+example. Figure 4.9 shows the design of Order Service. The service’s business logic
+consists of traditional business logic classes, such as Order Service and the Order
+Deﬁnes the Restaurant Order
+Service’s messaging API
+Sends commands to
+saga participants
+Orchestrator for the
+Create Order Saga
+Processes replies from
+saga participants
+Handles commands sent by the the
+Create Order Saga to the Order Service
+OrderServiceRequests
+AccountingServiceRequests
+ConsumerServiceRequests
+KitchenServiceRequests
+createOrder()
+cancelOrder()
+...
+Order Service
+controller
+Order
+command
+handlers
+Command
+message
+publisher
+CreateOrderSagaReplies
+Reply
+consumer
+OrderService
+CreateOrder
+Saga
+OrderService
+Proxy
+KitchenService
+Proxy
+Order
+createOrder()
+cancelOrder()
+approveOrder()
+rejectOrder()
+...
+OrderRepository
+save()
+ﬁndById()
+...
+Figure 4.9
+The design of the Order Service and its sagas
+ 

@@ -1,0 +1,41 @@
+398
+CHAPTER 12
+Deploying microservices
+The docker run command pulls the image from the registry if necessary. It then cre-
+ates and starts the container, which runs the java -jar command specified in the
+Dockerfile.
+ Using the docker run command may seem simple, but there are a couple of prob-
+lems. One is that docker run isn’t a reliable way to deploy a service, because it creates
+a container running on a single machine. The Docker engine provides some basic
+management features, such as automatically restarting containers if they crash or if
+the machine is rebooted. But it doesn’t handle machine crashes.
+ Another problem is that services typically don’t exist in isolation. They depend on
+other services, such as databases and message brokers. It would be nice to deploy or
+undeploy a service and its dependencies as a unit.
+ A better approach that’s especially useful during development is to use Docker
+Compose. Docker Compose is a tool that lets you declaratively define a set of contain-
+ers using a YAML file, and then start and stop those containers as a group. What’s
+more, the YAML file is a convenient way to specify numerous externalized configura-
+tion properties. To learn more about Docker Compose, I recommend reading Docker
+in Action by Jeff Nickoloff (Manning, 2016) and looking at the docker-compose.yml
+file in the example code.
+ The problem with Docker Compose, though, is that it’s limited to a single machine.
+To deploy services reliably, you must use a Docker orchestration framework, such as
+Kubernetes, which turns a set of machines into a pool of resources. I describe how to
+use Kubernetes later, in section 12.4. First, let’s review the benefits and drawbacks of
+using containers. 
+12.3.2 Benefits of deploying services as containers
+Deploying services as containers has several benefits. First, containers have many of
+the benefits of virtual machines:
+Encapsulation of the technology stack in which the API for managing your ser-
+vices becomes the container API.
+Service instances are isolated.
+Service instances’s resources are constrained.
+But unlike virtual machines, containers are a lightweight technology. Container
+images are typically fast to build. For example, on my laptop it takes as little as five sec-
+onds to package a Spring Boot application as a container image. Moving a container
+image over the network, such as to and from the container registry, is also relatively
+fast, primarily because only a subset of an image’s layers need to be transferred. Con-
+tainers also start very quickly, because there’s no lengthy OS boot process. When a
+container starts, all that runs is the service. 
+ 

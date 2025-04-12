@@ -1,0 +1,46 @@
+177
+Order Service business logic
+a semantic lock countermeasure, which helps ensure that sagas are isolated from one
+another. Eventually, once the saga has invoked the participating services, it then
+updates the Order to reflect the outcome. For example, as described in chapter 4, the
+Create Order Saga has multiple participant services, including Consumer Service,
+Accounting Service, and Kitchen Service. OrderService first creates an Order in an
+APPROVAL_PENDING state, and then later changes its state to either APPROVED or
+REJECTED. The behavior of an Order can be modeled as the state machine shown in
+figure 5.14.
+Similarly, other Order Service operations such as revise() and cancel() first change
+the Order to a pending state and use a saga to verify that the operation can be per-
+formed. Then, once the saga has verified that the operation can be performed, it
+changes the Order transitions to some other state that reflects the successful outcome
+of the operation. If the verification of the operation fails, the Order reverts to the pre-
+vious state. For example, the cancel() operation first transitions the Order to the
+CANCEL_PENDING state. If the order can be cancelled, the Cancel Order Saga changes
+the state of the Order to the CANCELLED state. Otherwise, if a cancel() operation is
+rejected because, for example, it’s too late to cancel the order, then the Order transi-
+tions back to the APPROVED state.
+ Let’s now look at the how the Order aggregate implements this state machine. 
+THE ORDER AGGREGATE’S METHODS
+The Order class has several groups of methods, each of which corresponds to a saga.
+In each group, one method is invoked at the start of the saga, and the other methods
+are invoked at the end. I’ll first discuss the business logic that creates an Order. After
+that we’ll look at how an Order is updated. The following listing shows the Order’s
+methods that are invoked during the process of creating an Order.
+APPROVAL_PENDING
+CANCEL_PENDING
+cancelRejected
+cancelConﬁrmed
+revise
+rejected
+authorized
+cancel
+reviseConﬁrmed
+reviseRejected
+REVISION_PENDING
+APPROVED
+CANCELLED
+REJECTED
+...
+Initial state
+Figure 5.14
+Part of the state machine model of the Order aggregate
+ 

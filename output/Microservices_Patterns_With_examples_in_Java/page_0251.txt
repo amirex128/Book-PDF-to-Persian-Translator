@@ -1,0 +1,43 @@
+221
+Querying using the API composition pattern
+among the databases owned by multiple services. You can’t, however, use a traditional
+distributed query mechanism, because even if it were technically possible, it violates
+encapsulation.
+ Consider, for example, the query operations for the FTGO application described
+in chapter 2. Some queries retrieve data that’s owned by just one service. The find-
+ConsumerProfile() query, for example, returns data from Consumer Service. But
+other FTGO query operations, such as findOrder() and findOrderHistory(), return
+data owned by multiple services. Implementing these query operations is not as
+straightforward.
+ There are two different patterns for implementing query operations in a microser-
+vice architecture:
+The API composition pattern—This is the simplest approach and should be used
+whenever possible. It works by making clients of the services that own the data
+responsible for invoking the services and combining the results.
+The Command query responsibility segregation (CQRS) pattern—This is more power-
+ful than the API composition pattern, but it’s also more complex. It maintains
+one or more view databases whose sole purpose is to support queries.
+After discussing these two patterns, I will talk about how to design CQRS views, fol-
+lowed by the implementation of an example view. Let’s start by taking a look at the
+API composition pattern.
+7.1
+Querying using the API composition pattern
+The FTGO application implements numerous query operations. Some queries, as
+mentioned earlier, retrieve data from a single service. Implementing these queries is
+usually straightforward—although later in this chapter, when I cover the CQRS pat-
+tern, you’ll see examples of single service queries that are challenging to implement.
+ There are also queries that retrieve data from multiple services. In this section, I
+describe the findOrder() query operation, which is an example of a query that
+retrieves data from multiple services. I explain the challenges that often crop up when
+implementing this type of query in a microservice architecture. I then describe the
+API composition pattern and show how you can use it to implement queries such as
+findOrder().
+7.1.1
+The findOrder() query operation
+The findOrder() operation retrieves an order by its primary key. It takes an orderId
+as a parameter and returns an OrderDetails object, which contains information
+about the order. As shown in figure 7.1, this operation is called by a frontend module,
+such as a mobile device or a web application, that implements the Order Status view.
+ The information displayed by the Order Status view includes basic information
+about the order, including its status, payment status, status of the order from the
+ 

@@ -1,0 +1,26 @@
+In my experience, this tends to be the most common first step. The main reason for
+this is that it tends to deliver more short-term benefit. If we left the data in the mono‐
+lithic database, we’re storing up lots of pain for the future, so that does need to be
+addressed too, but we have gained a lot from our new microservice.
+Extracting the application code tends to be easier than extracting things from the
+database. If we found that it was impossible to extract the application code cleanly,
+we could abort any further work, avoiding the need to detangle the database. If, how‐
+ever, the application code is cleanly extracted but extracting the data proves to be
+impossible, we could be in trouble—thus it’s essential that even if you decide to
+extract the application code before the data, you need to have looked at the associated
+data storage and have some idea as to whether extraction is viable and how you will
+go about it. So do the legwork to sketch out how both application code and data will
+be extracted before you start.
+Data First
+In Figure 3-4, we see the data being extracted first, before the application code. I see
+this approach less often, but it can be useful in situations in which you are unsure
+whether the data can be separated cleanly. Here, you prove that this can be done
+before moving on to the hopefully easier application code extraction.
+Figure 3-4. The tables associated with the wishlist functionality are extracted first
+The main benefit of this approach in the short term is in derisking the full extraction
+of the microservice. It forces you to deal up front with issues like loss of enforced data
+integrity in your database or lack of transactional operations across both sets of data.
+We’ll touch briefly on the implications of both issues later in this chapter.
+78 
+| 
+Chapter 3: Splitting the Monolith

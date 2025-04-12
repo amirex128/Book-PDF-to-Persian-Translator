@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 343</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3>CHAPTER 9</h3>
+    <h4>Consistency and Consensus</h4>
+    <p>
+        Is it better to be alive and wrong or right and dead?
+        <br>
+        —Jay Kreps, A Few Notes on Kafka and Jepsen (2013)
+    </p>
+    <p>
+        همانطور که در فصل 8 مورد بحث قرار گرفت، موارد زیادی می‌توانند در <em>distributed systems</em> اشتباه پیش بروند. ساده‌ترین راه برای رسیدگی به چنین <em>faults</em>، این است که اجازه دهیم کل <em>service</em> شکست بخورد، و به user یک پیام <em>error</em> نشان دهیم. اگر آن راه‌حل غیرقابل قبول باشد، ما باید راه‌هایی را برای تحمل <em>faults</em> پیدا کنیم—یعنی، حفظ عملکرد صحیح service، حتی اگر برخی از اجزای داخلی آن <em>faulty</em> باشند.
+    </p>
+    <p>
+        در این فصل، ما در مورد برخی از نمونه‌های الگوریتم‌ها و پروتکل‌ها برای ساختن <em>fault-tolerant distributed systems</em> صحبت خواهیم کرد. ما فرض خواهیم کرد که تمام مشکلات فصل 8 می‌توانند رخ دهند: <em>packets</em> می‌توانند از بین بروند، reordered شوند، تکراری شوند، یا به طور دلخواه در شبکه به تأخیر بیفتند. ساعت‌ها در بهترین حالت تقریبی هستند. و nodes ها می‌توانند متوقف شوند (به عنوان مثال، به دلیل <em>garbage collection</em>) یا در هر زمانی <em>crash</em> کنند.
+    </p>
+    <p>
+        بهترین راه برای ساختن <em>fault-tolerant systems</em>، یافتن برخی از <em>general-purpose abstractions</em> ها با <em>useful guarantees</em> ها، پیاده‌سازی آنها یک‌بار است، و سپس به application ها اجازه دهیم که به آن <em>guarantees</em> تکیه کنند. این همان رویکردی است که ما در فصل 7 با <strong>Transactions</strong> استفاده کردیم: با استفاده از یک <strong>Transaction</strong>، application می‌تواند وانمود کند که هیچ <em>crashes</em> (atomicity) وجود ندارد، که هیچ‌کس دیگری به طور همزمان به database دسترسی ندارد (<em>isola‐tion</em>)، و اینکه دستگاه‌های ذخیره‌سازی کاملاً قابل اعتماد هستند (<em>durability</em>). حتی اگر <em>crashes, race conditions</em>، و <em>disk failures</em> رخ دهند، <em>transaction abstraction</em>، این مشکلات را پنهان می‌کند تا application نیازی به نگرانی در مورد آنها نداشته باشد.
+    </p>
+    <p>
+        ما اکنون در امتداد همان مسیر ادامه خواهیم داد، و به دنبال <em>abstractions</em> هایی هستیم که می‌توانند به یک application اجازه دهند تا برخی از مشکلات موجود در <em>distributed systems</em> را نادیده بگیرد. به عنوان مثال، یکی از مهم‌ترین <em>abstractions</em> ها برای <em>distributed systems</em>، <em>consensus</em> است: یعنی، وادار کردن تمام nodes ها برای توافق بر سر چیزی. همانطور که در این فصل خواهیم دید، به طور قابل اعتماد
+        <br>
+        321
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

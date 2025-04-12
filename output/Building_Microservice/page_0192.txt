@@ -1,0 +1,39 @@
+proxy is doing. Service meshes, which we explore next, are much better placed to
+solve this problem.
+Service Meshes
+With a service mesh, common functionality associated with inter-microservice com‐
+munication is pushed into the mesh. This reduces the functionality that a microser‐
+vice needs to implement internally, while also providing consistency across how
+certain things are done.
+Common features implemented by service meshes include mutual TLS, correlation
+IDs, service discovery and load balancing, and more. Often this type of functionality
+is fairly generic from one microservice to the next, so we’d end up making use of a
+shared library to handle it. But then you have to deal with what happens if different
+microservices have different versions of the libraries running, or what happens if you
+have microservices written in different runtimes.
+Historically at least, Netflix would mandate that all nonlocal network communication
+had to be done JVM to JVM. This was to ensure that the tried and tested common
+libraries that are a vital part of managing effective communication between microser‐
+vices could be reused. With the use of a service mesh, though, we have the possibility
+of reusing common inter-microservice functionality across microservices written in
+different programming languages. Service meshes can also be incredibly useful in
+implementing standard behavior across microservices created by different teams—
+and the use of a service mesh, especially on Kubernetes, has increasingly become an
+assumed part of any given platform you might create for self-service deployment and
+management of microservices.
+Making it easy to implement common behavior across microservices is one of the big
+benefits of a service mesh. If this common functionality was implemented solely
+through shared libraries, changing this behavior would require every microservice to
+pull in a new version of said libraries and be deployed before that change is live. With
+a service mesh, you have much more flexibility in rolling out changes in terms of
+inter-microservice communication without requiring a rebuild and redeploy.
+How they work
+In general, we’d expect to have less north-south traffic than east-west traffic with a
+microservice architecture. A single north-south call—placing an order, for example—
+could result in multiple east-west calls. This means that when considering any sort of
+proxy for in-perimeter calls, we have to be aware of the overhead these additional
+calls can cause, and this is a core consideration in terms of how service meshes are
+built.
+166 
+| 
+Chapter 5: Implementing Microservice Communication

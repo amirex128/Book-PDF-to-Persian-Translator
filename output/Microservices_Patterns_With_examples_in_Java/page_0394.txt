@@ -1,0 +1,52 @@
+364
+CHAPTER 11
+Developing production-ready services
+The Spring Cloud Config project is a good example of a configuration server-based
+framework. It consists of a server and a client. The server supports a variety of backends
+for storing configuration properties, including version control systems, databases, and
+Hashicorp Vault. The client retrieves configuration properties from the server and
+injects them into the Spring ApplicationContext.
+ Using a configuration server has several benefits:
+Centralized configuration—All the configuration properties are stored in one
+place, which makes them easier to manage. What’s more, in order to eliminate
+duplicate configuration properties, some implementations let you define global
+defaults, which can be overridden on a per-service basis.
+Transparent decryption of sensitive data—Encrypting sensitive data such as database
+credentials is a security best practice. One challenge of using encryption, though,
+is that usually the service instance needs to decrypt them, which means it needs
+the encryption keys. Some configuration server implementations automatically
+decrypt properties before returning them to the service.
+Dynamic reconfiguration—A service could potentially detect updated property val-
+ues by, for example, polling, and reconfigure itself.
+The primary drawback of using a configuration server is that unless it’s provided by
+the infrastructure, it’s yet another piece of infrastructure that needs to be set up and
+maintained. Fortunately, there are various open source frameworks, such as Spring
+Cloud Config, which make it easier to run a configuration server.
+ Now that we’ve looked at how to design configurable services, let’s talk about how
+to design observable services. 
+11.3
+Designing observable services
+Let’s say you’ve deployed the FTGO application into production. You probably want
+to know what the application is doing: requests per second, resource utilization, and
+Order
+History Service
+instance
+Process
+Conﬁgures
+Creates
+CONFIG_SERVER_URL=...
+getConﬁguration(“orderHistoryService”)
+BOOTSTRAP_SERVERS=kafka1:9092
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=...
+....
+Environment variables
+Deployment
+infrastructure
+Conﬁguration
+server
+Figure 11.8
+On startup, a service instance retrieves its configuration properties from a configuration server. The 
+deployment infrastructure provides the configuration properties for accessing the configuration server.
+ 

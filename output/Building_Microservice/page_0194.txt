@@ -1,0 +1,40 @@
+building block for service meshes and other types of proxy-based software—it is an
+important building block for Istio and Ambassador, for example.
+These proxies are in turn managed by a control plane. This will be a set of software
+that helps you see what is going on and control what is being done. When using a
+service mesh to implement mutual TLS, for example, the control plane would be used
+to distribute client and server certificates.
+Aren’t service meshes smart pipes?
+So all this talk of pushing common behavior into a service mesh might have alarm
+bells ringing for some of you. Isn’t this approach open to the same sorts of problems
+as enterprise service buses or overly bloated API gateways? Aren’t we at risk of push‐
+ing too many “smarts” into our service mesh?
+The key thing to remember here is that the common behavior we are putting into the
+mesh is not specific to any one microservice. No business functionality has leaked to
+the outside. We’re configuring generic things like how request time-outs are handled.
+In terms of common behavior that might want to be tweaked on a per-microservice
+basis, that’s typically something that is well catered for, without the need for work to
+be done on a central platform. For example, with Istio, I can define my time-out
+requirements on a self-service basis just by changing my service definition.
+Do you need one?
+When the use of service meshes first started becoming popular, just after the release
+of the first edition of this book, I saw a lot of merit in the idea but also saw a lot of
+churn in the space. Different deployment models were suggested, built, and then
+dropped, and the number of companies offering solutions in this space increased
+drastically; but even for those tools that had been around for a long time, there was
+an apparent lack of stability. Linkerd, which arguably did as much as anyone to pio‐
+neer this space, totally rebuilt its product from scratch in the shift from v1 to v2. Istio,
+which was the Google-anointed service mesh, took years to get to an initial 1.0
+release, and even still it had significant subsequent changes in its architecture (mov‐
+ing somewhat ironically, although sensibly, to a more monolithic deployment model
+for its control plane).
+For much of the last five years, when I have been asked “Should we get a service
+mesh?” my advice has been “If you can afford to wait six months before making a
+choice, then wait six months.” I was sold on the idea but concerned about the stabil‐
+ity. And something like a service mesh is not where I personally want to take a lot of
+risks—it’s so key, so essential to everything working well. You’re putting it on your
+critical path. It’s up there with selecting a message broker or cloud provider in terms
+of how seriously I’d take it.
+168 
+| 
+Chapter 5: Implementing Microservice Communication

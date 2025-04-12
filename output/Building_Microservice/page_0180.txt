@@ -1,0 +1,40 @@
+Extreme Measures
+So assuming you know that a consumer is still using an old interface that you want to
+remove, and they are dragging their heels about moving to the new version, what can
+you do about it? Well, the first thing to do is talk to them. Perhaps you can lend them
+a hand to make the changes happen. If all else fails, and they still don’t upgrade even
+after agreeing to do so, there are some extreme techniques I’ve seen used.
+At one large tech company, we discussed how it handled this issue. Internally, the
+company had a very generous period of one year before old interfaces would be
+retired. I asked how it knew if consumers were still using the old interfaces, and the
+company replied that it didn’t really bother tracking that information; after one year
+it just turned the old interface off. It was recognized internally that if this caused a
+consumer to break, it was the fault of the consuming microservice’s team—they’d
+had a year to make the change and hadn’t done so. Of course, this approach won’t
+work for many (I said it was extreme!). It also leads to a large degree of inefficiency.
+By not knowing if the old interface was used, the company denied itself the opportu‐
+nity to remove it before the year had passed. Personally, even if I was to suggest just
+turning the endpoint off after a certain period of time, I’d still definitely want track‐
+ing of who was going to be impacted.
+Another extreme measure I saw was actually in the context of deprecating libraries,
+but it could also theoretically be used for microservice endpoints. The example given
+was of an old library that people were trying to retire from use inside the organization
+in favor of a newer, better one. Despite lots of work to move code over to use the new
+library, some teams were still dragging their heels. The solution was to insert a sleep
+in the old library so that it responded more slowly to calls (with logging to show what
+was happening). Over time, the team driving the deprecation just kept increasing the
+duration of the sleep, until eventually the other teams got the message. You obviously
+have to be extremely sure that you’ve exhausted other reasonable efforts to get con‐
+sumers to upgrade before considering something like this!
+DRY and the Perils of Code Reuse in a Microservice World
+One of the acronyms we developers hear a lot is DRY: don’t repeat yourself. Though
+its definition is sometimes simplified as trying to avoid duplicating code, DRY
+more accurately means that we want to avoid duplicating our system behavior and
+knowledge. This is very sensible advice in general. Having lots of lines of code that do
+the same thing makes your codebase larger than needed and therefore harder to rea‐
+son about. When you want to change behavior, and that behavior is duplicated in
+many parts of your system, it is easy to forget everywhere you need to make a change,
+which can lead to bugs. So using DRY as a mantra in general makes sense.
+154 
+| 
+Chapter 5: Implementing Microservice Communication

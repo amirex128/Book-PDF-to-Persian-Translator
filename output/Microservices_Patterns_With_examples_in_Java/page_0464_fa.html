@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 464</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   strategy، زیرا این نحوه مهاجرت functionality از monolith به
+   strangler application است.
+  </p>
+  <p>
+   بیایید نگاهی به هر یک از این استراتژی‌ها بیندازیم، با پیاده‌سازی features جدید به عنوان servicesها شروع می‌کنیم.
+  </p>
+  <h3><strong>13.2.1 Implement new features as services</strong></h3>
+  <p>
+   قانون Holes بیان می‌کند که "اگر خود را در یک سوراخ یافتید، از کندن دست بکشید" (https://
+   en.m.wikipedia.org/wiki/Law_of_holes). این یک توصیه عالی است که باید هنگام
+   monolithic application شما غیرقابل مدیریت شده است، دنبال کنید. به عبارت دیگر، اگر شما یک
+   application monolithic بزرگ و complex دارید، featuresهای جدید را با افزودن کد به
+   monolith پیاده‌سازی نکنید. این باعث می‌شود که monolith شما حتی بزرگ‌تر و غیرقابل مدیریت‌تر شود. در عوض،
+   شما باید featuresهای جدید را به عنوان servicesها پیاده‌سازی کنید.
+  </p>
+  <p>
+   این یک راه عالی برای شروع migrating application monolithic خود به یک microser-
+   vice architecture است. این باعث کاهش نرخ رشد monolith می‌شود. توسعه را تسریع می‌کند
+   featuresهای جدید، زیرا شما در حال توسعه در یک کد کاملاً جدید هستید
+   base. همچنین به سرعت value اتخاذ microservice architecture را نشان می‌دهد.
+  </p>
+  <h3><strong>INTEGRATING THE NEW SERVICE WITH THE MONOLITH</strong></h3>
+  <p>
+   شکل 13.2 معماری application را پس از پیاده‌سازی یک feature جدید به عنوان یک
+   service نشان می‌دهد. علاوه بر service جدید و monolith، معماری شامل دو ele-
+   ments دیگر است که service را در application ادغام می‌کند:
+   <ul>
+    <li>
+     API gateway—requestsها را برای functionality جدید به service جدید route می‌کند و
+     requestsهای legacy را به monolith route می‌کند.
+    </li>
+    <li>
+     Integration glue code—service را با monolith ادغام می‌کند. این service را قادر می‌سازد تا به data متعلق به monolith دسترسی پیدا کند و functionality را فراخوانی کند که imple-
+     mented شده توسط monolith.
+    </li>
+   </ul>
+  </p>
+  <p>
+   The integration glue code یک component مستقل نیست. در عوض، این شامل adapt-
+   ersها در monolith و service است که از یک یا چند interprocess communication استفاده می‌کنند
+   mechanismsها. به عنوان مثال، integration glue برای Delayed Delivery Service، شرح داده شده
+   در بخش 13.4.1، از REST و domain events استفاده می‌کند. service، اطلاعات قرارداد مشتری را از
+   monolith با فراخوانی یک REST API بازیابی می‌کند. monolith pub-
+   lishes Order domain eventsها، به طوری که Delayed Delivery Service می‌تواند state of را ردیابی کند
+   Orders و به orderهایی پاسخ می‌دهد که به موقع تحویل داده نمی‌شوند. بخش 13.3.1 توضیح می‌دهد
+   the integration glue code را با جزئیات بیشتر.
+  </p>
+  <h3><strong>WHEN TO IMPLEMENT A NEW FEATURE AS A SERVICE</strong></h3>
+  <p>
+   در حالت ایده‌آل، شما باید هر feature جدید را در strangler application پیاده‌سازی کنید،
+   تا در monolith. شما یک feature جدید را یا به عنوان یک service جدید یا به عنوان بخشی از
+   از یک service موجود. به این ترتیب، شما از هرگز دست زدن به کد monolith اجتناب خواهید کرد
+   base. متأسفانه، اگرچه، نه هر feature جدید می‌تواند به عنوان یک service پیاده‌سازی شود.
+  </p>
+  <p>
+   That’s because the essence of a microservice architecture is a set of loosely coupled
+   services that are organized around business capabilities. A feature might, for instance,
+   be too small to be a meaningful service. You might, for example, just need to add a
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

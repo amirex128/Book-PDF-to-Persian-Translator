@@ -1,0 +1,54 @@
+260
+CHAPTER 8
+External API patterns
+and rate limiting. Figure 8.3 shows the relationship between the clients, the API gate-
+way, and the services.
+The API gateway is responsible for request routing, API composition, and protocol
+translation. All API requests from external clients first go to the API gateway, which
+routes some requests to the appropriate service. The API gateway handles other
+requests using the API composition pattern and by invoking multiple services and
+aggregating the results. It may also translate between client-friendly protocols such as
+HTTP and WebSockets and client-unfriendly protocols used by the services.
+REQUEST ROUTING
+One of the key functions of an API gateway is request routing. An API gateway imple-
+ments some API operations by routing requests to the corresponding service. When it
+receives a request, the API gateway consults a routing map that specifies which service
+to route the request to. A routing map might, for example, map an HTTP method
+and path to the HTTP URL of a service. This function is identical to the reverse proxy-
+ing features provided by web servers such as NGINX. 
+Lower-performance
+internet
+Higher-performance
+LAN
+Backend services
+Order Service
+Firewall
+API
+requests
+API
+requests
+API
+requests
+Web page
+requests
+Web
+application
+Consumer
+Service
+Delivery
+Service
+Browser
+iPhone/
+Android
+application
+3rd-party
+application
+HTML
+JavaScript
+application
+API
+gateway
+Figure 8.3
+The API gateway is the single entry point into the application for API calls from outside 
+the firewall.
+ 

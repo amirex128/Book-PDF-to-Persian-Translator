@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 369</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   <strong>Part 2</strong>
+  </p>
+  <p>
+   The consumer-side test، همانند REST client است.
+  </p>
+  <p>
+   ...
+  </p>
+  <p>
+   Listing 10.9 shows the consumer-side integration test for Order Service.
+   تیم تولیدکننده، از این قراردادها برای تست Order Service استفاده می‌کند.
+   This test suite, along with those contributed by other teams, is run by Order Service’s
+   deployment pipeline.
+  </p>
+  <p>
+   ....
+  </p>
+  <p>
+   <strong>10.2.2 Writing acceptance tests using Gherkin</strong>
+  </p>
+  <p>
+   و هر دو، در مورد API توافق دارند. ما قبلاً به آن پرداختیم.
+  </p>
+  <p>
+   ...
+  </p>
+  <p>
+   The gherkin specification for a service such as Order Service consists of a set of fea-
+   tures. Each feature is described by a set of scenarios such as the one you saw earlier. A sce-
+   nario has the given-when-then structure. The givens are the preconditions, the when is
+   the action or event that occurs, and the then/and are the expected outcome.
+  </p>
+  <p>
+   به عنوان مثال، رفتار مورد نظر Order Service توسط چندین feature، از جمله Place Order، Cancel Order و Revise Order تعریف می‌شود. Listing 10.11، یک excerpt از feature Place Order است. این feature از چندین عنصر تشکیل شده است:
+  </p>
+  <ol>
+   <li>
+    Name—برای این feature، نام Place Order است.
+   </li>
+   <li>
+    Specification brief—این، توضیح می‌دهد که چرا feature وجود دارد. برای این feature، specification brief، user story است.
+   </li>
+   <li>
+    Scenarios—Order authorized و Order rejected due to expired credit card.
+   </li>
+  </ol>
+  <p>
+   <pre><code class="language-java">Feature: Place Order
+As a consumer of the Order Service
+I should be able to place an order
+Scenario: Order authorized
+Given a valid consumer
+Given using a valid credit card
+Given the restaurant is accepting orders
+When I place an order for Chicken Vindaloo at Ajanta
+Then the order should be APPROVED
+And an OrderAuthorized event should be published
+Scenario: Order rejected due to expired credit card
+Given a valid consumer
+Given using an expired credit card
+Given the restaurant is accepting orders
+When I place an order for Chicken Vindaloo at Ajanta
+Then the order should be REJECTED
+And an OrderRejected event should be published
+...</code></pre>
+  </p>
+  <p>
+   <strong>Listing 10.11</strong>
+   The Gherkin definition of the Place Order feature and some of its scenarios
+  </p>
+  <p>
+   به این می پردازیم که:
+  </p>
+  <p>
+   ...
+  </p>
+  <p>
+   Let’s look at the details, starting with the contract.
+  </p>
+  <p>
+   ...
+  </p>
+  <p>
+   و سپس بررسی میکنیم که برای چه چیزی از آن استفاده می‌کنیم.
+  </p>
+  <h4>10.2.3 Designing component tests</h4>
+  <p>
+   تصور کنید که شما در حال پیاده‌سازی component tests برای Order Service هستید. بخش 10.2.2 نشان می‌دهد که چگونه رفتار مورد نظر را با استفاده از Gherkin مشخص کنید و آن را با استفاده از Cucumber اجرا کنید. اما قبل از اینکه یک component test بتواند سناریوهای Gherkin را اجرا کند، باید ابتدا Order Service را اجرا کند و dependencies های service را راه‌اندازی کند. شما باید Order Service را در isolation تست کنید، بنابراین component test باید stubs ها را برای service های مختلف، از جمله Kitchen Service، پیکربندی کند. همچنین باید یک database و زیرساخت messaging را راه‌اندازی کند.
+  </p>
+  <p>
+   چندین گزینه مختلف وجود دارد که سرعت و سادگی را با هم مقایسه می‌کنند.
+  </p>
+  <p>
+   <strong>IN-PROCESS COMPONENT TESTS</strong>
+  </p>
+  <p>
+   یک گزینه، نوشتن in-process component tests ها است. یک in-process component test، service را با stubs ها و mocks های in-memory برای dependencies های آن اجرا می‌کند. به عنوان مثال، شما می‌توانید یک component test را برای یک service مبتنی بر Spring Boot با استفاده از فریم‌ورک testing Spring Boot بنویسید. یک test class که با @SpringBootTest annotation نویسی شده است، service را در همان JVM که تست در آن قرار دارد، اجرا می‌کند. از dependency injection برای پیکربندی service برای استفاده از mocks و stubs استفاده می‌کند. به عنوان مثال، یک تست برای Order Service، آن را پیکربندی می‌کند تا از یک database JDBC in-memory، مانند H2، HSQLDB یا Derby، و stubs های in-memory برای Eventuate Tram استفاده کند. In-process tests، نوشتن آنها ساده‌تر و سریع‌تر است، اما نقطه ضعف آن، تست نکردن service deployable است.
+  </p>
+  <p>
+   <strong>OUT-OF-PROCESS COMPONENT TESTING</strong>
+  </p>
+  <p>
+   یک رویکرد واقع‌بینانه‌تر، بسته بندی service در یک قالب production-ready و اجرای آن به عنوان یک process جداگانه است. به عنوان مثال، فصل 12 توضیح می‌دهد که بسته بندی service ها به عنوان container images های Docker، به طور فزاینده‌ای رایج است. An out-of-process component test از service های infrastructure واقعی، مانند databases و message brokers، استفاده می‌کند، اما از stubs ها برای هر گونه dependencies که application services هستند، استفاده می‌کند. به عنوان مثال، یک out-of-process component test برای FTGO Order Service، از MySQL و Apache Kafka، و stubs ها برای service ها از جمله Consumer Service و Accounting Service استفاده می‌کند. از آنجایی که Order Service با آن service ها با استفاده از messaging تعامل دارد، این stubs ها پیام‌ها را از Apache Kafka مصرف می‌کنند و پیام‌های reply را برمی‌گردانند.
+  </p>
+  <p>
+   یک مزیت کلیدی of out-of-process component testing این است که coverage تست را بهبود می‌بخشد، زیرا آنچه تست می‌شود، بسیار نزدیک‌تر به چیزی است که deploy می‌شود. نقطه ضعف این است که نوشتن این نوع تست، اجرا کردن آن کندتر، و به‌طور بالقوه brittleتر از یک in-process component test است. همچنین شما باید نحوه stub کردن application services ها را بفهمید. بیایید نگاهی بیندازیم که چگونه این کار را انجام دهیم.
+  </p>
+  <p>
+   <strong>HOW TO STUB SERVICES IN OUT-OF-PROCESS COMPONENT TESTS</strong>
+  </p>
+  <p>
+   Service under test اغلب dependencies ها را با استفاده از interaction styles هایی که شامل ارسال یک response هستند، فراخوانی می‌کند. Order Service، به عنوان مثال، از request/response asynchronous استفاده می‌کند و پیام‌های command را به service های مختلف ارسال می‌کند. API Gateway از HTTP استفاده می‌کند، که یک interaction style از نوع request/response است. یک out-of-process test، باید stubs ها را برای این نوع dependencies ها، که requests ها را مدیریت می‌کنند و reply ها را برمی‌گردانند، پیکربندی کند.
+  </p>
+  <p>
+   One option is to use Spring Cloud Contract, which we looked at earlier in sec-
+   tion 10.1 when discussing integration tests. We could write contracts that configure
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

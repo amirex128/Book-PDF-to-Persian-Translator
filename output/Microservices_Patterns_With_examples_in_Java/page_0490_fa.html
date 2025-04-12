@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 490</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   من این بخش را با توصیف delivery management و نحوه قرارگیری فعلی آن آغاز می‌کنم
+   embedded درون monolith. در مرحله بعد، طراحی جدید و مستقل را مورد بحث قرار می‌دهم
+   Delivery Service و API آن. سپس نحوه همکاری Delivery Service و FTGO را شرح می‌دهم
+   monolith. در نهایت، من در مورد برخی از تغییراتی که ما نیاز داریم برای ایجاد
+   monolith برای پشتیبانی از Delivery Service.
+  </p>
+  <p>
+   اجازه دهید با بررسی طراحی موجود شروع کنیم.
+  </p>
+  <h3><strong>13.5.1 Overview of existing delivery management functionality</strong></h3>
+  <p>
+   Delivery management مسئول زمان‌بندی couriersها است که ordersها را در
+   restaurantsها برمی‌دارند و آنها را به مصرف‌کنندگان تحویل می‌دهند. هر courier دارای یک plan است که یک schedule
+   از actionsهای pickup و deliver است. یک pickup action به Courier می‌گوید که یک order را
+   از یک رستوران در یک زمان خاص بردارد. یک deliver action به Courier می‌گوید که یک
+   order را به یک consumer تحویل دهد. plansها هر زمان که ordersها ثبت، لغو یا
+   بازبینی می‌شوند، و با تغییر مکان و در دسترس بودن couriersها، بازبینی می‌شوند.
+  </p>
+  <p>
+   Delivery management یکی از قدیمی‌ترین بخش‌های application FTGO است. همانطور که fig-
+   ure 13.16 نشان می‌دهد، در order management، embedded است. بخش زیادی از کد برای man-
+   aging deliveriesها در OrderService است. علاوه بر این، هیچ representation صریحی از
+   Delivery وجود ندارد. این در entity Order، که دارای fieldsهای مختلف مربوط به delivery است،
+   مانند scheduledPickupTime و scheduledDeliveryTime.
+  </p>
+  <p>
+   Commandsهای متعددی که توسط monolith پیاده‌سازی شده‌اند، delivery manage-
+   ment، از جمله موارد زیر را فراخوانی می‌کنند:
+   <ul>
+    <li>
+     
+     acceptOrder()—هنگامی فراخوانی می‌شود که یک رستوران یک order را می‌پذیرد و
+     متعهد می‌شود که آن را تا یک زمان مشخص آماده کند. این operation، delivery management را فراخوانی می‌کند تا a
+     delivery را زمان‌بندی کند.
+    </li>
+    <li>
+     
+     cancelOrder()—هنگامی فراخوانی می‌شود که یک consumer، یک order را لغو می‌کند. در صورت لزوم، it
+     delivery را لغو می‌کند.
+    </li>
+    <li>
+     
+     noteCourierLocationUpdated()—توسط application موبایل courier فراخوانی می‌شود
+     برای آپدیت کردن location courier. این، rescheduling deliveriesها را trigger می‌کند.
+    </li>
+    <li>
+     
+     noteCourierAvailabilityChanged()—توسط application موبایل courier فراخوانی می‌شود-
+     tion برای آپدیت کردن availability courier. این، rescheduling deliveriesها را trigger می‌کند.
+    </li>
+   </ul>
+   همچنین، queriesهای مختلف، data که توسط delivery management نگهداری می‌شود، از جمله
+   زیر را بازیابی می‌کنند:
+   <ul>
+    <li>
+     
+     getCourierPlan()—توسط application موبایل courier فراخوانی شده و
+     plan courier را برمی‌گرداند
+    </li>
+    <li>
+     
+     getOrderStatus()—status of order را برمی‌گرداند، که شامل delivery-related
+     اطلاعاتی مانند courier اختصاص داده شده و ETA
+    </li>
+    <li>
+     
+     getOrderHistory()—اطلاعات مشابه getOrderStatus() را برمی‌گرداند به جز
+     در مورد multiple orders
+    </li>
+   </ul>
+  </p>
+  <p>
+   اغلب آنچه که به یک service استخراج می‌شود، همانطور که در بخش 13.2.3 ذکر شد، یک کل است
+   vertical slice، با controllersها در بالا و جداول database در پایین. ما می‌توانیم
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

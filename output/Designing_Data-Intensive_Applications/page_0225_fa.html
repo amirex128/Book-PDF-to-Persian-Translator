@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 225</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        با این حال، the downside of key range partitioning این است که الگوهای دسترسی خاصی می‌توانند منجر به hot spots شوند. اگر key یک timestamp باشد، سپس partitions با ranges of time مطابقت دارند—به عنوان مثال، یک partition برای هر روز. متأسفانه، از آنجایی که ما data را از sensors به database در حین وقوع اندازه‌گیری‌ها می‌نویسیم، همه writes به همان partition ختم می‌شوند (آن برای امروز)، بنابراین آن partition می‌تواند با writes بیش از حد بارگذاری شود در حالی که بقیه بیکار هستند [5].
+    </p>
+    <p>
+        برای اجتناب از این مشکل در sensor database، شما نیاز دارید که از چیزی به غیر از timestamp به عنوان اولین عنصر از key استفاده کنید. به عنوان مثال، شما می‌توانید هر timestamp را با sensor name پیشوند کنید تا partitioning ابتدا بر اساس sensor name و سپس بر اساس زمان انجام شود. با فرض اینکه شما بسیاری از sensors را دارید که به طور همزمان فعال هستند، write load در نهایت به طور مساوی در سراسر partitions پخش می‌شود. اکنون، هنگامی که شما می‌خواهید values از چندین sensors را در یک زمان range واکشی کنید، شما نیاز دارید که یک query range جداگانه را برای هر sensor name انجام دهید.
+    </p>
+    <h4>Partitioning by Hash of Key</h4>
+    <p>
+        به دلیل این خطر از skew و hot spots، بسیاری از datastores distributed از یک hash function برای تعیین partition برای یک key داده شده، استفاده می‌کنند.
+    </p>
+    <p>
+        A good hash function داده‌های skewed را می‌گیرد و آن‌ها را به طور یکنواخت توزیع می‌کند. فرض کنید شما یک hash function 32 بیتی دارید که یک string را می‌گیرد. هر زمان که شما یک string جدید به آن می‌دهید، آن یک عدد ظاهراً تصادفی بین 0 و 232 − 1 برمی‌گرداند. حتی اگر strings ورودی بسیار شبیه به هم باشند، hashes آن‌ها در سراسر آن range از اعداد به طور مساوی توزیع شده‌اند.
+    </p>
+    <p>
+        For partitioning purposes، hash function نباید cryptographically strong باشد: به عنوان مثال، Cassandra و MongoDB از MD5 استفاده می‌کنند و Voldemort از the Fowler–Noll–Vo function استفاده می‌کند. بسیاری از زبان‌های برنامه‌نویسی دارای hash functions ساده‌ای هستند (چون آن‌ها برای hash tables استفاده می‌شوند)، اما ممکن است برای partitioning مناسب نباشند: به عنوان مثال، در Object.hashCode() از Java و Object#hash از Ruby، همان key ممکن است در فرآیندهای مختلف، یک مقدار hash متفاوت داشته باشد [6].
+    </p>
+    <p>
+        Once you have a suitable hash function for keys، شما می‌توانید هر partition را به یک range از hashes (به جای یک range از keys) اختصاص دهید و هر key که hash آن در range یک partition قرار می‌گیرد، در آن partition ذخیره می‌شود. این در شکل 6-3 نشان داده شده است.
+    </p>
+    <p>
+        Partitioning of Key-Value Data | 203
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

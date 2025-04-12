@@ -1,0 +1,41 @@
+The Paved Road at Scale
+The use of in-house internal microservice templates and frameworks is often found
+in organizations that have large numbers of microservices. Netflix and Monzo are
+two such organizations. Each has decided to standardize on its technology stack to
+some degree (the JVM in the case of Netflix, Go in terms of Monzo), allowing it to
+speed up the creation of a new microservice with standard, expected behavior by
+using a common set of tools. With a more divergent technology stack, having a stan‐
+dard microservice template for your own needs becomes more difficult.
+If you were to embrace multiple disparate technology stacks, you’d need a matching
+microservice template for each. This could be a way you subtly constrain language
+choices in your teams, though. If the in-house microservice template supports only
+the JVM, then people may be discouraged from picking alternative stacks if they have
+to do lots more work themselves. Netflix, for example, is especially concerned with
+aspects like fault tolerance to ensure that the outage of one part of its system cannot
+take everything down. To handle this, a large amount of work has been done to
+ensure that there are client libraries on the JVM to provide teams with the tools they
+need to keep their microservice well behaved. Introducing a new technology stack
+would mean having to reproduce all this effort. The main concern for Netflix is less
+about the duplicated effort and more about the fact that it is so easy to get this wrong.
+The risk of a microservice getting newly implemented fault tolerance wrong is high if
+it could impact more of the system. Netflix mitigates this by using “sidecar services,”
+which communicate locally with a JVM that is using the appropriate libraries.
+Service meshes have given us another potential way to offload common behavior.
+Some functionality that was commonly seen as an internal microservice’s responsibil‐
+ity can now be pushed to a microservice mesh. This can ensure more consistency of
+behavior across microservices written in different programming languages and also
+reduce the responsibilities of these microservice templates.
+Technical Debt
+We are often put in situations in which we cannot follow through to the letter on our
+technical vision. Often, we need to make a choice to cut a few corners to get some
+urgent features out. This is just one more trade-off that we’ll find ourselves having to
+make. Our technical vision exists for a reason. If we deviate from this reason, it might
+have a short-term benefit but a long-term cost. A concept that helps us understand
+this trade-off is technical debt. When we accrue technical debt, just like debt in the
+real world it has an ongoing cost and is something we want to pay down.
+Sometimes technical debt isn’t just something we cause by taking shortcuts. What
+happens if our vision for the system changes, but not all of our system matches? In
+this situation, too, we have created new sources of technical debt.
+Technical Debt 
+| 
+547

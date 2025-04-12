@@ -1,0 +1,39 @@
+8 Mostly. AWS does now provide bare metal instances, which messes with my brain a bit.
+behavior. SLAs tend to be very much at the “bare minimum” level of things, often to
+the point that if the system only just achieved its targets, the end user would still be
+unhappy. As an example, AWS has an SLA for its compute service. It makes it clear
+there is no effective guarantee for uptime for a single EC2 instance (a managed vir‐
+tual machine8). AWS states that it makes its best efforts to ensure 90% uptime for a
+given instance, but if that isn’t achieved, then it just doesn’t charge you for the given
+hour in which the instance was unavailable. Now, if your EC2 instances were con‐
+stantly failing to reach 90% availability in a given hour, causing significant system
+instability, you might not be getting charged, but you also wouldn’t be very happy. In
+my experience, AWS in practice achieves far in excess of what the SLA outlines, as is
+often the case with SLAs.
+Service-level objectives
+Mapping an SLA down to a team is problematic, especially if the SLA is somewhat
+broad and cross-cutting. At a team level, we instead talk about service-level objectives
+(SLOs). SLOs define what the team signs up to provide. Achieving the SLOs of every
+team across the organization will satisfy (and likely greatly exceed) the requirements
+of the organization’s SLAs. Example SLOs could include things like expected uptime
+or acceptable response times for a given operation.
+It is too simplistic to think of SLOs as being what a team needs to do for the organiza‐
+tion to achieve its SLAs. Yes, if the entire organization achieves all of its SLOs, we
+would assume that all the SLAs have also been achieved, but SLOs can speak to other
+goals not outlined in the SLA—or they might be aspirational, they could be inward
+facing (trying to carry out some internal change). SLOs can often reflect something
+that the team itself wants to achieve that may have no relation to an SLA.
+Service-level indicators
+To determine if we are meeting our SLOs, we need to gather real data. This is what
+our service-level indicators (SLI) are. An SLI is a measure of something our software
+does. It could, for example, be a response time from a process, a customer being reg‐
+istered, an error being raised to the customer, or an order being placed. We need to
+collect and surface these SLIs to make sure we are meeting our SLOs.
+Error budgets
+When we try new things, we inject more potential instability into our systems. As
+such, a desire to maintain (or improve) system stability could result in change being
+discouraged. Error budgets are an attempt to avoid this problem by being clear about
+how much error is acceptable in a system.
+328 
+| 
+Chapter 10: From Monitoring to Observability

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 333</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        <em>ance of partial failures</em> into software، به‌طوری‌که system در کل ممکن است به عملکرد خود ادامه دهد، حتی زمانی که برخی از بخش‌های تشکیل‌دهنده آن خراب هستند.
+    </p>
+    <p>
+        برای تحمل <em>faults</em>، اولین گام، تشخیص آنها است، اما حتی این هم دشوار است. اکثر systems ها یک مکانیسم دقیق برای تشخیص اینکه آیا یک node شکست خورده است یا خیر ندارند، بنابراین اکثر الگوریتم‌های <em>distributed</em> به <em>timeouts</em> متکی هستند تا تعیین کنند که آیا یک node از راه دور هنوز در دسترس است یا خیر. با این حال، <em>timeouts</em> نمی‌توانند بین <em>network</em> و <em>node failures</em> تمایز قائل شوند، و تأخیر شبکه متغیر گاهی اوقات باعث می‌شود که یک node به اشتباه مشکوک به <em>crashing</em> شود. علاوه بر این، گاهی اوقات یک node می‌تواند در یک حالت <em>degraded</em> قرار داشته باشد: به عنوان مثال، یک <em>Gigabit network interface</em> می‌تواند ناگهان به <em>throughput</em> 1 کیلوبیت بر ثانیه به دلیل یک باگ <em>driver</em> <em>drop</em> شود [94]. رسیدگی به چنین node ای که <em>“limping”</em> است اما <em>dead</em> نیست، دشوارتر از یک node که به طور منظم <em>failed</em> است، می‌باشد.
+    </p>
+    <p>
+        هنگامی که یک <em>fault</em> تشخیص داده شد، ایجاد یک system که آن را تحمل کند نیز آسان نیست: هیچ متغیر global، حافظه مشترک، دانش مشترک یا هر نوع دیگری از <em>shared state</em> بین machine ها وجود ندارد. nodes ها حتی نمی‌توانند بر سر زمان به توافق برسند، چه برسد به هر چیز عمیق‌تری. تنها راهی که اطلاعات می‌تواند از یک node به node دیگر جریان یابد، ارسال آن از طریق شبکه غیرقابل اعتماد است. تصمیمات اصلی را نمی‌توان با خیال راحت توسط یک node واحد اتخاذ کرد، بنابراین ما به پروتکل‌هایی نیاز داریم که کمک سایر nodes ها را جذب کنند و سعی کنند یک <em>quorum</em> را به توافق برسانند.
+    </p>
+    <p>
+        اگر شما به نوشتن نرم‌افزار در کمال ریاضیاتی ایده‌آل یک کامپیوتر واحد عادت کرده‌اید، که در آن یک operation یکسان همیشه به طور قطعی نتیجه یکسانی را برمی‌گرداند، پس حرکت به سمت واقعیت فیزیکی درهم و برهم <em>distributed systems</em> می‌تواند کمی شوکه‌کننده باشد. برعکس، مهندسان <em>distributed systems</em> اغلب یک مشکل را بی‌اهمیت می‌دانند اگر بتوان آن را روی یک کامپیوتر واحد حل کرد [5]، و در واقع یک کامپیوتر واحد امروزه می‌تواند کارهای زیادی انجام دهد [95]. اگر می‌توانید از باز کردن جعبه پاندورا اجتناب کنید و به سادگی چیزها را روی یک machine نگه دارید، به‌طور کلی ارزش انجام این کار را دارد.
+    </p>
+    <p>
+        با این حال، همانطور که در مقدمه قسمت II مورد بحث قرار گرفت، مقیاس‌پذیری تنها دلیل برای تمایل به استفاده از یک <em>distributed system</em> نیست. <em>Fault tolerance</em> و <em>low latency</em> (با قرار دادن داده‌ها از نظر جغرافیایی نزدیک به users) اهداف به همان اندازه مهمی هستند، و آن چیزها را نمی‌توان با یک node واحد به دست آورد.
+    </p>
+    <p>
+        در این فصل، ما همچنین به برخی از <em>tangents</em> ها رفتیم تا بررسی کنیم که آیا غیرقابل اعتماد بودن شبکه‌ها، ساعت‌ها، و <em>processes</em> یک قانون اجتناب‌ناپذیر طبیعت است یا خیر. ما دیدیم که اینطور نیست: ارائه <em>hard real-time response guarantees</em> و تأخیرهای <em>bounded</em> در شبکه‌ها امکان‌پذیر است، اما انجام این کار بسیار گران است و منجر به استفاده کمتر از منابع سخت‌افزاری می‌شود. اکثر سیستم‌های غیر <em>safety-critical</em>، ارزان و غیرقابل اعتماد را بر گران و قابل اعتماد ترجیح می‌دهند.
+    </p>
+    <p>
+        ما همچنین به <em>supercomputers</em> ها اشاره کردیم، که اجزای قابل اعتماد را فرض می‌کنند و بنابراین باید به طور کامل وقتی یک component <em>fail</em> می‌شود، متوقف و راه‌اندازی مجدد شوند. در مقابل، <em>distributed systems</em> می‌توانند برای همیشه بدون وقفه در سطح service اجرا شوند، زیرا تمام <em>faults</em> و maintenance را می‌توان در سطح node مدیریت کرد—حداقل در
+        <br>
+        309
+        <br>
+        |
+        <br>
+        Chapter 8: The Trouble with Distributed Systems
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

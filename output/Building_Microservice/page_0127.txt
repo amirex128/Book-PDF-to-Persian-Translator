@@ -1,0 +1,34 @@
+3 Please note, this is very simplified—I’ve completely omitted error-handling code, for example. If you want to
+know more about async/await, specifically in JavaScript, the Modern JavaScript Tutorial is a great place to
+start.
+When we reference eurToGbp using await, we block until latestRate’s state is fulfil‐
+led—process isn’t reached until we resolve the state of eurToGbp.3
+Even though our exchange rates are being received in an asynchronous fashion, the
+use of await in this context means we are blocking until the state of latestRate is
+resolved. So even if the underlying technology we are using to get the rate could be
+considered asynchronous in nature (for example, waiting for the rate), from the point
+of our code, this is inherently a synchronous, blocking interaction.
+Where to Use It
+Ultimately, when considering whether asynchronous communication is right for you,
+you also have to consider which type of asynchronous communication you want to
+pick, as each type has its own trade-offs. In general, though, there are some specific
+use cases that would have me reaching for some form of asynchronous communica‐
+tion. Long-running processes are an obvious candidate, as we explored in Figure 4-5.
+Also, situations in which you have long call chains that you can’t easily restructure
+could be a good candidate. We’ll dive deeper into this when we look at three of the
+most common forms of asynchronous communication—request-response calls,
+event-driven communication, and communication through common data.
+Pattern: Communication Through Common Data
+A style of communication that spans a multitude of implementations is communica‐
+tion through common data. This pattern is used when one microservice puts data
+into a defined location, and another microservice (or potentially multiple microservi‐
+ces) then makes use of the data. It can be as simple as one microservice dropping a
+file in a location, and at some point later on another microservice picks up that file
+and does something with it. This integration style is fundamentally asynchronous in
+nature.
+An example of this style can be seen in Figure 4-6, where the New Product Importer
+creates a file that will then be read by the downstream Inventory and Catalog
+microservices.
+Pattern: Communication Through Common Data 
+| 
+101

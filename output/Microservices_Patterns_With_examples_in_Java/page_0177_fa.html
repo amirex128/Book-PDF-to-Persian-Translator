@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 177</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Business logic organization patterns (الگوهای سازماندهی منطق تجاری)</strong></h3>
+  <p>دو چالش کلیدی را برطرف می‌کند. اول، یک model (مدل) domain (دامنه) معمولی یک تار درهم از کلاس‌های به هم پیوسته است. اگرچه این در یک monolithic application (برنامه یکپارچه) مشکلی ندارد، اما در یک microservice architecture (معماری ریز سرویس)، که در آن کلاس‌ها در سراسر services (سرویس‌ها) مختلف پراکنده شده‌اند، شما باید ارجاعات object (شی) را که در غیر این صورت مرزهای service (سرویس) را در بر می‌گرفت، حذف کنید. چالش دوم، طراحی business logic (منطق تجاری) است که در محدودیت‌های transaction management (مدیریت تراکنش) یک microservice architecture (معماری ریز سرویس) کار می‌کند. business logic (منطق تجاری) شما می‌تواند از ACID transactions (تراکنش‌های اتمی) در داخل services (سرویس‌ها) استفاده کند، اما همانطور که در فصل 4 توضیح داده شد، باید از الگوی Saga (حماسه) برای حفظ data consistency (سازگاری داده‌ها) در سراسر services (سرویس‌ها) استفاده کند.</p>
+  <p>خوشبختانه، ما می‌توانیم این مسائل را با استفاده از الگوی Aggregate (تجمیع) از DDD (طراحی مبتنی بر دامنه) برطرف کنیم. الگوی Aggregate (تجمیع)، business logic (منطق تجاری) یک service (سرویس) را به عنوان مجموعه‌ای از aggregates (تجمیع‌ها) ساختار می‌دهد. یک aggregate (تجمیع) یک cluster (خوشه) از objects (اشیاء) است که می‌تواند به عنوان یک واحد در نظر گرفته شود. دو دلیل وجود دارد که چرا aggregates (تجمیع‌ها) هنگام توسعه business logic (منطق تجاری) در یک microservice (ریز سرویس) architecture (معماری) مفید هستند:</p>
+  <ul>
+   <li>Aggregates (تجمیع‌ها) از هرگونه امکان ارجاع object (شی) که مرزهای service (سرویس) را در بر می‌گیرد، اجتناب می‌کنند، زیرا یک reference (ارجاع) بین aggregate (تجمیع) یک مقدار primary key (کلید اصلی) است تا یک object reference (ارجاع شی).</li>
+   <li>از آنجایی که یک transaction (تراکنش) می‌تواند فقط یک aggregate (تجمیع) را ایجاد یا به‌روزرسانی کند، aggregates (تجمیع‌ها) با محدودیت‌های model (مدل) تراکنش microservices (ریز سرویس‌ها) مطابقت دارند.</li>
+  </ul>
+  <p>در نتیجه، یک ACID transaction (تراکنش اتمی) تضمین شده است که در یک service (سرویس) واحد قرار دارد.</p>
+  <p>من این فصل را با توصیف راه‌های مختلف سازماندهی business logic (منطق تجاری) شروع می‌کنم: الگوی Transcription script (اسکریپت رونویسی) و الگوی Domain model (مدل دامنه). در مرحله بعد، مفهوم یک DDD aggregate (تجمیع DDD) را معرفی می‌کنم و توضیح می‌دهم که چرا یک building block (بلوک ساختمانی) خوب برای business logic (منطق تجاری) یک service (سرویس) است. پس از آن، الگوی Domain event (رویداد دامنه) و events (رویدادها) را شرح می‌دهم و توضیح می‌دهم که چرا انتشار events (رویدادها) برای یک service (سرویس) مفید است. من این فصل را با چند نمونه از business logic (منطق تجاری) از Kitchen Service (سرویس آشپزخانه) و Order Service (سرویس سفارش) به پایان می‌رسانم.</p>
+  <p>بیایید اکنون به الگوهای سازماندهی business logic (منطق تجاری) نگاهی بیندازیم.</p>
+  <h4><strong>5.1 Business logic organization patterns (الگوهای سازماندهی منطق تجاری)</strong></h4>
+  <p>شکل 5.1 architecture (معماری) یک service (سرویس) معمولی را نشان می‌دهد. همانطور که در فصل 2 توضیح داده شد، business logic (منطق تجاری) هسته یک hexagonal architecture (معماری شش ضلعی) است. اطراف business logic (منطق تجاری)، inbound (ورودی) و outbound adapters (آداپتورهای خروجی) قرار دارند. یک inbound adapter (آداپتور ورودی)، request (درخواست‌ها) را از clients (مشتریان) مدیریت می‌کند و business logic (منطق تجاری) را فراخوانی می‌کند. یک outbound adapter (آداپتور خروجی)، که توسط business logic (منطق تجاری) فراخوانی می‌شود، سایر services (سرویس‌ها) و applications (برنامه‌ها) را فراخوانی می‌کند.</p>
+  <p>این service (سرویس) شامل business logic (منطق تجاری) و adapters (آداپتورهای) زیر است:</p>
+  <ul>
+   <li>REST API adapter (آداپتور REST API) - یک inbound adapter (آداپتور ورودی) که یک REST API (رابط برنامه‌نویسی) را پیاده‌سازی می‌کند که business logic (منطق تجاری) را فراخوانی می‌کند</li>
+   <li>OrderCommandHandlers (هندلرهای دستور سفارش) - یک inbound adapter (آداپتور ورودی) که command messages (پیام‌های دستور) را از یک کانال message (پیام‌رسانی) مصرف می‌کند و business logic (منطق تجاری) را فراخوانی می‌کند</li>
+   <li>Database Adapter (آداپتور پایگاه داده) - یک outbound adapter (آداپتور خروجی) که توسط business logic (منطق تجاری) برای دسترسی به database (پایگاه داده) فراخوانی می‌شود</li>
+   <li>Domain Event Publishing Adapter (آداپتور انتشار رویداد دامنه) - یک outbound adapter (آداپتور خروجی) که events (رویدادها) را به یک message broker (واسطه پیام) منتشر می‌کند</li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

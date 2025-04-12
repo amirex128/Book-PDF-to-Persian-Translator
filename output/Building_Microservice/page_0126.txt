@@ -1,0 +1,37 @@
+Disadvantages
+The main downsides of nonblocking asynchronous communication, relative to
+blocking synchronous communication, are the level of complexity and the range of
+choice. As we’ve already outlined, there are different styles of asynchronous commu‐
+nication to choose from—which one is right for you? When we start digging into
+how these different styles of communication are implemented, there is a potentially
+bewildering list of technology we could look at.
+If asynchronous communication doesn’t map to your mental models of computing,
+adopting an asynchronous style of communication will be challenging at first. And as
+we’ll explore further when we look in detail at the various styles of asynchronous
+communication, there are a lot of different, interesting ways in which you can get
+yourself into a lot of trouble.
+Async/Await and When Asynchronous Is Still Blocking
+As with many areas of computing, we can use the same term in different contexts to
+have very different meanings. A style of programming that appears to be especially
+popular is the use of constructs like async/await to work with a potentially asynchro‐
+nous source of data but in a blocking, synchronous style.
+In Example 4-1, we see a very simple JavaScript example of this in action. The cur‐
+rency exchange rates fluctuate frequently through the day, and we receive these via a
+message broker. We define a Promise. Generically, a promise is something that will
+resolve to a state at some point in the future. In our case, our eurToGbp will eventually
+resolve to being the next euro-to-GBP exchange rate.
+Example 4-1. An example of working with a potentially asynchronous call in a
+blocking, synchronous fashion
+async function f() {
+  let eurToGbp = new Promise((resolve, reject) => {
+    //code to fetch latest exchange rate between EUR and GBP
+    ...
+  });
+  var latestRate = await eurToGbp; 
+  process(latestRate); 
+}
+Wait until the latest EUR-to-GBP exchange rate is fetched.
+Won’t run until the promise is fulfilled.
+100 
+| 
+Chapter 4: Microservice Communication Styles

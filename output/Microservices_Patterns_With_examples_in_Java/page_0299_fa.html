@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 299</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>الگوی API Gateway</h3>
+  <p>
+   از یک طرف، همانطور که انتظار می‌رود، استفاده از NIO هزینه هر connection شبکه را کاهش داد، به این دلیل که دیگر یک thread اختصاصی برای هر کدام وجود ندارد. همچنین، یک خوشه Zuul که منطق I/O-intensive - مانند request routing - را اجرا می‌کرد، 25٪ افزایش در throughput و 25٪ کاهش در CPU utilization داشت. از طرف دیگر، یک خوشه Zuul که منطق CPU-intensive - مانند رمزگشایی و فشرده‌سازی - را اجرا می‌کرد، هیچ بهبودی نشان نداد.
+  </p>
+  <p>
+   <strong>USE REACTIVE PROGRAMMING ABSTRACTIONS</strong>
+  </p>
+  <p>
+   همانطور که قبلاً ذکر شد، API composition شامل فراخوانی چندین service backend است.
+   برخی از request های service backend کاملاً به پارامترهای request client بستگی دارد.
+   برخی دیگر ممکن است به نتایج request های service دیگر بستگی داشته باشند. یک رویکرد این است که یک متد handler API endpoint، service ها را به ترتیبی که توسط dependencies تعیین می‌شود، فراخوانی کند. به عنوان مثال، فهرست زیر handler را برای request findOrder() نشان می‌دهد که به این روش نوشته شده است. این متد، هر یک از چهار service را یکی پس از دیگری فراخوانی می‌کند.
+  </p>
+  <pre><code class="language-java">@RestController
+public class OrderDetailsController {
+@RequestMapping("/order/{orderId}")
+public OrderDetails getOrderDetails(@PathVariable String orderId) {
+OrderInfo orderInfo = orderService.findOrderById(orderId);
+TicketInfo ticketInfo = kitchenService
+.findTicketByOrderId(orderId);
+DeliveryInfo deliveryInfo = deliveryService
+.findDeliveryByOrderId(orderId);
+BillInfo billInfo = accountingService
+.findBillByOrderId(orderId);
+OrderDetails orderDetails =
+OrderDetails.makeOrderDetails(orderInfo, ticketInfo,
+deliveryInfo, billInfo);
+return orderDetails;
+}
+...</code></pre>
+  <p>
+   نقطه ضعف فراخوانی service ها به صورت ترتیبی این است که زمان پاسخگویی، مجموع زمان‌های پاسخگویی service است. به منظور به حداقل رساندن زمان پاسخگویی، منطق composition باید، در صورت امکان، service ها را به طور همزمان فراخوانی کند. در این مثال، هیچ dependencies ای بین فراخوانی‌های service وجود ندارد. همه service ها باید به طور همزمان فراخوانی شوند که زمان پاسخگویی را به میزان قابل توجهی کاهش می‌دهد. چالش این است که کد همزمانی بنویسید که قابل نگهداری باشد.
+  </p>
+  <p>
+   این به این دلیل است که روش سنتی برای نوشتن کد مقیاس‌پذیر و همزمان، استفاده از callback ها است. I/O Asynchronous و event-driven ذاتاً مبتنی بر callback است. حتی یک Servlet
+  </p>
+  <p>
+   <strong>Listing 8.1</strong>
+   Fetching the order details by calling the backend services sequentially
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

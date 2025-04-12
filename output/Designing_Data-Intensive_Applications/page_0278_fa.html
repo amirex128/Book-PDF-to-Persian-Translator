@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 278</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        x. اگر یک transaction نیاز به دسترسی به داده‌هایی دارد که در حافظه نیستند، بهترین راه‌حل ممکن است <em>abort</em> کردن <em>transaction</em> باشد، داده‌ها را به‌طور ناهمزمان در حافظه واکشی کنید در حالی که به پردازش <strong>Transactions</strong> های دیگر ادامه می‌دهید، و سپس <strong>Transaction</strong> را هنگامی که داده‌ها بارگیری شده‌اند، راه‌اندازی مجدد کنید. این رویکرد به عنوان <em>anti-caching</em> شناخته می‌شود، همانطور که قبلاً در "Keeping everything in memory" در صفحه 88 ذکر شد.
+    </p>
+    <p>
+        به منظور مقیاس‌پذیری به چندین <em>CPU core</em> و چندین node، شما به طور بالقوه می‌توانید داده‌های خود را <em>partition</em> کنید (به فصل 6 مراجعه کنید)، که در VoltDB پشتیبانی می‌شود. اگر می‌توانید راهی برای <em>partitioning</em> dataset خود پیدا کنید به طوری که هر <strong>Transaction</strong> فقط نیاز به خواندن و نوشتن داده‌ها در یک partition واحد داشته باشد، در این صورت هر partition می‌تواند thread پردازش <strong>Transaction</strong> خود را داشته باشد که به طور مستقل از بقیه اجرا می‌شود. در این حالت، شما می‌توانید به هر <em>CPU core</em> <em>partition</em> خود را بدهید، که به <em>transaction throughput</em> شما اجازه می‌دهد تا با تعداد <em>CPU cores</em> به‌صورت خطی مقیاس‌پذیر شود [47].
+    </p>
+    <p>
+        با این حال، برای هر <strong>Transaction</strong> که نیاز به دسترسی به چندین partition دارد، database باید <strong>Transaction</strong> را در سراسر تمام partitions هایی که لمس می‌کند، هماهنگ کند. <em>Stored procedure</em> باید به‌صورت <em>lock-step</em> در سراسر تمام partitions انجام شود تا از <em>serializability</em> در سراسر کل system اطمینان حاصل شود.
+    </p>
+    <p>
+        از آنجایی که <em>cross-partition transactions</em> دارای سربار هماهنگی اضافی هستند، بسیار کندتر از <em>single-partition transactions</em> هستند. VoltDB <em>throughput</em> حدود 1000 <em>cross-partition writes</em> در ثانیه را گزارش می‌دهد، که چندین مرتبه پایین‌تر از <em>single-partition throughput</em> آن است و نمی‌تواند با افزودن machine های بیشتر افزایش یابد [49].
+    </p>
+    <p>
+        اینکه آیا <strong>Transactions</strong> می‌تواند <em>single-partition</em> باشد یا نه، بسیار به ساختار داده‌های مورد استفاده توسط application بستگی دارد. داده‌های <em>key-value</em> ساده اغلب می‌توانند خیلی راحت <em>partitioned</em> شوند، اما داده‌ها با چندین <em>secondary indexes</em> احتمالاً به هماهنگی <em>cross-partition</em> زیادی نیاز دارند (به "Partitioning and Secondary Indexes" در صفحه 206 مراجعه کنید).
+    </p>
+    <h4>Summary of serial execution</h4>
+    <p>
+        اجرای سریال <strong>Transactions</strong> به یک روش مناسب برای دستیابی به <em>serializable isolation</em> در محدودیت‌های خاص تبدیل شده است:
+    </p>
+    <ul>
+        <li>
+            هر <strong>Transaction</strong> باید کوچک و سریع باشد، زیرا فقط یک <strong>Transaction</strong> کند برای متوقف کردن همه پردازش <strong>Transactions</strong> طول می‌کشد.
+        </li>
+        <li>
+            به موارد استفاده‌ای محدود می‌شود که dataset فعال می‌تواند در حافظه جا شود. داده‌های که به ندرت به آنها دسترسی می‌شود، به طور بالقوه می‌توانند به دیسک منتقل شوند، اما اگر نیاز به دسترسی به آنها در یک <em>single-threaded transaction</em> باشد، system بسیار کند می‌شود.x
+        </li>
+        <li>
+            <em>Write throughput</em> باید به اندازه کافی کم باشد که در یک <em>CPU core</em> واحد مدیریت شود، یا <em>transactions</em> باید بدون نیاز به هماهنگی <em>cross-partition</em> <em>partitioned</em> شوند.
+        </li>
+        <li>
+            <em>Cross-partition transactions</em> امکان‌پذیر هستند، اما یک محدودیت سخت برای میزان استفاده از آنها وجود دارد.
+        </li>
+    </ul>
+    <p>
+        256
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

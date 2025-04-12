@@ -1,0 +1,39 @@
+377
+Designing observable services
+The Exception tracking pattern is a useful way to quickly identify and respond to pro-
+duction issues.
+ It’s also important to track user behavior. Let’s look at how to do that. 
+11.3.6 Applying the Audit logging pattern
+The purpose of audit logging is to record each user’s actions. An audit log is typically
+used to help customer support, ensure compliance, and detect suspicious behavior.
+Each audit log entry records the identity of the user, the action they performed, and
+the business object(s). An application usually stores the audit log in a database table.
+Exception tracking services
+There are several exception tracking services. Some, such as Honeybadger (www
+.honeybadger.io), are purely cloud-based. Others, such as Sentry.io (https://sentry.io/
+welcome/), also have an open source version that you can deploy on your own infra-
+structure. These services receive exceptions from your application and generate alerts.
+They provide a console for viewing exceptions and managing their resolution. An excep-
+tion tracking service typically provides client libraries in a variety of languages.
+Pattern: Audit logging
+Record user actions in a database in order to help customer support, ensure com-
+pliance, and detect suspicious behavior. See http://microservices.io/patterns/
+observability/audit-logging.html.
+View & manage
+Notify
+User
+POST/exceptions
+java.lang.NullPointerException
+at net.chrisrichardson.ftgo...
+at net.chrisrichardson.ftgo...
+at net.chrisrichardson.ftgo...
+Order Service
+Exception tracking
+client library
+Exception database
+Exception tracking service
+Report exception
+Figure 11.15
+A service reports exceptions to an exception tracking service, which de-duplicates 
+exceptions and alerts developers. It has a UI for viewing and managing exceptions.
+ 

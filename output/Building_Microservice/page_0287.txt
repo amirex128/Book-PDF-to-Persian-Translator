@@ -1,0 +1,24 @@
+multiple containers deployed together can make sense though. A good example of
+this is the use of sidecar proxies such as Envoy, often as part of a service mesh—a
+topic we discussed in “Service Meshes and API Gateways” on page 162.
+The next concept that is useful to know about is called a service. In the context of
+Kubernetes, you can think of a service as a stable routing endpoint—basically, a way
+to map from the pods you have running to a stable network interface that is available
+within the cluster. Kubernetes handles routing within the cluster, as we see in
+Figure 8-23.
+Figure 8-23. How a pod, a service, and a deployment work together
+The idea is that a given pod can be considered ephemeral—it be might shut down for
+any number of reasons—whereas a service as a whole lives on. The service exists to
+route calls to and from the pods and can handle pods being shut down or new pods
+being launched. Purely from a terminology point of view, this can be confusing. We
+talk more generally about deploying a service, but in Kubernetes you don’t deploy a
+service—you deploy pods that map to a service. It can take a while to get your head
+around this.
+Next, we have a replica set. With a replica set, you define the desired state of a set of
+pods. This is where you say, “I want four of these pods,” and Kubernetes handles the
+rest. In practice, you are no longer expected to work with replica sets directly; instead,
+they are handled for you via a deployment, the last concept we’ll look at. A deploy‐
+ment is how you apply changes to your pods and replica sets. With a deployment,
+Kubernetes and Container Orchestration 
+| 
+261

@@ -1,0 +1,50 @@
+460
+CHAPTER 13
+Refactoring to microservices
+ I start this section by describing delivery management and how it’s currently
+embedded within the monolith. Next I discuss the design of the new, standalone
+Delivery Service and its API. I then describe how Delivery Service and the FTGO
+monolith collaborate. Finally I talk about some of the changes we need to make to the
+monolith to support Delivery Service.
+ Let’s begin by reviewing the existing design.
+13.5.1 Overview of existing delivery management functionality
+Delivery management is responsible for scheduling the couriers that pick up orders at
+restaurants and deliver them to consumers. Each courier has a plan that is a schedule
+of pickup and deliver actions. A pickup action tells the Courier to pick up an order
+from a restaurant at a particular time. A deliver action tells the Courier to deliver an
+order to a consumer. The plans are revised whenever orders are placed, canceled, or
+revised, and as the location and availability of couriers changes.
+ Delivery management is one of the oldest parts of the FTGO application. As fig-
+ure 13.16 shows, it’s embedded within order management. Much of the code for man-
+aging deliveries is in OrderService. What’s more, there’s no explicit representation of
+a Delivery. It’s embedded within the Order entity, which has various delivery-related
+fields, such as scheduledPickupTime and scheduledDeliveryTime.
+ Numerous commands implemented by the monolith invoke delivery manage-
+ment, including the following:
+
+acceptOrder()—Invoked when a restaurant accepts an order and commits to
+preparing it by a certain time. This operation invokes delivery management to
+schedule a delivery.
+
+cancelOrder()—Invoked when a consumer cancels an order. If necessary, it
+cancels the delivery.
+
+noteCourierLocationUpdated()—Invoked by the courier’s mobile application
+to update the courier’s location. It triggers the rescheduling of deliveries.
+
+noteCourierAvailabilityChanged()—Invoked by the courier’s mobile applica-
+tion to update the courier’s availability. It triggers the rescheduling of deliveries.
+Also, various queries retrieve data maintained by delivery management, including the
+following:
+
+getCourierPlan()—Invoked by the courier’s mobile application and returns
+the courier’s plan
+
+getOrderStatus()—Returns the order’s status, which includes delivery-related
+information such as the assigned courier and the ETA
+
+getOrderHistory()—Returns similar information as getOrderStatus() except
+about multiple orders
+Quite often what’s extracted into a service is, as mentioned in section 13.2.3, an entire
+vertical slice, with controllers at the top and database tables at the bottom. We could
+ 

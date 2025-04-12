@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 115</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>CHAPTER 4</h3>
+  <h4>سبک‌های ارتباطی Microservice</h4>
+  <p>
+   به نظر من، برقراری ارتباط صحیح بین microservicesها برای بسیاری از افراد مشکل‌ساز است، تا حد زیادی به این دلیل که مردم به یک رویکرد تکنولوژیکی انتخاب‌شده گرایش پیدا می‌کنند، بدون اینکه ابتدا انواع مختلف ارتباطی را که ممکن است بخواهند در نظر بگیرند. در این فصل، من سعی خواهم کرد سبک‌های مختلف ارتباطی را از هم جدا کنم تا به شما در درک مزایا و معایب هر کدام کمک کنم، و همچنین رویکردی را که به بهترین وجه با فضای مشکل شما مطابقت دارد، درک کنید.
+  </p>
+  <p>
+   ما به مکانیسم‌های ارتباطی <em>synchronous blocking</em> و <em>asynchronous nonblocking</em>، و همچنین مقایسه همکاری <strong>request-response</strong> با همکاری <strong>event-driven</strong> نگاه خواهیم کرد.
+  </p>
+  <p>
+   تا پایان این فصل، شما باید آمادگی بسیار بیشتری برای درک گزینه‌های مختلف موجود داشته باشید و دانش بنیادی خواهید داشت که هنگام شروع بررسی نگرانی‌های پیاده‌سازی دقیق‌تر در فصل‌های بعدی، کمک خواهد کرد.
+  </p>
+  <h4>از In-Process به Inter-Process</h4>
+  <p>
+   خوب، بیایید ابتدا موارد آسان را از سر راه برداریم—یا حداقل آنچه امیدوارم آسان باشد.
+   یعنی، فراخوانی‌ها بین فرآیندهای مختلف در سراسر یک شبکه (<strong>inter-process</strong>) با فراخوانی‌ها در یک فرآیند واحد (<strong>in-process</strong>) بسیار متفاوت هستند. در یک سطح، ما می‌توانیم این تمایز را نادیده بگیریم. به عنوان مثال، فکر کردن به یک <strong>object</strong> که یک متد را در یک <strong>object</strong> دیگر فراخوانی می‌کند و سپس این تعامل را به دو microservices که از طریق یک شبکه ارتباط برقرار می‌کنند، نگاشت کنیم، آسان است. با کنار گذاشتن این واقعیت که microservicesها فقط <strong>objects</strong> نیستند، این تفکر می‌تواند ما را به دردسر بیندازد.
+  </p>
+  <p>
+   بیایید به برخی از این تفاوت‌ها و نحوه تغییر آنها در مورد نحوه تفکر شما در مورد تعاملات بین microservicesهایتان نگاهی بیندازیم.
+  </p>
+  <p>89</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

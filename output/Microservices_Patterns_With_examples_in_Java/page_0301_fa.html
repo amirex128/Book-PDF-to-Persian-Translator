@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 301</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>الگوی API Gateway</h3>
+  <p>
+   رفتار یک application و عیب‌یابی مشکلات. یک API gateway، مانند سایر service ها در معماری، باید الگوهایی را که برای معماری انتخاب شده‌اند، پیاده‌سازی کند.
+  </p>
+  <h3>8.3</h3>
+  <h3>پیاده‌سازی یک API gateway</h3>
+  <p>
+   بیایید اکنون نگاهی بیندازیم به نحوه پیاده‌سازی یک API gateway. همانطور که قبلاً ذکر شد، مسئولیت‌های یک API gateway به شرح زیر است:
+  </p>
+  <ul>
+   <li>
+    Request routing—requests ها را به service ها با استفاده از معیارهایی مانند متد و مسیر request HTTP route می‌کند. API gateway باید با استفاده از متد request HTTP route کند، زمانی که application دارای یک یا چند service query از نوع CQRS باشد. همانطور که در فصل 7 بحث شد، در چنین معماری، دستورات و queries توسط service های جداگانه مدیریت می‌شوند.
+   </li>
+   <li>
+    API composition—یک endpoint GET REST را با استفاده از الگوی API composition، که در فصل 7 توضیح داده شد، پیاده‌سازی می‌کند. request handler، نتایج فراخوانی چندین service را ترکیب می‌کند.
+   </li>
+   <li>
+    Edge functions—که برجسته‌ترین آن‌ها authentication است.
+   </li>
+   <li>
+    Protocol translation—بین پروتکل‌های client-friendly و پروتکل‌های client-unfriendly که توسط service ها استفاده می‌شوند، ترجمه می‌کند.
+   </li>
+   <li>
+    Being a good citizen در معماری application.
+   </li>
+  </ul>
+  <p>
+   چندین راه مختلف برای پیاده‌سازی یک API gateway وجود دارد:
+  </p>
+  <ul>
+   <li>
+    استفاده از یک محصول/service API gateway آماده - این گزینه به توسعه کمی نیاز دارد یا اصلاً نیازی ندارد، اما کمترین انعطاف‌پذیری را دارد. به عنوان مثال، یک API gateway آماده معمولاً از API composition پشتیبانی نمی‌کند
+   </li>
+   <li>
+    توسعه API gateway خود با استفاده از یک فریم‌ورک API gateway یا یک فریم‌ورک وب به عنوان نقطه شروع - این رویکرد انعطاف‌پذیرترین رویکرد است، اگرچه به مقداری تلاش برای توسعه نیاز دارد.
+   </li>
+  </ul>
+  <p>
+   بیایید به این گزینه‌ها نگاهی بیندازیم، با استفاده از یک محصول یا service API gateway آماده شروع می‌کنیم.
+  </p>
+  <h4>8.3.1</h4>
+  <h3>استفاده از یک محصول/service API gateway آماده</h3>
+  <p>
+   چندین service و محصول آماده، ویژگی‌های API gateway را پیاده‌سازی می‌کنند. ابتدا به چند service که توسط AWS ارائه می‌شود نگاهی می‌اندازیم. پس از آن، در مورد برخی از محصولاتی که می‌توانید دانلود، پیکربندی و خودتان اجرا کنید، بحث خواهم کرد.
+  </p>
+  <p>
+   <strong>AWS API GATEWAY</strong>
+  </p>
+  <p>
+   AWS API gateway، یکی از خدمات متعددی که توسط Amazon Web Services ارائه می‌شود، یک service برای deploy و مدیریت API ها است. یک AWS API gateway API مجموعه‌ای از resource های REST است که هر کدام از یک یا چند متد HTTP پشتیبانی می‌کنند. شما API gateway را طوری پیکربندی می‌کنید که هر (متد، Resource) را به یک service backend route کند. یک service backend یا یک Function از نوع AWS Lambda است که بعداً در فصل 12 توضیح داده می‌شود، یک service HTTP تعریف شده توسط application یا یک service AWS است. در صورت لزوم، می‌توانید API را پیکربندی کنید ...
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

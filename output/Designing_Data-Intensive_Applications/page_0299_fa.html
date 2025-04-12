@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 299</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در نهایت، یک <em>faulty</em> خواهد شد، و نرم‌افزار باید به نحوی آن را مدیریت کند. <em>Fault han‐dling</em> باید بخشی از طراحی نرم‌افزار باشد، و شما (به عنوان <em>operator</em> نرم‌افزار) باید بدانید که چه رفتاری را از نرم‌افزار در صورت بروز <em>fault</em> انتظار داشته باشید.
+    </p>
+    <p>
+        نادیده گرفتن <em>faults</em> و به سادگی امیدوار بودن به بهترین‌ها، عاقلانه نیست. مهم است که طیف وسیعی از <em>faults</em> های ممکن—حتی موارد نسبتاً بعید—را در نظر بگیرید و به طور مصنوعی چنین موقعیت‌هایی را در محیط تست خود ایجاد کنید تا ببینید چه اتفاقی می‌افتد.
+    </p>
+    <p>
+        در <em>distributed systems</em>، سوء ظن، بدبینی، و پارانویا نتیجه می‌دهد.
+    </p>
+    <h4>Building a Reliable System from Unreliable Components</h4>
+    <p>
+        ممکن است تعجب کنید که آیا این منطقی است—شهودی به نظر می‌رسد که یک system فقط می‌تواند به اندازه کمترین component قابل اعتماد خود (ضعیف‌ترین پیوند آن) قابل اعتماد باشد. اینطور نیست: در واقع، این یک ایده قدیمی در <em>computing</em> است که یک system قابل اعتمادتر از یک base اساسی کمتر قابل اعتماد بسازیم [11]. به عنوان مثال:
+    </p>
+    <ul>
+        <li>
+            <em>Error-correcting codes</em> به داده‌های دیجیتال اجازه می‌دهند تا با دقت در یک <em>communication channel</em> که گاهی اوقات بیت‌های خاصی را اشتباه می‌گیرد، منتقل شوند، به عنوان مثال به دلیل <em>radio interference</em> در یک شبکه بی‌سیم [12].
+        </li>
+        <li>
+            IP (<em>the Internet Protocol</em>) غیرقابل اعتماد است: ممکن است <em>packets</em> را <em>drop, delay, duplicate, or reorder</em> کند. TCP (<em>the Transmission Control Protocol</em>) یک <em>transport layer</em> قابل اعتمادتر را بر روی IP فراهم می‌کند: این اطمینان حاصل می‌کند که <em>packets</em> های گم شده <em>retransmitted</em> شوند، <em>duplicates</em> حذف می‌شوند، و <em>packets</em> به ترتیبی که ارسال شده‌اند، <em>reassembled</em> می‌شوند.
+        </li>
+    </ul>
+    <p>
+        اگرچه system می‌تواند قابل اعتمادتر از بخش‌های اساسی خود باشد، اما همیشه محدودیتی برای میزان قابل اعتمادتر بودن آن وجود دارد. به عنوان مثال، <em>error-correcting codes</em> می‌توانند با تعداد کمی از <em>single-bit errors</em> مقابله کنند، اما اگر سیگنال شما توسط <em>interference</em> فراگیر شود، یک محدودیت اساسی برای مقدار داده‌ای که می‌توانید از طریق <em>communication channel</em> خود دریافت کنید، وجود دارد [13]. TCP می‌تواند از دست دادن <em>packet</em>، تکثیر، و <em>reordering</em> را از شما پنهان کند، اما نمی‌تواند جادویی تأخیرها را در شبکه حذف کند.
+    </p>
+    <p>
+        اگرچه system سطح بالاتر قابل اعتمادتر کامل نیست، اما هنوز هم مفید است زیرا از برخی از <em>faults</em> های سطح پایین <em>tricky</em> مراقبت می‌کند، و بنابراین معمولاً استدلال در مورد <em>faults</em> باقی‌مانده آسان‌تر است. ما این موضوع را بیشتر در "The end-to-end argument" در صفحه 519 بررسی خواهیم کرد.
+    </p>
+    <h4>Unreliable Networks</h4>
+    <p>
+        همانطور که در مقدمه قسمت II مورد بحث قرار گرفت، <em>distributed systems</em> که ما در این کتاب روی آنها تمرکز می‌کنیم، <em>shared-nothing systems</em> هستند: یعنی، مجموعه‌ای از machine ها که توسط یک شبکه متصل شده‌اند.
+        <br>
+        شبکه تنها راهی است که آن machine ها می‌توانند با یکدیگر ارتباط برقرار کنند—ما فرض می‌کنیم که هر
+        <br>
+        Unreliable Networks
+        <br>
+        |
+        <br>
+        277
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

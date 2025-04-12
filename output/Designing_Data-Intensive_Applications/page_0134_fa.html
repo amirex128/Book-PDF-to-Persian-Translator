@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 134</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <ul>
+        <li>With server-side applications شما ممکن است بخواهید یک rolling upgrade را انجام دهید (که همچنین به عنوان a staged rollout شناخته می‌شود)، deploying the new version به چند node در یک زمان، بررسی اینکه آیا نسخه جدید به آرامی در حال اجرا است یا خیر، و به تدریج از طریق همه nodes کار می‌کنید. این به نسخه‌های جدید اجازه می‌دهد بدون service downtime، deploy شوند و بنابراین releases مکرر و بهتر evolva‐bility را تشویق می‌کند.</li>
+        <li>With client-side applications شما در mercy of the user هستید، که ممکن است update را برای مدتی نصب نکند.</li>
+    </ul>
+    <p>
+        این بدان معناست که نسخه‌های قدیمی و جدید از code، و formats data قدیمی و جدید، ممکن است به طور بالقوه در همان زمان در سیستم وجود داشته باشند. به منظور اینکه سیستم به طور روان به کار خود ادامه دهد، ما نیاز به حفظ compatibility در هر دو جهت داریم:
+    </p>
+    <ul>
+        <li>Backward compatibility</li>
+        <li>Newer code می‌تواند داده‌هایی را که توسط کد قدیمی‌تر نوشته شده است، بخواند.</li>
+        <li>Forward compatibility</li>
+        <li>Older code می‌تواند داده‌هایی را که توسط کد جدیدتر نوشته شده است، بخواند.</li>
+    </ul>
+    <p>
+        Backward compatibility معمولاً سخت نیست: به عنوان author از the newer code، شما format از data نوشته شده توسط older code را می‌دانید، و بنابراین شما می‌توانید صریحاً آن را handle کنید (در صورت لزوم با نگه داشتن ساده کد قدیمی برای خواندن data قدیمی). Forward compati‐bility می‌تواند trickier باشد، زیرا به older code نیاز دارد که additions ساخته شده توسط یک نسخه جدیدتر از code را نادیده بگیرد.
+    </p>
+    <p>
+        در این فصل ما به چندین format برای encoding data، از جمله JSON، XML، Protocol Buffers، Thrift و Avro نگاه خواهیم کرد. به طور خاص، ما به چگونگی handling schema changes و نحوه پشتیبانی آن‌ها از systems که در آن داده‌ها و کد قدیمی و جدید باید همزیستی داشته باشند، نگاه خواهیم کرد. سپس ما در مورد نحوه استفاده از آن formats برای data storage و برای communication بحث خواهیم کرد: در web services، Representational State Transfer (REST)، و remote procedure calls (RPC)، و همچنین systems message-passing مانند actors و message queues.
+    </p>
+    <h4>Formats for Encoding Data</h4>
+    <p>
+        برنامه‌ها معمولاً با داده‌ها در (حداقل) دو representation مختلف کار می‌کنند:
+    </p>
+    <ol>
+        <li>In memory, داده‌ها در objects، structs، lists، arrays، hash tables، trees و غیره نگهداری می‌شوند. این data structures برای دسترسی و دستکاری کارآمد توسط CPU (معمولاً با استفاده از pointers) بهینه شده‌اند.</li>
+        <li>When you want to write data to a file or send it over the network, you have to encode it as some kind of self-contained sequence of bytes (for example, a JSON document). Since a pointer wouldn’t make sense to any other process, this</li>
+    </ol>
+    <p>
+        112 | Chapter 4: Encoding and Evolution
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 213</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        lem، یک آیتم را نمی‌توان به سادگی از database حذف کرد، زمانی که آن حذف می‌شود؛ در عوض، سیستم باید یک marker را با یک شماره version مناسب باقی بگذارد تا نشان دهد که آیتم حذف شده است، هنگام merging siblings. چنین deletion marker به عنوان یک tombstone شناخته می‌شود. (ما قبلاً tombstones را در context از log compaction در "Hash Indexes" در صفحه 72 مشاهده کردیم.)
+    </p>
+    <p>
+        از آنجایی که merging siblings در application code پیچیده و مستعد خطا است، برخی تلاش‌ها برای طراحی data structures وجود دارد که می‌تواند این merging را به طور خودکار انجام دهد، همانطور که در "Automatic Conflict Resolution" در صفحه 174 بحث شد. به عنوان مثال، پشتیبانی datatype از Riak از یک family از data structures به نام CRDTs [38, 39, 55] استفاده می‌کند که می‌تواند به طور خودکار siblings را به روش‌های معقول merge کند، از جمله preservation deletions.
+    </p>
+    <h4>Version vectors</h4>
+    <p>
+        The example in Figure 5-13 فقط از یک replica واحد استفاده می‌کرد. چگونه الگوریتم تغییر می‌کند، زمانی که multiple replicas وجود دارد، اما هیچ leader وجود ندارد؟
+    </p>
+    <p>
+        شکل 5-13 از یک شماره version واحد برای گرفتن dependencies بین opera‐tions استفاده می‌کرد، اما این برای زمانیکه multiple replicas به طور همزمان writes را می‌پذیرند، کافی نیست. در عوض، ما نیاز داریم که از یک شماره version per replica و همچنین per key استفاده کنیم.
+    </p>
+    <p>
+        هر replica شماره version خود را هنگام پردازش یک write افزایش می‌دهد و همچنین شماره‌های version را که از هر یک از other replicas دیده‌ است، پیگیری می‌کند. این اطلاعات نشان می‌دهد که کدام values را overwrite و کدام values را به عنوان siblings حفظ کنیم.
+        مجموعه شماره‌های version از همه replicas، یک version vector [56] نامیده می‌شود.
+    </p>
+    <p>
+        چندین variant از این ایده در حال استفاده است، اما جالب‌ترین آن احتمالاً dotted version vector [57] است که در Riak 2.0 استفاده می‌شود [58, 59]. ما به جزئیات آن نخواهیم پرداخت، اما روش کار آن کاملاً شبیه به چیزی است که ما در مثال cart خود دیدیم.
+    </p>
+    <p>
+        Like the version numbers in Figure 5-13, version vectors از database replicas به clients هنگامی که values خوانده می‌شوند، ارسال می‌شوند، و نیاز به بازگشت به database دارند هنگامی که یک value متعاقباً نوشته می‌شود. (Riak version vector را به عنوان یک string که آن را causal context می‌نامد، رمزگذاری می‌کند.) The version vector به database اجازه می‌دهد که بین overwrites و concurrent writes تمایز قائل شود.
+    </p>
+    <p>
+        همچنین، همانند مثال single-replica، application ممکن است نیاز به merge siblings داشته باشد.
+        The version vector structure اطمینان می‌دهد که خواندن از یک replica و متعاقباً نوشتن به replica دیگر، ایمن است. انجام این کار ممکن است منجر به ایجاد siblings شود، اما تا زمانی که siblings به درستی merge شوند، هیچ داده‌ای از دست نمی‌رود.
+    </p>
+    <h4>Version vectors and vector clocks</h4>
+    <p>
+        A version vector is sometimes also called a vector clock, even though they are not quite the same. The difference is subtle—please see the references for details [57, 60, 61]. In brief, when comparing the state of replicas, version vectors are the right data structure to use.
+    </p>
+    <p>
+        Leaderless Replication | 191
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0213/image_1.png" alt="Image from page 213" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

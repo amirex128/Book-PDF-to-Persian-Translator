@@ -1,0 +1,42 @@
+321
+Writing integration tests
+A contract consists of either one message, in the case of publish/subscribe style inter-
+actions, or two messages, in the case of request/response and asynchronous request/
+response style interactions.
+ The contracts are used to test both the consumer and the provider, which ensures
+that they agree on the API. They’re used in slightly different ways depending on
+whether you’re testing the consumer or the provider:
+Consumer-side tests—These are tests for the consumer’s adapter. They use the
+contracts to configure stubs that simulate the provider, enabling you to write
+integration tests for a consumer that don’t require a running provider.
+Provider-side tests—These are tests for the provider’s adapter. They use the con-
+tracts to test the adapters using mocks for the adapters’s dependencies.
+Later in this section, I describe examples of these types of tests—but first let’s look at
+how to write persistence tests.
+10.1.1 Persistence integration tests
+Services typically store data in a database. For instance, Order Service persists aggre-
+gates, such as Order, in MySQL using JPA. Similarly, Order History Service maintains
+a CQRS view in AWS DynamoDB. The unit tests we wrote earlier only test in-memory
+objects. In order to be confident that a service works correctly, we must write per-
+sistence integration tests, which verify that a service’s database access logic works as
+expected. In the case of Order Service, this means testing the JPA repositories, such
+as OrderRepository.
+ Each phase of a persistence integration test behaves as follows:
+Setup—Set up the database by creating the database schema and initializing it to
+a known state. It might also begin a database transaction.
+Execute—Perform a database operation.
+Verify—Make assertions about the state of the database and objects retrieved
+from the database.
+Teardown—An optional phase that might undo the changes made to the database
+by, for example, rolling back the transaction that was started by the setup phase.
+Listing 10.1 shows a persistent integration test for the Order aggregate and Order-
+Repository. Apart from relying on JPA to create the database schema, the persistence
+integration tests don’t make any assumption about the state of the database. Conse-
+quently, tests don’t need to roll back the changes they make to the database, which
+avoids problems with the ORM caching data changes in memory.
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = OrderJpaTestConfiguration.class)
+public class OrderJpaTest {
+Listing 10.1
+An integration test that verifies that an Order can be persisted
+ 

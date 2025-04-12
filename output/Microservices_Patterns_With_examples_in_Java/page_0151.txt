@@ -1,0 +1,42 @@
+121
+Coordinating sagas
+ For example, the participants of the Create Order Saga can use the orderId as a
+correlation ID that’s passed from one participant to the next. Accounting Service pub-
+lishes a Credit Card Authorized event containing the orderId from the Ticket-
+Created event. When Order Service receives a Credit Card Authorized event, it uses
+the orderId to retrieve the corresponding Order. Similarly, Kitchen Service uses the
+orderId from that event to retrieve the corresponding Ticket. 
+BENEFITS AND DRAWBACKS OF CHOREOGRAPHY-BASED SAGAS
+Choreography-based sagas have several benefits:
+Simplicity—Services publish events when they create, update, or delete business
+objects.
+Loose coupling —The participants subscribe to events and don’t have direct knowl-
+edge of each other.
+And there are some drawbacks:
+More difficult to understand—Unlike with orchestration, there isn’t a single place
+in the code that defines the saga. Instead, choreography distributes the imple-
+mentation of the saga among the services. Consequently, it’s sometimes difficult
+for a developer to understand how a given saga works.
+Cyclic dependencies between the services—The saga participants subscribe to each
+other’s events, which often creates cyclic dependencies. For example, if you
+carefully examine figure 4.4, you’ll see that there are cyclic dependencies, such
+as Order Service  Accounting Service  Order Service. Although this isn’t
+necessarily a problem, cyclic dependencies are considered a design smell.
+Risk of tight coupling—Each saga participant needs to subscribe to all events that
+affect them. For example, Accounting Service must subscribe to all events that
+cause the consumer’s credit card to be charged or refunded. As a result, there’s
+a risk that it would need to be updated in lockstep with the order lifecycle
+implemented by Order Service.
+Choreography can work well for simple sagas, but because of these drawbacks it’s
+often better for more complex sagas to use orchestration. Let’s look at how orches-
+tration works. 
+4.2.2
+Orchestration-based sagas
+Orchestration is another way to implement sagas. When using orchestration, you
+define an orchestrator class whose sole responsibility is to tell the saga participants
+what to do. The saga orchestrator communicates with the participants using command/
+async reply-style interaction. To execute a saga step, it sends a command message to a
+participant telling it what operation to perform. After the saga participant has per-
+formed the operation, it sends a reply message to the orchestrator. The orchestrator
+then processes the message and determines which saga step to perform next.
+ 

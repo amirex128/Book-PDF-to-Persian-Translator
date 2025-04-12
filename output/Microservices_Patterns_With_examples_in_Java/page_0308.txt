@@ -1,0 +1,48 @@
+278
+CHAPTER 8
+External API patterns
+simple and easy to understand. In this example, the getOrderDetails() method
+invokes the four services in parallel and combines the results to create an Order-
+Details object.
+ The getOrderDetails() method takes a ServerRequest, which is the Spring Web-
+Flux representation of an HTTP request, as a parameter and does the following:
+1
+It extracts the orderId from the path.
+2
+It invokes the four services asynchronously via their proxies, which return Monos.
+In order to improve availability, getOrderDetails() treats the results of all ser-
+vices except the OrderService as optional. If a Mono returned by an optional
+service contains an exception, the call to onErrorReturn() transforms it into a
+Mono containing an empty Optional.
+3
+It combines the results asynchronously using Mono.when(), which returns a
+Mono<Tuple4> containing the four values.
+4
+It transforms the Mono<Tuple4> into a Mono<OrderDetails> by calling Order-
+Details::makeOrderDetails.
+5
+It transforms the OrderDetails into a ServerResponse, which is the Spring
+WebFlux representation of the JSON/HTTP response.
+As you can see, because getOrderDetails() uses Monos, it concurrently invokes the
+services and combines the results without using messy, difficult-to-read callbacks. Let’s
+take a look at one of the service proxies that return the results of a service API call
+wrapped in a Mono. 
+THE ORDERSERVICE CLASS
+The OrderService class, shown in the following listing, is a remote proxy for the Order
+Service. It invokes the Order Service using a WebClient, which is the Spring Web-
+Flux reactive HTTP client.
+@Service
+public class OrderService {
+private OrderDestinations orderDestinations;
+private WebClient client;
+public OrderService(OrderDestinations orderDestinations, WebClient client)
+{
+this.orderDestinations = orderDestinations;
+this.client = client;
+}
+public Mono<OrderInfo> findOrderById(String orderId) {
+Mono<ClientResponse> response = client
+.get()
+Listing 8.5
+OrderService class—a remote proxy for Order Service
+ 

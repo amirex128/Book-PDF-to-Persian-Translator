@@ -1,0 +1,79 @@
+365
+Designing observable services
+so on. You also need to be alerted if there’s a problem, such as a failed service instance
+or a disk filling up—ideally before it impacts a user. And, if there’s a problem, you
+need to be able to troubleshoot and identify the root cause.
+ Many aspects of managing an application in production are outside the scope of
+the developer, such as monitoring hardware availability and utilization. These are
+clearly the responsibility of operations. But there are several patterns that you, as a ser-
+vice developer, must implement to make your service easier to manage and trouble-
+shoot. These patterns, shown in figure 11.9, expose a service instance’s behavior and
+health. They enable a monitoring system to track and visualize the state of a service
+and generate alerts when there’s a problem. These patterns also make troubleshoot-
+ing problems easier.
+You can use the following patterns to design observable services:
+Health check API—Expose an endpoint that returns the health of the service.
+Log aggregation—Log service activity and write logs into a centralized logging
+server, which provides searching and alerting.
+Pattern
+participant
+Key
+Operations
+responsibility
+Distributed
+tracing
+server
+Exception
+Tracking
+Service
+Logging
+Server
+Logging
+aggregation
+pipeline
+Log ﬁle
+Metrics
+Service
+Developer
+responsibility
+Pattern
+Observable
+Service
+Distributed
+tracing
+exporter
+Exception
+reporter
+Metrics
+exporter
+Health
+check
+API
+Health check
+invoker, such as
+monitoring service
+Invokes
+Audit
+database
+adapter
+Auditing
+database
+Logging
+adapter
+Distributed
+tracing pattern
+Application
+metrics pattern
+Audit
+logging pattern
+Health check
+API pattern
+Exception
+tracking pattern
+Log aggregation
+pattern
+Figure 11.9
+The observability patterns enable developers and operations to understand the behavior of an 
+application and troubleshoot problems. Developers are responsible for ensuring that their services are observable. 
+Operations are responsible for the infrastructure that collects the information exposed by the services.
+ 

@@ -1,0 +1,46 @@
+179
+Order Service business logic
+ The initial state of the Order is APPROVAL_PENDING. When the CreateOrderSaga
+completes, it will invoke either noteApproved() or noteRejected(). The note-
+Approved() method is invoked when the consumer’s credit card has been successfully
+authorized. The noteRejected() method is called when one of the services rejects
+the order or authorization fails. As you can see, the state of the Order aggregate
+determines the behavior of most of its methods. Like the Ticket aggregate, it also
+emits events.
+ In addition to createOrder(), the Order class defines several update methods. For
+example, the Revise Order Saga revises an order by first invoking the revise() method
+and then, once it’s verified that the revision can be made, it invokes the confirm-
+Revised() method. The following listing shows these methods.
+class Order ...
+public List<OrderDomainEvent> revise(OrderRevision orderRevision) {
+switch (state) {
+case APPROVED:
+LineItemQuantityChange change =
+orderLineItems.lineItemQuantityChange(orderRevision);
+if (change.newOrderTotal.isGreaterThanOrEqual(orderMinimum)) {
+throw new OrderMinimumNotMetException();
+}
+this.state = REVISION_PENDING;
+return singletonList(new OrderRevisionProposed(orderRevision,
+change.currentOrderTotal, change.newOrderTotal));
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public List<OrderDomainEvent> confirmRevision(OrderRevision orderRevision) {
+switch (state) {
+case REVISION_PENDING:
+LineItemQuantityChange licd =
+orderLineItems.lineItemQuantityChange(orderRevision);
+orderRevision
+.getDeliveryInformation()
+.ifPresent(newDi -> this.deliveryInformation = newDi);
+if (!orderRevision.getRevisedLineItemQuantities().isEmpty()) {
+orderLineItems.updateLineItems(orderRevision);
+}
+this.state = APPROVED;
+return singletonList(new OrderRevised(orderRevision,
+licd.currentOrderTotal, licd.newOrderTotal));
+Listing 5.16
+The Order method for revising an Order
+ 

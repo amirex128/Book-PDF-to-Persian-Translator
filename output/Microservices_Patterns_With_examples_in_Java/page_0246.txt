@@ -1,0 +1,50 @@
+216
+CHAPTER 6
+Developing business logic with event sourcing
+2
+Add a SagaReplyRequestedEvent pseudo event to the list of events saved in the
+event store. When SagaReplyRequestedEventHandler receives the SagaReply-
+RequestedEvent pseudo event, it sends a reply to the CreateOrderSaga’s reply
+channel.
+3
+Send an AccountDisabledReply instead of the default error reply when the
+aggregate throws an AccountDisabledException.
+Now that we’ve looked at how to implement saga participants using event sourcing,
+let’s find out how to implement saga orchestrators. 
+6.3.4
+Implementing saga orchestrators using event sourcing
+So far in this section, I’ve described how event sourcing-based services can initiate
+and participate in sagas. You can also use event sourcing to implement saga orches-
+trators. This will enable you to develop applications that are entirely based on an
+event store.
+ There are three key design problems you must solve when implementing a saga
+orchestrator:
+1
+How can you persist a saga orchestrator?
+2
+How can you atomically change the state of the orchestrator and send com-
+mand messages?
+3
+How can you ensure that a saga orchestrator processes reply messages exactly
+once?
+Chapter 4 discusses how to implement an RDBMS-based saga orchestrator. Let’s look
+at how to solve these problems when using event sourcing.
+PERSISTING A SAGA ORCHESTRATOR USING EVENT SOURCING
+A saga orchestrator has a very simple lifecycle. First, it’s created. Then it’s updated in
+response to replies from saga participants. We can, therefore, persist a saga using the
+following events:
+
+SagaOrchestratorCreated—The saga orchestrator has been created.
+
+SagaOrchestratorUpdated—The saga orchestrator has been updated.
+A saga orchestrator emits a SagaOrchestratorCreated event when it’s created and a
+SagaOrchestratorUpdated event when it has been updated. These events contain the
+data necessary to re-create the state of the saga orchestrator. For example, the events
+for CreateOrderSaga, described in chapter 4, would contain a serialized (for example,
+JSON) CreateOrderSagaState. 
+SENDING COMMAND MESSAGES RELIABLY
+Another key design issue is how to atomically update the state of the saga and send a
+command. As described in chapter 4, the Eventuate Tram-based saga implementa-
+tion does this by updating the orchestrator and inserting the command message
+into a message table as part of the same transaction. An application that uses an
+ 

@@ -1,0 +1,65 @@
+414
+CHAPTER 12
+Deploying microservices
+DEPLOYING VERSION 2 OF CONSUMER SERVICE
+Here’s an excerpt of the version 2 Deployment for Consumer Service:
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: ftgo-consumer-service-v2
+  
+spec:
+replicas: 1
+template:
+metadata:
+labels:
+app: ftgo-consumer-service
+version: v2
+  
+...
+This deployment is called ftgo-consumer-service-v2. It labels its pods with version:
+v2. After creating this deployment, both versions of the ftgo-consumer-service will be
+running. But because of the routing rules, Istio won’t route any traffic to v2. You’re
+now ready to route some test traffic to v2. 
+ROUTING TEST TRAFFIC TO VERSION 2
+Once you’ve deployed a new version of a service, the next step is to test it. Let’s sup-
+pose that requests from test users have a testuser header . We can enhance the ftgo-
+consumer-service VirtualService to route requests with this header to v2 instances
+by making the following change:
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+name: ftgo-consumer-service
+spec:
+hosts:
+- ftgo-consumer-service
+http:
+- match:
+- headers:
+testuser:
+regex: "^.+$"
+  
+route:
+- destination:
+host: ftgo-consumer-service
+subset: v2
+  
+- route:
+- destination:
+host: ftgo-consumer-service
+subset: v1
+  
+In addition to the original default route, VirtualService has a routing rule that
+routes requests with the testuser header to the v2 subset. After you’ve updated the
+rules, you can now test Consumer Service. Then, once you feel confident that the v2 is
+working, you can route some production traffic to it. Let’s look at how to do that. 
+Version 2
+Pod is labeled 
+with the version
+Matches a nonblank 
+testuser header
+Routes test 
+users to v2
+Routes everyone 
+else to v1
+ 

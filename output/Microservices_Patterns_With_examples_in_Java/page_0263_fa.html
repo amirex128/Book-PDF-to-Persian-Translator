@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 263</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Using the CQRS pattern</mark></h3>
+  <p>
+   در یک <mark>service</mark> مبتنی بر <mark>CQRS</mark>، مدل <mark>domain</mark> سمت دستور عملیات <mark>CRUD</mark> را مدیریت می‌کند و به <mark>database</mark> خود نگاشت می‌شود. همچنین ممکن است <mark>queries</mark> ساده، مانند <mark>queries</mark> غیر <mark>join</mark>، مبتنی بر <mark>primary key</mark> را مدیریت کند. سمت دستور، هر زمان که داده‌هایش تغییر می‌کند، <mark>domain events</mark> را منتشر می‌کند. این <mark>events</mark> ممکن است با استفاده از یک فریم‌ورک مانند <mark>Eventuate Tram</mark> یا با استفاده از <mark>event sourcing</mark> منتشر شوند.
+  </p>
+  <p>
+   یک مدل <mark>query</mark> جداگانه، <mark>queries</mark> غیر بدیهی را مدیریت می‌کند. این مدل بسیار ساده‌تر از سمت دستور است زیرا مسئول پیاده‌سازی قوانین تجاری نیست. سمت <mark>query</mark> از هر نوع <mark>database</mark>ای که برای <mark>queries</mark>ی که باید پشتیبانی کند، منطقی باشد، استفاده می‌کند. سمت <mark>query</mark> دارای <mark>event handlers</mark> است که به <mark>domain events</mark> مشترک می‌شوند و <mark>database</mark> یا <mark>databases</mark> را به‌روزرسانی می‌کنند. حتی ممکن است چندین مدل <mark>query</mark> وجود داشته باشد، یکی برای هر نوع <mark>query</mark>.
+  </p>
+  <h5><mark>CQRS AND QUERY-ONLY SERVICES</mark></h5>
+  <p>
+   نه تنها می‌توان <mark>CQRS</mark> را در یک <mark>service</mark> اعمال کرد، بلکه می‌توانید از این الگو برای تعریف <mark>query services</mark> نیز استفاده کنید. یک <mark>query service</mark> دارای یک <mark>API</mark> است که فقط از عملیات <mark>query</mark> تشکیل شده است—هیچ عملیات دستوری وجود ندارد. این عملیات <mark>query</mark> را با <mark>querying</mark> یک <mark>database</mark> پیاده‌سازی می‌کند که با اشتراک در <mark>events</mark> منتشر شده توسط یک یا چند <mark>services</mark> دیگر، آن را به‌روز نگه می‌دارد. یک <mark>service</mark> سمت <mark>query</mark> یک راه خوب برای پیاده‌سازی یک <mark>view</mark> است که توسط
+  </p>
+  <p>
+   <mark>Service</mark>
+   <br />
+   <mark>CRUD</mark>
+   <br />
+   عملیات <mark>CRUD</mark>
+   <br />
+   <mark>R</mark>
+   <br />
+   مدل <mark>Domain</mark>
+   <br />
+   <mark>Aggregate</mark>
+   <br />
+   <mark>Query</mark>
+   <br />
+   <mark>bypass</mark>
+   <br />
+   <mark>Aggregate</mark>
+   <br />
+   <mark>Database</mark>
+   <br />
+   یک <mark>database</mark> برای ایجاد، به‌روزرسانی و حذف. یک
+   <br />
+   <mark>database</mark> جداگانه برای <mark>queries</mark>. این با استفاده از <mark>events</mark>ی که هر زمان
+   <br />
+   که <mark>database</mark> سمت دستور تغییر می‌کند، منتشر می‌شوند، به‌روز نگه داشته می‌شود.
+  </p>
+  <p>
+   <mark>Database</mark> واحد برای همه <mark>CRUD</mark>
+  </p>
+  <p>
+   <mark>Service</mark>
+   <br />
+   <mark>CUD</mark>
+   <br />
+   عملیات <mark>CRUD</mark>
+   <br />
+   <mark>R</mark>
+   <br />
+   مدل <mark>Command/domain</mark>
+   <br />
+   <mark>Events</mark>
+  </p>
+  <p>
+   <mark>CQRS</mark>
+  </p>
+  <p>
+   غیر <mark>CQRS</mark>
+  </p>
+  <p>
+   <mark>Aggregate</mark>
+  </p>
+  <p>
+   <mark>Event</mark>
+   <br />
+   <mark>handler</mark>
+   <br />
+   <mark>Aggregate</mark>
+   <br />
+   <mark>Command-side</mark>
+   <br />
+   <mark>database</mark>
+   <br />
+   <mark>Query database</mark>
+   <br />
+   مدل <mark>Query</mark>
+  </p>
+  <p>
+   شکل 7.8
+   <br />
+   در سمت چپ نسخه غیر <mark>CQRS</mark>ی <mark>service</mark>، و در سمت راست نسخه <mark>CQRS</mark> قرار دارد.
+   <br />
+   <mark>CQRS</mark> یک <mark>service</mark> را به ماژول‌های سمت دستور و سمت <mark>query</mark> بازسازی می‌کند، که دارای <mark>databases</mark> جداگانه هستند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+175
+Order Service business logic
+
+OrderEventConsumer—Subscribes to events published by Restaurant Service. It
+invokes OrderService to create and update its replica of Restaurants.
+
+OrderCommandHandlers—The asynchronous request/response-based API that’s
+invoked by sagas. It invokes OrderService to update Orders.
+
+SagaReplyAdapter—Subscribes to the saga reply channels and invokes the sagas.
+The service also has some outbound adapters:
+
+DB adapter—Implements the OrderRepository interface and accesses the Order
+Service database
+
+DomainEventPublishingAdapter—Implements the DomainEventPublisher inter-
+face and publishes Order domain events
+
+OutboundCommandMessageAdapter—Implements the CommandPublisher inter-
+face and sends command messages to saga participants
+Let’s first take a closer look at the Order aggregate and then examine OrderService.
+5.5.1
+The Order Aggregate
+The Order aggregate represents an order placed by a consumer. We’ll first look at the
+structure of the Order aggregate and then check out its methods.
+THE STRUCTURE OF THE ORDER AGGREGATE
+Figure 5.13 shows the structure of the Order aggregate. The Order class is the root of
+the Order aggregate. The Order aggregate also consists of value objects such as Order-
+LineItem, DeliveryInfo, and PaymentInfo.
+«value object»
+Address
+street1
+street2
+city
+state
+zip
+«aggregate»
+Order
+state
+consumerId
+restaurantId
+...
+Price
+Order minimum
+«value object»
+OrderLineItem
+quantity
+menuItem
+name
+«value object»
+DeliveryInfo
+deliveryTime
+«value object»
+Money
+amount
+«value object»
+PaymentInfo
+paymentMethodId
+Figure 5.13
+The design of the Order aggregate, which consists of the Order aggregate root 
+and various value objects.
+ 

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 320</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>فصل 8</h3>
+  <h3>الگوهای API خارجی</h3>
+  <p>
+   این مثال، نگرانی‌هایی مانند security را مدیریت نمی‌کند، اما پیاده‌سازی آنها ساده خواهد بود. به عنوان مثال، API gateway می‌تواند کاربران را با استفاده از Passport، یک فریم‌ورک security NodeJS که در فصل 11 توضیح داده شده است، احراز هویت کند. function makeContextWithDependencies() اطلاعات کاربر را به constructor هر repository منتقل می‌کند تا بتوانند اطلاعات کاربر را به service ها انتقال دهند.
+  </p>
+  <p>
+   اکنون بیایید نگاهی بیندازیم که چگونه یک client می‌تواند این server را برای اجرای queries های GraphQL فراخوانی کند.
+  </p>
+  <p>
+   <strong>WRITING A GRAPHQL CLIENT</strong>
+  </p>
+  <p>
+   چند راه مختلف وجود دارد که یک application client می‌تواند server GraphQL را فراخوانی کند. از آنجا که سرور GraphQL دارای یک API مبتنی بر HTTP است، یک application client می‌تواند از یک کتابخانه HTTP برای ایجاد requests استفاده کند، مانند GET http://localhost:3000/graphql?query={orders(consumerId:1){orderId,restaurant{id}}}'. با این حال، استفاده از یک کتابخانه client GraphQL، که مراقب فرمت‌بندی مناسب requests است و معمولاً ویژگی‌هایی مانند caching سمت client را ارائه می‌دهد، آسان‌تر است.
+  </p>
+  <p>
+   فهرست زیر، کلاس FtgoGraphQLClient را نشان می‌دهد، که یک client ساده مبتنی بر GraphQL برای application FTGO است. constructor آن، ApolloClient را نمونه‌سازی می‌کند که توسط کتابخانه client Apollo GraphQL ارائه می‌شود. کلاس FtgoGraphQLClient یک متد findConsumer() را تعریف می‌کند که از client برای بازیابی نام یک consumer استفاده می‌کند.
+  </p>
+  <pre><code class="language-java">class FtgoGraphQLClient {
+constructor(...) {
+this.client = new ApolloClient({ ... });
+}
+findConsumer(consumerId) {
+return this.client.query({
+variables: { cid: consumerId},
+  
+query: gql
+query foo($cid : Int!) {
+  
+consumer(consumerId: $cid)
+{
+  
+id
+firstName
+lastName
+}
+} ,
+})
+}
+}</code></pre>
+  <p>
+   کلاس FtgoGraphQLClient می‌تواند انواع مختلفی از متدهای query، مانند findConsumer() را تعریف کند. هر کدام، یک query را اجرا می‌کند که دقیقاً داده‌های مورد نیاز client را بازیابی می‌کند.
+  </p>
+  <p>
+   <strong>Listing 8.11</strong>
+   Using the Apollo GraphQL client to execute queries
+  </p>
+  <p>
+   Supply the value
+   of the $cid.
+  </p>
+  <p>
+   Define $cid as a
+   variable of type Int.
+  </p>
+  <p>
+   Set the value of
+   query parameter
+   consumerid to $cid.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

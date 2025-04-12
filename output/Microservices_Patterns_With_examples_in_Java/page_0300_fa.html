@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 300</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>فصل 8</h3>
+  <h3>الگوهای API خارجی</h3>
+  <p>
+   API-based API composer که service ها را به طور همزمان فراخوانی می‌کند، معمولاً از callback ها استفاده می‌کند. می‌تواند requests را با فراخوانی ()ExecutorService.submitCallable به طور همزمان اجرا کند.
+   مشکل این است که این متد، یک Future را برمی‌گرداند که دارای یک API blocking است. یک رویکرد مقیاس‌پذیرتر این است که یک API composer، ()ExecutorService.submit (Runnable) را فراخوانی کند و برای هر Runnable یک callback را با نتیجه request فراخوانی کند. callback، نتایج را جمع‌آوری می‌کند و پس از دریافت همه آنها، پاسخ را به client برمی‌گرداند.
+  </p>
+  <p>
+   نوشتن کد API composition با استفاده از رویکرد callback asynchronous سنتی، شما را سریعاً به callback hell می‌رساند. کد درهم‌تنیده، دشوار برای درک و مستعد خطا خواهد بود، به خصوص زمانی که composition به ترکیبی از request های موازی و متوالی نیاز دارد. یک رویکرد بسیار بهتر این است که کد API composition را با سبک اعلانی با استفاده از رویکرد reactive بنویسید. نمونه‌هایی از انتزاع‌های reactive برای JVM عبارتند از:
+  </p>
+  <ul>
+   <li>
+    Java 8 CompletableFutures
+   </li>
+   <li>
+    Project Reactor Monos
+   </li>
+   <li>
+    RxJava (Reactive Extensions for Java) Observables، که توسط Netflix به طور خاص برای حل این مشکل در API gateway خود ایجاد شده است
+   </li>
+   <li>
+    Scala Futures
+   </li>
+  </ul>
+  <p>
+   یک API gateway مبتنی بر NodeJS از JavaScript promises یا RxJS استفاده می‌کند که extensions reactive برای JavaScript است. استفاده از یکی از این انتزاع‌های reactive شما را قادر می‌سازد تا کد همزمانی بنویسید که ساده و آسان برای درک است. بعداً در این فصل، من نمونه‌ای از این سبک کدنویسی را با استفاده از Project Reactor Monos و نسخه 5 Spring Framework نشان می‌دهم.
+  </p>
+  <p>
+   <strong>HANDLING PARTIAL FAILURES</strong>
+  </p>
+  <p>
+   علاوه بر مقیاس‌پذیری، یک API gateway نیز باید قابل اعتماد باشد. یک راه برای دستیابی به قابلیت اطمینان، اجرای چندین نمونه از gateway در پشت یک load balancer است. اگر یک نمونه شکست بخورد، load balancer، requests را به نمونه‌های دیگر route می‌کند.
+  </p>
+  <p>
+   راه دیگر برای اطمینان از قابلیت اطمینان یک API gateway، رسیدگی صحیح به request های ناموفق و request هایی است که latency بسیار بالایی دارند. هنگامی که یک API gateway یک service را فراخوانی می‌کند، همیشه این احتمال وجود دارد که service کند یا در دسترس نباشد. یک API gateway ممکن است برای مدت زمان بسیار طولانی، شاید برای مدت نامحدود، منتظر پاسخ باشد که منابع را مصرف می‌کند و از ارسال پاسخ به client خود جلوگیری می‌کند. یک request برجسته به یک service ناموفق ممکن است حتی یک منبع محدود و ارزشمند مانند یک thread را مصرف کند و در نهایت منجر به این شود که API gateway قادر به رسیدگی به هیچ request دیگری نباشد. راه‌حل، همانطور که در فصل 3 توضیح داده شد، این است که یک API gateway از الگوی Circuit breaker هنگام فراخوانی service ها استفاده کند.
+  </p>
+  <p>
+   <strong>BEING A GOOD CITIZEN IN THE ARCHITECTURE</strong>
+  </p>
+  <p>
+   در فصل 3 من الگوهایی را برای service discovery شرح دادم و در فصل 11، الگوهایی را برای observability پوشش می‌دهم. الگوهای service discovery یک service client، مانند یک API gateway، را قادر می‌سازند تا موقعیت شبکه یک instance service را تعیین کند تا بتواند آن را فراخوانی کند. الگوهای observability به developers اجازه می‌دهند تا ... را مانیتور کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

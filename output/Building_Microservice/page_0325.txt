@@ -1,0 +1,40 @@
+Smoke tests are typically safe, as the operations they carry out are often done on soft‐
+ware before it is released. As we explored in “Separating Deployment from Release”
+on page 270, separating the concept of deployment from release can be incredibly
+useful. When it comes to in-production testing, tests carried out on software that is
+deployed into production, before it is released, should be safe.
+People tend to get most concerned about the safety of things like injecting fake user
+behavior into the system. We don’t really want the order to be shipped, or the pay‐
+ment made. This is something that needs due care and attention, and despite the
+challenges, this type of testing can be hugely beneficial. We’ll return to this in
+“Semantic Monitoring” on page 333.
+Mean Time to Repair over Mean Time Between Failures?
+So by looking at techniques like blue-green deployment or canary releasing, we find a
+way to test closer to (or even in) production, and we also build tools to help us man‐
+age a failure if it occurs. Using these approaches is a tacit acknowledgment that we
+cannot spot and catch all problems before we actually release our software.
+Sometimes expending the same effort on getting better at fixing probems when they
+occur can be significantly more beneficial than adding more automated functional
+tests. In the web operations world, this is often referred to as the trade-off between
+optimizing for mean time between failures (MTBF) and optimizing for mean time to
+repair (MTTR).
+Techniques to reduce the time to recovery can be as simple as very fast rollbacks cou‐
+pled with good monitoring (which we’ll discuss in Chapter 10). If we can spot a prob‐
+lem in production early and roll back early, we reduce the impact on our customers.
+For different organizations, the trade-off between MTBF and MTTR will vary, and
+much of this lies with understanding the true impact of failure in a production envi‐
+ronment. However, most organizations that I see spending time creating functional
+test suites often expend little to no effort on better monitoring or recovering from
+failure. So while they may reduce the number of defects that occur in the first place,
+they can’t eliminate all of them, and are unprepared for dealing with them if they pop
+up in production.
+Trade-offs other than those between MTBF and MTTR exist. For example, whether
+you are trying to work out if anyone will actually use your software, it may make
+much more sense to get something out now, to prove the idea or the business model
+before building robust software. In an environment where this is the case, testing may
+be overkill, as the impact of not knowing if your idea works is much higher than
+having a defect in production. In these situations, it can be quite sensible to avoid
+testing prior to production altogether.
+From Preproduction to In-Production Testing 
+| 
+299

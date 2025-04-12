@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 91</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3>فصل 3</h3>
+    <h4>Storage و Retrieval</h4>
+    <p>
+        Wer Ordnung hält, ist nur zu faul zum Suchen.
+        (If you keep things tidily ordered, you’re just too lazy to go searching.)
+        —German proverb
+    </p>
+    <p>
+        در اساسی‌ترین سطح، یک database باید دو کار را انجام دهد: وقتی شما به آن مقداری data می‌دهید، باید data را ذخیره کند و وقتی بعداً دوباره از آن درخواست می‌کنید، باید data را به شما برگرداند.
+    </p>
+    <p>
+        در فصل 2 ما در مورد data models و query languages بحث کردیم—یعنی، format که در آن شما (developer application) data خود را به database می‌دهید و مکانیزمی که به وسیله آن می‌توانید بعداً دوباره آن را درخواست کنید. در این فصل ما از دیدگاه database در مورد همین موضوع بحث می‌کنیم: چگونه می‌توانیم data را که به ما داده شده است، ذخیره کنیم و چگونه می‌توانیم دوباره آن را پیدا کنیم وقتی از ما درخواست می‌شود.
+    </p>
+    <p>
+        چرا شما، به عنوان یک developer application، باید به نحوه مدیریت internal storage و retrieval توسط database اهمیت دهید؟ شما احتمالاً موتور storage خود را از ابتدا پیاده‌سازی نخواهید کرد، اما شما نیاز دارید یک storage engine را انتخاب کنید که برای application شما مناسب باشد، از بین بسیاری از مواردی که در دسترس هستند. به منظور تنظیم یک storage engine برای عملکرد خوب در workload شما، شما باید یک ایده تقریبی از آنچه که storage engine در حال انجام آن است، داشته باشید.
+    </p>
+    <p>
+        به طور خاص، یک تفاوت بزرگ بین storage engines که برای transactional workloads بهینه شده‌اند و آن‌هایی که برای analytics بهینه شده‌اند، وجود دارد. ما در ادامه در "Transaction Processing or Analytics?" در صفحه 90، این تمایز را بررسی خواهیم کرد و در "Column-Oriented Storage" در صفحه 95 ما یک family از storage engines را که برای analytics بهینه شده است، مورد بحث قرار خواهیم داد.
+    </p>
+    <p>
+        با این حال، ابتدا این فصل را با صحبت در مورد storage engines که در انواع databases استفاده می‌شوند که شما احتمالاً با آن‌ها آشنا هستید، شروع خواهیم کرد: traditional relational data‐bases و همچنین اکثر databases به اصطلاح NoSQL. ما دو خانواده از
+    </p>
+    <p>
+        69
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

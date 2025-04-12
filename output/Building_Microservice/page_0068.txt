@@ -1,0 +1,33 @@
+In a microservice architecture, this type of interaction is largely unavoidable. A
+microservice-based system relies on multiple microservices collaborating in order for
+it to do its work. We still want to keep this to a minimum, though; whenever you see
+a single microservice depending on multiple downstream services in this way, it can
+be a cause for concern—it might imply a microservice that is doing too much.
+As a general rule, domain coupling is considered to be a loose form of coupling,
+although even here we can hit problems. A microservice that needs to talk to lots of
+downstream microservices might point to a situation in which too much logic has
+been centralized. Domain coupling can also become problematic as more complex
+sets of data are sent between services—this can often point to the more problematic
+forms of coupling we’ll explore shortly.
+Just remember the importance of information hiding. Share only what you absolutely
+have to, and send only the absolute minimum amount of data that you need.
+A Brief Note on Temporal Coupling
+Another form of coupling you may have heard of is temporal coupling. From a code-
+centric view of coupling, temporal coupling refers to a situation in which concepts are
+bundled together purely because they happen at the same time. Temporal coupling
+has a subtly different meaning in the context of a distributed system, where it refers to
+a situation in which one microservice needs another microservice to do something at
+the same time for the operation to complete.
+Both microservices need to be up and available to communicate with each other at
+the same time for the operation to complete. So in Figure 2-3, where MusicCorp’s
+Order Processor is making a synchronous HTTP call to the Warehouse service, Ware
+house needs to be up and available at the same time the call is made.
+Figure 2-3. An example of temporal coupling, in which Order Processor makes a syn‐
+chronous HTTP call to the Warehouse microservice
+If for some reason Warehouse can’t be reached by the Order Processor, then the
+operation fails, as we can’t reserve the CDs to be sent out. Order Processor will also
+have to block and wait for a response from Warehouse, potentially causing issues in
+terms of resource contention.
+42 
+| 
+Chapter 2: How to Model Microservices

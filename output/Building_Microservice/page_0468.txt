@@ -1,0 +1,21 @@
+Request cache
+With a request cache, we store a cached answer for the original request. So in
+Figure 13-13 for example, we store the actual top ten entries. Subsequent requests for
+the top ten best sellers result in the cached result being returned. No lookups in the
+Sales data needed, no round trips to Catalog—this is far and away the most effective
+cache in terms of optimizing for speed.
+Figure 13-13. Caching the results of the top 10 request
+The benefits here are obvious. This is super efficient, for one thing. However, we
+need to recognize that this form of caching is highly specific. We’ve only cached the
+result of this specific request. This means that other operations that hit Sales or
+Catalog won’t be hitting a cache and thus won’t benefit in any way from this form of
+optimization.
+Invalidation
+There are only two hard things in Computer Science: cache invalidation and naming things.
+—Phil Karlton
+Invalidation is the process by which we evict data from our cache. It’s an idea that is
+simple in concept but complex in execution, if for no other reason than there are a
+wealth of options in terms of how to implement it, and numerous trade-offs to con‐
+442 
+| 
+Chapter 13: Scaling

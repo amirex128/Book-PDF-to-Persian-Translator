@@ -1,0 +1,57 @@
+118
+CHAPTER 4
+Managing transactions with sagas
+Orchestration—Centralize a saga’s coordination logic in a saga orchestrator class.
+A saga orchestrator sends command messages to saga participants telling them
+which operations to perform.
+Let’s look at each option, starting with choreography.
+4.2.1
+Choreography-based sagas
+One way you can implement a saga is by using choreography. When using choreogra-
+phy, there’s no central coordinator telling the saga participants what to do. Instead,
+the saga participants subscribe to each other’s events and respond accordingly. To
+show how choreography-based sagas work, I’ll first describe an example. After that, I’ll
+discuss a couple of design issues that you must address. Then I’ll discuss the benefits
+and drawbacks of using choreography.
+IMPLEMENTING THE CREATE ORDER SAGA USING CHOREOGRAPHY
+Figure 4.4 shows the design of the choreography-based version of the Create Order
+Saga. The participants communicate by exchanging events. Each participant, starting
+with the Order Service, updates its database and publishes an event that triggers the
+next participant.
+Accounting Service
+4. createPendingAuthorization()
+6. authorizeCard()
+Kitchen Service
+3. createTicket()
+6. approveTicket()
+Order
+Service
+1. createOrder()
+7. approveOrder()
+Consumer Service
+2. verifyConsumerDetails()
+Order events
+Message broker
+Consumer veriﬁed
+Publish
+Key
+Subscribe
+Consumer events
+Ticket events
+Credit card events
+2
+Order created
+1
+Ticket created
+3
+Credit card authorized
+5
+6
+4
+5a
+7
+5b
+Figure 4.4
+Implementing the Create Order Saga using choreography. The saga participants communicate by 
+exchanging events.
+ 

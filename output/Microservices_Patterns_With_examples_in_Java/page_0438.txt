@@ -1,0 +1,49 @@
+408
+CHAPTER 12
+Deploying microservices
+ A much more reliable way to roll out a new version is to separate deployment from
+release:
+Deployment—Running in the production environment
+Releasing a service—Making it available to end users
+You then deploy a service into production using the following steps:
+1
+Deploy the new version into production without routing any end-user requests
+to it.
+2
+Test it in production.
+3
+Release it to a small number of end users.
+4
+Incrementally release it to an increasingly larger number of users until it’s han-
+dling all the production traffic.
+5
+If at any point there’s an issue, revert back to the old version—otherwise, once
+you’re confident the new version is working correctly, delete the old version.
+Ideally, those steps will be performed by a fully automated deployment pipeline that
+carefully monitors the newly deployed service for errors.
+ Traditionally, separating deployments and releases in this way has been challeng-
+ing because it requires a lot of work to implement it. But one of the benefits of using a
+service mesh is that using this style of deployment is a lot easier. A service mesh is, as
+described in chapter 11, networking infrastructure that mediates all communication
+between a service and other services and external applications. In addition to taking
+on some of the responsibilities of the microservice chassis framework, a service mesh
+provides rule-based load balancing and traffic routing that lets you safely run multiple
+versions of your services simultaneously. Later in this section, you’ll see that you can
+route test users to one version of a service and end-users to a different version, for
+example.
+ As described in chapter 11, there are several service meshes to choose from. In this
+section, I show you how to use Istio, a popular, open source service mesh originally
+developed by Google, IBM, and Lyft. I begin by providing a brief overview of Istio and
+a few of its many features. Next I describe how to deploy an application using Istio.
+After that, I show how to use its traffic-routing capabilities to deploy and release an
+upgrade to a service.
+OVERVIEW OF THE ISTIO SERVICE MESH
+The Istio website describes Istio as an “An open platform to connect, manage, and
+secure microservices” (https://istio.io). It’s a networking layer through which all of
+your services’ network traffic flows. Istio has a rich set of features organized into four
+main categories:
+Traffic management—Includes service discovery, load balancing, routing rules,
+and circuit breakers
+Security—Secures interservice communication using Transport Layer Security
+(TLS)
+ 

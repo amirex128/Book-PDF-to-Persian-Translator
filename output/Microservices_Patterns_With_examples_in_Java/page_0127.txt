@@ -1,0 +1,51 @@
+97
+Communicating using the Asynchronous messaging pattern
+ Another option is for a  message handler to record message ids in an application
+table instead of a dedicated table. This approach is particularly useful when using a
+NoSQL database that has a limited transaction model, so it doesn’t support updat-
+ing two tables as part of a database transaction. Chapter 7 shows an example of this
+approach. 
+3.3.7
+Transactional messaging
+A service often needs to publish messages as part of a transaction that updates the
+database. For instance, throughout this book you see examples of services that publish
+domain events whenever they create or update business entities. Both the database
+update and the sending of the message must happen within a transaction. Otherwise,
+a service might update the database and then crash, for example, before sending the
+message. If the service doesn’t perform these two operations atomically, a failure
+could leave the system in an inconsistent state.
+ The traditional solution is to use a distributed transaction that spans the database
+and the message broker. But as you’ll learn in chapter 4, distributed transactions
+aren’t a good choice for modern applications. Moreover, many modern brokers such
+as Apache Kafka don’t support distributed transactions.
+ As a result, an application must use a different mechanism to reliably publish mes-
+sages. Let’s look at how that works.
+USING A DATABASE TABLE AS A MESSAGE QUEUE
+Let’s imagine that your application is using a relational database. A straightforward
+way to reliably publish messages is to apply the Transactional outbox pattern. This
+pattern uses a database table as a temporary message queue. As figure 3.13 shows, a
+service that sends messages has an OUTBOX database table. As part of the database
+Order
+Service
+Read
+OUTBOX
+table
+Publish
+...
+...
+ORDER table
+INSERT,
+UPDATE,DELETE
+INSERT
+Database
+Message
+relay
+Transaction
+OUTBOX table
+Message
+broker
+Figure 3.13
+A service reliably publishes a message by inserting it into an OUTBOX table as part of the transaction 
+that updates the database. The Message Relay reads the OUTBOX table and publishes the messages to a 
+message broker.
+ 

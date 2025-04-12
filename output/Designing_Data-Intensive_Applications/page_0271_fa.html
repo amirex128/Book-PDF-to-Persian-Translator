@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 271</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        ix. در PostgreSQL می‌توانید این کار را با استفاده از <em>range types</em> ظریف‌تر انجام دهید، اما آنها به طور گسترده در databases های دیگر پشتیبانی نمی‌شوند.
+    </p>
+    <h4>More examples of write skew</h4>
+    <p>
+        <em>Write skew</em> ممکن است در ابتدا یک مسئله باطنی به نظر برسد، اما هنگامی که از آن آگاه شدید، ممکن است موقعیت‌های بیشتری را که می‌تواند رخ دهد، متوجه شوید. در اینجا چند نمونه دیگر آورده شده است:
+    </p>
+    <h4>Meeting room booking system</h4>
+    <p>
+        فرض کنید می‌خواهید اجرا کنید که نمی‌تواند دو رزرو برای یک اتاق جلسه یکسان در یک زمان یکسان وجود داشته باشد [43]. وقتی شخصی می‌خواهد رزرو کند، ابتدا هر گونه رزرو متناقض (یعنی، رزرو برای همان اتاق با یک بازه زمانی همپوشانی) را بررسی می‌کنید، و اگر هیچ‌کدام پیدا نشد، جلسه را ایجاد می‌کنید (به مثال 7-2 مراجعه کنید).ix
+    </p>
+    <p>
+        Example 7-2. A meeting room booking system tries to avoid double-booking (not
+        safe under snapshot isolation)
+    </p>
+    <pre><code class="language-sql">BEGIN TRANSACTION;
+-- Check for any existing bookings that overlap with the period of noon-1pm
+SELECT COUNT(*) FROM bookings
+  WHERE room_id = 123 AND
+    end_time > '2015-01-01 12:00' AND start_time < '2015-01-01 13:00';
+-- If the previous query returned zero:
+INSERT INTO bookings
+  (room_id, start_time, end_time, user_id)
+  VALUES (123, '2015-01-01 12:00', '2015-01-01 13:00', 666);
+COMMIT;
+</code></pre>
+    <p>
+        متاسفانه، <em>snapshot isolation</em> از اینکه یک user دیگر به طور همزمان یک جلسه متناقض را درج کند، جلوگیری نمی‌کند. به منظور تضمین اینکه شما تداخل برنامه‌ریزی نخواهید داشت، شما دوباره به <em>serializable isolation</em> نیاز دارید.
+    </p>
+    <h4>Multiplayer game</h4>
+    <p>
+        در مثال 7-1، ما از یک <em>lock</em> برای جلوگیری از <em>lost updates</em> استفاده کردیم (یعنی، اطمینان از اینکه دو player نمی‌توانند همزمان یک شکل یکسان را حرکت دهند). با این حال، <em>lock</em> از اینکه player ها دو شکل مختلف را به یک موقعیت یکسان روی تخته حرکت دهند، یا به طور بالقوه انجام حرکتی که قوانین بازی را نقض می‌کند، جلوگیری نمی‌کند. بسته به نوع rule که شما در حال اجرا هستید، ممکن است بتوانید از یک <em>unique constraint</em> استفاده کنید، اما در غیر این صورت شما در برابر <em>write skew</em> آسیب‌پذیر هستید.
+    </p>
+    <p>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        249
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

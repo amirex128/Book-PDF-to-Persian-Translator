@@ -1,0 +1,40 @@
+picking something more complex. For a situation in which you have only single
+nodes, having DNS refer directly to hosts is probably fine. But for those situations in
+which you need more than one instance of a host, have DNS entries resolve to load
+balancers that can handle putting individual hosts into and out of service as
+appropriate.
+Dynamic Service Registries
+The downsides of DNS as a way of finding nodes in a highly dynamic environment
+have led to a number of alternative systems, most of which involve the service regis‐
+tering itself with some central registry, which in turn offers the ability to look up
+these services later on. Often, these systems do more than just providing service reg‐
+istration and discovery, which may or may not be a good thing. This is a crowded
+field, so we’ll just look at a few options to give you a sense of what is available.
+ZooKeeper
+ZooKeeper was originally developed as part of the Hadoop project. It is used for an
+almost bewildering array of use cases, including configuration management, synchro‐
+nizing data between services, leader election, message queues, and (usefully for us) as
+a naming service.
+Like many similar types of systems, ZooKeeper relies on running a number of nodes
+in a cluster to provide various guarantees. This means you should expect to be run‐
+ning at least three Zookeeper nodes. Most of the smarts in ZooKeeper are around
+ensuring that data is replicated safely between these nodes, and that things remain
+consistent when nodes fail.
+At its heart, ZooKeeper provides a hierarchical namespace for storing information.
+Clients can insert new nodes in this hierarchy, change them, or query them. Further‐
+more, they can add watches to nodes to be told when they change. This means we
+could store the information about where our services are located in this structure and
+as a client be told when they change. ZooKeeper is often used as a general configura‐
+tion store, so you could also store service-specific configuration in it, allowing you to
+do tasks like dynamically changing log levels or turning off features of a running
+system.
+In reality, better solutions exist for dynamic service registration, to the extent that I
+would actively avoid ZooKeeper for this use case nowadays.
+Consul
+Like ZooKeeper, Consul supports both configuration management and service dis‐
+covery. But it goes further than ZooKeeper in providing more support for these key
+use cases. For example, it exposes an HTTP interface for service discovery, and one of
+Consul’s killer features is that it actually provides a DNS server out of the box;
+Service Discovery 
+| 
+159

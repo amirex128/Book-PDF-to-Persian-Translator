@@ -1,0 +1,19 @@
+Limiting scope
+Limiting the scope of credentials is core to the idea of embracing the principle of least
+privilege. This can apply across all forms of credentials, but limiting the scope of what
+a given set of credentials gives you access to can be incredibly useful. For example, in
+Figure 11-1, each instance of the Inventory microservice is given the same username
+and password for the supporting database. We also provide read-only access to the
+supporting Debezium process that will be used to read data and send it out via Kafka
+as part of an existing ETL process. If the username and password for the microservi‐
+ces are compromised, an external party could theoretically gain read and write access
+to the database. If they gained access to the Debezium credentials, though, they’d
+only have read-only access.
+Figure 11-1. Limiting scope of credentials to limit the impact of misuse
+Limiting scope can apply in terms of both what the set of credentials can access and
+also who has access to that set of credentials. In Figure 11-2, we’ve changed things
+such that each instance of Inventory gets a different set of credentials. This means
+that we could rotate each credential independently, or just revoke the credential for
+Foundations of Application Security 
+| 
+359

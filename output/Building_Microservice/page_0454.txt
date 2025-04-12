@@ -1,0 +1,39 @@
+Another common example of data partitioning is to do it on a geographic basis. You
+might have one partition per country, or one per region.
+For FoodCo, one option to handle the contention on its primary database is to parti‐
+tion data based on country. So customers in Ghana hit one database, and customers
+in Jersey hit another. This model wouldn’t make sense for FoodCo due to a number
+of factors. The main problem is that FoodCo has plans to continue geographic expan‐
+sion and is hoping to drive efficiencies by being able to serve multiple geographical
+locales from the same system. The idea of having to continually spin up new parti‐
+tions for each country would drastically increase the cost of moving into new coun‐
+tries.
+More often than not, partitioning will be done by the subsystem you rely on. For
+example, Cassandra uses partitions to distribute both reads and writes across the
+nodes in a given “ring,” and Kafka supports distributing messages across partitioned
+topics.
+Key benefits
+Data partitioning scales really nicely for transactional workloads. If your system is
+write-constrained, for example, data partitioning can deliver huge improvements.
+The creation of multiple partitions can also make it easier to reduce the impact and
+scope of maintenance activities. Rolling out updates can be done on a per-partition
+basis, and operations that would otherwise require downtime can have reduced
+impact, as they’ll affect only a single partition. For example, if partitioning around
+geographic regions, operations that might result in interruption of service could be
+done at the least impactful time of day, perhaps in the early hours of the morning.
+Geographical partitioning can also be very useful if you need to ensure that data can‐
+not leave certain jurisdictions—making sure that data associated with EU citizens
+remains stored inside the EU, for example.
+Data partitioning can work well with horizontal duplication—each partition could
+consist of multiple nodes able to handle that work.
+Limitations
+It’s worth pointing out that data partitioning has limited utility in terms of improving
+system robustness. If a partition fails, that portion of your requests will fail. For
+example, if your load is distributed evenly across four partitions, and one partition
+fails, then 25% of your requests will end up failing. This isn’t as bad as a total failure,
+but it’s still pretty bad. This is why, as outlined earlier, it is common to combine data
+partitioning with a technique like horizontal duplication to improve the robustness of
+a given partition.
+428 
+| 
+Chapter 13: Scaling

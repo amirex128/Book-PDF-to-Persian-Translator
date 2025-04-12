@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 386</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <h4><span style="font-weight: bold;">HANDLING AUTHORIZATION</span></h4>
+  <p>
+   Authenticating a client’s credentials مهم است اما کافی نیست. An application
+   همچنین باید یک authorization mechanism را پیاده‌سازی کند که تأیید کند که client مجاز
+   به انجام operation درخواستی است. به عنوان مثال، در FTGO application
+   the getOrderDetails() query فقط می‌تواند توسط consumer که Order را place کرده است (یک نمونه از instance-based security) و یک customer service agent که
+   به consumer کمک می‌کند، فراخوانی شود.
+  </p>
+  <p>
+   One place برای implement authorization، API gateway است. It can, for example,
+   دسترسی به GET /orders/{orderId} را فقط به users که consumers و cus-
+   tomer service agents هستند، محدود می‌کند. If a user isn’t allowed به دسترسی به یک path خاص، API gateway
+   می‌تواند request را قبل از ارسال آن به service رد کند. As with authentication،
+   centralizing authorization در داخل API gateway، خطر security vulnera-
+   bilities را کاهش می‌دهد. You can implement authorization در API gateway با استفاده از یک security frame-
+   work، مانند Spring Security.
+  </p>
+  <p>
+   One drawback از implementing authorization در API gateway این است که ریسک
+   coupling the API gateway به services، که نیاز به به‌روزرسانی آنها در lockstep دارد.
+   What’s more, the API gateway می‌تواند معمولاً فقط role-based access را به URL
+   paths پیاده‌سازی کند. It’s generally not practical برای API gateway برای پیاده‌سازی ACLs که کنترل
+   access به individual domain objects، زیرا این کار نیاز به دانش دقیقی از ser-
+   vice’s domain logic دارد.
+  </p>
+  <p>
+   The other place برای implement authorization در services است. A service می‌تواند imple-
+   ment role-based authorization برای URLs و برای service methods. It can also implement
+   ACLs برای مدیریت دسترسی به aggregates. Order Service می‌تواند، به عنوان مثال، the
+   role-based و ACL-based authorization mechanism را برای کنترل دسترسی به orders پیاده‌سازی کند.
+   Other services در FTGO application logic authorization مشابهی را پیاده‌سازی می‌کنند.
+  </p>
+  <h4><span style="font-weight: bold;">USING JWTS TO PASS USER IDENTITY AND ROLES</span></h4>
+  <p>
+   When implementing security در یک microservice architecture، شما باید تصمیم بگیرید که کدام
+   type از token یک API gateway باید برای انتقال اطلاعات user به services استفاده کند.
+  </p>
+  <p>
+   There are two types از tokens برای انتخاب. One option این است که از opaque tokens استفاده کنید،
+   که معمولاً UUIDs هستند. The downside از opaque tokens این است که performance را کاهش می‌دهند
+   و availability و latency را افزایش می‌دهند. That’s because recipient از چنین
+   token باید یک synchronous RPC call را به یک security service انجام دهد تا token را تأیید کند
+   و اطلاعات user را بازیابی کند.
+  </p>
+  <p>
+   An alternative approach، که تماس با security service را حذف می‌کند، استفاده از a
+   transparent token حاوی اطلاعات در مورد user است. One such popular standard
+   برای transparent tokens the JSON Web Token (JWT) است. JWT یک روش استاندارد برای ایمن
+   represent claims، مانند user identity و roles، بین دو طرف است. A JWT یک pay-
+   load دارد، که یک object از نوع JSON است که حاوی اطلاعاتی در مورد user، مانند their
+   identity و roles و other metadata، مانند an expiration date است. It’s signed with a
+   secret که فقط برای creator از JWT، مانند API gateway و the
+   recipient از JWT، مانند یک service شناخته شده است. The secret تضمین می‌کند که یک third party مخرب
+   can’t forge یا tamper با یک JWT.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

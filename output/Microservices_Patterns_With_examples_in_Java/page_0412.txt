@@ -1,0 +1,43 @@
+382
+CHAPTER 11
+Developing production-ready services
+route traffic enables you to separate deployment from release. It gives you the ability
+to deploy a new version of a service into production but only release it to certain users,
+such as internal test users. Chapter 12 discusses this concept further when describing
+how to deploy services using Kubernetes. 
+Summary
+It’s essential that a service implements its functional requirements, but it must
+also be secure, configurable, and observable.
+Many aspects of security in a microservice architecture are no different than in
+a monolithic architecture. But there are some aspects of application security
+that are necessarily different, including how user identity is passed between the
+API gateway and the services and who is responsible for authentication and autho-
+rization. A commonly used approach is for the API gateway to authenticate clients.
+The API gateway includes a transparent token, such as a JWT, in each request to a
+service. The token contains the identity of the principal and their roles. The ser-
+vices use the information in the token to authorize access to resources. OAuth 2.0
+is a good foundation for security in a microservice architecture.
+A service typically uses one or more external services, such as message brokers
+and databases. The network location and credentials of each external service
+often depend on the environment that the service is running in. You must apply
+the Externalized configuration pattern and implement a mechanism that pro-
+vides a service with configuration properties at runtime. One commonly used
+approach is for the deployment infrastructure to supply those properties via
+operating system environment variables or a properties file when it creates a
+service instance. Another option is for a service instance to retrieve its configu-
+ration from a configuration properties server.
+Operations and developers share responsibility for implementing the observ-
+ability patterns. Operations is responsible for the observability infrastructure,
+such as servers that handle log aggregation, metrics, exception tracking, and
+distributed tracing. Developers are responsible for ensuring that their services
+are observable. Services must have health check API endpoints, generate log
+entries, collect and expose metrics, report exceptions to an exception tracking
+service, and implement distributed tracing.
+In order to simplify and accelerate development, you should develop services
+on top of a microservices chassis. A microservices chassis is framework or set of
+frameworks that handle various cross-cutting concerns, including those described
+in this chapter. Over time, though, it’s likely that many of the networking-
+related functions of a microservice chassis will migrate into a service mesh, a
+layer of infrastructure software through which all of a service’s network traffic
+flows. 
+ 

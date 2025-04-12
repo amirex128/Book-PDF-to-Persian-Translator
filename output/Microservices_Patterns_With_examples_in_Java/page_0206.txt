@@ -1,0 +1,44 @@
+176
+CHAPTER 5
+Designing business logic in a microservice architecture
+The Order class has a collection of OrderLineItems. Because the Order’s Consumer
+and Restaurant are other aggregates, it references them by primary key value. The
+Order class has a DeliveryInfo class, which stores the delivery address and the
+desired delivery time, and a PaymentInfo, which stores the payment info. The follow-
+ing listing shows the code.
+@Entity
+@Table(name="orders")
+@Access(AccessType.FIELD)
+public class Order {
+@Id
+@GeneratedValue
+private Long id;
+@Version
+private Long version;
+private OrderState state;
+private Long consumerId;
+private Long restaurantId;
+@Embedded
+private OrderLineItems orderLineItems;
+@Embedded
+private DeliveryInformation deliveryInformation;
+@Embedded
+private PaymentInformation paymentInformation;
+@Embedded
+private Money orderMinimum;
+This class is persisted with JPA and is mapped to the ORDERS table. The id field is the
+primary key. The version field is used for optimistic locking. The state of an Order is
+represented by the OrderState enumeration. The DeliveryInformation and Payment-
+Information fields are mapped using the @Embedded annotation and are stored as col-
+umns of the ORDERS table. The orderLineItems field is an embedded object that
+contains the order line items. The Order aggregate consists of more than just fields. It
+also implements business logic, which can be described by a state machine. Let’s take
+a look at the state machine. 
+THE ORDER AGGREGATE STATE MACHINE
+In order to create or update an order, Order Service must collaborate with other ser-
+vices using sagas. Either OrderService or the first step of the saga invokes an Order
+method that verifies that the operation can be performed and changes the state of the
+Order to a pending state. A pending state, as explained in chapter 4, is an example of
+Listing 5.14
+The Order class and its fields
+ 

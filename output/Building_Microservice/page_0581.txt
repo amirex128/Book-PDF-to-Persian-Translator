@@ -1,0 +1,40 @@
+work. Sagas are in virtually all cases a better fit for implementing business processes
+that span multiple microservices.
+There are two different styles of sagas to consider: orchestrated sagas and choreo‐
+graphed sagas. Orchestrated sagas use a centralized orchestrator to coordinate with
+other microservices and ensure that things are done. In general, this is a simple and
+straightforward approach, but the central orchestrator can end up doing too much if
+you aren’t careful, and it can become a source of contention when multiple teams are
+working on the same business process. With choreographed sagas, there is no central
+coordinator; instead, the responsibility for the business process is distributed into a
+number of collaborating microservices. This can be a more complex architecture to
+implement, and it requires more work to ensure that the right things are happening,
+but on the flip side it is much less prone to coupling and works well for multiple
+teams.
+Personally, I love choreographed sagas, but then I’ve used them a lot and made a lot
+of mistakes implementing them. My general advice is that orchestrated sagas work
+fine when a single team owns responsibility for the whole process, but they become
+more problematic with multiple teams. Choreographed sagas can justify their
+increased complexity in situations in which multiple teams are expected to collabo‐
+rate on a process.
+Build
+Each microservice should have its own build, its own CI pipeline. When I make a
+change to a microservice, I expect to be able to build that microservice by itself.
+Avoid situations in which you have to build all your microservices together, as this
+makes independent deployability much harder.
+For reasons outlined in Chapter 7, I am not a fan of monorepos. If you really want to
+use them, then please understand the challenges they cause around clear lines of
+ownership and potential complexity of builds. But definitely make sure that, whether
+you use a monorepo or a multirepo approach, each microservice has its own CI build
+process that can be triggered independently of any other builds.
+Deployment
+Microservices are normally deployed as a process. This process can be deployed onto
+a physical machine, a virtual machine, a container, or an FaaS platform. Ideally, we
+want microservices to be as isolated from one another as possible in a deployed envi‐
+ronment. We don’t want a situation in which one microservice using up lots of com‐
+puting resources can impact a different microservice. In general, this means we want
+to have each microservice using its own ring-fenced operating system and set of com‐
+puting resources. Containers are especially effective at giving each microservice
+Afterword: Bringing It All Together 
+| 
+555

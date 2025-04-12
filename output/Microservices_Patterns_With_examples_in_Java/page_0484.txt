@@ -1,0 +1,74 @@
+454
+CHAPTER 13
+Refactoring to microservices
+shows how this works. The login handler returns an additional cookie, which in this
+example I call USERINFO, that contains user information, such as the user ID and roles.
+The browser includes that cookie in every request. The API gateway extracts the infor-
+mation from the cookie and includes it in the HTTP requests that it makes to a ser-
+vice. As a result, each service has access to the needed user information.
+The sequence of events is as follows:
+1
+The client makes a login request containing the user’s credentials.
+2
+API Gateway routes the login request to the FTGO monolith.
+3
+The monolith returns a response containing the JSESSIONID session cookie
+and the USERINFO cookie, which contains the user information, such as ID
+and roles.
+4
+The client makes a request, which includes the USERINFO cookie, in order to
+invoke an operation.
+5
+API Gateway validates the USERINFO cookie and includes it in the Authoriza-
+tion header of the request that it makes to the service. The service validates the
+USERINFO token and extracts the user information.
+Let’s look at LoginHandler and API Gateway in more detail.
+THE MONOLITH’S LOGINHANDLER SETS THE USERINFO COOKIE
+LoginHandler processes the POST of the user’s credentials. It authenticates the user
+and stores information about the user in the session. It’s often implemented by a
+FTGO Monolith
+Order History Service
+POST/login
+GET/orders
+Authorization: TOKEN
+...
+HTTP/1.1 200 OK
+Set-cookie: JSESSIONID=...
+Set-cookie: USERINFO=TOKEN
+...
+GET/orders
+Cookie: JSESSIONID=...
+Cookie: USERINFO=TOKEN
+...
+Browser-based
+SPA application
+Log in with user
+ID and password.
+User
+database
+API
+gateway
+userId: xxx
+roles:[a, b, c]
+...
+OrderHistory
+RequestHandler
+Login
+handler
+Initializes
+Query
+POST/login
+Log in with user
+ID and password.
+Return session cookie.
+Provide JWT.
+Provide session cookie.
+Contains user information,
+such as ID and roles
+In-memory
+session
+Figure 13.13
+The login handler is enhanced to set a USERINFO cookie, which is a JWT containing user 
+information. API Gateway transfers the USERINFO cookie to an authorization header when it invokes a 
+service.
+ 

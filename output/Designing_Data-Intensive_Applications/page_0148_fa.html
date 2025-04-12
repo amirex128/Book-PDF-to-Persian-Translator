@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 148</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        base. A reader می‌تواند یک record را واکشی کند، شماره version را استخراج کند، و سپس the writer’s schema را برای آن شماره version از database واکشی کند. با استفاده از آن writer’s schema، می‌توان بقیه record را decode کرد. (به عنوان مثال، Espresso [23] به این روش عمل می‌کند.)
+    </p>
+    <h4>Sending records over a network connection</h4>
+    <p>
+        هنگامی که دو فرآیند در حال برقراری ارتباط از طریق یک network connec‐tion bidirectional هستند، آن‌ها می‌توانند version schema را در راه‌اندازی اتصال مذاکره کنند و سپس از آن schema برای طول عمر اتصال استفاده کنند. The Avro RPC protocol (به "Dataflow Through Services: REST and RPC" در صفحه 131 مراجعه کنید) اینگونه کار می‌کند.
+    </p>
+    <p>
+        یک database از schema versions یک چیز مفید است که در هر صورت داشته باشید، زیرا به عنوان documentation عمل می‌کند و به شما این شانس را می‌دهد که schema compatibility را بررسی کنید [24]. به عنوان شماره version، شما می‌توانید یک integer incrementing ساده، یا یک hash از schema را استفاده کنید.
+    </p>
+    <h4>Dynamically generated schemas</h4>
+    <p>
+        One advantage از رویکرد Avro، در مقایسه با Protocol Buffers و Thrift، این است که schema هیچ tag numbers ندارد. اما چرا این مهم است؟ مشکل در نگه‌داشتن چند number در schema چیست؟
+    </p>
+    <p>
+        تفاوت این است که Avro به schemas dynamically generated friendlyتر است. به عنوان مثال، فرض کنید شما یک relational database دارید که محتویات آن را می‌خواهید در یک فایل dump کنید، و شما می‌خواهید از یک binary format برای اجتناب از مشکلات ذکر شده با textual formats (JSON, CSV, SQL) استفاده کنید. اگر شما از Avro استفاده می‌کنید، شما می‌توانید به آسانی یک schema Avro (در representation JSON که قبلاً دیدیم) را از relational schema تولید کنید و محتویات database را با استفاده از آن schema encoding کنید، و همه آن را در یک فایل object container Avro dump کنید [25]. شما یک record schema برای هر جدول database تولید می‌کنید و هر column به یک فیلد در آن record تبدیل می‌شود. Column name در database به field name در Avro نگاشت می‌شود.
+    </p>
+    <p>
+        اکنون، اگر database schema تغییر کند (به عنوان مثال، یک جدول یک column اضافه شده و یک column حذف شده است)، شما فقط می‌توانید یک schema Avro جدید را از database schema به‌روزرسانی شده تولید کنید و data را در schema Avro جدید export کنید. فرآیند data export نیازی به توجه به تغییر schema ندارد—آن می‌تواند به سادگی تبدیل schema را هر بار که اجرا می‌شود، انجام دهد. هر کسی که فایل‌های data جدید را می‌خواند، خواهد دید که فیلدهای record تغییر کرده‌اند، اما از آنجایی که فیلدها توسط نام شناسایی می‌شوند، the updated writer’s schema هنوز هم می‌تواند با the old reader’s schema مطابقت داشته باشد.
+    </p>
+    <p>
+        در مقابل، اگر شما از Thrift یا Protocol Buffers برای این منظور استفاده می‌کردید، field tags احتمالاً باید به صورت دستی اختصاص داده می‌شدند: هر بار که database schema تغییر می‌کند، یک administrator باید به صورت دستی mapping را از data‐base column names به field tags به‌روزرسانی کند. (ممکن است این کار را بتوان اتوماتیک کرد، اما the schema generator باید بسیار مراقب باشد که tag field قبلاً استفاده شده را اختصاص ندهد)
+    </p>
+    <p>
+        126 | Chapter 4: Encoding and Evolution
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 49</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3>فصل 2</h3>
+    <h4>Data Models و Query Languages</h4>
+    <p>
+        The limits of my language mean the limits of my world.
+        —Ludwig Wittgenstein, Tractatus Logico-Philosophicus (1922)
+    </p>
+    <p>
+        Data models شاید مهم‌ترین بخش در توسعه software باشند، زیرا آن‌ها چنین تأثیر عمیقی دارند: نه تنها بر نحوه نوشته شدن software، بلکه بر نحوه تفکر ما در مورد مشکلی که در حال حل آن هستیم.
+    </p>
+    <p>
+        اکثر applications با layering یک data model بر روی دیگری ساخته می‌شوند. برای هر layer، سوال کلیدی این است: چگونه در terms of لایه بعدی پایین‌تر نشان داده می‌شود؟ به عنوان مثال:
+    </p>
+    <p>
+        1.  به عنوان یک developer application، شما به دنیای واقعی نگاه می‌کنید (که در آن افراد، سازمان‌ها، کالاها، اقدامات، جریان‌های پولی، سنسورها و غیره وجود دارد) و آن را در terms of objects یا data structures و APIs که آن data structures را دستکاری می‌کنند، مدل‌سازی می‌کنید. آن structures اغلب مختص application شما هستند.
+    </p>
+    <p>
+        2.  هنگامی که می‌خواهید آن data structures را ذخیره کنید، آن‌ها را در terms of یک data model general-purpose، مانند JSON یا XML documents، جداول در یک relational database یا یک graph model، بیان می‌کنید.
+    </p>
+    <p>
+        3.  مهندسانی که software database شما را ساخته‌اند، در مورد یک راه برای نشان دادن آن data JSON/XML/relational/graph در terms of bytes in memory، on disk یا on a network تصمیم گرفتند. این نمایش ممکن است به داده‌ها اجازه دهد تا به روش‌های مختلف query، searched، manipulated و processed شوند.
+    </p>
+    <p>
+        4.  در سطوح پایین‌تر، مهندسان سخت‌افزار چگونگی نمایش bytes را در terms of electrical currents، pulses of light، magnetic fields و موارد دیگر مشخص کرده‌اند.
+    </p>
+    <p>
+        در یک application پیچیده ممکن است سطوح واسطه‌ای بیشتری وجود داشته باشد، مانند APIs که بر روی APIs ساخته شده‌اند، اما ایده اساسی هنوز یکسان است: هر layer پیچیدگی layers زیر خود را با ارائه یک data model تمیز پنهان می‌کند. این abstractions به شما اجازه می‌دهد.
+    </p>
+    <p>
+        27
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

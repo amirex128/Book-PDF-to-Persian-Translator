@@ -1,0 +1,39 @@
+ACID, isolation ensures that we don’t see intermediate states during a transaction.
+But with this two-phase commit, we’ve lost that guarantee.
+When a two-phase commit works, at its heart it is very often just coordinating dis‐
+tributed locks. The workers need to lock local resources to ensure that the commit
+can take place during the second phase. Managing locks and avoiding deadlocks in a
+single-process system isn’t fun. Now imagine the challenges of coordinating locks
+among multiple participants. It’s not pretty.
+There are a host of failure modes associated with two-phase commits that we don’t
+have time to explore. Consider the problem of a worker voting to proceed with the
+transaction but then not responding when asked to commit. What should we do
+then? Some of these failure modes can be handled automatically, but some can leave
+the system in such a state that things need to be fixed manually by an operator.
+The more participants you have, and the more latency you have in the system, the
+more issues a two-phase commit will have. 2PC can be a quick way to inject huge
+amounts of latency into your system, especially if the scope of locking is large, or if
+the duration of the transaction is large. It’s for this reason two-phase commits are
+typically used only for very short-lived operations. The longer the operation takes,
+the longer you’ve got resources locked!
+Distributed Transactions—Just Say No
+For all the reasons outlined so far, I strongly suggest you avoid the use of distributed
+transactions like the two-phase commit to coordinate changes in state across your
+microservices. So what else can you do?
+Well, the first option could be to just not split the data apart in the first place. If you
+have pieces of state that you want to manage in a truly atomic and consistent way,
+and you cannot work out how to sensibly get these characteristics without an ACID-
+style transaction, then leave that state in a single database, and leave the functionality
+that manages that state in a single service (or in your monolith). If you’re in the pro‐
+cess of working out where to split your monolith and what decompositions might be
+easy (or hard), then you could well decide that splitting apart data that is currently
+managed in a transaction is just too difficult to handle right now. Work on some
+other area of the system, and come back to this later.
+But what happens if you really do need to break this data apart, but you don’t want all
+the pain of managing distributed transactions? How can you carry out operations in
+multiple services but avoid locking? What if the operation is going to take minutes,
+days, or perhaps even months? In cases like this, you may consider an alternative
+approach: sagas.
+Distributed Transactions—Just Say No 
+| 
+181

@@ -1,0 +1,51 @@
+153
+Designing a domain model using the DDD aggregate pattern
+example, which classes are part of the Order business object. This lack of boundaries
+can sometimes cause problems, especially in microservice architecture.
+ I begin this section with an example problem caused by the lack of explicit bound-
+aries. Next I describe the concept of an aggregate and how it has explicit boundaries.
+After that, I describe the rules that aggregates must obey and how they make aggre-
+gates a good fit for the microservice architecture. I then describe how to carefully
+choose the boundaries of your aggregates and why it matters. Finally, I discuss how to
+design business logic using aggregates. Let’s first take a look at the problems caused
+by fuzzy boundaries.
+5.2.1
+The problem with fuzzy boundaries
+Imagine, for example, that you want to perform an operation, such as a load or delete,
+on an Order business object. What exactly does that mean? What is the scope an oper-
+ation? You would certainly load or delete the Order object. But in reality there’s more
+to an Order than simply the Order object. There are also the order line items, the pay-
+ment information, and so on. Figure 5.4 leaves the boundaries of a domain object to
+the developer’s intuition.
+ Besides a conceptual fuzziness, the lack of explicit boundaries causes problems
+when updating a business object. A typical business object has invariants, business
+rules that must be enforced at all times. An Order has a minimum order amount, for
+example. The FTGO application must ensure that any attempt to update an order
+doesn’t violate an invariant such as the minimum order amount. The challenge is that
+in order to enforce invariants, you must design your business logic carefully.
+ For example, let’s look at how to ensure the order minimum is met when multiple
+consumers work together to create an order. Two consumers—Sam and Mary—are
+working together on an order and simultaneously decide that the order exceeds their
+budget. Sam reduces the quantity of samosas, and Mary reduces the quantity of naan
+bread. From the application’s perspective, both consumers retrieve the order and its
+line items from the database. Both consumers then update a line item to reduce the
+cost of the order. From each consumer’s perspective the order minimum is preserved.
+Here’s the sequence of database transactions.
+Consumer - Mary
+Consumer - Sam
+BEGIN TXN
+SELECT ORDER_TOTAL FROM ORDER
+WHERE ORDER ID = X
+SELECT * FROM ORDER_LINE_ITEM
+WHERE ORDER_ID = X
+...
+END TXN
+BEGIN TXN
+SELECT ORDER_TOTAL FROM ORDER
+WHERE ORDER ID = X
+SELECT * FROM ORDER_LINE_ITEM
+WHERE ORDER_ID = X
+...
+END TXN
+Verify minimum is met
+ 

@@ -1,0 +1,56 @@
+255
+External API design issues
+To learn more about these drawbacks, let’s take a look at how the FTGO mobile appli-
+cation for consumers retrieves data from the services.
+8.1.1
+API design issues for the FTGO mobile client
+Consumers use the FTGO mobile client to place and manage their orders. Imagine
+you’re developing the mobile client’s View Order view, which displays an order. As
+described in chapter 7, the information displayed by this view includes basic order
+information, including its status, payment status, status of the order from the restau-
+rant’s perspective, and delivery status, including its location and estimated delivery
+time if in transit.
+ The monolithic version of the FTGO application has an API endpoint that returns
+the order details. The mobile client retrieves the information it needs by making a sin-
+gle request. In contrast, in the microservices version of the FTGO application, the
+order details are, as described previously, scattered across several services, including
+the following:
+Lower-performance
+internet
+Higher-performance
+LAN
+Backend services
+Order Service
+Firewall
+API
+requests
+API
+requests
+API
+requests
+Web page
+requests
+Web
+application
+Consumer
+Service
+Delivery
+Service
+Kitchen
+Service
+Browser
+iPhone/
+Android
+application
+3rd-party
+application
+HTML
+JavaScript
+application
+Figure 8.1
+The FTGO application’s services and their clients. There are several 
+different types of clients. Some are inside the firewall, and others are outside. 
+Those outside the firewall access the services over the lower-performance 
+internet/mobile network. Those clients inside the firewall use a higher-
+performance LAN.
+ 

@@ -1,0 +1,43 @@
+72
+CHAPTER 3
+Interprocess communication in a microservice architecture
+the attributes in addition to their values. Another drawback is the overhead of parsing
+text, especially when messages are large. Consequently, if efficiency and performance
+are important, you may want to consider using a binary format. 
+BINARY MESSAGE FORMATS
+There are several different binary formats to choose from. Popular formats include
+Protocol Buffers (https://developers.google.com/protocol-buffers/docs/overview)
+and Avro (https://avro.apache.org). Both formats provide a typed IDL for defining
+the structure of your messages. A compiler then generates the code that serializes and
+deserializes the messages. You’re forced to take an API-first approach to service
+design! Moreover, if you write your client in a statically typed language, the compiler
+checks that it uses the API correctly.
+ One difference between these two binary formats is that Protocol Buffers uses
+tagged fields, whereas an Avro consumer needs to know the schema in order to inter-
+pret messages. As a result, handling API evolution is easier with Protocol Buffers
+than with Avro. This blog post (http://martin.kleppmann.com/2012/12/05/schema-
+evolution-in-avro-protocol-buffers-thrift.html) is an excellent comparison of Thrift,
+Protocol Buffers, and Avro.
+ Now that we’ve looked at message formats, let’s look at specific IPC mechanisms
+that transport the messages, starting with the Remote procedure invocation (RPI)
+pattern. 
+3.2
+Communicating using the synchronous Remote 
+procedure invocation pattern
+When using a remote procedure invocation-based IPC mechanism, a client sends a
+request to a service, and the service processes the request and sends back a response.
+Some clients may block waiting for a response, and others might have a reactive, non-
+blocking architecture. But unlike when using messaging, the client assumes that the
+response will arrive in a timely fashion.
+ Figure 3.1 shows how RPI works. The business logic in the client invokes a proxy
+interface , implemented by an RPI proxy adapter class. The RPI proxy makes a request to
+the service. The request is handled by an RPI server adapter class, which invokes the
+service’s business logic via an interface. It then sends back a reply to the RPI proxy,
+which returns the result to the client’s business logic.
+The proxy interface usually encapsulates the underlying communication protocol.
+There are numerous protocols to choose from. In this section, I describe REST and
+Pattern: Remote procedure invocation
+A client invokes a service using a synchronous, remote procedure invocation-based
+protocol, such as REST (http://microservices.io/patterns/communication-style/
+messaging.html).
+ 

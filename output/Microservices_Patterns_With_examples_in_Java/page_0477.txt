@@ -1,0 +1,46 @@
+447
+Designing how the service and the monolith collaborate
+such as DDD and develop a pristine new domain model. Also, because the FTGO
+monolith’s domain is poorly defined and somewhat out-of-date, you’ll probably model
+concepts differently. As a result, your service’s domain model will have different class
+names, field names, and field values. For example, Delayed Delivery Service has a
+Delivery entity with narrowly focused responsibilities, whereas the FTGO monolith
+has an Order entity with an excessive number of responsibilities. Because the two
+domain models are different, you must implement what DDD calls an anti-corruption
+layer (ACL) in order for the service to communicate with the monolith.
+The goal of an ACL is to prevent a legacy monolith’s domain model from polluting a
+service’s domain model. It’s a layer of code that translates between the different
+domain models. For example, as figure 13.11 shows, Delayed Delivery Service has a
+CustomerContactInfoRepository interface, which defines a findCustomerContact-
+Info() method that returns CustomerContactInfo. The class that implements the
+CustomerContactInfoRepository interface must translate between the ubiquitous
+language of Delayed Delivery Service and that of the FTGO monolith.
+The implementation of findCustomerContactInfo() invokes the FTGO monolith to
+retrieve the customer information and translates the response to CustomerContact-
+Info. In this example, the translation is quite simple, but in other scenarios it could
+be quite complex and involve, for example, mapping values such as status codes.
+Pattern: Anti-corruption layer
+A software layer that translates between two different domain models in order to
+prevent concepts from one model polluting another. See https://microservices.io/
+patterns/refactoring/anti-corruption-layer.html.
+Delayed
+Delivery Service
+FTGO
+monolith
+REST
+API
+API
+Translation layer
+GET/user/{userId}
+Monolith layer
+REST client
+Customer
+ContactInfo
+Repository
+Ubiquitous language of service
+Ubiquitous language of monolith
+Anti-corruption layer
+Figure 13.11
+A service adapter that invokes the monolith must translate between the service’s domain model 
+and the monolith’s domain model.
+ 

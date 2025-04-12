@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 125</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>مزایا</h4>
+  <p>
+   با ارتباط ناهمزمان <strong>nonblocking</strong>، microservice که <strong>call</strong> اولیه را انجام می‌دهد و microserviceها (یا microservicesها) که <strong>call</strong> را دریافت می‌کنند، به طور موقت از هم جدا می‌شوند. microservicesهایی که <strong>call</strong> را دریافت می‌کنند، نیازی ندارند که همزمان با انجام <strong>call</strong> قابل دسترس باشند. این بدان معناست که ما از نگرانی‌های <strong>temporal decoupling</strong> که در فصل 2 (به "A Brief Note on Temporal Coupling" در صفحه 42 مراجعه کنید) بحث کردیم، اجتناب می‌کنیم.
+  </p>
+  <p>
+   این سبک ارتباطی نیز در صورتی که <strong>functionality</strong> که توسط یک <strong>call</strong> فعال می‌شود، زمان زیادی را برای پردازش صرف کند، مفید است. بیایید به مثال <strong>MusicCorp</strong>، و به طور خاص فرآیند ارسال یک بسته برگردیم. در شکل 4-5، <strong>Order Processor</strong> پرداخت را انجام داده است و تصمیم گرفته است که زمان ارسال بسته فرا رسیده است، بنابراین یک <strong>call</strong> را به <strong>Warehouse microservice</strong> ارسال می‌کند. فرآیند یافتن سی‌دی‌ها، برداشتن آنها از قفسه، بسته‌بندی آنها و حمل آنها می‌تواند ساعت‌ها، و احتمالاً حتی روزها طول بکشد، بسته به نحوه عملکرد فرآیند ارسال واقعی. بنابراین منطقی است که <strong>Order Processor</strong> یک <strong>nonblocking</strong> <strong>asynchronous call</strong> را به <strong>Warehouse</strong> صادر کند و <strong>Warehouse</strong> بعداً برای اطلاع <strong>Order Processor</strong> از پیشرفت خود تماس بگیرد. این شکلی از ارتباط ناهمزمان <strong>request-response</strong> است.
+  </p>
+  <p>
+   شکل 4-5. <strong>Order Processor</strong> فرآیند بسته‌بندی و ارسال یک سفارش را آغاز می‌کند، که به روشی ناهمزمان انجام می‌شود.
+  </p>
+  <p>
+   اگر ما سعی می‌کردیم کاری مشابه را با فراخوانی‌های <strong>synchronous blocking</strong> انجام دهیم، آنگاه مجبور می‌شدیم تعاملات بین <strong>Order Processor</strong> و <strong>Warehouse</strong> را دوباره ساختار دهیم—برای <strong>Order Processor</strong> باز کردن یک اتصال، ارسال یک درخواست، مسدود کردن هرگونه عملیات بیشتر در فراخوانی <strong>thread</strong>، و انتظار برای پاسخ برای آنچه ممکن است ساعت‌ها یا روزها باشد، امکان‌پذیر نبود.
+  </p>
+  <p>Pattern: Asynchronous Nonblocking | 99</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0125/image_1.png" alt="Image from page 125" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

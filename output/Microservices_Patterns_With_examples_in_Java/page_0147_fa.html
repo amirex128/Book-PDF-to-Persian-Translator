@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 147</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Coordinating sagas (هماهنگ‌سازی حماسه‌ها)</strong></h3>
+  <p>هرگز شکست نمی‌خورند، و چگونه دو مرحله آخر به عنوان retriable transactions (تراکنش‌های قابل تلاش مجدد) نامیده می‌شوند زیرا آنها همیشه موفق می‌شوند.</p>
+  <p>برای دیدن چگونگی استفاده از compensating transactions (تراکنش‌های جبرانی)، یک سناریو را تصور کنید که در آن authorization (مجوز) credit card (کارت اعتباری) مصرف‌کننده شکست می‌خورد. در این سناریو، saga (حماسه) local transactions (تراکنش‌های محلی) زیر را اجرا می‌کند:</p>
+  <ol>
+   <li>Order Service (سرویس سفارش) - ایجاد یک Order (سفارش) در یک state (وضعیت) APPROVAL_PENDING (در انتظار تایید).</li>
+   <li>Consumer Service (سرویس مصرف‌کننده) - تأیید اینکه consumer (مصرف‌کننده) می‌تواند یک order (سفارش) ثبت کند.</li>
+   <li>Kitchen Service (سرویس آشپزخانه) - validate (اعتبارسنجی) جزئیات order (سفارش) و ایجاد یک Ticket (بلیت) در state (وضعیت) CREATE_PENDING (در انتظار ایجاد).</li>
+   <li>Accounting Service (سرویس حسابداری) - authorize (مجوز) credit card (کارت اعتباری) مصرف‌کننده، که شکست می‌خورد.</li>
+   <li>Kitchen Service (سرویس آشپزخانه) - تغییر state (وضعیت) Ticket (بلیت) به CREATE_REJECTED (ایجاد رد شده).</li>
+   <li>Order Service (سرویس سفارش) - تغییر state (وضعیت) Order (سفارش) به REJECTED (رد شده).</li>
+  </ol>
+  <p>مراحل پنجم و ششم compensating transactions (تراکنش‌های جبرانی) هستند که به ترتیب به‌روزرسانی‌های انجام شده توسط Kitchen Service (سرویس آشپزخانه) و Order Service (سرویس سفارش) را undo (واگردانی) می‌کنند. logic (منطق) coordination (هماهنگی) یک saga (حماسه) مسئول sequence (توالی) دادن اجرای forward (به جلو) و compensating transactions (تراکنش‌های جبرانی) است. بیایید نگاهی به نحوه عملکرد آن بیندازیم.</p>
+  <h4><strong>4.2 Coordinating sagas (هماهنگ‌سازی حماسه‌ها)</strong></h4>
+  <p>پیاده‌سازی یک saga (حماسه) از منطقی تشکیل شده است که مراحل saga (حماسه) را هماهنگ می‌کند. هنگامی که یک saga (حماسه) توسط system command (دستور سیستم) آغاز می‌شود، logic (منطق) coordination (هماهنگی) باید اولین participant (شرکت‌کننده) saga (حماسه) را انتخاب کرده و به آن بگوید که یک local transaction (تراکنش محلی) را اجرا کند. پس از تکمیل آن transaction (تراکنش)، coordination (هماهنگی) sequence (توالی) saga (حماسه) participant (شرکت‌کننده) saga (حماسه) بعدی را انتخاب و فراخوانی می‌کند. این process (فرآیند) تا زمانی ادامه می‌یابد که saga (حماسه) تمام مراحل را اجرا کرده باشد. اگر هر local transaction (تراکنش محلی) شکست بخورد، saga (حماسه) باید compensating transactions (تراکنش‌های جبرانی) را به ترتیب معکوس اجرا کند. چند راه مختلف برای ساختار logic (منطق) coordination (هماهنگی) یک saga (حماسه) وجود دارد:</p>
+  <ul>
+   <li>Choreography (طراحی رقص) - تصمیم‌گیری و sequence (توالی) را در میان participants (شرکت‌کنندگان) saga (حماسه) توزیع کنید. آنها در درجه اول با تبادل events (رویدادها) ارتباط برقرار می‌کنند.</li>
+  </ul>
+  <br>
+  <p>Table (جدول) 4.1</p>
+  <p>The compensating transactions (تراکنش‌های جبرانی) برای Create Order Saga (حماسه ایجاد سفارش)</p>
+  <br>
+  <table>
+   <tr>
+    <td>Step (مرحله)</td>
+    <td>Service (سرویس)</td>
+    <td>Transaction (تراکنش)</td>
+    <td>Compensating transaction (تراکنش جبرانی)</td>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>Order Service (سرویس سفارش)</td>
+    <td>createOrder() (ایجاد سفارش)</td>
+    <td>rejectOrder() (رد سفارش)</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>Consumer Service (سرویس مصرف‌کننده)</td>
+    <td>verifyConsumerDetails() (تایید جزئیات مصرف کننده)</td>
+    <td>—</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>Kitchen Service (سرویس آشپزخانه)</td>
+    <td>createTicket() (ایجاد بلیط)</td>
+    <td>rejectTicket() (رد بلیط)</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>Accounting Service (سرویس حسابداری)</td>
+    <td>authorizeCreditCard() (مجوز کارت اعتباری)</td>
+    <td>—</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>Kitchen Service (سرویس آشپزخانه)</td>
+    <td>approveTicket() (تایید بلیط)</td>
+    <td>—</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>Order Service (سرویس سفارش)</td>
+    <td>approveOrder() (تایید سفارش)</td>
+    <td>—</td>
+   </tr>
+  </table>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

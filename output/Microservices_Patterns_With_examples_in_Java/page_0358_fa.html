@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 358</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   <strong>Part 2</strong>
+  </p>
+  <p>
+   مجموعه تست های Order Service را تست کرد و آن را به یک repository منتشر کرد.
+   The API Gateway team writes the contracts. The Order Service team
+   uses those contracts to test Order Service and publishes them to a repository. The
+   API Gateway team uses the published contracts to test API Gateway.
+   The HTTP request’s
+   method and path
+   The HTTP response’s status
+   code, headers, and body
+  </p>
+  <p>
+   برای مثال، فصل 8 نشان می‌دهد که چگونه API Gateway application FTGO، REST API calls ها را به service های متعدد، از جمله ConsumerService، Order Service، و Delivery Service ایجاد می‌کند. endpoint GET /orders/{orderId} OrderService یکی از endpoints هایی است که توسط API Gateway فراخوانی می‌شود. به منظور اطمینان از اینکه API Gateway و Order Service می‌توانند بدون استفاده از یک end-to-end test ارتباط برقرار کنند، ما باید integration tests ها را بنویسیم.
+  </p>
+  <p>
+   همانطور که در فصل قبل گفته شد، یک استراتژی integration testing خوب، استفاده از consumer-driven contract tests ها است. تعامل بین API Gateway و GET /orders/{orderId} را می‌توان با استفاده از مجموعه‌ای از contract های مبتنی بر HTTP توصیف کرد. هر contract، از یک request و response HTTP تشکیل شده است. contract ها برای تست کردن API Gateway و Order Service استفاده می‌شوند.
+  </p>
+  <p>
+   شکل 10.3 نحوه استفاده از Spring Cloud Contract را برای تست تعاملات مبتنی بر REST نشان می‌دهد. consumer-side API Gateway integration tests، از contract ها برای پیکربندی یک server HTTP stub که رفتار Order Service را شبیه‌سازی می‌کند، استفاده می‌کند. request از یک contract، یک request HTTP را از API gateway مشخص می‌کند، و response از contract، پاسخ را مشخص می‌کند که stub به API gateway بازمی‌گرداند. Spring Cloud Contract، از contract ها برای code-generate کردن provider-side Order Service integration tests ها استفاده می‌کند که controllers ها را با استفاده از Spring Mock MVC یا Rest Assured Mock MVC تست می‌کند. request از contract، request HTTP را برای ایجاد به controller مشخص می‌کند، و response از contract، response مورد انتظار controller را مشخص می‌کند.
+  </p>
+  <p>
+   در این مثال، the deployment pipeline کاملاً automated است.
+  </p>
+  <p>
+   The shouldSaveAndLoadOrder() method، دو transaction را اجرا می‌کند.
+  </p>
+  <p>
+   <pre><code class="language-java">package contracts;
+org.springframework.cloud.contract.spec.Contract.make {
+label 'orderCreatedEvent'
+  
+input {
+triggeredBy('orderCreated()')       
+}
+outputMessage {
+sentTo('net.chrisrichardson.ftgo.orderservice.domain.Order')
+body(&quot;{&quot;orderDetails&quot;:{&quot;lineItems&quot;:[{&quot;quantity&quot;:5,&quot;menuItemId&quot;:&quot;1&quot;,
+                 &quot;name&quot;:&quot;Chicken Vindaloo&quot;,&quot;price&quot;:&quot;12.34&quot;,&quot;total&quot;:&quot;61.70&quot;}],
+                 &quot;orderTotal&quot;:&quot;61.70&quot;,&quot;restaurantId&quot;:1, 
+        &quot;consumerId&quot;:1511300065921},&quot;orderState&quot;:&quot;APPROVAL_PENDING&quot;}&quot;)
+        headers {
+            header('event-aggregate-type', 
+                        'net.chrisrichardson.ftgo.orderservice.domain.Order')
+            header('event-aggregate-id', '1')
+        }
+}
+}</code></pre>
+  <p>
+   این contract خاص، یک تلاش موفقیت‌آمیز توسط API Gateway برای بازیابی یک Order از Order Service را شرح می‌دهد. اکنون بیایید نگاهی بیندازیم که چگونه از این contract برای نوشتن integra-
+   tion tests ها استفاده کنیم، با تست ها برای Order Service شروع می‌کنیم.
+  </p>
+  <p>
+   <strong>CONSUMER-DRIVEN CONTRACT TESTS FOR ORDER SERVICE</strong>
+  </p>
+  <p>
+   The consumer-driven contract integration tests برای Order Service، تأیید می‌کنند که API آن، انتظارات client هایش را برآورده می‌کند. Listing 10.3 HttpBase را نشان می‌دهد که کلاس base انتزاعی برای کد تست class generated by Spring Cloud Contract است. این مسئول فاز setup تست است. controllers ها را که با dependencies های mock شده تزریق شده‌اند، ایجاد می‌کند و آن mocks ها را پیکربندی می‌کند تا مقادیری را برگردانند که باعث می‌شوند controller، response مورد انتظار را تولید کند.
+  </p>
+  <pre><code class="language-java">public abstract class HttpBase {
+private StandaloneMockMvcBuilder controllers(Object... controllers) {
+...</code></pre>
+  <p>
+   Create mocks for
+   OrderController’s
+   dependencies.
+  </p>
+  <p>
+   ...
+  </p>
+  <p>
+   هر متد تست، OrderServiceProxy را فراخوانی می‌کند و تأیید می‌کند که یا مقادیر صحیح را برمی‌گرداند یا exception مورد انتظار را پرتاب می‌کند. متد shouldVerifyExistingCustomer()، تأیید می‌کند که findOrderById()، مقادیری برابر با مقادیر مشخص شده در response contract را برمی‌گرداند. the shouldFailToFindMissingOrder() تلاش می‌کند تا یک Order غیر موجود را بازیابی کند و تأیید می‌کند که OrderServiceProxy، یک OrderNotFoundException را پرتاب می‌کند. Testing هر دو سمت تعامل REST client و service REST با استفاده از contract های یکسان، تضمین می‌کند که در مورد API توافق دارند.
+  </p>
+  <p>
+   Let’s now look at how to do the same kind of testing for services that interact using
+   messaging.
+  </p>
+  <p>
+   <strong>10.1.3 Integration testing publish/subscribe-style interactions</strong>
+  </p>
+  <p>
+   Service ها اغلب domain events هایی را منتشر می‌کنند که توسط یک یا چند service دیگر مصرف می‌شوند. Integration testing باید تأیید کند که publisher و consumers آن در مورد message channel و ساختار domain events توافق دارند. به عنوان مثال، Order Service، رویدادهای Order* را هر زمان که یک Order aggregate را ایجاد یا به‌روزرسانی می‌کند، منتشر می‌کند. Order History Service یکی از consumers های آن رویدادها است. بنابراین، ما باید تست هایی را بنویسیم که تأیید کنند که این service ها می‌توانند تعامل داشته باشند.
+  </p>
+  <p>
+   شکل 10.4 رویکردی را برای integration testing publish/subscribe interactions نشان می‌دهد. این، کاملاً شبیه به رویکردی است که برای تست کردن تعاملات REST استفاده می‌شود. مانند قبل، تعاملات توسط مجموعه‌ای از contract ها تعریف می‌شوند. چیزی که متفاوت است این است که هر contract، یک domain event را مشخص می‌کند.
+  </p>
+  <p>
+   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAApwAAAEsCAYAAACbT7y2AAAgAElEQVR4nO3dfZBU1ZXHP93xJgI7wZlM2cZmds10T+cI2N5Jd4b33f7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v7v
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

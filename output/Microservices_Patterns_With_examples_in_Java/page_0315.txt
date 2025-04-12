@@ -1,0 +1,48 @@
+285
+Implementing an API gateway
+orders {
+orderId
+restaurant {
+id
+name
+}
+deliveryInfo {
+estimatedDeliveryTime
+name
+}
+}
+}
+}
+This query tells the server to return more than just the fields of the Consumer. It
+retrieves the consumer’s Orders and each Order’s restaurant. As you can see, a
+GraphQL client can specify exactly the data to return, including the fields of transi-
+tively related objects.
+ The query language is more flexible than it might first appear. That’s because a
+query is a field of the Query object, and a query document specifies which of those fields
+the server should return. These simple examples retrieve a single field, but a query doc-
+ument can execute multiple queries by specifying multiple fields. For each field, the
+query document supplies the field’s arguments and specifies what fields of the result
+object it’s interested in. Here’s a query that retrieves two different consumers:
+query {
+c1: consumer (consumerId:1)
+{ id, firstName, lastName}
+c2: consumer (consumerId:2)
+{ id, firstName, lastName}
+}
+In this query document, c1 and c2 are what GraphQL calls aliases. They’re used to dis-
+tinguish between the two Consumers in the result, which would otherwise both be
+called consumer. This example retrieves two objects of the same type, but a client
+could retrieve several objects of different types.
+ A GraphQL schema defines the shape of the data and the supported queries. To
+be useful, it has to be connected to the source of the data. Let’s look at how to do that. 
+CONNECTING THE SCHEMA TO THE DATA
+When the GraphQL server executes a query, it must retrieve the requested data from
+one or more data stores. In the case of the FTGO application, the GraphQL server
+must invoke the APIs of the services that own the data. You associate a GraphQL
+schema with the data sources by attaching resolver functions to the fields of the object
+types defined by the schema. The GraphQL server implements the API composition
+pattern by invoking resolver functions to retrieve the data, first for the top-level query,
+and then recursively for the fields of the result object or objects.
+ The details of how resolver functions are associated with the schema depend on
+which GraphQL server you are using. Listing 8.8 shows how to define the resolvers
+ 

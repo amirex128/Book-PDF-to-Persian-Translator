@@ -1,0 +1,39 @@
+Local calls are not like remote calls.    The core idea of RPC is to hide the complexity of a
+remote call. However, this can lead to hiding too much. The drive in some forms of
+RPC to make remote method calls look like local method calls hides the fact that
+these two things are very different. I can make large numbers of local, in-process calls
+without worrying too much about the performance. With RPC, though, the cost of
+marshaling and unmarshaling payloads can be significant, not to mention the time
+taken to send things over the network. This means you need to think differently
+about API design for remote interfaces versus local interfaces. Just taking a local API
+and trying to make it a service boundary without any more thought is likely to get
+you in trouble. In some of the worst examples, developers may be using remote calls
+without knowing it, if the abstraction is overly opaque.
+You need to think about the network itself. Famously, the first of the fallacies of dis‐
+tributed computing is “The network is reliable”. Networks aren’t reliable. They can
+and will fail, even if your client and the server you are speaking to are fine. They can
+fail fast, they can fail slow, and they can even malform your packets. You should
+assume that your networks are plagued with malevolent entities ready to unleash
+their ire on a whim. Therefore, you can expect to encounter types of failure modes
+that you may never have had to deal with in simpler, monolithic software. A failure
+could be caused by the remote server returning an error, or by you making a bad call.
+Can you tell the difference, and if so, can you do anything about it? And what do you
+do when the remote server just starts responding slowly? We’ll cover this topic when
+we talk about resiliency in Chapter 12.
+Brittleness.    Some of the most popular implementations of RPC can lead to some
+nasty forms of brittleness, Java RMI being a very good example. Let’s consider a very
+simple Java interface that we have decided to make a remote API for our Customer
+service. Example 5-1 declares the methods we are going to expose remotely. Java RMI
+then generates the client and server stubs for our method.
+Example 5-1. Defining a service endpoint using Java RMI
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+public interface CustomerRemote extends Remote {
+  public Customer findCustomer(String id) throws RemoteException;
+  public Customer createCustomer(
+    String firstname, String surname, String emailAddress)
+    throws RemoteException;
+}
+Technology Choices 
+| 
+125

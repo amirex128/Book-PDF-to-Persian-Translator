@@ -1,0 +1,48 @@
+387
+Deploying services using the Language-specific packaging format pattern
+To deploy Restaurant Service on a machine, you would first install the necessary
+runtime, which in this case is the JDK. If it’s a WAR file, you also need to install a
+web container such as Apache Tomcat. Once you’ve configured the machine, you
+copy the package to the machine and start the service. Each service instance runs as
+a JVM process.
+ Ideally, you’ve set up your deployment pipeline to automatically deploy the service
+to production, as shown in figure 12.3. The deployment pipeline builds an executable
+JAR file or WAR file. It then invokes the production environment’s service manage-
+ment interface to deploy the new version.
+A service instance is typically a single process but sometimes may be a group of pro-
+cesses. A Java service instance, for example, is a process running the JVM. A NodeJS
+service might spawn multiple worker processes in order to process requests concur-
+rently. Some languages support deploying multiple service instances within the same
+process.
+ Sometimes you might deploy a single service instance on a machine, while retain-
+ing the option to deploy multiple service instances on the same machine. For exam-
+ple, as figure 12.4 shows, you could run multiple JVMs on a single machine. Each JVM
+runs a single service instance.
+Pattern: Language-specific packaging format
+Deploy a language-specific package into production. See http://microservices.io/
+patterns/deployment/language-specific-packaging.html.
+JVM
+process
+JVM
+process
+JVM
+process
+Service instance
+Build time
+Runtime
+Service runtime management
+Machine
+Production
+JDK/JRE
+Machine
+JDK/JRE
+Service
+code
+Executable
+JAR/WAR ﬁle
+Deployment
+pipeline
+Figure 12.3
+The deployment pipeline builds an executable JAR file and deploys it into production. 
+In production, each service instance is a JVM running on a machine that has the JDK or JRE installed.
+ 

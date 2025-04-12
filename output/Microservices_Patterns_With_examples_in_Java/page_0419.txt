@@ -1,0 +1,41 @@
+389
+Deploying services using the Language-specific packaging format pattern
+FAST DEPLOYMENT
+One major benefit of this pattern is that deploying a service instance is relatively
+fast: you copy the service to a host and start it. If the service is written in Java, you
+copy a JAR or WAR file. For other languages, such as NodeJS or Ruby, you copy the
+source code. In either case, the number of bytes copied over the network is rela-
+tively small.
+ Also, starting a service is rarely time consuming. If the service is its own process,
+you start it. Otherwise, if the service is one of several instances running in the same
+container process, you either dynamically deploy it into the container or restart the
+container. Because of the lack of overhead, starting a service is usually fast. 
+EFFICIENT RESOURCE UTILIZATION
+Another major benefit of this pattern is that it uses resources relatively efficiently. Mul-
+tiple service instances share the machine and its operating system. It’s even more effi-
+cient if multiple service instances run within the same process. For example, multiple
+web applications could share the same Apache Tomcat server and JVM. 
+12.1.2 Drawbacks of the Service as a language-specific package pattern
+Despite its appeal, the Service as a language-specific package pattern has several signif-
+icant drawbacks:
+Lack of encapsulation of the technology stack.
+No ability to constrain the resources consumed by a service instance.
+Lack of isolation when running multiple service instances on the same machine.
+Automatically determining where to place service instances is challenging.
+Let’s look at each drawback.
+LACK OF ENCAPSULATION OF THE TECHNOLOGY STACK
+The operation team must know the specific details of how to deploy each and every
+service. Each service needs a particular version of the runtime. A Java web application,
+for example, needs particular versions of Apache Tomcat and the JDK. Operations
+must install the correct version of each required software package.
+ To make matters worse, services can be written in a variety of languages and frame-
+works. They might also be written in multiple versions of those languages and frame-
+works. Consequently, the development team must share lots of details with operations.
+This complexity increases the risk of errors during deployment. A machine might, for
+example, have the wrong version of the language runtime. 
+NO ABILITY TO CONSTRAIN THE RESOURCES CONSUMED BY A SERVICE INSTANCE
+Another drawback is that you can’t constrain the resources consumed by a service
+instance. A process can potentially consume all of a machine’s CPU or memory, starv-
+ing other service instances and operating systems of resources. This might happen, for
+example, because of a bug. 
+ 

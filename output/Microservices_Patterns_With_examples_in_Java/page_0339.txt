@@ -1,0 +1,43 @@
+309
+Writing unit tests for a service
+The typical testing strategy for each class is as follows:
+Entities, such as Order, which as described in chapter 5 are objects with per-
+sistent identity, are tested using sociable unit tests.
+Value objects, such as Money, which as described in chapter 5 are objects that are
+collections of values, are tested using sociable unit tests.
+Sagas, such as CreateOrderSaga, which as described in chapter 4 maintain data
+consistency across services, are tested using sociable unit tests.
+Domain services, such as OrderService, which as described in chapter 5 are
+classes that implement business logic that doesn’t belong in entities or value
+objects, are tested using solitary unit tests.
+Controllers, such as OrderController, which handle HTTP requests, are tested
+using solitary unit tests.
+Inbound and outbound messaging gateways are tested using solitary unit tests.
+Let’s begin by looking at how to test entities.
+9.2.1
+Developing unit tests for entities
+The following listing shows an excerpt of OrderTest class, which implements the unit
+tests for the Order entity. The class has an @Before setUp() method that creates an Order
+before running each test. Its @Test methods might further initialize Order, invoke one of
+its methods, and then make assertions about the return value and the state of Order.
+public class OrderTest {
+private ResultWithEvents<Order> createResult;
+private Order order;
+@Before
+public void setUp() throws Exception {
+createResult = Order.createOrder(CONSUMER_ID, AJANTA_ID, CHICKEN_VINDALOO
+_LINE_ITEMS);
+order = createResult.result;
+}
+@Test
+public void shouldCalculateTotal() {
+assertEquals(CHICKEN_VINDALOO_PRICE.multiply(CHICKEN_VINDALOO_QUANTITY),
+order.getOrderTotal());
+}
+...
+}
+The @Test shouldCalculateTotal() method verifies that Order.getOrderTotal()
+returns the expected value. Unit tests thoroughly test the business logic. They are
+Listing 9.2
+A simple, fast-running unit test for the Order entity
+ 

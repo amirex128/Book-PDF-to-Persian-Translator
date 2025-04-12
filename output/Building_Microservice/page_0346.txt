@@ -1,0 +1,42 @@
+Lucene open source project. At the time of writing, AWS had predictably committed
+to creating and maintaining an open source fork of both Elasticsearch and Kibana
+under the previously used open source Apache 2.0 license.
+In many ways, Kibana was a laudable attempt to create an open source alternative to
+expensive commercial options like Splunk. As good as Splunk seems to be, every
+Splunk customer I’ve spoken to has also told me that it can be eye-wateringly expen‐
+sive, in terms of both the licensing fees and the hardware costs. Many of these cus‐
+tomers do see its value, though. That said, there are a wealth of commercial options
+out there. I’m personally a big fan of Humio, many people like to use Datadog for log
+aggregation, and you have basic but workable out-of-the-box solutions for log aggre‐
+gation with some public cloud providers, such as CloudWatch for AWS or Applica‐
+tion Insights for Azure.
+The reality is that you have a huge array of options in this space, from open source to
+commercial, and from self-hosted to fully hosted. If you want to build a microservice
+architecture, this isn’t one of the things you should find difficult to get sorted out.
+Shortcomings
+Logs are a fantastic and easy way to rapidly get information out of your running sys‐
+tems. I remain convinced that for an early-stage microservice architecture, there are
+few places that will return investment more than logs when it comes to improving
+visibility of your application in production. They’ll become the lifeblood for informa‐
+tion gathering and diagnosis. That said, you do need to be aware of some potentially
+significant challenges with logs.
+Firstly, as we’ve already touched on, due to clock skew they can’t always be relied on
+to help you understand the order in which calls occurred. This clock skew between
+machines also means the accurate timing of a sequence of calls will be problematic,
+potentially limiting the logs’ usefulness in tracking down latency bottlenecks.
+The main issue with logs, though, is that as you have more microservices and more
+calls, you end up generating a LOT of data. Loads. Huge quantities. This can result in
+higher costs in terms of requiring more hardware, and it can also increase the fee you
+pay to your service provider (some providers charge by use). And depending on how
+your log aggregation toolchain is built, this can also result in scaling challenges. Some
+log aggregation solutions try and create an index when receiving log data to make
+queries faster. The problem is that maintaining an index is computationally expen‐
+sive—and the more logs you receive, and the larger the index grows, the more prob‐
+lematic this can become. This results in the need to be more tailored in what you log
+to reduce this issue, which in turn can generate more work and which runs the risk
+that you might put off logging information that would otherwise be valuable. I spoke
+to a team that managed the Elasticsearch cluster for SaaS-based developer tooling; it
+found that the largest Elasticsearch cluster it could happily run would only be able to
+320 
+| 
+Chapter 10: From Monitoring to Observability

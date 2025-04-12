@@ -1,0 +1,35 @@
+by experts with a deep focus on this sort of thing. Having smart people do work for
+you is often a good idea.
+Now, in the case of our specific example with AdvertCorp, using middleware to man‐
+age request-response communication with the downstream turnip system might not
+actually have helped much. We would still not be getting responses back to our cus‐
+tomers. The one potential benefit would be that we’d be relieving resource contention
+on our own system, but this would just shift to an increasing number of pending
+requests being held in the broker. Worse still, many of these requests asking for the
+latest turnip prices might relate to user requests that are no longer valid.
+An alternative could be to instead invert the interaction and use middleware to have
+the turnip system broadcast the last turnip ads, and we could then consume them.
+But if the downstream turnip system had a problem, we still wouldn’t be able to help
+the customer looking for the best turnip prices.
+So using middleware like message brokers to help offload some robustness concerns
+can be useful, but not in every situation.
+Idempotency
+In idempotent operations, the outcome doesn’t change after the first application, even
+if the operation is subsequently applied multiple times. If operations are idempotent,
+we can repeat the call multiple times without adverse impact. This is very useful when
+we want to replay messages that we aren’t sure have been processed, a common way
+of recovering from error.
+Let’s consider a simple call to add some points as a result of one of our customers
+placing an order. We might make a call with the sort of payload shown in
+Example 12-1.
+Example 12-1. Crediting points to an account
+<credit>
+  <amount>100</amount>
+  <forAccount>1234</account>
+</credit>
+If this call is received multiple times, we would add 100 points multiple times. As it
+stands, therefore, this call is not idempotent. With a bit more information, though,
+we allow the points bank to make this call idempotent, as shown in Example 12-2.
+406 
+| 
+Chapter 12: Resiliency

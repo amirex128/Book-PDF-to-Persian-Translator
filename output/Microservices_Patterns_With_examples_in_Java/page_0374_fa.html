@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 374</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 10</span></h3>
+  <h3><span style="font-weight: bold;">Testing microservices: Part 2</span></h3>
+  <pre><code class="language-java">
+  (Class&lt;DomainEvent&gt;)Class.forName("net.chrisrichardson.ftgo.order
+  service.domain." + expectedEventClass));
+  }
+  ....
+  }
+  </code></pre>
+  <p>
+   متد verifyEventPublished() از کلاس MessageTracker استفاده می‌کند، یک کلاس test helper
+   که events را که در طول test منتشر شده‌اند، ثبت می‌کند. این class
+   و SagaParticipantStubManager توسط کلاس TestConfiguration
+   @Configuration ایجاد می‌شوند.
+  </p>
+  <p>
+   اکنون که به step definitions پرداختیم، بیایید ببینیم چگونه component tests را اجرا کنیم.
+  </p>
+  <h4><span style="font-weight: bold;">RUNNING THE COMPONENT TESTS</span></h4>
+  <p>
+   از آنجایی که این tests نسبتاً کند هستند، ما نمی‌خواهیم آنها را به عنوان بخشی از ./gradlew
+   test اجرا کنیم. در عوض، ما کد test را در یک دایرکتوری جداگانه src/component-test/java قرار می‌دهیم
+   و آنها را با استفاده از ./gradlew componentTest اجرا می‌کنیم. به ftgo-order-service/ نگاهی بیندازید
+   build.gradle file تا پیکربندی Gradle را ببینید.
+  </p>
+  <p>
+   The tests از Docker برای اجرای Order Service و وابستگی‌های آن استفاده می‌کنند. همانطور که در
+   فصل 12 توضیح داده شد، یک Docker container یک مکانیزم مجازی سازی سیستم عامل سبک است که
+   به شما امکان می‌دهد یک نمونه service را در یک sandbox ایزوله مستقر کنید. Docker
+   Compose یک ابزار فوق العاده مفید است که با آن می‌توانید مجموعه‌ای از containers را تعریف کنید
+   و آنها را به عنوان یک واحد شروع و متوقف کنید. برنامه FTGO دارای یک docker-compose file است
+   در root directory که containers را برای همه services و زیرساخت‌ها تعریف می‌کند.
+   service.
+  </p>
+  <p>
+   ما می‌توانیم از Gradle Docker Compose plugin برای اجرای containers قبل از exe-
+   cuting the tests و متوقف کردن containers پس از اتمام tests استفاده کنیم:
+  </p>
+  <pre><code class="language-groovy">
+  apply plugin: 'docker-compose'
+  dockerCompose.isRequiredBy(componentTest)
+  componentTest.dependsOn(assemble)
+  dockerCompose {
+  startedServices = [ 'ftgo-order-service']
+  }
+  </code></pre>
+  <p>
+   The preceding snippet of Gradle configuration دو کار را انجام می‌دهد. اول، پیکربندی می‌کند
+   Gradle Docker Compose plugin برای اجرا قبل از component tests و شروع
+   Order Service به همراه زیرساخت services که برای وابستگی به آن پیکربندی شده است.
+   دوم، componentTest را پیکربندی می‌کند تا به assemble وابسته باشد تا فایل JAR
+   مورد نیاز توسط Docker image ابتدا ساخته شود. با وجود این، ما می‌توانیم این com-
+   ponent tests را با دستورات زیر اجرا کنیم:
+  </p>
+  <p>
+   ./gradlew
+   :ftgo-order-service:componentTest
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

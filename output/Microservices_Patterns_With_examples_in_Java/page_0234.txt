@@ -1,0 +1,47 @@
+204
+CHAPTER 6
+Developing business logic with event sourcing
+create table events (
+event_id varchar(1000) PRIMARY KEY,
+event_type varchar(1000),
+event_data varchar(1000) NOT NULL,
+entity_type VARCHAR(1000) NOT NULL,
+entity_id VARCHAR(1000) NOT NULL,
+triggering_event VARCHAR(1000)
+);
+The triggering_event column is used to detect duplicate events/messages. It stores
+the ID of the message/event whose processing generated this event.
+ The entities table stores the current version of each entity. It’s used to imple-
+ment optimistic locking. Here’s the definition of this table:
+create table entities (
+entity_type VARCHAR(1000),
+entity_id VARCHAR(1000),
+entity_version VARCHAR(1000) NOT NULL,
+PRIMARY KEY(entity_type, entity_id)
+);
+When an entity is created, a row is inserted into this table. Each time an entity is
+updated, the entity_version column is updated.
+ The snapshots table stores the snapshots of each entity. Here’s the definition of
+this table:
+create table snapshots (
+entity_type VARCHAR(1000),
+entity_id VARCHAR(1000),
+entity_version VARCHAR(1000),
+snapshot_type VARCHAR(1000) NOT NULL,
+snapshot_json VARCHAR(1000) NOT NULL,
+triggering_events VARCHAR(1000),
+PRIMARY KEY(entity_type, entity_id, entity_version)
+)
+The entity_type and entity_id columns specify the snapshot’s entity. The snapshot
+_json column is the serialized representation of the snapshot, and the snapshot_type
+is its type. The entity_version specifies the version of the entity that this is a snap-
+shot of.
+ The three operations supported by this schema are find(), create(), and
+update(). The find() operation queries the snapshots table to retrieve the latest
+snapshot, if any. If a snapshot exists, the find() operation queries the events table to
+find all events whose event_id is greater than the snapshot’s entity_version. Other-
+wise, find() retrieves all events for the specified entity. The find() operation also
+queries the entity table to retrieve the entity’s current version.
+ The create() operation inserts a row into the entity table and inserts the events
+into the events table. The update() operation inserts events into the events table. It
+ 

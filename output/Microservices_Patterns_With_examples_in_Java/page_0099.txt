@@ -1,0 +1,42 @@
+69
+Overview of interprocess communication in a microservice architecture
+ Regardless of which IPC mechanism you choose, it’s important to precisely define
+a service’s API using some kind of interface definition language (IDL). Moreover, there
+are good arguments for using an API-first approach to defining services (see www
+.programmableweb.com/news/how-to-design-great-apis-api-first-design-and-raml/how-to/
+2015/07/10 for more). First you write the interface definition. Then you review the
+interface definition with the client developers. Only after iterating on the API defini-
+tion do you then implement the service. Doing this up-front design increases your
+chances of building a service that meets the needs of its clients.
+The nature of the API definition depends on which IPC mechanism you’re using. For
+example, if you’re using messaging, the API consists of the message channels, the mes-
+sage types, and the message formats. If you’re using HTTP, the API consists of the
+URLs, the HTTP verbs, and the request and response formats. Later in this chapter,
+I explain how to define APIs.
+ A service’s API is rarely set in stone. It will likely evolve over time. Let’s take a look
+at how to do that and consider the issues you’ll face. 
+3.1.3
+Evolving APIs
+APIs invariably change over time as new features are added, existing features are
+changed, and (perhaps) old features are removed. In a monolithic application, it’s rel-
+atively straightforward to change an API and update all the callers. If you’re using a
+statically typed language, the compiler helps by giving a list of compilation errors. The
+only challenge may be the scope of the change. It might take a long time to change a
+widely used API.
+ In a microservices-based application, changing a service’s API is a lot more diffi-
+cult. A service’s clients are other services, which are often developed by other teams.
+The clients may even be other applications outside of the organization. You usually
+can’t force all clients to upgrade in lockstep with the service. Also, because modern
+applications are usually never down for maintenance, you’ll typically perform a rolling
+upgrade of your service, so both old and new versions of a service will be running
+simultaneously.
+ It’s important to have a strategy for dealing with these challenges. How you handle
+a change to an API depends on the nature of the change.
+API-first design is essential
+Even in small projects, I’ve seen problems occur because components don’t agree
+on an API. For example, on one project the backend Java developer and the AngularJS
+frontend developer both said they had completed development. The application, how-
+ever, didn’t work. The REST and WebSocket API used by the frontend application to
+communicate with the backend was poorly defined. As a result, the two applications
+couldn’t communicate!
+ 

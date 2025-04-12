@@ -1,0 +1,40 @@
+Flink, some tasks can instead be done inside Kafka itself. Using KSQL, you can define
+SQL-like statements that can process one or more topics on the fly. This can give you
+something akin to a dynamically updating materialized database view, with the
+source of data being Kafka topics rather than a database. These capabilities open up
+some very interesting possibilities for how data is managed in distributed systems. If
+you’d like to explore these ideas in more detail, I can recommend Designing Event-
+Driven Systems (O’Reilly) by Ben Stopford. (I have to recommend Ben’s book, as I
+wrote the foreword for it!) For a deeper dive into Kafka in general, I’d suggest Kafka:
+The Definitive Guide (O’Reilly) by Neha Narkhede, Gwen Shapira, and Todd Palino.
+Serialization Formats
+Some of the technology choices we’ve looked at—specifically, some of the RPC
+implementations—make choices for you regarding how data is serialized and deseri‐
+alized. With gRPC, for example, any data sent will be converted into protocol buffer
+format. Many of the technology options, though, give us a lot of freedom in terms of
+how we covert data for network calls. Pick Kafka as your broker of choice, and you
+can send messages in a variety of formats. So which format should you choose?
+Textual Formats
+The use of standard textual formats gives clients a lot of flexibility in how they con‐
+sume resources. REST APIs most often use a textual format for the request and
+response bodies, even if theoretically you can quite happily send binary data over
+HTTP. In fact, this is how gRPC works—using HTTP underneath but sending binary
+protocol buffers.
+JSON has usurped XML as the text serialization format of choice. You can point to a
+number of reasons why this has occurred, but the primary reason is that one of the
+main consumers of APIs is often a browser, where JSON is a great fit. JSON became
+popular partly as a result of the backlash against XML, and proponents cite its rela‐
+tive compactness and simplicity when compared to XML as another winning factor.
+The reality is that there’s rarely a massive differential between the size of a JSON pay‐
+load and that of an XML payload, especially as these payloads are typically com‐
+pressed. It’s also worth pointing out that some of the simplicity of JSON comes at a
+cost—in our rush to adopt simpler protocols, schemas went out of the window (more
+on that later).
+Avro is an interesting serialization format. It takes JSON as an underlying structure
+and uses it to define a schema-based format. Avro has found a lot of popularity as a
+format for message payloads, partly due to its ability to send the schema as part of the
+payload, which can make supporting multiple different messaging formats much
+easier.
+140 
+| 
+Chapter 5: Implementing Microservice Communication

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 194</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 5: طراحی منطق کسب‌وکار در معماری microservice</strong></h3>
+  <h4><strong style="color:darkblue">5.3.5: تولید و انتشار domain events</strong></h4>
+  <p>
+   Communicating با استفاده از domain events یک فرم از asynchronous messaging است که در فصل 3 مورد بحث قرار گرفت. اما قبل از اینکه business logic بتواند آنها را به یک message broker منتشر کند، ابتدا باید آنها را ایجاد کند. بیایید نگاهی به نحوه انجام این کار بیندازیم.
+  </p>
+  <p>
+   GENERATING DOMAIN EVENTS
+   <br>
+   از نظر مفهومی، domain events توسط aggregates منتشر می‌شوند. یک aggregate می‌داند چه زمانی state آن تغییر می‌کند و از این رو چه eventای را منتشر کند. یک aggregate می‌تواند مستقیماً یک messaging API را فراخوانی کند. نقطه ضعف این رویکرد این است که از آنجایی که aggregates نمی‌توانند از dependency injection استفاده کنند، messaging API باید به عنوان یک method argument منتقل شود. این امر concerns زیرساخت و business logic را در هم می‌آمیزد، که بسیار نامطلوب است.
+  </p>
+  <p>
+   یک رویکرد بهتر این است که مسئولیت را بین aggregate و service (یا class معادل آن) که آن را فراخوانی می‌کند، تقسیم کنیم. Services می‌توانند از dependency injection برای به دست آوردن یک reference به messaging API استفاده کنند و به راحتی events را منتشر کنند. aggregate events را هر زمان که state آن تغییر می‌کند تولید می‌کند و آنها را به service برمی‌گرداند. چندین راه مختلف وجود دارد که یک aggregate می‌تواند events را به service برگرداند. یک گزینه این است که return value از یک aggregate method شامل یک list از events باشد. به عنوان مثال، listing زیر نشان می‌دهد که چگونه method به نام accept() از یک Ticket aggregate می‌تواند یک TicketAcceptedEvent را به caller آن برگرداند.
+  </p>
+  <pre><code class="language-java">public class Ticket {
+public List&lt;DomainEvent&gt; accept(ZonedDateTime readyBy) {
+...
+this.acceptTime = ZonedDateTime.now();
+
+this.readyBy = readyBy;
+return singletonList(new TicketAcceptedEvent(readyBy));
+}
+}
+</code></pre>
+  <p>
+   The service، method از aggregate root را فراخوانی می‌کند و سپس events را منتشر می‌کند. به عنوان مثال، listing زیر نشان می‌دهد که چگونه KitchenService، Ticket.accept() را فراخوانی می‌کند و events را منتشر می‌کند.
+  </p>
+  <pre><code class="language-java">public class KitchenService {
+@Autowired
+private TicketRepository ticketRepository;
+@Autowired
+private DomainEventPublisher domainEventPublisher;
+</code></pre>
+  <p>
+   Listing 5.3
+   <br>
+   The Ticket aggregate’s accept() method
+  </p>
+  <p>
+   Listing 5.4
+   <br>
+   KitchenService calls Ticket.accept()
+   <br>
+   Updates
+   <br>
+   the Ticket
+   <br>
+   Returns
+   <br>
+   an event
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

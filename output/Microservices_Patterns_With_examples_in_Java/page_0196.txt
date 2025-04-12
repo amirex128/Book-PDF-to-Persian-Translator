@@ -1,0 +1,46 @@
+166
+CHAPTER 5
+Designing business logic in a microservice architecture
+HOW TO RELIABLY PUBLISH DOMAIN EVENTS?
+Chapter 3 talks about how to reliably send messages as part of a local database transac-
+tion. Domain events are no different. A service must use transactional messaging to
+publish events to ensure that they’re published as part of the transaction that updates
+the aggregate in the database. The Eventuate Tram framework, described in chapter 3,
+implements such a mechanism. It insert events into an OUTBOX table as part of the
+ACID transaction that updates the database. After the transaction commits, the events
+that were inserted into the OUTBOX table are then published to the message broker.
+ The Tram framework provides a DomainEventPublisher interface, shown in the
+following listing. It defines several overloaded publish() methods that take the aggre-
+gate type and ID as parameters, along with a list of domain events.
+public interface DomainEventPublisher {
+void publish(String aggregateType, Object aggregateId, 
+List<DomainEvent> domainEvents);
+It uses the Eventuate Tram framework’s MessageProducer interface to publish those
+events transactionally.
+ A service could call the DomainEventPublisher publisher directly. But one draw-
+back of doing so is that it doesn’t ensure that a service only publishes valid events.
+KitchenService, for example, should only publish events that implement Ticket-
+DomainEvent, which is the marker interface for the Ticket aggregate’s events. A better
+option is for services to implement a subclass of AbstractAggregateDomainEvent-
+Publisher, which is shown in listing 5.7. AbstractAggregateDomainEventPublisher
+is an abstract class that provides a type-safe interface for publishing domain events.
+It’s a generic class that has two type parameters, A, the aggregate type, and E, the
+marker interface type for the domain events. A service publishes events by calling
+the publish() method, which has two parameters: an aggregate of type A and a list of
+events of type E.
+public abstract class AbstractAggregateDomainEventPublisher<A, E extends Doma
+inEvent> {
+private Function<A, Object> idSupplier;
+private DomainEventPublisher eventPublisher;
+private Class<A> aggregateType;
+protected AbstractAggregateDomainEventPublisher(
+DomainEventPublisher eventPublisher,
+Class<A> aggregateType,
+Function<A, Object> idSupplier) {
+this.eventPublisher = eventPublisher;
+this.aggregateType = aggregateType;
+Listing 5.6
+The Eventuate Tram framework’s DomainEventPublisher interface
+Listing 5.7
+The abstract superclass of type-safe domain event publishers
+ 

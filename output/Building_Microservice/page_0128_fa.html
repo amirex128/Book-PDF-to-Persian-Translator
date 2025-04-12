@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 128</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   شکل 4-6. یک microservice فایلی را می‌نویسد که microservicesهای دیگر از آن استفاده می‌کنند
+  </p>
+  <p>
+   این الگو از جهاتی رایج‌ترین الگوی عمومی ارتباط بین فرآیندی است که شما خواهید دید، و با این حال ما گاهی اوقات نمی‌توانیم آن را به عنوان یک الگوی ارتباطی در نظر بگیریم—من فکر می‌کنم عمدتاً به این دلیل که ارتباط بین فرآیندها اغلب آنقدر غیرمستقیم است که تشخیص آن دشوار است.
+  </p>
+  <h4>پیاده‌سازی</h4>
+  <p>
+   برای پیاده‌سازی این الگو، شما به نوعی <strong>persistent store</strong> برای داده‌ها نیاز دارید. در بسیاری از موارد، یک <strong>filesystem</strong> می‌تواند کافی باشد. من سیستم‌های زیادی را ساخته‌ام که فقط دوره‌ای یک <strong>filesystem</strong> را اسکن می‌کنند، وجود یک فایل جدید را یادداشت می‌کنند، و بر این اساس به آن واکنش نشان می‌دهند. شما همچنین می‌توانید از نوعی حافظه توزیع‌شده <strong>memory store</strong> استفاده کنید. لازم به ذکر است که هر microservice پایین‌دست که قرار است بر اساس این داده‌ها عمل کند، به مکانیزم خود برای شناسایی در دسترس بودن داده‌های جدید نیاز دارد—<strong>polling</strong> یک راه‌حل مکرر برای این مشکل است.
+  </p>
+  <p>
+   دو مثال رایج از این الگو، <strong>data lake</strong> و <strong>data warehouse</strong> هستند. در هر دو مورد، این راه‌حل‌ها معمولاً برای کمک به پردازش حجم زیادی از داده‌ها طراحی شده‌اند، اما می‌توان گفت که آنها در انتهای مخالف طیف از نظر <em>coupling</em> وجود دارند.
+  </p>
+  <p>
+   با یک <strong>data lake</strong>، منابع داده‌های خام را با هر فرمتی که مناسب می‌دانند آپلود می‌کنند، و از مصرف‌کنندگان پایین‌دست این داده‌های خام انتظار می‌رود که بدانند چگونه اطلاعات را پردازش کنند. با یک <strong>data warehouse</strong>، خود <strong>warehouse</strong> یک انبار داده ساختاریافته است.
+  </p>
+  <p>
+   Microservices که داده‌ها را به <strong>data warehouse</strong> منتقل می‌کنند، باید ساختار <strong>data warehouse</strong> را بدانند—اگر ساختار به روشی که با عقب سازگار نیست تغییر کند، این تولیدکنندگان باید به‌روز شوند.
+  </p>
+  <p>
+   با هر دو <strong>data warehouse</strong> و <strong>data lake</strong>، این فرض وجود دارد که جریان اطلاعات در یک جهت واحد است. یک microservice داده‌ها را به انبار داده‌های مشترک منتشر می‌کند، و <strong>consumers</strong> پایین‌دست آن داده‌ها را می‌خوانند و اقدامات مناسب را انجام می‌دهند. این جریان یک‌طرفه می‌تواند <strong>reasoning</strong> را در مورد جریان
+  </p>
+  <p>102 | Chapter 4: Microservice Communication Styles</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0128/image_1.png" alt="Image from page 128" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+218
+CHAPTER 6
+Developing business logic with event sourcing
+mechanism. The ID of SagaCommandEvent, which is guaranteed to be unique, is used
+as the ID of the command message. As a result, the duplicate messages will have the
+same ID. A saga participant that receives a duplicate command message will discard it
+using the mechanism described earlier. 
+PROCESSING REPLIES EXACTLY ONCE
+A saga orchestrator also needs to detect and discard duplicate reply messages, which it
+can do using the mechanism described earlier. The orchestrator stores the reply mes-
+sage’s ID in the events that it emits when processing the reply. It can then easily deter-
+mine whether a message is a duplicate.
+ As you can see, event sourcing is a good foundation for implementing sagas. This
+is in addition to the other benefits of event sourcing, including the inherently reli-
+able generation of events whenever data changes, reliable audit logging, and the
+ability to do temporal queries. Event sourcing isn’t a silver bullet, though. It involves
+a significant learning curve. Evolving the event schema isn’t always straightforward.
+But despite these drawbacks, event sourcing has a major role to play in a micro-
+service architecture. In the next chapter, we’ll switch gears and look at how to tackle
+a different distributed data management challenge in a microservice architecture:
+queries. I’ll describe how to implement queries that retrieve data scattered across
+multiple services. 
+Summary
+Event sourcing persists an aggregate as a sequence of events. Each event rep-
+resents either the creation of the aggregate or a state change. An application
+recreates the state of an aggregate by replaying events. Event sourcing preserves
+the history of a domain object, provides an accurate audit log, and reliably pub-
+lishes domain events.
+Snapshots improve performance by reducing the number of events that must
+be replayed.
+Events are stored in an event store, a hybrid of a database and a message broker.
+When a service saves an event in an event store, it delivers the event to subscribers.
+Eventuate Local is an open source event store based on MySQL and Apache
+Kafka. Developers use the Eventuate client framework to write aggregates and
+event handlers.
+One challenge with using event sourcing is handling the evolution of events. An
+application potentially must handle multiple event versions when replaying
+events. A good solution is to use upcasting, which upgrades events to the latest
+version when they’re loaded from the event store.
+Deleting data in an event sourcing application is tricky. An application must use
+techniques such as encryption and pseudonymization in order to comply with
+regulations like the European Union’s GDPR that requires an application to
+erase an individual’s data.
+ 

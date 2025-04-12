@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 436</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <p>
+   A NodePort service از طریق یک cluster-wide port در تمام nodes در the clus-
+   ter قابل دسترسی است. Any traffic به آن port در هر cluster node به pods backend load balanced می‌شود.
+   You must یک پورت در محدوده 30000–32767 را انتخاب کنید. For example, listing 12.6
+   یک service را نشان می‌دهد که traffic را به پورت 30000 از Consumer Service هدایت می‌کند.
+  </p>
+  <pre><code class="language-text">
+  apiVersion: v1
+  kind: Service
+  metadata:
+  name: ftgo-api-gateway
+  spec:
+  type: NodePort
+  ports:
+  - nodePort: 30000
+  port: 80
+  targetPort: 8080
+  selector:
+  app: ftgo-api-gateway
+  ---
+  </code></pre>
+  <p>
+   API Gateway در داخل cluster با استفاده از URL http://ftgo-api-gateway و out-
+   side از URL http://<node-ip-address>:3000/ قرار دارد، که node-ip-address the IP است
+   address از یکی از nodes. After configuring a NodePort service شما می‌توانید، برای exam-
+   ple، یک AWS Elastic Load Balancer (ELB) را پیکربندی کنید تا requests را از
+   internet در سراسر nodes load balance کند. A key benefit از این رویکرد این است که ELB کاملاً
+   under your control است. You have complete flexibility هنگام پیکربندی آن.
+  </p>
+  <p>
+   A NodePort type service تنها گزینه نیست. You can also use a Load-
+   Balancer service، که به طور خودکار یک cloud-specific load balancer را پیکربندی می‌کند. The
+   load balancer یک ELB خواهد بود اگر Kubernetes در AWS در حال اجرا باشد. One benefit از this
+   type از service این است که شما دیگر مجبور نیستید load balancer خود را پیکربندی کنید. The
+   drawback، however، این است که اگرچه Kubernetes چند گزینه برای configur-
+   ing the ELB می‌دهد، مانند گواهی SSL، شما کنترل بسیار کمتری بر روی configuration آن دارید.
+  </p>
+  <h4><span style="font-weight: bold;">12.4.4 Zero-downtime deployments</span></h4>
+  <p>
+   Imagine شما Restaurant Service را به‌روزرسانی کرده‌اید و می‌خواهید آن تغییرات را به
+   production مستقر کنید. Updating a running service یک process سه‌مرحله‌ای ساده هنگام استفاده است
+   Kubernetes:
+  </p>
+  <p>
+   1
+   Build یک container image جدید و آن را به registry با استفاده از همان process
+   described earlier push کنید. The only difference این است که image با یک dif-
+   ferent version tag برچسب‌گذاری می‌شود—به عنوان مثال، ftgo-restaurant-service:1.1.0.RELEASE.
+  </p>
+  <p>
+   2
+   Edit the YAML file برای service’s deployment تا به image جدید اشاره کند.
+  </p>
+  <p>
+   3
+   Update the deployment با استفاده از the kubectl apply -f command.
+  </p>
+  <p>
+   Kubernetes سپس a rolling upgrade از pods را انجام می‌دهد. It will incrementally cre-
+   ate pods که version 1.1.0.RELEASE را اجرا می‌کنند و pods که version را اجرا می‌کنند، خاتمه می‌دهند
+  </p>
+  <p>
+   Listing 12.6
+   The YAML definition از a NodePort service که traffic را به پورت هدایت می‌کند
+   8082 از Consumer Service
+   Specifies a type
+   از NodePort
+   The cluster-
+   wide port
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

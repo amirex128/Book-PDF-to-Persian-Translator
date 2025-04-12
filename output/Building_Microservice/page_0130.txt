@@ -1,0 +1,36 @@
+on your list of requirements. If you are interested in sending larger volumes of data
+and having them processed more in “real time,” then using some sort of streaming
+technology like Kafka would be a better fit.
+Another big disadvantage, and something that should be fairly obvious if you
+remember back to our exploration of common coupling in Figure 4-7, is that the
+common data store becomes a potential source of coupling. If that data store changes
+structure in some way, it can break communication between microservices.
+The robustness of the communication will also come down to the robustness of the
+underlying data store. This isn’t a disadvantage strictly speaking, but it’s something to
+be aware of. If you’re dropping a file on a filesystem, you might want to make sure
+that the filesystem itself isn’t going to fail in interesting ways.
+Where to Use It
+Where this pattern really shines is in enabling interoperability between processes that
+might have restrictions on what technology they can use. Having an existing system
+talk to your microservice’s GRPC interface or subscribe to its Kafka topic might well
+be more convenient from the point of view of the microservice, but not from the
+point of view of a consumer. Older systems may have limitations on what technology
+they can support and may have high costs of change. On the other hand, even old
+mainframe systems should be able to read data out of a file. This does of course all
+depend on using data store technology that is widely supported—I could also imple‐
+ment this pattern using something like a Redis cache. But can your old mainframe
+system talk to Redis?
+Another major sweet spot for this pattern is in sharing large volumes of data. If you
+need to send a multigigabyte file to a filesystem or load a few million rows into a
+database, then this pattern is the way to go.
+Pattern: Request-Response Communication
+With request-response, a microservice sends a request to a downstream service ask‐
+ing it to do something and expects to receive a response with the result of the request.
+This interaction can be undertaken via a synchronous blocking call, or it could be
+implemented in an asynchronous nonblocking fashion. A simple example of this
+interaction is shown in Figure 4-8, where the Chart microservice, which collates the
+best-selling CDs for different genres, sends a request to the Inventory service asking
+for the current stock levels for some CDs.
+104 
+| 
+Chapter 4: Microservice Communication Styles

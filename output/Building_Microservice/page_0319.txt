@@ -1,0 +1,42 @@
+services—your contract tests should pass when you run your own stubs, just as they
+should the real external service.
+Contract tests become very useful when used as part of consumer-driven contracts
+(CDCs). The contract tests are in effect an explicit, programmatic representation of
+how the consumer (upstream) microservice expects the producer (downstream)
+microservice to behave. With CDCs, the consumer team ensures that these contract
+tests are shared with the producer team to allow the producer team to ensure that its
+microservice meets these expectations. Typically, this is done by having the down‐
+stream producer team run the consumer contracts for each consuming microservice
+as part of its test suite that would be run on every build. Very importantly from a test
+feedback point of view, these tests need to be run only against a single producer in
+isolation, so they can be faster and more reliable than the end-to-end tests they might
+replace.
+As an example, let’s revisit our scenario from earlier. The Customer microservice has
+two separate consumers: the helpdesk and the web shop. Both of these consuming
+applications have expectations for how the Customer microservice will behave. In this
+example, you create a set of tests for each consumer: one representing the helpdesk’s
+expectations of the Customer microservice, and another set representing the expecta‐
+tions that the web shop has.
+Because these CDCs are expectations for how the Customer microservice should
+behave, we need only to run the Customer microservice itself, meaning we have the
+same effective test scope as our service tests. They’d have similar performance charac‐
+teristics and would require us to run only the Customer microservice itself, with any
+external dependencies stubbed out.
+A good practice here is to have someone from the producer and consumer teams col‐
+laborate on creating the tests, so perhaps people from the web shop and helpdesk
+teams pair with people from the customer service team. Arguably, consumer-driven
+contracts are as much about fostering clear lines of communication and collabora‐
+tion, where needed, between microservices and the teams that consume them. It
+could be argued, in fact, that implementing CDCs is just making more explicit the
+communication between the teams that must already exist. In cross-team collabora‐
+tion, CDCs are an explicit reminder of Conway’s law.
+CDCs sit at the same level in the test pyramid as service tests, albeit with a very differ‐
+ent focus, as shown in Figure 9-10. These tests are focused on how a consumer will
+use the service, and the trigger if they break is very different when compared with
+service tests. If one of these CDCs breaks during a build of the Customer service, it
+becomes obvious which consumer would be impacted. At this point, you can either
+fix the problem or else start the discussion about introducing a breaking change in
+the manner we discussed in “Handling Change Between Microservices” on page 144.
+Should You Avoid End-to-End Tests? 
+| 
+293

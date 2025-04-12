@@ -1,0 +1,45 @@
+100
+CHAPTER 3
+Interprocess communication in a microservice architecture
+There are a few examples of this approach in use:
+Debezium (http://debezium.io)—An open source project that publishes data-
+base changes to the Apache Kafka message broker.
+LinkedIn Databus (https://github.com/linkedin/databus)—An open source proj-
+ect that mines the Oracle transaction log and publishes the changes as events.
+LinkedIn uses Databus to synchronize various derived data stores with the sys-
+tem of record.
+DynamoDB streams (http://docs.aws.amazon.com/amazondynamodb/latest/
+developerguide/Streams.html)—DynamoDB streams contain the time-ordered
+sequence of changes (creates, updates, and deletes) made to the items in a
+DynamoDB table in the last 24 hours. An application can read those changes
+from the stream and, for example, publish them as events.
+Eventuate Tram (https://github.com/eventuate-tram/eventuate-tram-core)—Your
+author’s very own open source transaction messaging library that uses MySQL
+binlog protocol, Postgres WAL, or polling to read changes made to an OUTBOX
+table and publish them to Apache Kafka.
+Although this approach is obscure, it works remarkably well. The challenge is that
+implementing it requires some development effort. You could, for example, write low-
+level code that calls database-specific APIs. Alternatively, you could use an open source
+framework such as Debezium that publishes changes made by an application to MySQL,
+Postgres, or MongoDB to Apache Kafka. The drawback of using Debezium is that its
+focus is capturing changes at the database level and that APIs for sending and receiving
+messages are outside of its scope. That’s why I created the Eventuate Tram framework,
+which provides the messaging APIs as well as transaction tailing and polling. 
+3.3.8
+Libraries and frameworks for messaging
+A service needs to use a library to send and receive messages. One approach is to use
+the message broker’s client library, although there are several problems with using
+such a library directly:
+The client library couples business logic that publishes messages to the message
+broker APIs.
+A message broker’s client library is typically low level and requires many lines of
+code to send or receive a message. As a developer, you don’t want to repeatedly
+write boilerplate code. Also, as the author of this book I don’t want the example
+code cluttered with low-level boilerplate.
+The client library usually provides only the basic mechanism to send and
+receive messages and doesn’t support the higher-level interaction styles.
+A better approach is to use a higher-level library or framework that hides the low-level
+details and directly supports the higher-level interaction styles. For simplicity, the
+examples in this book use my Eventuate Tram framework. It has a simple, easy-to-
+understand API that hides the complexity of using the message broker. Besides an API
+ 

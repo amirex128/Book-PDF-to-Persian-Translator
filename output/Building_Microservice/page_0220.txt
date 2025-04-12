@@ -1,0 +1,36 @@
+6 It’s outside the scope of this book, but Hector Garcia-Molina and Kenneth Salem went on to explore how
+multiple sagas could be “nested” to implement more complex processes. To read more on this topic, see Hec‐
+tor Garcia-Molina et al., “Modeling Long-Running Activities as Nested Sagas,” Data Engineering 14, no. 1
+(March 1991: 14–18).
+part of this saga. When one of our services reacts to an event, the correlation ID is
+extracted and used for any local logging processes, and it’s also passed downstream
+with any further calls or events that are fired. We could then have a service whose job
+it is to just vacuum up all these events and present a view of what state each order is
+in, and perhaps programmatically carry out actions to resolve issues as part of the ful‐
+fillment process if the other services couldn’t do it themselves. I consider some form
+of correlation ID essential for choreographed sagas like this, but correlation IDs also
+have a lot of value more generally, something we explore in more depth in Chap‐
+ter 10.
+Mixing styles
+While it may seem that orchestrated and choreographed sagas are diametrically
+opposing views of how sagas could be implemented, you could easily consider mixing
+and matching models. You may have some business processes in your system that
+more naturally fit one model or another. You may also have a single saga that has a
+mix of styles. In the order fulfillment use case, for example, inside the boundary of
+the Warehouse service, when managing the packaging and dispatch of an order, we
+may use an orchestrated flow even if the original request was made as part of a larger
+choreographed saga.6
+If you do decide to mix styles, it’s important that you still have a clear way to under‐
+stand what state a saga is in, and what activities have already happened as part of a
+saga. Without this, understanding failure modes becomes complex, and recovery
+from failure is difficult.
+Tracing Calls
+Whether you chose choreography or orchestration, when implementing a business
+process using multiple microservices, it’s common to want to be able to trace all the
+calls related to the process. This can sometimes be just to help you understand if the
+business process is working correctly, or it could be to help you diagnose a problem.
+In Chapter 10 we’ll look at concepts such as correlation IDs and log aggregation and
+how they can help in this regard.
+194 
+| 
+Chapter 6: Workflow

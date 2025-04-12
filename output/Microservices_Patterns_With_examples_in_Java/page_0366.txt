@@ -1,0 +1,50 @@
+336
+CHAPTER 10
+Testing microservices: Part 2
+10.2.1 Defining acceptance tests
+Acceptance tests are business-facing tests for a software component. They describe the
+desired externally visible behavior from the perspective of the component’s clients
+rather than in terms of the internal implementation. These tests are derived from user
+stories or use cases. For example, one of the key stories for Order Service is the Place
+Order story:
+As a consumer of the Order Service
+I should be able to place an order
+We can expand this story into scenarios such as the following:
+Given a valid consumer
+Given using a valid credit card
+Given the restaurant is accepting orders
+When I place an order for Chicken Vindaloo at Ajanta
+Then the order should be APPROVED
+And an OrderAuthorized event should be published
+This scenario describes the desired behavior of Order Service in terms of its API.
+ Each scenario defines an acceptance test. The givens correspond to the test’s setup
+phase, the when maps to the execute phase, and the then and the and to the verifica-
+tion phase. Later, you see a test for this scenario that does the following:
+1
+Creates an Order by invoking the POST /orders endpoint
+2
+Verifies the state of the Order by invoking the GET /orders/{orderId} endpoint
+3
+Verifies that the Order Service published an OrderAuthorized event by sub-
+scribing to the appropriate message channel
+We could translate each scenario into Java code. An easier option, though, is to write
+the acceptance tests using a DSL such as Gherkin. 
+End-to-end
+Component
+Integration
+Unit
+Component
+test
+Tests
+Service
+Stub
+dependency 1
+Stub
+dependency 2
+Stub
+dependency
+...
+Figure 10.6
+A component test tests a service in isolation. It typically uses stubs for the service’s 
+dependencies.
+ 

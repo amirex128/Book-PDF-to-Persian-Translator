@@ -1,0 +1,41 @@
+5 Don’t get me started on people who start talking about hypotheses and then go about cherry-picking infor‐
+mation to confirm their already-held beliefs.
+system can introduce new sources of fragility as well. By scaling one part of our appli‐
+cation, we create a weakness elsewhere. Our Order microservice may now be running
+on its own infrastructure, helping us better handle the load of the system, but we’ve
+got yet another microservice that we need to make sure is available if we want our
+system to function, and yet more infrastructure that has to be managed and made
+robust.
+Even if you think you have identified a bottleneck, a process of experimentation is
+essential to make sure that you are right and that further work is justified. It’s amaz‐
+ing to me how many people who would happily describe themselves as computer sci‐
+entists seem not to have even a basic understanding of the scientific method.5 If
+you’ve identified what you think is a problem, try to identify a small amount of work
+that can be done to confirm whether or not your proposed solution will work. In the
+context of scaling systems to handle load, having a suite of automated load tests, for
+example, can be incredibly useful. Run the tests to get a baseline and to re-create the
+bottleneck you are experiencing, make a change, and observe the difference. This
+isn’t rocket science, but it is, even in a very small way, attempting to be at least
+vaguely scientific.
+CQRS and Event Sourcing
+The Command Query Responsibility Segregation (CQRS) pattern refers to an alter‐
+nate model for storing and querying information. Rather than our having a single
+model for how we both manipulate and retrieve data, as is common, responsibilities
+for reads and writes are instead handled by separate models. These separate read and
+write models, implemented in code, could be deployed as separate units, giving us the
+ability to scale reads and writes independently. CQRS is often, though not always,
+used in conjunction with event sourcing, where—rather than storing the current state
+of an entity as a single record—we instead project the state of an entity by looking at
+the history of events related to that entity.
+Arguably, CQRS is doing something very similar in our application tier to what read
+replicas can do in the data tier, although due to the large number of different ways
+CQRS can be implemented, this is a simplification.
+Personally, although I see value in the CQRS pattern in some situations, it’s a com‐
+plex pattern to execute well. I’ve spoken to very smart people who have hit not insig‐
+nificant issues in making CQRS work. As such, if you are considering CQRS as a way
+to help scale your application, regard it as one of the harder forms of scaling you’d
+need to implement, and perhaps try some of the easier stuff first. For example, if you
+are simply read-constrained, a read replica may well be a significantly less risky and
+434 
+| 
+Chapter 13: Scaling

@@ -1,0 +1,45 @@
+345
+Writing end-to-end tests
+Those commands, which take a couple of minutes, perform the following actions:
+1
+Build Order Service.
+2
+Run the service and its infrastructure services.
+3
+Run the tests.
+4
+Stop the running services.
+Now that we’ve looked at how to test a service in isolation, we’ll see how to test the
+entire application. 
+10.3
+Writing end-to-end tests
+Component testing tests each service separately. End-to-end testing, though, tests the
+entire application. As figure 10.8 shows, end-to-end testing is the top of the test pyra-
+mid. That’s because these kinds of tests are—say it with me now—slow, brittle, and
+time consuming to develop.
+End-to-end tests have a large number of moving parts. You must deploy multiple ser-
+vices and their supporting infrastructure services. As a result, end-to-end tests are slow.
+Also, if your test needs to deploy a large number of services, there’s a good chance
+one of them will fail to deploy, making the tests unreliable. Consequently, you should
+minimize the number of end-to-end tests.
+10.3.1 Designing end-to-end tests
+As I’ve explained, it’s best to write as few of these as possible. A good strategy is to
+write user journey tests. A user journey test corresponds to a user’s journey through the
+system. For example, rather than test create order, revise order, and cancel order sep-
+arately, you can write a single test that does all three. This approach significantly
+reduces the number of tests you must write and shortens the test execution time. 
+End-to-end
+Component
+Integration
+Unit
+End-to-end
+test
+Tests
+Service
+Service 1
+Service 2
+Service ...
+Figure 10.8
+End-to-end tests are at the top of the test pyramid. They are slow, brittle, and time 
+consuming to develop. You should minimize the number of end-to-end tests.
+ 

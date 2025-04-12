@@ -1,0 +1,63 @@
+312
+CHAPTER 9
+Testing microservices: Part 1
+failureReply().
+            
+expect().
+command(new RejectOrderCommand(ORDER_ID)).
+to(OrderServiceChannels.orderServiceChannel);
+      
+}
+}
+The @Test shouldCreateOrder() method tests the happy path. The @Test should-
+RejectOrderDueToConsumerVerificationFailed() method tests the scenario where
+Consumer Service rejects the order. It verifies that CreateOrderSaga sends a Reject-
+OrderCommand to compensate for the consumer being rejected. The CreateOrder-
+SagaTest class has methods that test other failure scenarios.
+ Let’s now look at how to test domain services. 
+9.2.4
+Writing unit tests for domain services
+The majority of a service’s business logic is implemented by the entities, value objects,
+and sagas. Domain service classes, such as the OrderService class, implement the
+remainder. This class is a typical domain service class. Its methods invoke entities and
+repositories and publish domain events. An effective way to test this kind of class is to
+use a mostly solitary unit test, which mocks dependencies such as repositories and
+messaging classes.
+ Listing 9.5 shows the OrderServiceTest class, which tests OrderService. It defines
+solitary unit tests, which use Mockito mocks for the service’s dependencies. Each test
+implements the test phases as follows:
+1
+Setup—Configures the mock objects for the service’s dependencies
+2
+Execute—Invokes a service method
+3
+Verify—Verifies that the value returned by the service method is correct and that
+the dependencies have been invoked correctly
+public class OrderServiceTest {
+private OrderService orderService;
+private OrderRepository orderRepository;
+private DomainEventPublisher eventPublisher;
+private RestaurantRepository restaurantRepository;
+private SagaManager<CreateOrderSagaState> createOrderSagaManager;
+private SagaManager<CancelOrderSagaData> cancelOrderSagaManager;
+private SagaManager<ReviseOrderSagaData> reviseOrderSagaManager;
+@Before
+public void setup() {
+orderRepository = mock(OrderRepository.class);         
+eventPublisher = mock(DomainEventPublisher.class);
+restaurantRepository = mock(RestaurantRepository.class);
+Listing 9.5
+A simple, fast-running unit test for the OrderService class
+Send a failure 
+reply indicating 
+that Consumer 
+Service rejected 
+Order.
+Verify that the saga sends
+a RejectOrderCommand
+message to Order Service.
+Create Mockito 
+mocks for 
+OrderService’s 
+dependencies.
+ 

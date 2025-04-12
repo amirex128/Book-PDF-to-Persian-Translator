@@ -1,0 +1,41 @@
+366
+CHAPTER 11
+Developing production-ready services
+Distributed tracing—Assign each external request a unique ID and trace requests
+as they flow between services.
+Exception tracking—Report exceptions to an exception tracking service, which
+de-duplicates exceptions, alerts developers, and tracks the resolution of each
+exception.
+Application metrics—Services maintain metrics, such as counters and gauges, and
+expose them to a metrics server.
+Audit logging—Log user actions.
+A distinctive feature of most of these patterns is that each pattern has a developer
+component and an operations component. Consider, for example, the Health check
+API pattern. The developer is responsible for ensuring that their service implements a
+health check endpoint. Operations is responsible for the monitoring system that peri-
+odically invokes the health check API. Similarly, for the Log aggregation pattern, a
+developer is responsible for ensuring that their services log useful information,
+whereas operations is responsible for log aggregation.
+ Let’s take a look at each of these patterns, starting with the Health check API pattern.
+11.3.1 Using the Health check API pattern
+Sometimes a service may be running but unable to handle requests. For instance, a
+newly started service instance may not be ready to accept requests. The FTGO Con-
+sumer Service, for example, takes around 10 seconds to initialize the messaging and
+database adapters. It would be pointless for the deployment infrastructure to route
+HTTP requests to a service instance until it’s ready to process them.
+ Also, a service instance can fail without terminating. For example, a bug might
+cause an instance of Consumer Service to run out of database connections and
+be unable to access the database. The deployment infrastructure shouldn’t route
+requests to a service instance that has failed yet is still running. And, if the service
+instance does not recover, the deployment infrastructure must terminate it and create
+a new instance.
+A service instance needs to be able to tell the deployment infrastructure whether or
+not it’s able to handle requests. A good solution is for a service to implement a health
+check endpoint, which is shown in figure 11.10. The Spring Boot Actuator Java library,
+for example, implements a GET /actuator/health endpoint, which returns 200 if and
+only if the service is healthy, and 503 otherwise. Similarly, the HealthChecks .NET
+Pattern: Health check API
+A service exposes a health check API endpoint, such as GET /health, which returns
+the health of the service. See http://microservices.io/patterns/observability/health-
+check-api.html.
+ 

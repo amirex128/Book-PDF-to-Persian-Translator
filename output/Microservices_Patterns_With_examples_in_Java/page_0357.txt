@@ -1,0 +1,74 @@
+327
+Writing integration tests
+Each consumer-side test publishes the event specified by the contract and verifies that
+OrderHistoryEventHandlers invokes its mocked dependencies correctly.
+ On the provider side, Spring Cloud Contract code-generates test classes that
+extend MessagingBase, which is a hand-written abstract superclass. Each test method
+invokes a hook method defined by MessagingBase, which is expected to trigger the
+publication of an event by the service. In this example, each hook method invokes
+OrderDomainEventPublisher, which is responsible for publishing Order aggregate
+events. The test method then verifies that OrderDomainEventPublisher published
+the expected event. Let’s look at the details of how these tests work, starting with the
+contract.
+THE CONTRACT FOR PUBLISHING AN ORDERCREATED EVENT
+Listing 10.5 shows the contract for an OrderCreated event. It specifies the event’s
+channel, along with the expected body and message headers.
+Provider-side integration
+test for Order Service
+Consumer-side
+integration test for
+Order History Service
+Spring cloud
+contract
+Tests
+Tests
+Reads from
+Publishes to
+Conﬁgures
+Code
+generates
+Publishes to
+Reads from
+Invokes
+Uses
+contract.make{
+label 'orderCreatedEvent'
+input{
+triggeredBy('orderCreated()')
+}
+outputMessage{...}
+}
+class MessageTest extends MessagingBase{
+@Test
+public void validate_orderCreatedEvent(){
+orderCreated();
+...
+}
+}
+class MessagingBase{
+void orderCreated(){
+}
+OrderHistory
+EventHandlers
+Test
+OrderHistory
+EventHandlers
+Channel
+Order domain
+EventPublisher
+Channel
+Messaging stub
+Class under test
+Class under test
+Triggers
+'orderCreatedEvent'
+Invokes trigger function
+that veriﬁes that the output
+message is published to the
+expected channel
+Figure 10.4
+The contracts are used to test both sides of the publish/subscribe interaction. The provider-side 
+tests verify that OrderDomainEventPublisher publishes events that confirm to the contract. The 
+consumer-side tests verify that OrderHistoryEventHandlers consume the example events from 
+the contract.
+ 

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 238</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Developing business logic with event sourcing</strong></h3>
+  <p>
+   3 Apply the generated events by calling apply()
+  </p>
+  <p>
+   4 Saves the generated events in the event store
+  </p>
+  <p>
+   The update() method شبیه است. این دو پارامتر دارد، یک aggregate ID و یک command، و مراحل زیر را انجام می‌دهد:
+  </p>
+  <ol>
+   <li>Retrieves the aggregate from the event store</li>
+   <li>Invokes process() to process the command</li>
+   <li>Applies the generated events by calling apply()</li>
+   <li>Saves the generated events in the event store</li>
+  </ol>
+  <p>
+   The AggregateRepository class در درجه اول توسط services استفاده می‌شود، که aggregates را در پاسخ به requestsهای خارجی ایجاد و update می‌کنند. به عنوان مثال، listing زیر نشان می‌دهد که چگونه OrderService از یک AggregateRepository برای ایجاد یک Order استفاده می‌کند.
+  </p>
+  <pre><code class="language-java">public class OrderService {
+private AggregateRepository&lt;Order, OrderCommand&gt; orderRepository;
+public OrderService(AggregateRepository&lt;Order, OrderCommand&gt; orderRepository)
+{
+this.orderRepository = orderRepository;
+}
+public EntityWithIdAndVersion&lt;Order&gt; createOrder(OrderDetails orderDetails) {
+return orderRepository.save(new CreateOrder(orderDetails));
+}
+</code></pre>
+  <p>
+   OrderService با یک AggregateRepository برای Orders تزریق می‌شود. method به نام create() آن، AggregateRepository.save() را با یک command به نام CreateOrder فراخوانی می‌کند.
+  </p>
+  <h4><strong style="color:darkblue">SUBSCRIBING TO DOMAIN EVENTS</strong></h4>
+  <p>
+   فریم‌ورک Eventuate Client همچنین یک API برای نوشتن event handlers فراهم می‌کند. Listing 6.5 یک event handler را برای events به نام CreditReserved نشان می‌دهد. annotation به نام @EventSubscriber، ID از durable subscription را مشخص می‌کند. Events که زمانی که subscriber در حال اجرا نیست منتشر می‌شوند، هنگامی که راه‌اندازی می‌شود، تحویل داده می‌شوند. annotation به نام @EventHandlerMethod، method به نام creditReserved() را به عنوان یک event handler شناسایی می‌کند.
+  </p>
+  <pre><code class="language-java">@EventSubscriber(id="orderServiceEventHandlers")
+public class OrderServiceEventHandlers {
+@EventHandlerMethod
+public void creditReserved(EventHandlerContext&lt;CreditReserved&gt; ctx) {
+CreditReserved event = ctx.getEvent();
+...
+}
+</code></pre>
+  <p>
+   Listing 6.4
+   <br>
+   OrderService uses an AggregateRepository
+  </p>
+  <p>
+   Listing 6.5
+   <br>
+   An event handler for OrderCreatedEvent
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

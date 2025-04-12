@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 500</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   بعد از پیاده‌سازی Order History Service، تیم FTGO می‌تواند سپس
+   servicesها را به ترتیبی که در بخش 13.3.2 توضیح داده شد، استخراج کند: Order Service, Consumer Service,
+   Kitchen Service و غیره. همانطور که تیم FTGO هر service را استخراج می‌کند، maintain-
+   ability و testability application آنها به تدریج بهبود می‌یابد، و سرعت توسعه آنها
+   افزایش می‌یابد.
+  </p>
+  <h3><strong>Summary</strong></h3>
+  <ul>
+   <li>
+    
+    قبل از migrating به یک microservice architecture، مهم است که مطمئن شوید
+    مشکلات تحویل نرم‌افزار شما نتیجه outgrown شدن معماری mono-
+    lithic شما است. شما ممکن است بتوانید تحویل را با بهبود
+    software development process خود، تسریع کنید.
+   </li>
+   <li>
+    
+    مهم است که با توسعه افزایشی یک stran-
+    gler application به microservicesها مهاجرت کنید. یک strangler application یک application جدید است که شامل
+    microservicesهایی است که شما در اطراف application monolithic موجود می‌سازید. شما
+    باید value را در اوایل و اغلب نشان دهید تا اطمینان حاصل شود که کسب‌وکار
+    از effort migration پشتیبانی می‌کند.
+   </li>
+   <li>
+    
+    یک راه عالی برای معرفی microservicesها به معماری شما، implement کردن است
+    features جدید به عنوان servicesها. انجام این کار به شما امکان می‌دهد تا به سرعت و به راحتی یک
+    feature را با استفاده از یک technology و development process مدرن، توسعه دهید. این یک راه خوب است برای
+    به سرعت نشان دادن ارزش migrating به microservicesها.
+   </li>
+   <li>
+    
+    یک راه برای شکستن monolith این است که presentation tier را از
+    backend جدا کنید، که منجر به دو monolith کوچک‌تر می‌شود. اگرچه این یک
+    بهبود بزرگ نیست، اما به این معنی است که شما می‌توانید هر monolith را به طور مستقل deploy کنید.
+    به عنوان مثال، این به تیم UI اجازه می‌دهد تا به راحتی بر روی طراحی UI تکرار شوند
+    بدون تأثیر بر backend.
+   </li>
+   <li>
+    
+    راه اصلی برای شکستن monolith، migrating افزایشی function-
+    ality از monolith به servicesها است. مهم است که بر استخراج
+    servicesهایی تمرکز کنید که بیشترین benefit را ارائه می‌دهند. به عنوان مثال، شما توسعه را تسریع خواهید کرد
+    اگر شما یک service را استخراج کنید که functionalityای را پیاده‌سازی می‌کند که فعالانه در حال
+    توسعه است.
+   </li>
+   <li>
+    
+    servicesهای newly developed تقریباً همیشه باید با monolith تعامل داشته باشند. A
+    service اغلب نیاز دارد که به data monolith دسترسی داشته باشد و functionality آن را فراخوانی کند. The
+    monolith گاهی اوقات نیاز دارد که به data یک service دسترسی داشته باشد و functionality آن را فراخوانی کند.
+    برای پیاده‌سازی این همکاری، integration glue را توسعه دهید، که شامل
+    inbound و outbound adaptersها در monolith می‌شود.
+   </li>
+   <li>
+    
+    برای جلوگیری از آلوده شدن domain model monolith به domain model service،
+    integration glue باید از یک anti-corruption layer استفاده کند، که یک layer از
+    software است که بین domain modelsها ترجمه می‌کند.
+   </li>
+   <li>
+    
+    یک راه برای به حداقل رساندن تأثیر بر monolith در استخراج یک service، این است که
+    data را که به service منتقل شده بود، به database monolith تکرار کنید.
+    از آنجایی که schema monolith بدون تغییر باقی مانده است، این امر
+    نیاز به ایجاد تغییرات بالقوه گسترده در code base monolith را از بین می‌برد.
+   </li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

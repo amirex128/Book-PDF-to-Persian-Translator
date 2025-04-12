@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 151</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p><em>Local calls</em> مانند <em>remote calls</em> نیستند. ایده اصلی <em>RPC</em> این است که پیچیدگی یک <em>remote call</em> را پنهان کند. با این حال، این می‌تواند منجر به پنهان کردن بیش از حد شود. تلاش در برخی از اشکال <em>RPC</em> برای اینکه <em>remote method calls</em> شبیه <em>local method calls</em> به نظر برسند، این واقعیت را پنهان می‌کند که این دو چیز بسیار متفاوت هستند. من می‌توانم تعداد زیادی <em>local, in-process calls</em> برقرار کنم بدون اینکه خیلی نگران عملکرد باشم. با این حال، با <em>RPC</em>، هزینه <em>marshaling</em> و <em>unmarshaling payloads</em> می‌تواند قابل توجه باشد، چه رسد به زمانی که برای ارسال چیزها از طریق شبکه صرف می‌شود. این بدان معناست که شما باید در مورد طراحی <em>API</em> برای <em>remote interfaces</em> در مقابل <em>local interfaces</em> متفاوت فکر کنید. فقط گرفتن یک <em>local API</em> و تلاش برای تبدیل آن به یک <em>service boundary</em> بدون هیچ فکر دیگری احتمالاً شما را به دردسر می‌اندازد. در برخی از بدترین نمونه‌ها، توسعه‌دهندگان ممکن است بدون اینکه بدانند از <em>remote calls</em> استفاده می‌کنند، اگر <em>abstraction</em> بیش از حد <em>opaque</em> باشد.</p>
+
+  <p>شما باید در مورد خود <strong>network</strong> فکر کنید. معروف است که اولین مورد از <em>fallacies</em> محاسبات توزیع شده این است که "شبکه قابل اعتماد است". شبکه‌ها قابل اعتماد نیستند. آن‌ها می‌توانند و خراب خواهند شد، حتی اگر <em>client</em> شما و <em>server</em> که با آن صحبت می‌کنید خوب باشند. آن‌ها می‌توانند سریع شکست بخورند، می‌توانند کند شکست بخورند، و حتی می‌توانند <em>packets</em> شما را بد شکل کنند. شما باید فرض کنید که شبکه‌های شما مملو از موجودات بدخواه هستند که آماده‌اند خشم خود را در یک لحظه از بین ببرند. بنابراین، می‌توانید انتظار داشته باشید که با انواع <em>failure modes</em> مواجه شوید که ممکن است هرگز مجبور نشده باشید در نرم‌افزار ساده‌تر و <em>monolithic</em> با آن مقابله کنید. یک <em>failure</em> می‌تواند ناشی از بازگشت یک <em>error</em> توسط <em>remote server</em> یا برقراری یک تماس بد توسط شما باشد. آیا می‌توانید تفاوت را تشخیص دهید و اگر چنین است، آیا می‌توانید در مورد آن کاری انجام دهید؟ و وقتی <em>remote server</em> به آرامی شروع به پاسخ دادن می‌کند چه می‌کنید؟ ما این موضوع را زمانی که در فصل 12 در مورد <em>resiliency</em> صحبت می‌کنیم، پوشش خواهیم داد.</p>
+
+  <p><strong>Brittleness</strong>. برخی از محبوب‌ترین پیاده‌سازی‌های <em>RPC</em> می‌توانند منجر به برخی از اشکال‌های ناخوشایند <em>brittleness</em> شوند، که <em>Java RMI</em> یک مثال بسیار خوب است. بیایید یک <em>Java interface</em> بسیار ساده را در نظر بگیریم که تصمیم گرفته‌ایم یک <em>remote API</em> برای <em>Customer service</em> خود ایجاد کنیم. <em>Example 5-1</em> متدهایی را که قصد داریم از راه دور در معرض نمایش قرار دهیم، اعلام می‌کند. سپس <em>Java RMI</em> <em>client</em> و <em>server stubs</em> را برای متد ما تولید می‌کند.</p>
+
+  <p><strong>Example 5-1. Defining a service endpoint using Java RMI</strong></p>
+  <pre><code class="language-java">
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface CustomerRemote extends Remote {
+  public Customer findCustomer(String id) throws RemoteException;
+  public Customer createCustomer(
+    String firstname, String surname, String emailAddress)
+    throws RemoteException;
+}
+  </code></pre>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

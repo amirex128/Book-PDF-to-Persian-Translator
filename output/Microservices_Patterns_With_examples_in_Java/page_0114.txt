@@ -1,0 +1,58 @@
+84
+CHAPTER 3
+Interprocess communication in a microservice architecture
+DNS name order-service, which resolves to the virtual IP address 10.1.3.4. The
+deployment platform automatically load balances requests across the three instances
+of the Order Service.
+ This approach is a combination of two patterns:
+3rd party registration pattern—Instead of a service registering itself with the ser-
+vice registry, a third party called the registrar, which is typically part of the
+deployment platform, handles the registration.
+Server-side discovery pattern—Instead of a client querying the service registry, it
+makes a request to a DNS name, which resolves to a request router that queries
+the service registry and load balances requests.
+Service
+order-service
+order-service
+order-service
+...
+Service registry
+IP address
+10.232.23.1
+10.232.23.2
+10.232.23.3
+...
+Service
+client
+GET http://order-service/...
+Deployment platform
+RPC/rest
+client
+Service
+instance 1
+Order service
+Observes
+10.232.23.1
+10.232.24.99
+Service
+instance 2
+Service
+instance 3
+Platform
+router
+Queries
+Updates
+10.232.23.2
+10.232.23.3
+Registrar
+3rd party registration
+Server-side discovery
+Service DNS name
+resolves to service VIP
+Service virtual IP address (VIP)
+Figure 3.6
+The platform is responsible for service registration, discovery, and request routing. Service 
+instances are registered with the service registry by the registrar. Each service has a network location, 
+a DNS name/virtual IP address. A client makes a request to the service’s network location. The router 
+queries the service registry and load balances requests across the available service instances.
+ 

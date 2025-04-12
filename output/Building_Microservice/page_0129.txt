@@ -1,0 +1,26 @@
+information. A more problematic implementation would be the use of a shared data‐
+base in which multiple microservices both read and write to the same data store, an
+example of which we discussed in Chapter 2 when we explored common coupling—
+Figure 4-7 shows both Order Processor and Warehouse updating the same record.
+Figure 4-7. An example of common coupling in which both Order Processor and Ware
+house are updating the same order record
+Advantages
+This pattern can be implemented very simply, using commonly understood technol‐
+ogy. If you can read or write to a file or read and write to a database, you can use this
+pattern. The use of prevalent and well-understood technology also enables interoper‐
+ability between different types of systems, including older mainframe applications or
+customizable off-the-shelf (COTS) software products. Data volumes are also less of a
+concern here—if you’re sending lots of data in one big go, this pattern can work well.
+Disadvantages
+Downstream consuming microservices will typically be aware that there is new data
+to process via some sort of polling mechanism, or else perhaps through a periodically
+triggered timed job. That means that this mechanism is unlikely to be useful in low-
+latency situations. You can of course combine this pattern with some other sort of
+call informing a downstream microservice that new data is available. For example, I
+could write a file to a shared filesystem and then send a call to the interested micro‐
+service informing it that there is new data that it may want. This can close the gap
+between data being published and data being processed. In general, though, if you’re
+using this pattern for very large volumes of data, it’s less likely that low latency is high
+Pattern: Communication Through Common Data 
+| 
+103

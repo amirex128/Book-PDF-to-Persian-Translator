@@ -1,0 +1,60 @@
+435
+Strategies for refactoring a monolith to microservices
+few fields and methods to an existing class. Or the new feature might be too tightly
+coupled to the code in the monolith. If you attempted to implement this kind of fea-
+ture as a service you would typically find that performance would suffer because of
+excessive interprocess communication. You might also have problems maintaining
+data consistency. If a new feature can’t be implemented as a service, the solution is
+often to initially implement the new feature in the monolith. Later on, you can then
+extract that feature along with other related features into their own service.
+ Implementing new features as services accelerates the development of those fea-
+tures. It’s a good way to quickly demonstrate the value of the microservice architec-
+ture. It also reduces the monolith’s growth rate. But ultimately, you need to break
+apart the monolith using the two other strategies. You need to migrate functionality to
+the strangler application by extracting functionality from the monolith into services.
+You might also be able to improve development velocity by splitting the monolith hor-
+izontally. Let’s look at how to do that. 
+Monolith
+Outbound
+adapter
+API gateway
+Old features
+New features
+Integration
+glue
+Inbound
+adapter
+Inbound
+adapter
+Database
+adapter
+Database
+adapter
+Inbound
+adapter
+Event
+subscriber
+adapter
+Event
+publisher
+adapter
+Service
+database
+Monolith
+database
+«aggregate»
+DelayedDelivery
+Service
+«aggregate»
+Order
+«aggregate»
+Notification
+Service
+implementing
+new feature
+Figure 13.2
+A new feature is implemented as a service that’s part of the strangler application. The 
+integration glue integrates the service with the monolith and consists of adapters that implement 
+synchronous and asynchronous APIs. An API gateway routes requests that invoke new functionality 
+to the service.
+ 

@@ -1,0 +1,54 @@
+93
+Communicating using the Asynchronous messaging pattern
+IMPLEMENTING MESSAGE CHANNELS USING A MESSAGE BROKER
+Each message broker implements the message channel concept in a different way. As
+table 3.2 shows, JMS message brokers such as ActiveMQ have queues and topics.
+AMQP-based message brokers such as RabbitMQ have exchanges and queues. Apache
+Kafka has topics, AWS Kinesis has streams, and AWS SQS has queues. What’s more,
+some message brokers offer more flexible messaging than the message and channels
+abstraction described in this chapter.
+Almost all the message brokers described here support both point-to-point and publish-
+subscribe channels. The one exception is AWS SQS, which only supports point-to-point
+channels.
+ Now let’s look at the benefits and drawbacks of broker-based messaging. 
+BENEFITS AND DRAWBACKS OF BROKER-BASED MESSAGING
+There are many advantages to using broker-based messaging:
+Loose coupling—A client makes a request by simply sending a message to the
+appropriate channel. The client is completely unaware of the service instances.
+It doesn’t need to use a discovery mechanism to determine the location of a ser-
+vice instance.
+Message buffering—The message broker buffers messages until they can be pro-
+cessed. With a synchronous request/response protocol such as HTTP, both the
+client and service must be available for the duration of the exchange. With mes-
+saging, though, messages will queue up until they can be processed by the con-
+sumer. This means, for example, that an online store can accept orders from
+customers even when the order-fulfillment system is slow or unavailable. The
+messages will simply queue up until they can be processed.
+Flexible communication—Messaging supports all the interaction styles described
+earlier.
+Explicit interprocess communication—RPC-based mechanism attempts to make invok-
+ing a remote service look the same as calling a local service. But due to the laws
+of physics and the possibility of partial failure, they’re in fact quite different.
+Table 3.2
+Each message broker implements the message channel concept in a different way.
+Message broker
+Point-to-point channel
+Publish-subscribe channel
+JMS
+Queue
+Topic
+Apache Kafka
+Topic
+Topic
+AMQP-based brokers, such as 
+RabbitMQ
+Exchange + Queue
+Fanout exchange and a queue per 
+consumer
+AWS Kinesis
+Stream
+Stream
+AWS SQS
+Queue
+—
+ 

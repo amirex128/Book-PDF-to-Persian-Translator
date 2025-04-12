@@ -1,0 +1,38 @@
+Note that HTTP can be used to implement RPC too. SOAP, for example, gets routed
+over HTTP, but it unfortunately uses very little of the specification. Verbs are
+ignored, as are simple things like HTTP error codes. On the other hand, gRPC has
+been designed to take advantage of the capabilities of HTTP/2, such as the ability to
+send multiple request-response streams over a single connection. But of course, when
+using gRPC, you’re not doing REST just because you’re using HTTP!
+Hypermedia as the engine of application state
+Another principle introduced in REST that can help us avoid the coupling between
+client and server is the concept of hypermedia as the engine of application state (often
+abbreviated as HATEOAS, and boy, did it need an abbreviation). This is fairly dense
+wording and a fairly interesting concept, so let’s break it down a bit.
+Hypermedia is a concept wherein a piece of content contains links to various other
+pieces of content in a variety of formats (e.g., text, images, sounds). This should be
+pretty familiar to you, as it’s what happens in the average web page: you follow links,
+which are a form of hypermedia controls, to see related content. The idea behind
+HATEOAS is that clients should perform interactions with the server (potentially
+leading to state transitions) via these links to other resources. A client doesn’t need to
+know where exactly customers live on the server by knowing which URI to hit;
+instead, the client looks for and navigates links to find what it needs.
+This is a bit of an odd concept, so let’s first step back and consider how people inter‐
+act with a web page, which we have already established is rich with hypermedia
+controls.
+Think of the Amazon.com shopping site. The location of the shopping cart has
+changed over time. The graphic has changed. The link has changed. But as humans
+we are smart enough to still see a shopping cart, know what it is, and interact with it.
+We have an understanding of what a shopping cart means, even if the exact form and
+underlying control used to represent it have changed. We know that if we want to
+view the cart, this is the control we want to interact with. This is how web pages can
+change incrementally over time. As long as these implicit contracts between the cus‐
+tomer and the website are still met, changes don’t need to be breaking changes.
+With hypermedia controls, we are trying to achieve the same level of “smarts” for our
+electronic consumers. Let’s look at a hypermedia control that we might have for
+MusicCorp. We’ve accessed a resource representing a catalog entry for a given album
+in Example 5-2. Along with information about the album, we see a number of hyper‐
+media controls.
+Technology Choices 
+| 
+129

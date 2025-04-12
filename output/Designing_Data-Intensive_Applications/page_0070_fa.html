@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 70</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        تابع map یک بار برای هر document فراخوانی می‌شود، که منجر به emit("1995-12", 3) و emit("1995-12", 4) می‌شود. متعاقباً، تابع reduce با reduce("1995-12", [3, 4]) فراخوانی می‌شود که 7 را برمی‌گرداند.
+    </p>
+    <p>
+        توابع map و reduce تا حدودی در آنچه مجاز به انجام آن هستند، محدود شده‌اند. آن‌ها باید pure functions باشند، به این معنی که آن‌ها فقط از داده‌هایی استفاده می‌کنند که به عنوان ورودی به آن‌ها پاس داده می‌شود، نمی‌توانند queries database اضافی را انجام دهند و نباید هیچ side effects داشته باشند. این restrictions به database اجازه می‌دهد تا توابع را در هر جایی، به هر ترتیبی اجرا کند و آن‌ها را در صورت failure دوباره اجرا کند. با این حال، آن‌ها همچنان قدرتمند هستند: می‌توانند strings را parse کنند، توابع library را فراخوانی کنند، محاسبات را انجام دهند و موارد دیگر.
+    </p>
+    <p>
+        MapReduce یک programming model نسبتاً low-level برای execution distributed بر روی یک cluster of machines است. زبان‌های query high-level مانند SQL را می‌توان به عنوان یک pipeline از operations MapReduce پیاده‌سازی کرد (به فصل 10 مراجعه کنید)، اما همچنین پیاده‌سازی‌های distributed بسیاری از SQL وجود دارد که از MapReduce استفاده نمی‌کنند. توجه داشته باشید که هیچ چیز در SQL وجود ندارد که آن را به اجرا بر روی یک machine واحد محدود کند و MapReduce انحصار execution query distributed را ندارد.
+    </p>
+    <p>
+        توانایی استفاده از کد JavaScript در وسط یک query یک ویژگی عالی برای queries پیشرفته است، اما به MapReduce محدود نمی‌شود—برخی از SQL databases را می‌توان با توابع JavaScript نیز توسعه داد [34].
+    </p>
+    <p>
+        یک مشکل usability با MapReduce این است که شما باید دو تابع JavaScript با دقت هماهنگ شده بنویسید، که اغلب سخت‌تر از نوشتن یک query واحد است. علاوه بر این، یک declarative query language فرصت‌های بیشتری را برای یک query optimizer فراهم می‌کند تا performance یک query را بهبود بخشد. به همین دلایل، MongoDB 2.2 پشتیبانی از یک declarative query language به نام aggregation pipeline [9] را اضافه کرد. در این زبان، همان query shark-counting به این صورت است:
+    </p>
+    <pre><code class="language-javascript">db.observations.aggregate([
+    { $match: { family: "Sharks" } },
+    { $group: {
+        _id: {
+            year:  { $year:  "$observationTimestamp" },
+            month: { $month: "$observationTimestamp" }
+        },
+        totalAnimals: { $sum: "$numAnimals" }
+    } }
+]);
+</code></pre>
+    <p>
+        زبان aggregation pipeline از نظر expressiveness شبیه به یک subset از SQL است، اما از یک syntax مبتنی بر JSON به جای syntax جمله-style انگلیسی SQL استفاده می‌کند. این تفاوت شاید یک matter of taste باشد. نکته اخلاقی این داستان این است که یک سیستم NoSQL ممکن است خود را به طور تصادفی در حال بازآفرینی SQL بیابد، اگرچه در disguise.
+    </p>
+    <p>
+        48 | Chapter 2: Data Models and Query Languages
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 172</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <ol>
+   <li>CreateOrderSagaState (حالت حماسه ایجاد سفارش) برای تولید یک command message (پیام دستور) فراخوانی می‌شود.</li>
+   <li>SagaManager (مدیر حماسه) command message (پیام دستور) را به participant (شرکت‌کننده) saga (حماسه) (Kitchen Service (سرویس آشپزخانه)) ارسال می‌کند.</li>
+   <li>SagaManager (مدیر حماسه) نمونه saga (حماسه) به‌روزرسانی شده را در database (پایگاه داده) ذخیره می‌کند.</li>
+  </ol>
+  <p>اگر یک participant (شرکت‌کننده) saga (حماسه) شکست بخورد، SagaManager (مدیر حماسه) compensating transactions (تراکنش‌های جبرانی) را به ترتیب معکوس اجرا می‌کند.</p>
+  <p>بخش دیگر از Eventuate Tram Saga framework (فریم‌ورک حماسه Eventuate Tram) بسته participant (شرکت‌کننده) saga (حماسه) است. این کلاس‌های SagaCommandHandlersBuilder (سازنده هندلرهای حماسه) و SagaCommandDispatcher (توزیع کننده دستورات حماسه) را برای نوشتن saga participants (شرکت‌کنندگان حماسه) ارائه می‌دهد. این کلاس‌ها command messages (پیام‌های دستور) را به متدهای handler (هندلر) هدایت می‌کنند، که business logic (منطق تجاری) saga participants (شرکت‌کنندگان حماسه) را فراخوانی می‌کنند و reply messages (پیام‌های پاسخ) را تولید می‌کنند. بیایید نگاهی به نحوه استفاده از این کلاس‌ها توسط Order Service (سرویس سفارش) بیندازیم.</p>
+  <h4><strong>4.4.3 The OrderCommandHandlers class (کلاس OrderCommandHandlers)</strong></h4>
+  <p>Order Service (سرویس سفارش) در sagas (حماسه‌های) خود شرکت می‌کند. به عنوان مثال، CreateOrderSaga (حماسه ایجاد سفارش) Order Service (سرویس سفارش) را فراخوانی می‌کند تا یک Order (سفارش) را تأیید یا رد کند. کلاس OrderCommandHandlers، که در شکل 4.15 نشان داده شده است، متدهای handler (هندلر) را برای command messages (پیام‌های دستور) ارسال شده توسط این sagas (حماسه‌ها) تعریف می‌کند.</p>
+  <p>هر متد handler (هندلر) OrderService (سرویس سفارش) را برای به‌روزرسانی یک Order (سفارش) فراخوانی می‌کند و یک message (پیام) reply (پاسخ) ایجاد می‌کند. کلاس SagaCommandDispatcher (توزیع‌کننده دستورات حماسه) command messages (پیام‌های دستور) را به متد handler (هندلر) مناسب هدایت می‌کند و reply (پاسخ) را ارسال می‌کند.</p>
+  <br>
+  <p>approveOrder() (تایید سفارش)</p>
+  <p>rejectOrder() (رد سفارش)</p>
+  <p>... (و...)</p>
+  <p>OrderCommandHandlers (هندلرهای دستورات سفارش)</p>
+  <br>
+  <p>Eventuate</p>
+  <p>Tram Sagas (حماسه‌های ترام Eventuate)</p>
+  <br>
+  <p>approveOrder() (تایید سفارش)</p>
+  <p>rejectOrder() (رد سفارش)</p>
+  <p>... (و...)</p>
+  <p>OrderService (سرویس سفارش)</p>
+  <p>Invokes (فراخوانی می‌کند)</p>
+  <p>Invokes (فراخوانی می‌کند)</p>
+  <p>Uses (استفاده می‌کند)</p>
+  <p>Reads (می‌خواند)</p>
+  <p>Sends (ارسال می‌کند)</p>
+  <p>SagaCommand (دستور حماسه)</p>
+  <p>Dispatcher (توزیع‌کننده)</p>
+  <p>Eventuate tram (ترام Eventuate)</p>
+  <p>OrderService (سرویس سفارش)</p>
+  <p>requests (درخواست‌ها)</p>
+  <p>CreateOrderSaga (حماسه ایجاد سفارش)</p>
+  <p>replies (پاسخ‌ها)</p>
+  <p>Routes (مسیردهی) command messages (پیام‌های دستور) to (به)</p>
+  <p>handlers (هندلرها) and (و) sends (ارسال می‌کند) replies (پاسخ‌ها)</p>
+  <br>
+  <img src="figure_4_15.png" alt="Figure 4.15">
+  <p>OrderCommandHandlers (هندلرهای دستورات سفارش) command handlers (هندلرهای دستور) را برای دستوراتی که توسط sagas (حماسه‌های) مختلف Order Service (سرویس سفارش) ارسال می‌شوند، پیاده‌سازی می‌کند.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 324</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <ul>
+        <li>
+            فقط به یک user اجازه داده می‌شود که یک username خاص را ثبت کند، زیرا یک username باید یک user را به طور <em>unique</em> شناسایی کند.
+        </li>
+    </ul>
+    <p>
+        پیاده‌سازی این در یک <em>distributed system</em> نیازمند مراقبت است: حتی اگر یک node معتقد باشد که "انتخابی" است (leader از partition، دارنده <em>lock</em>، <em>request handler</em> از user که با موفقیت username را گرفته است)، این لزوماً به این معنا نیست که یک <em>quorum</em> از nodes موافق هستند! یک node ممکن است قبلاً leader بوده باشد، اما اگر nodes های دیگر در این میان آن را <em>dead</em> اعلام کردند (به عنوان مثال، به دلیل <em>network interruption</em> یا <em>GC pause</em>)، ممکن است عزل شده باشد و leader دیگری قبلاً انتخاب شده باشد.
+    </p>
+    <p>
+        اگر یک node به عنوان <em>chosen one</em> ادامه دهد، حتی اگر اکثریت nodes ها آن را <em>dead</em> اعلام کرده باشند، می‌تواند مشکلاتی را در یک system که با دقت طراحی نشده است، ایجاد کند. چنین node می‌تواند پیام‌هایی را به سایر nodes ها در ظرفیت خود تعیین شده ارسال کند، و اگر nodes های دیگر به آن اعتقاد داشته باشند، system در کل ممکن است کاری نادرست انجام دهد.
+    </p>
+    <p>
+        به عنوان مثال، شکل 8-4 یک باگ <em>data corruption</em> را به دلیل پیاده‌سازی نادرست از <em>locking</em> نشان می‌دهد. (باگ نظری نیست: HBase قبلاً این مشکل را داشته است [74, 75].) فرض کنید شما می‌خواهید اطمینان حاصل کنید که یک فایل در یک <em>storage service</em> فقط می‌تواند در یک زمان توسط یک client دسترسی پیدا کند، زیرا اگر چندین clients سعی کنند به آن بنویسند، فایل خراب می‌شود. شما سعی می‌کنید این را با نیاز به یک client برای دریافت یک <em>lease</em> از یک <em>lock service</em> قبل از دسترسی به فایل، پیاده‌سازی کنید.
+    </p>
+    <figure>
+        <img src="figure8-4.png" alt="Figure 8-4. Incorrect implementation of a distributed lock: client 1 believes that it still has a valid lease, even though it has expired, and thus corrupts a file in storage.">
+        <figcaption>Figure 8-4. Incorrect implementation of a distributed lock: client 1 believes that it still has a valid lease, even though it has expired, and thus corrupts a file in storage.</figcaption>
+    </figure>
+    <p>
+        مشکل نمونه‌ای از آنچه ما در "Process Pauses" در صفحه 295 مورد بحث قرار دادیم: اگر client که <em>lease</em> را نگه می‌دارد، برای مدت طولانی مکث کند، <em>lease</em> آن منقضی می‌شود. client دیگری می‌تواند یک <em>lease</em> برای همان فایل دریافت کند و شروع به نوشتن در فایل کند. هنگامی که client متوقف شده بازمی‌گردد، (به اشتباه) معتقد است که هنوز <em>lease</em> معتبری دارد و به نوشتن در فایل ادامه می‌دهد. در نتیجه، <em>writes</em> های clients با هم برخورد می‌کنند و فایل را خراب می‌کنند.
+        <br>
+        302
+        <br>
+        |
+        <br>
+        Chapter 8: The Trouble with Distributed Systems
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0324/image_1.png" alt="Image from page 324" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

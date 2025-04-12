@@ -1,0 +1,40 @@
+you can do things like issue rolling upgrades (so you replace pods with a newer ver‐
+sion in a gradual fashion to avoid downtime), rollbacks, scaling up the number of
+nodes, and more.
+So, to deploy your microservice, you define a pod, which will contain your microser‐
+vice instance inside it; you define a service, which will let Kubernetes know how your
+microservice will be accessed; and you apply changes to the running pods using a
+deployment. It seems easy when I say that, doesn’t it? Let’s just say I’ve left out quite a
+bit of stuff here for the sake of brevity.
+Multitenancy and Federation
+From an efficiency point of view, you’d want to pool all the computing resources
+available to you in a single Kubernetes cluster and have all workloads run there from
+all across your organization. This would likely give you a higher utilization of the
+underlying resources, as unused resources could be freely reallocated to whomever
+needs them. This in turn should reduce costs accordingly.
+The challenge is that while Kubernetes is well able to manage different microservices
+for different purposes, it has limitations regarding how “multitenanted” the platform
+is. Different departments in your organization might want different degrees of con‐
+trol over various resources. These sorts of controls were not built into Kubernetes, a
+decision that seems sensible in terms of trying to keep the scope of Kubernetes some‐
+what limited. To work around this problem, organizations seem to explore a couple
+of different paths.
+The first option is to adopt a platform built on top of Kubernetes that provides these
+capabilities—OpenShift from Red Hat, for example, has a rich set of access controls
+and other capabilities that are built with larger organizations in mind and can make
+the concept of multitenancy somewhat easier. Aside from any financial implication of
+using these sorts of platforms, for them to work you’ll sometimes have to work with
+the abstractions given to you by the vendor you chose—meaning your developers
+need to know not only how to use Kubernetes but also how to use that specific ven‐
+dor’s platform.
+Another approach is to consider a federated model, outlined in Figure 8-24. With
+federation, you have multiple separate clusters, with some layer of software that sits
+on top allowing you to make changes across all the clusters if needed. In many cases,
+people would work directly against one cluster, giving them a pretty familiar Kuber‐
+netes experience, but in some situations, you may want to distribute an application
+across multiple clusters, perhaps if those clusters were in different geographies and
+you wanted your application deployed with some ability to handle the loss of an
+entire cluster.
+262 
+| 
+Chapter 8: Deployment

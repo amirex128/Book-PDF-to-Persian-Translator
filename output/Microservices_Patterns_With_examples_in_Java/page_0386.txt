@@ -1,0 +1,46 @@
+356
+CHAPTER 11
+Developing production-ready services
+HANDLING AUTHORIZATION
+Authenticating a client’s credentials is important but insufficient. An application
+must also implement an authorization mechanism that verifies that the client is
+allowed to perform the requested operation. For example, in the FTGO application
+the getOrderDetails() query can only be invoked by the consumer who placed the
+Order (an example of instance-based security) and a customer service agent who is
+helping the consumer.
+ One place to implement authorization is the API gateway. It can, for example,
+restrict access to GET /orders/{orderId} to only users who are consumers and cus-
+tomer service agents. If a user isn’t allowed to access a particular path, the API gateway
+can reject the request before forwarding it on to the service. As with authentication,
+centralizing authorization within the API gateway reduces the risk of security vulnera-
+bilities. You can implement authorization in the API gateway using a security frame-
+work, such as Spring Security.
+ One drawback of implementing authorization in the API gateway is that it risks
+coupling the API gateway to the services, requiring them to be updated in lockstep.
+What’s more, the API gateway can typically only implement role-based access to URL
+paths. It’s generally not practical for the API gateway to implement ACLs that control
+access to individual domain objects, because that requires detailed knowledge of a ser-
+vice’s domain logic.
+ The other place to implement authorization is in the services. A service can imple-
+ment role-based authorization for URLs and for service methods. It can also implement
+ACLs to manage access to aggregates. Order Service can, for example, implement the
+role-based and ACL-based authorization mechanism for controlling access to orders.
+Other services in the FTGO application implement similar authorization logic. 
+USING JWTS TO PASS USER IDENTITY AND ROLES
+When implementing security in a microservice architecture, you need to decide which
+type of token an API gateway should use to pass user information to the services.
+There are two types of tokens to choose from. One option is to use opaque tokens,
+which are typically UUIDs. The downside of opaque tokens is that they reduce perfor-
+mance and availability and increase latency. That’s because the recipient of such a
+token must make a synchronous RPC call to a security service to validate the token
+and retrieve the user information.
+ An alternative approach, which eliminates the call to the security service, is to use a
+transparent token containing information about the user. One such popular standard
+for transparent tokens is the JSON Web Token (JWT). JWT is standard way to securely
+represent claims, such as user identity and roles, between two parties. A JWT has a pay-
+load, which is a JSON object that contains information about the user, such as their
+identity and roles, and other metadata, such as an expiration date. It’s signed with a
+secret that’s only known to the creator of the JWT, such as the API gateway and the
+recipient of the JWT, such as a service. The secret ensures that a malicious third party
+can’t forge or tamper with a JWT.
+ 

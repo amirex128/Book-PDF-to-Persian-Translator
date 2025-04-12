@@ -1,0 +1,41 @@
+Taking these ideas and articulating them as service-level objectives (SLOs), which we
+covered in Chapter 10, can be a good way to enshrine these requirements as a core
+part of your software delivery process.
+Degrading Functionality
+An essential part of building a resilient system, especially when your functionality is
+spread over a number of different microservices that may be up or down, is the abil‐
+ity to safely degrade functionality. Let’s imagine a standard web page on our ecom‐
+merce site. To pull together the various parts of that website, we might need several
+microservices to play a part. One microservice might display the details about the
+item being offered for sale. Another might show the price and stock level. And we’ll
+probably be showing shopping cart contents too, which may be yet another microser‐
+vice. If one of those services goes down, and that results in the whole web page being
+unavailable, then we have arguably made a system that is less resilient than one that
+requires only one service to be available.
+What we need to do is understand the impact of each outage and work out how to
+properly degrade functionality. From a business point of view, we would want our
+order-taking workflow to be as robust as possible, and we might be happy to accept
+some degradation of functionality to ensure this still works. If the stock levels are
+unavailable, we might make the decision to still go ahead with the sale and work out
+the details later. If the shopping cart microservice is unavailable, we’re probably in a
+lot of trouble, but we could still show the web page with the listing. Perhaps we just
+hide the shopping cart or replace it with an icon saying “Be Back Soon!”
+With a single-process monolithic application, we don’t have many decisions to make.
+System health is, to an extent, binary in this context—the process is either up or
+down. But with a microservice architecture, we need to consider a much more
+nuanced situation. The right thing to do in any situation is often not a technical deci‐
+sion. We might know what is technically possible when the shopping cart is down,
+but unless we understand the business context we won’t understand what action we
+should be taking. For example, perhaps we close the entire site, still allow people to
+browse the catalog of items, or replace the part of the UI containing the cart control
+with a phone number for placing an order. But for every customer-facing interface
+that uses multiple microservices, or every microservice that depends on multiple
+downstream collaborators, you need to ask yourself, “What happens if this is down?”
+and know what to do.
+By thinking about the criticality of each of our capabilities in terms of our cross-
+functional requirements, we’ll be much better positioned to know what we can do.
+Now let’s consider some things we can do from a technical point of view to make
+sure that when failure occurs, we can handle it gracefully.
+394 
+| 
+Chapter 12: Resiliency

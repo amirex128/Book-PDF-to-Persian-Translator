@@ -1,0 +1,57 @@
+283
+Implementing an API gateway
+primary way of defining the data model, and enums, which are similar to Java enums.
+An object type has a name and a collection of typed, named fields. A field can be a sca-
+lar type, such as a number, string, or enum; a list of scalar types; a reference to another
+object type; or a collection of references to another object type. Despite resembling a
+field of a traditional object-oriented class, a GraphQL field is conceptually a function
+that returns a value. It can have arguments, which enable a GraphQL client to tailor
+the data the function returns.
+ GraphQL also uses fields to define the queries supported by the schema. You
+define the schema’s queries by declaring an object type, which by convention is called
+Query. Each field of the Query object is a named query, which has an optional set of
+parameters, and a return type. I found this way of defining queries a little confusing
+when I first encountered it, but it helps to keep in mind that a GraphQL field is a
+function. It will become even clearer when we look at how fields are connected to the
+backend data sources.
+ The following listing shows part of the schema for the GraphQL-based FTGO API
+gateway. It defines several object types. Most of the object types correspond to the
+FTGO application’s Consumer, Order, and Restaurant entities. It also has a Query object
+type that defines the schema’s queries.
+type Query {
+   
+orders(consumerId : Int!): [Order]
+order(orderId : Int!): Order
+consumer(consumerId : Int!): Consumer
+}
+type Consumer {
+id: ID
+  
+firstName: String
+lastName: String
+orders: [Order]
+     
+}
+type Order {
+orderId: ID,
+consumerId : Int,
+consumer: Consumer
+restaurant: Restaurant
+deliveryInfo : DeliveryInfo
+...
+}
+type Restaurant {
+id: ID
+name: String
+...
+}
+Listing 8.7
+The GraphQL schema for the FTGO API gateway
+Defines the queries 
+that a client can 
+execute
+The unique ID 
+for a Consumer
+A consumer has 
+a list of orders.
+ 

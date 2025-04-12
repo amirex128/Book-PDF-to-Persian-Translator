@@ -1,0 +1,64 @@
+375
+Designing observable services
+the Micrometer Metrics library as a dependency and using a few lines of configura-
+tion. Spring Boot’s autoconfiguration takes care of configuring the metrics library and
+exposing the metrics. A service only needs to use the Micrometer Metrics API directly
+if it gathers application-specific metrics.
+ The following listing shows how OrderService can collect metrics about the number
+of orders placed, approved, and rejected. It uses MeterRegistry, which is the interface-
+provided Micrometer Metrics, to gather custom metrics. Each method increments an
+appropriately named counter.
+public class OrderService {
+@Autowired
+private MeterRegistry meterRegistry;
+    
+public Order createOrder(...) {
+...
+meterRegistry.counter("placed_orders").increment();    
+return order;
+}
+public void approveOrder(long orderId) {
+...
+meterRegistry.counter("approved_orders").increment();
+}
+public void rejectOrder(long orderId) {
+...
+meterRegistry.counter("rejected_orders").increment();      
+}
+DELIVERING METRICS TO THE METRICS SERVICE
+A service delivers metrics to the Metrics Service in one of two ways: push or pull. With
+the push model, a service instance sends the metrics to the Metrics Service by invoking
+an API. AWS Cloudwatch metrics, for example, implements the push model.
+ With the pull model, the Metrics Service (or its agent running locally) invokes a
+service API to retrieve the metrics from the service instance. Prometheus, a popular
+open source monitoring and alerting system, uses the pull model.
+ The FTGO application’s Order Service uses the micrometer-registry-prometheus
+library to integrate with Prometheus. Because this library is on the classpath, Spring
+Boot exposes a GET /actuator/prometheus endpoint, which returns metrics in the
+format that Prometheus expects. The custom metrics from OrderService are reported
+as follows:
+$ curl -v http://localhost:8080/actuator/prometheus | grep _orders
+# HELP placed_orders_total
+# TYPE placed_orders_total counter
+Listing 11.1
+OrderService tracks the number of orders placed, approved, and 
+rejected.
+The Micrometer Metrics 
+library API for managing 
+application-specific meters
+Increments the 
+placedOrders counter 
+when an order has 
+successfully been 
+placed
+Increments the 
+approvedOrders 
+counter when an 
+order has been 
+approved
+Increments the 
+rejectedOrders 
+counter when an 
+order has been 
+rejected
+ 

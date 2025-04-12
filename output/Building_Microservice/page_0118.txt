@@ -1,0 +1,39 @@
+Omission failure
+You sent something, but you didn’t get a response. Also includes situations in
+which you expect a downstream microservice to be firing messages (perhaps
+including events), and it just stops.
+Timing failure
+Something happened too late (you didn’t get it in time), or something happened
+too early!
+Response failure
+You got a response, but it just seems wrong. For example, you asked for an order
+summary, but needed pieces of information are missing in the response.
+Arbitrary failure
+Otherwise known as Byzantine failure, this is when something has gone wrong,
+but participants are unable to agree if the failure has occurred (or why). As it
+sounds like, this is a bad time all around.
+Many of these errors are often transient in nature—they are short-lived problems that
+might go away. Consider the situation in which we send a request to a microservice
+but don’t hear back (a type of omission failure). This could mean that the down‐
+stream microservice never got the request in the first place, so we need to send it
+again. Other problems can’t be dealt with easily and might need a human operator to
+intervene. As a result, it can become important to have a richer set of semantics for
+returning errors in a way that can allow clients to take appropriate action.
+HTTP is an example of a protocol that understands the importance of this. Every
+HTTP response has a code, with the 400 and 500 series codes being reserved for
+errors. 400 series error codes are request errors—essentially, a downstream service is
+telling the client that there is something wrong with the original request. As such, it’s
+probably something you should give up on—is there any point retrying a 404 Not
+Found, for example? The 500 series response codes relate to downstream issues, a sub‐
+set of which indicate to the client that the issue might be temporary. A 503 Service
+Unavailable, for example, indicates that the downstream server is unable to handle
+the request, but it may be a temporary state, in which case an upstream client might
+decide to retry the request. On the other hand, if a client receives a 501 Not Imple
+mented response, a retry is unlikely to help much.
+Whether or not you pick an HTTP-based protocol for communication between
+microservices, if you have a rich set of semantics around the nature of the error,
+you’ll make it easier for clients to carry out compensating actions, which in turn
+should help you build more robust systems.
+92 
+| 
+Chapter 4: Microservice Communication Styles

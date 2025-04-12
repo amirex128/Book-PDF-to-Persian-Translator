@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 93</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در واقع تابع db_set ما برای چیزی که اینقدر ساده است، performance بسیار خوبی دارد، زیرا اضافه کردن به یک فایل عموماً بسیار کارآمد است. به طور مشابه با آنچه db_set انجام می‌دهد، بسیاری از databases به صورت داخلی از یک log استفاده می‌کنند که یک فایل داده append-only است. databases واقعی مشکلات بیشتری برای مقابله با آن‌ها دارند (مانند concurrency control، بازیابی فضای دیسک به طوری که log برای همیشه رشد نکند و handling errors و records که به طور جزئی نوشته شده‌اند)، اما اصل اساسی یکسان است. Logs باورنکردنی مفید هستند و ما آن‌ها را چندین بار در بقیه این کتاب مشاهده خواهیم کرد.
+    </p>
+    <p>
+        کلمه log اغلب برای اشاره به application logs استفاده می‌شود، جایی که یک application متنی را خروجی می‌دهد که آنچه را که در حال رخ دادن است، توضیح می‌دهد. در این کتاب، log در معنای general‌تر استفاده می‌شود: یک دنباله append-only از records. نیازی نیست که انسان-readable باشد. ممکن است باینری باشد و فقط برای خواندن توسط برنامه‌های دیگر در نظر گرفته شده باشد.
+    </p>
+    <p>
+        از طرف دیگر، تابع db_get ما اگر شما تعداد زیادی record در database خود داشته باشید، performance وحشتناکی دارد. هر بار که می‌خواهید یک key را جستجو کنید، db_get باید کل فایل database را از ابتدا تا انتها scan کند و به دنبال occurrences of the key باشد. از نظر الگوریتمی، هزینه یک lookup O(n) است: اگر شما تعداد records n را در database خود دو برابر کنید، یک lookup دو برابر طول می‌کشد. این خوب نیست.
+    </p>
+    <p>
+        به منظور یافتن کارآمد value برای یک key خاص در database، ما به یک data structure متفاوت نیاز داریم: یک index. در این فصل ما به طیف وسیعی از indexing structures نگاه خواهیم کرد و خواهیم دید که چگونه با هم مقایسه می‌شوند. ایده کلی پشت آن‌ها این است که مقداری metadata اضافی را در کنار خود نگه دارید، که به عنوان یک signpost عمل می‌کند و به شما کمک می‌کند داده‌های مورد نظر خود را پیدا کنید. اگر شما می‌خواهید data یکسان را به روش‌های مختلف جستجو کنید، ممکن است به چندین index متفاوت در قسمت‌های مختلف data نیاز داشته باشید.
+    </p>
+    <p>
+        یک index یک ساختار اضافی است که از داده‌های اولیه مشتق شده است. بسیاری از databases به شما اجازه می‌دهند تا indexes را اضافه و حذف کنید و این بر محتویات database تأثیری ندارد. این فقط بر performance of queries تأثیر می‌گذارد. حفظ ساختارهای اضافی، overhead ایجاد می‌کند، به خصوص در writes. برای writes، غلبه بر performance از append کردن ساده به یک فایل سخت است، زیرا این ساده‌ترین عمل write ممکن است. هر نوع index معمولاً سرعت writes را کاهش می‌دهد، زیرا index نیز باید هر بار که داده‌ها نوشته می‌شود، به‌روزرسانی شود.
+    </p>
+    <p>
+        این یک trade-off مهم در storage systems است: indexes که به خوبی انتخاب شده‌اند، queries read را سرعت می‌بخشند، اما هر index سرعت writes را کاهش می‌دهد. به همین دلیل، databases معمولاً به طور پیش‌فرض همه چیز را index نمی‌کنند، اما از شما—developer application یا database administrator—می‌خواهند که indexes را به صورت دستی، با استفاده از دانش شما از الگوهای query معمولی application، انتخاب کنید. سپس می‌توانید indexes را انتخاب کنید که بیشترین سود را برای application شما به ارمغان می‌آورند، بدون اینکه overhead بیشتری نسبت به آنچه لازم است، معرفی کنید.
+    </p>
+    <p>
+        Data Structures That Power Your Database | 71
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0093/image_1.png" alt="Image from page 93" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

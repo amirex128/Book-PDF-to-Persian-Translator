@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 152</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>در این <em>interface</em>، <code>createCustomer</code> <code>firstName</code>, <code>surname</code> و <code>email address</code> را می‌گیرد.</p>
+  <p>اگر تصمیم بگیریم به <em>Customer</em> <em>object</em> اجازه دهیم فقط با یک <code>email address</code> ایجاد شود، چه اتفاقی می‌افتد؟ در این مرحله می‌توانیم یک <em>method</em> جدید را به راحتی اضافه کنیم، مانند این:</p>
+  <pre><code class="language-java">
+...
+public Customer createCustomer(String emailAddress) throws RemoteException;
+...
+  </code></pre>
+  <p>مشکل این است که اکنون باید <em>client stubs</em> را نیز بازسازی کنیم. <em>Clients</em> که می‌خواهند از <em>method</em> جدید استفاده کنند، به <em>stubs</em> جدید نیاز دارند، و بسته به ماهیت تغییرات در <em>specification</em>، <em>consumers</em> که به <em>method</em> جدید نیازی ندارند نیز ممکن است نیاز داشته باشند که <em>stubs</em> آن‌ها ارتقا یابد. البته این قابل مدیریت است، اما فقط تا یک نقطه.</p>
+  <p>واقعیت این است که تغییراتی از این قبیل نسبتاً رایج هستند. <em>RPC endpoints</em> اغلب در نهایت تعداد زیادی <em>method</em> برای راه‌های مختلف ایجاد یا تعامل با <em>objects</em> دارند. این تا حدی به این دلیل است که ما هنوز به این <em>remote calls</em> به عنوان <em>local ones</em> فکر می‌کنیم.</p>
+
+  <p>با این حال، نوع دیگری از <em>brittleness</em> وجود دارد. بیایید نگاهی به شکل <em>Customer</em> <em>object</em> خود بیندازیم:</p>
+  <pre><code class="language-java">
+public class Customer implements Serializable {
+  private String firstName;
+  private String surname;
+  private String emailAddress;
+  private String age;
+}
+  </code></pre>
+  <p>اگر مشخص شود که، اگرچه ما <em>age field</em> را در <em>Customer objects</em> خود قرار می‌دهیم، اما هیچ یک از <em>consumers</em> ما هرگز از آن استفاده نمی‌کنند؟ ما تصمیم می‌گیریم که می‌خواهیم این <em>field</em> را حذف کنیم. اما اگر پیاده‌سازی <em>server</em> <code>age</code> را از تعریف خود از این <em>type</em> حذف کند، و ما همین کار را با همه <em>consumers</em> انجام ندهیم، در این صورت، حتی اگر آن‌ها هرگز از <em>field</em> استفاده نکرده باشند، کد مرتبط با <em>deserializing</em> <em>Customer object</em> در سمت <em>consumer</em> خراب می‌شود. برای پیاده‌سازی این تغییر، باید تغییراتی در <em>client code</em> ایجاد کنیم تا از تعریف جدید پشتیبانی کنیم و این <em>updated clients</em> را همزمان با راه‌اندازی نسخه جدید <em>server</em> مستقر کنیم. این یک چالش کلیدی با هر مکانیزم <em>RPC</em> است که استفاده از <em>binary stub generation</em> را ترویج می‌دهد: شما نمی‌توانید <em>client</em> و <em>server deployments</em> را از هم جدا کنید. اگر از این فناوری استفاده می‌کنید، <em>lockstep releases</em> ممکن است در آینده شما باشد.</p>
+
+  <p>مشکلات مشابهی در صورت تمایل به <em>restructure</em> کردن <em>Customer object</em> رخ می‌دهد، حتی اگر <em>fields</em> را حذف نکنیم—به عنوان مثال، اگر بخواهیم <code>firstName</code> و <code>surname</code> را در یک <em>naming type</em> جدید کپسوله کنیم تا مدیریت آن آسان‌تر شود. البته می‌توانیم این مشکل را با انتقال <em>dictionary types</em> به عنوان پارامترهای <em>calls</em> خود برطرف کنیم، اما در آن مرحله، بسیاری از مزایای <em>generated stubs</em> را از دست می‌دهیم زیرا همچنان باید به صورت دستی <em>match</em> و <em>extract</em> کنیم <em>fields</em> را که می‌خواهیم.</p>
+  <p>در عمل، <em>objects</em> که به عنوان بخشی از <em>binary serialization across the wire</em> استفاده می‌شوند، می‌توانند به عنوان <em>"expand-only" types</em> در نظر گرفته شوند. این <em>brittleness</em> منجر به این می‌شود که <em>types</em> از طریق</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

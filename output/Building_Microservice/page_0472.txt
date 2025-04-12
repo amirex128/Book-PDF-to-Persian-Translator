@@ -1,0 +1,40 @@
+actually changed. If a heartbeat event isn’t received, the client can assume an issue
+and could do whatever is most appropriate—perhaps informing a user that they are
+seeing stale data, or perhaps just turning off functionality.
+You also need to consider what the notification contains. If the notification just says
+“this thing has changed” without saying what the change is, then when receiving the
+notification, a consumer would need to go the origin and fetch the new data. On the
+other hand, if the notification contains the current state of the data, then consumers
+can load that directly into their local cache. Having a notification containing more
+data can cause issues regarding size and also carries a risk of potentially exposing sen‐
+sitive data too broadly. We previously explored this trade-off in more depth when
+looking at event-driven communication in “What’s in an Event?” on page 111.
+Write-through
+With a write-through cache, the cache is updated at the same time as the state in the
+origin. “At the same time” is where write-through caches get tricky, of course. Imple‐
+menting a write-through mechanism on a server-side cache is somewhat straightfor‐
+ward, as you could update a database and an in-memory cache within the same
+transaction without too much difficulty. If the cache is elsewhere, it’s more difficult
+to reason about what “at the same time” means in terms of these entries being
+updated.
+Due to this difficulty, you’d typically see write-through caching being used in a
+microservice architecture on the server side. The benefits are pretty clear—the win‐
+dow in which a client might see stale data could be practically eliminated. This is bal‐
+anced against the fact that server-side caches may well be less generally useful,
+limiting the circumstances in which a write-through cache would be effective in
+microservices.
+Write-behind
+With a write-behind cache, the cache itself is updated first, and then the origin is
+updated. Conceptually, you can think of the cache as a buffer. Writing into the cache
+is faster than updating the origin. So we write the result into the cache, allowing faster
+subsequent reads, and trust that the origin will be updated afterward.
+The main concern around write-behind caches is going to be the potential for data
+loss. If the cache itself isn’t durable, we could lose the data before the data is written
+to the origin. Additionally, we’re now in an interesting spot—what is the origin in this
+context? We’d expect the origin to be the microservice where this data is sourced
+from—but if we update the cache first, is that really the origin? What is our source of
+truth? When making use of caching, it’s important to separate out what data is
+cached (and potentially out of date) and what data can actually be considered to be
+446 
+| 
+Chapter 13: Scaling

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 106</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <ul>
+   <li>
+    کلاینت‌ها باید مکان (<strong>URLs</strong>) نمونه‌های سرویس را بدانند. همانطور که توضیح داده شد
+    در بخش 3.2.4، این یک مشکل غیر بدیهی در یک اپلیکیشن مدرن است. کلاینت‌ها باید
+    از آنچه به عنوان یک مکانیسم <strong>service discovery</strong> شناخته می‌شود، برای یافتن نمونه‌های سرویس استفاده کنند.
+   </li>
+   <li>
+    بازیابی چندین <strong>resource</strong> در یک <strong>request</strong> واحد، چالش‌برانگیز است.
+   </li>
+   <li>
+    گاهی اوقات نگاشت چندین عملیات <strong>update</strong> به <strong>HTTP verbs</strong> دشوار است.
+   </li>
+  </ul>
+  <p>
+   علیرغم این معایب، <strong>REST</strong> به نظر می‌رسد که استاندارد <strong>de facto</strong> برای <strong>APIs</strong> است، اگرچه
+   چندین جایگزین جالب وجود دارد. به عنوان مثال، <strong>GraphQL</strong>، <strong>data fetching</strong> کارآمد و انعطاف‌پذیر را پیاده‌سازی می‌کند. فصل 8 به <strong>GraphQL</strong> می‌پردازد و الگو <strong>API gateway</strong> را پوشش می‌دهد.
+  </p>
+  <p>
+   <strong>gRPC</strong> یکی دیگر از جایگزین‌های <strong>REST</strong> است. بیایید نگاهی بیندازیم به نحوه عملکرد آن.
+  </p>
+  <h4>3.2.2 Using gRPC</h4>
+  <p>
+   همانطور که در بخش قبل ذکر شد، یک چالش با استفاده از <strong>REST</strong> این است که
+   از آنجایی که <strong>HTTP</strong> فقط تعداد محدودی از <strong>verbs</strong> را ارائه می‌دهد، طراحی یک <strong>REST API</strong> که از چندین عملیات <strong>update</strong> پشتیبانی می‌کند، همیشه ساده نیست. یک فناوری <strong>IPC</strong>
+   که از این مشکل اجتناب می‌کند، <strong>gRPC</strong> (www.grpc.io) است، یک فریم‌ورک برای نوشتن
+   کلاینت‌ها و سرورهای <strong>cross-language</strong> (به https://en.wikipedia.org/wiki/Remote_procedure_call مراجعه کنید
+   برای اطلاعات بیشتر). <strong>gRPC</strong> یک پروتکل مبتنی بر پیام باینری است، و این به این معنی است - همانطور که قبلاً در بحث در مورد فرمت‌های پیام باینری ذکر شد - شما مجبور هستید یک رویکرد <strong>API-first</strong> را در طراحی سرویس در نظر بگیرید. شما <strong>APIs gRPC</strong> خود را با استفاده از یک <strong>Protocol Buffers-based</strong>
+   <strong>IDL</strong> تعریف می‌کنید، که مکانیسم خنثی Google برای سریال‌سازی <strong>structured data</strong> است.
+   شما از کامپایلر <strong>Protocol Buffer</strong> برای تولید <strong>stubs</strong> سمت کلاینت و <strong>skel-</strong>
+   <strong>etons</strong> سمت سرور استفاده می‌کنید. کامپایلر می‌تواند کدی را برای انواع زبان‌ها، از جمله <strong>Java</strong>، <strong>C#</strong>،
+   <strong>NodeJS</strong> و <strong>GoLang</strong> تولید کند. کلاینت‌ها و سرورها پیام‌های باینری را در <strong>Protocol</strong> تبادل می‌کنند
+   فرمت <strong>Buffers</strong> با استفاده از <strong>HTTP/2</strong>.
+  </p>
+  <p>
+   یک <strong>gRPC API</strong> از یک یا چند سرویس و تعاریف پیام <strong>request/response</strong> تشکیل شده است. یک
+   تعریف سرویس مشابه یک <strong>Java interface</strong> است و مجموعه‌ای از متدهای <strong>strongly</strong>
+   <strong>typed</strong> است. همچنین پشتیبانی از <strong>RPC request/response</strong> ساده، <strong>gRPC</strong> از
+   <strong>streaming RPC</strong> پشتیبانی می‌کند. یک سرور می‌تواند با یک جریان از پیام‌ها به کلاینت پاسخ دهد. متناوباً،
+   یک کلاینت می‌تواند یک جریان از پیام‌ها را به سرور ارسال کند.
+  </p>
+  <p>
+   <strong>gRPC</strong> از <strong>Protocol Buffers</strong> به عنوان فرمت پیام استفاده می‌کند. <strong>Protocol Buffers</strong>، همانطور که
+   قبلاً ذکر شد، یک فرمت باینری کارآمد و فشرده است. این یک فرمت <strong>tagged</strong> است. هر <strong>field</strong> از
+   یک پیام <strong>Protocol Buffers</strong> شماره‌گذاری شده و دارای یک <strong>type code</strong> است. یک گیرنده پیام می‌تواند
+   فیلدهایی را که نیاز دارد استخراج کند و از فیلدهایی که آن را نمی‌شناسد، صرفنظر کند. به عنوان یک
+   نتیجه، <strong>gRPC</strong> <strong>APIs</strong> را قادر می‌سازد تا تکامل یابند در حالی که <strong>backward-compatible</strong> باقی می‌مانند.
+  </p>
+  <p>
+   فهرست 3.1 بخشی از <strong>gRPC API</strong> را برای <strong>Order Service</strong> نشان می‌دهد. این سرویس چندین متد، از جمله
+   <strong>createOrder()</strong> را تعریف می‌کند. این متد یک <strong>CreateOrderRequest</strong> را به عنوان
+   یک پارامتر دریافت می‌کند و یک <strong>CreateOrderReply</strong> را برمی‌گرداند.
+  </p>
+  <pre>
+   <code>
+    service OrderService {
+     rpc createOrder(CreateOrderRequest) returns (CreateOrderReply) {}
+    </code>
+  </pre>
+  <p>
+   فهرست 3.1
+   بخشی از <strong>gRPC API</strong> برای <strong>Order Service</strong>
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 394</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   The Spring Cloud Config project یک مثال خوب از یک configuration server-based است
+   framework. It consists از یک server و یک client. The server پشتیبانی می‌کند از variety از backends
+   برای ذخیره configuration properties، از جمله version control systems، databases، و
+   Hashicorp Vault. The client configuration properties را از server بازیابی می‌کند و
+   آنها را در Spring ApplicationContext تزریق می‌کند.
+  </p>
+  <p>
+   Using a configuration server دارای چندین benefit است:
+  </p>
+  <p>
+   Centralized configuration—تمام configuration properties در یک
+   place ذخیره می‌شوند، که مدیریت آنها را آسان‌تر می‌کند. What’s more، برای حذف
+   duplicate configuration properties، برخی از پیاده‌سازی‌ها به شما اجازه می‌دهند که global را تعریف کنید
+   defaults، که می‌تواند بر اساس هر service نادیده گرفته شود.
+  </p>
+  <p>
+   Transparent decryption of sensitive data—رمزگذاری data حساس مانند database
+   credentials یک security best practice است. One challenge از استفاده از encryption, though,
+   این است که معمولاً service instance نیاز به decrypt آنها دارد، که به این معنی است که به
+   encryption keys نیاز دارد. Some configuration server implementations به طور خودکار
+   properties را قبل از بازگرداندن آنها به service decrypt می‌کند.
+  </p>
+  <p>
+   Dynamic reconfiguration—A service می‌تواند بالقوه updated property val-
+   ues را با، به عنوان مثال، polling، تشخیص دهد و خود را reconfigure کند.
+  </p>
+  <p>
+   The primary drawback از استفاده از یک configuration server این است که تا زمانی که توسط
+   the infrastructure ارائه نشود، این یک قطعه دیگر از infrastructure است که نیاز به راه‌اندازی و
+   maintenance دارد. Fortunately, there are various open source frameworks، مانند Spring
+   Cloud Config, which make it easier to run a configuration server.
+  </p>
+  <p>
+   Now that we’ve looked at how to design configurable services، بیایید در مورد اینکه چگونه صحبت کنیم
+   to design observable services.
+  </p>
+  <h4><span style="font-weight: bold;">11.3 Designing observable services</span></h4>
+  <p>
+   Let’s say شما application FTGO را در production مستقر کرده‌اید. You probably want
+   to know که application چه می‌کند: requests در هر ثانیه، resource utilization، و
+  </p>
+  <p>
+   Order
+   History Service
+   instance
+   Process
+   Conﬁgures
+   Creates
+   CONFIG_SERVER_URL=...
+   getConﬁguration(“orderHistoryService”)
+   BOOTSTRAP_SERVERS=kafka1:9092
+   AWS_ACCESS_KEY_ID=
+   AWS_SECRET_ACCESS_KEY=...
+   AWS_REGION=...
+   ....
+   Environment variables
+   Deployment
+   infrastructure
+   Conﬁguration
+   server
+  </p>
+  <p>
+   Figure 11.8
+   On startup, a service instance configuration properties خود را از یک configuration server بازیابی می‌کند. The
+   deployment infrastructure configuration properties را برای دسترسی به configuration server فراهم می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

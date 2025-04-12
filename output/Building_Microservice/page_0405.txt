@@ -1,0 +1,40 @@
+One final problem with this approach is that it can lull you into a false sense of secu‐
+rity. Again, I like to return to the idea of defense in depth—from network perimeter
+to subnet, firewall, machine, operating system, and the underlying hardware. You
+have the ability to implement security measures at all of these points. I have seen
+some people put all their eggs in one basket, relying on the gateway to handle every
+step for them. And we all know what happens when we have a single point of
+failure…
+Obviously you could use this gateway to do other things. For example, you could also
+decide to terminate HTTPS at this level, run intrusion detection, and so on. Do be
+careful, though. Gateway layers tend to take on more and more functionality, which
+itself can end up being a giant coupling point. And the more functionality something
+has, the greater the attack surface.
+Fine-Grained Authorization
+A gateway may be able to provide fairly effective coarse-grained authentication. For
+example, it could prevent any non-logged-in users from accessing the helpdesk appli‐
+cation. Assuming our gateway can extract attributes about the principal as a result of
+the authentication, it may be able to make more nuanced decisions. For example, it is
+common to place people in groups or assign them to roles. We can use this informa‐
+tion to understand what they can do. So for the helpdesk application, we might allow
+access only to principals with a specific role (e.g., STAFF). Beyond allowing (or disal‐
+lowing) access to specific resources or endpoints, though, we need to leave the rest to
+the microservice itself; it will need to make further decisions about what operations
+to allow.
+Back to our helpdesk application: do we allow any staff member to see any and all
+details? More likely, we’ll have different roles at work. For example, a principal in the
+CALL_CENTER group might be allowed to view any piece of information about a cus‐
+tomer except their payment details. This principal might also be able to issue refunds,
+but that amount might be capped. Someone who has the CALL_CENTER_TEAM_LEADER
+role, however, might be able to issue larger refunds.
+These decisions need to be local to the microservice in question. I have seen people
+use the various attributes supplied by identity providers in horrible ways, using really
+fine-grained roles like CALL_CENTER_50_DOLLAR_REFUND, where they end up putting
+information specific to one piece of microservice functionality into their directory
+services. This is a nightmare to maintain and gives very little scope for our services to
+have their own independent life cycle, as suddenly a chunk of information about how
+a service behaves lives elsewhere, perhaps in a system managed by a different part of
+the organization.
+Authentication and Authorization 
+| 
+379

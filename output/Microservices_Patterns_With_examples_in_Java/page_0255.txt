@@ -1,0 +1,42 @@
+225
+Querying using the API composition pattern
+7.1.4
+API composition design issues
+When using this pattern, you have to address a couple of design issues:
+Deciding which component in your architecture is the query operation’s API
+composer
+How to write efficient aggregation logic
+Let’s look at each issue.
+WHO PLAYS THE ROLE OF THE API COMPOSER?
+One decision that you must make is who plays the role of the query operation’s API
+composer. You have three options. The first option, shown in figure 7.4, is for a client of
+the services to be the API composer.
+A frontend client such as a web application, that implements the Order Status view
+and is running on the same LAN, could efficiently retrieve the order details using this
+pattern. But as you’ll learn in chapter 8, this option is probably not practical for cli-
+ents that are outside of the firewall and access services via a slower network.
+ The second option, shown in figure 7.5, is for an API gateway, which implements the
+application’s external API, to play the role of an API composer for a query operation.
+ This option makes sense if the query operation is part of the application’s external
+API. Instead of routing a request to another service, the API gateway implements the
+API composition logic. This approach enables a client, such as a mobile device, that’s
+running outside of the firewall to efficiently retrieve data from numerous services with
+a single API call. I discuss the API gateway in chapter 8.
+ The third option, shown in figure 7.6, is to implement an API composer as a stand-
+alone service.
+Client, such as web application
+Order
+Service
+Delivery
+Service
+Kitchen
+Service
+Accounting
+Service
+API composer
+Figure 7.4
+Implementing API 
+composition in a client. The 
+client queries the provider 
+services to retrieve the data.
+ 

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 183</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Designing a domain model (طراحی یک مدل دامنه) using the (با استفاده از) the DDD aggregate pattern (الگوی تجمیع DDD)</strong></h3>
+  <p>example (مثال)، کدام کلاس‌ها بخشی از business object (شیء تجاری) Order (سفارش) هستند. این فقدان مرزها گاهی اوقات می‌تواند مشکل‌ساز شود، به‌ویژه در microservice architecture (معماری ریز سرویس).</p>
+  <p>من این بخش را با یک مشکل example (مثال) ناشی از فقدان مرزهای صریح شروع می‌کنم. در مرحله بعد، مفهوم یک aggregate (تجمیع) و اینکه چگونه مرزهای صریح دارد را شرح می‌دهم. پس از آن، قوانین را شرح می‌دهم که aggregates (تجمیع‌ها) باید از آنها اطاعت کنند و چگونه آنها را برای microservice architecture (معماری ریز سرویس) مناسب می‌سازند. سپس، من چگونگی انتخاب دقیق مرزهای aggregates (تجمیع‌ها) و دلیل اهمیت آن را شرح می‌دهم. در نهایت، من در مورد چگونگی طراحی business logic (منطق تجاری) با استفاده از aggregates (تجمیع‌ها) بحث می‌کنم. ابتدا بیایید نگاهی به مشکلات ناشی از مرزهای fuzzy (فازی) بیندازیم.</p>
+  <h4><strong>5.2.1 The problem with fuzzy boundaries (مشکل با مرزهای فازی)</strong></h4>
+  <p>به عنوان مثال، تصور کنید که می‌خواهید یک operation (عملیات) را انجام دهید، مانند load (بارگذاری) یا delete (حذف)، روی یک business object (شیء تجاری) Order (سفارش). این دقیقاً به چه معناست؟ دامنه یک operation (عملیات) چیست؟ شما مطمئناً object (شیء) Order (سفارش) را بارگذاری یا حذف می‌کنید. اما در واقعیت، چیزی بیش از صرفاً object (شیء) Order (سفارش) وجود دارد. همچنین آیتم‌های خط سفارش، اطلاعات پرداخت و غیره وجود دارد. شکل 5.4 مرزهای یک domain object (شیء دامنه) را به شهود developer (توسعه‌دهنده) واگذار می‌کند.</p>
+  <p>علاوه بر یک conceptual fuzziness (ابهام مفهومی)، فقدان مرزهای صریح باعث ایجاد مشکلاتی هنگام به‌روزرسانی یک business object (شیء تجاری) می‌شود. یک business object (شیء تجاری) معمولی دارای invariants (نامتغیرها) است، business rules (قوانین تجاری) که باید همیشه اعمال شوند. به عنوان مثال، یک Order (سفارش) دارای حداقل مقدار سفارش است. application (برنامه) FTGO باید اطمینان حاصل کند که هر تلاشی برای به‌روزرسانی یک order (سفارش) یک invariant (نامتغیر) مانند حداقل مقدار سفارش را نقض نمی‌کند. چالش این است که برای اعمال invariants (نامتغیرها)، شما باید business logic (منطق تجاری) خود را با دقت طراحی کنید.</p>
+  <p>به عنوان مثال، بیایید نگاهی بیندازیم که چگونه از رعایت حداقل سفارش اطمینان حاصل کنیم وقتی چندین consumers (مصرف‌کننده) با هم برای ایجاد یک order (سفارش) کار می‌کنند. دو consumers (مصرف‌کننده) - Sam (سم) و Mary (مری) - با هم روی یک order (سفارش) کار می‌کنند و همزمان تصمیم می‌گیرند که order (سفارش) از بودجه آنها فراتر رفته است. Sam (سم) مقدار samosas (سمبوسه) را کاهش می‌دهد، و Mary (مری) مقدار naan bread (نان) را کاهش می‌دهد. از دیدگاه application (برنامه)، هر دو consumers (مصرف‌کننده) order (سفارش) و آیتم‌های خط آن را از database (پایگاه داده) بازیابی می‌کنند. سپس هر دو consumers (مصرف‌کننده) یک آیتم خط را برای کاهش هزینه order (سفارش) به‌روزرسانی می‌کنند. از دیدگاه هر consumer (مصرف‌کننده)، حداقل order (سفارش) حفظ می‌شود.</p>
+  <p>در اینجا توالی database transactions (تراکنش‌های پایگاه داده) آمده است.</p>
+  <br>
+  <p>Consumer - Mary (مصرف‌کننده - مری)</p>
+  <p>Consumer - Sam (مصرف‌کننده - سم)</p>
+  <br>
+  <p>BEGIN TXN (شروع تراکنش)</p>
+  <p>SELECT ORDER_TOTAL FROM ORDER (انتخاب مجموع سفارش از سفارش)</p>
+  <p>WHERE ORDER ID = X (جایی که شناسه سفارش = X)</p>
+  <p>SELECT * FROM ORDER_LINE_ITEM (انتخاب * از آیتم خط سفارش)</p>
+  <p>WHERE ORDER_ID = X (جایی که شناسه سفارش = X)</p>
+  <p>... (و...)</p>
+  <p>END TXN (پایان تراکنش)</p>
+  <p>BEGIN TXN (شروع تراکنش)</p>
+  <p>SELECT ORDER_TOTAL FROM ORDER (انتخاب مجموع سفارش از سفارش)</p>
+  <p>WHERE ORDER ID = X (جایی که شناسه سفارش = X)</p>
+  <p>SELECT * FROM ORDER_LINE_ITEM (انتخاب * از آیتم خط سفارش)</p>
+  <p>WHERE ORDER_ID = X (جایی که شناسه سفارش = X)</p>
+  <p>... (و...)</p>
+  <p>END TXN (پایان تراکنش)</p>
+  <p>Verify minimum is met (تایید حداقل رعایت شده است)</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 486</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   علت اصلی بسیاری از این مشکلات تحویل، الگوریتم زمان‌بندی تحویل ابتدایی است
+   که توسط application FTGO استفاده می‌شود. یک زمان‌بند sophisticatedتر در حال
+   توسعه است، اما برای چند ماه به پایان نخواهد رسید. راه‌حل موقت این است که
+   FTGO، به طور فعال سفارشات با تاخیر یا لغو شده را با عذرخواهی از cus-
+   tomer، و در برخی موارد ارائه compensation قبل از اینکه customer شکایت کند، handle کند.
+  </p>
+  <p>
+   وظیفه شما این است که یک feature جدید را پیاده‌سازی کنید که موارد زیر را انجام می‌دهد:
+   <ol>
+    <li>
+     Notify the customer when their order won’t be delivered on time.
+    </li>
+    <li>
+     Notify the customer when their order can’t be delivered because it can’t be
+     picked up before the restaurant closes.
+    </li>
+    <li>
+     Notify customer service when an order can’t be delivered on time so that they
+     can proactively rectify the situation by compensating the customer.
+    </li>
+    <li>
+     Track delivery statistics.
+    </li>
+   </ol>
+  </p>
+  <p>
+   این feature جدید، نسبتاً ساده است. کد جدید باید state of هر Order را ردیابی کند، و
+   اگر یک Order نتواند طبق وعده تحویل داده شود، کد باید به customer و cus-
+   tomer support، مثلاً با ارسال یک ایمیل، اطلاع دهد.
+  </p>
+  <p>
+   اما چگونه—یا شاید دقیق‌تر، کجا—شما باید این feature جدید را پیاده‌سازی کنید؟
+   یک رویکرد، پیاده‌سازی یک module جدید در monolith است. مشکل
+   در آنجا این است که توسعه و تست این کد دشوار خواهد بود. علاوه بر این، این
+   رویکرد، اندازه monolith را افزایش می‌دهد و در نتیجه monolith hell را حتی
+   بدتر می‌کند. قانون Holes را از قبل به یاد داشته باشید: وقتی در یک سوراخ هستید، بهتر است
+   از کندن دست بکشید. به جای بزرگ‌تر کردن monolith، یک رویکرد بسیار بهتر، imple-
+   ment این features جدید به عنوان یک service است.
+  </p>
+  <h3><strong>13.4.1 The design of Delayed Delivery Service</strong></h3>
+  <p>
+   ما این feature را به عنوان یک service به نام Delayed Order Service پیاده‌سازی خواهیم کرد. شکل 13.14
+   معماری application FTGO را پس از پیاده‌سازی این service نشان می‌دهد. the appli-
+   cation شامل FTGO monolith، service جدید Delayed Delivery و یک
+   API Gateway است. Delayed Delivery Service دارای یک API است که یک query opera-
+   tion واحد به نام getDelayedOrders() را تعریف می‌کند، که سفارشات در حال حاضر با تاخیر یا غیرقابل تحویل را برمی‌گرداند. API Gateway، request getDelayedOrders() را به service route می‌کند و همه
+   requestsهای دیگر را به monolith. The integration glue، به Delayed Order Service دسترسی به data monolith را می‌دهد.
+  </p>
+  <p>
+   domain model Delayed Order Service شامل entitiesهای مختلفی از جمله
+   DelayedOrderNotification, Order و Restaurant است. the core logic توسط
+   کلاس DelayedOrderService پیاده‌سازی می‌شود. این به طور دوره‌ای توسط یک timer فراخوانی می‌شود تا سفارشاتی را پیدا کند
+   که به موقع تحویل داده نمی‌شوند. این کار را با querying Orders و Restaurants انجام می‌دهد. اگر
+   یک Order نتواند به موقع تحویل داده شود، DelayedOrderService به consumer و
+   customer service اطلاع می‌دهد.
+  </p>
+  <p>
+   Delayed Order Service متعلق به entityهای Order و Restaurant نیست. در عوض،
+   این data از FTGO monolith، replicated شده است. علاوه بر این، service
+   اطلاعات تماس customer را ذخیره نمی‌کند، بلکه آن را از monolith بازیابی می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

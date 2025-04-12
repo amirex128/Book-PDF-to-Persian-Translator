@@ -1,0 +1,41 @@
+154
+CHAPTER 5
+Designing business logic in a microservice architecture
+Each consumer changes a line item using a sequence of two transactions. The first
+transaction loads the order and its line items. The UI verifies that the order minimum
+is satisfied before executing the second transaction. The second transaction updates
+the line item quantity using an optimistic offline locking check that verifies that the
+order line is unchanged since it was loaded by the first transaction.
+ In this scenario, Sam reduces the order total by $X and Mary reduces it by $Y. As a
+result, the Order is no longer valid, even though the application verified that the order
+still satisfied the order minimum after each consumer’s update. As you can see, directly
+updating part of a business object can result in the violation of the business rules. DDD
+aggregates are intended to solve this problem. 
+5.2.2
+Aggregates have explicit boundaries
+An aggregate is a cluster of domain objects within a boundary that can be treated as a
+unit. It consists of a root entity and possibly one or more other entities and value
+objects. Many business objects are modeled as aggregates. For example, in chapter 2
+we created a rough domain model by analyzing the nouns used in the requirements
+and by domain experts. Many of these nouns, such as Order, Consumer, and Restau-
+rant, are aggregates.
+Figure 5.5 shows the Order aggregate and its boundary. An Order aggregate consists of
+an Order entity, one or more OrderLineItem value objects, and other value objects
+such as a delivery Address and PaymentInformation.
+BEGIN TXN
+UPDATE ORDER_LINE_ITEM
+SET VERSION=..., QUANTITY=...
+WHERE VERSION = <loaded version>
+AND ID = ...
+END TXN
+Verify minimum is met
+BEGIN TXN
+UPDATE ORDER_LINE_ITEM
+SET VERSION=..., QUANTITY=...
+WHERE VERSION = <loaded version>
+AND ID = ...
+END TXN
+Pattern: Aggregate
+Organize a domain model as a collection of aggregates, each of which is a graph of
+objects that can be treated as a unit.
+ 

@@ -1,0 +1,56 @@
+395
+Deploying services using the Service as a container pattern
+12.3.1 Deploying services using Docker
+To deploy a service as a container, you must package it as a container image. A container
+image is a filesystem image consisting of the application and any software required to
+run the service. It’s often a complete Linux root filesystem, although more lightweight
+images are also used. For example, to deploy a Spring Boot-based service, you build a
+container image containing the service’s executable JAR and the correct version of
+the JDK. Similarly, to deploy a Java web application, you would build a container
+image containing the WAR file, Apache Tomcat, and the JDK.
+BUILDING A DOCKER IMAGE
+The first step in building an image is to create a Dockerfile. A Dockerfile describes how
+to build a Docker container image. It specifies the base container image, a series of
+instructions for installing software and configuring the container, and the shell com-
+mand to run when the container is created. Listing 12.1 shows the Dockerfile used to
+build an image for Restaurant Service. It builds a container image containing the
+service’s executable JAR file. It configures the container to run the java -jar com-
+mand on startup.
+Build time
+Runtime
+$ docker build ...
+Deployed
+as
+Deployed
+as
+Service
+instance
+Container
+VM
+VM
+Container
+image registry
+Service
+instance
+Container
+Service
+instance
+Container
+Service
+code
+Container runtime
+Container runtime
+Deployment pipeline
+Creates
+Container
+builder tool
+Docker
+ﬁle
+Service
+container
+image
+Figure 12.8
+A service is packaged as a container image, which is stored in a registry. At runtime 
+the service consists of multiple containers instantiated from that image. Containers typically run on 
+virtual machines. A single VM will usually run multiple containers.
+ 

@@ -1,0 +1,39 @@
+Advantages
+There is something simple and familiar about a blocking, synchronous call. Many of
+us learned to program in a fundamentally synchronous style—reading a piece of code
+like a script, with each line executing in turn, and with the next line of code waiting
+its turn to do something. Most of the situations in which you would have used inter-
+process calls were probably done in a synchronous, blocking style—running a SQL
+query on a database, for example, or making an HTTP request of a downstream API.
+When moving from a less distributed architecture, like that of a single process mono‐
+lith, sticking with those ideas that are familiar when there is so much else going on
+that is brand-new can make sense.
+Disadvantages
+The main challenge with synchronous calls is the inherent temporal coupling that
+occurs, a topic we explored briefly in Chapter 2. When the Order Processor makes a
+call to Loyalty in the preceding example, the Loyalty microservice needs to be
+reachable for the call to work. If the Loyalty microservice is unavailable, then the call
+will fail, and Order Processor needs to work out what kind of compensating action
+to carry out—this might involve an immediate retry, buffering the call to retry later,
+or perhaps giving up altogether.
+This coupling is two-way. With this style of integration, the response is typically sent
+over the same inbound network connection to the upstream microservice. So if the
+Loyalty microservice wants to send a response back to Order Processor, but the
+upstream instance has subsequently died, the response will get lost. The temporal
+coupling here isn’t just between two microservices; it’s between two specific instances
+of these microservices.
+As the sender of the call is blocking and waiting for the downstream microservice to
+respond, it also follows that if the downstream microservice responds slowly, or if
+there is an issue with the latency of the network, then the sender of the call will be
+blocked for a prolonged period of time waiting for a response. If the Loyalty micro‐
+service is under significant load and is responding slowly to requests, this in turn will
+cause the Order Processor to respond slowly.
+Thus the use of synchronous calls can make a system vulnerable to cascading issues
+caused by downstream outages more readily than can the use of asynchronous calls.
+Where to Use It
+For simple microservice architectures, I don’t have a massive problem with the use of
+synchronous, blocking calls. Their familiarity for many people is an advantage when
+coming to grips with distributed systems.
+96 
+| 
+Chapter 4: Microservice Communication Styles

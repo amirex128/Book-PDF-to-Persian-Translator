@@ -1,0 +1,16 @@
+5 We really can’t. I’ve tried!
+Figure 6-7. Triggering a rollback of the entire saga
+Because we cannot always cleanly revert a transaction, we say that these compensat‐
+ing transactions are semantic rollbacks. We cannot always clean up everything, but we
+do enough for the context of our saga. As an example, one of our steps may have
+involved sending an email to a customer to tell them their order was on the way. If we
+decide to roll that back, we can’t unsend an email!5 Instead, our compensating trans‐
+action could cause a second email to be sent to the customer, informing them that
+there was a problem with the order and it has canceled.
+It is totally appropriate for information related to the rollback to persist in the sys‐
+tem. In fact, this may be very important information. You may want to keep a record
+in the Order service for this aborted order, along with information about what hap‐
+pened, for a whole host of reasons.
+Sagas 
+| 
+187

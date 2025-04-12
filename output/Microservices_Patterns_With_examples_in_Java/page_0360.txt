@@ -1,0 +1,59 @@
+330
+CHAPTER 10
+Testing microservices: Part 2
+@DirtiesContext
+public class OrderHistoryEventHandlersTest {
+@Configuration
+@EnableAutoConfiguration
+@Import({OrderHistoryServiceMessagingConfiguration.class,
+TramCommandProducerConfiguration.class,
+TramInMemoryConfiguration.class,
+EventuateContractVerifierConfiguration.class})
+public static class TestConfiguration {
+@Bean
+public OrderHistoryDao orderHistoryDao() {
+return mock(OrderHistoryDao.class);
+  
+}
+}
+@Test
+public void shouldHandleOrderCreatedEvent() throws ... {
+stubFinder.trigger("orderCreatedEvent");
+         
+eventually(() -> {
+      
+verify(orderHistoryDao).addOrder(any(Order.class), any(Optional.class));
+});
+}
+The shouldHandleOrderCreatedEvent() test method tells Spring Cloud Contract to
+publish the OrderCreated event. It then verifies that OrderHistoryEventHandlers
+invoked orderHistoryDao.addOrder(). Testing both the domain event’s publisher and
+consumer using the same contracts ensures that they agree on the API. Let’s now look at
+how to do integration test services that interact using asynchronous request/response. 
+10.1.4 Integration contract tests for asynchronous request/response 
+interactions
+Publish/subscribe isn’t the only kind of messaging-based interaction style. Services
+also interact using asynchronous request/response. For example, in chapter 4 we saw
+that Order Service implements sagas that send command messages to various ser-
+vices, such as Kitchen Service, and processes the reply messages.
+ The two parties in an asynchronous request/response interaction are the requestor,
+which is the service that sends the command, and the replier, which is the service that
+processes the command and sends back a reply. They must agree on the name of com-
+mand message channel and the structure of the command and reply messages. Let’s
+look at how to write integration tests for asynchronous request/response interactions.
+ Figure 10.5 shows how to test the interaction between Order Service and Kitchen
+Service. The approach to integration testing asynchronous request/response interac-
+tions is quite similar to the approach used for testing REST interactions. The interac-
+tions between the services are defined by a set of contracts. What’s different is that a
+contract specifies an input message and an output message instead of an HTTP request
+and reply.
+Create a mock OrderHistoryDao 
+to inject into OrderHistory-
+EventHandlers.
+Trigger the 
+orderCreatedEvent 
+stub, which emits an 
+OrderCreated event.
+Verify that OrderHistoryEventHandlers
+invoked orderHistoryDao.addOrder().
+ 

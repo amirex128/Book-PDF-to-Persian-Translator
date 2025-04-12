@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 476</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   یک رویکرد جایگزین این است که data consumer یک replica از data را حفظ کند،
+   همانطور که در شکل 13.10 نشان داده شده است. replica اساساً یک view از نوع CQRS است. the data consumer
+   replica را با subscribing به domain eventsهایی که توسط data
+   provider منتشر می‌شوند، به‌روز نگه می‌دارد.
+  </p>
+  <p>
+   استفاده از یک replica دارای چندین مزیت است. از سربار querying مکرر
+   data provider اجتناب می‌کند. در عوض، همانطور که هنگام توصیف CQRS در فصل 7 بحث شد، شما می‌توانید
+   replica را برای پشتیبانی از queriesهای کارآمد طراحی کنید. با این حال، یکی از معایب استفاده از یک replica،
+   پیچیدگی نگهداری آن است. یک چالش بالقوه، همانطور که بعداً
+   در این بخش توضیح داده شد، نیاز به تغییر monolith برای publish کردن domain eventsها است.
+  </p>
+  <p>
+   اکنون که ما در مورد نحوه انجام queriesها بحث کردیم، بیایید در نظر بگیریم که چگونه updatesها را انجام دهیم. یکی
+   چالش با انجام updatesها، نیاز به حفظ data consistency در سراسر
+   service و monolith است. party که درخواست update را می‌دهد (the requestor)
+   database خود را آپدیت کرده یا نیاز به آپدیت آن دارد. بنابراین ضروری است که هر دو update انجام شوند.
+  </p>
+  <p>
+   راه‌حل این است که service و monolith با استفاده از transactional mes-
+   saging که توسط یک framework پیاده‌سازی شده است، مانند Eventuate Tram، ارتباط برقرار کنند. در سناریوهای ساده،
+   requestor می‌تواند یک پیام notification ارسال کند یا یک event را برای trigger کردن یک update منتشر کند. در
+   سناریوهای پیچیده‌تر، requestor باید از یک saga برای حفظ data consistency استفاده کند.
+   بخش 13.3.2 پیامدهای استفاده از sagasها را مورد بحث قرار می‌دهد.
+  </p>
+  <h3><strong>IMPLEMENTING AN ANTI-CORRUPTION LAYER</strong></h3>
+  <p>
+   تصور کنید که شما در حال پیاده‌سازی یک feature جدید به عنوان یک service کاملاً جدید هستید. شما محدود نشده‌اید
+   توسط code base monolith، بنابراین شما می‌توانید از تکنیک‌های توسعه مدرن استفاده کنید
+  </p>
+  <p>
+   Delayed
+   <br/>
+   Delivery Service
+   <br/>
+   FTGO
+   <br/>
+   monolith
+   <br/>
+   Monolith
+   <br/>
+   database
+   <br/>
+   Service
+   <br/>
+   database
+   <br/>
+   Event
+   <br/>
+   publisher
+   <br/>
+   Customer event channel
+   <br/>
+   Customer
+   <br/>
+   domain
+   <br/>
+   event
+   <br/>
+   Event
+   <br/>
+   subscriber
+   <br/>
+   Database
+   <br/>
+   adapter
+   <br/>
+   Customer
+   <br/>
+   ContactInfo
+   <br/>
+   Repository
+   <br/>
+   query()
+   <br/>
+   update()
+  </p>
+  <p>
+   <strong>Figure 13.10</strong>
+   <br/>
+   The integration glue replicates data from the monolith to the service. The monolith publishes
+   domain events, and an event handler implemented by the service updates the service’s database.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

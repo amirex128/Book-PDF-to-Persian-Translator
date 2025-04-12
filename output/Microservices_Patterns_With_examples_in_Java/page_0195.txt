@@ -1,0 +1,48 @@
+165
+Publishing domain events
+public void accept(long ticketId, ZonedDateTime readyBy) {
+Ticket ticket =
+ticketRepository.findById(ticketId)
+.orElseThrow(() ->
+new TicketNotFoundException(ticketId));
+List<DomainEvent> events = ticket.accept(readyBy);
+domainEventPublisher.publish(Ticket.class, orderId, events);
+}
+The accept() method first invokes the TicketRepository to load the Ticket from the
+database. It then updates the Ticket by calling accept(). KitchenService then pub-
+lishes events returned by Ticket by calling DomainEventPublisher.publish(),
+described shortly.
+ This approach is quite simple. Methods that would otherwise have a void return
+type now return List<Event>. The only potential drawback is that the return type of
+non-void methods is now more complex. They must return an object containing the
+original return value and List<Event>. You’ll see an example of such a method soon.
+ Another option is for the aggregate root to accumulate events in a field. The ser-
+vice then retrieves the events and publishes them. For example, the following listing
+shows a variant of the Ticket class that works this way.
+public class Ticket extends AbstractAggregateRoot {
+public void accept(ZonedDateTime readyBy) {
+...
+this.acceptTime = ZonedDateTime.now();
+this.readyBy = readyBy;
+registerDomainEvent(new TicketAcceptedEvent(readyBy));
+}
+}
+Ticket extends AbstractAggregateRoot, which defines a registerDomainEvent()
+method that records the event. A service would call AbstractAggregateRoot.get-
+DomainEvents() to retrieve those events.
+ My preference is for the first option: the method returning events to the service.
+But accumulating events in the aggregate root is also a viable option. In fact, the
+Spring Data Ingalls release train (https://spring.io/blog/2017/01/30/what-s-new-in-
+spring-data-release-ingalls) implements a mechanism that automatically publishes
+events to the Spring ApplicationContext. The main drawback is that to reduce code
+duplication, aggregate roots should extend a superclass such as AbstractAggregate-
+Root, which might conflict with a requirement to extend some other superclass. Another
+issue is that although it’s easy for the aggregate root’s methods to call register-
+DomainEvent(), methods in other classes in the aggregate would find it challenging.
+They would mostly likely need to somehow pass the events to the aggregate root. 
+Listing 5.5
+The Ticket extends a superclass, which records domain events
+Publishes 
+domain 
+events
+ 

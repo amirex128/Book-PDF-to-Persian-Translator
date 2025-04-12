@@ -1,0 +1,41 @@
+to some experts who state that guaranteeing exactly once delivery in all cases is
+impossible, while other experts say you basically can do so with a few simple work‐
+arounds. Either way, if your broker of choice claims to implement this, then pay
+really careful attention to how it is implemented. Even better, build your consumers
+in such a way that they are prepared for the fact that they might receive a message
+more than once and can handle this situation. A very simple example would be for
+each message to have an ID, which a consumer can check each time a message is
+received. If a message with that ID has already been processed, the newer message
+can be ignored.
+Choices
+A variety of message brokers exist. Popular examples include RabbitMQ, ActiveMQ,
+and Kafka (which we’ll explore further shortly). The main public cloud vendors also
+provide a variety of products that play this role, from managed versions of those
+brokers that you can install on your own infrastructure to bespoke implementations
+that are specific to a given platform. AWS, for example, has Simple Queue Service
+(SQS), Simple Notification Service (SNS), and Kinesis, all of which provide different
+flavors of fully managed brokers. SQS was in fact the second-ever product released by
+AWS, having been launched back in 2006.
+Kafka
+Kafka is worth highlighting as a specific broker, due in large part to its recent popu‐
+larity. Part of that popularity is due to Kafka’s use in helping move large volumes of
+data around as part of implementing stream processing pipelines. This can help move
+from batch-oriented processing to more real-time processing.
+There are a few characteristics of Kafka that are worth highlighting. Firstly, it is
+designed for very large scale—it was built at LinkedIn to replace multiple existing
+message clusters with a single platform. Kafka is built to allow for multiple consum‐
+ers and producers—I’ve spoken to one expert at a large technology company who had
+over fifty thousand producers and consumers working on the same cluster. To be
+fair, very few organizations have problems at that level of scale, but for some organi‐
+zations, the ability to scale Kafka easily (relatively speaking) can be very useful.
+Another fairly unique feature of Kafka is message permanence. With a normal mes‐
+sage broker, once the last consumer has received a message, the broker no longer
+needs to hold on to that message. With Kafka, messages can be stored for a configu‐
+rable period. This means that messages can be stored forever. This can allow consum‐
+ers to reingest messages that they had already processed, or allow newly deployed
+consumers to process messages that were sent previously.
+Finally, Kafka has been rolling out built-in support for stream processing. Rather
+than using Kafka to send messages to a dedicated stream processing tool like Apache
+Technology Choices 
+| 
+139

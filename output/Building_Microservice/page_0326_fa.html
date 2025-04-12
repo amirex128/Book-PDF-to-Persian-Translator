@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 326</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Cross-Functional Testing</h4>
+    <p>
+        بخش عمده این فصل بر روی تست قطعات خاصی از <strong>functionality</strong> متمرکز شده است، و اینکه این موضوع در هنگام تست یک سیستم مبتنی بر <strong>microservice</strong> چگونه متفاوت است. با این حال، یک دسته دیگر از تست وجود دارد که مهم است در مورد آن بحث شود. الزامات غیر <strong>functional</strong> یک اصطلاح کلی است که برای توصیف آن ویژگی‌هایی استفاده می‌شود که سیستم شما نشان می‌دهد و نمی‌توان آنها را به سادگی مانند یک ویژگی معمولی پیاده‌سازی کرد. آنها شامل جنبه‌هایی مانند تأخیر قابل قبول یک صفحه وب، تعداد کاربرانی که یک سیستم باید پشتیبانی کند، میزان دسترسی رابط کاربری شما برای افراد دارای معلولیت، یا میزان امنیت داده‌های مشتری شما می‌شوند.
+    </p>
+    <p>
+        اصطلاح غیر <strong>functional</strong> هرگز با من سازگار نبود. برخی از مواردی که توسط این اصطلاح پوشش داده می‌شوند، در ماهیت خود بسیار <strong>functional</strong> به نظر می‌رسند! یکی از همکاران قبلی من، <strong>Sarah Taraporewalla</strong>، عبارت الزامات <strong>cross-functional (CFR)</strong> را ابداع کرد، که من بسیار ترجیح می‌دهم. این بیشتر به این واقعیت اشاره دارد که این رفتارهای سیستم واقعاً فقط در نتیجه کارهای <strong>cross-cutting</strong> زیادی ظاهر می‌شوند.
+    </p>
+    <p>
+        بسیاری اگر نه اکثر <strong>CFRs</strong>ها واقعاً فقط می‌توانند در <strong>production</strong> برآورده شوند. با این حال، ما می‌توانیم استراتژی‌های تستی را تعریف کنیم تا به ما کمک کند ببینیم آیا ما حداقل به سمت تحقق این اهداف حرکت می‌کنیم یا خیر. این نوع تست‌ها در مربع تست ویژگی قرار می‌گیرند. یک مثال عالی از این نوع تست، تست عملکرد است، که ما در ادامه با جزئیات بیشتری در مورد آن بحث خواهیم کرد.
+    </p>
+    <p>
+        شما ممکن است بخواهید برخی از <strong>CFRs</strong>ها را در سطح <strong>microservice</strong> فردی پیگیری کنید. به عنوان مثال، ممکن است تصمیم بگیرید که دوام سرویسی که از <strong>service</strong> پرداخت خود می‌خواهید، به طور قابل توجهی بالاتر است، اما شما از زمان خرابی بیشتر برای <strong>service</strong> توصیه‌های موسیقی خود خوشحال هستید، با دانستن اینکه کسب‌وکار اصلی شما می‌تواند زنده بماند اگر نتوانید هنرمندانی مشابه <strong>Metallica</strong> را به مدت 10 دقیقه یا بیشتر توصیه کنید. این <strong>trade-offs</strong>ها در نهایت تأثیر زیادی بر نحوه طراحی و تکامل سیستم شما خواهند داشت، و یک بار دیگر ماهیت ریزدانه یک سیستم مبتنی بر <strong>microservice</strong> به شما فرصت‌های بیشتری برای انجام این <strong>trade-offs</strong> می‌دهد. هنگام نگاه کردن به <strong>CFRs</strong>ها که یک <strong>microservice</strong> یا تیم معین ممکن است مسئولیت آن را بر عهده داشته باشد، معمولاً آنها به عنوان بخشی از اهداف سطح <strong>service</strong> تیم (<strong>SLOs</strong>)، موضوعی که ما بیشتر در "آیا ما خوب هستیم؟" در صفحه 327 بررسی می‌کنیم، ظاهر می‌شوند.
+    </p>
+    <p>
+        تست‌ها در اطراف <strong>CFRs</strong> باید از <strong>pyramid</strong> نیز پیروی کنند. برخی از تست‌ها باید <strong>end-to-end</strong> باشند، مانند تست‌های بار، اما بقیه اینطور نیستند. به عنوان مثال، هنگامی که یک گلوگاه عملکردی را در یک تست بار <strong>end-to-end</strong> پیدا کردید، یک تست با <strong>scope</strong> کوچکتر بنویسید تا به شما در شناسایی مشکل در آینده کمک کند. سایر <strong>CFRs</strong>ها به راحتی با تست‌های سریع‌تر مطابقت دارند. من به یاد دارم که روی پروژه‌ای کار می‌کردم که در آن ما اصرار داشتیم که اطمینان حاصل کنیم که نشانه‌گذاری <strong>HTML</strong> ما از ویژگی‌های دسترسی مناسب برای کمک به افراد دارای معلولیت برای استفاده از وب‌سایت ما استفاده می‌کند. بررسی نشانه‌گذاری تولید شده برای اطمینان از وجود کنترل‌های مناسب، می‌تواند بسیار سریع، بدون نیاز به هیچ گونه <strong>networking round trips</strong> انجام شود.
+    </p>
+    <p>
+        بسیار زیاد، ملاحظات در مورد <strong>CFRs</strong> خیلی دیر مطرح می‌شود. من قویاً پیشنهاد می‌کنم <strong>CFRs</strong>های خود را در اسرع وقت بررسی کنید و مرتباً آنها را مرور کنید.
+    </p>
+    <p>
+        300 | Chapter 9: Testing
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

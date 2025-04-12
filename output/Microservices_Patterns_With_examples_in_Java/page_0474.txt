@@ -1,0 +1,45 @@
+444
+CHAPTER 13
+Refactoring to microservices
+ In this section, I first describe the design of the integration glue. I talk about the prob-
+lems it solves and the different implementation options. After that I describe transaction
+management strategies, including the use of sagas. I discuss how sometimes the require-
+ment to maintain data consistency changes the order in which you extract services.
+ Let’s first look at the design of the integration glue.
+13.3.1 Designing the integration glue
+When implementing a feature as a service or extracting a service from the monolith,
+you must develop the integration glue that enables a service to collaborate with the
+monolith. It consists of code in both the service and monolith that uses some kind of
+IPC mechanism. The structure of the integration glue depends on the type of IPC
+mechanism that is used. If, for example, the service invokes the monolith using REST,
+then the integration glue consists of a REST client in the service and web controllers
+in the monolith. Alternatively, if the monolith subscribes to domain events published
+by the service, then the integration glue consists of an event-publishing adapter in the
+service and event handlers in the monolith.
+DESIGNING THE INTEGRATION GLUE API
+The first step in designing the integration glue is to decide what APIs it provides to
+the domain logic. There are a couple of different styles of interface to choose from,
+depending on whether you’re querying data or updating data. Let’s say you’re work-
+ing on Delayed Delivery Service, which needs to retrieve customer contact info
+from the monolith. The service’s business logic doesn’t need to know the IPC mecha-
+nism that the integration glue uses to retrieve the information. Therefore, that mecha-
+nism should be encapsulated by an interface. Because Delayed Delivery Service is
+querying data, it makes sense to define a CustomerContactInfoRepository:
+interface CustomerContactInfoRepository {
+CustomerContactInfo findCustomerContactInfo(long customerId)
+}
+The service’s business logic can invoke this API without knowing how the integration
+glue retrieves the data.
+ Let’s consider a different service. Imagine that you’re extracting delivery manage-
+ment from the FTGO monolith. The monolith needs to invoke Delivery Service to
+schedule, reschedule, and cancel deliveries. Once again, the details of the underlying
+IPC mechanism aren’t important to the business logic and should be encapsulated by
+an interface. In this scenario, the monolith must invoke a service operation, so using a
+repository doesn’t make sense. A better approach is to define a service interface, such
+as the following:
+interface DeliveryService {
+void scheduleDelivery(...);
+void rescheduleDelivery(...);
+void cancelDelivery(...);
+}
+ 

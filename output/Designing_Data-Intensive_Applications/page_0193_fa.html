@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 193</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        ما معمولاً به ویرایش مشارکتی به عنوان یک database replication problem فکر نمی‌کنیم، اما با استفاده از data و با استفاده از اطلاعات موجود در زمینه data.
+    </p>
+    <p>
+        هنگامی که یک user یک document را ویرایش می‌کند، تغییرات فوراً به replica محلی آن‌ها اعمال می‌شود (state از document در web browser یا application client آن‌ها) و به طور asynchronous به server و هر user دیگری که در حال ویرایش همان document هستند، replicate می‌شود.
+    </p>
+    <p>
+        اگر شما می‌خواهید تضمین کنید که هیچ editing conflicts وجود نخواهد داشت، application باید یک lock را روی document قبل از اینکه یک user بتواند آن را ویرایش کند، دریافت کند. اگر user دیگری می‌خواهد همان document را ویرایش کند، ابتدا باید منتظر بماند تا user اول changes خود را committed کند و lock را release کند. این مدل collaboration معادل replication single-leader با transactions روی leader است.
+    </p>
+    <p>
+        با این حال، برای collaboration سریعتر، شما ممکن است بخواهید unit of change را بسیار کوچک کنید (به عنوان مثال، یک ضربه کلید واحد) و از locking اجتناب کنید. این رویکرد به multiple users اجازه می‌دهد تا به طور همزمان ویرایش کنند، اما همچنین تمام چالش‌های multi-leader replication، از جمله نیاز به conflict resolution [32] را به همراه دارد.
+    </p>
+    <h4>Handling Write Conflicts</h4>
+    <p>
+        The biggest problem با multi-leader replication این است که write conflicts ممکن است رخ دهند، که به این معنی است که conflict resolution مورد نیاز است.
+    </p>
+    <p>
+        به عنوان مثال، یک صفحه wiki را در نظر بگیرید که به طور همزمان توسط دو user ویرایش می‌شود، همانطور که در شکل 5-7 نشان داده شده است. User 1 title از صفحه را از A به B تغییر می‌دهد و user 2 title را از A به C در همان زمان تغییر می‌دهد. تغییر هر user با موفقیت به leader محلی آن‌ها اعمال می‌شود. با این حال، وقتی changes به طور asynchronous replicate می‌شوند، یک conflict شناسایی می‌شود [33]. این مشکل در یک database single-leader رخ نمی‌دهد.
+    </p>
+    <p>
+        شکل 5-7. A write conflict که توسط دو leader که به طور همزمان همان record را به‌روزرسانی می‌کنند، ایجاد شده است.
+    </p>
+    <p>
+        Multi-Leader Replication | 171
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0193/image_1.png" alt="Image from page 193" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

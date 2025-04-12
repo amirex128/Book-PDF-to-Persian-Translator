@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 173</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>The design of the Order Service (طراحی Order Service) و the Create Order Saga (حماسه ایجاد سفارش)</strong></h3>
+  <p>فهرست زیر کلاس OrderCommandHandlers را نشان می‌دهد. متد commandHandlers() آن، انواع command message (پیام دستور) را به متدهای handler (هندلر) map (نگاشت) می‌کند. هر متد handler (هندلر) یک command message (پیام دستور) را به عنوان یک پارامتر می‌گیرد، OrderService (سرویس سفارش) را فراخوانی می‌کند و یک message (پیام) reply (پاسخ) را بازمی‌گرداند.</p>
+  <pre><code class="language-java">public class OrderCommandHandlers {
+ @Autowired
+ private OrderService orderService;
+ public CommandHandlers commandHandlers() {
+  
+  return SagaCommandHandlersBuilder
+  .fromChannel("orderService")
+  .onMessage(ApproveOrderCommand.class, this::approveOrder)
+  .onMessage(RejectOrderCommand.class, this::rejectOrder)
+  ...
+  .build();
+ }
+ public Message approveOrder(CommandMessage&lt;ApproveOrderCommand&gt; cm) {
+  long orderId = cm.getCommand().getOrderId();
+  orderService.approveOrder(orderId);
+  return withSuccess();
+ }
+ public Message rejectOrder(CommandMessage&lt;RejectOrderCommand&gt; cm) {
+  long orderId = cm.getCommand().getOrderId();
+  orderService.rejectOrder(orderId);
+  return withSuccess();
+ }
+</code></pre>
+  <p>متدهای approveOrder() (تایید سفارش) و rejectOrder() (رد سفارش) Order (سفارش) مشخص شده را با فراخوانی OrderService (سرویس سفارش) به‌روزرسانی می‌کنند. سایر services (سرویس‌هایی) که در sagas (حماسه‌ها) شرکت می‌کنند، کلاس‌های handler (هندلر) command (دستور) مشابهی دارند که domain objects (اشیاء دامنه) خود را به‌روزرسانی می‌کنند.</p>
+  <h4><strong>4.4.4 The OrderServiceConfiguration class (کلاس OrderServiceConfiguration)</strong></h4>
+  <p>Order Service (سرویس سفارش) از فریم‌ورک Spring (اسپرینگ) استفاده می‌کند. فهرست زیر گزیده‌ای از کلاس OrderServiceConfiguration است، که یک کلاس @Configuration (پیکربندی) است که Spring @Beans (بخش‌های اسپرینگ) را نمونه‌سازی و به هم متصل می‌کند.</p>
+  <pre><code class="language-java">@Configuration
+ public class OrderServiceConfiguration {
+  @Bean
+  public OrderService orderService(RestaurantRepository restaurantRepository,
+ </code></pre>
+  <p>Listing (فهرست) 4.6</p>
+  <p>The command handlers (هندلرهای دستور) for Order Service (برای سرویس سفارش)</p>
+  <br>
+  <p>Listing (فهرست) 4.7</p>
+  <p>The OrderServiceConfiguration (پیکربندی سرویس سفارش) is a Spring @Configuration (کلاس پیکربندی اسپرینگ) (کلاس) that defines (که تعریف می‌کند) the Spring @Beans (بخش‌های اسپرینگ) for the (برای) Order Service (سرویس سفارش).</p>
+  <p>Route (مسیردهی) each command (هر دستور)</p>
+  <p>message (پیام) to (به) the appropriate (مناسب)</p>
+  <p>handler method (متد هندلر).</p>
+  <p>Change (تغییر) the (the) state (وضعیت)</p>
+  <p>of the (از) Order (سفارش) to (به)</p>
+  <p>authorized (مجوز داده شده).</p>
+  <p>Return (بازگشت) a generic (عمومی)</p>
+  <p>success message (پیام موفقیت).</p>
+  <p>Change (تغییر) the (the) state (وضعیت) of (از)</p>
+  <p>the Order (سفارش) to (به) rejected (رد شده).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

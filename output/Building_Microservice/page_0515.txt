@@ -1,0 +1,40 @@
+reduce round trips. A query like this requires that we define the various data types we
+are accessing—explicitly defining types is a key part of GraphQL.
+To implement GraphQL, we need a resolver to handle the queries. A GraphQL
+resolver sits on the server side and maps the GraphQL queries into calls to actually
+fetch the information. So in the case of a microservice architecture, we’d need a
+resolver that would be capable of mapping the request for the order with ID 123 into
+an equivalent call to a microservice.
+In this way, we can use GraphQL to implement an aggregating gateway, or even a
+BFF. The benefit of GraphQL is that we can easily change the aggregation and filter‐
+ing we want simply by changing the query from the client; no changes are needed at
+the GraphQL server side of things as long as the GraphQL types support the query we
+want to make. If we no longer wanted to see the driver name in the example query,
+we could just omit this from the query itself and it would no longer be sent. On the
+other hand, if we wanted to see the number of points we were awarded for this order,
+assuming this information is available in the order type, we could just add this to the
+query and the information would be returned. This is a significant advantage over
+BFF implementations that require changes in aggregation logic to also be applied to
+the BFF itself.
+The flexibility that GraphQL gives for the client device to dynamically change the
+queries being made without server-side changes means that there is less chance of
+your GraphQL server becoming a shared, contended resource, as we discussed with
+the general-purpose aggregating gateway. That said, server-side changes will still be
+needed if you need to expose new types or add fields to existing types. As such, you
+may still want multiple GraphQL server backends to align along team boundaries—
+so GraphQL becomes a way of implementing a BFF.
+I do have concerns around GraphQL, which I outlined in detail in Chapter 5. That
+said, it is a neat solution allowing for dynamic querying to suit the needs of different
+types of user interfaces.
+A Hybrid Approach
+Many of the aforementioned options don’t need to be one-size-fits-all. I could see an
+organization adopting the approach of widget-based decomposition to create a web‐
+site but using a backend for frontend approach when it comes to its mobile applica‐
+tion. The key point is that we need to retain cohesion of the underlying capabilities
+that we offer our users. We need to ensure that logic associated with ordering music
+or changing customer details lives inside those services that handle those operations
+and doesn’t get smeared all over our system. Avoiding the trap of putting too much
+behavior into any intermediate layers is a tricky balancing act.
+A Hybrid Approach 
+| 
+489

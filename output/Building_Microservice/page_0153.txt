@@ -1,0 +1,40 @@
+wire and becoming a mass of fields, some of which are no longer used but can’t be
+safely removed.
+Where to use it
+Despite its shortcomings, I actually quite like RPC, and the more modern implemen‐
+tations, such as gRPC, are excellent, whereas other implementations have significant
+issues that would cause me to give them a wide berth. Java RMI, for example, has a
+number of issues regarding brittleness and limited technology choices, and SOAP is
+pretty heavyweight from a developer perspective, especially when compared with
+more modern choices.
+Just be aware of some of the potential pitfalls associated with RPC if you’re going to
+pick this model. Don’t abstract your remote calls to the point that the network is
+completely hidden, and ensure that you can evolve the server interface without hav‐
+ing to insist on lockstep upgrades for clients. Finding the right balance for your client
+code is important, for example. Make sure your clients aren’t oblivious to the fact
+that a network call is going to be made. Client libraries are often used in the context
+of RPC, and if not structured right they can be problematic. We’ll talk more about
+them shortly.
+If I was looking at options in this space, gRPC would be at the top of my list. Built to
+take advantage of HTTP/2, it has some impressive performance characteristics and
+good general ease of use. I also appreciate the ecosystem around gRPC, including
+tools like Protolock, which is something we’ll discuss later in this chapter when we
+discuss schemas.
+gRPC fits a synchronous request-response model well but can also work in conjunc‐
+tion with reactive extensions. It’s high on my list whenever I’m in situations where I
+have a good deal of control over both the client and server ends of the spectrum. If
+you’re having to support a wide variety of other applications that might need to talk
+to your microservices, the need to compile client-side code against a server-side
+schema can be problematic. In that case, some form of REST over HTTP API would
+likely be a better fit.
+REST
+Representational State Transfer (REST) is an architectural style inspired by the web.
+There are many principles and constraints behind the REST style, but we are going to
+focus on those that really help us when we face integration challenges in a microser‐
+vices world, and when we’re looking for an alternative to RPC for our service
+interfaces.
+Most important when thinking about REST is the concept of resources. You can
+think of a resource as a thing that the service itself knows about, like a Customer. The
+Technology Choices 
+| 
+127

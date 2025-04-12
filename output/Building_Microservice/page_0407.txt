@@ -1,0 +1,40 @@
+When a user is logged in, they can click on a link to view details of an order. To dis‐
+play the information, we need to pull back the original order from the Order service,
+but we also want to look up shipping information for the order. So when a logged-in
+customer clicks a link for /orderStatus/12345, this request is routed to Web Shop,
+which then needs to make calls to the downstream Order and Shipping microservices
+asking for the details for order 12345.
+But should these downstream services accept the calls from the Web Shop? We could
+adopt a stance of implicit trust: because the call came from within our perimeter, it is
+OK. We could even use certificates or API keys to confirm that it really is the Web
+Shop asking for this information. But is this enough? For example, a customer who is
+logged into the online shopping system can see their personal account details. What
+if the customer could trick the web shop’s UI into making a request for someone else’s
+details, maybe by making a call with their own logged-in credentials?
+In this example, what is to stop the customer from asking for orders that are not
+theirs? Once logged in, they could start sending requests for other orders that aren’t
+theirs to see if they could get useful information. They could start guessing order IDs
+to see if they could extract other people’s information. Fundamentally, what has hap‐
+pened here is that while we have authenticated the user in question, we aren’t provid‐
+ing sufficient authorization. What we want is some part of our system to be able to
+judge that a request to see User A’s details can be granted only if it’s User A asking to
+see them. Where does this logic live, though?
+Centralized, Upstream Authorization
+One option for avoiding the confused deputy problem is to perform all required
+authorization as soon as the request is received in our system. In Figure 11-8, this
+would mean that we would aim to authorize the request either in the SSO gateway
+itself or in the Web Shop. The idea is that by the time the calls are sent to the Order or
+Shipping microservice, we assume that the requests are allowed.
+This form of upstream authorization effectively implies that we are accepting some
+form of implicit trust (as opposed to zero trust)—the Shipping and Order microser‐
+vices have to assume they are only being sent requests that they are allowed to fulfill.
+The other issue is that an upstream entity—for example, a gateway or something sim‐
+ilar—needs to have knowledge of what functionality downstream microservices pro‐
+vide, and it needs to know how to limit access to that functionality.
+Ideally, though, we want our microservices to be as self-contained as possible, to
+make it as easy as possible to make changes and roll out new functionality. We want
+our releases to be as simple as possible—we want independent deployability. If the act
+of deployment now involves both deploying a new microservice and applying some
+Authentication and Authorization 
+| 
+381

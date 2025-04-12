@@ -1,0 +1,39 @@
+Where to use it
+GraphQL’s sweet spot is for use at the perimeter of the system, exposing functionality
+to external clients. These clients are typically GUIs, and it’s an obvious fit for mobile
+devices given their constraints in terms of their limited ability to surface data to the
+end user and the nature of mobile networks. But GraphQL has also seen use for
+external APIs, GitHub being an early adopter of GraphQL. If you have an external
+API that often requires external clients to make multiple calls to get the information
+they need, then GraphQL can help make the API much more efficient and friendly.
+Fundamentally, GraphQL is a call aggregation and filtering mechanism, so in the
+context of a microservice architecture it would be used to aggregate calls over multi‐
+ple downstream microservices. As such, it’s not something that would replace general
+microservice-to-microservice communication.
+An alternative to the use of GraphQL would be to consider an alternative pattern like
+the backend for frontend (BFF) pattern—we’ll look at that and compare it with
+GraphQL and other aggregation techniques in Chapter 14.
+Message Brokers
+Message brokers are intermediaries, often called middleware, that sit between pro‐
+cesses to manage communication between them. They are a popular choice to help
+implement asynchronous communication between microservices, as they offer a vari‐
+ety of powerful capabilities.
+As we discussed earlier, a message is a generic concept that defines the thing that a
+message broker sends. A message could contain a request, a response, or an event.
+Rather than one microservice directly communicating with another microservice, the
+microservice instead gives a message to a message broker, with information about
+how the message should be sent.
+Topics and queues
+Brokers tend to provide either queues or topics, or both. Queues are typically point to
+point. A sender puts a message on a queue, and a consumer reads from that queue.
+With a topic-based system, multiple consumers are able to subscribe to a topic, and
+each subscribed consumer will receive a copy of that message.
+A consumer could represent one or more microservices—typically modeled as a con‐
+sumer group. This would be useful when you have multiple instances of a microser‐
+vice, and you want any one of them to be able to receive a message. In Figure 5-1, we
+see an example in which the Order Processor has three deployed instances, all as
+part of the same consumer group. When a message is put into the queue, only one
+member of the consumer group will receive that message; this means the queue
+Technology Choices 
+| 
+135

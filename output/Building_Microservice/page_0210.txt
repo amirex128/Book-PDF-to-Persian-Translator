@@ -1,0 +1,16 @@
+Figure 6-5. An example order fulfillment flow, along with the services responsible for
+carrying out the operation
+Saga Failure Modes
+With a saga being broken into individual transactions, we need to consider how to
+handle failure—or, more specifically, how to recover when a failure happens. The
+original saga paper describes two types of recovery: backward recovery and forward
+recovery.
+Backward recovery involves reverting the failure and cleaning up afterwards—a roll‐
+back. For this to work, we need to define compensating actions that allow us to undo
+previously committed transactions. Forward recovery allows us to pick up from the
+point where the failure occurred and keep processing. For that to work, we need to be
+able to retry transactions, which in turn implies that our system is persisting enough
+information to allow this retry to take place.
+184 
+| 
+Chapter 6: Workflow

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 159</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Handling the lack of isolation (مدیریت فقدان انزوا)</strong></h3>
+  <ul>
+   <li>Retriable transactions (تراکنش‌های قابل تلاش مجدد) - تراکنش‌هایی که از pivot transaction (تراکنش محوری) پیروی می‌کنند و موفقیت آنها تضمین شده است.</li>
+  </ul>
+  <p>در Create Order Saga (حماسه ایجاد سفارش)، مراحل createOrder() (ایجاد سفارش)، verifyConsumerDetails() (تایید جزئیات مصرف‌کننده) و createTicket() (ایجاد بلیت) compensatable transactions (تراکنش‌های قابل جبران) هستند. تراکنش‌های createOrder() (ایجاد سفارش) و createTicket() (ایجاد بلیت) تراکنش‌های جبرانی دارند که به‌روزرسانی‌های آنها را undo (واگردانی) می‌کنند. transaction (تراکنش) verifyConsumerDetails() (تایید جزئیات مصرف‌کننده) فقط خواندنی است، بنابراین نیازی به یک compensating transaction (تراکنش جبرانی) ندارد. transaction (تراکنش) authorizeCreditCard() (مجوز کارت اعتباری) این saga (حماسه) pivot transaction (تراکنش محوری) است. اگر credit card (کارت اعتباری) مصرف‌کننده بتواند authorized (مجوز) شود، این saga (حماسه) تکمیل می‌شود. مراحل approveTicket() (تایید بلیت) و approveOrder() (تایید سفارش) retriable transactions (تراکنش‌های قابل تلاش مجدد) هستند که از pivot transaction (تراکنش محوری) پیروی می‌کنند.</p>
+  <p>تمایز بین compensatable transactions (تراکنش‌های قابل جبران) و retriable transactions (تراکنش‌های قابل تلاش مجدد) به ویژه مهم است. همانطور که خواهید دید، هر نوع transaction (تراکنش) نقش متفاوتی در countermeasures (اقدامات متقابل) ایفا می‌کند. فصل 13 بیان می‌کند که هنگام مهاجرت به microservices (ریز سرویس‌ها)، monolith (یکپارچه) گاهی اوقات باید در sagas (حماسه‌ها) شرکت کند و اگر monolith (یکپارچه) فقط نیاز به اجرای retriable transactions (تراکنش‌های قابل تلاش مجدد) داشته باشد، بسیار ساده‌تر است.</p>
+  <p>اکنون بیایید به هر countermeasure (اقدام متقابل) نگاهی بیندازیم، با semantic lock countermeasure (اقدام متقابل قفل معنایی) شروع می‌کنیم.</p>
+  <p>COUNTERMEASURE: SEMANTIC LOCK (اقدام متقابل: قفل معنایی)</p>
+  <p>هنگام استفاده از semantic lock countermeasure (اقدام متقابل قفل معنایی)، compensatable transaction (تراکنش قابل جبران) یک flag (پرچم) را در هر record (رکورد) که ایجاد یا به‌روزرسانی می‌کند، تنظیم می‌کند. این flag (پرچم) نشان می‌دهد که record (رکورد)...</p>
+  <br>
+  <table>
+   <tr>
+    <td>Step (مرحله)</td>
+    <td>Service (سرویس)</td>
+    <td>Transaction (تراکنش)</td>
+    <td>Compensation Transaction (تراکنش جبرانی)</td>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>Order Service (سرویس سفارش)</td>
+    <td>createOrder() (ایجاد سفارش)</td>
+    <td>rejectOrder() (رد سفارش)</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>Consumer Service (سرویس مصرف‌کننده)</td>
+    <td>verifyConsumerDetails() (تایید جزئیات مصرف‌کننده)</td>
+    <td>-</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>Kitchen Service (سرویس آشپزخانه)</td>
+    <td>createTicket() (ایجاد بلیت)</td>
+    <td>rejectTicket() (رد بلیت)</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>Accounting Service (سرویس حسابداری)</td>
+    <td>authorizeCreditCard() (مجوز کارت اعتباری)</td>
+    <td>-</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>Restaurant Order Service (سرویس سفارش رستوران)</td>
+    <td>approveRestaurantOrder() (تایید سفارش رستوران)</td>
+    <td>-</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>Order Service (سرویس سفارش)</td>
+    <td>approveOrder() (تایید سفارش)</td>
+    <td>-</td>
+   </tr>
+  </table>
+  <br>
+  <p>Compensatable transactions (تراکنش‌های قابل جبران):</p>
+  <p>Must support roll back (باید از بازگشت پشتیبانی کند)</p>
+  <p>Pivot transactions (تراکنش‌های محوری):</p>
+  <p>The saga’s go/no-go transaction (تراکنش go/no-go حماسه).</p>
+  <p>If it succeeds, then the saga runs (اگر موفق شود، saga (حماسه) اجرا می‌شود)</p>
+  <p>to completion (تا تکمیل).</p>
+  <p>Retriable transactions (تراکنش‌های قابل تلاش مجدد):</p>
+  <p>Guaranteed to complete (تضمین شده برای تکمیل)</p>
+  <br>
+  <img src="figure_4_8.png" alt="Figure 4.8">
+  <p>A saga consists of three different types of transactions (یک حماسه از سه نوع مختلف تراکنش تشکیل شده است): compensatable transactions (تراکنش‌های قابل جبران)،</p>
+  <p>which can be rolled back (که می‌تواند بازگردانده شود)، so have a compensating transaction (بنابراین یک تراکنش جبرانی دارد)، a pivot transaction (یک تراکنش محوری)، which is the (که نقطه go/no-go حماسه است)، and retriable transactions (تراکنش‌های قابل تلاش مجدد)، which are transactions that don’t need to be (که تراکنش‌هایی هستند که نیازی به بازگرداندن ندارند) </p>
+  <p>rolled back and are guaranteed to complete (و تکمیل آنها تضمین شده است).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

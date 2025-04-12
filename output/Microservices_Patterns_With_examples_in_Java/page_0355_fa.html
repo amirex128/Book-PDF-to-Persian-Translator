@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 355</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   در این صورت، کد، tests ها را برای API Gateway و Order Service ایجاد می‌کند و از Spring Mock MVC یا Rest Assured Mock MVC استفاده می‌کند.
+   request از contract، request HTTP را برای ایجاد به controller مشخص می‌کند، و response از contract، response مورد انتظار controller را مشخص می‌کند.
+  </p>
+  <p>
+   <pre><code class="language-java">return MockMvcBuilders.standaloneSetup(controllers)
+.setMessageConverters(...);
+}
+@Before
+public void setup() {
+OrderService orderService = mock(OrderService.class);
+  
+OrderRepository orderRepository = mock(OrderRepository.class);
+OrderController orderController =
+new OrderController(orderService, orderRepository);
+when(orderRepository.findById(1223232L))
+            
+.thenReturn(Optional.of(OrderDetailsMother.CHICKEN_VINDALOO_ORDER));
+...
+RestAssuredMockMvc.standaloneSetup(controllers(orderController));</code></pre>
+  </p>
+  <p>
+   آرگومان 1223232L که به متد findById() از OrderRepository mock شده، منتقل می‌شود، با orderId مشخص شده در contract که در listing 10.3 نشان داده شده است، مطابقت دارد. این تست تأیید می‌کند که Order Service یک endpoint GET /orders/{orderId} دارد که با انتظارات client آن مطابقت دارد.
+  </p>
+  <p>
+   بیایید نگاهی به تست client مربوطه بیندازیم.
+  </p>
+  <p>
+   <strong>CONSUMER-SIDE INTEGRATION TEST FOR API GATEWAY’S ORDERSERVICEPROXY</strong>
+  </p>
+  <p>
+   API Gateway’s OrderServiceProxy، endpoint GET /orders/{orderId} را فراخوانی می‌کند. Listing 10.4 کلاس تست OrderServiceProxyIntegrationTest را نشان می‌دهد که تأیید می‌کند که با contract ها مطابقت دارد. این کلاس با @AutoConfigureStubRunner که توسط Spring Cloud Contract ارائه شده است، annotation نویسی شده است. این، به Spring Cloud Contract می‌گوید که سرور WireMock را روی یک پورت تصادفی اجرا کند و آن را با استفاده از contract های مشخص شده پیکربندی کند. OrderServiceProxyIntegrationTest، OrderServiceProxy را پیکربندی می‌کند تا requests ها را به پورت WireMock ارسال کند.
+  </p>
+  <pre><code class="language-java">@RunWith(SpringRunner.class)
+@SpringBootTest(classes=TestConfiguration.class,
+webEnvironment= SpringBootTest.WebEnvironment.NONE)
+@AutoConfigureStubRunner(ids =
+        
+{&quot;net.chrisrichardson.ftgo.contracts:ftgo-order-service-contracts&quot;},
+workOffline = false)
+@DirtiesContext
+public class OrderServiceProxyIntegrationTest {
+@Value(&quot;${stubrunner.runningstubs.ftgo-order-service-contracts.port}&quot;)  </code></pre>
+  <p>
+   <strong>Listing 10.4</strong>
+   A consumer-side integration test for API Gateway's
+   OrderServiceProxy
+  </p>
+  <p>
+   Create
+   OrderRepository
+   injected with mocks.
+  </p>
+  <p>
+   Configure OrderResponse to return an Order when findById()
+   is invoked with the orderId specified in the contract.
+  </p>
+  <p>
+   Configure Spring MVC with
+   OrderController.
+  </p>
+  <p>
+   Tell Spring Cloud Contract
+   to configure WireMock with
+   Order Service’s contracts.
+  </p>
+  <p>
+   Obtain the randomly assigned port
+   that WireMock is running on.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+335
+Developing component tests
+new TicketDetails(Collections.emptyList())));
+}
+}
+KitchenServiceCommandHandler invokes KitchenService with arguments that are
+derived from a contract’s input message and creates a reply message that’s derived
+from the return value. The test class’s setup() method configures the mock Kitchen-
+Service to return the values that match the contract’s output message
+ Integration tests and unit tests verify the behavior of individual parts of a service.
+The integration tests verify that services can communicate with their clients and
+dependencies. The unit tests verify that a service’s logic is correct. Neither type of test
+runs the entire service. In order to verify that a service as a whole works, we’ll move up
+the pyramid and look at how to write component tests. 
+10.2
+Developing component tests
+So far, we’ve looked at how to test individual classes and clusters of classes. But imag-
+ine that we now want to verify that Order Service works as expected. In other words,
+we want to write the service’s acceptance tests, which treat it as a black box and verify
+its behavior through its API. One approach is to write what are essentially end-to-end
+tests and deploy Order Service and all of its transitive dependencies. As you should
+know by now, that’s a slow, brittle, and expensive way to test a service.
+A much better way to write acceptance tests for a service is to use component testing.
+As figure 10.6 shows, component tests are sandwiched between integration tests and
+end-to-end tests. Component testing verifies the behavior of a service in isolation. It
+replaces a service’s dependencies with stubs that simulate their behavior. It might even
+use in-memory versions of infrastructure services such as databases. As a result, com-
+ponent tests are much easier to write and faster to run.
+ I begin by briefly describing how to use a testing DSL called Gherkin to write
+acceptance tests for services, such as Order Service. After that I discuss various com-
+ponent testing design issues. I then show how to write acceptance tests for Order
+Service.
+ Let’s look at writing acceptance tests using Gherkin.
+ 
+ 
+Pattern: Service component test
+Test a service in isolation. See http://microservices.io/patterns/testing/service-
+component-test.html.
+ 

@@ -1,0 +1,42 @@
+376
+CHAPTER 11
+Developing production-ready services
+placed_orders_total{service="ftgo-order-service",} 1.0
+# HELP approved_orders_total
+# TYPE approved_orders_total counter
+approved_orders_total{service="ftgo-order-service",} 1.0
+The placed_orders counter is, for example, reported as a metric of type counter.
+ The Prometheus server periodically polls this endpoint to retrieve metrics. Once
+the metrics are in Prometheus, you can view them using Grafana, a data visualization
+tool (https://grafana.com). You can also set up alerts for these metrics, such as when
+the rate of change for placed_orders_total falls below some threshold.
+ Application metrics provide valuable insights into your application’s behavior.
+Alerts triggered by metrics enable you to quickly respond to a production issue, per-
+haps before it impacts users. Let’s now look at how to observe and respond to another
+source of alerts: exceptions. 
+11.3.5 Using the Exception tracking pattern
+A service should rarely log an exception, and when it does, it’s important that you
+identify the root cause. The exception might be a symptom of a failure or a program-
+ming bug. The traditional way to view exceptions is to look in the logs. You might even
+configure the logging server to alert you if an exception appears in the log file. There
+are, however, several problems with this approach:
+Log files are oriented around single-line log entries, whereas exceptions consist
+of multiple lines.
+There’s no mechanism to track the resolution of exceptions that occur in log
+files. You would have to manually copy/paste the exception into an issue tracker.
+There are likely to be duplicate exceptions, but there’s no automatic mecha-
+nism to treat them as one.
+A better approach is to use an exception tracking service. As figure 11.15 shows, you
+configure your service to report exceptions to an exception tracking service via, for
+example, a REST API. The exception tracking service de-duplicates exceptions, gener-
+ates alerts, and manages the resolution of exceptions.
+ There are a couple of ways to integrate the exception tracking service into your
+application. Your service could invoke the exception tracking service’s API directly. A
+better approach is to use a client library provided by the exception tracking service.
+For example, HoneyBadger’s client library provides several easy-to-use integration
+mechanisms, including a Servlet Filter that catches and reports exceptions.
+Pattern: Exception tracking
+Services report exceptions to a central service that de-duplicates exceptions, gener-
+ates alerts, and manages the resolution of exceptions. See http://microservices.io/
+patterns/observability/audit-logging.html.
+ 

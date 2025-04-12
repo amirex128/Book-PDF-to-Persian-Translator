@@ -1,0 +1,47 @@
+160
+CHAPTER 5
+Designing business logic in a microservice architecture
+the service updates an Order aggregate. If an update request spans multiple services,
+the OrderService will also create a saga, as described in chapter 4.
+ We’ll take a look at the code—but first, let’s examine a concept that’s closely
+related to aggregates: domain events. 
+5.3
+Publishing domain events
+Merriam-Webster (https://www.merriam-webster.com/dictionary/event) lists several
+definitions of the word event, including these:
+1
+Something that happens
+2
+A noteworthy happening
+3
+A social occasion or activity
+4
+An adverse or damaging medical occurrence, a heart attack or other cardiac event
+In the context of DDD, a domain event is something that has happened to an aggre-
+gate. It’s represented by a class in the domain model. An event usually represents a
+state change. Consider, for example, an Order aggregate in the FTGO application. Its
+state-changing events include Order Created, Order Cancelled, Order Shipped, and
+so forth. An Order aggregate might, if there are interested consumers, publish one of
+the events each time it undergoes a state transition.
+5.3.1
+Why publish change events?
+Domain events are useful because other parties—users, other applications, or other
+components within the same application—are often interested in knowing about an
+aggregate’s state changes. Here are some example scenarios:
+Maintaining data consistency across services using choreography-based sagas,
+described in chapter 4.
+Notifying a service that maintains a replica that the source data has changed.
+This approach is known as Command Query Responsibility Segregation (CQRS),
+and it’s described in chapter 7.
+Notifying a different application via a registered webhook or via a message bro-
+ker in order to trigger the next step in a business process.
+Notifying a different component of the same application in order, for example,
+to send a WebSocket message to a user’s browser or update a text database such
+as ElasticSearch.
+Sending notifications—text messages or emails—to users informing them that
+their order has shipped, their Rx prescription is ready for pick up, or their
+flight is delayed.
+Pattern: Domain event
+An aggregate publishes a domain event when it’s created or undergoes some other
+significant change.
+ 

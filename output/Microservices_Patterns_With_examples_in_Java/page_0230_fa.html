@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 230</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 6: Developing business logic with event sourcing</strong></h3>
+  <p>
+   که تا آن زمان رخ داده است، folding می‌کنید. به عنوان مثال، محاسبه اعتبار موجود از یک customer در یک مقطع زمانی در گذشته، آسان است.
+  </p>
+  <h4><strong style="color:darkblue">MOSTLY AVOIDS THE O/R IMPEDANCE MISMATCH PROBLEM</strong></h4>
+  <p>
+   Event sourcing، events را persist می‌کند نه aggregation آنها. Eventsها معمولاً یک ساختار ساده و به راحتی serializable دارند. همانطور که قبلاً ذکر شد، یک service می‌تواند یک aggregate complex را با serializing یک memento از state آن snapshot کند، که یک سطح از indirection را بین یک aggregate و representation serialized آن اضافه می‌کند.
+  </p>
+  <h4><strong style="color:darkblue">PROVIDES DEVELOPERS WITH A TIME MACHINE</strong></h4>
+  <p>
+   Event sourcing تاریخچه کاملی از هر آنچه در طول عمر یک application رخ داده است را ذخیره می‌کند. تصور کنید که developers از FTGO نیاز به پیاده‌سازی یک requirement جدید برای مشتریانی دارند که یک آیتم را به shopping cart خود اضافه کرده‌اند و سپس آن را حذف کرده‌اند. یک application سنتی این اطلاعات را حفظ نمی‌کرد، بنابراین فقط می‌توانست برای مشتریانی که آیتم‌ها را پس از پیاده‌سازی این ویژگی اضافه و حذف می‌کنند، بازاریابی کند. در مقابل، یک application مبتنی بر event sourcing می‌تواند بلافاصله برای مشتریانی که این کار را در گذشته انجام داده‌اند، بازاریابی کند. انگار event sourcing، developers را با یک time machine برای سفر به گذشته و پیاده‌سازی requirementsهای پیش‌بینی نشده فراهم می‌کند.
+  </p>
+  <h4><strong style="color:darkblue">6.1.9: Drawbacks of event sourcing</strong></h4>
+  <p>
+   Event sourcing یک silver bullet نیست. این معایب زیر را دارد:
+  </p>
+  <ul>
+   <li>It has a different programming model that has a learning curve.</li>
+   <li>It has the complexity of a messaging-based application.</li>
+   <li>Evolving events can be tricky.</li>
+   <li>Deleting data is tricky.</li>
+   <li>Querying the event store is challenging.</li>
+  </ul>
+  <p>
+   بیایید به هر معایب نگاهی بیندازیم.
+  </p>
+  <h4><strong style="color:darkblue">DIFFERENT PROGRAMMING MODEL THAT HAS A LEARNING CURVE</strong></h4>
+  <p>
+   این یک programming model متفاوت و ناآشنا است و این به معنای یک learning curve است.
+  </p>
+  <p>
+   به منظور اینکه یک application موجود از event sourcing استفاده کند، شما باید business logic آن را دوباره بنویسید. خوشبختانه، این یک transformation نسبتاً mechanical است که می‌توانید هنگام migration application خود به microservices انجام دهید.
+  </p>
+  <h4><strong style="color:darkblue">COMPLEXITY OF A MESSAGING-BASED APPLICATION</strong></h4>
+  <p>
+   یکی دیگر از معایب event sourcing این است که message brokers معمولاً at-least-once delivery را تضمین می‌کنند. Event handlers که idempotent نیستند، باید eventsهای duplicate را تشخیص داده و دور بریزند. فریم‌ورک event sourcing می‌تواند با اختصاص یک ID به طور یکنواخت در حال افزایش به هر event کمک کند. سپس یک event handler می‌تواند eventsهای تکراری را با ردیابی بالاترین ID event دیده شده، تشخیص دهد. حتی این اتفاق به طور خودکار زمانی رخ می‌دهد که event handlers aggregates را update می‌کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

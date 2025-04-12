@@ -1,0 +1,24 @@
+make such a guarantee? In Figure 6-3, for example, Worker A has said it will be able
+to change the state of the row in the Customer table to update that specific customer’s
+status to VERIFIED. What if a different operation at some later point deletes the row,
+or makes some other smaller change that nonetheless means that a change to VERI
+FIED later is invalid? To guarantee that the change to VERIFIED can be made later,
+Worker A will likely have to lock the record to ensure that other changes cannot take
+place.
+If any workers didn’t vote in favor of the commit, a rollback message needs to be sent
+to all parties to ensure that they can clean up locally, which allows the workers to
+release any locks they may be holding. If all workers agreed to make the change, we
+move to the commit phase, as in Figure 6-4. Here, the changes are actually made, and
+associated locks are released.
+Figure 6-4. In the commit phase of a two-phase commit, changes are actually applied
+It’s important to note that in such a system, we cannot in any way guarantee that
+these commits will occur at exactly the same time. The Coordinator needs to send
+the commit request to all participants, and that message could arrive and be pro‐
+cessed at different times. This means that it’s possible we could see the change made
+to Worker A but not yet to Worker B, if we could directly observe the state of either
+worker. The more latency there is between the Coordinator and the participants in
+the two-phase commit, and the more slowly the workers process the response, the
+wider this window of inconsistency might be. Coming back to our definition of
+180 
+| 
+Chapter 6: Workflow

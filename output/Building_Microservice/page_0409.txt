@@ -1,0 +1,37 @@
+16 The JWT site has an excellent overview of which libraries support which public claims—it’s a great resource
+in general for all things JWT.
+Format
+The main payload of a JWT is a JSON structure, which broadly speaking can contain
+anything you want. We can see an example token in Example 11-1. The JWT stan‐
+dard does describe some specifically named fields (“public claims”) that you should
+use if they relate to you. For example, exp defines the expiration date of a token. If
+you use these public claim fields correctly, there is a good chance that the libraries
+you use will be able to make use of them appropriately—rejecting a token, for exam‐
+ple, if the exp field states that the token has already expired.16 Even if you won’t use
+all of these public claims, it’s worth being aware of what they are to ensure you don’t
+end up using them for your own application-specific uses, as this could cause some
+odd behavior in supporting libraries.
+Example 11-1. An example of the JSON payload of a JWT
+{
+  "sub": "123",
+  "name": "Sam Newman",
+  "exp": 1606741736,
+  "groups": "admin, beta"
+}
+In Example 11-2, we see the token from Example 11-1 encoded. This token is really
+just a single string, but it is split into three parts delineated with a “.”—the header,
+payload, and signature.
+Example 11-2. The result of encoding a JWT payload
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. 
+eyJzdWIiOiIxMjMiLCJuYW1lIjoiU2FtIE5ld21hbiIsImV4cCI6MTYwNjc0MTczNiwiZ3J... . 
+Z9HMH0DGs60I0P5bVVSFixeDxJjGovQEtlNUi__iE_0 
+The header
+The payload (truncated)
+The signature
+For the benefit of the example here, I have split the line at each part, but in reality this
+would be a single string with no line breaks. The header contains information about
+the signing algorithm being used. This allows the program decoding the token to
+support different signing schemes. The payload is where we store information about
+Authentication and Authorization 
+| 
+383

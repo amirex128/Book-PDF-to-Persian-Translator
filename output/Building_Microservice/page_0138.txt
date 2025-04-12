@@ -1,0 +1,24 @@
+the new customer so that they can start earning points, whereas the Notifications
+microservice sends an email to the newly registered customer welcoming them to the
+wondrous delights of MusicCorp.
+Figure 4-12. Notifications and Loyalty microservices receive an event when a new
+customer is registered
+With a request, we are asking a microservice to do something and providing the
+required information for the requested operation to be carried out. With an event, we
+are broadcasting a fact that other parties might be interested in, but as the microser‐
+vice emitting an event can’t and shouldn’t know who receives the event, how do we
+know what information other parties might need from the event? What, exactly,
+should be inside the event?
+Just an ID
+One option is for the event to just contain an identifier for the newly registered cus‐
+tomer, as shown in Figure 4-13. The Loyalty microservice needs only this identifier
+to create the matching loyalty account, so it has all the information it needs. How‐
+ever, while the Notifications microservice knows that it needs to send a welcome
+email when this type of event is received, it will need additional information to do its
+job—at least an email address, and probably the name of the customer as well to give
+the email that personal touch. As this information isn’t in the event that the Notifica
+tions microservice receives, it has no choice but to fetch this information from the
+Customer microservice, something we see in Figure 4-13.
+112 
+| 
+Chapter 4: Microservice Communication Styles

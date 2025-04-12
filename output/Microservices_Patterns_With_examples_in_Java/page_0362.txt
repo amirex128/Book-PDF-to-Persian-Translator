@@ -1,0 +1,57 @@
+332
+CHAPTER 10
+Testing microservices: Part 2
+Similarly, the output message’s sentTo element specifies the channel that the reply
+should be sent to.
+package contracts;
+org.springframework.cloud.contract.spec.Contract.make {
+label 'createTicket'
+input {
+    
+messageFrom('kitchenService')
+messageBody('''{"orderId":1,"restaurantId":1,"ticketDetails":{...}}''')
+messageHeaders {
+header('command_type','net.chrisrichardson...CreateTicket')
+header('command_saga_type','net.chrisrichardson...CreateOrderSaga')
+header('command_saga_id',$(consumer(regex('[0-9a-f]{16}-[0-9a-f]
+{16}'))))
+header('command_reply_to','net.chrisrichardson...CreateOrderSaga-Reply')
+}
+}
+outputMessage {
+     
+sentTo('net.chrisrichardson...CreateOrderSaga-reply')
+body([
+ticketId: 1
+])
+headers {
+header('reply_type', 'net.chrisrichardson...CreateTicketReply')
+header('reply_outcome-type', 'SUCCESS')
+}
+}
+}
+In this example contract, the input message is a CreateTicket command that’s sent to
+the kitchenService channel. The output message is a successful reply that’s sent to the
+CreateOrderSaga’s reply channel. Let’s look at how to use this contract in tests, start-
+ing with the consumer-side tests for Order Service. 
+CONSUMER-SIDE CONTRACT INTEGRATION TEST FOR AN ASYNCHRONOUS REQUEST/RESPONSE 
+INTERACTION
+The strategy for writing a consumer-side integration test for an asynchronous request/
+response interaction is similar to testing a REST client. The test invokes the service’s
+messaging proxy and verifies two aspects of its behavior. First, it verifies that the mes-
+saging proxy sends a command message that conforms to the contract. Second, it ver-
+ifies that the proxy properly handles the reply message.
+ Listing 10.9 shows the consumer-side integration test for KitchenServiceProxy,
+which is the messaging proxy used by Order Service to invoke Kitchen Service. Each
+test sends a command message using KitchenServiceProxy and verifies that it returns
+the expected result. It uses Spring Cloud Contract to configure messaging stubs for
+Listing 10.8
+Contract describing how Order Service asynchronously invokes 
+Kitchen Service
+The command message 
+sent by Order Service 
+to the kitchenService 
+channel
+The reply message sent 
+by Kitchen Service
+ 

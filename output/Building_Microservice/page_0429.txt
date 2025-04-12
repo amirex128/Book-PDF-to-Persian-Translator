@@ -1,0 +1,21 @@
+being made as part of a synchronous call chain, however, it is probably better to fail
+fast. This could mean propagating an error up the call chain, or a more subtle degrad‐
+ing of functionality.
+In the case of AdvertCorp, we wrapped downstream calls to the legacy systems with
+circuit breakers, as Figure 12-6 shows. When these circuit breakers blew, we pro‐
+grammatically updated the website to show that we couldn’t currently show ads for,
+say, turnips. We kept the rest of the website working and clearly communicated to
+the customers that there was an issue restricted to one part of our product, all in a
+fully automated way.
+Figure 12-6. Adding circuit breakers to AdvertCorp
+We were able to scope our circuit breakers so that we had one for each of the down‐
+stream legacy systems—this lined up well with the fact that we had decided to have
+different request worker pools for each downstream service.
+If we have this mechanism in place (as with the circuit breakers in our home), we
+could use them manually to make it safer to do our work. For example, if we wanted
+to take a microservice down as part of routine maintenance, we could manually open
+all the circuit breakers of the upstream consumers so they fail fast while the microser‐
+vice is offline. Once it’s back, we can close the circuit breakers, and everything should
+Stability Patterns 
+| 
+403

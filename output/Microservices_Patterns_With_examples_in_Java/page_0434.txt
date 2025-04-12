@@ -1,0 +1,44 @@
+404
+CHAPTER 12
+Deploying microservices
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 20
+This deployment definition configures Kubernetes to invoke Restaurant Service’s
+health check endpoint. As described in chapter 11, a health check endpoint enables
+Kubernetes to determine the health of the service instance. Kubernetes implements
+two different checks. The first check is readinessProbe, which it uses to determine
+whether it should route traffic to a service instance. In this example, Kubernetes
+invokes the /actuator/health HTTP endpoint every 20 seconds after an initial 30-
+second delay, which gives it a chance to initialize. If some number (default is 1) of
+consecutive readinessProbes succeeds, Kubernetes considers the service to be ready,
+whereas if some number (default, 3) of consecutive readinessProbes fail, it’s consid-
+ered not to be ready. Kubernetes will only route traffic to the service instance when
+the readinessProbe indicates that it’s ready.
+ The second health check is the livenessProbe. It’s configured the same way as the
+readinessProbe. But rather than determine whether traffic should be routed to a ser-
+vice instance, the livenessProbe determines whether Kubernetes should terminate
+and restart the service instance. If some number (default, 3) of consecutive liveness-
+Probes fail in a row, Kubernetes will terminate and restart the service.
+ Once you’ve written the YAML file, you can create or update the deployment by
+using the kubectl apply command:
+kubectl apply -f ftgo-restaurant-service/src/deployment/kubernetes/ftgo-
+restaurant-service.yml
+This command makes a request to the Kubernetes API server that results in the cre-
+ation of the deployment and the pods.
+ To create this deployment, you must first create the Kubernetes Secret called
+ftgo-db-secret. One quick and insecure way to do that is as follows:
+kubectl create secret generic ftgo-db-secret \
+--from-literal=username=mysqluser --from-literal=password=mysqlpw
+This command creates a secret containing the database user ID and password speci-
+fied on the command line. See the Kubernetes documentation (https://kubernetes
+.io/docs/concepts/configuration/secret/#creating-your-own-secrets) for more secure
+ways to create secrets.
+CREATING A KUBERNETES SERVICE
+At this point the pods are running, and the Kubernetes deployment will do its best to
+keep them running. The problem is that the pods have dynamically assigned IP
+addresses and, as such, aren’t that useful to a client that wants to make an HTTP
+request. As described in chapter 3, the solution is to use a service discovery mechanism.
+ 

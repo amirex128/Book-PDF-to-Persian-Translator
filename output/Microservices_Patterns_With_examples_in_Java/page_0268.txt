@@ -1,0 +1,63 @@
+238
+CHAPTER 7
+Implementing queries in a microservice architecture
+the so-called NoSQL databases. A NoSQL database typically has a limited form of trans-
+actions and less general querying capabilities. For certain use cases, these databases
+have certain advantages over SQL databases, including a more flexible data model
+and better performance and scalability.
+ A NoSQL database is often a good choice for a CQRS view, which can leverage its
+strengths and ignore its weaknesses. A CQRS view benefits from the richer data model,
+and performance of a NoSQL database. It’s unaffected by the limitations of a NoSQL
+database, because it only uses simple transactions and executes a fixed set of queries.
+ Having said that, sometimes it makes sense to implement a CQRS view using a SQL
+database. A modern RDBMS running on modern hardware has excellent perfor-
+mance. Developers, database administrators, and IT operations are, in general, much
+more familiar with SQL databases than they are with NoSQL databases. As mentioned
+earlier, SQL databases often have extensions for non-relational features, such as geo-
+spatial datatypes and queries. Also, a CQRS view might need to use a SQL database in
+order to support a reporting engine.
+ As you can see in table 7.1, there are lots of different options to choose from. And
+to make the choice even more complicated, the differences between the different
+types of database are starting to blur. For example, MySQL, which is an RDBMS, has
+excellent support for JSON, which is one of the strengths of MongoDB, a JSON-style
+document-oriented database.
+Now that I’ve discussed the different kinds of databases you can use to implement a
+CQRS view, let’s look at the problem of how to efficiently update a view. 
+SUPPORTING UPDATE OPERATIONS
+Besides efficiently implementing queries, the view data model must also efficiently
+implement the update operations executed by the event handlers. Usually, an event
+Table 7.1
+Query-side view stores
+If you need
+Use
+Example
+PK-based lookup of JSON 
+objects
+A document store such as MongoDB 
+or DynamoDB, or a key value store 
+such as Redis
+Implement order history by main-
+taining a MongoDB document 
+containing the per-customer.
+Query-based lookup of JSON 
+objects
+A document store such as MongoDB 
+or DynamoDB
+Implement customer view using 
+MongoDB or DynamoDB.
+Text queries
+A text search engine such as Elastic-
+search
+Implement text search for orders 
+by maintaining a per-order Elas-
+ticsearch document.
+Graph queries
+A graph database such as Neo4j
+Implement fraud detection by 
+maintaining a graph of custom-
+ers, orders, and other data.
+Traditional SQL reporting/BI
+An RDBMS
+Standard business reports and 
+analytics.
+ 

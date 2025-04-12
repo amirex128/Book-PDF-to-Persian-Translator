@@ -1,0 +1,37 @@
+available. This meant that in the worst case, we would expect to wait around 2 sec‐
+onds for information from the turnip system.
+Time-outs are incredibly useful. Put time-outs on all out-of-
+process calls, and pick a default time-out for everything. Log when
+time-outs occur, look at what happens, and change them accord‐
+ingly. Look at “normal” healthy response times for your down‐
+stream services, and use that to guide where you set the time-out
+threshold.
+Setting a time-out for a single service call might not be enough. What happens if this
+time-out is happening as part of a wider set of operations that you might want to give
+up on even before the time-out occurs? In the case of AdvertCorp, for example, there
+is no point waiting for the latest turnip prices if there is a good chance the user has
+already given up asking. In such a situation, it can make sense to have a time-out for
+the overall operation and to give up if this time-out is exceeded. For that to work, the
+current time left for the operation would need to be passed downstream. For exam‐
+ple, if the overall operation to render a page had to complete within 1,000 ms, and by
+the time we made the call to the downstream turnip ad service 300 ms had already
+passed, we would then need to make sure we waited no longer than 700 ms for the
+rest of the calls to complete.
+Don’t just think about the time-out for a single service call; also
+think about a time-out for the overall operation, and abort the
+operation if this overall time-out budget is exceeded.
+Retries
+Some issues with downstream calls are temporary. Packets can get misplaced, or gate‐
+ways can have an odd spike in load, causing a time-out. Often, retrying the call can
+make a lot of sense. Coming back to what we just talked about, how often have you
+refreshed a web page that didn’t load, only to find the second attempt worked fine?
+That’s a retry in action.
+It can be useful to consider what sort of downstream call failures should even be
+retried. If using a protocol like HTTP, for example, you may get back some useful
+information in the response codes that can help you determine if a retry is warranted.
+If you got back a 404 Not Found, a retry is unlikely to be a useful idea. On the other
+hand, a 503 Service Unavailable or a 504 Gateway Time-out could be considered
+temporary errors and could justify a retry.
+Stability Patterns 
+| 
+399

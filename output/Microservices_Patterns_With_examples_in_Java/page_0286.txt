@@ -1,0 +1,49 @@
+256
+CHAPTER 8
+External API patterns
+
+Order Service—Basic order information, including the details and status
+
+Kitchen Service—The status of the order from the restaurant’s perspective
+and the estimated time it will be ready for pickup
+
+Delivery Service—The order’s delivery status, its estimated delivery time, and
+its current location
+
+Accounting Service—The order’s payment status
+If the mobile client invokes the services directly, then it must, as figure 8.2 shows, make
+multiple calls to retrieve this data.
+FTGO backend services
+Order Service
+Firewall
+Monolithic FTGO
+application
+Firewall
+Internet
+Internet
+getOrder()
+getDelivery()
+getOrderDetails()
+getBill()
+getTicket()
+Delivery
+Service
+Accounting
+Service
+Kitchen
+Service
+iPhone/
+Android
+consumer
+application
+iPhone/
+Android
+consumer
+application
+One API required
+Many API calls required
+Figure 8.2
+A client can retrieve the order details from the monolithic FTGO application with a 
+single request. But the client must make multiple requests to retrieve the same information in a 
+microservice architecture.
+ 

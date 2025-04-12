@@ -1,0 +1,36 @@
+maybe received) via a broker, you’ll have to look elsewhere for a solution. This is one
+area where Pact might be able to help—that’s something we’ll look at more shortly.
+So if we want to run our service tests for just our Customer microservice, we can
+launch the Customer microservice and a mountebank instance that acts as our Loy
+alty microservice on the same machine. And if those tests pass, I can deploy the Cus
+tomer service straightaway! Or can I? What about the services that call the Customer
+microservice—the helpdesk and the web shop? Do we know if we have made a
+change that may break them? Of course, we have forgotten the important tests at the
+top of the pyramid: the end-to-end tests.
+Implementing (Those Tricky) End-to-End Tests
+In a microservice system, the capabilities we expose via our user interfaces are deliv‐
+ered by a number of microservices. The point of the end-to-end tests as outlined in
+Mike Cohn’s pyramid is to drive functionality through these user interfaces against
+everything underneath to give us some feedback on the quality of the system as a
+whole.
+So, to implement an end-to-end test, we need to deploy multiple microservices
+together, and then run a test against all of them. Obviously, this test has a much
+larger scope, resulting in more confidence that our system works! On the other hand,
+these tests are liable to be slower and make it harder to diagnose failure. Let’s dig into
+them a bit more using our previous example to see how these tests can fit in.
+Imagine we want to push out a new version of the Customer microservice. We want
+to deploy our changes into production as soon as possible but are concerned that we
+may have introduced a change that could break either the helpdesk or the web shop.
+No problem—let’s deploy all our services together and run some tests against the
+helpdesk and web shop to see if we’ve introduced a bug. Now, a naive approach
+would be to just add these tests onto the end of our customer service pipeline, as in
+Figure 9-7.
+Figure 9-7. Adding our end-to-end tests stage: the right approach?
+So far, so good. But the first question we have to ask ourselves is, which version of the
+other microservices should we use? Should we run our tests against the versions of
+helpdesk and web shop that are in production? It’s a sensible assumption—but what
+if a new version of either the helpdesk or the web shop is queued up to go live? What
+should we do then?
+Implementing (Those Tricky) End-to-End Tests 
+| 
+285

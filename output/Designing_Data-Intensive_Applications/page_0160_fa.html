@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 160</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        A topic فقط یک dataflow یک‌طرفه را ارائه می‌دهد. با این حال، یک consumer ممکن است خود، messages را به یک topic دیگر منتشر کند (بنابراین شما می‌توانید آن‌ها را با هم زنجیر کنید، همانطور که در Chap‐ter 11 خواهیم دید)، یا به یک reply queue که توسط sender از the original message مصرف می‌شود (اجازه دادن به a request/response dataflow، شبیه به RPC).
+    </p>
+    <p>
+        Message brokers معمولاً هیچ data model خاصی را اعمال نمی‌کنند—یک message فقط یک sequence از bytes با مقداری metadata است، بنابراین شما می‌توانید از هر encoding format استفاده کنید. اگر encoding backward و forward compatible باشد، شما بیشترین انعطاف‌پذیری را برای تغییر publishers و consumers به طور مستقل دارید و آن‌ها را به هر ترتیبی deploy می‌کنید.
+    </p>
+    <p>
+        If a consumer messages را به یک topic دیگر republishes می‌کند، شما ممکن است نیاز داشته باشید که در مورد حفظ unknown fields مراقب باشید، تا از issue که قبلاً در context از databases توضیح داده شد (شکل 4-7) جلوگیری کنید.
+    </p>
+    <h4>Distributed actor frameworks</h4>
+    <p>
+        The actor model یک programming model برای concurrency در یک فرآیند واحد است. به جای برخورد مستقیم با threads (و مشکلات مرتبط با race conditions، locking و deadlock)، logic در actors encapsulated شده است. هر actor معمولاً یک client یا entity را نشان می‌دهد، ممکن است مقداری state local داشته باشد (که با هیچ actor دیگری به اشتراک گذاشته نمی‌شود) و با ارسال و دریافت asynchro‐nous messages با سایر actors ارتباط برقرار می‌کند. Message delivery تضمین نمی‌شود: در سناریوهای خطای خاص، messages از بین خواهند رفت. از آنجایی که هر actor فقط یک message را در یک زمان پردازش می‌کند، نیازی به نگرانی در مورد threads ندارد و هر actor می‌تواند به طور مستقل توسط framework زمان‌بندی شود.
+    </p>
+    <p>
+        در distributed actor frameworks، این programming model برای scale کردن یک application در سراسر multiple nodes استفاده می‌شود. همان مکانیزم message-passing استفاده می‌شود، مهم نیست که آیا sender و recipient در یک node یا nodes مختلف قرار دارند. اگر آن‌ها در nodes مختلف هستند، message به طور شفاف به یک byte sequence encoding می‌شود، از طریق شبکه ارسال می‌شود و در طرف دیگر decode می‌شود.
+    </p>
+    <p>
+        Location transparency در the actor model بهتر از RPC عمل می‌کند، زیرا the actor model قبلاً فرض می‌کند که messages ممکن است از بین بروند، حتی در داخل یک فرآیند واحد.
+    </p>
+    <p>
+        اگرچه latency over the network احتمالاً بالاتر از داخل همان فرآیند است، اما در استفاده از actor model، mismatch اساسی کمتری بین communication local و remote وجود دارد.
+    </p>
+    <p>
+        A distributed actor framework اساساً یک message broker و the actor programming model را در یک framework واحد ادغام می‌کند. با این حال، اگر شما می‌خواهید rolling upgrades از application مبتنی بر actor خود را انجام دهید، شما هنوز هم باید در مورد forward و backward compatibility نگران باشید، زیرا messages ممکن است از یک node که نسخه جدید را اجرا می‌کند، به یک node که نسخه قدیمی را اجرا می‌کند، ارسال شود و بالعکس.
+    </p>
+    <p>
+        سه framework actor distributed محبوب، message encoding را به شرح زیر handle می‌کنند:
+    </p>
+    <p>
+        138 | Chapter 4: Encoding and Evolution
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

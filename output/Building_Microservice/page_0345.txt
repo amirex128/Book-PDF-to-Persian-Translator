@@ -1,0 +1,42 @@
+5 See the analysis Kyle Kingsbury did on Elasticsearch 1.1.0 in “Jepsen: Elasticsearch,” https://oreil.ly/uO9wU
+and on Elasticsearch 1.5.0 in “Jepsen: Elasticsearch 1.5.0,” https://oreil.ly/8fBCt.
+6 Renato Losio, “Elastic Changes Licences for Elasticsearch and Kibana: AWS Forks Both,” InfoQ, January 25,
+2021, https://oreil.ly/VdWzD.
+Implementations
+Few spaces in our industry are as contested as that of log aggregation, and a large
+variety of solutions exist in this space.
+A popular open source toolchain for log aggregation has been to make use of a log
+forwarding agent like Fluentd to send logs to Elasticsearch, using Kibana as a way to
+slice and dice the resulting stream of logs. The biggest challenge with this stack tends
+to be the overhead of managing Elasticsearch itself, but this may be less of an issue if
+you need to run Elasticsearch for other purposes, or if you make use of a managed
+provider. I will sound two additional notes of caution about the use of this toolchain.
+Firstly, a lot of effort has gone into marketing Elasticsearch as a database. Personally,
+this has always sat uneasily with me. Taking something that was always billed as a
+search index and rebadging it as a database can be highly problematic. We implicitly
+make assumptions about how databases act and behave, and we treat them accord‐
+ingly, regarding them as a source of truth for vital data. But by design, a search index
+isn’t the source of truth; it’s a projection of the source of truth. Elasticsearch has suf‐
+fered from problems in the past that give me pause for thought.5 While I’m sure
+many of these issues have been resolved, my own reading of these problems has made
+me cautious regarding the use of Elasticseach in certain situations, and certainly
+when considering it as a database. Having a search index that might occasionally lose
+data isn’t an issue if you can already re-index. But treating it like a database is another
+thing entirely. If I were using this stack and couldn’t afford to lose log information, I
+would want to ensure that I can re-index the original logs if anything went wrong.
+The second set of concerns is less about the technical aspects of Elasticsearch and
+Kibana and more about the behaviors of Elastic, the company behind these projects.
+Recently, Elastic made a decision to change the license for the source code for both
+the core Elasticsearch database and Kibana from a widely used and accepted open
+source license (Apache 2.0) to a non–open source Server Side Public License (SSPL).6
+The driver for this change in license seems to have been the fact that Elastic is frustra‐
+ted that organizations like AWS have made successful commercial offerings building
+on this technology that have undercut Elastic’s own commercial offerings. Aside
+from the concerns that the SSPL can be “viral” in nature (in a similar way to the GNU
+General Public License), this decision has left many incensed. Well over a thousand
+people contributed code to Elasticsearch under the expectation that they were donat‐
+ing to an open source product. There is the added irony that Elasticsearch itself, and
+therefore much of the Elastic company as a whole, was built on technology from the
+Building Blocks for Observability 
+| 
+319

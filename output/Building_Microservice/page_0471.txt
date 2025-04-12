@@ -1,0 +1,30 @@
+Stock Change event, letting Recommendation (or any other subscribers to this event)
+know that the stock level has increased or decreased for a given item.
+Figure 13-14. Inventory fires Stock Change events, which Recommendation can use to
+update its local cache
+The main benefit of this mechanism is that it reduces the potential window wherein
+the cache is serving stale data. The window in which a cache might now be serving
+stale data is limited to the time taken for the notification to be sent and processed.
+Depending on the mechanism you use to send the notification, this could be pretty
+fast.
+The downside here is the complexity of implementation. We need the origin to be
+able to emit notifications, and we need interested parties to be able to respond to
+these notifications. Now, this is a natural place to make use of something like a mes‐
+sage broker, as this model fits neatly into the typical pub/sub-style interactions that
+many brokers provide. The additional guarantees that the broker might be able to
+give us could also be helpful. That said, as we’ve already discussed in “Message Brok‐
+ers” on page 135, there is an overhead to managing messaging middleware, and it
+might be overkill if you were using it only for this purpose. If you were using brokers
+for other forms of inter-microservice communication, however, it would make sense
+to make use of technology that you already had on hand.
+One problem to be aware of when using notification-based invalidation is that you
+may want to know whether the notification mechanism is actually working or not.
+Consider a situation in which we haven’t received any Stock Changed events from
+Inventory for a while. Does that mean we haven’t sold items or had items restocked
+during that time? Perhaps. It could also mean our notification mechanism is down
+and that we aren’t being sent updates any more. If this is a concern, then we could
+send a heartbeat event via the same notification mechanism—Recommendation, in
+our case—to let subscribers know that notifications are still coming, but nothing has
+Caching 
+| 
+445

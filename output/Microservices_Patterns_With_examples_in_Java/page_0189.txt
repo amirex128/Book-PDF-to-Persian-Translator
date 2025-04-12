@@ -1,0 +1,52 @@
+159
+Designing a domain model using the DDD aggregate pattern
+5.2.5
+Designing business logic with aggregates
+In a typical (micro)service, the bulk of the business logic consists of aggregates. The
+rest of the business logic resides in the domain services and the sagas. The sagas orches-
+trate sequences of local transactions in order to enforce data consistency. The services
+are the entry points into the business logic and are invoked by inbound adapters. A
+service uses a repository to retrieve aggregates from the database or save aggregates to
+the database. Each repository is implemented by an outbound adapter that accesses
+the database. Figure 5.9 shows the aggregate-based design of the business logic for the
+Order Service.
+The business logic consists of the Order aggregate, the OrderService service class, the
+OrderRepository, and one or more sagas. The OrderService invokes the Order-
+Repository to save and load Orders. For simple requests that are local to the service,
+REST API
+Domain
+event
+publisher
+«service»
+OrderService
+«saga»
+CreateOrder
+Saga
+«saga»
+ReviseOrder
+Saga
+createOrder()
+reviseOrder()
+cancelOrder()
+«value object»
+OrderLineItem
+quantity
+menuItem
+name
+Order
+command
+handlers
+Database
+adapter
+«aggregate»
+Order
+id
+...
+«repository»
+OrderRepository
+voidSave(Order)
+Orer ﬁndOne(id)
+...
+Figure 5.9
+An aggregate-based design for the Order Service business logic
+ 

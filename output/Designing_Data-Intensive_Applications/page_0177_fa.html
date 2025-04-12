@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 177</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        leader و یک follower synchronous. این configuration گاهی اوقات semi-synchronous [7] نیز نامیده می‌شود.
+    </p>
+    <p>
+        اغلب، leader-based replication به طور کامل asynchronous پیکربندی می‌شود. در این حالت، اگر leader fail شود و قابل بازیابی نباشد، هر writes که هنوز به followers replicate نشده‌اند، از بین می‌روند. این بدان معناست که تضمین نمی‌شود که یک write durable باشد، حتی اگر به client تأیید شده باشد. با این حال، یک configuration کاملاً asynchronous این مزیت را دارد که leader می‌تواند به پردازش writes ادامه دهد، حتی اگر همه followers آن عقب افتاده باشند.
+    </p>
+    <p>
+        Weakening durability ممکن است مانند یک trade-off بد به نظر برسد، اما replication asynchronous با این وجود به طور گسترده‌ای استفاده می‌شود، به خصوص اگر followers زیادی وجود داشته باشند یا اگر آن‌ها geographically distributed باشند. ما در "Problems with Replication Lag" در صفحه 161 به این موضوع باز خواهیم گشت.
+    </p>
+    <h4>Research on Replication</h4>
+    <p>
+        از دست دادن data توسط systems asynchronously replicated، اگر leader fail شود، می‌تواند یک مشکل جدی باشد، بنابراین محققان به بررسی روش‌های replication ادامه داده‌اند که داده‌ها را از دست نمی‌دهند، اما همچنان performance و availability خوبی را ارائه می‌دهند. به عنوان مثال، chain replication [8, 9] یک variant از synchronous replication است که با موفقیت در چند سیستم مانند Microsoft Azure Storage [10, 11] پیاده‌سازی شده است.
+    </p>
+    <p>
+        یک اتصال قوی بین consistency of replication و consensus (موافقت چندین node بر روی یک value) وجود دارد و ما این حوزه از نظریه را با جزئیات بیشتر در فصل 9 بررسی خواهیم کرد. در این فصل ما بر روی ساده‌ترین فرم‌های replication که معمولاً در databases در عمل استفاده می‌شوند، تمرکز خواهیم کرد.
+    </p>
+    <h4>Setting Up New Followers</h4>
+    <p>
+        هر از چند گاهی، شما نیاز دارید که followers جدید را راه‌اندازی کنید—شاید برای افزایش تعداد replicas یا جایگزینی nodes fail شده. چگونه اطمینان حاصل می‌کنید که follower جدید یک کپی دقیق از data leader دارد؟
+    </p>
+    <p>
+        کپی کردن ساده فایل‌های data از یک node به node دیگر معمولاً کافی نیست: clients دائماً در حال نوشتن در database هستند و data همیشه در حال نوسان است، بنابراین یک copy فایل استاندارد، بخش‌های مختلفی از database را در زمان‌های مختلف خواهد دید. نتیجه ممکن است هیچ معنایی نداشته باشد.
+    </p>
+    <p>
+        شما می‌توانید فایل‌ها را روی دیسک با locking database (که آن را برای writes غیرقابل دسترس می‌کند) سازگار کنید، اما این با هدف ما از high availability مغایرت دارد. خوشبختانه، راه‌اندازی یک follower معمولاً می‌تواند بدون downtime انجام شود. از نظر مفهومی، فرآیند به این صورت است:
+    </p>
+    <p>
+        Leaders and Followers | 155
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

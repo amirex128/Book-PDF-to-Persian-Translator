@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 447</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <h4><span style="font-weight: bold;">Deploying services using the Serverless deployment 
+   pattern</span></h4>
+  <h4><span style="font-weight: bold;">12.5.2 Developing a lambda function</span></h4>
+  <p>
+   Unlike when using the other three patterns، شما باید از یک programming متفاوت استفاده کنید
+   model برای lambda functions خود. A lambda function’s code و the packaging
+   به زبان برنامه‌نویسی بستگی دارد. A Java lambda function یک class است که imple-
+   ments the generic interface RequestHandler، که توسط the AWS Lambda تعریف شده است
+   Java core library و در لیست زیر نشان داده شده است. This interface دو type را می‌گیرد
+   parameters: I، که the input type است، و O، که the output type است. The type از I
+   و O به the specific kind از request که the lambda handles، بستگی دارد.
+  </p>
+  <pre><code class="language-java">
+  public interface RequestHandler&lt;I, O&gt; {
+  public O handleRequest(I input, Context context);
+  }
+  </code></pre>
+  <p>
+   The RequestHandler interface یک handleRequest() method واحد را تعریف می‌کند. This method
+   دارای دو پارامتر است، یک input object و یک context، که دسترسی به the lambda را فراهم می‌کند
+   execution environment، مانند the request ID. The handleRequest() method
+   یک output object را برمی‌گرداند. For lambda functions که HTTP requests را مدیریت می‌کنند که هستند
+   proxied توسط an AWS API Gateway، I و O به ترتیب APIGatewayProxyRequestEvent و
+   APIGatewayProxyResponseEvent هستند. As you’ll soon see، the handler func-
+   tions کاملاً شبیه به old-style Java EE servlets هستند.
+  </p>
+  <p>
+   A Java lambda به عنوان یک فایل ZIP یا یک فایل JAR بسته‌بندی می‌شود. A JAR file یک uber JAR است
+   (یا fat JAR) که، به عنوان مثال، توسط the Maven Shade plugin ایجاد شده است. A ZIP file دارای the
+   classes در root directory و JAR dependencies در lib directory. Later, I show
+   که چگونه یک پروژه Gradle می‌تواند یک فایل ZIP ایجاد کند. But first، بیایید به راه‌های مختلف نگاه کنیم
+   از فراخوانی a lambda function.
+  </p>
+  <h4><span style="font-weight: bold;">12.5.3 Invoking lambda functions</span></h4>
+  <p>
+   There are four ways برای فراخوانی a lambda function:
+  </p>
+  <p>
+   HTTP requests
+  </p>
+  <p>
+   Events که توسط AWS services ایجاد شده‌اند
+  </p>
+  <p>
+   Scheduled invocations
+  </p>
+  <p>
+   Directly با استفاده از یک API call
+  </p>
+  <p>
+   Let’s look at each one.
+  </p>
+  <h4><span style="font-weight: bold;">HANDLING HTTP REQUESTS</span></h4>
+  <p>
+   One way برای فراخوانی a lambda function این است که یک AWS API Gateway را برای route
+   HTTP requests به lambda شما پیکربندی کنید. The API gateway, function شما را به عنوان
+   یک HTTPS endpoint نشان می‌دهد. It functions به عنوان یک HTTP proxy، lambda function را فراخوانی می‌کند
+   با یک HTTP request object، و انتظار دارد که the lambda function یک HTTP را برگرداند
+   response object. By using the API gateway با AWS Lambda شما می‌توانید، به عنوان مثال،
+   deploy RESTful services به عنوان lambda functions.
+  </p>
+  <p>
+   Listing 12.8
+   A Java lambda function یک class است که the RequestHandler را پیاده‌سازی می‌کند
+   interface.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

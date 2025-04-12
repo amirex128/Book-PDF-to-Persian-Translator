@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 146</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        کتابخانه Avro این تفاوت‌ها را با نگاه کردن به the writer’s schema و the reader’s schema در کنار هم و ترجمه data از the writer’s schema به the reader’s schema حل می‌کند. the Avro specification [20] دقیقاً نحوه عملکرد این resolution را تعریف می‌کند و در شکل 4-6 نشان داده شده است.
+    </p>
+    <p>
+        به عنوان مثال، هیچ مشکلی وجود ندارد اگر the writer’s schema و the reader’s schema فیلدهای خود را به ترتیب متفاوتی داشته باشند، زیرا schema resolution، فیلدها را بر اساس field name با هم مطابقت می‌دهد. اگر کد که data را می‌خواند، با یک فیلد مواجه شود که در the writer’s schema ظاهر می‌شود اما در the reader’s schema وجود ندارد، به سادگی آن فیلد را نادیده می‌گیرد. اگر کد که data را می‌خواند، انتظار یک فیلد را داشته باشد، اما the writer’s schema حاوی یک فیلد با آن نام نباشد، با یک default value که در the reader’s schema اعلام شده است، پر می‌شود.
+    </p>
+    <p>
+        شکل 4-6. A Avro reader تفاوت‌ها بین the writer’s schema و the reader’s schema را حل می‌کند.
+    </p>
+    <h4>Schema evolution rules</h4>
+    <p>
+        با Avro، forward compatibility به این معنی است که شما می‌توانید یک نسخه جدید از schema را به عنوان writer و یک نسخه قدیمی از schema را به عنوان reader داشته باشید. برعکس، backward compatibility به این معنی است که شما می‌توانید یک نسخه جدید از schema را به عنوان reader و یک نسخه قدیمی را به عنوان writer داشته باشید.
+    </p>
+    <p>
+        برای حفظ compatibility، شما فقط ممکن است یک فیلد را اضافه یا حذف کنید که دارای default value باشد. (فیلد favoriteNumber در schema Avro ما دارای یک default value از null است.)
+    </p>
+    <p>
+        به عنوان مثال، فرض کنید شما یک فیلد را با یک default value اضافه می‌کنید، بنابراین این فیلد جدید در new schema وجود دارد اما در old schema وجود ندارد. هنگامی که یک reader با استفاده از schema جدید، یک record را که با schema قدیمی نوشته شده است، می‌خواند، the default value برای فیلد گمشده پر می‌شود.
+    </p>
+    <p>
+        اگر شما یک فیلد را اضافه کنید که هیچ default value ندارد، readers جدید نمی‌توانند data نوشته شده توسط writers قدیمی را بخوانند، بنابراین شما backward compatibility را خراب خواهید کرد. اگر شما یک فیلد را که هیچ default value ندارد، حذف کنید، readers قدیمی نمی‌توانند data نوشته شده توسط writers جدید را بخوانند، بنابراین شما forward compatibility را خراب خواهید کرد.
+    </p>
+    <p>
+        124 | Chapter 4: Encoding and Evolution
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0146/image_1.png" alt="Image from page 146" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

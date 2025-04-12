@@ -1,0 +1,46 @@
+66
+CHAPTER 3
+Interprocess communication in a microservice architecture
+cloud services, such as the Twilio messaging service and the Stripe payment service.
+But within a monolithic application like FTGO, modules invoke one another via
+language-level method or function calls. FTGO developers generally don’t need to
+think about IPC unless they’re working on the REST API or the modules that inte-
+grate with cloud services.
+ In contrast, as you saw in chapter 2, the microservice architecture structures an
+application as a set of services. Those services must often collaborate in order to han-
+dle a request. Because service instances are typically processes running on multiple
+machines, they must interact using IPC. It plays a much more important role in a
+microservice architecture than it does in a monolithic application. Consequently, as
+they migrate their application to microservices, Mary and the rest of the FTGO devel-
+opers will need to spend a lot more time thinking about IPC.
+ There’s no shortage of IPC mechanisms to chose from. Today, the fashionable
+choice is REST (with JSON). It’s important, though, to remember that there are no
+silver bullets. You must carefully consider the options. This chapter explores various
+IPC options, including REST and messaging, and discusses the trade-offs.
+ The choice of IPC mechanism is an important architectural decision. It can impact
+application availability. What’s more, as I explain in this chapter and the next, IPC
+even intersects with transaction management. I favor an architecture consisting of
+loosely coupled services that communicate with one another using asynchronous mes-
+saging. Synchronous protocols such as REST are used mostly to communicate with
+other applications.
+ I begin this chapter with an overview of interprocess communication in micro-
+service architecture. Next, I describe remote procedure invocation-based IPC, of which
+REST is the most popular example. I cover important topics including service discov-
+ery and how to handle partial failure. After that, I describe asynchronous messaging-
+based IPC. I also talk about scaling consumers while preserving message ordering,
+correctly handling duplicate messages, and transactional messaging. Finally, I go
+through the concept of self-contained services that handle synchronous requests with-
+out communicating with other services in order to improve availability.
+3.1
+Overview of interprocess communication in a 
+microservice architecture
+There are lots of different IPC technologies to choose from. Services can use
+synchronous request/response-based communication mechanisms, such as HTTP-
+based REST or gRPC. Alternatively, they can use asynchronous, message-based com-
+munication mechanisms such as AMQP or STOMP. There are also a variety of differ-
+ent messages formats. Services can use human-readable, text-based formats such as JSON
+or XML. Alternatively, they could use a more efficient binary format such as Avro or
+Protocol Buffers.
+ Before getting into the details of specific technologies, I want to bring up several
+design issues you should consider. I start this section with a discussion of interaction
+ 

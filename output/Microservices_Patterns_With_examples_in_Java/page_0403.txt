@@ -1,0 +1,41 @@
+373
+Designing observable services
+tracing information, such as the current trace ID and the parent span ID, to outbound
+requests. For example, one common standard for propagating trace information is
+the B3 standard (https://github.com/openzipkin/b3-propagation), which uses head-
+ers such as X-B3-TraceId and X-B3-ParentSpanId. The instrumentation library also
+reports traces to the distributed tracing server. The distributed tracing server stores
+the traces and provides a UI for visualizing them.
+ Let’s take a look at the instrumentation library and the distribution tracing server,
+beginning with the library.
+USING AN INSTRUMENTATION LIBRARY
+The instrumentation library builds the tree of spans and sends them to the distributed
+tracing server. The service code could call the instrumentation library directly, but that
+would intertwine the instrumentation logic with business and other logic. A cleaner
+approach is to use interceptors or aspect-oriented programming (AOP).
+ A great example of an AOP-based framework is Spring Cloud Sleuth. It uses the
+Spring Framework’s AOP mechanism to automagically integrate distributed tracing
+into the service. As a result, you have to add Spring Cloud Sleuth as a project depen-
+dency. Your service doesn’t need to call a distributed tracing API except in those cases
+that aren’t handled by Spring Cloud Sleuth. 
+ABOUT THE DISTRIBUTED TRACING SERVER
+The instrumentation library sends the spans to a distributed tracing server. The dis-
+tributed tracing server stitches the spans together to form complete traces and stores
+them in a database. One popular distributed tracing server is Open Zipkin. Zipkin was
+originally developed by Twitter. Services can deliver spans to Zipkin using either
+HTTP or a message broker. Zipkin stores the traces in a storage backend, which is
+either a SQL or NoSQL database. It has a UI that displays traces, as shown earlier in
+figure 11.12. AWS X-ray is another example of a distributed tracing server. 
+11.3.4 Applying the Application metrics pattern
+A key part of the production environment is monitoring and alerting. As figure 11.14
+shows, the monitoring system gathers metrics, which provide critical information
+about the health of an application, from every part of the technology stack. Metrics
+range from infrastructure-level metrics, such as CPU, memory, and disk utilization, to
+application-level metrics, such as service request latency and number of requests exe-
+cuted. Order Service, for example, gathers metrics about the number of placed,
+approved, and rejected orders. The metrics are collected by a metrics service, which
+provides visualization and alerting.
+Pattern: Application metrics
+Services report metrics to a central server that provides aggregation, visualization,
+and alerting.
+ 

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 184</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        iii. The term eventual consistency was coined by Douglas Terry et al. [24], popularized by Werner Vogels [22], and became the battle cry of many NoSQL projects. However, not only NoSQL databases are eventually consistent: followers in an asynchronously replicated relational database have the same characteristics.
+    </p>
+    <p>
+        unavailable for writing. و هرچه nodes بیشتری داشته باشید، احتمال بیشتری وجود دارد که یکی از آن‌ها از کار بیفتد، بنابراین یک configuration کاملاً synchronous بسیار غیرقابل اعتماد خواهد بود.
+    </p>
+    <p>
+        متأسفانه، اگر یک application از یک follower asynchronous بخواند، ممکن است اطلاعات outdated را ببیند اگر follower عقب افتاده باشد. این منجر به inconsistencies آشکار در database می‌شود: اگر شما همان query را در leader و a follower به طور همزمان اجرا کنید، شما ممکن است نتایج متفاوتی دریافت کنید، زیرا همه writes در the follower منعکس نشده‌اند. این inconsistency فقط یک state موقت است—اگر شما نوشتن در database را متوقف کنید و مدتی صبر کنید، the followers در نهایت catch up خواهند شد و با leader سازگار می‌شوند. به همین دلیل، این effect به عنوان eventual consistency [22, 23] شناخته می‌شود.iii
+    </p>
+    <p>
+        اصطلاح "eventually" عمداً مبهم است: به طور کلی، هیچ محدودیتی برای اینکه یک replica چقدر می‌تواند عقب بیفتد، وجود ندارد. در عملکرد normal، تأخیر بین رخ دادن یک write در leader و منعکس شدن آن در یک follower—the replication lag—ممکن است فقط یک fraction از یک ثانیه باشد و در عمل قابل توجه نیست. با این حال، اگر سیستم در نزدیکی ظرفیت در حال کار باشد یا اگر مشکلی در network وجود داشته باشد، the lag می‌تواند به راحتی به چند ثانیه یا حتی چند دقیقه افزایش یابد.
+    </p>
+    <p>
+        وقتی lag آنقدر بزرگ است، inconsistencies که معرفی می‌کند، فقط یک مشکل نظری نیست بلکه یک مشکل واقعی برای applications است. در این بخش ما سه نمونه از مشکلاتی را که احتمالاً هنگام وجود replication lag رخ می‌دهند، برجسته می‌کنیم و برخی از رویکردها را برای حل آن‌ها تشریح می‌کنیم.
+    </p>
+    <h4>Reading Your Own Writes</h4>
+    <p>
+        Many applications به user اجازه می‌دهند که مقداری data را submit کنند و سپس آنچه را که submit کرده‌اند، مشاهده کنند. این ممکن است یک record در یک customer database باشد، یا یک comment در یک discussion thread، یا چیز دیگری از این نوع. وقتی data جدید ارسال می‌شود، باید به leader ارسال شود، اما وقتی user data را مشاهده می‌کند، می‌توان آن را از یک follower خواند. این به خصوص مناسب است اگر data اغلب مشاهده شود اما فقط گهگاهی نوشته شود.
+    </p>
+    <p>
+        با replication asynchronous، یک مشکل وجود دارد، که در شکل 5-3 نشان داده شده است: اگر user data را اندکی پس از ایجاد یک write مشاهده کند، data جدید ممکن است هنوز به replica نرسیده باشد. برای user، به نظر می‌رسد که داده‌هایی که ارسال کرده‌اند، از دست رفته است، بنابراین آن‌ها قابل درک هستند و ناراحت خواهند بود.
+    </p>
+    <p>
+        162 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

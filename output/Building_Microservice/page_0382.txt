@@ -1,0 +1,37 @@
+8 Some people are concerned about the fact that secrets are stored in plain text. Whether or not this is an issue
+for you depends largely on your threat model. For the secrets to be read, an attacker would have to have direct
+access to the core systems running your cluster, at which point it’s arguable that your cluster is already hope‐
+lessly compromised.
+Secrets
+Broadly speaking, secrets are critical pieces of information that a microservice needs
+to operate and that are also sensitive enough that they require protecting from mali‐
+cious parties. Examples of secrets that a microservice might need include:
+• Certificates for TLS
+• SSH keys
+• Public/private API keypairs
+• Credentials for accessing databases
+If we consider the life cycle of a secret, we can start to tease apart the various aspects
+of secrets management that might require different security needs:
+Creation
+How do we create the secret in the first place?
+Distribution
+Once the secret is created, how do we make sure it gets to the right place (and
+only the right place)?
+Storage
+Is the secret stored in a way that ensures only authorized parties can access it?
+Monitoring
+Do we know how this secret is being used?
+Rotation
+Are we able to change the secret without causing problems?
+If we have a number of microservices, each of which might want different sets of
+secrets, we’re going to need to use tooling to help manage all of this.
+Kubernetes provides a built-in secrets solution. It is somewhat limited in terms of
+functionality but does come as part of a basic Kubernetes install, so it could be good
+enough for many use cases.8
+If you were looking for a more sophisticated tool in this space, Hashicorp’s Vault is
+worth a look. An open source tool with commercial options available, it’s a veritable
+Swiss Army knife of secrets management, handling everything from the basic aspects
+of distributing secrets to generating time-limited credentials for databases and cloud
+356 
+| 
+Chapter 11: Security

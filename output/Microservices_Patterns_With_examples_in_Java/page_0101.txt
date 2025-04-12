@@ -1,0 +1,44 @@
+71
+Overview of interprocess communication in a microservice architecture
+ Another option is to use HTTP’s content negotiation mechanism and include the
+version number in the MIME type. For example, a client would request version 1.x of
+an Order using a request like this:
+GET /orders/xyz HTTP/1.1
+Accept: application/vnd.example.resource+json; version=1
+...
+This request tells the Order Service that the client expects a version 1.x response.
+ In order to support multiple versions of an API, the service’s adapters that imple-
+ment the APIs will contain logic that translates between the old and new versions.
+Also, as described in chapter 8, the API gateway will almost certainly use versioned
+APIs. It may even have to support numerous older versions of an API.
+ Now we’ll look at the issue of message formats, the choice of which can impact how
+easy evolving an API will be. 
+3.1.4
+Message formats
+The essence of IPC is the exchange of messages. Messages usually contain data, and so
+an important design decision is the format of that data. The choice of message format
+can impact the efficiency of IPC, the usability of the API, and its evolvability. If you’re
+using a messaging system or protocols such as HTTP, you get to pick your message for-
+mat. Some IPC mechanisms—such as gRPC, which you’ll learn about shortly—might
+dictate the message format. In either case, it’s essential to use a cross-language mes-
+sage format. Even if you’re writing your microservices in a single language today, it’s
+likely that you’ll use other languages in the future. You shouldn’t, for example, use
+Java serialization.
+ There are two main categories of message formats: text and binary. Let’s look at
+each one.
+TEXT-BASED MESSAGE FORMATS
+The first category is text-based formats such as JSON and XML. An advantage of these
+formats is that not only are they human readable, they’re self describing. A JSON mes-
+sage is a collection of named properties. Similarly, an XML message is effectively a col-
+lection of named elements and values. This format enables a consumer of a message
+to pick out the values of interest and ignore the rest. Consequently, many changes to
+the message schema can easily be backward-compatible.
+ The structure of XML documents is specified by an XML schema (www.w3.org/
+XML/Schema). Over time, the developer community has come to realize that JSON also
+needs a similar mechanism. One popular option is to use the JSON Schema standard
+(http://json-schema.org). A JSON schema defines the names and types of a message’s
+properties and whether they’re optional or required. As well as being useful documenta-
+tion, a JSON schema can be used by an application to validate incoming messages.
+ A downside of using a text-based messages format is that the messages tend to be
+verbose, especially XML. Every message has the overhead of containing the names of
+ 

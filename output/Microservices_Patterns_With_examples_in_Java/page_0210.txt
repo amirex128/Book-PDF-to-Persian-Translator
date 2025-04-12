@@ -1,0 +1,43 @@
+180
+CHAPTER 5
+Designing business logic in a microservice architecture
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+}
+The revise() method is called to initiate the revision of an order. Among other
+things, it verifies that the revised order won’t violate the order minimum and changes
+the state of the order to REVISION_PENDING. Once Revise Order Saga has successfully
+updated Kitchen Service and Accounting Service, it then calls confirmRevision()
+to complete the revision.
+ These methods are invoked by OrderService. Let’s take a look at that class. 
+5.5.2
+The OrderService class
+The OrderService class defines methods for creating and updating Orders. It’s the
+main entry point into the business logic and is invoked by various inbound adapters,
+such as the REST API. Most of its methods create a saga to orchestrate the creation and
+updating of Order aggregates. As a result, this service is more complicated than the
+KitchenService class discussed earlier. The following listing shows an excerpt of this
+class. OrderService is injected with various dependencies, including OrderRepository,
+OrderDomainEventPublisher, and several saga managers. It defines several methods,
+including createOrder() and reviseOrder().
+@Transactional
+public class OrderService {
+@Autowired
+private OrderRepository orderRepository;
+@Autowired
+private SagaManager<CreateOrderSagaState, CreateOrderSagaState>
+createOrderSagaManager;
+@Autowired
+private SagaManager<ReviseOrderSagaState, ReviseOrderSagaData>
+reviseOrderSagaManagement;
+@Autowired
+private OrderDomainEventPublisher orderAggregateEventPublisher;
+public Order createOrder(OrderDetails orderDetails) {
+Restaurant restaurant = restaurantRepository.findById(restaurantId)
+.orElseThrow(() -
+> new RestaurantNotFoundException(restaurantId));
+Listing 5.17
+The OrderService class has methods for creating and managing orders
+ 

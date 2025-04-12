@@ -1,0 +1,73 @@
+135
+The design of the Order Service and the Create Order Saga
+4.4.2
+The implementation of the Create Order Saga
+Figure 4.11 shows the classes that implement the Create Order Saga. The responsibil-
+ities of each class are as follows:
+
+CreateOrderSaga—A singleton class that defines the saga’s state machine. It
+invokes the CreateOrderSagaState to create command messages and sends
+them to participants using message channels specified by the saga participant
+proxy classes, such as KitchenServiceProxy.
+Eventuate tram sagas
+create()
+...
+SagaManager
+«interface»
+SimpleSaga
+SagaDeﬁnition
+CommandEndpoint
+SagaDeﬁnition
+getSagaDeﬁnition()
+«table»
+SAGA_INSTANCE
+Eventuate tram
+Uses
+Implements
+Creates
+Manages
+Invokes
+Order database
+CreateOrderSaga
+replies
+OrderService
+requests
+Stores the state
+of saga instances
+The state of a saga
+Describes a
+message channel
+Describes the
+steps of a saga
+Abstract superclass
+for saga
+orchestrators
+orderId
+orderDetails
+...
+CreateOrder
+SagaState
+CreateOrder
+Saga
+Kitchen
+ServiceProxy
+this.sagaDeﬁnition=
+step()
+.withCompensation(...)
+.step()
+.invokeParticipant(...)
+.step()
+.invokeParticipant(...)
+.onReply(...)
+.withCompensation(...)
+OrderService
+Proxy
+OrderService
+The SagaManager handles persisting a saga,
+sending the command messages that it
+generates, subscribing to reply messages,
+and invoking the saga to handle replies.
+Figure 4.11
+The OrderService's sagas, such as Create Order Saga, are implemented using 
+the Eventuate Tram Saga framework.
+ 

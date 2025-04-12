@@ -1,0 +1,51 @@
+194
+CHAPTER 6
+Developing business logic with event sourcing
+approach is to use the number of events as the version number. Alternatively, as you’ll
+see below in section 6.2, an event store could maintain an explicit version number. 
+6.1.4
+Event sourcing and publishing events
+Strictly speaking, event sourcing persists aggregates as events and reconstructs the cur-
+rent state of an aggregate from those events. You can also use event sourcing as a reli-
+able event publishing mechanism. Saving an event in the event store is an inherently
+atomic operation. We need to implement a mechanism to deliver all persisted events
+to interested consumers.
+ Chapter 3 describes a couple of different mechanisms—polling and transaction log
+tailing—for publishing messages that are inserted into the database as part of a transac-
+tion. An event sourcing-based application can publish events using one of these mecha-
+nisms. The main difference is that it permanently stores events in an EVENTS table rather
+than temporarily saving events in an OUTBOX table and then deleting them. Let’s take a
+look at each approach, starting with polling.
+USING POLLING TO PUBLISH EVENTS
+If events are stored in the EVENTS table shown in figure 6.6, an event publisher can
+poll the table for new events by executing a SELECT statement and publish the events
+to a message broker. The challenge is determining which events are new. For exam-
+ple, imagine that eventIds are monotonically increasing. The superficially appealing
+approach is for the event publisher to record the last eventId that it has processed. It
+would then retrieve new events using a query like this: SELECT * FROM EVENTS where
+event_id > ? ORDER BY event_id ASC.
+ The problem with this approach is that transactions can commit in an order that’s
+different from the order in which they generate events. As a result, the event pub-
+lisher can accidentally skip over an event. Figure 6.6 shows such as a scenario.
+Transaction A
+Transaction B
+COMMIT
+BEGIN
+BEGIN
+COMMIT
+INSERT event with
+EVENT_ID = 1020
+SELECT * FROM EVENTS
+WHERE EVENT_ID > ....
+SELECT * FROM EVENTS
+WHERE EVENT_ID > 1020...
+INSERT event with
+EVENT_ID = 1010
+Retrieves event 1020
+Commits last
+Skips event 1010 because
+1010 <= event 1020
+Figure 6.6
+A scenario where an event is skipped because its transaction A commits after 
+transaction B. Polling sees eventId=1020 and then later skips eventId=1010.
+ 

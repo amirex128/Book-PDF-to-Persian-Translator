@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 214</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 6: Developing business logic with event sourcing</strong></h3>
+  <p>
+   از طرف دیگر، منطق event publishing به business logic متصل شده است. business logic حتی زمانی که developer فراموش می‌کند یک event را منتشر کند، به کار خود ادامه می‌دهد. Mary نگران بود که این روش انتشار events ممکن است منبعی از bugs باشد.
+  </p>
+  <p>
+   سال‌ها پیش، Mary در مورد event sourcing، یک روش event-centric برای نوشتن business logic و persist کردن domain objects، یاد گرفته بود. در آن زمان او با مزایای متعدد آن، از جمله چگونگی حفظ تاریخچه کامل از تغییرات در یک aggregate، مجذوب شده بود، اما این فقط یک کنجکاوی بود. با توجه به اهمیت domain events در معماری microservice، او اکنون تعجب می‌کند که آیا استفاده از event sourcing در application FTGO ارزشمند خواهد بود یا خیر. از این گذشته، event sourcing یک منبع از خطاهای برنامه‌نویسی را با تضمین اینکه یک event، هر زمان که یک aggregate ایجاد یا update می‌شود، منتشر می‌شود، حذف می‌کند.
+  </p>
+  <p>
+   من این فصل را با توصیف نحوه عملکرد event sourcing و چگونگی استفاده از آن برای نوشتن business logic آغاز می‌کنم. من توضیح می‌دهم که چگونه event sourcing هر aggregate را به عنوان یک sequence از events در آنچه که به عنوان event store شناخته می‌شود، persist می‌کند. من در مورد مزایا و معایب event sourcing بحث می‌کنم و نحوه پیاده‌سازی یک event store را پوشش می‌دهم. من یک framework ساده را برای نوشتن business logic مبتنی بر event sourcing توضیح می‌دهم. پس از آن، من در مورد چگونگی event sourcing به عنوان یک پایه خوب برای پیاده‌سازی sagas بحث می‌کنم. بیایید با نگاهی به نحوه توسعه business logic با event sourcing شروع کنیم.
+  </p>
+  <h4><strong style="color:darkblue">6.1: Developing business logic using event sourcing</strong></h4>
+  <p>
+   Event sourcing یک روش متفاوت برای ساختاربندی business logic و persist کردن aggregates است. یک aggregate را به عنوان یک sequence از events persist می‌کند. هر event نشان‌دهنده یک state change از aggregate است. یک application، state فعلی از یک aggregate را با replaying the events بازسازی می‌کند.
+  </p>
+  <p>
+   Event sourcing چندین مزیت مهم دارد. به عنوان مثال، تاریخچه aggregates را حفظ می‌کند، که برای اهداف auditing و regulatory ارزشمند است. و به طور قابل‌اعتمادی domain events را منتشر می‌کند، که به ویژه در یک معماری microservice مفید است.
+  </p>
+  <p>
+   Event sourcing همچنین معایبی دارد. این شامل یک learning curve می‌شود، زیرا یک روش متفاوت برای نوشتن business logic شما است. همچنین، querying the event store اغلب دشوار است، که نیاز دارد شما از pattern به نام CQRS، که در فصل 7 توضیح داده شد، استفاده کنید.
+  </p>
+  <p>
+   من این بخش را با توصیف محدودیت‌های persistence سنتی شروع می‌کنم. سپس event sourcing را با جزئیات شرح می‌دهم و در مورد چگونگی غلبه بر آن محدودیت‌ها صحبت می‌کنم.
+  </p>
+  <p>
+   بعد از آن، من نشان می‌دهم که چگونه Order aggregate را با استفاده از event sourcing پیاده‌سازی کنم. در نهایت، من مزایا و معایب event sourcing را شرح می‌دهم.
+  </p>
+  <p>
+   بیایید ابتدا به محدودیت‌های رویکرد سنتی برای persistence نگاهی بیندازیم.
+  </p>
+  <p>
+   Pattern: Event sourcing
+   <br>
+   Persist an aggregate as a sequence of domain events that represent state changes.
+   <br>
+   See http://microservices.io/patterns/data/event-sourcing.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

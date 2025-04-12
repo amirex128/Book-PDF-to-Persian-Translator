@@ -1,0 +1,49 @@
+279
+Implementing an API gateway
+.uri(orderDestinations.orderServiceUrl + "/orders/{orderId}",
+orderId)
+.exchange();
+    
+return response.flatMap(resp -> resp.bodyToMono(OrderInfo.class));  
+}
+}
+The findOrder() method retrieves the OrderInfo for an order. It uses the WebClient
+to make the HTTP request to the Order Service and deserializes the JSON response
+to an OrderInfo. WebClient has a reactive API, and the response is wrapped in a Mono.
+The findOrder() method uses flatMap() to transform the Mono<ClientResponse>
+into a Mono<OrderInfo>. As the name suggests, the bodyToMono() method returns the
+response body as a Mono. 
+THE APIGATEWAYAPPLICATION CLASS
+The ApiGatewayApplication class, shown in the following listing, implements the API
+gateway’s main() method. It’s a standard Spring Boot main class.
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@EnableGateway
+@Import(OrdersConfiguration.class)
+public class ApiGatewayApplication {
+public static void main(String[] args) {
+SpringApplication.run(ApiGatewayApplication.class, args);
+}
+}
+The @EnableGateway annotation imports the Spring configuration for the Spring
+Cloud Gateway framework.
+ Spring Cloud Gateway is an excellent framework for implementing an API gateway.
+It enables you to configure basic proxying using a simple, concise routing rules DSL.
+It’s also straightforward to route requests to handler methods that perform API com-
+position and protocol translation. Spring Cloud Gateway is built using the scalable,
+reactive Spring Framework 5 and Project Reactor frameworks. But there’s another
+appealing option for developing your own API gateway: GraphQL, a framework that
+provides graph-based query language. Let’s look at how that works. 
+8.3.3
+Implementing an API gateway using GraphQL
+Imagine that you’re responsible for implementing the FTGO’s API Gateway’s GET
+/orders/{orderId} endpoint, which returns the order details. On the surface, imple-
+menting this endpoint might appear to be simple. But as described in section 8.1, this
+endpoint retrieves data from multiple services. Consequently, you need to use the
+Listing 8.6
+The main() method for the API gateway
+Invoke the
+service.
+Convert the response
+body to an OrderInfo.
+ 

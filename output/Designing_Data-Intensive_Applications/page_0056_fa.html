@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 56</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        iii. At the time of writing, joins در RethinkDB پشتیبانی می‌شوند، در MongoDB پشتیبانی نمی‌شوند و فقط در views از قبل اعلام شده در CouchDB پشتیبانی می‌شوند.
+    </p>
+    <p>
+        Database administrators و developers عاشق بحث در مورد normalization و denormalization هستند، اما ما در حال حاضر قضاوت را به حالت تعلیق در می‌آوریم. در قسمت III این کتاب ما به این موضوع باز خواهیم گشت و راه‌های سیستماتیک برخورد با caching، denormalization و derived data را بررسی خواهیم کرد.
+    </p>
+    <p>
+        متأسفانه، نرمال‌سازی این data به relationships many-to-one نیاز دارد (افراد زیادی در یک منطقه خاص زندگی می‌کنند، افراد زیادی در یک صنعت خاص کار می‌کنند)، که به خوبی با document model مطابقت ندارند. در relational databases، ارجاع به ردیف‌ها در tables دیگر توسط ID، به دلیل آسان بودن joins، normal است. در document databases، joins برای ساختارهای درختی one-to-many مورد نیاز نیستند و پشتیبانی از joins اغلب ضعیف است.iii
+    </p>
+    <p>
+        اگر خود database از joins پشتیبانی نمی‌کند، باید یک join را در application code با انجام multiple queries به database شبیه‌سازی کنید. (در این مورد، lists of regions و industries احتمالاً به اندازه کافی کوچک و کند تغییر می‌کنند که application می‌تواند به سادگی آن‌ها را در memory نگه دارد. اما با این وجود، کار انجام join از database به application code منتقل می‌شود.)
+    </p>
+    <p>
+        علاوه بر این، حتی اگر نسخه اولیه یک application به خوبی در یک document model بدون join قرار گیرد، data تمایل به interconnectedتر شدن با اضافه شدن features به applications دارد. به عنوان مثال، تغییراتی را که می‌توانیم در مثال resume ایجاد کنیم، در نظر بگیرید:
+    </p>
+    <ul>
+        <li>Organizations و schools به عنوان entities</li>
+        <li>در توضیحات قبلی، organization (شرکتی که user در آن کار می‌کرد) و school_name (جایی که آن‌ها تحصیل می‌کردند) فقط strings هستند. شاید آن‌ها باید به جای آن، به references به entities اشاره کنند؟ سپس هر organization، school یا university می‌تواند صفحه وب خود را داشته باشد (با logo، news feed و غیره). هر resume می‌تواند به organizations و schools که به آن اشاره می‌کند، link شود و شامل logos و اطلاعات دیگر آن‌ها باشد (به شکل 2-3 برای یک مثال از LinkedIn مراجعه کنید).</li>
+        <li>Recommendations</li>
+        <li>فرض کنید می‌خواهید یک feature جدید اضافه کنید: یک user می‌تواند یک recommendation برای user دیگری بنویسد. recommendation در resume از user که recommendation شده است، همراه با name و photo از user که recommendation را انجام می‌دهد، نمایش داده می‌شود. اگر recommender photo خود را به‌روزرسانی کند، هر recommendation که نوشته است باید photo جدید را منعکس کند. بنابراین، recommendation باید یک reference به profile نویسنده داشته باشد.</li>
+    </ul>
+    <p>
+        34 | Chapter 2: Data Models and Query Languages
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0056/image_1.png" alt="Image from page 56" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

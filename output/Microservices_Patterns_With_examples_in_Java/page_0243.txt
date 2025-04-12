@@ -1,0 +1,46 @@
+213
+Using sagas and event sourcing together
+6.3.3
+Implementing an event sourcing-based saga participant
+Imagine that you used event sourcing to implement a service that needs to participate
+in an orchestration-based saga. Not surprisingly, if your service uses an RDBMS-based
+event store such as Eventuate Local, you can easily ensure that it atomically processes
+saga command messages and sends replies. It can update the event store as part of the
+ACID transaction initiated by the Eventuate Tram framework. But you must use an
+entirely different approach if your service uses an event store that can’t participate in
+the same transaction as the Eventuate Tram framework.
+ You must address a couple of different issues:
+Idempotent command message handling
+Atomically sending a reply message
+Let’s first look at how to implement idempotent command message handlers.
+IDEMPOTENT COMMAND MESSAGE HANDLING
+The first problem to solve is how an event sourcing-based saga participant can detect
+and discard duplicate messages in order to implement idempotent command message
+handling. Fortunately, this is an easy problem to address using the idempotent mes-
+sage handling mechanism described earlier. A saga participant records the message
+ID in the events that are generated when processing the message. Before updating an
+aggregate, the saga participant verifies that it hasn’t processed the message before by
+looking for the message ID in the events. 
+ATOMICALLY SENDING REPLY MESSAGES
+The second problem to solve is how an event sourcing-based saga participant can
+atomically send replies. In principle, a saga orchestrator could subscribe to the events
+emitted by an aggregate, but there are two problems with this approach. The first is
+that a saga command might not actually change the state of an aggregate. In this sce-
+nario, the aggregate won’t emit an event, so no reply will be sent to the saga orchestra-
+tor. The second problem is that this approach requires the saga orchestrator to treat
+saga participants that use event sourcing differently from those that don’t. That’s
+because in order to receive domain events, the saga orchestrator must subscribe to the
+aggregate’s event channel in addition to its own reply channel.
+ A better approach is for the saga participant to continue to send a reply message to
+the saga orchestrator’s reply channel. But rather than send the reply message directly,
+a saga participant uses a two-step process:
+1
+When a saga command handler creates or updates an aggregate, it arranges for
+a SagaReplyRequested pseudo event to be saved in the event store along with
+the real events emitted by the aggregate.
+2
+An event handler for the SagaReplyRequested pseudo event uses the data con-
+tained in the event to construct the reply message, which it then writes to the
+saga orchestrator’s reply channel.
+Let’s look at an example to see how this works.
+ 

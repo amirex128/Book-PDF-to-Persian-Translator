@@ -1,0 +1,42 @@
+184
+CHAPTER 6
+Developing business logic with event sourcing
+hand, the event publishing logic is bolted on to the business logic. The business logic
+continues to work even when the developer forgets to publish an event. Mary was con-
+cerned that this way of publishing events might be a source of bugs.
+ Many years ago, Mary had learned about event sourcing, an event-centric way of writ-
+ing business logic and persisting domain objects. At the time she was intrigued by its
+numerous benefits, including how it preserves the complete history of the changes to
+an aggregate, but it remained a curiosity. Given the importance of domain events
+in microservice architecture, she now wonders whether it would be worthwhile to
+explore using event sourcing in the FTGO application. After all, event sourcing elimi-
+nates a source of programming errors by guaranteeing that an event will be published
+whenever an aggregate is created or updated.
+ I begin this chapter by describing how event sourcing works and how you can use it
+to write business logic. I describe how event sourcing persists each aggregate as a
+sequence of events in what is known as an event store. I discuss the benefits and draw-
+backs of event sourcing and cover how to implement an event store. I describe a sim-
+ple framework for writing event sourcing-based business logic. After that, I discuss
+how event sourcing is a good foundation for implementing sagas. Let’s start by look-
+ing at how to develop business logic with event sourcing.
+6.1
+Developing business logic using event sourcing
+Event sourcing is a different way of structuring the business logic and persisting aggre-
+gates. It persists an aggregate as a sequence of events. Each event represents a state
+change of the aggregate. An application recreates the current state of an aggregate by
+replaying the events.
+Event sourcing has several important benefits. For example, it preserves the history of
+aggregates, which is valuable for auditing and regulatory purposes. And it reliably
+publishes domain events, which is particularly useful in a microservice architecture.
+Event sourcing also has drawbacks. It involves a learning curve, because it’s a different
+way to write your business logic. Also, querying the event store is often difficult, which
+requires you to use the CQRS pattern, described in chapter 7.
+ I begin this section by describing the limitations of traditional persistence. I then
+describe event sourcing in detail and talk about how it overcomes those limitations.
+After that, I show how to implement the Order aggregate using event sourcing. Finally,
+I describe the benefits and drawbacks of event sourcing.
+ Let’s first look at the limitations of the traditional approach to persistence.
+Pattern: Event sourcing
+Persist an aggregate as a sequence of domain events that represent state changes.
+See http://microservices.io/patterns/data/event-sourcing.html.
+ 

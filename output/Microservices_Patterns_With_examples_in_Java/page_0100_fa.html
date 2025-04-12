@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 100</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <p>
+   <strong>USE SEMANTIC VERSIONING</strong>
+  </p>
+  <p>
+   مشخصات <strong>Semantic Versioning</strong> (http://semver.org) یک راهنمای مفید برای
+   <strong>versioning APIs</strong> است. این مجموعه‌ای از قوانینی است که نحوه استفاده و افزایش اعداد نسخه را مشخص می‌کند.
+   <strong>Semantic versioning</strong> در اصل برای <strong>versioning</strong> بسته‌های نرم‌افزاری در نظر گرفته شده بود، اما شما می‌توانید از آن برای
+   <strong>versioning APIs</strong> در یک سیستم توزیع شده استفاده کنید.
+  </p>
+  <p>
+   مشخصات <strong>Semantic Versioning</strong> (<strong>Semvers</strong>) مستلزم این است که یک شماره نسخه از سه بخش تشکیل شود:
+   <strong>MAJOR.MINOR.PATCH</strong>. شما باید هر بخش از شماره نسخه را به شرح زیر افزایش دهید:
+  </p>
+  <ul>
+   <li>
+    <strong>MAJOR</strong>—هنگامی که یک تغییر <strong>incompatible</strong> در <strong>API</strong> ایجاد می‌کنید
+   </li>
+   <li>
+    <strong>MINOR</strong>—هنگامی که پیشرفت‌های <strong>backward-compatible</strong> را در <strong>API</strong> ایجاد می‌کنید
+   </li>
+   <li>
+    <strong>PATCH</strong>—هنگامی که یک رفع اشکال <strong>backward-compatible</strong> انجام می‌دهید
+   </li>
+  </ul>
+  <p>
+   چندین مکان وجود دارد که می‌توانید از شماره نسخه در یک <strong>API</strong> استفاده کنید. اگر شما
+   در حال پیاده‌سازی یک <strong>REST API</strong> هستید، می‌توانید، همانطور که در زیر ذکر شد، از نسخه اصلی به عنوان
+   اولین عنصر مسیر <strong>URL</strong> استفاده کنید. متناوباً، اگر شما در حال پیاده‌سازی یک سرویس هستید
+   که از پیام‌رسانی استفاده می‌کند، می‌توانید شماره نسخه را در پیام‌هایی که ارسال می‌کند، قرار دهید.
+   هدف این است که <strong>APIs</strong> را به درستی <strong>version</strong> کنید و آنها را به شیوه‌ای کنترل‌شده تکامل دهید. بیایید نگاهی بیندازیم به نحوه رسیدگی به تغییرات جزئی و اصلی.
+  </p>
+  <p>
+   <strong>MAKING MINOR, BACKWARD-COMPATIBLE CHANGES</strong>
+  </p>
+  <p>
+   در حالت ایده‌آل، شما باید تلاش کنید فقط تغییرات <strong>backward-compatible</strong> ایجاد کنید. <strong>Backward-</strong>
+   تغییرات <strong>compatible</strong>، تغییرات افزایشی به یک <strong>API</strong> هستند:
+  </p>
+  <ul>
+   <li>
+    افزودن ویژگی‌های اختیاری به <strong>request</strong>
+   </li>
+   <li>
+    افزودن ویژگی‌ها به یک <strong>response</strong>
+   </li>
+   <li>
+    افزودن عملیات جدید
+   </li>
+  </ul>
+  <p>
+   اگر شما فقط این نوع تغییرات را ایجاد کنید، کلاینت‌های قدیمی‌تر با سرویس‌های جدیدتر کار خواهند کرد،
+   به شرطی که آنها به اصل <strong>Robustness</strong> (https://en.wikipedia.org/wiki/
+   <strong>Robustness_principle</strong>) عمل کنند، که بیان می‌کند: "در آنچه انجام می‌دهید محافظه‌کار باشید، در
+   آنچه از دیگران می‌پذیرید لیبرال باشید." سرویس‌ها باید مقادیر پیش‌فرض را برای موارد از دست رفته ارائه دهند
+   ویژگی‌های <strong>request</strong>. به طور مشابه، کلاینت‌ها باید هر ویژگی <strong>response</strong> اضافی را نادیده بگیرند. در
+   به منظور اینکه این کار بدون دردسر انجام شود، کلاینت‌ها و سرویس‌ها باید از یک <strong>request</strong> و <strong>response</strong> استفاده کنند.
+   فرمت <strong>format</strong> که از اصل <strong>Robustness</strong> پشتیبانی می‌کند. در ادامه این بخش، من توضیح می‌دهم که چگونه متن-
+   فرمت‌های مبتنی بر <strong>JSON</strong> و <strong>XML</strong> به طور کلی تکامل <strong>APIs</strong> را آسان‌تر می‌کنند.
+  </p>
+  <p>
+   <strong>MAKING MAJOR, BREAKING CHANGES</strong>
+  </p>
+  <p>
+   گاهی اوقات شما باید تغییرات اصلی و <strong>incompatible</strong> در <strong>API</strong> ایجاد کنید. از آنجایی که شما نمی‌توانید
+   کلاینت‌ها را مجبور کنید تا فوراً ارتقا پیدا کنند، یک سرویس باید همزمان از نسخه‌های قدیمی و
+   نسخه‌های جدید یک <strong>API</strong> برای مدتی پشتیبانی کند. اگر شما از یک <strong>IPC</strong> مبتنی بر <strong>HTTP</strong> استفاده می‌کنید
+   مکانیسم، مانند <strong>REST</strong>، یک رویکرد این است که شماره نسخه اصلی را در
+   <strong>URL</strong> قرار دهید. به عنوان مثال، مسیرهای نسخه 1 با '/v1/…' و مسیرهای نسخه 2
+   با '/v2/…' پیشوند می‌شوند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

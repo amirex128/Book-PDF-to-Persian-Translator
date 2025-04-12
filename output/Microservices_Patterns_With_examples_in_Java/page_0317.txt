@@ -1,0 +1,64 @@
+287
+Implementing an API gateway
+ Here’s the resolveOrderRestaurant() function, which is the resolver for the
+Order.restaurant field that retrieves an order’s restaurant:
+function resolveOrderRestaurant({restaurantId}, args, context) {
+return context.restaurantServiceProxy.findRestaurant(restaurantId);
+}
+Its first parameter is Order. It invokes RestaurantServiceProxy.findRestaurant()
+with the Order’s restaurantId, which was provided by resolveOrders().
+ GraphQL uses a recursive algorithm to execute the resolver functions. First, it exe-
+cutes the resolver function for the top-level query specified by the Query document.
+Next, for each object returned by the query, it iterates through the fields specified in
+the Query document. If a field has a resolver, it invokes the resolver with the object
+and the arguments from the Query document. It then recurses on the object or
+objects returned by that resolver.
+ Figure 8.11 shows how this algorithm executes the query that retrieves a consumer’s
+orders and each order’s delivery information and restaurant. First, the GraphQL engine
+invokes resolveConsumer(), which retrieves Consumer. Next, it invokes resolve-
+ConsumerOrders(), which is the resolver for the Consumer.orders field that returns
+the consumer’s orders. The GraphQL engine then iterates through Orders, invok-
+ing the resolvers for the Order.restaurant and Order.deliveryInfo fields.
+The result of executing the resolvers is a Consumer object populated with data retrieved
+from multiple services.
+ Let’s now look at how to optimize the executing of resolvers by using batching and
+caching. 
+Resolver functions
+Schema
+Query document
+type Query{
+consumer(consumerId:int!): Consumer
+}
+type Order {
+...
+restaurant: Restaurant
+deliveryInfo : DeliveryInfo
+...
+query{
+consumer(consumerId:1){
+id
+ﬁrstName
+lastName
+orders{
+orderId
+restaurant{
+id
+name
+}
+deliveryInfo{
+estimatedDeliveryTime
+name
+}
+}
+}
+}
+consumer = resolveConsumer(..., 1)
+orders = resolveConsumerOrders(consumer)
+resolveOrderRestaurant(order, ...)
+resolveOrderDeliveryInfo(order)
+Query arguments passed to resolver
+Figure 8.11
+GraphQL executes a query by recursively invoking the resolver functions for the fields specified in 
+the Query document. First, it executes the resolver for the query, and then it recursively invokes the resolvers for 
+the fields in the result object hierarchy.
+ 

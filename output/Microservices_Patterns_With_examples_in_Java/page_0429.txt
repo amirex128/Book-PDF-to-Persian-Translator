@@ -1,0 +1,43 @@
+399
+Deploying the FTGO application with Kubernetes
+12.3.3 Drawbacks of deploying services as containers
+One significant drawback of containers is that you’re responsible for the undifferenti-
+ated heavy lifting of administering the container images. You must patch the operat-
+ing system and runtime. Also, unless you’re using a hosted container solution such as
+Google Container Engine or AWS ECS, you must administer the container infrastruc-
+ture and possibly the VM infrastructure it runs on. 
+12.4
+Deploying the FTGO application with Kubernetes
+Now that we’ve looked at containers and their trade-offs, let’s look at how to deploy
+the FTGO application’s Restaurant Service using Kubernetes. Docker Compose,
+described in section 12.3.1, is great for development and testing. But to reliably run
+containerized services in production, you need to use a much more sophisticated con-
+tainer runtime, such as Kubernetes. Kubernetes is a Docker orchestration framework,
+a layer of software on top of Docker that turns a set of machines into a single pool of
+resources for running services. It endeavors to keep the desired number of instances
+of each service running at all times, even when service instances or machines crash.
+The agility of containers combined with the sophistication of Kubernetes is a compel-
+ling way to deploy services.
+ In this section, I first give an overview of Kubernetes, its functionality, and its archi-
+tecture. After that, I show how to deploy a service using Kubernetes. Kubernetes is a
+complex topic, and covering it exhaustively is beyond the scope of this book, so I only
+show how to use Kubernetes from the perspective of a developer. For more informa-
+tion, I recommend Kubernetes in Action by Marko Luksa (Manning, 2018).
+12.4.1 Overview of Kubernetes
+Kubernetes is a Docker orchestration framework. A Docker orchestration framework treats
+a set of machines running Docker as a pool of resources. You tell the Docker orches-
+tration framework to run N instances of your service, and it handles the rest. Figure 12.9
+shows the architecture of a Docker orchestration framework.
+ A Docker orchestration framework, such as Kubernetes , has three main functions:
+Resource management—Treats a cluster of machines as a pool of CPU, memory,
+and storage volumes, turning the collection of machines into a single machine.
+Scheduling—Selects the machine to run your container. By default, scheduling
+considers the resource requirements of the container and each node’s available
+resources. It might also implement affinity, which colocates containers on the
+same node, and anti-affinity, which places containers on different nodes.
+Service management—Implements the concept of named and versioned services
+that map directly to services in the microservice architecture. The orchestration
+framework ensures that the desired number of healthy instances is running at
+all times. It load balances requests across them. The orchestration framework
+performs rolling upgrades of services and lets you roll back to an old version.
+ 

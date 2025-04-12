@@ -1,0 +1,53 @@
+124
+CHAPTER 4
+Managing transactions with sagas
+The state machine also defines numerous state transitions. For example, the state
+machine transitions from the Creating Ticket state to either the Authorizing Card
+or the Rejected Order state. It transitions to the Authorizing Card state when it
+receives a successful reply to the Create Ticket command. Alternatively, if Kitchen
+Service couldn’t create the Ticket, the state machine transitions to the Rejected
+Order state.
+ The state machine’s initial action is to send the VerifyConsumer command to
+Consumer Service. The response from Consumer Service triggers the next state tran-
+sition. If the consumer was successfully verified, the saga creates the Ticket and tran-
+sitions to the Creating Ticket state. But if the consumer verification failed, the saga
+rejects the Order and transitions to the Rejecting Order state. The state machine
+undergoes numerous other state transitions, driven by the responses from saga partici-
+pants, until it reaches a final state of either Order Approved or Order Rejected. 
+Veriﬁng
+consumer
+Rejecting
+order
+Creating
+ticket
+Authorizing
+card
+Rejecting
+ticket
+Approving
+ticket
+Approving
+order
+Order
+approved
+Order
+rejected
+/Send VerifyConsumer
+ConsumerVeriﬁcationFailed/
+send RejectOrder
+Ticket creation failed/
+send RejectOrder
+ConsumerVeriﬁed/
+send CreateRestaurantOrder
+Ticket created/
+send AuthorizeCard
+Card authorized/
+send ApproveTicket
+Ticket approved/
+send ApproveOrder
+Order approved
+Card authorization failed/
+send RejectTicket
+Figure 4.7
+The state machine model for the Create Order Saga
+ 

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 440</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <p>
+   The Istio Envoy proxy یک version اصلاح شده از Envoy است (www.envoyproxy.io). It’s a high-
+   performance proxy که از variety از protocols پشتیبانی می‌کند، شامل TCP، low-level pro-
+   tocols مانند HTTP و HTTPS، و higher-level protocols. It also understands
+   MongoDB, Redis و DynamoDB protocols. Envoy همچنین از interservice قوی پشتیبانی می‌کند
+   communication با features مانند circuit breakers، rate limiting و automatic
+   retries. It can secure communication در داخل application با استفاده از TLS برای inter-
+   Envoy communication.
+  </p>
+  <p>
+   Istio از Envoy به عنوان یک sidecar استفاده می‌کند، یک process یا container که در کنار service
+   instance اجرا می‌شود و cross-cutting concerns را پیاده‌سازی می‌کند. When running در Kubernetes، the
+   Envoy proxy یک container در داخل service’s pod است. In other environments که ندارند
+   the pod concept، Envoy در همان container که service است، اجرا می‌شود. All traffic to
+   و از service از طریق the Envoy proxy آن جریان دارد، که traffic را با توجه به
+   routing rules به آن توسط the control plane داده می‌شود. For example, direct Service  Service
+   communication تبدیل به Service  Source Envoy  Destination Envoy  Service می‌شود.
+  </p>
+  <p>
+   Istio با استفاده از Kubernetes-style YAML configuration files پیکربندی شده است. It has یک command-
+   line tool به نام istioctl که شبیه به kubectl است. You use istioctl برای ایجاد،
+   updating، و deleting rules و policies. When using Istio on Kubernetes، شما می‌توانید
+   همچنین از kubectl استفاده کنید.
+  </p>
+  <p>
+   Let’s look at نحوه deploy کردن یک service با Istio.
+  </p>
+  <h4><span style="font-weight: bold;">DEPLOYING A SERVICE WITH ISTIO</span></h4>
+  <p>
+   Deploying a service در Istio کاملاً ساده است. You define a Kubernetes Service
+   و a Deployment برای هر یک از services از application شما. Listing 12.7 the را نشان می‌دهد
+   definition از Service و Deployment برای Consumer Service. Although it’s almost identical
+   به the definitions که من قبلاً نشان دادم، چند تفاوت وجود دارد. That’s because Istio has
+   a few requirements برای the Kubernetes services و pods:
+  </p>
+  <p>
+   A Kubernetes service port باید از the Istio naming convention از <proto-
+   col>[-<suffix>] استفاده کند، که در آن protocol http، http2، grpc، mongo یا redis است. If the
+   port unnamed است، Istio the port را به عنوان a TCP port و won’t apply rule-
+   based routing.
+  </p>
+  <p>
+   A pod باید یک app label مانند app: ftgo-consumer-service داشته باشد، که
+   the service را شناسایی می‌کند، به منظور پشتیبانی از Istio distributed tracing.
+  </p>
+  <p>
+   In order to run multiple versions از یک service به طور همزمان، نام از a
+   Kubernetes deployment باید شامل version، مانند ftgo-consumer-
+   service-v1, ftgo-consumer-service-v2 و غیره باشد. A deployment’s pods باید داشته باشد
+   a version label، مانند version: v1، که version را مشخص می‌کند، تا
+   Istio می‌تواند به یک version خاص route کند.
+  </p>
+  <p>
+   Pattern: Sidecar
+   Implement cross-cutting concerns در یک sidecar process یا container که در کنار اجرا می‌شود
+   the service instance. See http://microservices.io/patterns/deployment/sidecar.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

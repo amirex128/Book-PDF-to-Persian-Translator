@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 125</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the Asynchronous messaging pattern</h3>
+  <p>
+   در این مثال، هر پیام <strong>Order event</strong> دارای <strong>orderId</strong> به عنوان کلید <strong>shard</strong> است. هر <strong>event</strong>
+   برای یک <strong>order</strong> خاص به همان <strong>shard</strong> منتشر می‌شود، که توسط یک نمونه <strong>consumer</strong> واحد خوانده می‌شود.
+   در نتیجه، تضمین می‌شود که این پیام‌ها به ترتیب پردازش شوند.
+  </p>
+  <h4>3.3.6 Handling duplicate messages</h4>
+  <p>
+   چالش دیگری که هنگام استفاده از پیام‌رسانی باید با آن مقابله کنید، رسیدگی به پیام‌های تکراری است.
+   یک <strong>message broker</strong> در حالت ایده‌آل باید هر پیام را فقط یک بار تحویل دهد، اما <strong>guar-</strong>
+   <strong>anteeing exactly-once messaging</strong> معمولاً بیش از حد هزینه بر است. در عوض، اکثر <strong>message brokers</strong>
+   قول می‌دهند که یک پیام را حداقل یک بار تحویل دهند.
+  </p>
+  <p>
+   وقتی سیستم به طور معمول کار می‌کند، یک <strong>message broker</strong> که تحویل <strong>at-least-</strong>
+   یک بار را تضمین می‌کند، هر پیام را فقط یک بار تحویل می‌دهد. اما خرابی یک کلاینت، شبکه یا
+   <strong>message broker</strong> می‌تواند منجر به این شود که یک پیام چندین بار تحویل داده شود. فرض کنید یک کلاینت
+   پس از پردازش یک پیام و به‌روزرسانی <strong>database</strong> خود - اما قبل از تأیید
+   پیام. <strong>message broker</strong> دوباره پیام تأیید نشده را تحویل می‌دهد،
+   یا به آن کلاینت زمانی که دوباره راه‌اندازی می‌شود یا به یک <strong>replica</strong> دیگر از کلاینت.
+  </p>
+  <p>
+   در حالت ایده‌آل، شما باید از یک <strong>message broker</strong> استفاده کنید که ترتیب را هنگام تحویل مجدد
+   پیام‌ها حفظ می‌کند. تصور کنید که کلاینت یک رویداد <strong>Order Created</strong> را دنبال می‌کند
+   یک رویداد <strong>Order Cancelled</strong> برای همان <strong>Order</strong>، و به نوعی <strong>Order Created</strong>
+   <strong>event</strong> تأیید نشده بود. <strong>message broker</strong> باید رویدادهای <strong>Order Cre-</strong>
+   <strong>ated</strong> و <strong>Order Cancelled</strong> را دوباره تحویل دهد. اگر فقط <strong>Order Created</strong> را دوباره تحویل دهد، کلاینت
+   ممکن است لغو <strong>Order</strong> را لغو کند.
+  </p>
+  <p>
+   چندین راه مختلف برای رسیدگی به پیام‌های تکراری وجود دارد:
+  </p>
+  <ul>
+   <li>
+    نوشتن <strong>idempotent message handlers</strong>.
+   </li>
+   <li>
+    پیام‌ها را ردیابی کنید و موارد تکراری را دور بریزید.
+   </li>
+  </ul>
+  <p>
+   بیایید به هر گزینه نگاهی بیندازیم.
+  </p>
+  <p>
+   مسیرها بر اساس یک
+   <strong>hash</strong> از <strong>shard-key</strong>
+   دریافت کننده <strong>A</strong>
+   نمونه 1
+   دریافت کننده <strong>A</strong>
+   نمونه 2
+   دریافت کننده
+   اختصاص <strong>Shard</strong>
+   دریافت کننده
+   ...
+   روتر
+   <strong>Shard 0</strong>
+   کانال
+   دریافت‌کننده منطقی <strong>A</strong>
+   <strong>Shard 1</strong>
+   <strong>Shard ...</strong>
+   ایجاد <strong>order</strong>
+   <strong>request</strong>
+   <strong>Shard-key:orderId</strong>
+   فرستنده
+  </p>
+  <p>
+   شکل 3.11
+   مقیاس‌بندی مصرف‌کنندگان در حالی که ترتیب پیام‌ها را با استفاده از یک کانال پیام <strong>sharded (partitioned)</strong> حفظ می‌کنید.
+   <strong>sender</strong> شامل کلید <strong>shard</strong> در پیام است. <strong>message broker</strong>، پیام را به یک <strong>shard</strong> می‌نویسد
+   که توسط کلید <strong>shard</strong> تعیین می‌شود. <strong>message broker</strong>، هر پارتیشن را به یک نمونه از <strong>receiver</strong> تکراری اختصاص می‌دهد.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

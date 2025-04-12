@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 142</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>به طور خودکار در یک transaction (تراکنش) اجرا می‌شوند. در نتیجه، نوشتن business logic (منطق تجاری) تراکنشی ساده است.</p>
+  <p>یا، به طور دقیق‌تر، transaction management (مدیریت تراکنش) در یک monolithic application (برنامه یکپارچه) که به یک database (پایگاه داده) واحد دسترسی دارد، ساده است. transaction management (مدیریت تراکنش) در یک monolithic application (برنامه یکپارچه) پیچیده که از چندین database (پایگاه داده) و message broker (واسطه پیام) استفاده می‌کند، چالش برانگیزتر است. و در یک microservice (ریز سرویس) architecture (معماری)، transactions (تراکنش‌ها) چندین service (سرویس) را در بر می‌گیرند که هر کدام database (پایگاه داده) خود را دارند. در این شرایط، application (برنامه) باید از یک مکانیزم دقیق‌تر برای مدیریت transactions (تراکنش‌ها) استفاده کند. همانطور که خواهید آموخت، رویکرد سنتی استفاده از distributed transactions (تراکنش‌های توزیع شده) یک option (گزینه) مناسب برای applications (برنامه‌های) مدرن نیست. در عوض، یک application (برنامه) مبتنی بر microservices (ریز سرویس‌ها) باید از sagas (حماسه‌ها) استفاده کند.</p>
+  <p>قبل از اینکه sagas (حماسه‌ها) را توضیح دهم، ابتدا به این موضوع می‌پردازیم که چرا transaction management (مدیریت تراکنش) در یک microservice (ریز سرویس) architecture (معماری) چالش برانگیز است.</p>
+  <h4><strong>4.1.1 The need for distributed transactions (نیاز به تراکنش‌های توزیع شده) در یک microservice (ریز سرویس) architecture (معماری)</strong></h4>
+  <p>تصور کنید که شما developer (توسعه‌دهنده) FTGO هستید که مسئول پیاده‌سازی operation (عملیات) createOrder() (ایجاد سفارش) هستید. همانطور که در فصل 2 توضیح داده شد، این operation (عملیات) باید تأیید کند که consumer (مصرف‌کننده) می‌تواند یک order (سفارش) ثبت کند، جزئیات order (سفارش) را تأیید کند، credit card (کارت اعتباری) مصرف‌کننده را authorize (مجوز) کند و یک Order (سفارش) را در database (پایگاه داده) ایجاد کند. پیاده‌سازی این operation (عملیات) در monolithic FTGO application (برنامه یکپارچه FTGO) نسبتاً ساده است. تمام data (داده‌های) مورد نیاز برای validate (اعتبارسنجی) order (سفارش) به راحتی در دسترس است. علاوه بر این، شما می‌توانید از یک ACID transaction (تراکنش اتمی) برای اطمینان از data consistency (سازگاری داده‌ها) استفاده کنید. ممکن است از annotation (حاشیه‌نویسی) Spring's @Transactional روی method (متد) service (سرویس) createOrder() استفاده کنید.</p>
+  <p>در مقابل، پیاده‌سازی همان operation (عملیات) در یک microservice (ریز سرویس) architecture (معماری) بسیار پیچیده‌تر است. همانطور که شکل 4.1 نشان می‌دهد، data (داده‌های) مورد نیاز در چندین service (سرویس) پراکنده شده است. operation (عملیات) createOrder() (ایجاد سفارش) به data (داده‌ها) در numerous services (سرویس‌های متعدد) دسترسی دارد. این data (داده‌ها) را از Consumer Service (سرویس مصرف‌کننده) می‌خواند و data (داده‌ها) را در Order Service (سرویس سفارش)، Kitchen Service (سرویس آشپزخانه) و Accounting Service (سرویس حسابداری) به‌روزرسانی می‌کند.</p>
+  <p>از آنجایی که هر service (سرویس) database (پایگاه داده) خود را دارد، شما باید از یک مکانیزم برای حفظ data consistency (سازگاری داده‌ها) در سراسر این databases (پایگاه‌های داده) استفاده کنید.</p>
+  <h4><strong>4.1.2 The trouble with distributed transactions (مشکل با تراکنش‌های توزیع شده)</strong></h4>
+  <p>رویکرد سنتی برای حفظ data consistency (سازگاری داده‌ها) در سراسر چندین service (سرویس)، databases (پایگاه‌های داده) یا message brokers (واسطه‌های پیام) استفاده از distributed transactions (تراکنش‌های توزیع شده) است. استاندارد de facto (عملی) برای distributed transaction management (مدیریت تراکنش توزیع شده) مدل X/Open Distributed Transaction Processing (DTP) (پردازش تراکنش توزیع شده) (X/Open XA – به https://en.wikipedia.org/wiki/X/Open_XA مراجعه کنید) است. XA از two-phase commit (2PC) (تعهد دو مرحله‌ای) استفاده می‌کند تا اطمینان حاصل شود که همه participants (شرکت‌کنندگان) در یک transaction (تراکنش) commit (تعهد) یا rollback (بازگشت) می‌کنند. یک stack (پشته) فناوری منطبق با XA شامل databases (پایگاه‌های داده) و message brokers (واسطه‌های پیام) منطبق با XA، database drivers (درایورهای پایگاه داده) و messaging APIs (رابط‌های برنامه‌نویسی پیام‌رسانی) و یک مکانیزم interprocess communication (ارتباط بین فرآیندی) است که XA global transaction ID (شناسه تراکنش سراسری XA) را منتشر می‌کند. اکثر SQL databases (پایگاه‌های داده SQL) با XA سازگار هستند، همانطور که برخی از message brokers (واسطه‌های پیام) نیز هستند. به عنوان مثال، applications (برنامه‌های) Java EE می‌توانند از JTA برای انجام distributed transactions (تراکنش‌های توزیع شده) استفاده کنند.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

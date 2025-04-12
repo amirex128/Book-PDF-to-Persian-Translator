@@ -1,0 +1,96 @@
+412
+CHAPTER 12
+Deploying microservices
+Init Containers:
+istio-init:
+ 
+Image:
+docker.io/istio/proxy_init:0.8.0
+....
+Containers:
+ftgo-consumer-service:
+ 
+Image:
+msapatterns/ftgo-consumer-service:latest
+...
+istio-proxy:
+Image:
+docker.io/istio/proxyv2:0.8.0
+  
+...
+Now that we’ve deployed the service, let’s look at how to define routing rules. 
+CREATE ROUTING RULES TO ROUTE TO THE V1 VERSION
+Let’s imagine that you deployed the ftgo-consumer-service-v2 deployment. In the
+absence of routing rules, Istio load balances requests across all versions of a service. It
+would, therefore, load balance across versions 1 and 2 of ftgo-consumer-service,
+which defeats the purpose of using Istio. In order to safely roll out a new version, you
+must define a routing rule that routes all traffic to the current v1 version.
+Initializes the pod
+The service 
+container
+The Envoy 
+container
+API gateway
+pod
+VirtualService
+DestinationRule
+Consumer
+Service
+v1 pod
+metadata:
+labels:
+app: ftgo-consumer-service
+version: v1
+Consumer
+Service
+v2 pod
+Routes to the v
+subset
+1
+Routing rule for the
+Consumer Service
+Deﬁnes subsets of
+pods of a service
+No trafﬁc routed to v2.
+Deﬁnes subsets
+v
+and v2
+1
+All trafﬁc routed to v1
+metadata:
+labels:
+app: ftgo-consumer-service
+version: v2
+kind: DestinationRule
+metadata:
+name:ftgo-consumer-service
+spec:
+host: ftgo-consumer-service
+subsets:
+-name: v1
+labels:
+version: v1
+-name: v2
+labels:
+version: v2
+kind: VirtualService
+metadata:
+name:ftgo-consumer-service
+spec:
+hosts:
+-ftgo-consumer-service
+http:
+-route:
+-destination:
+host: ftgo-consumer-service
+subset: v1
+weight: 100
+GET/consumers/1
+host:ftgo-consumer-
+service
+Figure 12.12
+The routing rule for Consumer Service, which routes all traffic to the v1 pods. It consists of a 
+VirtualService, which routes its traffic to the v1 subset, and a DestinationRule, which defines the v1 
+subset as the pods labeled with version: v1. Once you’ve defined this rule, you can safely deploy a new version 
+without routing any traffic to it initially.
+ 

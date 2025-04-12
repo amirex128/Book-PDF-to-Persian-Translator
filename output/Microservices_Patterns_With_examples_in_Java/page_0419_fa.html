@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 419</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <p>
+   FAST DEPLOYMENT
+   One major benefit از این pattern این است که deploy کردن یک service instance نسبتاً
+   fast است: شما service را به یک host کپی می‌کنید و آن را شروع می‌کنید. If the service در Java نوشته شده است، شما
+   یک فایل JAR یا WAR کپی می‌کنید. For other languages، مانند NodeJS یا Ruby، شما
+   source code را کپی می‌کنید. In either case، تعداد بایت‌های کپی شده از طریق شبکه rela-
+   tively small است.
+  </p>
+  <p>
+   Also, starting a service به ندرت زمان‌بر است. If the service process خود است،
+   شما آن را شروع می‌کنید. Otherwise, if the service یکی از چندین instances است که در حال اجرا است
+   the same container process، شما یا به صورت پویا آن را در container مستقر می‌کنید یا restart
+   the container. Because از عدم overhead، starting a service معمولاً fast است.
+  </p>
+  <h4><span style="font-weight: bold;">EFFICIENT RESOURCE UTILIZATION</span></h4>
+  <p>
+   Another major benefit از این pattern این است که از منابع نسبتاً کارآمد استفاده می‌کند. Mul-
+   tiple service instances machine و operating system آن را به اشتراک می‌گذارند. It’s even more effi-
+   cient اگر multiple service instances در داخل the same process اجرا شوند. For example, multiple
+   web applications می‌توانند همان Apache Tomcat server و JVM را به اشتراک بگذارند.
+  </p>
+  <h4><span style="font-weight: bold;">12.1.2 Drawbacks of the Service as a language-specific package pattern</span></h4>
+  <p>
+   Despite its appeal, the Service as a language-specific package pattern دارای چندین signif-
+   icant drawbacks است:
+  </p>
+  <p>
+   Lack از encapsulation از the technology stack.
+  </p>
+  <p>
+   No ability برای constrain the resources مصرف شده توسط یک service instance.
+  </p>
+  <p>
+   Lack از isolation هنگام اجرای multiple service instances در همان machine.
+  </p>
+  <p>
+   Automatically determining که کجا service instances را قرار دهیم چالش برانگیز است.
+  </p>
+  <p>
+   Let’s look at each drawback.
+  </p>
+  <h4><span style="font-weight: bold;">LACK OF ENCAPSULATION OF THE TECHNOLOGY STACK</span></h4>
+  <p>
+   The operation team باید جزئیات خاص را بداند که چگونه هر
+   service را deploy کند. Each service به یک نسخه خاص از runtime نیاز دارد. A Java web application,
+   for example, به نسخه‌های خاص از Apache Tomcat و the JDK نیاز دارد. Operations
+   باید نسخه صحیح از هر software package مورد نیاز را نصب کند.
+  </p>
+  <p>
+   To make matters worse, services می‌توانند در انواع مختلفی از زبان‌ها و frame-
+   works نوشته شوند. They might also be written در چندین نسخه از آن زبان‌ها و frame-
+   works. Consequently, the development team باید lots از details را با operations به اشتراک بگذارد.
+   This complexity خطر از errors را در طول deployment افزایش می‌دهد. A machine ممکن است، برای
+   example, the wrong version از language runtime را داشته باشد.
+  </p>
+  <h4><span style="font-weight: bold;">NO ABILITY TO CONSTRAIN THE RESOURCES CONSUMED BY A SERVICE INSTANCE</span></h4>
+  <p>
+   Another drawback این است که شما نمی‌توانید resources مصرف شده توسط یک service را محدود کنید
+   instance. A process می‌تواند بالقوه تمام CPU یا memory از یک machine را مصرف کند، starv-
+   ing other service instances و operating systems از resources. This might happen, for
+   example, because of a bug.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

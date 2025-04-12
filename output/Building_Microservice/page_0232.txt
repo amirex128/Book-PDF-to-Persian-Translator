@@ -1,0 +1,27 @@
+where we will run all the verification steps associated with all our microservices and
+produce multiple artifacts, all tied back to the same build.
+Figure 7-5. Using a single source code repository and CI build for all microservices
+Compared to other approaches, this seems much simpler on the surface: fewer repo‐
+sitories to be concerned about, and a conceptually simpler build. From a developer
+point of view, things are pretty straightforward too. I just check code in. If I have to
+work on multiple services at once, I just have to worry about one commit.
+This model can work perfectly well if you buy into the idea of lockstep releases, where
+you don’t mind deploying multiple services at once. In general, this is absolutely a
+pattern to avoid, but very early on in a project, especially if only one team is working
+on everything, this model might make sense for short periods of time.
+Now let me explain some of the significant downsides to this approach. If I make a
+one-line change to a single service—for example, changing behavior in the User ser‐
+vice in Figure 7-5—all the other services get verified and built. This could take more
+time than needed—I’m waiting for things that probably don’t need to be tested. This
+impacts our cycle time, the speed at which we can move a single change from devel‐
+opment to live. More troubling, though, is knowing what artifacts should or
+shouldn’t be deployed. Do I now need to deploy all the build services to push my
+small change into production? It can be hard to tell; trying to guess which services
+really changed just by reading the commit messages is difficult. Organizations using
+this approach often fall back to just deploying everything together, which we really
+want to avoid.
+Furthermore, if my one-line change to the User service breaks the build, no other
+changes can be made to the other services until that break is fixed. And think about a
+206 
+| 
+Chapter 7: Build

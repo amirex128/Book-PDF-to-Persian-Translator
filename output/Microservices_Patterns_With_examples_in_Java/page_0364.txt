@@ -1,0 +1,56 @@
+334
+CHAPTER 10
+Testing microservices: Part 2
+The shouldSuccessfullyCreateTicket() test method sends a CreateTicket com-
+mand message and verifies that the reply contains the expected data. It uses Saga-
+MessagingTestHelper, which is a test helper class that synchronously sends and receives
+messages.
+ Let’s now look at how to write provider-side integration tests.
+WRITING PROVIDER-SIDE, CONSUMER-DRIVEN CONTRACT TESTS FOR ASYNCHRONOUS 
+REQUEST/RESPONSE INTERACTIONS
+A provider-side integration test must verify that the provider handles a command mes-
+sage by sending the correct reply. Spring Cloud Contract generates test classes that
+have a test method for each contract. Each test method sends the contract’s input
+message and verifies that the reply matches the contract’s output message.
+ The provider-side integration tests for Kitchen Service test KitchenService-
+CommandHandler. The KitchenServiceCommandHandler class handles a message by
+invoking KitchenService. The following listing shows the AbstractKitchenService-
+ConsumerContractTest class, which is the base class for the Spring Cloud Contract-
+generated tests. It creates a KitchenServiceCommandHandler injected with a mock
+KitchenService.
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = 
+AbstractKitchenServiceConsumerContractTest.TestConfiguration.class,
+webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@AutoConfigureMessageVerifier
+public abstract class AbstractKitchenServiceConsumerContractTest {
+@Configuration
+@Import(RestaurantMessageHandlersConfiguration.class)
+public static class TestConfiguration {
+...
+@Bean
+public KitchenService kitchenService() {
+   
+return mock(KitchenService.class);
+}
+}
+@Autowired
+private KitchenService kitchenService;
+@Before
+public void setup() {
+reset(kitchenService);
+when(kitchenService
+.createTicket(eq(1L), eq(1L),
+    
+any(TicketDetails.class)))
+.thenReturn(new Ticket(1L, 1L,
+Listing 10.10
+Superclass of provider-side, consumer-driven contract tests for Kitchen
+Service
+Overrides the definition 
+of the kitchenService 
+@Bean with a mock
+Configures the mock to 
+return the values that match 
+a contract’s output message
+ 

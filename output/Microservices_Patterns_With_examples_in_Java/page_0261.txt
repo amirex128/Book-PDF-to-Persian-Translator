@@ -1,0 +1,44 @@
+231
+Using the CQRS pattern
+But first, let’s look at an example of a query operation that’s challenging to imple-
+ment, despite being local to a single service. 
+A CHALLENGING SINGLE SERVICE QUERY: FINDAVAILABLERESTAURANTS()
+As you’ve just seen, implementing queries that retrieve data from multiple services
+can be challenging. But even queries that are local to a single service can be difficult
+to implement. There are a couple of reasons why this might be the case. One is
+because, as discussed shortly, sometimes it’s not appropriate for the service that owns
+the data to implement the query. The other reason is that sometimes a service’s data-
+base (or data model) doesn’t efficiently support the query.
+ Consider, for example, the findAvailableRestaurants() query operation. This
+query finds the restaurants that are available to deliver to a given address at a given
+time. The heart of this query is a geospatial (location-based) search for restaurants
+that are within a certain distance of the delivery address. It’s a critical part of the order
+process and is invoked by the UI module that displays the available restaurants.
+ The key challenge when implementing this query operation is performing an effi-
+cient geospatial query. How you implement the findAvailableRestaurants() query
+depends on the capabilities of the database that stores the restaurants. For example,
+it’s straightforward to implement the findAvailableRestaurants() query using
+either MongoDB or the Postgres and MySQL geospatial extensions. These databases
+support geospatial datatypes, indexes, and queries. When using one of these databases,
+Restaurant Service persists a Restaurant as a database record that has a location
+attribute. It finds the available restaurants using a geospatial query that’s optimized by
+a geospatial index on the location attribute.
+ If the FTGO application stores restaurants in some other kind of database, imple-
+menting the findAvailableRestaurant() query is more challenging. It must main-
+tain a replica of the restaurant data in a form that’s designed to support the geospatial
+query. The application could, for example, use the Geospatial Indexing Library for
+DynamoDB (https://github.com/awslabs/dynamodb-geo) that uses a table as a geo-
+spatial index. Alternatively, the application could store a replica of the restaurant data
+in an entirely different type of database, a situation very similar to using a text search
+database for text queries.
+ The challenge with using replicas is keeping them up-to-date whenever the origi-
+nal data changes. As you’ll learn below, CQRS solves the problem of synchronizing
+replicas. 
+THE NEED TO SEPARATE CONCERNS
+Another reason why single service queries are challenging to implement is that some-
+times the service that owns the data shouldn’t be the one that implements the query.
+The findAvailableRestaurants() query operation retrieves data that is owned by
+Restaurant Service. This service enables restaurant owners to manage their restau-
+rant’s profile and menu items. It stores various attributes of a restaurant, including its
+name, address, cuisines, menu, and opening hours. Given that this service owns the
+ 

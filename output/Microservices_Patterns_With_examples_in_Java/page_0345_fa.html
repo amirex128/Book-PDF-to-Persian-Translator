@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 345</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   <pre><code class="language-java">orderController = new OrderController(orderService, orderRepository);
+}
+@Test
+public void shouldFindOrder() {
+when(orderRepository.findById(1L))
+.thenReturn(Optional.of(CHICKEN_VINDALOO_ORDER_);    
+given().
+standaloneSetup(configureControllers(
+      
+new OrderController(orderService, orderRepository))).
+when().
+get("/orders/1").
+    
+then().
+statusCode(200).
+   
+body("orderId",
+            
+equalTo(new Long(OrderDetailsMother.ORDER_ID).intValue())).
+body("state",
+equalTo(OrderDetailsMother.CHICKEN_VINDALOO_ORDER_STATE.name())).
+body("orderTotal",
+equalTo(CHICKEN_VINDALOO_ORDER_TOTAL.asString()))
+;</code></pre>
+  </p>
+  <p>
+   متد shouldFindOrder() ابتدا OrderRepository mock را پیکربندی می‌کند تا یک Order را برگرداند. سپس یک request HTTP برای بازیابی order ایجاد می‌کند. در نهایت، بررسی می‌کند که request موفقیت‌آمیز بوده است و بدنه پاسخ حاوی داده‌های مورد انتظار است.
+  </p>
+  <p>
+   Controllers ها تنها adapters هایی نیستند که درخواست‌ها را از system های خارجی مدیریت می‌کنند.
+   همچنین event/message handlers ها وجود دارند، بنابراین بیایید در مورد نحوه unit test کردن آنها صحبت کنیم.
+  </p>
+  <h4>9.2.6</h4>
+  <h3>Developing unit tests for event and message handlers</h3>
+  <p>
+   Service ها اغلب message هایی را که توسط system های خارجی ارسال می‌شوند، پردازش می‌کنند. به عنوان مثال، Order Service دارای OrderEventConsumer است که یک message adapter است که domain events منتشر شده توسط service های دیگر را مدیریت می‌کند. مانند controllers ها، message adapters ها تمایل به کلاس‌های ساده‌ای دارند که service های domain را فراخوانی می‌کنند. هر یک از متدهای message adapter، معمولاً یک متد service را با داده‌های message یا event فراخوانی می‌کند.
+  </p>
+  <p>
+   ما می‌توانیم message adapters را با استفاده از رویکردی مشابه با آنچه برای unit testing controllers استفاده کردیم، unit test کنیم. هر تست، message adapter را نمونه‌سازی می‌کند، یک message را به یک channel ارسال می‌کند و تأیید می‌کند که service mock به درستی فراخوانی شده است. در پشت ...
+  </p>
+  <p>
+   Configure the mock
+   OrderRepository to
+   return an Order.
+  </p>
+  <p>
+   Configure
+   OrderController.
+  </p>
+  <p>
+   Make an
+   HTTP
+   request.
+  </p>
+  <p>
+   Verify the response
+   status code.
+  </p>
+  <p>
+   Verify
+   elements
+   of the JSON
+   response
+   body.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+Shipping microservice wants a Shipping Manifest. One way to hide this detail
+would be to have Warehouse take in the required information as part of its contract,
+and then have it construct the Shipping Manifest locally, as we see in Figure 2-6.
+This means that if the Shipping service changes its service contract, this change will
+be invisible from the viewpoint of Order Processor, as long as Warehouse collects
+the required data.
+Figure 2-6. Hiding the need for a Shipping Manifest from the Order Processor
+While this will help protect the Warehouse microservice from some changes to Ship
+ping, there are some things that would still require all parties to change. Let’s con‐
+sider the idea that we want to start shipping internationally. As part of this, the
+Shipping service needs a Customs Declaration to be included in the Shipping Mani
+fest. If this is an optional parameter, then we could deploy a new version of the
+Shipping microservice without issue. If this is a required parameter, however, then
+Warehouse would need to create one. It might be able to do this with existing infor‐
+mation that it has (or is given), or it might require that additional information be
+passed to it by the Order Processor.
+Although in this case we haven’t eliminated the need for changes to be made across
+all three microservices, we have been given much more power over when and how
+these changes could be made. If we had the tight (pass-through) coupling of the ini‐
+tial example, adding this new Customs Declaration might require a lockstep rollout
+of all three microservices. At least by hiding this detail we could much more easily
+phase deployment.
+One final approach that could help reduce the pass-through coupling would be for
+the Order Processor to still send the Shipping Manifest to the Shipping microser‐
+vice via the Warehouse, but to have the Warehouse be totally unaware of the structure
+of the Shipping Manifest itself. The Order Processor sends the manifest as part of
+Types of Coupling 
+| 
+45

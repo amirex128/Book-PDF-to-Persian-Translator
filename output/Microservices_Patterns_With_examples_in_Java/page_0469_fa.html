@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 469</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>Strategies for refactoring a monolith to microservices</strong></h2>
+  <h3><strong>SPLITTING THE DOMAIN MODEL</strong></h3>
+  <p>
+   به منظور استخراج یک service، شما نیاز دارید که domain model آن را از domain model monolith استخراج کنید. شما
+   نیاز دارید که جراحی بزرگی را برای تقسیم domain modelsها انجام دهید. یک
+   چالش که با آن روبرو خواهید شد، حذف object referencesهایی است که در غیر این صورت
+   service boundaries را پوشش می‌دهد. ممکن است classesهایی که در monolith باقی می‌مانند، به
+   classesهایی که به service منتقل شده‌اند، یا بالعکس، reference کنند. به عنوان مثال، تصور کنید که، همانطور که
+   شکل 13.5 نشان می‌دهد، شما Order Service را استخراج می‌کنید، و در نتیجه class Order آن،
+   class Restaurant monolith را reference می‌کند. از آنجایی که یک instance service معمولاً یک process است،
+   داشتن object referencesهایی که از service boundaries عبور می‌کنند، منطقی نیست. به نوعی
+   شما نیاز دارید که این نوع object reference را حذف کنید.
+  </p>
+  <p>
+   یک راه خوب برای حل این مشکل این است که از منظر DDD aggregatesها فکر کنید، همانطور که در
+   فصل 5 توضیح داده شد. Aggregatesها با استفاده از primary keyها به یکدیگر reference می‌کنند،
+   به جای object ref-
+   erencesها. بنابراین، شما classesهای Order و Restaurant را به عنوان aggre-
+   gatesها در نظر می‌گیرید و، همانطور که شکل 13.6 نشان می‌دهد، reference به Restaurant در class Order را
+   با یک فیلد restaurantId که مقدار primary key را ذخیره می‌کند، جایگزین می‌کنید.
+  </p>
+  <p>
+   FTGO monolith
+   <br/>
+   Extracted service
+   <br/>
+   «Entity»
+   <br/>
+   Restaurant
+   <br/>
+   Object reference that spans
+   <br/>
+   service boundaries
+   <br/>
+   «Entity»
+   <br/>
+   Order
+   <br/>
+   Delivery Service
+   <br/>
+   FTGO monolith
+   <br/>
+   ?
+   <br/>
+   «Entity»
+   <br/>
+   Restaurant
+   <br/>
+   «Entity»
+   <br/>
+   Order
+  </p>
+  <p>
+   <strong>Figure 13.5</strong>
+   <br/>
+   The Order domain class has a reference to a Restaurant class. If we extract
+   Order into a separate service, we need to do something about its reference to Restaurant,
+   because object references between processes don’t make sense.
+  </p>
+  <p>
+   Replace with primary key.
+   <br/>
+   Delivery Service
+   <br/>
+   FTGO monolith
+   <br/>
+   «Entity»
+   <br/>
+   Restaurant
+   <br/>
+   «Entity»
+   <br/>
+   Order
+   <br/>
+   restaurantId
+   <br/>
+   Object reference that spans
+   <br/>
+   service boundaries
+   <br/>
+   Delivery Service
+   <br/>
+   FTGO monolith
+   <br/>
+   ?
+   <br/>
+   «Entity»
+   <br/>
+   Restaurant
+   <br/>
+   «Entity»
+   <br/>
+   Order
+  </p>
+  <p>
+   <strong>Figure 13.6</strong>
+   <br/>
+   The Order class’s reference to Restaurant is replaced with the Restaurant's
+   primary key in order to eliminate an object that would span process boundaries.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

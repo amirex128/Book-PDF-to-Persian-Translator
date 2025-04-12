@@ -1,0 +1,40 @@
+5 Diane Vaughan, The Challenger Launch Decision: Risky Technology, Culture, and Deviance at NASA (Chi‐
+cago: University of Chicago Press, 1996).
+6 Martin Fowler, “Eradicating Non-Determinism in Tests,” martinfowler.com, April 14, 2011, https://oreil.ly/
+7Ve7e.
+The more moving parts there are, the more brittle our tests may be and the less deter‐
+ministic they are. If you have tests that sometimes fail, but everyone just reruns them
+because they may pass again later, then you have flaky tests. And tests covering lots of
+different processes are not the only culprit. Tests that cover functionality being exer‐
+cised on multiple threads (and across multiple processes) are also often problematic;
+a failure could mean a race condition or a time-out, or that the functionality is
+actually broken. Flaky tests are the enemy. When they fail, they don’t tell us much.
+We rerun our CI builds in the hope that they will pass again later, only to see check-
+ins pile up, and suddenly we find ourselves with a load of broken functionality.
+When we detect flaky tests, it is essential that we do our best to remove them. Other‐
+wise, we start to lose faith in a test suite that “always fails like that.” A test suite with
+flaky tests can become a victim of what Diane Vaughan calls the normalization of
+deviance—the idea that over time we can become so accustomed to things being
+wrong that we start to accept them as being normal and not a problem.5 This very
+human tendency means we need to find and eliminate these flaky tests as soon as we
+can before we start to assume that failing tests are OK.
+In “Eradicating Non-Determinism in Tests,”6 Martin Fowler advocates the approach
+that if you have flaky tests, you should track them down and—if you can’t immedi‐
+ately fix them—remove them from the suite so you can treat them. See if you can
+rewrite them to avoid testing code running on multiple threads. See if you can make
+the underlying environment more stable. Better yet, see if you can replace the flaky
+test with a smaller-scoped test that is less likely to exhibit problems. In some cases,
+changing the software under test to make it easier to test can also be the right way
+forward.
+Who Writes These End-to-End Tests?
+With the tests that run as part of the pipeline for a specific microservice, the sensible
+starting point is for the team that owns that service to write those tests (we’ll talk
+more about service ownership in Chapter 15). But if we consider that we might have
+multiple teams involved, and the end-to-end tests step is now effectively shared
+among the teams, who writes and looks after these tests?
+I have seen a number of problems caused here. These tests become a free-for-all,
+with all teams granted access to add tests without any understanding of the health of
+the whole suite. This can often result in an explosion of test cases, sometimes
+Implementing (Those Tricky) End-to-End Tests 
+| 
+287

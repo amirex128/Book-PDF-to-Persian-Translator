@@ -1,0 +1,41 @@
+The map function would be called once for each document, resulting in
+emit("1995-12", 3) and emit("1995-12", 4). Subsequently, the reduce function
+would be called with reduce("1995-12", [3, 4]), returning 7.
+The map and reduce functions are somewhat restricted in what they are allowed to
+do. They must be pure functions, which means they only use the data that is passed to
+them as input, they cannot perform additional database queries, and they must not
+have any side effects. These restrictions allow the database to run the functions any‐
+where, in any order, and rerun them on failure. However, they are nevertheless pow‐
+erful: they can parse strings, call library functions, perform calculations, and more.
+MapReduce is a fairly low-level programming model for distributed execution on a
+cluster of machines. Higher-level query languages like SQL can be implemented as a
+pipeline of MapReduce operations (see Chapter 10), but there are also many dis‐
+tributed implementations of SQL that don’t use MapReduce. Note there is nothing in
+SQL that constrains it to running on a single machine, and MapReduce doesn’t have
+a monopoly on distributed query execution.
+Being able to use JavaScript code in the middle of a query is a great feature for
+advanced queries, but it’s not limited to MapReduce—some SQL databases can be
+extended with JavaScript functions too [34].
+A usability problem with MapReduce is that you have to write two carefully coordi‐
+nated JavaScript functions, which is often harder than writing a single query. More‐
+over, a declarative query language offers more opportunities for a query optimizer to
+improve the performance of a query. For these reasons, MongoDB 2.2 added support
+for a declarative query language called the aggregation pipeline [9]. In this language,
+the same shark-counting query looks like this:
+db.observations.aggregate([
+    { $match: { family: "Sharks" } },
+    { $group: {
+        _id: {
+            year:  { $year:  "$observationTimestamp" },
+            month: { $month: "$observationTimestamp" }
+        },
+        totalAnimals: { $sum: "$numAnimals" }
+    } }
+]);
+The aggregation pipeline language is similar in expressiveness to a subset of SQL, but
+it uses a JSON-based syntax rather than SQL’s English-sentence-style syntax; the dif‐
+ference is perhaps a matter of taste. The moral of the story is that a NoSQL system
+may find itself accidentally reinventing SQL, albeit in disguise. 
+48 
+| 
+Chapter 2: Data Models and Query Languages

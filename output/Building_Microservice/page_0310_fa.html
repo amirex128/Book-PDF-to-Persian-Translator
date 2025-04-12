@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 310</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        3 Steve Freeman and Nat Pryce, Growing Object-Oriented Software, Guided by Tests (Upper Saddle River, NJ: Addison-Wesley, 2009).
+        4 Jason D. Valentino, “Moving One of Capital One’s Largest Customer-Facing Apps to AWS,” Capital One Tech, May 24, 2017, https://oreil.ly/5UM5W.
+    </p>
+    <p>
+        <strong>mocking calls</strong> یک موضوع ظریف است و در <strong>service tests</strong> به همان اندازه در <strong>unit tests</strong> مشکل‌ساز است. به طور کلی، من برای <strong>service tests</strong> از <strong>stubs</strong> خیلی بیشتر از <strong>mocks</strong> استفاده می‌کنم. برای بحثی عمیق‌تر در مورد این <strong>trade-off</strong>، به کتاب <em>Growing Object-Oriented Software, Guided by Tests</em> نوشته <strong>Steve Freeman</strong> و <strong>Nat Pryce</strong> نگاهی بیندازید.<sup>3</sup>
+    </p>
+    <p>
+        به طور کلی، من به ندرت از <strong>mocks</strong> برای این نوع تست استفاده می‌کنم. اما داشتن ابزاری که بتواند هم <strong>mocks</strong> و هم <strong>stubs</strong> را پیاده‌سازی کند، مفید است.
+    </p>
+    <p>
+        در حالی که من احساس می‌کنم که <strong>stubs</strong> و <strong>mocks</strong> در واقع کاملاً از هم متمایز هستند، می‌دانم که این تمایز می‌تواند برای برخی گیج‌کننده باشد، به خصوص زمانی که برخی افراد اصطلاحات دیگری مانند <strong>fakes, spies</strong> و <strong>dummies</strong> را اضافه می‌کنند. <strong>Gerard Meszaros</strong> همه این موارد، از جمله <strong>stubs</strong> و <strong>mocks</strong> را "<strong>Test Doubles</strong>" می‌نامد.
+    </p>
+    <h4>A Smarter Stub Service</h4>
+    <p>
+        معمولاً، برای سرویس‌های <strong>stub</strong>، خودم آنها را راه‌اندازی کرده‌ام. من از همه چیز، از سرور وب <strong>Apache</strong> یا <strong>nginx</strong> گرفته تا کانتینرهای <strong>Jetty</strong> تعبیه شده یا حتی سرورهای وب <strong>Python</strong> که از طریق خط فرمان راه‌اندازی می‌شوند، برای راه‌اندازی سرورهای <strong>stub</strong> برای چنین موارد آزمایشی استفاده کرده‌ام. من احتمالاً در ایجاد این <strong>stubs</strong>، کار یکسانی را بارها و بارها تکرار کرده‌ام. یکی از همکاران قدیمی <strong>Thoughtworks</strong> من، <strong>Brandon Byars</strong>، با سرور <strong>stub/mock</strong> خود به نام <strong>mountebank</strong>، به طور بالقوه کار زیادی را برای بسیاری از ما ذخیره کرده است.
+    </p>
+    <p>
+        شما می‌توانید <strong>mountebank</strong> را به عنوان یک <strong>software appliance</strong> کوچک در نظر بگیرید که از طریق <strong>HTTP</strong> قابل برنامه‌ریزی است. این واقعیت که به طور اتفاقی در <strong>NodeJS</strong> نوشته شده است، برای هر <strong>service</strong> فراخوان کاملاً غیرشفاف است. هنگامی که <strong>mountebank</strong> راه‌اندازی می‌شود، به آن دستوراتی را ارسال می‌کنید که به آن می‌گویید یک یا چند "<strong>imposters</strong>" ایجاد کند، که در یک <strong>port</strong> داده شده با یک <strong>protocol</strong> خاص (در حال حاضر از <strong>TCP, HTTP, HTTPS</strong> و <strong>SMTP</strong> پشتیبانی می‌شود) پاسخ می‌دهد، و این <strong>imposters</strong> باید هنگام ارسال درخواست‌ها چه پاسخ‌هایی را ارسال کنند. همچنین اگر می‌خواهید از آن به عنوان <strong>mock</strong> استفاده کنید، از تنظیم انتظارات نیز پشتیبانی می‌کند. از آنجایی که یک نمونه <strong>mountebank</strong> واحد می‌تواند از ایجاد چندین <strong>imposters</strong> پشتیبانی کند، می‌توانید از آن برای <strong>stub</strong> کردن چندین <strong>microservices downstream</strong> استفاده کنید.
+    </p>
+    <p>
+        <strong>mountebank</strong> در خارج از تست‌های <strong>automated functional</strong> کاربردهایی دارد. به عنوان مثال، <strong>Capital One</strong> از <strong>mountebank</strong> برای جایگزینی زیرساخت <strong>mocking</strong> موجود برای تست‌های عملکرد در مقیاس بزرگ خود استفاده کرد.<sup>4</sup>
+    </p>
+    <p>
+        یک محدودیت <strong>mountebank</strong> این است که از <strong>stubbing</strong> برای پروتکل‌های پیام‌رسانی پشتیبانی نمی‌کند—به عنوان مثال، اگر می‌خواهید مطمئن شوید که یک رویداد به درستی ارسال شده است (و...
+    </p>
+    <p>
+        284 | Chapter 9: Testing
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

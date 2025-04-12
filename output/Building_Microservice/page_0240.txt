@@ -1,0 +1,39 @@
+5 Rachel Potvin and Josh Levenberg, “Why Google Stores Billions of Lines of Code in a Single Repository,”
+Communications of the ACM 59, no. 7 (July 2016): 78–87.
+Example 7-1. Examples of how to specify ownership in specific directories in a GitHub
+CODEOWNERS file
+# In this example, @doctocat owns any files in the build/logs
+# directory at the root of the repository and any of its
+# subdirectories.
+/build/logs/ @doctocat
+# In this example, @octocat owns any file in an apps directory
+# anywhere in your repository.
+apps/ @octocat
+# In this example, @doctocat owns any file in the `/docs`
+# directory in the root of your repository.
+/docs/ @doctocat
+GitHub’s own code ownership concept ensures that code owners for source files are
+requested for review whenever a pull request is raised for the relevant files. This could
+be a problem with larger pull requests, as you could end up needing sign-off from
+multiple reviewers, but there are lots of good reasons to aim for smaller pull requests,
+in any case.
+Tooling
+Google’s own monorepo is massive, and it takes significant amounts of engineering
+to make it work at scale. Consider things like a graph-based build system that has
+gone through multiple generations, a distributed object linker to speed up build
+times, plug-ins for IDEs and text editors that can dynamically keep dependency files
+in check—it’s an enormous amount of work. As Google grew, it increasingly hit limi‐
+tations on its use of Perforce and ended up having to create its own proprietary
+source control tool called Piper. When I worked in this part of Google back in 2007–
+2008, there were over a hundred people maintaining various developer tools, with a
+significant part of this effort given over to dealing with implications of the monorepo
+approach. That’s something that you can justify if you have tens of thousands of engi‐
+neers, of course.
+For a more detailed overview of the rationale behind Google’s use of a monorepo, I
+recommend “Why Google Stores Billions of Lines of Code in a Single Repository” by
+Rachel Potvin and Josh Levenberg.5 In fact, I’d suggest it is required reading for any‐
+one thinking, “We should use a monorepo, because Google does!” Your organization
+probably isn’t Google and probably doesn’t have Google-type problems, constraints,
+214 
+| 
+Chapter 7: Build

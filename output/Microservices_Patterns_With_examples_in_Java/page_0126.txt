@@ -1,0 +1,48 @@
+96
+CHAPTER 3
+Interprocess communication in a microservice architecture
+WRITING IDEMPOTENT MESSAGE HANDLERS
+If the application logic that processes messages is idempotent, then duplicate mes-
+sages are harmless. Application logic is idempotent if calling it multiple times with the
+same input values has no additional effect. For instance, cancelling an already-cancelled
+order is an idempotent operation. So is creating an order with a client-supplied ID.
+An idempotent message handler can be safely executed multiple times, provided that
+the message broker preserves ordering when redelivering messages.
+ Unfortunately, application logic is often not idempotent. Or you may be using a
+message broker that doesn’t preserve ordering when redelivering messages. Duplicate
+or out-of-order messages can cause bugs. In this situation, you must write message
+handlers that track messages and discard duplicate messages. 
+TRACKING MESSAGES AND DISCARDING DUPLICATES
+Consider, for example, a message handler that authorizes a consumer credit card. It
+must authorize the card exactly once for each order. This example of application logic
+has a different effect each time it’s invoked. If duplicate messages caused the message
+handler to execute this logic multiple times, the application would behave incorrectly.
+The message handler that executes this kind of application logic must become idem-
+potent by detecting and discarding duplicate messages.
+ A simple solution is for a message consumer to track the messages that it has pro-
+cessed using the message id and discard any duplicates. It could, for example, store
+the message id of each message that it consumed in a database table. Figure 3.12
+shows how to do this using a dedicated table.
+When a consumer handles a message, it records the message id in the database table as
+part of the transaction that creates and updates business entities. In this example, the
+consumer inserts a row containing the message id into a PROCESSED_MESSAGES table. If a
+message is a duplicate, the INSERT will fail and the consumer can discard the message.
+MSG_ID
+PROCESSED_MESSAGE table
+INSERT
+INSERT will fail for
+duplicate messages.
+UPDATE
+...
+...
+Application table
+xyz
+Transaction
+Message
+id: xyz
+Consumer
+Figure 3.12
+A consumer detects and discards duplicate messages by recording the IDs of 
+processed messages in a database table. If a message has been processed before, the INSERT 
+into the PROCESSED_MESSAGES table will fail.
+ 

@@ -1,0 +1,39 @@
+7 This quote is often attributed to biologist Paul Ehrlich, but its actual origins are unclear.
+Feature Toggles
+With feature toggles (otherwise known as feature flags), we hide deployed functional‐
+ity behind a toggle that can be used to switch functionality off or on. This is most
+commonly used as part of trunk-based development, where functionality that isn’t
+yet finished can be checked in and deployed but still hidden from end users, but it
+has lots of applications outside of this. This could be useful to turn on a feature at a
+specified time, or turn off a feature that is causing problems.
+You can also use feature toggles in a more fine-grained manner, perhaps allowing a
+flag to have a different state based on the nature of the user making a request. So you
+could for example have a group of customers that see a feature turned on (perhaps a
+beta test group), whereas most people see the feature as being turned off—this could
+help you implement a canary rollout, something we discuss next. Fully managed sol‐
+utions exist for managing feature toggles, including LaunchDarkly and Split. Impres‐
+sive as these platforms are, I think you can get started with something much simpler
+—just a configuration file can do for a start, then look at these technologies as you
+start pushing how you want to use the toggles.
+For a much deeper dive into the world of feature toggles, I can heartily recommend
+Pete Hodgson’s writeup “Feature Toggles (aka Feature Flags)”, which goes into a lot
+of detail regarding how to implement them and the many different ways they can be
+used.
+Canary Release
+To err is human, but to really foul things up you need a computer.7
+We all make mistakes, and computers can let us make mistakes faster and at larger
+scale than ever before. Given that mistakes are unavoidable (and trust me, they are),
+then it makes sense to do things that allow us to limit the impact of these mistakes.
+Canary releases are one such technique.
+Named for the canaries taken into mines as an early warning system for miners to
+warn them of the presence of dangerous gases, with a canary rollout the idea is that a
+limited subset of our customers see new functionality. If there is a problem with the
+rollout, then only that portion of our customers is impacted. If the feature works for
+that canary group, then it can be rolled out to more of your customers until everyone
+sees the new version.
+For a microservice architecture, a toggle could be configured at an individual micro‐
+service level, turning functionality on (or off) for requests to that functionality from
+the outside world or other microservices. Another technique is to have two different
+Progressive Delivery 
+| 
+271

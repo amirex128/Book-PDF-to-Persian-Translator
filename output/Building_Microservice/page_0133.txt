@@ -1,0 +1,26 @@
+Figure 4-10. Using queues to send stock reservation requests
+So with a nonblocking asynchronous interaction, the microservice that receives the
+request needs either to know implicitly where to route the response or else to be told
+where the response should go. When using a queue, we have the added benefit that
+multiple requests could be buffered up in the queue waiting to be handled. This can
+help in situations in which the requests can’t be handled quickly enough. The micro‐
+service can consume the next request when it is ready, rather than being over‐
+whelmed by too many calls. Of course, a lot then depends on the queue absorbing
+these requests.
+When a microservice receives a response in this way, it might need to relate the
+response to the original request. This can be challenging, as a lot of time may have
+passed, and depending on the nature of the protocol being used, the response may
+not come back to the same instance of the microservice that sent the request. In our
+example of reserving stock as part of placing an order, we’d need to know how to
+associate the “stock reserved” response with a given order so we can carry on process‐
+ing that particular order. An easy way to handle this would be to store any state asso‐
+ciated with the original request into a database, such that when the response comes
+in, the receiving instance can reload any associated state and act accordingly.
+One last note: all forms of request-response interaction are likely going to require
+some form of time-out handling to avoid issues where the system gets blocked wait‐
+ing for something that may never happen. How this time-out functionality is imple‐
+mented can vary based on the implementation technology, but it will be needed.
+We’ll look at time-outs in more detail in Chapter 12.
+Pattern: Request-Response Communication 
+| 
+107

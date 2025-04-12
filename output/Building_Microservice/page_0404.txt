@@ -1,0 +1,19 @@
+Figure 11-7. Using a gateway to handle SSO
+However, we still need to solve the problem of how the downstream service receives
+information about principals, such as their username or what roles they play. If
+you’re using HTTP, you could configure your gateway to populate headers with this
+information. Shibboleth is one tool that can do this for you, and I’ve seen it used with
+the Apache web server to handle integration with SAML-based identity providers, to
+great effect. An alternative, which we’ll look at in more detail shortly, is to create a
+JSON Web Token (JWT) containing all the information about the principal; this has
+a number of benefits, including being something we can more easily pass from
+microservice to microservice.
+Another consideration with using a single sign-on gateway is that if we have decided
+to offload responsibility for authentication to a gateway, it can be harder to reason
+about how a microservice behaves when looking at it in isolation. Remember in
+Chapter 9 when we explored some of the challenges of reproducing production-like
+environments? If you decide to use a gateway, make sure your developers can launch
+their services behind one without too much work.
+378 
+| 
+Chapter 11: Security

@@ -1,0 +1,15 @@
+Reordering workflow steps to reduce rollbacks
+In Figure 6-7, we could have made our likely rollback scenarios somewhat simpler by
+reordering the steps in our original workflow. A simple change would be to award
+points only when the order is actually dispatched, as seen in Figure 6-8.
+Figure 6-8. Moving steps later in the saga can reduce what has to be rolled back in case
+of a failure
+In this way we would avoid having to worry about that stage being rolled back if we
+were to have a problem while trying to package and send the order. Sometimes you
+can simplify your rollback operations just by tweaking how your workflow is carried
+out. By pulling forward those steps that are most likely to fail and failing the process
+earlier, you avoid having to trigger later compensating transactions, as those steps
+weren’t even triggered in the first place.
+188 
+| 
+Chapter 6: Workflow

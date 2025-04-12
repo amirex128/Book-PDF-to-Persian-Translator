@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 296</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در پایان، وظیفه ما به عنوان مهندسان این است که system هایی بسازیم که کار خود را انجام دهند (یعنی، <em>guarantees</em> هایی را که کاربران انتظار دارند، برآورده کنند)، علیرغم اینکه همه چیز اشتباه پیش می‌رود. در فصل 9، ما به برخی از نمونه‌های الگوریتم‌هایی نگاه خواهیم کرد که می‌توانند چنین <em>guarantees</em> هایی را در یک system <em>distributed</em> ارائه دهند. اما ابتدا، در این فصل، باید بفهمیم با چه چالش‌هایی روبرو هستیم.
+    </p>
+    <p>
+        این فصل یک نمای کلی کاملاً بدبینانه و دلسردکننده از چیزهایی است که ممکن است در یک <em>distributed system</em> اشتباه پیش برود. ما به مشکلات شبکه‌ها ("Unreliable Networks" در صفحه 277) نگاه خواهیم کرد. ساعت‌ها و مسائل زمان‌بندی ("Unreliable Clocks" در صفحه 287)؛ و ما در مورد میزان اجتناب از آنها بحث خواهیم کرد. عواقب همه این مسائل، گیج‌کننده هستند، بنابراین ما بررسی خواهیم کرد که چگونه در مورد وضعیت یک <em>distributed system</em> فکر کنیم و چگونه در مورد چیزهایی که اتفاق افتاده‌اند استدلال کنیم ("Knowledge, Truth, and Lies" در صفحه 300).
+    </p>
+    <h4>Faults and Partial Failures</h4>
+    <p>
+        وقتی شما در حال نوشتن یک برنامه روی یک کامپیوتر واحد هستید، معمولاً به روشی نسبتاً قابل پیش‌بینی رفتار می‌کند: یا کار می‌کند یا نمی‌کند. نرم‌افزار باگ‌دار ممکن است این‌طور به نظر برسد که کامپیوتر گاهی اوقات "روز بدی دارد" (مشکلی که اغلب با راه‌اندازی مجدد برطرف می‌شود)، اما این عمدتاً فقط یک نتیجه از نرم‌افزار بد نوشته‌شده است.
+    </p>
+    <p>
+        هیچ دلیل اساسی وجود ندارد که چرا نرم‌افزار روی یک کامپیوتر واحد باید ناپایدار باشد: وقتی سخت‌افزار به درستی کار می‌کند، operation یکسان همیشه نتیجه یکسانی را تولید می‌کند (<em>it is deterministic</em>). اگر یک مشکل سخت‌افزاری وجود داشته باشد (به عنوان مثال، <em>memory corruption</em> یا یک کانکتور شل)، عواقب آن معمولاً یک <em>total system failure</em> است (به عنوان مثال، <em>kernel panic</em>، "<em>blue screen of death</em>"، عدم راه‌اندازی). یک کامپیوتر منفرد با نرم‌افزار خوب معمولاً یا کاملاً کاربردی است یا کاملاً خراب است، اما نه چیزی در این بین.
+    </p>
+    <p>
+        این یک انتخاب عمدی در طراحی کامپیوترها است: اگر یک <em>internal fault</em> رخ دهد، ما ترجیح می‌دهیم که یک کامپیوتر به طور کامل <em>crash</em> کند تا اینکه یک نتیجه اشتباه را برگرداند، زیرا نتایج اشتباه مدیریت آنها دشوار و گیج‌کننده است. بنابراین، کامپیوترها واقعیت فیزیکی مبهم را که بر روی آنها پیاده‌سازی می‌شوند، پنهان می‌کنند و یک مدل <em>idealized system</em> را ارائه می‌دهند که با کمال ریاضی عمل می‌کند. یک <em>CPU instruction</em> همیشه یک کار یکسان را انجام می‌دهد. اگر شما مقداری داده را به حافظه یا دیسک <em>write</em> می‌کنید، آن داده‌ها دست‌نخورده باقی می‌مانند و به طور تصادفی خراب نمی‌شوند. این هدف طراحی از محاسبه همیشه صحیح به تمام راه‌های اولیه از اولین کامپیوتر دیجیتال برمی‌گردد [3].
+    </p>
+    <p>
+        وقتی شما در حال نوشتن نرم‌افزاری هستید که روی چندین کامپیوتر اجرا می‌شود، که توسط یک شبکه متصل شده‌اند، وضعیت اساساً متفاوت است. در <em>distributed systems</em>، ما دیگر در یک مدل <em>idealized system</em> کار نمی‌کنیم—ما چاره‌ای نداریم جز اینکه با واقعیت درهم و برهم دنیای فیزیکی روبرو شویم. و در دنیای فیزیکی، طیف وسیعی از چیزها می‌توانند اشتباه پیش بروند، همانطور که توسط این حکایت نشان داده شده است [4]:
+        <br>
+        274
+        <br>
+        |
+        <br>
+        Chapter 8: The Trouble with Distributed Systems
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

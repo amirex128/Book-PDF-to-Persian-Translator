@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 224</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Partitioning by Key Range</h4>
+    <p>
+        One way of partitioning این است که یک range پیوسته از keys (از برخی mini‐mum تا برخی maximum) را به هر partition اختصاص دهید، مانند volume از یک paper encyclopedia (شکل 6-2). اگر شما مرزها را بین ranges می‌دانید، شما می‌توانید به راحتی تعیین کنید که کدام partition حاوی یک key داده شده است. اگر شما همچنین می‌دانید که کدام partition به کدام node اختصاص داده شده است، پس شما می‌توانید request خود را مستقیماً به node مناسب (یا، در مورد encyclopedia، کتاب صحیح را از قفسه بردارید) ارسال کنید.
+    </p>
+    <p>
+        شکل 6-2. A print encyclopedia توسط key range partition شده است.
+    </p>
+    <p>
+        The ranges از keys لزوماً به طور مساوی فاصله‌گذاری نشده‌اند، زیرا data شما ممکن است به طور مساوی توزیع نشده باشد. به عنوان مثال، در شکل 6-2، volume 1 شامل کلماتی است که با A و B شروع می‌شوند، اما volume 12 شامل کلماتی است که با T, U, V, X, Y و Z شروع می‌شوند. به سادگی داشتن یک volume برای هر دو حرف از الفبا، منجر به بزرگ‌تر شدن برخی از volumes نسبت به بقیه می‌شود. به منظور توزیع داده‌ها به طور مساوی، the partition bound‐aries نیاز به انطباق با داده‌ها دارند.
+    </p>
+    <p>
+        The partition boundaries ممکن است به صورت دستی توسط یک administrator انتخاب شوند، یا database می‌تواند آن‌ها را به طور خودکار انتخاب کند (ما در مورد انتخاب partition boundaries با جزئیات بیشتر در "Rebalancing Partitions" در صفحه 209 بحث خواهیم کرد). این strategy partitioning توسط Bigtable، نمونه open source آن HBase [2, 3]، RethinkDB و MongoDB قبل از نسخه 2.4 [4] استفاده می‌شود.
+    </p>
+    <p>
+        Within each partition، ما می‌توانیم keys را به ترتیب مرتب شده نگه داریم (به "SSTables and LSM-Trees" در صفحه 76 مراجعه کنید). این مزیت دارد که range scans آسان هستند و شما می‌توانید با key به عنوان یک concatenated index رفتار کنید تا چندین record مرتبط را در یک query واکشی کنید ("Multi-column indexes" در صفحه 87 را ببینید). به عنوان مثال، یک application را در نظر بگیرید که data را از یک network از sensors ذخیره می‌کند، جایی که key، timestamp از measurement (year-month-day-hour-minute-second) است. Range scans در این مورد بسیار مفید هستند، زیرا به شما اجازه می‌دهند که به راحتی، به عنوان مثال، تمام readings را از یک ماه خاص واکشی کنید.
+    </p>
+    <p>
+        202 | Chapter 6: Partitioning
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0224/image_1.png" alt="Image from page 224" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+388
+CHAPTER 12
+Deploying microservices
+Some languages also let you run multiple services instances in a single process. For
+example, as figure 12.5 shows, you can run multiple Java services on a single Apache
+Tomcat.
+This approach is commonly used when deploying applications on traditional expen-
+sive and heavyweight application servers, such as WebLogic and WebSphere. You can
+also package services as OSGI bundles and run multiple service instances in each
+OSGI container.
+ The Service as a language-specific package pattern has both benefits and draw-
+backs. Let’s first look at the benefits.
+12.1.1 Benefits of the Service as a language-specific package pattern
+The Service as a language-specific package pattern has a few benefits:
+Fast deployment
+Efficient resource utilization, especially when running multiple instances on
+the same machine or within the same process
+Let’s look at each one.
+JVM
+Process
+Physical or virtual machine
+Tomcat
+Service
+instance A
+JVM
+Process
+Tomcat
+Service
+instance B
+JVM
+Process
+Tomcat
+Service
+instance ...
+Figure 12.4
+Deploying multiple service 
+instances on the same machine. They 
+might be instances of the same service 
+or instances of different services. The 
+overhead of the OS is shared among the 
+service instances. Each service instance 
+is a separate process, so there’s some 
+isolation between them.
+Process
+Physical or virtual machine
+Service
+instance A
+JVM
+Tomcat
+Service
+instance B
+Service
+instance ...
+Figure 12.5
+Deploying multiple 
+services instances on the same web 
+container or application server. They 
+might be instances of the same service 
+or instances of different services. The 
+overhead of the OS and runtime is shared 
+among all the service instances. But 
+because the service instances are in the 
+same process, there’s no isolation 
+between them.
+ 

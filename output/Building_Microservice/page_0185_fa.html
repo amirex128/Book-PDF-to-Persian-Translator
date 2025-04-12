@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 185</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>انتخاب چیزی پیچیده‌تر. برای موقعیتی که فقط یک <em>node</em> دارید، ارجاع <em>DNS</em> مستقیماً به میزبان‌ها احتمالاً خوب است. اما برای آن موقعیت‌هایی که شما به بیش از یک نمونه از یک میزبان نیاز دارید، ورودی‌های <em>DNS</em> را به <em>load balancers</em> منتقل کنید که می‌توانند میزبان‌های جداگانه را به داخل و خارج از <em>service</em> به درستی مدیریت کنند.</p>
+  <h4>Dynamic Service Registries</h4>
+  <p>نقاط ضعف <em>DNS</em> به عنوان راهی برای یافتن <em>nodes</em> در یک محیط بسیار پویا، منجر به ایجاد تعدادی سیستم جایگزین شده است، که اکثر آن‌ها شامل ثبت نام <em>service</em> با یک <em>central registry</em> است، که به نوبه خود توانایی جستجوی این <em>services</em> را در اواخر ارائه می‌دهد. اغلب، این سیستم‌ها چیزی بیش از ارائه ثبت و کشف <em>service</em> انجام می‌دهند، که ممکن است چیز خوبی باشد یا نباشد. این یک زمینه شلوغ است، بنابراین ما فقط به چند گزینه نگاه خواهیم کرد تا شما را با آنچه در دسترس است، آشنا کنیم.</p>
+  <h4>ZooKeeper</h4>
+  <p><em>ZooKeeper</em> در اصل به عنوان بخشی از پروژه <em>Hadoop</em> توسعه یافت. از آن برای آرایه تقریباً گیج‌کننده‌ای از موارد استفاده، از جمله مدیریت پیکربندی، همگام‌سازی داده‌ها بین <em>services</em>، انتخاب <em>leader</em>، <em>message queues</em>، و (با توجه به نیاز ما) به عنوان یک <em>naming service</em> استفاده می‌شود.</p>
+  <p>مانند بسیاری از انواع سیستم‌های مشابه، <em>ZooKeeper</em> به اجرای تعدادی <em>nodes</em> در یک <em>cluster</em> برای ارائه تضمین‌های مختلف متکی است. این بدان معناست که شما باید انتظار داشته باشید که حداقل سه <em>Zookeeper nodes</em> را اجرا کنید. بیشتر <em>smarts</em> در <em>ZooKeeper</em> در مورد اطمینان از تکثیر ایمن داده‌ها بین این <em>nodes</em> است، و اینکه وقتی <em>nodes</em> شکست می‌خورند، همه چیز سازگار باقی می‌ماند.</p>
+  <p>در اصل، <em>ZooKeeper</em> یک <em>hierarchical namespace</em> برای ذخیره اطلاعات فراهم می‌کند. <em>Clients</em> می‌توانند <em>nodes</em> جدید را در این سلسله مراتب درج، آن‌ها را تغییر، یا از آن‌ها <em>query</em> کنند. علاوه بر این، آن‌ها می‌توانند <em>watches</em> را به <em>nodes</em> اضافه کنند تا وقتی تغییر می‌کنند، به آن‌ها گفته شود. این بدان معناست که ما می‌توانیم اطلاعات مربوط به محل قرارگیری <em>services</em> خود را در این ساختار ذخیره کنیم و به عنوان یک <em>client</em> به ما گفته می‌شود که چه زمانی تغییر می‌کنند. <em>ZooKeeper</em> اغلب به عنوان یک <em>general configuration store</em> استفاده می‌شود، بنابراین شما همچنین می‌توانید پیکربندی <em>service-specific</em> را در آن ذخیره کنید، و به شما امکان می‌دهد کارهایی مانند تغییر پویا سطوح <em>log</em> یا غیرفعال کردن ویژگی‌های یک سیستم در حال اجرا را انجام دهید.</p>
+  <p>در واقعیت، راه‌حل‌های بهتری برای <em>dynamic service registration</em> وجود دارد، تا جایی که من امروزه فعالانه از <em>ZooKeeper</em> برای این مورد استفاده اجتناب می‌کنم.</p>
+  <h4>Consul</h4>
+  <p>مانند <em>ZooKeeper</em>، <em>Consul</em> از هر دو مدیریت پیکربندی و کشف <em>service</em> پشتیبانی می‌کند. اما در ارائه پشتیبانی بیشتر برای این موارد استفاده کلیدی، فراتر از <em>ZooKeeper</em> می‌رود. به عنوان مثال، یک <em>HTTP interface</em> را برای <em>service discovery</em> به نمایش می‌گذارد، و یکی از ویژگی‌های برجسته <em>Consul</em> این است که در واقع یک <em>DNS server</em> را از جعبه ارائه می‌دهد؛</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+modeling each and every stage our software has to go through, both manual and
+automated, an example of which I shared for our Catalog service in Figure 7-1. Most
+CI tools nowadays provide some support for defining and visualizing the state of
+build pipelines like this.
+If the new Catalog service passes whatever checks are carried out at a stage in the
+pipeline, it can then move on to the next step. If it doesn’t pass a stage, our CI tool
+can let us know which stages the build has passed and can get visibility about what
+failed. If we need to do something to fix it, we’d make a change and check it in, allow‐
+ing the new version of our microservice to try and pass all the stages before being
+available for deployment. In Figure 7-2, we see an example of this: build-120 failed
+the fast test stage, build-121 failed at the performance tests, but build-122 made it
+all the way to production.
+Figure 7-2. Our Catalog microservice can get deployed only if it passes each step in our
+pipeline
+Continuous Delivery Versus Continuous Deployment
+I have on occasion seen some confusion around the terms continuous delivery and
+continuous deployment. As we’ve already discussed, continuous delivery is the con‐
+cept whereby each check-in is treated as a release candidate, and whereby we can
+assess the quality of each release candidate to decide if it’s ready to be deployed. With
+continuous deployment on the other hand, all check-ins have to be validated using
+automated mechanisms (tests for example), and any software that passes these verifi‐
+cation checks is deployed automatically, without human intervention. Continuous
+deployment can therefore be considered an extention of continuous delivery.
+Without continuous delivery, you can’t do continuous deployment. But you can do
+continuous delivery without doing continuous deployment.
+Continuous deployment isn’t right for everyone—many people want some human
+interaction to decide whether software should be deployed, something that is totally
+compatible with continuous delivery. However, adopting continuous delivery does
+imply continual focus on optimizing your path to production, the increased visibility
+making it easier to see where optimizations should be made. Often human involve‐
+ment in the post-check-in process is a bottleneck that needs addressing—see the shift
+202 
+| 
+Chapter 7: Build

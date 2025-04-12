@@ -1,0 +1,43 @@
+201
+Developing business logic using event sourcing
+EVOLVING EVENTS CAN BE TRICKY
+With event sourcing, the schema of events (and snapshots!) will evolve over time.
+Because events are stored forever, aggregates potentially need to fold events corre-
+sponding to multiple schema versions. There’s a real risk that aggregates may become
+bloated with code to deal with all the different versions. As mentioned in section 6.1.7,
+a good solution to this problem is to upgrade events to the latest version when they’re
+loaded from the event store. This approach separates the code that upgrades events
+from the aggregate, which simplifies the aggregates because they only need to apply
+the latest version of the events. 
+DELETING DATA IS TRICKY
+Because one of the goals of event sourcing is to preserve the history of aggregates, it
+intentionally stores data forever. The traditional way to delete data when using event
+sourcing is to do a soft delete. An application deletes an aggregate by setting a
+deleted flag. The aggregate will typically emit a Deleted event, which notifies any
+interested consumers. Any code that accesses that aggregate can check the flag and
+act accordingly.
+ Using a soft delete works well for many kinds of data. One challenge, however, is
+complying with the General Data Protection Regulation (GDPR), a European data
+protection and privacy regulation that grants individuals the right to erasure (https://
+gdpr-info.eu/art-17-gdpr/). An application must have the ability to forget a user’s per-
+sonal information, such as their email address. The issue with an event sourcing-based
+application is that the email address might either be stored in an AccountCreated
+event or used as the primary key of an aggregate. The application somehow must for-
+get about the user without deleting the events.
+ Encryption is one mechanism you can use to solve this problem. Each user has an
+encryption key, which is stored in a separate database table. The application uses that
+encryption key to encrypt any events containing the user’s personal information
+before storing them in an event store. When a user requests to be erased, the applica-
+tion deletes the encryption key record from the database table. The user’s personal
+information is effectively deleted, because the events can no longer be decrypted.
+ Encrypting events solves most problems with erasing a user’s personal information.
+But if some aspect of a user’s personal information, such as email address, is used as
+an aggregate ID, throwing away the encryption key may not be sufficient. For exam-
+ple, section 6.2 describes an event store that has an entities table whose primary key
+is the aggregate ID. One solution to this problem is to use the technique of pseud-
+onymization, replacing the email address with a UUID token and using that as the
+aggregate ID. The application stores the association between the UUID token and the
+email address in a database table. When a user requests to be erased, the application
+deletes the row for their email address from that table. This prevents the application
+from mapping the UUID back to the email address. 
+ 

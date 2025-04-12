@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 107</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the synchronous Remote procedure invocation pattern</h3>
+  <pre>
+   <code>
+    rpc cancelOrder(CancelOrderRequest) returns (CancelOrderReply) {}
+    rpc reviseOrder(ReviseOrderRequest) returns (ReviseOrderReply) {}
+    ...
+    }
+    message CreateOrderRequest {
+     int64 restaurantId = 1;
+     int64 consumerId = 2;
+     repeated LineItem lineItems = 3;
+     ...
+    }
+    message LineItem {
+     string menuItemId = 1;
+     int32 quantity = 2;
+    }
+    message CreateOrderReply {
+     int64 orderId = 1;
+    }
+    ...
+   </code>
+  </pre>
+  <p>
+   <strong>CreateOrderRequest</strong> و <strong>CreateOrderReply</strong> پیام‌های <strong>typed</strong> هستند. به عنوان مثال، <strong>Create-</strong>
+   پیام <strong>OrderRequest</strong> دارای یک فیلد <strong>restaurantId</strong> از نوع <strong>int64</strong> است. مقدار برچسب فیلد 1 است.
+  </p>
+  <p>
+   <strong>gRPC</strong> چندین مزیت دارد:
+  </p>
+  <ul>
+   <li>
+    طراحی یک <strong>API</strong> که دارای مجموعه‌ای غنی از عملیات <strong>update</strong> است، ساده است.
+   </li>
+   <li>
+    این یک مکانیسم <strong>IPC</strong> کارآمد و فشرده دارد، به خصوص هنگام تبادل
+    پیام‌های بزرگ.
+   </li>
+   <li>
+    جریان دو طرفه، هر دو سبک <strong>RPI</strong> و پیام‌رسانی ارتباط را فعال می‌کند.
+   </li>
+   <li>
+    این قابلیت همکاری بین کلاینت‌ها و سرویس‌های نوشته شده در طیف وسیعی را فعال می‌کند
+    از زبان‌ها.
+   </li>
+  </ul>
+  <p>
+   <strong>gRPC</strong> همچنین چندین اشکال دارد:
+  </p>
+  <ul>
+   <li>
+    برای کلاینت‌های <strong>JavaScript</strong> مصرف <strong>API</strong> مبتنی بر <strong>gRPC</strong> بیشتر از
+    <strong>APIs</strong> مبتنی بر <strong>REST/JSON</strong> زمان می‌برد.
+   </li>
+   <li>
+    <strong>firewall</strong>های قدیمی‌تر ممکن است از <strong>HTTP/2</strong> پشتیبانی نکنند.
+   </li>
+  </ul>
+  <p>
+   <strong>gRPC</strong> یک جایگزین قانع‌کننده برای <strong>REST</strong> است، اما مانند <strong>REST</strong>، این یک ارتباط <strong>synchronous</strong> است
+   مکانیسم، بنابراین از مشکل <strong>partial failure</strong> نیز رنج می‌برد. بیایید نگاهی بیندازیم به
+   این چیست و چگونه آن را مدیریت کنیم.
+  </p>
+  <h4>3.2.3 Handling partial failure using the Circuit breaker pattern</h4>
+  <p>
+   در یک سیستم توزیع شده، هر زمان که یک سرویس یک <strong>request synchronous</strong> را به سرویس دیگری
+   انجام می‌دهد، یک خطر همیشگی از <strong>partial failure</strong> وجود دارد. از آنجایی که کلاینت و سرویس
+   فرآیندهای جداگانه هستند، یک سرویس ممکن است نتواند به موقع به یک سرویس پاسخ دهد
+   درخواست کلاینت. سرویس می‌تواند به دلیل یک <strong>failure</strong> یا برای نگهداری از کار افتاده باشد.
+   یا ممکن است سرویس بیش از حد بارگذاری شده باشد و به شدت به <strong>requests</strong> پاسخ دهد.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

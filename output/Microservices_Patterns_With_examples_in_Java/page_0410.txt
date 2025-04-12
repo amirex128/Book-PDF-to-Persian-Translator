@@ -1,0 +1,42 @@
+380
+CHAPTER 11
+Developing production-ready services
+Circuit breakers
+Distributed tracing
+It significantly reduces the amount of code you need to write. You may not even need
+to write any code. Instead, you configure the microservice chassis to fit your require-
+ments. A microservice chassis enables you to focus on developing your service’s busi-
+ness logic.
+ The FTGO application uses Spring Boot and Spring Cloud as the microservice
+chassis. Spring Boot provides functions such as externalized configuration. Spring
+Cloud provides functions such as circuit breakers. It also implements client-side ser-
+vice discovery, although the FTGO application relies on the infrastructure for service
+discovery. Spring Boot and Spring Cloud aren’t the only microservice chassis frame-
+works. If, for example, you’re writing services in GoLang, you could use either Go Kit
+(https://github.com/go-kit/kit) or Micro (https://github.com/micro/micro).
+ One drawback of using a microservice chassis is that you need one for every lan-
+guage/platform combination that you use to develop services. Fortunately, it’s likely
+that many of the functions implemented by a microservice chassis will instead be
+implemented by the infrastructure. For example, as described in chapter 3, many
+deployment environments handle service discovery. What’s more, many of the network-
+related functions of a microservice chassis will be handled by what’s known as a service
+mesh, an infrastructure layer running outside of the services. 
+11.4.2 From microservice chassis to service mesh
+A microservice chassis is a good way to implement various cross-cutting concerns, such
+as circuit breakers. But one obstacle to using a microservice chassis is that you need
+one for each programming language you use. For example, Spring Boot and Spring
+Cloud are useful if you’re a Java/Spring developer, but they aren’t any help if you
+want to write a NodeJS-based service.
+An emerging alternative that avoids this problem is to implement some of this func-
+tionality outside of the service in what’s known as a service mesh. A service mesh is net-
+working infrastructure that mediates the communication between a service and other
+services and external applications. As figure 11.17 shows, all network traffic in and out
+of a service goes through the service mesh. It implements various concerns including
+circuit breakers, distributed tracing, service discovery, load balancing, and rule-based
+traffic routing. A service mesh can also secure interprocess communication by using
+Pattern: Service mesh
+Route all network traffic in and out of services through a networking layer that imple-
+ments various concerns, including circuit breakers, distributed tracing, service dis-
+covery, load balancing, and rule-based traffic routing. See http://microservices.io/
+patterns/deployment/service-mesh.html.
+ 

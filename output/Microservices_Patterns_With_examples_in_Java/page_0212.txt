@@ -1,0 +1,27 @@
+182
+CHAPTER 5
+Designing business logic in a microservice architecture
+creating and updating orders. That’s because Orders must be transactionally consis-
+tent with data owned by other services. As a result, most OrderService methods create
+a saga rather than update an Order directly.
+ This chapter has covered how to implement business logic using a traditional
+approach to persistence. That has involved integrating messaging and event publish-
+ing with database transaction management. The event publishing code is intertwined
+with the business logic. The next chapter looks at event sourcing, an event-centric
+approach to writing business logic where event generation is integral to the business
+logic rather than being bolted on. 
+Summary
+The procedural Transaction script pattern is often a good way to implement
+simple business logic. But when implementing complex business logic you should
+consider using the object-oriented Domain model pattern.
+A good way to organize a service’s business logic is as a collection of DDD aggre-
+gates. DDD aggregates are useful because they modularize the domain model,
+eliminate the possibility of object reference between services, and ensure that
+each ACID transaction is within a service.
+An aggregate should publish domain events when it’s created or updated.
+Domain events have a wide variety of uses. Chapter 4 discusses how they can
+implement choreography-based sagas. And, in chapter 7, I talk about how to
+use domain events to update replicated data. Domain event subscribers can also
+notify users and other applications, and publish WebSocket messages to a user’s
+browser. 
+ 

@@ -1,0 +1,37 @@
+team had previously worked on a similar tool, GoCD, a now open source continuous
+delivery tool that can be deployed locally rather than being hosted in the cloud.
+Although there was some code reuse very early on between the Snap CI and GoCD
+projects, in the end Snap CI turned out to be a completely new codebase. Nonethe‐
+less, the previous experience of the team in the domain of CD tooling emboldened
+them to move more quickly in identifying boundaries and building their system as a
+set of microservices.
+After a few months, though, it became clear that the use cases of Snap CI were subtly
+different enough that the initial take on the service boundaries wasn’t quite right.
+This led to lots of changes being made across services, and an associated high cost of
+change. Eventually, the team merged the services back into one monolithic system,
+giving the team members time to better understand where the boundaries should
+exist. A year later, the team was able to split the monolithic system into microservi‐
+ces, whose boundaries proved to be much more stable. This is far from the only
+example of this situation I have seen. Prematurely decomposing a system into micro‐
+services can be costly, especially if you are new to the domain. In many ways, having
+an existing codebase you want to decompose into microservices is much easier than
+trying to go to microservices from the beginning for this very reason.
+What to Split First?
+Once you have a firm grasp on why you think microservices are a good idea, you can
+use this understanding to help prioritize which microservices to create first. Want to
+scale the application? Functionality that currently constrains the system’s ability to
+handle load is going to be high on the list. Want to improve time to market? Look at
+the system’s volatility to identify those pieces of functionality that change most fre‐
+quently, and see if they would work as microservices. You can use static analysis tools
+like CodeScene to quickly find volatile parts of your codebase. You can see an exam‐
+ple of a view from CodeScene in Figure 3-1, where we see hotspots in the open source
+Apache Zookeeper project.
+But you also have to consider what decompositions are viable. Some functionality can
+be so deeply baked into the existing monolithic application that it is impossible to see
+how it can be detangled. Or perhaps the functionality in question is so critical to the
+application that any changes are considered high risk. Alternatively, the functionality
+you want to migrate might already be somewhat self-contained, and so the extraction
+seems very straightforward.
+74 
+| 
+Chapter 3: Splitting the Monolith

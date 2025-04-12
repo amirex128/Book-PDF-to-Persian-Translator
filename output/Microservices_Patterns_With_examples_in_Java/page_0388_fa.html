@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 388</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   
+   Refresh Token—A long-lived yet revocable token که یک Client برای به دست آوردن استفاده می‌کند
+   یک AccessToken جدید.
+  </p>
+  <p>
+   
+   Resource Server—A service که از یک access token برای authorize access استفاده می‌کند. In a
+   microservice architecture, the services، resource servers هستند.
+  </p>
+  <p>
+   
+   Client—A client که می‌خواهد به یک Resource Server دسترسی داشته باشد. In a microservice
+   architecture, API Gateway، the OAuth 2.0 client است.
+  </p>
+  <p>
+   Later در این بخش، من نحوه پشتیبانی از login-based clients را توضیح می‌دهم. But first، بیایید در مورد
+   چگونه authenticate API clients صحبت کنیم.
+  </p>
+  <p>
+   Figure 11.4 نشان می‌دهد که چگونه API gateway یک request را از یک API client authenticate می‌کند.
+   The API gateway API client را با انجام یک request به OAuth 2.0 authenticates می‌کند
+   authorization server، که یک access token را برمی‌گرداند. The API gateway سپس یک
+   یا بیشتر requests که شامل access token هستند، به services ارسال می‌کند.
+  </p>
+  <p>
+   The sequence of events نشان داده شده در شکل 11.4 به شرح زیر است:
+  </p>
+  <ol>
+   <li>The client یک request را انجام می‌دهد و credentials خود را با استفاده از basic authentication ارائه می‌دهد.</li>
+   <li>The API gateway یک OAuth 2.0 Password Grant request را انجام می‌دهد (www.oauth.com/
+    oauth2-servers/access-tokens/password-grant/) به OAuth 2.0 authentication
+    server.</li>
+  </ol>
+  <p>
+   Order
+   Service
+   User
+   database
+   Contains the user
+   ID و their roles
+   Password grant request
+   API gateway
+   Spring OAuth2
+   Authentication
+   Server
+   GET /orders/1
+   Authorization: Basic...
+   ....
+   POST/oauth/token
+   userid=...&password=...
+   GET /orders/1
+   Authorization: Bearer AccessToken
+   HTTP/1.1 200 OK
+   ...
+   {
+   "access_token": "AccessToken"
+   ...
+   }
+   API client
+  </p>
+  <p>
+   Figure 11.4
+   An API gateway یک API client را با انجام یک Password Grant request به OAuth 2.0 authenticates می‌کند
+   authentication server. The server یک access token را برمی‌گرداند، که API gateway به services منتقل می‌کند. A service
+   the token’s signature را تأیید می‌کند و اطلاعاتی در مورد user، از جمله identity و roles آنها، استخراج می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+Figure 6-6. We’ve tried to package our item, but we can’t find it in the warehouse
+Instead, if you want to implement a rollback, you need to implement a compensating
+transaction. A compensating transaction is an operation that undoes a previously
+committed transaction. To roll back our order fulfillment process, we would trigger
+the compensating transaction for each step in our saga that has already been commit‐
+ted, as shown in Figure 6-7.
+It’s worth calling out the fact that these compensating transactions may not behave
+exactly as those of a normal database rollback. A database rollback happens before
+the commit, and after the rollback, it is as though the transaction never happened. In
+this situation, of course, these transactions did happen. We are creating a new trans‐
+action that reverts the changes made by the original transaction, but we can’t roll
+back time and make it as though the original transaction didn’t occur.
+186 
+| 
+Chapter 6: Workflow

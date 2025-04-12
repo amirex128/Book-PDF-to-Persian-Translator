@@ -1,0 +1,54 @@
+87
+Communicating using the Asynchronous messaging pattern
+business logic. Any number of senders can send messages to a channel. Similarly, any
+number of receivers can receive messages from a channel.
+ There are two kinds of channels: point-to-point (www.enterpriseintegrationpatterns
+.com/PointToPointChannel.html) and publish-subscribe (www.enterpriseintegration-
+patterns.com/PublishSubscribeChannel.html):
+A point-to-point channel delivers a message to exactly one of the consumers that
+is reading from the channel. Services use point-to-point channels for the one-
+to-one interaction styles described earlier. For example, a command message is
+often sent over a point-to-point channel.
+A publish-subscribe channel delivers each message to all of the attached consum-
+ers. Services use publish-subscribe channels for the one-to-many interaction
+styles described earlier. For example, an event message is usually sent over a
+publish-subscribe channel. 
+3.3.2
+Implementing the interaction styles using messaging
+One of the valuable features of messaging is that it’s flexible enough to support all the
+interaction styles described in section 3.1.1. Some interaction styles are directly imple-
+mented by messaging. Others must be implemented on top of messaging.
+ Let’s look at how to implement each interaction style, starting with request/response
+and asynchronous request/response.
+IMPLEMENTING REQUEST/RESPONSE AND ASYNCHRONOUS REQUEST/RESPONSE
+When a client and service interact using either request/response or asynchronous
+request/response, the client sends a request and the service sends back a reply. The
+Business
+logic
+invokes
+invokes
+Business logic
+Sending port
+Receiving port
+Sender
+Receiver
+Message
+sender
+Message
+Message
+channel
+Receives
+Sends
+Header
+Body
+Messaging
+infrastructure
+Message
+handler
+Service
+Figure 3.7
+The business logic in the sender invokes a sending port interface, which is implemented by a  message 
+sender adapter. The message sender sends a message to a receiver via a message channel. The message channel 
+is an abstraction of messaging infrastructure. A message handler adapter in the receiver is invoked to handle the 
+message. It invokes the receiving port interface implemented by the receiver’s business logic.
+ 

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 282</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <ul>
+        <li>
+            اگر <em>transaction</em> A می‌خواهد هر object را درج، <em>update</em> یا حذف کند، ابتدا باید بررسی کند که آیا value قدیمی یا جدید با هر <em>predicate lock</em> موجود مطابقت دارد یا خیر. اگر یک <em>predicate lock</em> منطبق توسط <em>transaction</em> B نگهداری می‌شود، سپس A باید منتظر بماند تا B <em>committed</em> یا <em>aborted</em> شود قبل از اینکه بتواند ادامه دهد.
+        </li>
+    </ul>
+    <p>
+        ایده اصلی در اینجا این است که یک <em>predicate lock</em> حتی برای object هایی که هنوز در database وجود ندارند، اما ممکن است در آینده اضافه شوند (<em>phantoms</em>)، اعمال می‌شود. اگر <em>two-phase locking</em> شامل <em>predicate locks</em> باشد، database از همه اشکال <em>write skew</em> و سایر <em>race conditions</em> جلوگیری می‌کند، و بنابراین <em>isolation</em> آن به <em>serializable</em> تبدیل می‌شود.
+    </p>
+    <h4>Index-range locks</h4>
+    <p>
+        متاسفانه، <em>predicate locks</em> عملکرد خوبی ندارند: اگر <em>locks</em> زیادی توسط <em>active transactions</em> وجود داشته باشد، بررسی برای <em>matching locks</em> زمان‌بر می‌شود. به همین دلیل، اکثر databases ها با 2PL در واقع <em>index-range locking</em> (همچنین به عنوان <em>next-key locking</em> شناخته می‌شود) را پیاده‌سازی می‌کنند، که یک تقریب ساده شده از <em>predicate locking</em> است [41, 50].
+    </p>
+    <p>
+        تسهیل یک <em>predicate</em> با تطبیق آن با مجموعه بزرگ‌تری از objects، ایمن است. به عنوان مثال، اگر شما یک <em>predicate lock</em> برای رزروهای اتاق 123 بین ظهر و 1 بعد از ظهر دارید، می‌توانید آن را با <em>locking</em> رزروهای اتاق 123 در هر زمان، یا می‌توانید آن را با <em>locking</em> تمام اتاق‌ها (نه فقط اتاق 123) بین ظهر و 1 بعد از ظهر تخمین بزنید.
+    </p>
+    <p>
+        این ایمن است، زیرا هر <em>write</em> که با <em>predicate</em> اصلی مطابقت داشته باشد، قطعاً با تقریب‌ها نیز مطابقت خواهد داشت.
+    </p>
+    <p>
+        در database رزرو اتاق، احتمالاً شما یک <em>index</em> روی ستون room_id، و/یا <em>indexes</em> روی start_time و end_time دارید (در غیر این صورت query قبلی در یک database بزرگ بسیار کند خواهد بود):
+    </p>
+    <ul>
+        <li>
+            فرض کنید <em>index</em> شما روی room_id است، و database از این <em>index</em> برای یافتن رزروهای موجود برای اتاق 123 استفاده می‌کند. اکنون database می‌تواند به سادگی یک <em>shared lock</em> را به این <em>index entry</em> متصل کند، که نشان می‌دهد یک <em>transaction</em> برای رزروهای اتاق 123 جستجو کرده است.
+        </li>
+        <li>
+            از طرف دیگر، اگر database از یک <em>time-based index</em> برای یافتن رزروهای موجود استفاده می‌کند، می‌تواند یک <em>shared lock</em> را به یک range از values در آن <em>index</em> متصل کند، که نشان می‌دهد یک <em>transaction</em> برای رزروهایی که با دوره زمانی ظهر تا 1 بعد از ظهر در 1 ژانویه 2018 همپوشانی دارند، جستجو کرده است.
+        </li>
+    </ul>
+    <p>
+        در هر صورت، یک تقریب از <em>search condition</em> به یکی از <em>indexes</em> متصل می‌شود. اکنون، اگر یک <em>transaction</em> دیگر بخواهد یک رزرو را برای همان اتاق و/یا یک دوره زمانی همپوشانی درج، <em>update</em> یا حذف کند، باید بخش یکسانی از index را <em>update</em> کند. در این فرآیند، با <em>shared lock</em> مواجه خواهد شد، و مجبور می‌شود منتظر بماند تا <em>lock</em> آزاد شود.
+    </p>
+    <p>
+        این حفاظت مؤثری را در برابر <em>phantoms</em> و <em>write skew</em> ارائه می‌دهد. <em>Index-range locks</em> به اندازه <em>predicate locks</em> دقیق نیستند (ممکن است یک range بزرگتر از
+        <br>
+        260
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

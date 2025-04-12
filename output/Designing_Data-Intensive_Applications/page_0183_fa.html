@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 183</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        warehouse for offline analysis, or for building custom indexes and caches [18]. This technique is called change data capture و ما در فصل 11 به آن باز خواهیم گشت.
+    </p>
+    <h4>Trigger-based replication</h4>
+    <p>
+        رویکردهای replication که تاکنون توضیح داده شد، توسط سیستم database، بدون دخالت هیچ application code، پیاده‌سازی شده‌اند. در بسیاری از موارد، این همان چیزی است که شما می‌خواهید—اما شرایطی وجود دارد که در آن‌ها به انعطاف‌پذیری بیشتری نیاز است. به عنوان مثال، اگر شما می‌خواهید فقط یک زیرمجموعه از data را replicate کنید، یا می‌خواهید از یک نوع database به دیگری replicate کنید، یا اگر شما به منطق حل conflict نیاز دارید (به "Handling Write Conflicts" در صفحه 171 مراجعه کنید)، پس شما ممکن است نیاز به جابجایی replication به application layer داشته باشید.
+    </p>
+    <p>
+        برخی از ابزارها، مانند Oracle GoldenGate [19]، می‌توانند تغییرات data را با خواندن log database در دسترس یک application قرار دهند. یک جایگزین این است که از features که در بسیاری از relational databases موجود است، استفاده کنید: triggers و stored procedures.
+    </p>
+    <p>
+        A trigger به شما این امکان را می‌دهد که کد application سفارشی را ثبت کنید که به طور خودکار هنگامی که یک data change (write transaction) در یک database system رخ می‌دهد، اجرا می‌شود. The trigger این فرصت را دارد که این تغییر را در یک جدول جداگانه log کند، که از آنجا می‌توان آن را توسط یک فرآیند خارجی خواند. آن فرآیند خارجی می‌تواند سپس هر منطق application لازم را اعمال کند و data change را به یک سیستم دیگر replicate کند. Databus برای Oracle [20] و Bucardo برای Postgres [21] به این شکل عمل می‌کنند، به عنوان مثال.
+    </p>
+    <p>
+        Trigger-based replication معمولاً overheads بیشتری نسبت به other replication methods دارد و بیشتر مستعد bugs و محدودیت‌ها نسبت به built-in repli‐cation database است. با این حال، با توجه به انعطاف‌پذیری آن، ممکن است مفید باشد.
+    </p>
+    <h4>Problems with Replication Lag</h4>
+    <p>
+        The ability to tolerate node failures فقط یک دلیل برای تمایل به replication است. همانطور که در مقدمه قسمت II ذکر شد، دلایل دیگر، scalability (پردازش درخواست‌های بیشتر از یک machine واحد) و latency (قرار دادن replicas به صورت geographically closer to users) است.
+    </p>
+    <p>
+        Leader-based replication نیاز به این دارد که همه writes از طریق یک node واحد انجام شوند، اما queries read-only می‌توانند به هر replica بروند. برای workloads که عمدتاً از reads تشکیل شده‌اند و فقط درصد کمی از writes دارند (یک الگوی common در وب)، یک گزینه جذاب وجود دارد: ایجاد followers های زیاد و توزیع read requests در سراسر آن followers. این load را از leader حذف می‌کند و به requests read اجازه می‌دهد تا توسط replicas نزدیک ارائه شوند.
+    </p>
+    <p>
+        در این read-scaling architecture، شما می‌توانید ظرفیت را برای serving read-only requests به سادگی با افزودن followers های بیشتر افزایش دهید. با این حال، این رویکرد تنها با replication asynchronous به طور واقع‌بینانه کار می‌کند—اگر شما سعی می‌کردید به صورت synchronous به همه followers replicate کنید، یک node failure یا network outage واحد باعث می‌شود کل سیستم
+    </p>
+    <p>
+        Problems with Replication Lag | 161
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+Data
+The nature of the data you hold and manage can drive you toward different forms of
+decomposition. For example, you might want to limit which services handle person‐
+ally identifiable information (PII), both to reduce your risk of data breaches and to
+simplify oversight and implementation of things like GDPR.
+For one of my recent clients, a payment company we’ll call PaymentCo, the use of
+certain types of data directly influenced the decisions we made about system decom‐
+position. PaymentCo handles credit card data, which means that its system needs to
+comply with various requirements set down by Payment Card Industry (PCI) stand‐
+ards for how this data needs to be managed. As part of this compliance, the com‐
+pany’s system and processes needed to be audited. PaymentCo had a need to handle
+the full credit card data, and at a volume that meant its system had to comply with
+PCI Level 1, which is the most stringent level and which requires quarterly external
+assessment of the systems and practices related to how the data is managed.
+Many of the PCI requirements are common sense, but ensuring that the whole sys‐
+tem complied with these requirements, not least the need for the system to be audited
+by an external party, was proving to be quite onerous. As a result, the company
+wanted to split out the part of the system that handled the full credit card data—
+meaning that only a subset of the system required this additional level of oversight. In
+Figure 2-17, we see a simplified form of the design we came up with. Services operat‐
+ing in the green zone (enclosed by a dotted green line) never see any credit card
+information—that data is limited to processes (and networks) in the red zone (sur‐
+rounded by red dashes). The gateway diverts calls to the appropriate services (and the
+appropriate zone); as the credit card information passes through this gateway, it is in
+effect also in the red zone.
+As credit card information never flows into the green zone, all services in this area
+can be exempted from a full PCI audit. Services in the red zone are in scope for such
+oversight. When working through the design, we did everything we could to limit
+what has to be in this red zone. It’s key to note that we had to make sure that the
+credit card information never flows to the green zone at all—if a microservice in the
+green zone could request this information, or if that information could be sent back
+to the green zone by a microservice in the red zone, then the clear lines of separation
+would break down.
+Segregation of data is often driven by a variety of privacy and security concerns; we’ll
+come back to this topic and the example of PaymentCo in Chapter 11.
+64 
+| 
+Chapter 2: How to Model Microservices

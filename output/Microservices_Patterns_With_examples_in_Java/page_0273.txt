@@ -1,0 +1,46 @@
+243
+Implementing a CQRS view with AWS DynamoDB
+
+OrderHistoryDataAccess—Contains the OrderHistoryDAO, which defines the
+methods that update and query the ftgo-order-history DynamoDB table and
+its helper classes
+
+ftgo-order-history DynamoDB table—The table that stores the orders
+Let’s look at the design of the event handlers, the DAO, and the DynamoDB table in
+more detail.
+7.4.1
+The OrderHistoryEventHandlers module
+This module consists of the event handlers that consume events and update the
+DynamoDB table. As the following listing shows, the event handlers are simple meth-
+ods. Each method is a one-liner that invokes an OrderHistoryDao method with argu-
+ments that are derived from the event.
+ 
+ 
+ 
+ 
+ 
+Order History Service
+OrderHistory
+Event
+Handlers
+Query
+Update
+OrderHistory
+Query
+OrderHistoryDataAccess
+<DynamoDB table>
+ftgo-order-history
+Order
+delivery
+...
+events
+ﬁndOrderHistory()
+ﬁndOrder
+OrderHistoryDAO
+Figure 7.12
+The design of OrderHistoryService. OrderHistory-
+EventHandlers updates the database in response to events. The 
+OrderHistoryQuery module implements the query operations by query-
+ing the database. These two modules use the OrderHistory-
+DataAccess module to access the database.
+ 

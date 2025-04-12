@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 305</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>الگوی API Gateway</h3>
+  <p>
+   کلاس OrderConfiguration، Spring beans های مسئول routing کردن requests های مرتبط با Order را تعریف می‌کند. یک قانون routing می‌تواند با ترکیبی از متد HTTP، headers و path مطابقت داشته باشد. orderProxyRoutes @Bean، قوانینی را تعریف می‌کند که عملیات API را به URL های service backend نگاشت می‌کنند. به عنوان مثال، paths هایی را که با /orders شروع می‌شوند، به Order Service route می‌کند.
+  </p>
+  <p>
+   orderHandlers @Bean، قوانینی را تعریف می‌کند که آنهایی را که توسط orderProxyRoutes تعریف شده‌اند، override می‌کند. این قوانین، عملیات API را به متدهای handler که معادل Spring WebFlux از متدهای controller Spring MVC هستند، نگاشت می‌کنند. به عنوان مثال، orderHandlers عملیات GET /orders/{orderId} را به متد OrderHandlers::getOrderDetails() نگاشت می‌کند.
+  </p>
+  <p>
+   کلاس OrderHandlers، متدهای مختلف request handler را پیاده‌سازی می‌کند، مانند OrderHandlers::getOrderDetails(). این متد از API composition برای دریافت جزئیات order (که قبلاً توضیح داده شد) استفاده می‌کند. متدهای handle، service های backend را با استفاده از کلاس‌های remote proxy، مانند OrderService فراخوانی می‌کنند. این کلاس، متدهایی را برای فراخوانی OrderService تعریف می‌کند.
+  </p>
+  <p>
+   بیایید به کد نگاهی بیندازیم، با کلاس OrderConfiguration شروع می‌کنیم.
+  </p>
+  <p>
+   <strong>THE ORDERCONFIGURATION CLASS</strong>
+  </p>
+  <p>
+   کلاس OrderConfiguration، که در listing 8.2 نشان داده شده است، یک کلاس @Configuration Spring است.
+   این، Spring @Beans هایی را تعریف می‌کند که /orders endpoints را پیاده‌سازی می‌کنند. orderProxyRouting و orderHandlerRouting @Beans از Spring WebFlux routing DSL برای تعریف request routing استفاده می‌کنند. orderHandlers @Bean، request handlers هایی را پیاده‌سازی می‌کند که API composition را انجام می‌دهند.
+  </p>
+  <pre><code class="language-java">@Configuration
+@EnableConfigurationProperties(OrderDestinations.class)
+public class OrderConfiguration {
+@Bean
+public RouteLocator orderProxyRouting(OrderDestinations orderDestinations) {
+return Routes.locator()
+.route("orders")
+.uri(orderDestinations.orderServiceUrl)
+.predicate(path("/orders").or(path("/orders/*")))
+  
+.and()
+...
+.build();
+}
+@Bean
+public RouterFunction&lt;ServerResponse&gt;
+orderHandlerRouting(OrderHandlers orderHandlers) {
+return RouterFunctions.route(GET("/orders/{orderId}"),
+  
+orderHandlers::getOrderDetails);
+}</code></pre>
+  <p>
+   <strong>Listing 8.2</strong>
+   The Spring @Beans that implement the /orders endpoints
+  </p>
+  <p>
+   By default, route all requests whose
+   path begins with /orders to the URL
+   orderDestinations.orderServiceUrl.
+   Route a GET
+   /orders/{orderId}
+   to orderHandlers::
+   getOrderDetails.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

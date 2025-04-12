@@ -1,0 +1,42 @@
+272
+CHAPTER 8
+External API patterns
+gateway to transform request and response using a template-based mechanism. The
+AWS API gateway can also authenticate requests.
+ The AWS API gateway fulfills some of the requirements for an API gateway that I
+listed earlier. The API gateway is provided by AWS, so you’re not responsible for instal-
+lation and operations. You configure the API gateway, and AWS handles everything
+else, including scaling.
+ Unfortunately, the AWS API gateway has several drawbacks and limitations that
+cause it to not fulfill other requirements. It doesn’t support API composition, so you’d
+need to implement API composition in the backend services. The AWS API gateway
+only supports HTTP(S) with a heavy emphasis on JSON. It only supports the Server-
+side discovery pattern, described in chapter 3. An application will typically use an AWS
+Elastic Load Balancer to load balance requests across a set of EC2 instances or ECS
+containers. Despite these limitations, unless you need API composition, the AWS API
+gateway is a good implementation of the API gateway pattern. 
+AWS APPLICATION LOAD BALANCER
+Another AWS service that provides API gateway-like functionality is the AWS Applica-
+tion Load Balancer, which is a load balancer for HTTP, HTTPS, WebSocket, and
+HTTP/2 (https://aws.amazon.com/blogs/aws/new-aws-application-load-balancer/).
+When configuring an Application Load Balancer, you define routing rules that route
+requests to backend services, which must be running on AWS EC2 instances.
+ Like the AWS API gateway, the AWS Application Load Balancer meets some of the
+requirements for an API gateway. It implements basic routing functionality. It’s hosted,
+so you’re not responsible for installation or operations. Unfortunately, it’s quite lim-
+ited. It doesn’t implement HTTP method-based routing. Nor does it implement API
+composition or authentication. As a result, the AWS Application Load Balancer
+doesn’t meet the requirements for an API gateway. 
+USING AN API GATEWAY PRODUCT
+Another option is to use an API gateway product such as Kong or Traefik . These are
+open source packages that you install and operate yourself. Kong is based on the
+NGINX HTTP server, and Traefik is written in GoLang. Both products let you config-
+ure flexible routing rules that use the HTTP method, headers, and path to select the
+backend service. Kong lets you configure plugins that implement edge functions such
+as authentication. Traefik can even integrate with some service registries, described in
+chapter 3.
+ Although these products implement edge functions and powerful routing capabil-
+ities, they have some drawbacks. You must install, configure, and operate them your-
+self. They don’t support API composition. And if you want the API gateway to perform
+API composition, you must develop your own API gateway. 
+ 

@@ -1,0 +1,38 @@
+important you still consider the services that make up these orchestrated flows as
+entities that have their own local state and behavior. They are in charge of their own
+local state machines.
+If logic has a place where it can be centralized, it will become
+centralized!
+One way to avoid too much centralization with orchestrated flows is to ensure you
+have different services playing the role of the orchestrator for different flows. You
+might have an Order Processor microservice that handles placing an order, a
+Returns microservice to handle the return and refund process, a Goods Receiving
+microservice that handles new stock arriving and being put on the shelves, and so on.
+Something like our Warehouse microservice may be used by all those orchestrators;
+such a model makes it easier for you to keep functionality in the Warehouse microser‐
+vice itself, allowing you to reuse functionality across all those flows.
+BPM Tools
+Business process modeling (BPM) tools have been available for many years. By and
+large, they are designed to allow nondevelopers to define business process flows,
+often using visual drag-and-drop tools. The idea is that developers would create the
+building blocks of these processes, and then nondevelopers would wire these building
+blocks together into the larger process flows. The use of such tools seems to line up
+really nicely as a way of implementing orchestrated sagas, and indeed, process orches‐
+tration is pretty much the main use case for BPM tools (or, in reverse, the use of BPM
+tools results in you having to adopt orchestration).
+In my experience, I’ve come to greatly dislike BPM tools. The main reason is that the
+central conceit—that nondevelopers will define the business process—has in my
+experience almost never been true. The tooling aimed at nondevelopers ends up get‐
+ting used by developers, and unfortunately these tools often work in ways that are
+alien to how developers like to work. They often require the use of GUIs to change
+the flows, the flows they create may be difficult (or impossible) to version control, the
+flows themselves may not be designed with testing in mind, and more.
+If your developers are going to be implementing your business processes, let them use
+tooling that they know and understand and that is fit for their workflows. In general,
+this means just letting them use code to implement these things! If you need visibility
+into how a business process has been implemented or how it is operating, then it is
+far easier to project a visual representation of a workflow from code than it is to use a
+visual representation of your workflow to describe how your code should work.
+Sagas 
+| 
+191

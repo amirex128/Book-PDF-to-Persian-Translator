@@ -1,0 +1,18 @@
+Still ACID, but Lacking Atomicity?
+I want to be clear that we can still use ACID-style transactions when using microser‐
+vices. A microservice is free to use an ACID transaction for operations to its own
+database, for example. It’s just that the scope of these transactions is reduced to state
+change that happens locally within that single microservice. Consider Figure 6-1.
+Here, we are keeping track of the process involved in onboarding a new customer to
+MusicCorp. We’ve reached the end of the process, which involves changing the Sta
+tus of customer 2346 from PENDING to VERIFIED. As the enrollment is now complete,
+we also want to remove the matching row from the PendingEnrollments table. With
+a single database, this is done in the scope of a single ACID database transaction—
+either both of these state changes occur, or neither occurs.
+Figure 6-1. Updating two tables in the scope of a single ACID transaction
+Compare this with Figure 6-2, where we’re making exactly the same change, but each
+change is made in a different database. This means there are two transactions to con‐
+sider, each of which could work or fail independently of the other.
+Database Transactions 
+| 
+177

@@ -1,0 +1,41 @@
+load, but scaling up will take you at least 10 minutes, then you know you’ll need to
+keep extra capacity around to bridge this gap. Having a good suite of load tests is
+almost essential here. You can use them to test your autoscaling rules. If you don’t
+have tests that can reproduce different loads that will trigger scaling, then you’re only
+going to find out in production if you got the rules wrong. And the consequences of
+failure aren’t great!
+A news site is a great example of a type of business in which you may want a mix of
+predictive and reactive scaling. On the last news site I worked on, we saw very clear
+daily trends, with views climbing from the morning to lunchtime and then starting to
+decline. This pattern was repeated day in and day out, with traffic generally lower on
+the weekend. That gave us a fairly clear trend that could drive proactive scaling of
+resources, whether up or down. On the other hand, a big news story would cause an
+unexpected spike, requiring more capacity and often at short notice.
+I actually see autoscaling used much more for handling failure of instances than for
+reacting to load conditions. AWS lets you specify rules like “There should be at least
+five instances in this group,” so that if one instance goes down a new one is automati‐
+cally launched. I’ve seen this approach lead to a fun game of whack-a-mole when
+someone forgets to turn off the rule and then tries to take down the instances for
+maintenance, only to see them keep spinning up!
+Both reactive and predictive scaling are very useful and can help you be much more
+cost effective if you’re using a platform that allows you to pay only for the computing
+resources you use. But they also require careful observation of the data available to
+you. I’d suggest using autoscaling for failure conditions first while you collect the
+data. Once you want to start autoscaling for load, make sure you are very cautious
+about scaling down too quickly. In most situations, having more computing power at
+hand than you need is much better than not having enough!
+Starting Again
+The architecture that gets you started may not be the architecture that keeps you
+going when your system has to handle very different volumes of load. As we’ve
+already seen, there are some forms of scaling that can have extremely limited impact
+on the architecture of your system—vertical scaling and horizontal duplication, for
+example. At certain points, though, you need to do something pretty radical to
+change the architecture of your system to support the next level of growth.
+Recall the story of Gilt, which we touched on in “Isolated Execution” on page 228. A
+simple monolithic Rails application did well for Gilt for two years. Its business
+became increasingly successful, which meant more customers and more load. At a
+certain tipping point, the company had to redesign the application to handle the load
+it was seeing.
+450 
+| 
+Chapter 13: Scaling

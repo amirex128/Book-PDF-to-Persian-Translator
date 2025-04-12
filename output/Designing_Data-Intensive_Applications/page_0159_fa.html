@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 159</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        and databases (که در آن یک فرآیند داده‌های encoded را می‌نویسد و یک فرآیند دیگر آن را در زمانی در آینده دوباره می‌خواند).
+    </p>
+    <p>
+        در این بخش نهایی، ما به طور خلاصه به سیستم‌های asynchronous message-passing نگاه خواهیم کرد، که در جایی بین RPC و databases قرار دارند. آن‌ها شبیه به RPC هستند زیرا request یک client (معمولاً یک message نامیده می‌شود) با low latency به یک فرآیند دیگر تحویل داده می‌شود. آن‌ها شبیه به databases هستند زیرا message از طریق یک connection network مستقیم ارسال نمی‌شود، بلکه از طریق یک واسطه به نام message broker (همچنین به عنوان a message queue یا message-oriented middleware نامیده می‌شود) می‌رود که message را به طور موقت ذخیره می‌کند.
+    </p>
+    <p>
+        استفاده از یک message broker، مزایای متعددی نسبت به RPC مستقیم دارد:
+    </p>
+    <ul>
+        <li>It can act as a buffer if the recipient is unavailable or overloaded, and thus improve system reliability.</li>
+        <li>It can automatically redeliver messages to a process that has crashed, and thus prevent messages from being lost.</li>
+        <li>It avoids the sender needing to know the IP address and port number of the recipient (which is particularly useful in a cloud deployment where virtual machines often come and go).</li>
+        <li>It allows one message to be sent to several recipients.</li>
+        <li>It logically decouples the sender from the recipient (the sender just publishes messages and doesn’t care who consumes them).</li>
+    </ul>
+    <p>
+        با این حال، یک تفاوت در مقایسه با RPC این است که communication message-passing معمولاً یک‌طرفه است: یک sender معمولاً انتظار دریافت یک reply را به messages خود ندارد.
+        امکان ارسال یک response وجود دارد، اما این کار معمولاً در یک channel جداگانه انجام می‌شود. این الگوی communication asynchronous است: sender منتظر تحویل message نمی‌ماند، بلکه به سادگی آن را ارسال می‌کند و سپس آن را فراموش می‌کند.
+    </p>
+    <h4>Message brokers</h4>
+    <p>
+        در گذشته، چشم‌انداز message brokers تحت سلطه software enterprise commercial از شرکت‌هایی مانند TIBCO، IBM WebSphere و webMethods بود.
+        اخیراً، پیاده‌سازی‌های open source مانند RabbitMQ, ActiveMQ, HornetQ, NATS و Apache Kafka محبوب شده‌اند. ما آن‌ها را با جزئیات بیشتر در فصل 11 مقایسه خواهیم کرد.
+    </p>
+    <p>
+        The detailed delivery semantics با پیاده‌سازی و configuration متفاوت است، اما به طور کلی، message brokers به صورت زیر استفاده می‌شوند: یک فرآیند، یک message را به یک queue یا topic نام‌گذاری شده ارسال می‌کند و broker اطمینان می‌دهد که message به یک یا چند consumer یا مشترک از آن queue یا topic تحویل داده می‌شود. می‌توانند producers و consumers زیادی در همان topic وجود داشته باشند.
+    </p>
+    <p>
+        Modes of Dataflow | 137
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

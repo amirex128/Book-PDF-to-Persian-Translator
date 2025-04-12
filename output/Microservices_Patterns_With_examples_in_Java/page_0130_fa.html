@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 130</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <p>
+   چندین نمونه از این رویکرد در حال استفاده وجود دارد:
+  </p>
+  <ul>
+   <li>
+    <strong>Debezium</strong> (http://debezium.io)—یک پروژه <strong>open source</strong> که داده‌های <strong>data-</strong>
+    <strong>base</strong> را به <strong>Apache Kafka message broker</strong> منتشر می‌کند.
+   </li>
+   <li>
+    <strong>LinkedIn Databus</strong> (https://github.com/linkedin/databus)—یک پروژه <strong>open source</strong> که <strong>transaction log</strong> اوراکل را <strong>mines</strong> می‌کند و تغییرات را به عنوان <strong>events</strong> منتشر می‌کند.
+    <strong>LinkedIn</strong> از <strong>Databus</strong> برای همگام‌سازی فروشگاه‌های داده مشتق شده مختلف با <strong>sys-</strong>
+    <strong>tem of record</strong> استفاده می‌کند.
+   </li>
+   <li>
+    <strong>DynamoDB streams</strong> (http://docs.aws.amazon.com/amazondynamodb/latest/
+    <strong>developerguide/Streams.html</strong>)—جریان‌های <strong>DynamoDB</strong> شامل توالی تغییرات مرتب شده بر اساس زمان (ایجاد، به‌روزرسانی و حذف) است که در موارد در یک
+    جدول <strong>DynamoDB</strong> در 24 ساعت گذشته انجام شده است. یک اپلیکیشن می‌تواند آن تغییرات را
+    از جریان بخواند و، به عنوان مثال، آنها را به عنوان <strong>events</strong> منتشر کند.
+   </li>
+   <li>
+    <strong>Eventuate Tram</strong> (https://github.com/eventuate-tram/eventuate-tram-core)—کتابخانه پیام‌رسانی <strong>transaction</strong> متن باز خود شما که از <strong>MySQL</strong>
+    <strong>binlog protocol</strong>، <strong>Postgres WAL</strong> یا <strong>polling</strong> برای خواندن تغییرات ایجاد شده استفاده می‌کند
+    به یک جدول <strong>OUTBOX</strong> و انتشار آنها به <strong>Apache Kafka</strong>.
+   </li>
+  </ul>
+  <p>
+   اگرچه این رویکرد نامشخص است، اما به طرز چشمگیری خوب عمل می‌کند. چالش این است که
+   پیاده‌سازی آن نیاز به مقداری تلاش توسعه دارد. به عنوان مثال، می‌توانید کد سطح پایین را بنویسید
+   که <strong>APIs</strong> خاص <strong>database</strong> را فراخوانی می‌کند. از طرف دیگر، می‌توانید از یک <strong>open source</strong> استفاده کنید
+   فریم‌ورک مانند <strong>Debezium</strong> که تغییرات ایجاد شده توسط یک اپلیکیشن را به <strong>MySQL</strong>، منتشر می‌کند.
+   <strong>Postgres</strong> یا <strong>MongoDB</strong> به <strong>Apache Kafka</strong>. اشکال استفاده از <strong>Debezium</strong> این است که
+   تمرکز آن بر گرفتن تغییرات در سطح <strong>database</strong> است و <strong>APIs</strong> برای ارسال و دریافت
+   پیام‌ها خارج از محدوده آن هستند. به همین دلیل من فریم‌ورک <strong>Eventuate Tram</strong> را ایجاد کردم،
+   که <strong>APIs</strong> پیام‌رسانی و همچنین <strong>transaction tailing</strong> و <strong>polling</strong> را ارائه می‌دهد.
+  </p>
+  <h4>3.3.8 Libraries and frameworks for messaging</h4>
+  <p>
+   یک سرویس نیاز دارد که از یک کتابخانه برای ارسال و دریافت پیام استفاده کند. یک رویکرد این است که از
+   کتابخانه کلاینت <strong>message broker</strong> استفاده کنید، اگرچه چندین مشکل با استفاده از
+   چنین کتابخانه‌ای مستقیماً وجود دارد:
+  </p>
+  <ul>
+   <li>
+    کتابخانه کلاینت، منطق کسب‌وکاری را که پیام‌ها را به <strong>message</strong> منتشر می‌کند، <strong>couples</strong>
+    <strong>broker APIs</strong>.
+   </li>
+   <li>
+    کتابخانه کلاینت یک <strong>message broker</strong>، معمولاً سطح پایین است و به خطوط زیادی نیاز دارد
+    کد برای ارسال یا دریافت یک پیام. به عنوان یک توسعه‌دهنده، شما نمی‌خواهید بارها و بارها
+    کد <strong>boilerplate</strong> بنویسید. همچنین، به عنوان نویسنده این کتاب، من نمی‌خواهم کد مثال باشد
+    با <strong>boilerplate</strong> سطح پایین <strong>cluttered</strong> شده است.
+   </li>
+   <li>
+    کتابخانه کلاینت معمولاً فقط مکانیسم اصلی را برای ارسال و ارائه می‌دهد
+    دریافت پیام‌ها و از سبک‌های تعامل سطح بالاتر پشتیبانی نمی‌کند.
+   </li>
+  </ul>
+  <p>
+   یک رویکرد بهتر استفاده از یک کتابخانه یا فریم‌ورک سطح بالاتر است که <strong>details</strong> سطح پایین را پنهان می‌کند
+   و مستقیماً از سبک‌های تعامل سطح بالاتر پشتیبانی می‌کند. برای سادگی،
+   مثال‌ها در این کتاب از فریم‌ورک <strong>Eventuate Tram</strong> من استفاده می‌کنند. این یک ساده، آسان است
+   برای درک <strong>API</strong> که پیچیدگی استفاده از <strong>message broker</strong> را پنهان می‌کند. علاوه بر یک <strong>API</strong>
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

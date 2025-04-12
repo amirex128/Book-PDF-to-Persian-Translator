@@ -1,0 +1,35 @@
+we have to come to terms with the fact that by breaking apart our databases for what
+may be very good reasons, we will encounter a new set of problems.
+Tooling
+Changing databases is difficult for many reasons, one of which is that limited tools
+remain available to allow us to make changes easily. With code, we have refactoring
+tooling built into our IDEs, and we have the added benefit that the systems we are
+changing are fundamentally stateless. With a database, the things we are changing
+have state, and we also lack good refactoring-type tooling.
+There are many tools out there to help you manage the process of changing the
+schema of a relational database, but most follow the same pattern. Each schema
+change is defined in a version-controlled delta script. These scripts are then run in
+strict order in an idempotent manner. Rails migrations work in this way, as did
+DBDeploy, a tool I helped create many years ago.
+Nowadays I point people to either Flyway or Liquibase to achieve the same outcome,
+if they don’t already have a tool that works in this way.
+Reporting Database
+As part of extracting microservices from our monolithic application, we also break
+apart our databases, as we want to hide access to our internal data storage. By hiding
+direct access to our databases, we are better able to create stable interfaces, which
+make independent deployability possible. Unfortunately, this causes us issues when
+we do have legitimate use cases for accessing data from more than one microservice,
+or when that data is better made available in a database, rather than via something
+like a REST API.
+With a reporting database, we instead create a dedicated database that is designed for
+external access, and we make it the responsibility of the microservice to push data
+from internal storage to the externally accessible reporting database, as seen in
+Figure 3-8.
+The reporting database allows us to hide internal state management, while still pre‐
+senting the data in a database—something which can be very useful. For example,
+you might want to allow people to run off ad hoc defined SQL queries, run large-scale
+joins, or make use of existing toolchains that expect to have access to a SQL endpoint.
+The reporting database is a nice solution to this problem.
+Data Decomposition Concerns 
+| 
+85

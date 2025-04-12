@@ -1,0 +1,54 @@
+355
+Developing secure services
+The sequence of events for API clients is as follows:
+1
+A client makes a request containing credentials.
+2
+The API gateway authenticates the credentials, creates a security token, and
+passes that to the service or services.
+The sequence of events for login-based clients is as follows:
+1
+A client makes a login request containing credentials.
+2
+The API gateway returns a security token.
+3
+The client includes the security token in requests that invoke operations.
+4
+The API gateway validates the security token and forwards it to the service or
+services.
+A little later in this chapter, I describe how to implement tokens, but let’s first look at
+the other main aspect of security: authorization. 
+Order
+Service
+API clients supply credentials
+in the Authorization header.
+Pass token to services so
+that they can identify and
+authorize the user.
+Include the security token
+in each request.
+Login clients ﬁrst obtain
+a security token.
+Authentication
+Interceptor
+API gateway
+Login-based
+client
+GET /orders/1
+Authorization: ...CREDENTIALS...
+...
+GET /orders/1
+...SECURITY_TOKEN...
+HTTP/1.1 200 OK
+...SECURITY_TOKEN...
+GET /orders/1
+...SECURITY_TOKEN...
+POST /login
+id=...
+password=...
+API client
+Figure 11.3
+The API gateway authenticates requests from clients and includes a security token in the requests 
+it makes to services. The services use the token to obtain information about the principal. The API gateway can 
+also use the security token as a session token.
+ 

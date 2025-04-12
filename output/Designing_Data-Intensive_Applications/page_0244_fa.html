@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 244</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        برای دهه‌ها، <strong>Transactions</strong> مکانیسم انتخابی برای ساده‌سازی این مسائل بوده است. یک <strong>Transaction</strong> راهی است برای اینکه یک application چندین <em>reads</em> و <em>writes</em> را با هم در یک واحد منطقی گروه‌بندی کند. از نظر مفهومی، تمام <em>reads</em> و <em>writes</em> در یک <strong>Transaction</strong> به عنوان یک operation اجرا می‌شوند: یا کل <strong>Transaction</strong> موفق می‌شود (commit) یا با شکست مواجه می‌شود (abort, rollback). اگر شکست بخورد، application می‌تواند با خیال راحت دوباره تلاش کند. با <strong>Transactions</strong>، مدیریت خطا برای یک application بسیار ساده‌تر می‌شود، زیرا نیازی نیست نگران failure های جزئی باشد—به عنوان مثال، موردی که در آن برخی از operations موفق می‌شوند و برخی شکست می‌خورند (به هر دلیلی).
+    </p>
+    <p>
+        اگر سال‌ها را صرف کار با <strong>Transactions</strong> کرده‌اید، ممکن است بدیهی به نظر برسند، اما نباید آنها را بدیهی بگیریم. <strong>Transactions</strong> یک قانون طبیعت نیستند. آنها با یک هدف ایجاد شدند، یعنی ساده‌سازی <em>programming model</em> برای applications که به یک database دسترسی دارند. با استفاده از <strong>Transactions</strong>، application آزاد است تا برخی از سناریوهای خطای احتمالی و مسائل <em>concurrency</em> را نادیده بگیرد، زیرا database به جای آن از آنها مراقبت می‌کند (ما اینها را safety guarantees می‌نامیم).
+    </p>
+    <p>
+        هر application به <strong>Transactions</strong> نیاز ندارد، و گاهی اوقات مزایایی در تضعیف <em>transactional guarantees</em> یا کنار گذاشتن کامل آنها وجود دارد (به عنوان مثال، برای دستیابی به <em>higher performance</em> یا <em>higher availability</em>). برخی از <em>safety properties</em> را می‌توان بدون <strong>Transactions</strong> به دست آورد.
+    </p>
+    <p>
+        چگونه متوجه می‌شوید که آیا به <strong>Transactions</strong> نیاز دارید؟ برای پاسخ به این سوال، ابتدا باید دقیقاً بفهمیم که <strong>Transactions</strong> چه <em>safety guarantees</em> را می‌توانند ارائه دهند و هزینه‌های مرتبط با آنها چیست. اگرچه <strong>Transactions</strong> در نگاه اول ساده به نظر می‌رسند، اما در واقع جزئیات ظریف اما مهمی وجود دارد که وارد بازی می‌شوند.
+    </p>
+    <p>
+        در این فصل، ما بسیاری از نمونه‌های مواردی را که می‌توانند اشتباه پیش بروند، بررسی خواهیم کرد و الگوریتم‌هایی را که databases برای محافظت در برابر آن مسائل استفاده می‌کنند، بررسی خواهیم کرد. ما به ویژه در زمینه <em>concurrency control</em> عمیق خواهیم شد و انواع مختلف <em>race conditions</em> که می‌توانند رخ دهند و نحوه پیاده‌سازی <em>isolation levels</em> مانند <em>read committed, snapshot isolation</em> و <em>serializability</em> توسط databases را مورد بحث قرار خواهیم داد.
+    </p>
+    <p>
+        این فصل برای هر دو database تک‌node و distributed databases اعمال می‌شود. در فصل 8 ما بحث را بر روی چالش‌های خاصی متمرکز خواهیم کرد که فقط در <em>distributed systems</em> بوجود می‌آیند.
+    </p>
+    <h4>The Slippery Concept of a Transaction</h4>
+    <p>
+        تقریباً تمام <em>relational databases</em> امروزی، و برخی <em>nonrelational databases</em>، از <strong>Transactions</strong> پشتیبانی می‌کنند. اکثر آنها از سبکی پیروی می‌کنند که در سال 1975 توسط IBM System R، اولین database <em>SQL</em>، معرفی شد [1, 2, 3]. اگرچه برخی از جزئیات پیاده‌سازی تغییر کرده‌اند، اما ایده کلی تقریباً 40 سال است که بدون تغییر باقی مانده است: پشتیبانی از <strong>Transaction</strong> در MySQL, PostgreSQL, Oracle, SQL Server و غیره، شباهت عجیبی به System R دارد.
+    </p>
+    <p>
+        222
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

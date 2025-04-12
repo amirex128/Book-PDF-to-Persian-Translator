@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 186</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 5 (فصل 5)</strong></h3>
+  <h3><strong>Designing (طراحی) business logic (منطق تجاری) in (در) a microservice architecture (معماری ریز سرویس)</strong></h3>
+  <p>RULE #1: REFERENCE ONLY THE AGGREGATE ROOT (قاعده شماره 1: فقط به ریشه تجمیع ارجاع دهید)</p>
+  <p>example (مثال) قبلی، خطرات به‌روزرسانی مستقیم OrderLineItems (آیتم‌های خط سفارش) را نشان داد. هدف از اولین قاعده aggregate (تجمیع) این است که این مشکل را از بین ببرد. این مستلزم آن است که root entity (موجودیت ریشه) تنها بخشی از یک aggregate (تجمیع) باشد که می‌تواند توسط کلاس‌هایی در خارج از aggregate (تجمیع) به آن ارجاع شود. یک client (مشتری) فقط می‌تواند یک aggregate (تجمیع) را با فراخوانی یک متد در aggregate root (ریشه تجمیع) به‌روزرسانی کند.</p>
+  <p>به عنوان مثال، یک service (سرویس)، از یک repository (مخزن) برای بارگذاری یک aggregate (تجمیع) از database (پایگاه داده) و دریافت یک reference (ارجاع) به aggregate root (ریشه تجمیع) استفاده می‌کند. این یک aggregate (تجمیع) را با فراخوانی یک متد در aggregate root (ریشه تجمیع) به‌روزرسانی می‌کند. این قانون تضمین می‌کند که aggregate (تجمیع) می‌تواند invariant (نامتغیر) خود را اعمال کند.</p>
+  <p>RULE #2: INTER-AGGREGATE REFERENCES (قاعده 2: ارجاعات بین تجمیعی) MUST USE PRIMARY KEYS (باید از کلیدهای اصلی استفاده کنند)</p>
+  <p>قانون دیگر این است که aggregates (تجمیع‌ها) به یکدیگر بر اساس identity (هویت) (به عنوان مثال، کلید اصلی) به جای object references (ارجاعات شی) ارجاع می‌دهند. به عنوان مثال، همانطور که شکل 5.6 نشان می‌دهد، یک Order (سفارش) با استفاده از یک consumerId (شناسه مصرف‌کننده) به Consumer (مصرف‌کننده) خود ارجاع می‌دهد، نه یک reference (ارجاع) به object (شیء) Consumer (مصرف‌کننده). به طور مشابه، یک Order (سفارش) با استفاده از یک restaurantId (شناسه رستوران) به یک Restaurant (رستوران) ارجاع می‌دهد.</p>
+  <p>این رویکرد کاملاً با object modeling (مدل‌سازی شی) سنتی متفاوت است، که کلیدهای خارجی در model (مدل) domain (دامنه) را یک design smell (بوی طراحی) در نظر می‌گیرد. این مزایای متعددی دارد. استفاده از identity (هویت) به جای object references (ارجاعات شی) به این معنی است که aggregates (تجمیع‌ها) به صورت loosely coupled (شل و غیر متصل) هستند. این تضمین می‌کند که مرزهای aggregate (تجمیع) بین aggregates (تجمیع‌ها) به خوبی تعریف شده‌اند و از به‌روزرسانی تصادفی یک aggregate (تجمیع) دیگر جلوگیری می‌کند. همچنین، اگر یک aggregate (تجمیع) بخشی از یک service (سرویس) دیگر باشد، مشکلی در مورد object references (ارجاعات شی) که خدمات را در بر می‌گیرد، وجود ندارد.</p>
+  <p>این رویکرد همچنین persistence (پایداری) را ساده می‌کند زیرا aggregate (تجمیع) واحد ذخیره‌سازی است. این ذخیره aggregates (تجمیع‌ها) را در یک database (پایگاه داده) NoSQL مانند MongoDB آسان‌تر می‌کند. همچنین</p>
+  <br>
+  <p>consumerId (شناسه مصرف‌کننده)</p>
+  <p>restaurantId (شناسه رستوران)</p>
+  <p>... (و...)</p>
+  <p>«»</p>
+  <p>aggregate root (ریشه تجمیع)</p>
+  <p>Order (سفارش)</p>
+  <p>quantity (تعداد)</p>
+  <p>OrderLineItem (آیتم خط سفارش)</p>
+  <p>DeliveryInfo (اطلاعات تحویل)</p>
+  <p>... (و...)</p>
+  <p>«»</p>
+  <p>aggregate root (ریشه تجمیع)</p>
+  <p>Consumer (مصرف‌کننده)</p>
+  <p>Order (تجمیع سفارش) aggregate (تجمیع)</p>
+  <p>Consumer (تجمیع مصرف‌کننده) aggregate (تجمیع)</p>
+  <p>... (و...)</p>
+  <p>«»</p>
+  <p>aggregate root (ریشه تجمیع)</p>
+  <p>Restaurant (رستوران)</p>
+  <p>Restaurant (تجمیع رستوران) aggregate (تجمیع)</p>
+  <p>PaymentInfo (اطلاعات پرداخت)</p>
+  <p>DeliveryInfo (اطلاعات تحویل)</p>
+  <p>PaymentInfo (اطلاعات پرداخت)</p>
+  <br>
+  <img src="figure_5_6.png" alt="Figure 5.6">
+  <p>References between aggregates (ارجاعات بین تجمیع‌ها) are (هستند) by (با) primary key (کلید اصلی) rather than (تا) by (با) object reference (ارجاع شی). The (the) Order (سفارش) aggregate (تجمیع) has (دارد) the IDs (شناسه‌های) of the (از) Consumer (مصرف‌کننده) and (و) Restaurant (رستوران) aggregates (تجمیع‌ها). Within (درون) an aggregate (یک تجمیع)، (,) objects (اشیاء) have (دارند) references (ارجاعات) to (به) one another (یکدیگر).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

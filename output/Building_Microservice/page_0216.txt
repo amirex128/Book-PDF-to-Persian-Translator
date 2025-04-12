@@ -1,0 +1,26 @@
+Figure 6-9. An example of how an orchestrated saga may be used to implement our
+order fulfillment process
+Here, our central Order Processor, playing the role of the orchestrator, coordinates
+our fulfillment process. It knows what services are needed to carry out the operation,
+and it decides when to make calls to those services. If the calls fail, it can decide what
+to do as a result. In general, orchestrated sagas tend to make heavy use of request-
+response interactions between services: the Order Processor sends a request to serv‐
+ices (such as a Payment Gateway) and expects a response to let it know if the request
+was successful and provide the results of the request.
+Having our business process explicitly modeled inside the Order Processor is
+extremely beneficial. It allows us to look at one place in our system and understand
+how this process is supposed to work. That can make the onboarding of new people
+easier and help impart a better understanding of the core parts of the system.
+There are a few downsides to consider, though. First, by its nature, this is a somewhat
+coupled approach. Our Order Processor needs to know about all the associated
+services, resulting in a higher degree of domain coupling. While domain coupling is
+not inherently bad, we’d still like to keep it to a minimum, if possible. Here, our
+Order Processor needs to know about and control so many things that this form of
+coupling is hard to avoid.
+The other issue, which is more subtle, is that logic that should otherwise be pushed
+into the services can start to become absorbed in the orchestrator instead. If this
+begins to happen, you may find that your services become anemic, with little behav‐
+ior of their own, just taking orders from orchestrators like the Order Processor. It’s
+190 
+| 
+Chapter 6: Workflow

@@ -1,0 +1,40 @@
+Due to its lightweight nature and the strong sandboxing concepts built in to its core
+specification, Wasm has the potential to challenge the use of containers as the go-to
+deployment format for server-side applications. In the short term, what is holding it
+back is likely the server-side platforms available to run Wasm. While you can theoret‐
+ically run Wasm on Kubernetes, for example, you end up embedding Wasm inside
+containers, which arguably ends up being somewhat pointless, as you’re running a
+more lightweight deployment inside a (comparatively) more heavyweight container.
+A server-side deployment platform with native support for WASI would likely be
+needed to get the most out of Wasm’s potential. Theoretically at least, a scheduler like
+Nomad would be better placed to support Wasm, as it supports a pluggable driver
+model. Time will tell!
+Challenges
+Aside from the limitations we’ve just looked at, there are some other challenges you
+may experience when using FaaS.
+Firstly, it’s important to address a concern that is often raised with FaaS, and that is
+the notion of spin-up time. Conceptually, functions are not running at all unless they
+are needed. This means they have to be launched to serve an incoming request. Now,
+for some runtimes, it takes a long time to spin up a new version of the runtime—
+often called a “cold start” time. JVM and .NET runtimes suffer a lot from this, so a
+cold start time for functions using these runtimes can often be significant.
+In reality, though, these runtimes rarely cold start. On AWS at least, the runtimes are
+kept “warm,” so that requests that come in are served by already launched and run‐
+ning instances. This happens to such an extent that it can be difficult to gauge the
+impact of a “cold start” nowadays due to the optimizations being done under the
+hood by the FaaS providers. Nonetheless, if this is a concern, sticking to languages
+whose runtimes have fast spin-up times (Go, Python, Node, and Ruby come to mind)
+can sidestep this issue effectively.
+Finally, the dynamic scaling aspect of functions can actually end up being an issue.
+Functions are launched when triggered. All the platforms I’ve used have a hard limit
+on the maximum number of concurrent function invocations, which is something
+you might have to take careful note of. I’ve spoken to more than one team that has
+had the issue of functions scaling up and overwhelming other parts of its infrastruc‐
+ture that didn’t have the same scaling properties. Steve Faulkner from Bustle shared
+one such example, where scaling functions overloaded Bustle’s Redis infrastructure,
+causing production issues. If one part of your system can dynamically scale but the
+other parts of your system don’t, then you might find that this mismatch can cause
+significant headaches.
+252 
+| 
+Chapter 8: Deployment

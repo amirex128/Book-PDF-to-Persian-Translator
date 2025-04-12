@@ -1,0 +1,45 @@
+386
+CHAPTER 12
+Deploying microservices
+pipeline to deploy new versions of services, and users to access functionality imple-
+mented by those services.
+ A production environment must implement four key capabilities:
+Service management interface—Enables developers to create, update, and config-
+ure services. Ideally, this interface is a REST API invoked by command-line and
+GUI deployment tools.
+Runtime service management—Attempts to ensure that the desired number of ser-
+vice instances is running at all times. If a service instance crashes or is somehow
+unable to handle requests, the production environment must restart it. If a
+machine crashes, the production environment must restart those service instances
+on a different machine.
+Monitoring—Provides developers with insight into what their services are doing,
+including log files and metrics. If there are problems, the production environ-
+ment must alert the developers. Chapter 11 describes monitoring, also called
+observability.
+Request routing—Routes requests from users to the services.
+In this chapter I discuss the four main deployment options:
+Deploying services as language-specific packages, such as Java JAR or WAR files.
+It’s worthwhile exploring this option, because even though I recommend using
+one of the other options, its drawbacks motivate the other options.
+Deploying services as virtual machines, which simplifies deployment by packag-
+ing a service as a virtual machine image that encapsulate the service’s technol-
+ogy stack.
+Deploying services as containers, which are more lightweight than virtual
+machines. I show how to deploy the FTGO application’s Restaurant Service
+using Kubernetes, a popular Docker orchestration framework.
+Deploying services using serverless deployment, which is even more modern than
+containers. We’ll look at how to deploy Restaurant Service using AWS Lambda,
+a popular serverless platform.
+Let’s first look at how to deploy services as language-specific packages.
+12.1
+Deploying services using the Language-specific 
+packaging format pattern
+Let’s imagine that you want to deploy the FTGO application’s Restaurant Service,
+which is a Spring Boot-based Java application. One way to deploy this service is by
+using the Service as a language-specific package pattern. When using this pattern,
+what’s deployed in production and what’s managed by the service runtime is a service
+in its language-specific package. In the case of Restaurant Service, that’s either the
+executable JAR file or a WAR file. For other languages, such as NodeJS, a service is a
+directory of source code and modules. For some languages, such as GoLang, a service
+is an operating system-specific executable.
+ 

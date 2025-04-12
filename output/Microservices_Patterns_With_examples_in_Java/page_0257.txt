@@ -1,0 +1,44 @@
+227
+Querying using the API composition pattern
+You should use this option for a query operation that’s used internally by multiple ser-
+vices. This operation can also be used for externally accessible query operations whose
+aggregation logic is too complex to be part of an API gateway. 
+API COMPOSERS SHOULD USE A REACTIVE PROGRAMMING MODEL
+When developing a distributed system, minimizing latency is an ever-present concern.
+Whenever possible, an API composer should call provider services in parallel in order to
+minimize the response time for a query operation. The Find Order Aggregator
+should, for example, invoke the four services concurrently because there are no
+dependencies between the calls. Sometimes, though, an API composer needs the result
+of one Provider service in order to invoke another service. In this case, it will need to
+invoke some—but hopefully not all—of the provider services sequentially.
+ The logic to efficiently execute a mixture of sequential and parallel service invo-
+cations can be complex. In order for an API composer to be maintainable as well as
+performant and scalable, it should use a reactive design based on Java Completable-
+Future’s, RxJava observables, or some other equivalent abstraction. I discuss this topic
+further in chapter 8 when I cover the API gateway pattern. 
+7.1.5
+The benefits and drawbacks of the API composition pattern
+This pattern is a simple and intuitive way to implement query operations in a micro-
+service architecture. But it has some drawbacks:
+Increased overhead
+Risk of reduced availability
+Lack of transactional data consistency
+Let’s take a look at them.
+INCREASED OVERHEAD
+One drawback of this pattern is the overhead of invoking multiple services and query-
+ing multiple databases. In a monolithic application, a client can retrieve data with a
+single request, which will often execute a single database query. In comparison, using
+the API composition pattern involves multiple requests and database queries. As a
+result, more computing and network resources are required, increasing the cost of
+running the application. 
+RISK OF REDUCED AVAILABILITY
+Another drawback of this pattern is reduced availability. As described in chapter 3, the
+availability of an operation declines with the number of services that are involved.
+Because the implementation of a query operation involves at least three services—the
+API composer and at least two provider services—its availability will be significantly less
+than that of a single service. For example, if the availability of an individual service is
+99.5%, then the availability of the findOrder() endpoint, which invokes four provider
+services, is 99.5%(4+1) = 97.5%!
+ There are couple of strategies you can use to improve availability. The first strat-
+egy is for the API composer to return previously cached data when a Provider service is
+ 

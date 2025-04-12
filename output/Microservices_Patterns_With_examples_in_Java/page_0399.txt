@@ -1,0 +1,51 @@
+369
+Designing observable services
+The solution is to use log aggregation. As figure 11.11 shows, the log aggregation pipe-
+line sends the logs of all of the service instances to a centralized logging server. Once
+the logs are stored by the logging server, you can view, search, and analyze them. You
+can also configure alerts that are triggered when certain messages appear in the logs.
+The logging pipeline and server are usually the responsibility of operations. But ser-
+vice developers are responsible for writing services that generate useful logs. Let’s first
+look at how a service generates a log.
+HOW A SERVICE GENERATES A LOG
+As a service developer, there are a couple of issues you need to consider. First you
+need to decide which logging library to use. The second issue is where to write the log
+entries. Let’s first look at the logging library.
+ Most programming languages have one or more logging libraries that make it easy
+to generate correctly structured log entries. For example, three popular Java logging
+libraries are Logback, log4j, and JUL (java.util.logging). There’s also SLF4J, which is a
+logging facade API for the various logging frameworks. Similarly, Log4JS is a popular
+logging framework for NodeJS. One reasonable way to use logging is to sprinkle calls
+to one of these logging libraries in your service’s code. But if you have strict logging
+requirements that can’t be enforced by the logging library, you may need to define
+your own logging API that wraps a logging library.
+ You also need to decide where to log. Traditionally, you would configure the log-
+ging framework to write to a log file in a well-known location in the filesystem. But
+with the more modern deployment technologies, such as containers and serverless,
+Service A
+instance 1
+Logging
+library
+Service B
+instance 1
+Logging
+library
+Service A
+instance 2
+Logging
+library
+Log
+View
+Notify
+Log
+Log
+Log
+pipeline
+Logging
+server
+User
+Figure 11.11
+The log aggregation infrastructure ships the logs of each service instance to a 
+centralized logging server. Users can view and search the logs. They can also set up alerts, which are 
+triggered when log entries match search criteria.
+ 

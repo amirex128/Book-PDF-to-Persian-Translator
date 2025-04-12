@@ -1,0 +1,15 @@
+109
+Summary
+patterns. It’s more work, but it does handle the scenario where services are run-
+ning on multiple deployment platforms.
+A good way to design a messaging-based architecture is to use the messages and
+channels model, which abstracts the details of the underlying messaging system.
+You can then map that design to a specific messaging infrastructure, which is
+typically message broker–based.
+One key challenge when using messaging is atomically updating the database
+and publishing a message. A good solution is to use the Transactional outbox
+pattern and first write the message to the database as part of the database trans-
+action. A separate process then retrieves the message from the database using
+either the Polling publisher pattern or the Transaction log tailing pattern and
+publishes it to the message broker. 
+ 

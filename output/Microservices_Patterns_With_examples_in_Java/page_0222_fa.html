@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 222</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 6: Developing business logic with event sourcing</strong></h3>
+  <pre><code class="language-java">public Order() {
+}
+public List&lt;Event&gt; process(CreateOrderCommand command) {
+... validate command ...
+return events(new OrderCreatedEvent(command.getOrderDetails()));
+}
+public void apply(OrderCreatedEvent event) {
+OrderDetails orderDetails = event.getOrderDetails();
+this.orderLineItems = new OrderLineItems(orderDetails.getLineItems());
+this.orderMinimum = orderDetails.getOrderMinimum();
+this.state = APPROVAL_PENDING;
+}
+</code></pre>
+  <p>
+   fieldsهای این class شبیه به fieldsهای Order مبتنی بر JPA هستند. تنها تفاوت این است که id از aggregate در aggregate ذخیره نمی‌شود. methods از Order کاملاً متفاوت هستند. the createOrder() factory method با methods به نام process() و apply() جایگزین شده است. method به نام process() یک command به نام CreateOrder را می‌گیرد و یک event به نام OrderCreated را emit می‌کند. method به نام apply()، OrderCreated را می‌گیرد و fields از Order را initialize می‌کند.
+  </p>
+  <p>
+   ما اکنون به business logic کمی پیچیده‌تر برای revising یک order نگاهی خواهیم انداخت. قبلاً این business logic از سه method تشکیل شده بود: reviseOrder()، confirmRevision() و rejectRevision(). نسخه event sourcing این سه method را با سه method به نام process() و برخی از methods به نام apply() جایگزین می‌کند. listing زیر، نسخه event sourcing از reviseOrder() و confirmRevision() را نشان می‌دهد.
+  </p>
+  <pre><code class="language-java">public class Order {
+public List&lt;Event&gt; process(ReviseOrder command) {
+OrderRevision orderRevision = command.getOrderRevision();
+switch (state) {
+case APPROVED:
+LineItemQuantityChange change =
+orderLineItems.lineItemQuantityChange(orderRevision);
+if (change.newOrderTotal.isGreaterThanOrEqual(orderMinimum)) {
+throw new OrderMinimumNotMetException();
+}
+return singletonList(new OrderRevisionProposed(orderRevision,
+change.currentOrderTotal, change.newOrderTotal));
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public void apply(OrderRevisionProposed event) {
+this.state = REVISION_PENDING;
+}
+</code></pre>
+  <p>
+   Listing 6.2
+   <br>
+   The process() and apply() methods that revise an Order aggregate
+  </p>
+  <p>
+   Validates the command and
+   <br>
+   returns an OrderCreatedEvent
+   <br>
+   Apply the OrderCreatedEvent by
+   <br>
+   initializing the fields of the Order.
+  </p>
+  <p>
+   Verify that the Order
+   <br>
+   can be revised and
+   <br>
+   that the revised
+   <br>
+   order meets the
+   <br>
+   order minimum.
+   <br>
+   Change the state of the Order
+   <br>
+   to REVISION_PENDING.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

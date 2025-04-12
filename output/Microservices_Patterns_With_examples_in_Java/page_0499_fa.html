@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 499</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   در نهایت، به کمک این روش، ما interface DeliveryService را با یک کلاس proxy پیاده‌سازی می‌کنیم که
+   messagesها را به Delivery Service ارسال می‌کند. اما به جای دور انداختن
+   implementation موجود، ما از یک design، که در شکل 13.23 نشان داده شده است، استفاده می‌کنیم که
+   monolith را قادر می‌سازد تا به صورت پویا بین implementation موجود و
+   Delivery Service، سوئیچ کند. ما interface DeliveryService را با یک کلاس پیاده‌سازی می‌کنیم که
+   از یک feature toggle dynamic برای تعیین اینکه آیا implementation موجود را فراخوانی کند یا خیر
+   Delivery Service.
+  </p>
+  <p>
+   این رویکرد، خطر rolling out Delivery Service را به طور قابل توجهی کاهش می‌دهد. ما
+   می‌توانیم Delivery Service را deploy و تست کنیم. و سپس، هنگامی که مطمئن شدیم کار می‌کند، می‌توانیم
+   toggle را برای هدایت traffic به آن، فعال کنیم. اگر سپس متوجه شدیم که Delivery Service آنطور که انتظار می‌رود کار نمی‌کند، می‌توانیم به پیاده‌سازی قدیمی برگردیم.
+  </p>
+  <p>
+   هنگامی که مطمئن شدیم که Delivery Service همانطور که انتظار می‌رود کار می‌کند، می‌توانیم سپس
+   کد delivery management را از monolith حذف کنیم.
+  </p>
+  <p>
+   Delivery Service و Delayed Order Service، مثال‌هایی از servicesهایی هستند که
+   تیم FTGO در طول سفر خود به microservice architecture، توسعه خواهند داد.
+   جایی که آنها پس از پیاده‌سازی این servicesها، در مرحله بعد می‌روند، بستگی به اولویت‌های
+   کسب‌وکار دارد. یک مسیر احتمالی، استخراج Order History Service است که در chap-
+   تر 7 توضیح داده شده است. استخراج این service، تا حدی نیاز به Delivery Service را از بین می‌برد تا
+   data را به monolith، تکرار کند.
+  </p>
+  <p>
+   About feature toggles
+   <br/>
+   Feature togglesها، یا feature flagsها، به شما این امکان را می‌دهند که بدون نیاز به
+   relasing آنها به کاربران، تغییرات کد را deploy کنید. آنها همچنین شما را قادر می‌سازند تا به صورت پویا رفتار
+   application را با deploying کد جدید، تغییر دهید. این مقاله از Martin Fowler یک
+   بررسی عالی از این موضوع ارائه می‌دهد: https://martinfowler.com/articles/feature-toggles
+   .html.
+  </p>
+  <p>
+   &lt;interface&gt;
+   <br/>
+   DeliveryService
+   <br/>
+   void schedule(...)
+   <br/>
+   void reschedule(...)
+   <br/>
+   void cancel(...)
+   <br/>
+   FeatureToggleBased
+   <br/>
+   DeliveryServiceImpl
+   <br/>
+   DeliveryServiceImpl
+   <br/>
+   DeliveryServiceProxy
+   <br/>
+   Delivery
+   <br/>
+   management
+   <br/>
+   Invokes
+   <br/>
+   Invokes
+   <br/>
+   Sends
+   <br/>
+   message
+   <br/>
+   Delivery
+   <br/>
+   management
+   <br/>
+   client
+   <br/>
+   Delivery notiﬁcations
+  </p>
+  <p>
+   <strong>Figure 13.23</strong>
+   <br/>
+   The final step is to implement DeliveryService with a proxy class that sends
+   messages Delivery Service. A feature toggle controls whether the FTGO monolith uses the old
+   implementation or the new Delivery Service.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 209</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>در عوض، نویسندگان مقاله پیشنهاد می‌کنند که ما این <em>LLTs</em> را به یک دنباله‌ای از <em>transactions</em> تقسیم کنیم، که هر یک از آن‌ها می‌تواند به طور مستقل مدیریت شود. ایده این است که مدت زمان هر یک از این <em>sub transactions</em> کوتاه‌تر خواهد بود، و فقط بخشی از داده‌های تحت تأثیر کل <em>LLT</em> را تغییر می‌دهد. در نتیجه، در <em>database</em> اساسی، به دلیل کاهش زیاد دامنه و مدت زمان قفل‌ها، بحث کمتری وجود خواهد داشت.</p>
+  <p>در حالی که <em>sagas</em> در ابتدا به عنوان یک مکانیسم برای کمک به <em>LLTs</em> که در برابر یک <em>single database</em> عمل می‌کنند، تصور می‌شد، این مدل برای هماهنگی تغییرات در چندین <em>services</em> نیز به خوبی کار می‌کند. ما می‌توانیم یک فرآیند تجاری واحد را به مجموعه‌ای از <em>calls</em> تقسیم کنیم که به <em>collaborating services</em> انجام می‌شود—این چیزی است که یک <em>saga</em> را تشکیل می‌دهد.</p>
+  <p>قبل از اینکه جلوتر برویم، شما باید درک کنید که یک <em>saga</em> به ما <em>atomicity</em> را از نظر <em>ACID</em> که ما به آن عادت کرده‌ایم، مانند یک <em>normal database transaction</em>، نمی‌دهد. همانطور که <em>LLT</em> را به <em>individual transactions</em> تقسیم می‌کنیم، ما <em>atomicity</em> را در سطح خود <em>saga</em> نداریم.
+  <p>ما برای هر <em>individual transaction</em> در داخل <em>overall saga</em>، <em>atomicity</em> را داریم، زیرا هر یک از آن‌ها در صورت نیاز می‌توانند به یک تغییر <em>ACID transactional</em> مرتبط شوند. آنچه یک <em>saga</em> به ما می‌دهد، اطلاعات کافی برای استدلال در مورد حالتی است که در آن قرار دارد؛ این به ما بستگی دارد که پیامدهای این موضوع را مدیریت کنیم.</p>
+  <p>بیایید نگاهی به یک جریان ساده تکمیل سفارش برای <em>MusicCorp</em> بیندازیم، که در شکل 6-5 نشان داده شده است، که می‌توانیم از آن برای بررسی بیشتر <em>sagas</em> در زمینه یک معماری <em>microservice</em> استفاده کنیم.</p>
+  <p>در اینجا، فرآیند تکمیل سفارش به عنوان یک <em>single saga</em> نشان داده شده است، که در آن هر مرحله از این جریان نشان‌دهنده عملیاتی است که می‌تواند توسط یک <em>service</em> متفاوت انجام شود.
+  <p>در داخل هر <em>service</em>، هر گونه تغییر حالت می‌تواند در یک <em>local ACID transaction</em> مدیریت شود. به عنوان مثال، هنگامی که ما موجودی را با استفاده از <em>Warehouse service</em> بررسی و ذخیره می‌کنیم، به صورت داخلی، <em>Warehouse service</em> ممکن است یک ردیف را در جدول <em>Reservation</em> محلی خود ایجاد کند و رزرو را ثبت کند؛ این تغییر در یک <em>normal database transaction</em> مدیریت می‌شود.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0209/image_1.png" alt="Image from page 209" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

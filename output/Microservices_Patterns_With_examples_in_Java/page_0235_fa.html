@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 235</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Implementing an event store</strong></h3>
+  <p>
+   همچنین یک check از optimistic locking با update کردن entity version در جدول entities با استفاده از عبارت UPDATE زیر انجام می‌دهد:
+  </p>
+  <p>
+   UPDATE entities SET entity_version = ?
+   <br>
+   WHERE entity_type = ? and entity_id = ? and entity_version = ?
+  </p>
+  <p>
+   این عبارت تأیید می‌کند که version از زمانی که توسط operation به نام find() بازیابی شده است، تغییر نکرده است. همچنین entity_version را به version جدید update می‌کند. The update() operation این updatesها را در یک transaction انجام می‌دهد تا اتمی بودن را تضمین کند.
+  </p>
+  <p>
+   اکنون که ما به نحوه ذخیره events و snapshots از یک aggregate توسط Eventuate Local نگاهی انداختیم، بیایید ببینیم چگونه یک client به events با استفاده از event broker به نام Eventuate Local subscribe می‌کند.
+  </p>
+  <h4><strong style="color:darkblue">CONSUMING EVENTS BY SUBSCRIBING TO EVENTUATE LOCAL’S EVENT BROKER</strong></h4>
+  <p>
+   Services، events را با subscribing به event broker، که با استفاده از Apache Kafka پیاده‌سازی شده است، consume می‌کنند. event broker دارای یک topic برای هر aggregate type است. همانطور که در فصل 3 توضیح داده شد، یک topic یک partitioned message channel است. این، consumers را قادر می‌سازد تا به صورت افقی مقیاس‌بندی شوند و در عین حال order از messages را حفظ کنند. ID از aggregate به عنوان partition key استفاده می‌شود، که ترتیب events منتشر شده توسط یک aggregate داده شده را حفظ می‌کند. برای consume کردن events از یک aggregate، یک service به topic از aggregate subscribe می‌کند.
+  </p>
+  <p>
+   بیایید اکنون به event relay—glue بین event database و event broker—نگاهی بیندازیم.
+  </p>
+  <h4><strong style="color:darkblue">THE EVENTUATE LOCAL EVENT RELAY PROPAGATES EVENTS FROM THE DATABASE TO THE MESSAGE BROKER</strong></h4>
+  <p>
+   event relay، eventsهایی را که به event database درج شده‌اند، به event broker منتشر می‌کند. در صورت امکان از transaction log tailing و برای سایر databasesها از polling استفاده می‌کند.
+  </p>
+  <p>
+   به عنوان مثال، نسخه MySQL از event relay از پروتکل replication به نام MySQL master/slave استفاده می‌کند. event relay به سرور MySQL متصل می‌شود، گویی که یک slave است و MySQL binlog را می‌خواند، یک رکورد از updates ساخته شده به database. Insertsها به جدول EVENTS، که با eventsها مطابقت دارند، به topic مربوطه Apache Kafka منتشر می‌شوند. The event relay، هر نوع دیگری از تغییرات را نادیده می‌گیرد.
+  </p>
+  <p>
+   event relay به عنوان یک process مستقل مستقر می‌شود. به منظور راه‌اندازی مجدد صحیح، به طور دوره‌ای موقعیت فعلی را در binlog—نام فایل و offset—در یک topic ویژه از Apache Kafka ذخیره می‌کند. در راه‌اندازی، ابتدا آخرین موقعیت ثبت شده را از topic بازیابی می‌کند. سپس event relay شروع به خواندن MySQL binlog از آن موقعیت می‌کند.
+  </p>
+  <p>
+   event database، message broker و event relay، event store را تشکیل می‌دهند. بیایید اکنون به فریم‌ورکی که یک application از Java برای دسترسی به event store استفاده می‌کند، نگاهی بیندازیم.
+  </p>
+  <h4><strong style="color:darkblue">6.2.2: The Eventuate client framework for Java</strong></h4>
+  <p>
+   فریم‌ورک Eventuate client، developers را قادر می‌سازد تا applications مبتنی بر event sourcing را بنویسند که از event store به نام Eventuate Local استفاده می‌کنند. این فریم‌ورک، که در شکل 6.10 نشان داده شده است، پایه و اساس developing event sourcing-based aggregates، services و event handlers را فراهم می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

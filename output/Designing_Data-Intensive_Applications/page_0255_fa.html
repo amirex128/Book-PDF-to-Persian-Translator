@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 255</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Weak Isolation Levels</h4>
+    <p>
+        اگر دو <strong>Transactions</strong> به داده‌های یکسان دست نزنند، می‌توانند با خیال راحت به صورت موازی اجرا شوند، زیرا هیچ‌کدام به دیگری وابسته نیستند. مشکلات <em>concurrency</em> (<em>race conditions</em>) فقط زمانی مطرح می‌شوند که یک <strong>Transaction</strong> داده‌ای را می‌خواند که همزمان توسط <strong>Transaction</strong> دیگری اصلاح می‌شود، یا زمانی که دو <strong>Transactions</strong> سعی می‌کنند همزمان داده‌های یکسانی را اصلاح کنند.
+    </p>
+    <p>
+        یافتن باگ‌های <em>concurrency</em> با تست دشوار است، زیرا چنین باگ‌هایی فقط زمانی ایجاد می‌شوند که شما در زمان‌بندی بدشانس باشید. این مسائل زمان‌بندی ممکن است بسیار به ندرت رخ دهند، و معمولاً بازتولید آنها دشوار است. همچنین استدلال در مورد <em>concurrency</em> بسیار دشوار است، به خصوص در یک application بزرگ که در آن لزوماً نمی‌دانید کدام بخش‌های دیگر کد در حال دسترسی به database هستند. <em>Application development</em> به اندازه کافی دشوار است اگر فقط یک user در یک زمان داشته باشید. داشتن بسیاری از users همزمان، کار را هنوز هم بسیار دشوارتر می‌کند، زیرا هر قطعه از داده می‌تواند به طور غیرمنتظره‌ای در هر زمانی تغییر کند.
+    </p>
+    <p>
+        به همین دلیل، databases ها مدت‌هاست که سعی کرده‌اند مشکلات <em>concurrency</em> را با ارائه <em>transaction isolation</em> از توسعه‌دهندگان application پنهان کنند. از نظر تئوری، <em>isolation</em> باید زندگی شما را آسان‌تر کند با اجازه دادن به شما برای تظاهر به اینکه هیچ <em>concurrency</em> رخ نمی‌دهد: <em>serializable isolation</em> به این معنی است که database تضمین می‌کند که <strong>Transactions</strong> همان اثر را دارند، انگار که به صورت <em>serially</em> (به عنوان مثال، یکی در یک زمان، بدون هیچ <em>concurrency</em>) اجرا شده‌اند.
+    </p>
+    <p>
+        در عمل، <em>isolation</em> متاسفانه به آن سادگی نیست. <em>Serializable isolation</em> دارای یک <em>performance cost</em> است، و بسیاری از databases ها نمی‌خواهند این هزینه را بپردازند [8]. بنابراین معمول است که سیستم‌ها از سطوح ضعیف‌تری از <em>isolation</em> استفاده کنند، که در برابر برخی از مشکلات <em>concurrency</em> محافظت می‌کنند، اما نه همه. درک این سطوح <em>isolation</em> بسیار سخت‌تر است، و آنها می‌توانند منجر به باگ‌های ظریف شوند، اما با این وجود در عمل استفاده می‌شوند [23].
+    </p>
+    <p>
+        باگ‌های <em>concurrency</em> ناشی از <em>weak transaction isolation</em> فقط یک مشکل نظری نیستند. آنها باعث از دست رفتن قابل توجه پول شده‌اند [24, 25]، منجر به تحقیقات توسط ممیزهای مالی [26] شده‌اند، و باعث خراب شدن داده‌های مشتری شده‌اند [27]. یک نظر محبوب در مورد آشکار شدن چنین مشکلاتی این است: "اگر در حال مدیریت داده‌های مالی هستید، از یک database <strong>ACID</strong> استفاده کنید!"—اما این نکته را از دست می‌دهد. حتی بسیاری از <em>relational database systems</em> محبوب (که معمولاً "ACID" در نظر گرفته می‌شوند) از <em>weak isolation</em> استفاده می‌کنند، بنابراین لزوماً از وقوع این باگ‌ها جلوگیری نمی‌کردند.
+    </p>
+    <p>
+        به جای تکیه کورکورانه به ابزارها، ما باید یک درک خوب از انواع مشکلات <em>concurrency</em> که وجود دارد، و چگونگی جلوگیری از آنها، ایجاد کنیم. سپس می‌توانیم applications هایی را ایجاد کنیم که قابل اعتماد و صحیح هستند، با استفاده از ابزارهای در دسترس خود.
+    </p>
+    <p>
+        در این بخش ما به چندین سطح <em>weak</em> (<em>nonserializable</em>) <em>isolation</em> که در عمل استفاده می‌شوند نگاه خواهیم کرد، و به تفصیل در مورد انواع <em>race conditions</em> که می‌توانند و نمی‌توانند رخ دهند بحث خواهیم کرد، تا بتوانید تصمیم بگیرید که چه سطحی برای application شما مناسب است. هنگامی که این کار را انجام دادیم، <em>serializability</em> را با جزئیات مورد بحث قرار خواهیم داد (به "Serializability" در صفحه
+        <br>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        233
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

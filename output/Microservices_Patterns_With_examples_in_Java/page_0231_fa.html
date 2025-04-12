@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 231</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Developing business logic with event sourcing</strong></h3>
+  <h4><strong style="color:darkblue">EVOLVING EVENTS CAN BE TRICKY</strong></h4>
+  <p>
+   با event sourcing، schema از events (و snapshots!) در طول زمان تکامل می‌یابد. از آنجایی که eventsها برای همیشه ذخیره می‌شوند، aggregates به طور بالقوه نیاز دارند که eventsها را که با multiple schema versions مطابقت دارند، fold کنند. یک خطر واقعی وجود دارد که aggregates ممکن است با کد برای رسیدگی به همه نسخه‌های مختلف، bloated شوند. همانطور که در بخش 6.1.7 ذکر شد، یک راه‌حل خوب برای این مشکل، ارتقای events به آخرین نسخه هنگام بارگذاری آنها از event store است. این رویکرد، کدی را که eventsها را از aggregate ارتقا می‌دهد، جدا می‌کند، که aggregatesها را ساده می‌کند زیرا آنها فقط نیاز دارند که آخرین نسخه از eventsها را apply کنند.
+  </p>
+  <h4><strong style="color:darkblue">DELETING DATA IS TRICKY</strong></h4>
+  <p>
+   از آنجایی که یکی از اهداف event sourcing، حفظ تاریخچه از aggregates است، به طور عمدی داده‌ها را برای همیشه ذخیره می‌کند. روش سنتی برای حذف داده‌ها هنگام استفاده از event sourcing این است که یک soft delete انجام دهید. یک application یک aggregate را با تنظیم یک deleted flag حذف می‌کند. aggregate معمولاً یک event به نام Deleted را emit می‌کند، که به هر consumer علاقه‌مند اطلاع می‌دهد. هر کدی که به آن aggregate دسترسی دارد می‌تواند flag را بررسی کند و بر این اساس عمل کند.
+  </p>
+  <p>
+   استفاده از یک soft delete برای بسیاری از انواع data خوب عمل می‌کند. با این حال، یک چالش، رعایت General Data Protection Regulation (GDPR) است، یک regulation اروپایی برای محافظت از داده‌ها و حریم خصوصی که به افراد حق erasure (https://gdpr-info.eu/art-17-gdpr/) را اعطا می‌کند. یک application باید این توانایی را داشته باشد که اطلاعات شخصی یک user، مانند آدرس ایمیل آنها را فراموش کند. مسئله با یک application مبتنی بر event sourcing این است که آدرس ایمیل ممکن است در یک event به نام AccountCreated ذخیره شود یا به عنوان primary key از یک aggregate استفاده شود. application به نحوی باید user را بدون حذف events فراموش کند.
+  </p>
+  <p>
+   Encryption یک mechanism است که می‌توانید برای حل این مشکل از آن استفاده کنید. هر user، یک encryption key دارد که در یک جدول database جداگانه ذخیره می‌شود. application از آن encryption key برای encrypt کردن هر event حاوی اطلاعات شخصی user قبل از ذخیره آنها در یک event store استفاده می‌کند. هنگامی که یک user درخواست می‌کند که erased شود، application، رکورد encryption key را از جدول database حذف می‌کند. اطلاعات شخصی user به طور مؤثر حذف می‌شود، زیرا eventsها دیگر نمی‌توانند decrypted شوند.
+  </p>
+  <p>
+   Encrypting events، بیشتر مشکلات مربوط به پاک کردن اطلاعات شخصی user را حل می‌کند. اما اگر برخی از جنبه‌های اطلاعات شخصی user، مانند آدرس ایمیل، به عنوان یک aggregate ID استفاده شود، دور انداختن encryption key ممکن است کافی نباشد. به عنوان مثال، بخش 6.2 یک event store را توصیف می‌کند که دارای یک جدول به نام entities است که primary key آن، aggregate ID است. یک راه‌حل برای این مشکل استفاده از تکنیک pseudonymization است، جایگزینی آدرس ایمیل با یک token UUID و استفاده از آن به عنوان aggregate ID. application، ارتباط بین token UUID و آدرس ایمیل را در یک جدول database ذخیره می‌کند. هنگامی که یک user درخواست می‌کند که erased شود، application، row را برای آدرس ایمیل آنها از آن جدول حذف می‌کند. این از mapping از UUID به آدرس ایمیل توسط application جلوگیری می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

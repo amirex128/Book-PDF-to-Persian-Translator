@@ -1,0 +1,67 @@
+289
+Implementing an API gateway
+INTEGRATING THE APOLLO GRAPHQL SERVER WITH EXPRESS
+The Apollo GraphQL server executes GraphQL queries. In order for clients to invoke
+it, you need to integrate it with a web framework. Apollo GraphQL server supports
+several web frameworks, including Express, a popular NodeJS web framework.
+ Listing 8.10 shows how to use the Apollo GraphQL server in an Express applica-
+tion. The key function is graphqlExpress, which is provided by the apollo-server-
+express module. It builds an Express request handler that executes GraphQL queries
+against a schema. This example configures Express to route requests to the GET
+/graphql and POST /graphql endpoints of this GraphQL request handler. It also creates
+a GraphQL context containing the proxies, which makes them available to the resolvers.
+const {graphqlExpress} = require("apollo-server-express");
+const typeDefs = gql`
+   
+type Query {
+orders: resolveOrders,
+...
+}
+type Consumer {
+...
+const resolvers = {     
+Query: {
+...
+}
+}
+const schema = makeExecutableSchema({ typeDefs, resolvers });    
+const app = express();
+function makeContextWithDependencies(req) {      
+const orderServiceProxy = new OrderServiceProxy();
+const consumerServiceProxy = new ConsumerServiceProxy();
+const restaurantServiceProxy = new RestaurantServiceProxy();
+...
+return {orderServiceProxy, consumerServiceProxy,
+restaurantServiceProxy, ...};
+}
+function makeGraphQLHandler() {
+   
+return graphqlExpress(req => {
+return {schema: schema, context: makeContextWithDependencies(req)}
+});
+}
+app.post('/graphql', bodyParser.json(), makeGraphQLHandler());
+  
+app.get('/graphql', makeGraphQLHandler());
+app.listen(PORT);
+Listing 8.10
+Integrating the GraphQL server with the Express web framework
+Define the GraphQL 
+schema.
+Define the 
+resolvers.
+Combine the 
+schema with the 
+resolvers to create 
+an executable 
+schema.
+Inject repositories into 
+the context so they’re 
+available to resolvers.
+Make an express request handler 
+that executes GraphQL queries 
+against the executable schema.
+Route POST /graphql and GET
+/graphql endpoints to the
+GraphQL server.
+ 

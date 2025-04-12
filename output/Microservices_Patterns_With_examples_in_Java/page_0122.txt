@@ -1,0 +1,43 @@
+92
+CHAPTER 3
+Interprocess communication in a microservice architecture
+In fact, some of these drawbacks, such as reduced availability and the need for service
+discovery, are the same as when using synchronous, response/response.
+ Because of these limitations, most enterprise applications use a message broker-
+based architecture. Let’s look at how that works. 
+OVERVIEW OF BROKER-BASED MESSAGING
+A message broker is an intermediary through which all messages flow. A sender writes
+the message to the message broker, and the message broker delivers it to the receiver.
+An important benefit of using a message broker is that the sender doesn’t need to
+know the network location of the consumer. Another benefit is that a message broker
+buffers messages until the consumer is able to process them.
+ There are many message brokers to chose from. Examples of popular open source
+message brokers include the following:
+ActiveMQ (http://activemq.apache.org)
+RabbitMQ (https://www.rabbitmq.com)
+Apache Kafka (http://kafka.apache.org)
+There are also cloud-based messaging services, such as AWS Kinesis (https://aws.amazon
+.com/kinesis/) and AWS SQS (https://aws.amazon.com/sqs/).
+ When selecting a message broker, you have various factors to consider, including
+the following:
+Supported programming languages—You probably should pick one that supports a
+variety of programming languages.
+Supported messaging standards—Does the message broker support any standards,
+such as AMQP and STOMP, or is it proprietary?
+Messaging ordering—Does the message broker preserve ordering of messages?
+Delivery guarantees—What kind of delivery guarantees does the broker make?
+Persistence—Are messages persisted to disk and able to survive broker crashes?
+Durability—If a consumer reconnects to the message broker, will it receive the
+messages that were sent while it was disconnected?
+Scalability—How scalable is the message broker?
+Latency—What is the end-to-end latency?
+Competing consumers—Does the message broker support competing consumers?
+Each broker makes different trade-offs. For example, a very low-latency broker might
+not preserve ordering, make no guarantees to deliver messages, and only store mes-
+sages in memory. A messaging broker that guarantees delivery and reliably stores
+messages on disk will probably have higher latency. Which kind of message broker is
+the best fit depends on your application’s requirements. It’s even possible that differ-
+ent parts of your application will have different messaging requirements.
+ It’s likely, though, that messaging ordering and scalability are essential. Let’s now
+look at how to implement message channels using a message broker. 
+ 

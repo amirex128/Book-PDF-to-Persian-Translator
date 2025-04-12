@@ -1,0 +1,52 @@
+90
+CHAPTER 3
+Interprocess communication in a microservice architecture
+DOCUMENTING ASYNCHRONOUS OPERATIONS
+A service’s operations can be invoked using one of two different interaction styles:
+Request/async response-style API—This consists of the service’s command message
+channel, the types and formats of the command message types that the service
+accepts, and the types and formats of the reply messages sent by the service.
+One-way notification-style API—This consists of the service’s command message
+channel and the types and format of the command message types that the ser-
+vice accepts.
+A service may use the same request channel for both asynchronous request/response
+and one-way notification. 
+DOCUMENTING PUBLISHED EVENTS
+A service can also publish events using a publish/subscribe interaction style. The spec-
+ification of this style of API consists of the event channel and the types and formats of
+the event messages that are published by the service to the channel.
+ The messages and channels model of messaging is a great abstraction and a good
+way to design a service’s asynchronous API. But in order to implement a service you
+need to choose a messaging technology and determine how to implement your design
+using its capabilities. Let’s take a look at what’s involved. 
+3.3.4
+Using a message broker
+A messaging-based application typically uses a message broker, an infrastructure service
+through which the service communicates. But a broker-based architecture isn’t the
+only messaging architecture. You can also use a brokerless-based messaging architec-
+ture, in which the services communicate with one another directly. The two approaches,
+shown in figure 3.10, have different trade-offs, but usually a broker-based architecture
+is a better approach.
+Service
+Command
+query
+API
+Service API
+Replies
+R
+R
+Events
+R
+Event
+publisher
+«Command channel»
+«Event channel»
+«Reply channel»
+Commands
+C
+C
+C
+Figure 3.9
+A service’s asynchronous API consists of message channels and command, reply, and 
+event message types.
+ 

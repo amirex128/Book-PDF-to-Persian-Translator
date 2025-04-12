@@ -1,0 +1,40 @@
+The Required Standard
+When you’re working through your practices and thinking about the trade-offs you
+need to make, one of the most important balances to find is how much variability to
+allow in your system. One of the key ways to identify what should be constant from
+microservice to microservice is to define what a well-behaved, good microservice
+looks like. What is a “good citizen” microservice in your system? What capabilities
+does it need to have to ensure that your system is manageable, and that one bad
+microservice doesn’t bring down the whole system? As with people, what a “good
+citizen” microservice is in one context does not reflect what it looks like somewhere
+else. Nonetheless, there are some common characteristics of well-behaved microser‐
+vices that I think are fairly important to observe. These are the few key areas in which
+allowing too much divergence can result in a pretty horrid time. As Ben Christensen
+from Facebook puts it, when you think about the bigger picture, “it needs to be a
+cohesive system made of many small parts with autonomous life cycles but all com‐
+ing together.” So you need to find a balance in which you optimize for the autonomy
+of individual microservices without losing sight of the bigger picture. Defining clear
+attributes that each microservice should have is one way of being clear as to where
+that balance sits. Let’s touch on some of those attributes.
+Monitoring
+It is essential that we are able to draw up coherent, cross-service views of our system
+health. This has to be a system-wide view, not a microservice-specific view. As we
+discussed in Chapter 10, knowing the health of an individual microservice is useful,
+but often only when you’re trying to diagnose a wider problem or understand a larger
+trend. To make this as easy as possible, I would suggest ensuring that all microservi‐
+ces emit health-related and general-monitoring-related metrics in the same way.
+You might choose to adopt a push mechanism, where each microservice needs to
+push this data into a central location. Whatever you pick, try to keep it standardized.
+Make the technology inside the box opaque, and don’t require that your monitoring
+systems change in order to support it. Logging falls into the same category here: we
+need it in one place.
+Interfaces
+Picking a small number of defined interface technologies helps integrate new con‐
+sumers. Having one standard is good. Two isn’t too bad, either. Having twenty differ‐
+ent styles of integration is not good. This isn’t just about picking the technology and
+the protocol. If you pick HTTP/REST, for example, will you use verbs or nouns? How
+will you handle pagination of resources? How will you handle versioning of
+endpoints?
+The Required Standard 
+| 
+543

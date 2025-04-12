@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 206</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>چنین تضمینی را بدهد؟ به عنوان مثال، در شکل 6-3، <em>Worker A</em> گفته است که می‌تواند وضعیت ردیف را در جدول <em>Customer</em> تغییر دهد تا وضعیت آن مشتری خاص را به <em>VERIFIED</em> به‌روزرسانی کند. اگر یک عملیات متفاوت در نقطه‌ای بعدی، ردیف را حذف کند، یا تغییرات دیگری را ایجاد کند که با این وجود به این معنی باشد که تغییری به <em>VERIFIED</em> در اواخر نامعتبر است؟ برای تضمین اینکه تغییر به <em>VERIFIED</em> می‌تواند در اواخر انجام شود، <em>Worker A</em> احتمالاً باید رکورد را قفل کند تا اطمینان حاصل شود که تغییرات دیگری نمی‌توانند انجام شوند.</p>
+  <p>اگر هیچ <em>worker</em> به نفع <em>commit</em> رأی ندهد، یک پیام <em>rollback</em> باید به همه طرف‌ها ارسال شود تا اطمینان حاصل شود که آن‌ها می‌توانند به صورت محلی پاک‌سازی کنند، که به <em>workers</em> اجازه می‌دهد هر قفل احتمالی را که در دست دارند، آزاد کنند. اگر همه <em>workers</em> با ایجاد تغییر موافقت کردند، ما به فاز <em>commit</em> می‌رویم، همانطور که در شکل 6-4 نشان داده شده است. در اینجا، تغییرات در واقع اعمال می‌شوند، و قفل‌های مرتبط آزاد می‌شوند.</p>
+  <p>شکل 6-4. در فاز <em>commit</em> یک <em>two-phase commit</em>، تغییرات در واقع اعمال می‌شوند</p>
+  <p>مهم است که توجه داشته باشید که در چنین سیستمی، ما به هیچ وجه نمی‌توانیم تضمین کنیم که این <em>commits</em> دقیقاً در یک زمان انجام می‌شوند. <em>Coordinator</em> باید <em>commit request</em> را به همه شرکت‌کنندگان ارسال کند، و آن <em>message</em> می‌تواند در زمان‌های مختلف وارد شود و پردازش شود. این بدان معناست که اگر بتوانیم مستقیماً وضعیت هر <em>worker</em> را مشاهده کنیم، این احتمال وجود دارد که بتوانیم تغییر ایجاد شده در <em>Worker A</em> را ببینیم، اما هنوز در <em>Worker B</em> نباشد. هرچه تأخیر بین <em>Coordinator</em> و شرکت‌کنندگان در <em>two-phase commit</em> بیشتر باشد، و هرچه <em>workers</em> پاسخ را کندتر پردازش کنند، این <em>window of inconsistency</em> می‌تواند گسترده‌تر باشد. با بازگشت به تعریف ما از</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0206/image_1.png" alt="Image from page 206" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

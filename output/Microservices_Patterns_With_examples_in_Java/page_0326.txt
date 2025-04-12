@@ -1,0 +1,46 @@
+296
+CHAPTER 9
+Testing microservices: Part 1
+4
+Teardown—Clean up the test fixture, if necessary. Many tests omit this phase,
+but some types of database test will, for example, roll back a transaction initi-
+ated by the setup phase.
+In order to reduce code duplication and simplify tests, a test class might have setup
+methods that are run before a test method, and teardown methods that are run after-
+wards. A test suite is a set of test classes. The tests are executed by a test runner. 
+TESTING USING MOCKS AND STUBS
+An SUT often has dependencies. The trouble with dependencies is that they can com-
+plicate and slow down tests. For example, the OrderController class invokes Order-
+Service, which ultimately depends on numerous other application services and
+infrastructure services. It wouldn’t be practical to test the OrderController class by
+running a large portion of the system. We need a way to test an SUT in isolation.
+ The solution, as figure 9.3 shows, is to replace the SUT’s dependencies with test
+doubles. A test double is an object that simulates the behavior of the dependency.
+There are two types of test doubles: stubs and mocks. The terms stubs  and mocks  are
+often used interchangeably, although they have slightly different behavior. A stub is a
+test double that returns values to the SUT. A mock is a test double that a test uses to ver-
+ify that the SUT correctly invokes a dependency. Also, a mock is often a stub.
+ Later on in this chapter, you’ll see examples of test doubles in action. For example,
+section 9.2.5 shows how to test the OrderController class in isolation by using a test
+double for the OrderService class. In that example, the OrderService test double is
+implemented using Mockito, a popular mock object framework for Java. Chapter 10
+shows how to test Order Service using test doubles for the other services that it invokes.
+Those test doubles respond to command messages sent by Order Service.
+ Let’s now look at the different types of tests. 
+Slow, complex
+test
+Tests
+Replaced with
+Tests
+System Under
+Test (SUT)
+Dependency
+Faster, simpler
+test
+System Under
+Test (SUT)
+Test double
+Figure 9.3
+Replacing a dependency with a test double enables the SUT to 
+be tested in isolation. The test is simpler and faster.
+ 

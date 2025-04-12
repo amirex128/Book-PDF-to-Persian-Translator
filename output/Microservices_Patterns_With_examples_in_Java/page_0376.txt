@@ -1,0 +1,53 @@
+346
+CHAPTER 10
+Testing microservices: Part 2
+10.3.2 Writing end-to-end tests
+End-to-end tests are, like the acceptance tests covered in section 10.2, business-facing
+tests. It makes sense to write them in a high-level DSL that’s understood by the busi-
+ness people. You can, for example, write the end-to-end tests using Gherkin and exe-
+cute them using Cucumber. The following listing shows an example of such a test. It’s
+similar to the acceptance tests we looked at earlier. The main difference is that rather
+than a single Then, this test has multiple actions.
+Feature: Place Revise and Cancel
+As a consumer of the Order Service
+I should be able to place, revise, and cancel an order
+Scenario: Order created, revised, and cancelled
+Given a valid consumer
+Given using a valid credit card
+Given the restaurant is accepting orders
+When I place an order for Chicken Vindaloo at Ajanta
+  
+Then the order should be APPROVED
+Then the order total should be 16.33
+And when I revise the order by adding 2 vegetable samosas   
+Then the order total should be 20.97
+And when I cancel the order
+Then the order should be CANCELLED
+      
+This scenario places an order, revises it, and then cancels it. Let’s look at how to run it. 
+10.3.3 Running end-to-end tests
+End-to-end tests must run the entire application, including any required infrastruc-
+ture services. As you saw in earlier in section 10.2, the Gradle Docker Compose plugin
+provides a convenient way to do this. Instead of running a single application service,
+though, the Docker Compose file runs all the application’s services.
+ Now that we’ve looked at different aspects of designing and writing end-to-end
+tests, let’s see an example end-to-end test.
+ The ftgo-end-to-end-test module implements the end-to-end tests for the FTGO
+application. The implementation of the end-to-end test is quite similar to the imple-
+mentation of the component tests discussed earlier in section 10.2. These tests are
+written using Gherkin and executed using Cucumber. The Gradle Docker Compose
+plugin runs the containers before the tests run. It takes around four to five minutes to
+start the containers and run the tests.
+ That may not seem like a long time, but this is a relatively simple application with
+just a handful of containers and tests. Imagine if there were hundreds of containers
+and many more tests. The tests could take quite a long time. Consequently, it’s best to
+focus on writing tests that are lower down the pyramid. 
+Listing 10.17
+A Gherkin-based specification of a user journey
+Create 
+Order.
+Revise 
+Order.
+Cancel 
+Order.
+ 

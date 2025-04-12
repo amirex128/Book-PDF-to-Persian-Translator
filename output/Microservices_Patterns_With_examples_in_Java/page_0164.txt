@@ -1,0 +1,52 @@
+134
+CHAPTER 4
+Managing transactions with sagas
+I’ll discuss this class in more detail in chapter 5. For now, let’s focus on the create-
+Order() method. The following listing shows OrderService’s createOrder() method.
+This method first creates an Order and then creates an CreateOrderSaga to validate
+the order.
+@Transactional
+public class OrderService {
+@Autowired
+private SagaManager<CreateOrderSagaState> createOrderSagaManager;
+@Autowired
+private OrderRepository orderRepository;
+@Autowired
+private DomainEventPublisher eventPublisher;
+public Order createOrder(OrderDetails orderDetails) {
+...
+ResultWithEvents<Order> orderAndEvents = Order.createOrder(...);  
+Order order = orderAndEvents.result;
+orderRepository.save(order);
+eventPublisher.publish(Order.class,
+Long.toString(order.getId()),
+orderAndEvents.events);
+CreateOrderSagaState data =
+new CreateOrderSagaState(order.getId(), orderDetails);
+  
+createOrderSagaManager.create(data, Order.class, order.getId());
+return order;
+}
+...
+}
+The createOrder() method creates an Order by calling the factory method Order
+.createOrder(). It then persists the Order using the OrderRepository, which is a JPA-
+based repository. It creates the CreateOrderSaga by calling SagaManager.create(),
+passing a CreateOrderSagaState containing the ID of the newly saved Order and the
+OrderDetails. The SagaManager instantiates the saga orchestrator, which causes it to
+send a command message to the first saga participant, and persists the saga orchestra-
+tor in the database.
+ Let’s look at the CreateOrderSaga and its associated classes. 
+Listing 4.1
+The OrderService class and its createOrder() method
+Ensure that service 
+methods are transactional.
+Create the
+Order.
+Persist the Order 
+in the database.
+Publish domain 
+events.
+Create a
+CreateOrderSaga.
+ 

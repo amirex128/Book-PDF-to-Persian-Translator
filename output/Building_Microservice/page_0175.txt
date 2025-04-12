@@ -1,0 +1,38 @@
+avoid the break altogether or else embrace it and start having the right conversations
+with the people looking after the consuming services.
+Managing Breaking Changes
+So you’ve gone as far as you can to ensure that the changes you’re making to a micro‐
+service’s interface are backward compatible, but you’ve realized that you just have to
+make a change that will constitute a breaking change. What can you do in such a sit‐
+uation? You’ve got three main options:
+Lockstep deployment
+Require that the microservice exposing the interface and all consumers of that
+interface are changed at the same time.
+Coexist incompatible microservice versions
+Run old and new versions of the microservice side by side.
+Emulate the old interface
+Have your microservice expose the new interface and also emulate the old
+interface.
+Lockstep Deployment
+Of course, lockstep deployment flies in the face of independent deployability. If we
+want to be able to deploy a new version of our microservice with a breaking change
+to its interface but still do this in an independent fashion, we need to give our con‐
+sumers time to upgrade to the new interface. That leads us on to the next two options
+I’d consider.
+Coexist Incompatible Microservice Versions
+Another versioning solution often cited is to have different versions of the service live
+at once and for older consumers to route their traffic to the older version, with newer
+consumers seeing the new version, as shown in Figure 5-3. This is the approach used
+sparingly by Netflix in situations in which the cost of changing older consumers is
+too high, especially in rare cases in which legacy devices are still tied to older versions
+of the API. I am not a fan of this idea personally, and understand why Netflix uses it
+rarely. First, if I need to fix an internal bug in my service, I now have to fix and
+deploy two different sets of services. This would probably mean I have to branch the
+codebase for my service, and that is always problematic. Second, it means I
+need smarts to handle directing consumers to the right microservice. This behavior
+inevitably ends up sitting in middleware somewhere, or in a bunch of nginx scripts,
+making it harder to reason about the behavior of the system. Finally, consider any
+persistent state our service might manage. Customers created by either version of the
+Managing Breaking Changes 
+| 
+149

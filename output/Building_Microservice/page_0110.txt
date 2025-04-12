@@ -1,0 +1,40 @@
+Data Integrity
+Databases can be useful in ensuring integrity of our data. Coming back to Figure 3-6,
+with both the Album and Ledger tables being in the same database, we could (and
+likely would) define a foreign key relationship between the rows in the Ledger table
+and the Album table. This would ensure that we’d always be able to navigate from a
+record in the Ledger table back to information about the album sold, as we wouldn’t
+be able to delete records from the Album table if they were referenced in Ledger.
+With these tables now living in different databases, we no longer have enforcement of
+the integrity of our data model. There is nothing to stop us from deleting a row in the
+Album table, causing an issue when we try to work out exactly what item was sold.
+To an extent, you’ll simply need to get used to the fact that you can no longer rely on
+your database to enforce the integrity of inter-entity relationships. Obviously, for
+data that remains inside a single database, this isn’t an issue.
+There are a number of work-arounds, although “coping patterns” would be a better
+term for ways we might deal with this problem. We could use a soft delete in the
+Album table so that we don’t actually remove a record but just mark it as deleted.
+Another option could be to copy the name of the album into the Ledger table when a
+sale is made, but we would have to resolve how we wanted to handle synchronizing
+changes in the album name.
+Transactions
+Many of us have come to rely on the guarantees we get from managing data in trans‐
+actions. Based on that certainty, we’ve built applications in a certain way, knowing
+that we can rely on the database to handle a number of things for us. Once we start
+splitting data across multiple databases, though, we lose the safety of the ACID trans‐
+actions we are used to. (I explain the acronym ACID and discuss ACID transactions
+in more depth in Chapter 6.)
+For people moving from a system in which all state changes could be managed in a
+single transactional boundary, the shift to distributed systems can be a shock, and
+often the reaction is to look to implement distributed transactions to regain the guar‐
+antees that ACID transactions gave us with simpler architectures. Unfortunately, as
+we’ll cover in depth in “Database Transactions” on page 175, distributed transactions
+are not only complex to implement, even when done well, but they also don’t actually
+give us the same guarantees that we came to expect with more narrowly scoped data‐
+base transactions.
+As we go on to explore in “Sagas” on page 182, there are alternative (and preferable)
+mechanisms to distributed transactions for managing state changes across multiple
+microservices, but they come with new sources of complexity. As with data integrity,
+84 
+| 
+Chapter 3: Splitting the Monolith

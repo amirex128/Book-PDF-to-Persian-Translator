@@ -1,0 +1,64 @@
+466
+CHAPTER 13
+Refactoring to microservices
+revises, and cancels a Delivery. A benefit of this approach is that the monolith doesn’t
+need to explicitly invoke Delivery Service. The drawback of relying on domain events
+is that it requires Delivery Service to know how each Order event impacts the corre-
+sponding Delivery.
+ A better approach is for Delivery Service to implement a notification-based API
+that enables the monolith to explicitly tell Delivery Service to create, revise, and
+cancel deliveries. Delivery Service’s API consists of a message notification channel
+and three message types: ScheduleDelivery, ReviseDelivery, or CancelDelivery. A
+notification message contains Order information needed by Delivery Service. For
+example, a ScheduleDelivery notification contains the pickup time and location and
+the delivery time and location. An important benefit of this approach is that Delivery
+Service doesn’t have detailed knowledge of the Order lifecycle. It’s entirely focused
+on managing deliveries and has no knowledge of orders.
+ This API isn’t the only way that Delivery Service and the FTGO monolith collab-
+orate. They also need to exchange data. 
+HOW THE DELIVERY SERVICE ACCESSES THE FTGO MONOLITH’S DATA
+Delivery Service needs to access the Courier location and availability data, which is
+owned by the monolith. Because that’s potentially a large amount of data, it’s not practi-
+cal for the service to repeatedly query the monolith. Instead, a better approach is for the
+monolith to replicate the data to Delivery Service by publishing Courier domain
+events, CourierLocationUpdated and CourierAvailabilityUpdated. Delivery Service
+has a CourierEventSubscriber that subscribes to the domain events and updates its
+version of the Courier. It might also trigger the rescheduling of deliveries. 
+Delivery
+Service
+FTGO
+monolith
+Courier events
+Courier events
+Delivery events
+Delivery Service
+notiﬁcations
+Delivery events
+Courier events
+Courier
+event
+subscriber
+Delivery
+event
+subscriber
+Delivery
+Service
+proxy
+Messaging
+adapter
+Messaging
+adapter
+Delivery
+Service
+notiﬁcations
+handlers
+«interface»
+DeliveryService
+«interface»
+DeliveryService
+«interface»
+CourierService
+Figure 13.20
+The design of the Delivery Service integration glue. Delivery Service has a delivery 
+management API. The service and the FTGO monolith synchronize data by exchanging domain events.
+ 

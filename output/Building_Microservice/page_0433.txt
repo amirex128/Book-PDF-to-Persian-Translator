@@ -1,0 +1,40 @@
+Example 12-2. Adding more information to the points credit to make it idempotent
+<credit>
+  <amount>100</amount>
+  <forAccount>1234</account>
+  <reason>
+    <forPurchase>4567</forPurchase>
+  </reason>
+</credit>
+We know that this credit relates to a specific order, 4567. Assuming that we could
+receive only one credit for a given order, we could apply this credit again without
+increasing the overall number of points.
+This mechanism works just as well with event-based collaboration and can be espe‐
+cially useful if you have multiple instances of the same type of service subscribing to
+events. Even if we store which events have been processed, with some forms of asyn‐
+chronous message delivery there may be small windows in which two workers can
+see the same message. By processing the events in an idempotent manner, we ensure
+this won’t cause us any issues.
+Some people get quite caught up with this concept and assume it means that subse‐
+quent calls with the same parameters can’t have any impact, which then leaves us in
+an interesting position. We really would still like to record the fact that a call was
+received in our logs, for example. We want to record the response time of the call and
+collect this data for monitoring. The key point here is that it is the underlying busi‐
+ness operation that we are considering idempotent, not the entire state of the system.
+Some of the HTTP verbs, such as GET and PUT, are defined in the HTTP specifica‐
+tion to be idempotent, but for that to be the case, they rely on your service handling
+these calls in an idempotent manner. If you start making these verbs nonidempotent,
+but callers think they can safely execute them repeatedly, you may get yourself into a
+mess. Remember, just because you’re using HTTP as an underlying protocol doesn’t
+mean you get everything for free!
+Spreading Your Risk
+One way to scale for resilience is to ensure that you don’t put all your eggs in one
+basket. A simplistic example of this is making sure that you don’t have multiple serv‐
+ices on one host, where an outage would impact multiple services. But let’s consider
+what host means. In most situations nowadays, a “host” is actually a virtual concept.
+So what if I have all of my services on different hosts, but all those hosts are actually
+virtual hosts, running on the same physical box? If that box goes down, I could lose
+multiple services. Some virtualization platforms enable you to ensure that your hosts
+Spreading Your Risk 
+| 
+407

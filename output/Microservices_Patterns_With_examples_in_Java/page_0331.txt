@@ -1,0 +1,44 @@
+301
+Testing strategies for microservice architectures
+Each interaction between a pair of services represents an agreement or contract
+between the two services. Order History Service and Order Service must, for exam-
+ple, agree on the event message structure and the channel that they’re published to.
+Similarly, the API gateway and the services must agree on the REST API endpoints.
+And Order Service and each service that it invokes using asynchronous request/
+response must agree on the command channel and the format of the command and
+reply messages.
+ As a developer of a service, you need to be confident that the services you consume
+have stable APIs. Similarly, you don’t want to unintentionally make breaking changes
+to your service’s API. For example, if you’re working on Order Service, you want to be
+sure that the developers of your service’s dependencies, such as Consumer Service and
+Kitchen Service, don’t change their APIs in ways that are incompatible with your ser-
+vice. Similarly, you must ensure that you don’t change the Order Services’s API in a
+way that breaks the API Gateway or Order History Service.
+ One way to verify that two services can interact is to run both services, invoke an API
+that triggers the communication, and verify that it has the expected outcome. This will
+certainly catch integration problems, but it’s basically an end-to-end. The test likely
+would need to run numerous other transitive dependencies of those services. A test
+might also need to invoke complex, high-level functionality such as business logic, even
+if its goal is to test relatively low-level IPC. It’s best to avoid writing end-to-end tests like
+these. Somehow, we need to write faster, simpler, and more reliable tests that ideally test
+services in isolation. The solution is to use what’s known as consumer-driven contract testing.
+CONSUMER-DRIVEN CONTRACT TESTING
+Imagine that you’re a member of the team developing API Gateway, described in chap-
+ter 8. The API Gateway’s OrderServiceProxy invokes various REST endpoints, includ-
+ing the GET /orders/{orderId} endpoint. It’s essential that we write tests that verify that
+API Gateway and Order Service agree on an API. In the terminology of consumer con-
+tract testing, the two services participate in a consumer-provider relationship. API Gateway is
+a consumer, and Order Service is a provider. A consumer contract test is an integration
+test for a provider, such as Order Service, that verifies that its API matches the expecta-
+tions of a consumer, such as API Gateway.
+ A consumer contract test focuses on verifying that the “shape” of a provider’s API
+meets the consumer’s expectations. For a REST endpoint, a contract test verifies that
+the provider implements an endpoint that
+Has the expected HTTP method and path
+Accepts the expected headers, if any
+Accepts a request body, if any
+Returns a response with the expected status code, headers, and body
+It’s important to remember that contract tests don’t thoroughly test the provider’s
+business logic. That’s the job of unit tests. Later on, you’ll see that consumer contract
+tests for a REST API are in fact mock controller tests.
+ 

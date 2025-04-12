@@ -1,0 +1,44 @@
+257
+External API design issues
+In this design, the mobile application is playing the role of API composer. It invokes
+multiple services and combines the results. Although this approach seems reasonable,
+it has several serious problems.
+POOR USER EXPERIENCE DUE TO THE CLIENT MAKING MULTIPLE REQUESTS
+The first problem is that the mobile application must sometimes make multiple
+requests to retrieve the data it wants to display to the user. The chatty interaction
+between the application and the services can make the application seem unrespon-
+sive, especially when it uses the internet or a mobile network. The internet has much
+lower bandwidth and higher latency than a LAN, and mobile networks are even worse.
+The latency of a mobile network (and internet) is typically 100x greater than a LAN.
+ The higher latency might not be a problem when retrieving the order details,
+because the mobile application minimizes the delay by executing the requests concur-
+rently. The overall response time is no greater than that of a single request. But in
+other scenarios, a client may need to execute requests sequentially, which will result in
+a poor user experience.
+ What’s more, poor user experience due to network latency is not the only issue
+with a chatty API. It requires the mobile developer to write potentially complex API
+composition code. This work is a distraction from their primary task of creating a
+great user experience. Also, because each network request consumes power, a chatty
+API drains the mobile device’s battery faster.
+LACK OF ENCAPSULATION REQUIRES FRONTEND DEVELOPERS TO CHANGE THEIR CODE IN LOCKSTEP 
+WITH THE BACKEND
+Another drawback of a mobile application directly accessing the services is the lack of
+encapsulation. As an application evolves, the developers of a service sometimes
+change an API in a way that breaks existing clients. They might even change how the
+system is decomposed into services. Developers may add new services and split or
+merge existing services. But if knowledge about the services is baked into a mobile
+application, it can be difficult to change the services’ APIs.
+ Unlike when updating a server-side application, it takes hours or perhaps even
+days to roll out a new version of a mobile application. Apple or Google must approve
+the upgrade and make it available for download. Users might not download the
+upgrade immediately—if ever. And you may not want to force reluctant users to
+upgrade. The strategy of exposing service APIs to mobile creates a significant obstacle
+to evolving those APIs.
+SERVICES MIGHT USE CLIENT-UNFRIENDLY IPC MECHANISMS
+Another challenge with a mobile application directly calling services is that some ser-
+vices could use protocols that aren’t easily consumed by a client. Client applications
+that run outside the firewall typically use protocols such as HTTP and WebSockets.
+But as described in chapter 3, service developers have many protocols to choose
+from—not just HTTP. Some of an application’s services might use gRPC, whereas
+others could use the AMQP messaging protocol. These kinds of protocols work well
+ 

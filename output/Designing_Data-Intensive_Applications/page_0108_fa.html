@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 108</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        mand، و آن‌ها اغلب برای انجام joins به طور کارآمد حیاتی هستند. به عنوان مثال، در شکل 2-1 در فصل 2 شما احتمالاً یک secondary index روی columns user_id خواهید داشت تا بتوانید تمام ردیف‌های متعلق به همان user را در هر یک از tables پیدا کنید.
+    </p>
+    <p>
+        یک secondary index را می‌توان به راحتی از یک key-value index ساخت. تفاوت اصلی این است که keys یکتا نیستند. یعنی، ممکن است ردیف‌های (documents, vertices) زیادی با همان key وجود داشته باشند. این را می‌توان به دو روش حل کرد: یا با ساختن هر value در index یک list of matching row identifiers (مانند یک postings list در یک full-text index) یا با ساختن هر key یکتا با اضافه کردن یک row identifier به آن. به هر حال، هم B-trees و هم indexes log-structured می‌توانند به عنوان secondary indexes استفاده شوند.
+    </p>
+    <h4>Storing values within the index</h4>
+    <p>
+        The key in an index چیزی است که queries به دنبال آن هستند، اما value می‌تواند یکی از دو چیز باشد: می‌تواند row (document, vertex) واقعی مورد نظر باشد، یا می‌تواند یک reference به ردیف ذخیره شده در جای دیگر باشد. در مورد دوم، مکانی که ردیف‌ها در آن ذخیره می‌شوند، به عنوان a heap file شناخته می‌شود و داده‌ها را بدون ترتیب خاصی ذخیره می‌کند (ممکن است append-only باشد، یا ممکن است ردیف‌های حذف شده را ردیابی کند تا بعداً آن‌ها را با data جدید overwrite کند). رویکرد heap file رایج است زیرا از تکرار data در صورت وجود multiple secondary indexes اجتناب می‌کند: هر index فقط به یک location در heap file اشاره می‌کند و data واقعی در یک مکان نگهداری می‌شود.
+    </p>
+    <p>
+        هنگام به‌روزرسانی یک value بدون تغییر key، رویکرد heap file می‌تواند بسیار کارآمد باشد: record را می‌توان در محل overwrite کرد، به شرطی که value جدید بزرگتر از value قدیمی نباشد. اگر value جدید بزرگتر باشد، وضعیت پیچیده‌تر است، زیرا احتمالاً نیاز به انتقال آن به یک location جدید در heap است که فضای کافی وجود دارد. در این صورت، یا همه indexes نیاز به به‌روزرسانی دارند تا به location heap جدید از record اشاره کنند، یا یک forwarding pointer در location heap قدیمی باقی می‌ماند [5].
+    </p>
+    <p>
+        در برخی موارد، جهش اضافی از index به heap file یک penalty performance بیش از حد برای reads است، بنابراین ممکن است ذخیره row indexed مستقیماً در یک index مطلوب باشد. این به عنوان a clustered index شناخته می‌شود. به عنوان مثال، در storage engine InnoDB از MySQL، primary key از یک table همیشه یک clustered index است و secondary indexes به primary key (به جای یک location heap file) اشاره می‌کنند [31]. در SQL Server، شما می‌توانید یک clustered index را برای هر table مشخص کنید [32].
+    </p>
+    <p>
+        یک compromise بین a clustered index (ذخیره تمام data row در index) و یک nonclustered index (ذخیره فقط references به data در index) به عنوان یک covering index یا index with included columns شناخته می‌شود، که برخی از columns یک جدول را در index ذخیره می‌کند [33]. این به برخی از queries اجازه می‌دهد تا با استفاده از index به تنهایی پاسخ داده شوند (در این صورت، گفته می‌شود index query را پوشش می‌دهد) [32].
+    </p>
+    <p>
+        Data Structures That Power Your Database | 86
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

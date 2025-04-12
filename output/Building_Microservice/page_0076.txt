@@ -1,0 +1,23 @@
+manifestation of this is an external service accessing another microservice’s database
+and changing it directly. The differences between content coupling and common
+coupling are subtle. In both cases, two or more microservices are reading and writing
+to the same set of data. With common coupling, you understand that you are making
+use of a shared, external dependency. You know it’s not under your control. With
+content coupling, the lines of ownership become less clear, and it becomes more dif‐
+ficult for developers to change a system.
+Let’s revisit our earlier example from MusicCorp. In Figure 2-11, we have an Order
+service that is supposed to manage the allowable state changes to orders in our sys‐
+tem. The Order Processor is sending requests to the Order service, delegating not
+just the exact change in state that will be made but also responsibility for deciding
+what state transitions are allowable. On the other hand, the Warehouse service is
+directly updating the table in which order data is stored, bypassing any functionality
+in the Order service that might check for allowable changes. We have to hope that the
+Warehouse service has a consistent set of logic to ensure that only valid changes are
+made. At best, this represents a duplication of logic. In the worst case, the checking
+around allowable changes in Warehouse is different from that in the Order service,
+and as a result we could end up with orders in very odd, confusing states.
+Figure 2-11. An example of content coupling in which the Warehouse is directly access‐
+ing the internal data of the Order service
+50 
+| 
+Chapter 2: How to Model Microservices

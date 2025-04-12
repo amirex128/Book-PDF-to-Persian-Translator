@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 232</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>جایی که ما تمام مراحل اعتبارسنجی مرتبط با همه <em>microservices</em> خود را اجرا می‌کنیم و <em>artifacts</em> متعددی تولید می‌کنیم، که همگی به همان <em>build</em> مرتبط هستند.
+  <p>شکل 7-5. استفاده از یک <em>source code repository</em> و <em>CI build</em> واحد برای همه <em>microservices</em></p>
+  <p>در مقایسه با رویکردهای دیگر، این کار در ظاهر بسیار ساده‌تر به نظر می‌رسد: تعداد کمتری <em>repositories</em> برای نگرانی، و یک <em>build</em> از نظر مفهومی ساده‌تر. از دیدگاه توسعه‌دهنده، همه چیز نیز کاملاً سرراست است. من فقط کد را <em>check in</em> می‌کنم. اگر مجبور باشم همزمان روی چندین <em>service</em> کار کنم، فقط باید نگران یک <em>commit</em> باشم.</p>
+  <p>این مدل می‌تواند کاملاً خوب کار کند اگر شما ایده <em>lockstep releases</em> را اتخاذ کنید، که در آن شما با استقرار چندین <em>services</em> به طور همزمان مشکلی ندارید. به طور کلی، این کاملاً یک الگوی اجتناب‌پذیر است، اما در مراحل اولیه یک پروژه، به خصوص اگر فقط یک تیم روی همه چیز کار می‌کند، این مدل ممکن است برای دوره‌های کوتاه مدت منطقی باشد.
+  <p>اکنون اجازه دهید برخی از معایب قابل توجه این رویکرد را توضیح دهم. اگر من یک تغییر یک خطی به یک <em>single service</em> ایجاد کنم—به عنوان مثال، تغییر رفتار در <em>User service</em> در شکل 7-5—تمام <em>services</em> دیگر <em>verified</em> و <em>built</em> می‌شوند. این می‌تواند زمان بیشتری نسبت به نیاز داشته باشد—من منتظر چیزهایی هستم که احتمالاً نیازی به آزمایش ندارند. این امر بر زمان چرخه ما تأثیر می‌گذارد، سرعتی که ما می‌توانیم یک تغییر واحد را از توسعه به <em>live</em> منتقل کنیم. با این حال، مشکل‌سازتر این است که بدانیم چه <em>artifacts</em> باید یا نباید مستقر شوند. آیا اکنون باید تمام <em>build services</em> را برای انتقال تغییر کوچک خود به <em>production</em> مستقر کنم؟ تشخیص آن دشوار است؛ تلاش برای حدس زدن اینکه کدام <em>services</em> واقعاً تغییر کرده‌اند، فقط با خواندن پیام‌های <em>commit</em> دشوار است. سازمان‌هایی که از این رویکرد استفاده می‌کنند، اغلب به سادگی به استقرار همه چیز با هم روی می‌آورند، که ما واقعاً می‌خواهیم از آن اجتناب کنیم.</p>
+  <p>علاوه بر این، اگر تغییر یک خطی من به <em>User service</em>، <em>build</em> را خراب کند، هیچ تغییر دیگری را نمی‌توان در <em>services</em> دیگر ایجاد کرد تا زمانی که آن شکست برطرف شود. و در مورد</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0232/image_1.png" alt="Image from page 232" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+11 Eric Evans, Domain-Driven Design: Tackling Complexity in the Heart of Software (Boston: Addison-Wesley,
+2004).
+In this situation, we also have the issue that the internal data structure of our order
+table is exposed to an outside party. When changing the Order service, we now have
+to be extremely careful about making changes to that particular table—that’s even
+assuming it’s obvious to us that this table is being directly accessed by an outside
+party. The easy fix here is to have the Warehouse send requests to the Order service
+itself, where we can vet the request but also hide the internal detail, making subse‐
+quent changes to the Order service much easier.
+If you are working on a microservice, it’s vital that you have a clear separation
+between what can be changed freely and what cannot. To be explicit, as a developer
+you need to know when you are changing functionality that is part of the contract
+your service exposes to the outside world. You need to ensure that if you make
+changes, that you will not break upstream consumers. Functionality that doesn’t
+impact the contract your microservice exposes can be changed without concern.
+It’s certainly the case that the problems that occur with common coupling also apply
+with content coupling, but content coupling has some additional headaches that
+make it problematic enough that some people refer to it as pathological coupling.
+When you allow an outside party to directly access your database, the database in
+effect becomes part of that external contract, albeit one where you cannot easily rea‐
+son about what can or cannot be changed. You’ve lost the ability to define what is
+shared (and therefore cannot be changed easily) and what is hidden. Information
+hiding has gone out of the window.
+In short, avoid content coupling.
+Just Enough Domain-Driven Design
+As I introduced in Chapter 1, the primary mechanism we use for finding microser‐
+vice boundaries is around the domain itself, making use of domain-driven design
+(DDD) to help create a model of our domain. Let’s now extend our understanding of
+how DDD works in the context of microservices.
+The desire to have our programs better represent the real world in which they will
+operate is not new. Object-oriented programming languages like Simula were devel‐
+oped to allow us to model real domains. But it takes more than program language
+capabilities for this idea to really take shape.
+Eric Evans’s Domain-Driven Design11 presented a series of important ideas that hel‐
+ped us better represent the problem domain in our programs. A full exploration of
+Just Enough Domain-Driven Design 
+| 
+51

@@ -1,0 +1,43 @@
+212
+CHAPTER 6
+Developing business logic with event sourcing
+Order aggregate and persists it in the event store. The event store publishes the Order-
+Created event, which is consumed by the event handler. The event handler invokes
+the Eventuate Tram saga framework to create a CreateOrderSaga.
+One issue to keep in mind when writing an event handler that creates a saga orches-
+trator is that it must handle duplicate events. At-least-once message delivery means
+that the event handler that creates the saga might be invoked multiple times. It’s
+important to ensure that only one saga instance is created.
+ A straightforward approach is to derive the ID of the saga from a unique attribute
+of the event. There are a couple of different options. One is to use the ID of the aggre-
+gate that emits the event as the ID of the saga. This works well for sagas that are cre-
+ated in response to aggregate creation events.
+ Another option is to use the event ID as the saga ID. Because event IDs are unique,
+this will guarantee that the saga ID is unique. If an event is a duplicate, the event han-
+dler’s attempt to create the saga will fail because the ID already exists. This option is
+useful when multiple instances of the same saga can exist for a given aggregate
+instance.
+ A service that uses an RDBMS-based event store can also use the same event-driven
+approach to create sagas. A benefit of this approach is that it promotes loose coupling
+because services such as OrderService no longer explicitly instantiate sagas.
+ Now that we’ve looked at how to reliably create a saga orchestrator, let’s see how
+event sourcing-based services can participate in orchestration-based sagas. 
+Create a CreateOrderSaga
+in response to an
+OrderCreated event.
+Persist an
+OrderCreated
+event.
+OrderCreated
+OrderCreated
+Order
+OrderCreated
+EventHandler
+CreateOrderSaga
+Event store
+Persisted as
+Order Service
+Figure 6.11
+Using an event handler to reliably create a saga after a service creates an event 
+sourcing-based aggregate
+ 

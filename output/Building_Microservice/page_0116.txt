@@ -1,0 +1,40 @@
+Performance
+The performance of an in-process call is fundamentally different from that of an
+inter-process call. When I make an in-process call, the underlying compiler and run‐
+time can carry out a whole host of optimizations to reduce the impact of the call,
+including inlining the invocation so it’s as though there was never a call in the first
+place. No such optimizations are possible with inter-process calls. Packets have to be
+sent. Expect the overhead of an inter-process call to be significant compared to the
+overhead of an in-process call. The former is very measurable—just round-tripping a
+single packet in a data center is measured in milliseconds—whereas the overhead of
+making a method call is something you don’t need to worry about.
+This can often lead you to want to rethink APIs. An API that makes sense in-process
+may not make sense in inter-process situations. I can make one thousand calls across
+an API boundary in-process without concern. Do I want to make one thousand net‐
+work calls between two microservices? Perhaps not.
+When I pass a parameter into a method, the data structure I pass in typically doesn’t
+move—what’s more likely is that I pass around a pointer to a memory location. Pass‐
+ing in an object or data structure to another method doesn’t necessitate more mem‐
+ory being allocated in order to copy the data.
+When making calls between microservices over a network, on the other hand, the
+data actually has to be serialized into some form that can be transmitted over a net‐
+work. The data then needs to be sent and deserialized at the other end. We therefore
+may need to be more mindful about the size of payloads being sent between pro‐
+cesses. When was the last time you were aware of the size of a data structure that you
+were passing around inside a process? The reality is that you likely didn’t need to
+know; now you do. This might lead you to reduce the amount of data being sent or
+received (perhaps not a bad thing if we think about information hiding), pick more
+efficient serialization mechanisms, or even offload data to a filesystem and pass
+around a reference to that file location instead.
+These differences may not cause you issues straight away, but you certainly need to
+be aware of them. I’ve seen a lot of attempts to hide from the developer the fact that a
+network call is even taking place. Our desire to create abstractions to hide detail is a
+big part of what allows us to do more things more efficiently, but sometimes we cre‐
+ate abstractions that hide too much. A developer needs to be aware if they are doing
+something that will result in a network call; otherwise, you should not be surprised if
+you end up with some nasty performance bottlenecks further down the line caused
+by odd inter-service interactions that weren’t visible to the developer writing the
+code.
+90 
+| 
+Chapter 4: Microservice Communication Styles

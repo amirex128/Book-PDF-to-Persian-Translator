@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 510</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4><strong>BFFs</strong> و استفاده مجدد از کد</h4>
+
+  <p>همانطور که قبلاً گفتم، من در مورد کد تکراری در <strong>microservices</strong> نسبتاً آرام هستم. که یعنی، در حالی که در یک مرز <strong>microservice</strong> واحد، معمولاً هر کاری را که می‌توانم برای <em>refactor</em> کردن تکرار در انتزاع‌های مناسب انجام می‌دهم، همان واکنش را در مواجهه با تکرار در سراسر <strong>microservices</strong> ندارم. این بیشتر به این دلیل است که من اغلب بیشتر در مورد پتانسیل استخراج کد مشترک برای ایجاد اتصال تنگاتنگ بین سرویس‌ها نگران هستم (موضوعی که ما در "<em>DRY</em> و خطرات استفاده مجدد از کد در دنیای <strong>Microservice</strong>" در صفحه 154 بررسی کردیم). با این حال، مطمئناً مواردی وجود دارد که این موضوع موجه است.</p>
+
+  <p>وقتی زمان آن فرا می‌رسد که کد مشترک را برای فعال کردن استفاده مجدد بین <strong>BFFs</strong> استخراج کنیم، دو گزینه آشکار وجود دارد. اولین گزینه، که اغلب ارزان‌تر است اما با مشکلات بیشتری همراه است، استخراج نوعی کتابخانه مشترک است. دلیل اینکه این می‌تواند مشکل‌ساز باشد این است که کتابخانه‌های مشترک منبع اصلی <strong>coupling</strong> هستند، به خصوص زمانی که برای تولید کتابخانه‌های <strong>client</strong> برای فراخوانی سرویس‌های پایین‌دستی استفاده می‌شوند. با این وجود، موقعیت‌هایی وجود دارد که این کار درست به نظر می‌رسد—به‌ویژه زمانی که کدی که انتزاع می‌شود، صرفاً یک نگرانی در داخل سرویس است.</p>
+
+  <p>گزینه دیگر این است که عملکرد مشترک را در یک <strong>microservice</strong> جدید استخراج کنید. اگر عملکرد استخراج شده، عملکرد دامنه کسب‌وکار را نشان دهد، این می‌تواند به خوبی کار کند. یک تغییر در این رویکرد ممکن است این باشد که مسئولیت‌های تجمیع را به <strong>microservices</strong> بیشتر در پایین‌دست فشار دهید. بیایید موقعیتی را در نظر بگیریم که در آن ما می‌خواهیم لیستی از اقلام موجود در لیست آرزوهای مشتری را، همراه با اطلاعاتی در مورد اینکه آیا آن اقلام موجود هستند یا خیر و قیمت فعلی، نمایش دهیم، همانطور که در جدول 14-1 نشان داده شده است.</p>
+
+  <p>جدول 14-1. نمایش لیست آرزوها برای مشتری MusicCorp</p>
+
+  <p><em>The Brakes</em>, <em>Give Blood</em></p>
+  <p>موجود است!</p>
+  <p>$5.99</p>
+  <p><em>Blue Juice</em>, <em>Retrospectable</em></p>
+  <p>موجود نیست</p>
+  <p>$7.50</p>
+  <p><em>Hot Chip</em>, <em>Why Make Sense?</em></p>
+  <p>سریع تمام می‌شود! (2 باقی مانده) $9.99</p>
+
+  <p><strong>microservice</strong> مشتری اطلاعاتی در مورد لیست آرزوها و شناسه هر مورد ذخیره می‌کند. <strong>microservice</strong> کاتالوگ نام و قیمت هر مورد را ذخیره می‌کند، و سطوح موجودی در <strong>microservice</strong> موجودی ما ذخیره می‌شود. برای نمایش این کنترل یکسان در هر دو برنامه <em>iOS</em> و <em>Android</em>، هر <strong>BFF</strong> باید همان سه تماس را با <strong>microservices</strong> پشتیبان برقرار کند، همانطور که در شکل 14-14 نشان داده شده است.</p>
+
+  <p>484 | فصل 14: رابط‌های کاربری</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

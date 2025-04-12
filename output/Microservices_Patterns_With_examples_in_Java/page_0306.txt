@@ -1,0 +1,48 @@
+276
+CHAPTER 8
+External API patterns
+@Bean
+public OrderHandlers orderHandlers(OrderService orderService,
+KitchenService kitchenService,
+DeliveryService deliveryService,
+AccountingService accountingService) {
+return new OrderHandlers(orderService, kitchenService,
+      
+deliveryService, accountingService);
+}
+}
+OrderDestinations, shown in the following listing, is a Spring @Configuration-
+Properties class that enables the externalized configuration of backend service URLs.
+@ConfigurationProperties(prefix = "order.destinations")
+public class OrderDestinations {
+@NotNull
+public String orderServiceUrl;
+public String getOrderServiceUrl() {
+return orderServiceUrl;
+}
+public void setOrderServiceUrl(String orderServiceUrl) {
+this.orderServiceUrl = orderServiceUrl;
+}
+...
+}
+You can, for example, specify the URL of the Order Service either as the order
+.destinations.orderServiceUrl property in a properties file or as an operating sys-
+tem environment variable, ORDER_DESTINATIONS_ORDER_SERVICE_URL. 
+THE ORDERHANDLERS CLASS
+The OrderHandlers class, shown in the following listing, defines the request handler
+methods that implement custom behavior, including API composition. The getOrder-
+Details() method, for example, performs API composition to retrieve information
+about an order. This class is injected with several proxy classes that make requests to
+backend services.
+public class OrderHandlers {
+private OrderService orderService;
+private KitchenService kitchenService;
+private DeliveryService deliveryService;
+private AccountingService accountingService;
+Listing 8.3
+The externalized configuration of backend service URLs
+Listing 8.4
+The OrderHandlers class implements custom request-handling logic.
+The @Bean, which implements the
+custom request-handling logic
+ 

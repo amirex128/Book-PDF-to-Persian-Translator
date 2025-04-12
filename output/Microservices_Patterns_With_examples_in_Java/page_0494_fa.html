@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 494</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <h3><strong>DECIDING WHICH DATA TO MIGRATE TO DELIVERY SERVICE</strong></h3>
+  <p>
+   اکنون که ما entitiesها و fieldsهایی را شناسایی کردیم که در delivery manage-
+   ment شرکت دارند، گام بعدی این است که تصمیم بگیریم کدام یک از آنها را باید به service منتقل کنیم. در یک
+   سناریوی ایده‌آل، dataای که توسط service دسترسی دارد، منحصراً توسط service استفاده می‌شود، بنابراین ما
+   می‌توانیم به سادگی آن data را به service منتقل کرده و کار را تمام کنیم. متاسفانه، این به ندرت ساده است،
+   و این وضعیت نیز از این قاعده مستثنی نیست. تمام entitiesها و fieldsهایی که توسط delivery man-
+   agement استفاده می‌شوند، همچنین توسط functionalityهای دیگری که توسط monolith پیاده‌سازی شده‌اند، استفاده می‌شوند.
+  </p>
+  <p>
+   در نتیجه، هنگام تعیین اینکه چه dataای را به service منتقل کنیم، ما نیاز داریم که دو مسئله را در نظر داشته باشیم.
+   اولین مورد این است: چگونه service به dataای دسترسی دارد که در
+   monolith باقی می‌ماند؟ دومی این است: چگونه monolith به dataای دسترسی دارد که به
+   service منتقل شده است؟ همچنین، همانطور که قبلاً در بخش 13.3 توضیح داده شد، ما نیاز داریم که با دقت
+   در نظر بگیریم که چگونه data consistency را بین service و monolith حفظ کنیم.
+  </p>
+  <p>
+   مسئولیت اساسی Delivery Service، مدیریت courier plansها و
+   آپدیت کردن fieldsهای scheduledPickupTime Order’s و scheduledDeliveryTime است. این
+   بنابراین، منطقی است که آن fieldsها را داشته باشد. ما همچنین می‌توانیم Cou-
+   rier.location و Courier.availability fieldsها را به Delivery Service منتقل کنیم. اما چون
+   ما در تلاش هستیم که کوچک‌ترین تغییر ممکن را ایجاد کنیم، ما این fieldsها را در mono-
+   lith برای حالا رها می‌کنیم.
+  </p>
+  <h3><strong>THE DESIGN OF THE DELIVERY SERVICE DOMAIN LOGIC</strong></h3>
+  <p>
+   شکل 13.19، طراحی domain model Delivery Service را نشان می‌دهد. هسته
+   service شامل domain classesهایی مانند Delivery و Courier است. the Delivery-
+   ServiceImpl class، نقطه ورود به business logic delivery management است. این،
+   interfacesهای DeliveryService و CourierService را پیاده‌سازی می‌کند، که توسط
+   DeliveryServiceEventsHandler و DeliveryServiceNotificationsHandlers،
+   که بعداً در این بخش توضیح داده شده‌اند، فراخوانی می‌شوند.
+  </p>
+  <p>
+   The delivery management business logic، عمدتاً کدی است که از monolith کپی شده است.
+   <br/>
+   به عنوان مثال، ما Order entity را از monolith به Delivery Service کپی می‌کنیم،
+   آن را به Delivery تغییر نام می‌دهیم، و تمام fieldsها را به جز مواردی که توسط delivery manage-
+   ment استفاده می‌شوند، حذف می‌کنیم. ما همچنین entity Courier را کپی کرده و اکثر fieldsهای آن را حذف می‌کنیم. به منظور
+   توسعه domain logic برای Delivery Service، ما نیاز خواهیم داشت که کد را از
+   monolith جدا کنیم. ما نیاز خواهیم داشت که وابستگی‌های متعددی را بشکنیم، که احتمالاً
+   وقت‌گیر است. یک بار دیگر، refactor کردن کد با استفاده از یک زبان statically
+   typed، بسیار آسان‌تر است، زیرا compiler، دوست شما خواهد بود.
+  </p>
+  <p>
+   Delivery Service یک service مستقل نیست. بیایید به طراحی inte-
+   gration glue نگاهی بیندازیم که Delivery Service و FTGO monolith را قادر می‌سازد که با هم همکاری کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

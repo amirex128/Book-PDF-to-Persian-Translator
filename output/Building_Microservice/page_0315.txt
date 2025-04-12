@@ -1,0 +1,40 @@
+challenges. Fundamentally, it’s problematic to have a team own responsibility for
+tests where people from a different team can cause these tests to break.
+Sometimes organizations react by having a dedicated team write these tests. This can
+be disastrous. The team developing the software becomes increasingly distant from
+the tests for its code. Cycle times increase, as service owners end up waiting for the
+test team to write end-to-end tests for the functionality it just wrote. Because another
+team writes these tests, the team that wrote the service is less involved with, and
+therefore less likely to know, how to run and fix these tests. Although it is unfortu‐
+nately still a common organizational pattern, I see significant harm done whenever a
+team is distanced from writing tests for the code it wrote in the first place.
+Getting this aspect right is really hard. We don’t want to duplicate effort, nor do we
+want to completely centralize this to the extent that the teams building services are
+too far removed from things. If you can find a clean way to assign end-to-end tests to
+a specific team, then do it. If not, and if you can’t find a way to remove end-to-end
+tests and replace them with something else, then you’ll likely need to treat the end-to-
+end test suite as a shared codebase, but with joint ownership. Teams are free to check
+in to this suite, but ownership of the health of the suite has to be shared between the
+teams developing the services themselves. If you want to make extensive use of end-
+to-end tests with multiple teams, I think this approach is essential, and yet I have seen
+it done only rarely, and never without issues. Ultimately, I am convinced that at a
+certain level of organizational scale, you need to move away from cross-team end-to-
+end tests for this reason.
+How Long Should End-to-End Tests Run?
+These end-to-end tests can take a while. I have seen them take up to a day to run, if
+not longer, and on one project I worked on, a full regression suite took six weeks! I
+rarely see teams actually curate their end-to-end test suites to reduce overlap in test
+coverage, or spend enough time in making them fast.
+This slowness, combined with the fact that these tests can often be flaky, can be a
+major problem. A test suite that takes all day and often has breakages that have noth‐
+ing to do with broken functionality is a disaster. Even if your functionality is broken,
+it could take you many hours to find out—at which point you likely would have
+already moved on to other activities, and the context switch in shifting your brain
+back to fix the issue would be painful.
+We can ameliorate some of this by running tests in parallel—for example, making use
+of tools like Selenium Grid. However, this approach is not a substitute for actually
+understanding what needs to be tested and actively removing tests that are no longer
+needed.
+Implementing (Those Tricky) End-to-End Tests 
+| 
+289

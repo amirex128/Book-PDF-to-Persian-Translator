@@ -1,0 +1,40 @@
+1 Kief Morris, Infrastructure as Code, 2nd edition (Sebastopol: O’Reilly, 2020).
+configuration can be version controlled, tested, and repeated at will. For more on this
+topic, I recommend Infrastructure as Code, 2nd edition, by Kief Morris.1
+Theoretically, you could use any programming language to apply the ideas of infra‐
+structure as code, but there are specialist tools in this area such as Puppet, Chef, Ansi‐
+ble, and others, all of which took their lead from the earlier CFEngine. These tools are
+declarative—they allow you to define in textual form what you expect a machine (or
+other set of resources) to look like, and when these scripts are applied, the infrastruc‐
+ture is brought into that state. More recent tools have gone beyond looking at config‐
+uring a machine and moved into looking at how to configure entire sets of cloud
+resources—Terraform has been very successful in this space, and I’m excited to see
+the potential of Pulumi, which is aiming to do something similar, albeit by allowing
+people to use normal programming languages rather than the domain-specific lan‐
+guages that often get used by these tools. AWS CloudFormation and the AWS Cloud
+Development Kit (CDK) are examples of platform-specific tools, in this case support‐
+ing only AWS—although it’s worth noting that even if I was working only with AWS,
+I’d prefer the flexibility of a cross-platform tool like Terraform.
+Version controlling your infrastructure code gives you transparency over who has
+made changes, something that auditors love. It also makes it easier to reproduce an
+environment at a given point in time. This is something that can be especially useful
+when trying to track down defects. In one memorable example, one of my clients, as
+part of a court case, had to re-create an entire running system as of a specific time
+some years before, down to the patch levels of the operating systems and the contents
+of message brokers. If the environment configuration had been stored in version con‐
+trol, their job would have been much easier—as it was, they ended up spending over
+three months painstakingly trying to rebuild a mirror image of an earlier production
+environment by wading through emails and release notes to try and work out what
+was done by whom. The court case, which had already been going for a long period
+of time, was still not resolved by the time I ended my work with the client.
+Zero-Downtime Deployment
+As you are probably sick and tired of hearing me say, independent deployability is
+really important. It is, however, also not an absolute quality. How independent is
+something exactly? Before this chapter, we’d primarily looked at independent deploy‐
+ability in terms of avoiding implementation coupling. Earlier in this chapter, we
+spoke about the importance of providing a microservice instance with an isolated
+execution environment, to ensure it has a degree of independence at the physical
+deployment level. But we can go further.
+Principles of Microservice Deployment 
+| 
+233

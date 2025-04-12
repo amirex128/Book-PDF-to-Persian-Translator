@@ -1,0 +1,40 @@
+You could store the Pact file in your CI/CD tool’s artifact repository, or else you
+could use the Pact Broker, which allows you to store multiple versions of your Pact
+specifications. This could let you run your consumer-driven contract tests against
+multiple different versions of the consumers, if you wanted to test against, say, the
+version of the consumer in production and the version of the consumer that was
+most recently built.
+The Pact Broker actually has a host of useful capabilities. Aside from acting as a place
+where contracts can be stored, you can also find out when those contracts were vali‐
+dated. Also, because the Pact Broker knows about the relationship between the con‐
+sumer and producer, it’s able to show you which microservices depend on which
+other microservices.
+Other options
+Pact isn’t the only option for tooling around consumer-driven contracts. Spring
+Cloud Contract is one such example. However, it’s worth noting that—unlike Pact,
+which was designed from the beginning to support different technology stacks—
+Spring Cloud Contract is really only useful in a pure JVM ecosystem.
+It’s about conversations
+In Agile, stories are often referred to as a placeholder for a conversation. CDCs are
+just like that. They become the codification of a set of discussions about what a ser‐
+vice API should look like, and when they break, they become a trigger point to have
+conversations about how that API should evolve.
+It is important to understand that CDCs require good communication and trust
+between the consumer and producing service. If both parties are in the same team (or
+are the same person!), then this shouldn’t be hard. However, if you are consuming a
+service provided with a third party, you may not have the frequency of communica‐
+tion, or trust, to make CDCs work. In these situations, you may have to make do with
+limited larger-scoped integration tests just around the untrusted component. Alter‐
+natively, if you are creating an API for thousands of potential consumers, such as
+with a publicly available web service API, you may have to play the role of the con‐
+sumer yourself (or perhaps work with a subset of your consumers) in defining these
+tests. Breaking huge numbers of external consumers is a pretty bad idea, so if any‐
+thing the importance of CDCs is increased!
+The Final Word
+As outlined in detail earlier in the chapter, end-to-end tests have a large number of
+disadvantages that grow significantly as you add more moving parts under test. From
+speaking to people who have been implementing microservices at scale for a while
+now, I have learned that most of them over time remove the need entirely for end-to-
+Should You Avoid End-to-End Tests? 
+| 
+295

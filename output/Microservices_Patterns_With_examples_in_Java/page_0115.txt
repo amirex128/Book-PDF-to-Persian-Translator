@@ -1,0 +1,37 @@
+85
+Communicating using the Asynchronous messaging pattern
+The key benefit of platform-provided service discovery is that all aspects of service dis-
+covery are entirely handled by the deployment platform. Neither the services nor the
+clients contain any service discovery code. Consequently, the service discovery mecha-
+nism is readily available to all services and clients regardless of which language or
+framework they’re written in.
+ One drawback of platform-provided service discovery is that it only supports the
+discovery of services that have been deployed using the platform. For example, as
+mentioned earlier when describing application-level discovery, Kubernetes-based dis-
+covery only works for services running on Kubernetes. Despite this limitation, I rec-
+ommend using platform-provided service discovery whenever possible.
+ Now that we’ve looked at synchronous IPC using REST or gRPC, let’s take a look at
+the alternative: asynchronous, message-based communication. 
+3.3
+Communicating using the Asynchronous messaging 
+pattern
+When using messaging, services communicate by asynchronously exchanging mes-
+sages. A messaging-based application typically uses a message broker, which acts as an
+intermediary between the services, although another option is to use a brokerless
+architecture, where the services communicate directly with each other. A service client
+makes a request to a service by sending it a message. If the service instance is expected
+to reply, it will do so by sending a separate message back to the client. Because the
+communication is asynchronous, the client doesn’t block waiting for a reply. Instead,
+the client is written assuming that the reply won’t be received immediately.
+I start this section with an overview of messaging. I show how to describe a messaging
+architecture independently of messaging technology. Next I compare and contrast
+Pattern: 3rd party registration
+Service instances are automatically registered with the service registry by a third party.
+See http://microservices.io/patterns/3rd-party-registration.html.
+Pattern: Server-side discovery
+A client makes a request to a router, which is responsible for service discovery. See
+http://microservices.io/patterns/server-side-discovery.html.
+Pattern: Messaging
+A client invokes a service using asynchronous messaging. See http://microservices
+.io/patterns/communication-style/messaging.html.
+ 

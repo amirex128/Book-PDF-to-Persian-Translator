@@ -1,0 +1,28 @@
+4 Michael T. Nygard, Release It! Design and Deploy Production-Ready Software, 2nd ed. (Raleigh: Pragmatic
+Bookshelf, 2018).
+You will likely need to have a delay before retrying. If the initial time-out or error was
+caused by the fact that the downstream microservice was under load, then bombard‐
+ing it with additional requests may well be a bad idea.
+If you are going to retry, you need to take this into account when considering your
+time-out threshold. If the time-out threshold for a downstream call is set to 500 ms,
+but you allow up to three retries with one second between each retry, then you could
+end up waiting for up to 3.5 seconds before giving up. As mentioned earlier, having a
+budget for how long an operation is allowed to take can be a useful idea—you might
+not decide to do the third (or even second) retry if you’ve already exceeded the over‐
+all time-out budget. On the other hand, if this is happening as part of a non-user-
+facing operation, waiting longer to get something done might be totally acceptable.
+Bulkheads
+In Release It!,4 Michael Nygard introduces the concept of a bulkhead as a way to iso‐
+late yourself from failure. In shipping, a bulkhead is a part of the ship that can be
+sealed off to protect the rest of the ship. So if the ship springs a leak, you can close the
+bulkhead doors. You lose part of the ship, but the rest of it remains intact.
+In software architecture terms, there are lots of different bulkheads we can consider.
+Returning to my own experience with AdvertCorp, we actually missed the chance to
+implement a bulkhead with regard to the downstream calls. We should have used dif‐
+ferent connection pools for each downstream connection. That way, if one connec‐
+tion pool got exhausted, the other connections wouldn’t be impacted, as we see in
+Figure 12-4.
+Figure 12-4. Using a connection pool per downstream service to provide bulkheads
+400 
+| 
+Chapter 12: Resiliency

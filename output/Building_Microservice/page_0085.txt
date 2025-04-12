@@ -1,0 +1,26 @@
+decompose a service into smaller parts is arguably an implementation decision, so we
+might as well hide it if we can. In Figure 2-16 we see an example of this. We’ve split
+Warehouse down into Inventory and Shipping. As far as the outside world is con‐
+cerned, there is still just the Warehouse microservice. Internally though, we’ve further
+decomposed things to allow Inventory to manage Stock Items and have Shipping
+manage Shipments. Remember, we want to keep the ownership of a single aggregate
+inside a single microservice.
+Figure 2-16. The Warehouse service internally has been split into Inventory and Ship
+ping microservices
+This is another form of information hiding—we’ve hidden a decision about internal
+implementation in such a way that if this implementation detail changes again in the
+future, our consumers will be unaware.
+Another reason to prefer the nested approach could be to chunk up your architecture
+to simplify testing. For example, when testing services that consume the warehouse, I
+don’t have to stub each service inside the warehouse context—just the more coarse-
+grained API. This can also give you a unit of isolation when considering larger-
+scoped tests. I may, for example, decide to have end-to-end tests in which I launch all
+services inside the warehouse context, but for all other collaborators I might stub
+them out. We’ll explore more about testing and isolation in Chapter 9.
+Event Storming
+Event storming, a technique developed by Alberto Brandolini, is a collaborative brain‐
+storming exercise designed to help surface a domain model. Rather than having an
+architect sit in a corner and come up with their own representation of what the
+Just Enough Domain-Driven Design 
+| 
+59

@@ -1,0 +1,51 @@
+446
+CHAPTER 13
+Refactoring to microservices
+ An alternative approach is for the data consumer to maintain a replica of the data,
+as shown in figure 13.10. The replica is essentially a CQRS view. The data consumer
+keeps the replica up-to-date by subscribing to domain events published by the data
+provider.
+Using a replica has several benefits. It avoids the overhead of repeatedly querying the
+data provider. Instead, as discussed when describing CQRS in chapter 7, you can
+design the replica to support efficient queries. One drawback of using a replica,
+though, is the complexity of maintaining it. A potential challenge, as described later
+in this section, is the need to modify the monolith to publish domain events.
+ Now that we’ve discussed how to do queries, let’s consider how to do updates. One
+challenge with performing updates is the need to maintain data consistency across the
+service and monolith. The party making the update request (the requestor) has
+updated or needs to update its database. So it’s essential that both updates happen.
+The solution is for the service and monolith to communicate using transactional mes-
+saging implemented by a framework, such as Eventuate Tram. In simple scenarios, the
+requestor can send a notification message or publish an event to trigger an update. In
+more complex scenarios, the requestor must use a saga to maintain data consistency.
+Section 13.3.2 discusses the implications of using sagas. 
+IMPLEMENTING AN ANTI-CORRUPTION LAYER
+Imagine you’re implementing a new feature as a brand new service. You’re not con-
+strained by the monolith’s code base, so you can use modern development techniques
+Delayed
+Delivery Service
+FTGO
+monolith
+Monolith
+database
+Service
+database
+Event
+publisher
+Customer event channel
+Customer
+domain
+event
+Event
+subscriber
+Database
+adapter
+Customer
+ContactInfo
+Repository
+query()
+update()
+Figure 13.10
+The integration glue replicates data from the monolith to the service. The monolith publishes 
+domain events, and an event handler implemented by the service updates the service’s database.
+ 

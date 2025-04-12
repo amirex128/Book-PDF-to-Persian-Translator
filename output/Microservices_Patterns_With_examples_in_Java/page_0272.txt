@@ -1,0 +1,47 @@
+242
+CHAPTER 7
+Implementing queries in a microservice architecture
+side module’s event handlers process all the events, and eventually the view will be
+up-to-date. Similarly, updating an existing view is also conceptually simple: you change
+the event handlers and rebuild the view from scratch. The problem, however, is that
+this approach is unlikely to work in practice. Let’s look at the issues.
+BUILD CQRS VIEWS USING ARCHIVED EVENTS
+One problem is that message brokers can’t store messages indefinitely. Traditional
+message brokers such as RabbitMQ delete a message once it’s been processed by a
+consumer. Even more modern brokers such as Apache Kafka, that retain messages for
+a configurable retention period, aren’t intended to store events indefinitely. As a
+result, a view can’t be built by only reading all the needed events from the message
+broker. Instead, an application must also read older events that have been archived in,
+for example, AWS S3. You can do this by using a scalable big data technology such as
+Apache Spark. 
+BUILD CQRS VIEWS INCREMENTALLY
+Another problem with view creation is that the time and resources required to process
+all events keep growing over time. Eventually, view creation will become too slow and
+expensive. The solution is to use a two-step incremental algorithm. The first step peri-
+odically computes a snapshot of each aggregate instance based on its previous snap-
+shot and events that have occurred since that snapshot was created. The second step
+creates a view using the snapshots and any subsequent events. 
+7.4
+Implementing a CQRS view with AWS DynamoDB
+Now that we’ve looked at the various design issues you must address when using
+CQRS, let’s consider an example. This section describes how to implement a CQRS
+view for the findOrderHistory() operation using DynamoDB. AWS DynamoDB is
+a scalable, NoSQL database that’s available as a service on the Amazon cloud. The
+DynamoDB data model consists of tables that contain items that, like JSON objects,
+are collections of hierarchical name-value pairs. AWS DynamoDB is a fully man-
+aged database, and you can scale the throughput capacity of a table up and down
+dynamically.
+ The CQRS view for the findOrderHistory() consumes events from multiple ser-
+vices, so it’s implemented as a standalone Order View Service. The service has an API
+that implements two operations: findOrderHistory() and findOrder(). Even though
+findOrder() can be implemented using API composition, this view provides this oper-
+ation for free. Figure 7.12 shows the design of the service. Order History Service is
+structured as a set of modules, each of which implements a particular responsibility
+in order to simplify development and testing. The responsibility of each module is
+as follows:
+
+OrderHistoryEventHandlers—Subscribes to events published by the various
+services and invokes the OrderHistoryDAO
+
+OrderHistoryQuery APImodule—Implements the REST endpoints described earlier
+ 

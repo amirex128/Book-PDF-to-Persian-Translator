@@ -1,0 +1,51 @@
+172
+CHAPTER 5
+Designing business logic in a microservice architecture
+public class KitchenService {
+@Autowired
+private TicketRepository ticketRepository;
+@Autowired
+private TicketDomainEventPublisher domainEventPublisher;
+public void accept(long ticketId, ZonedDateTime readyBy) {
+Ticket ticket =
+ticketRepository.findById(ticketId)
+.orElseThrow(() ->
+new TicketNotFoundException(ticketId));
+List<TicketDomainEvent> events = ticket.accept(readyBy);
+domainEventPublisher.publish(ticket, events);          
+}
+}
+The accept() method is invoked when the restaurant accepts a new order. It has two
+parameters:
+
+orderId—ID of the order to accept
+
+readyBy—Estimated time when the order will be ready for pickup
+This method retrieves the Ticket aggregate and calls its accept() method. It pub-
+lishes any generated events.
+ Now let’s look at the class that handles asynchronous commands. 
+THE KITCHENSERVICECOMMANDHANDLER CLASS
+The KitchenServiceCommandHandler class is an adapter that’s responsible for handling
+command messages sent by the various sagas implemented by Order Service. This class
+defines a handler method for each command, which invokes KitchenService to create
+or update a Ticket. The following listing shows an excerpt of this class.
+public class KitchenServiceCommandHandler {
+@Autowired
+private KitchenService kitchenService;
+ public CommandHandlers commandHandlers() {
+  
+return CommandHandlersBuilder
+.fromChannel("orderService")
+.onMessage(CreateTicket.class, this::createTicket)
+.onMessage(ConfirmCreateTicket.class,
+this::confirmCreateTicket)
+Listing 5.12
+The service’s accept() method updates Ticket
+Listing 5.13
+Handling command messages sent by sagas
+Publish 
+domain 
+events
+Maps  command messages 
+to message handlers
+ 

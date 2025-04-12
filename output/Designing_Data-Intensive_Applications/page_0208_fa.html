@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 208</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        The first write wins (discarding concurrent writes)
+        One approach for achieving eventual convergence این است که اعلام کنیم که هر replica فقط نیاز دارد که most “recent” value را ذخیره کند و به values “older” اجازه داده شود که overwrite و dis‐carded شوند. سپس، تا زمانی که ما به نوعی می‌توانیم به طور unambiguous تعیین کنیم که کدام write more “recent” است و هر write در نهایت به هر replica کپی می‌شود، the repli‐cas در نهایت به same value همگرا خواهند شد.
+    </p>
+    <p>
+        As indicated by the quotes around “recent,” این ایده در واقع کاملاً گمراه‌کننده است. در مثال شکل 5-12، هیچ یک از clients در مورد دیگری نمی‌دانستند، هنگامی که request writes خود را به database nodes ارسال می‌کردند، بنابراین مشخص نیست که کدام یک اول رخ داده است. در واقع، این واقعاً منطقی نیست که بگوییم که هر یک "first" رخ داده‌اند: ما می‌گوییم که writes concurrent هستند، بنابراین order آن‌ها تعریف نشده است.
+    </p>
+    <p>
+        Even though the writes don’t have a natural ordering، ما می‌توانیم یک order دلخواه را بر روی آن‌ها اعمال کنیم. به عنوان مثال، ما می‌توانیم یک timestamp را به هر write متصل کنیم، بزرگترین timestamp را به عنوان most “recent” انتخاب کنیم و هر writes را با یک timestamp earlier دور بریزیم.
+        این الگوریتم conflict resolution، last write wins (LWW) نامیده می‌شود، تنها method conflict resolution است که در Cassandra پشتیبانی می‌شود [53] و یک feature optional در Riak است [35].
+    </p>
+    <p>
+        LWW به هدف eventual convergence دست می‌یابد، اما به قیمت durability: اگر چندین concurrent writes به یک key یکسان وجود داشته باشد، حتی اگر همه آن‌ها به client موفقیت‌آمیز گزارش شده باشند (زیرا به w replicas نوشته شده‌اند)، فقط یکی از writes زنده می‌ماند و بقیه به طور silent discarded می‌شوند. علاوه بر این، LWW ممکن است حتی writes که concurrent نیستند را رها کند، همانطور که در "Timestamps for ordering events" در صفحه 291 بحث خواهیم کرد.
+    </p>
+    <p>
+        برخی از شرایط، مانند caching، که در آن‌ها writes lost شاید قابل قبول باشند. اگر از دست دادن data قابل قبول نباشد، LWW یک انتخاب ضعیف برای conflict resolution است.
+    </p>
+    <p>
+        The only safe way از استفاده از یک database با LWW این است که اطمینان حاصل شود که یک key فقط یک بار نوشته شده است و پس از آن به عنوان immutable رفتار می‌شود، بنابراین از هرگونه updates concurrent به همان key اجتناب می‌شود. به عنوان مثال، یک روش توصیه شده برای استفاده از Cassandra این است که از یک UUID به عنوان key استفاده کنید، بنابراین به هر عملیات write یک key یکتا می‌دهید [53].
+    </p>
+    <h4>The “happens-before” relationship and concurrency</h4>
+    <p>
+        How do we decide whether two operations are concurrent or not? To develop an intuition, let’s look at some examples:
+    </p>
+    <ul>
+        <li>In Figure 5-9، دو writes concurrent نیستند: insert از A قبل از increment از B اتفاق می‌افتد، زیرا the value که توسط B افزایش یافته است، value است که توسط A درج شده است. به عبارت دیگر، operation از B بر روی operation از A ساخته شده است، بنابراین operation از B باید later اتفاق افتاده باشد. ما همچنین می‌گوییم که B causally dependent بر A است.</li>
+    </ul>
+    <p>
+        186 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+267
+The API gateway pattern
+8.2.2
+Benefits and drawbacks of an API gateway
+As you might expect, the API gateway pattern has both benefits and drawbacks.
+BENEFITS OF AN API GATEWAY
+A major benefit of using an API gateway is that it encapsulates internal structure of the
+application. Rather than having to invoke specific services, clients talk to the gateway.
+The API gateway provides each client with a client-specific API, which reduces the
+number of round-trips between the client and application. It also simplifies the client
+code. 
+DRAWBACKS OF AN API GATEWAY
+The API gateway pattern also has some drawbacks. It is yet another highly available
+component that must be developed, deployed, and managed. There’s also a risk that
+the API gateway becomes a development bottleneck. Developers must update the API
+gateway in order to expose their services’s API. It’s important that the process for
+updating the API gateway be as lightweight as possible. Otherwise, developers will be
+forced to wait in line in order to update the gateway. Despite these drawbacks, though,
+for most real-world applications, it makes sense to use an API gateway. If necessary,
+you can use the Backends for frontends pattern to enable the teams to develop and
+deploy their APIs independently. 
+8.2.3
+Netflix as an example of an API gateway
+A great example of an API gateway is the Netflix API. The Netflix streaming service is
+available on hundreds of different kinds of devices including televisions, Blu-ray
+players, smartphones, and many more gadgets. Initially, Netflix attempted to have a
+one-size-fits-all style API for its streaming service (www.programmableweb.com/news/
+why-rest-keeps-me-night/2012/05/15). But the company soon discovered that didn’t
+work well because of the diverse range of devices and their different needs. Today,
+Netflix uses an API gateway that implements a separate API for each device. The client
+device team develops and owns the API implementation.
+ In the first version of the API gateway, each client team implemented their API
+using Groovy scripts that perform routing and API composition. Each script invoked
+one or more service APIs using Java client libraries provided by the service teams. On
+one hand, this works well, and client developers have written thousands of scripts. The
+Netflix API gateway handles billions of requests per day, and on average each API call
+fans out to six or seven backend services. On the other hand, Netflix has found this
+monolithic architecture to be somewhat cumbersome.
+ As a result, Netflix is now moving to an API gateway architecture similar to the
+Backends for frontends pattern. In this new architecture, client teams write API mod-
+ules using NodeJS. Each API module runs its own Docker container, but the scripts
+don’t invoke the services directly. Rather, they invoke a second “API gateway,” which
+exposes the service APIs using Netflix Falcor. Netflix Falcor is an API technology that
+does declarative, dynamic API composition and enables a client to invoke multiple
+ 

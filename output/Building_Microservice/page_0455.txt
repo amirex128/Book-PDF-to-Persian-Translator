@@ -1,0 +1,43 @@
+Getting the partition key right can be difficult. In Figure 13-5, we used a fairly simple
+partitioning scheme, where we partitioned workload based on the family name of the
+customer. Customers with a family name starting with A–M go to partition 1, and
+customers with a name that starts with N–Z go to partition 2. As I pointed out when I
+shared that example, this is not a good partitioning strategy. With data partitioning,
+we want even distribution of load. But we cannot expect even distribution with the
+scheme I have outlined. In China, for example, there historically have been a very
+small number of surnames, and even today there are reckoned to be fewer than 4,000.
+The most popular 100 surnames, which account for over 80% of the population, skew
+heavily toward those family names starting with N–Z in Mandarin. This is an exam‐
+ple of a scaling scheme that is unlikely to give even distribution of load, and across
+different countries and cultures could give wildly varying results.
+A more sensible alternative might be to partition based on a unique ID given to each
+customer when they signed up. This is much more likely to give us an even distribu‐
+tion of load and would also deal with the situation in which someone changes their
+name.
+Adding new partitions to an existing scheme can often be done without too much
+trouble. For example, adding a new node to a Cassandra ring doesn’t require any
+manual rebalancing of the data; instead, Cassandra has built-in support for dynami‐
+cally distributing data across the nodes. Kafka also makes it fairly easy to add new
+partitions after the fact, although messages already in a partition won’t move—but
+producers and consumers can be dynamically notified.
+Things get more tricky when you realize your partitioning scheme is just not fit for
+purpose, as in the case of our family name–based scheme outlined earlier. In that sit‐
+uation, you may have a painful road ahead. I remember chatting with a client many
+years ago who ended up having to take their main production system offline for three
+days to change the partitioning scheme for their main database.
+We can also hit an issue with queries. Looking up an individual record is easy, as I
+can just apply the hashing function to find which instance the data should be on and
+then retrieve it from the correct shard. But what about queries that span the data in
+multiple nodes—for example, finding all the customers who are over 18? If you want
+to query all shards, you need to either query each individual shard and join in mem‐
+ory or else have an alternative read store where both data sets are available. Often
+querying across shards is handled by an asynchronous mechanism, using cached
+results. Mongo uses map/reduce jobs, for example, to perform these queries.
+As you may have inferred from this brief overview, scaling databases for writes is
+where things get very tricky, and where the capabilities of the various databases really
+start to become differentiated. I often see people changing database technology when
+they start hitting limits on how easily they can scale their existing write volume.
+If this happens to you, buying a bigger box is often the quickest way to solve the
+The Four Axes of Scaling 
+| 
+429

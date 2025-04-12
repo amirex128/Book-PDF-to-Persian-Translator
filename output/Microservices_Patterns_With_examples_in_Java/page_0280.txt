@@ -1,0 +1,47 @@
+250
+CHAPTER 7
+Implementing queries in a microservice architecture
+The addOrder() method creates an UpdateSpec, which is part of the AWS SDK and
+describes the update operation. After creating the UpdateSpec, it calls idempotent-
+Update(), a helper method that performs the update after adding a condition expres-
+sion that guards against duplicate updates. 
+THE NOTEPICKEDUP() METHOD
+The notePickedUp() method, shown in listing 7.3, is called by the event handler for
+the DeliveryPickedUp event. It changes the deliveryStatus of the Order item to
+PICKED_UP.
+public class OrderHistoryDaoDynamoDb ...
+@Override
+public void notePickedUp(String orderId, Optional<SourceEvent> eventSource) {
+UpdateItemSpec spec = new UpdateItemSpec()
+.withPrimaryKey("orderId", orderId)
+.withUpdateExpression("SET #deliveryStatus = :deliveryStatus")
+.withNameMap(Collections.singletonMap("#deliveryStatus",
+DELIVERY_STATUS_FIELD))
+.withValueMap(Collections.singletonMap(":deliveryStatus",
+DeliveryStatus.PICKED_UP.toString()))
+.withReturnValues(ReturnValue.NONE);
+idempotentUpdate(spec, eventSource);
+}
+This method is similar to addOrder(). It creates an UpdateItemSpec and invokes
+idempotentUpdate(). Let’s look at the idempotentUpdate() method. 
+THE IDEMPOTENTUPDATE() METHOD
+The following listing shows the idempotentUpdate() method, which updates the item
+after possibly adding a condition expression to the UpdateItemSpec that guards against
+duplicate updates.
+public class OrderHistoryDaoDynamoDb ...
+private boolean idempotentUpdate(UpdateItemSpec spec, Optional<SourceEvent>
+eventSource) {
+try {
+table.updateItem(eventSource.map(es -> es.addDuplicateDetection(spec))
+.orElse(spec));
+return true;
+} catch (ConditionalCheckFailedException e) {
+// Do nothing
+return false;
+}
+}
+Listing 7.3
+The notePickedUp() method changes the order status to PICKED_UP
+Listing 7.4
+The idempotentUpdate() method ignores duplicate events
+ 

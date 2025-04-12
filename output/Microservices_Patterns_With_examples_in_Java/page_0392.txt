@@ -1,0 +1,45 @@
+362
+CHAPTER 11
+Developing production-ready services
+11.2.1 Using push-based externalized configuration
+The push model relies on the collaboration of the deployment environment and the
+service. The deployment environment supplies the configuration properties when it
+creates a service instance. It might, as figure 11.7 shows, pass the configuration prop-
+erties as environment variables. Alternatively, the deployment environment may sup-
+ply the configuration properties using a configuration file. The service instance then
+reads the configuration properties when it starts up.
+The deployment environment and the service must agree on how the configuration
+properties are supplied. The precise mechanism depends on the specific deployment
+environment. For example, chapter 12 describes how you can specify the environment
+variables of a Docker container.
+ Let’s imagine that you’ve decided to supply externalized configuration property
+values using environment variables. Your application could call System.getenv() to
+obtain their values. But if you’re a Java developer, it’s likely that you’re using a frame-
+work that provides a more convenient mechanism. The FTGO services are built using
+Spring Boot, which has an extremely flexible externalized configuration mechanism
+that retrieves configuration properties from a variety of sources with well-defined pre-
+cedence rules (https://docs.spring.io/spring-boot/docs/current/reference/html/boot-
+features-external-config.html). Let’s look at how it works.
+ Spring Boot reads properties from a variety of sources. I find the following sources
+useful in a microservice architecture:
+ 
+Order
+History Service
+instance
+Process
+Environment variables
+Deployment
+infrastructure
+Conﬁgures
+Creates
+Reads
+BOOTSTRAP_SERVERS=kafka1:9092
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=...
+....
+Figure 11.7
+When the deployment infrastructure creates an instance of Order History 
+Service, it sets the environment variables containing the externalized configuration. Order 
+History Service reads those environment variables.
+ 

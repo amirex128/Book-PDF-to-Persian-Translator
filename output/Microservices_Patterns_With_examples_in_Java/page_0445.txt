@@ -1,0 +1,48 @@
+415
+Deploying services using the Serverless deployment pattern
+ROUTING PRODUCTION TRAFFIC TO VERSION 2
+After you’ve tested a newly deployed service, the next step is to start routing produc-
+tion traffic to it. A good strategy is to initially only route a small amount of traffic.
+Here, for example, is a rule that routes 95% of traffic to v1 and 5% to v2:
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+name: ftgo-consumer-service
+spec:
+hosts:
+- ftgo-consumer-service
+http:
+- route:
+- destination:
+host: ftgo-consumer-service
+subset: v1
+weight: 95
+- destination:
+host: ftgo-consumer-service
+subset: v2
+weight: 5
+As you gain confidence that the service can handle production traffic, you can incre-
+mentally increase the amount of traffic going to the version 2 pods until it reaches
+100%. At that point, Istio isn’t routing any traffic to the v1 pods. You could leave them
+running for a little while longer before deleting the version 1 Deployment.
+ By letting you easily separate deployment from release, Istio makes rolling out a
+new version of a service much more reliable. Yet I’ve barely scratched the surface of
+Istio’s capabilities. As of the time of writing, the current version of Istio is 0.8. I’m
+excited to watch it and the other service meshes mature and become a standard part
+of a production environment. 
+12.5
+Deploying services using the Serverless deployment 
+pattern
+The Language-specific packaging (section 12.1), Service as a VM (section 12.2), and
+Service as a container (section 12.3) patterns are all quite different, but they share
+some common characteristics. The first is that with all three patterns you must prepro-
+vision some computing resources—either physical machines, virtual machines, or con-
+tainers. Some deployment platforms implement autoscaling, which dynamically adjusts
+the number of VMs or containers based on the load. But you’ll always need to pay for
+some VMs or containers, even if they’re idle.
+ Another common characteristic is that you’re responsible for system administra-
+tion. If you’re running any kind of machine, you must patch the operating system. In
+the case of physical machines, this also includes racking and stacking. You’re also
+responsible for administering the language runtime. This is an example of what Ama-
+zon called “undifferentiated heavy lifting.” Since the early days of computing, system
+ 

@@ -1,0 +1,30 @@
+Figure 4-14. An event with more information in it can allow receiving microservices to
+act without requiring further calls to the source of the event
+In addition to the fact that events with more information can allow for looser cou‐
+pling, events with more information can also double as a historical record of what
+happened to a given entity. This could help you as part of implementing an auditing
+system, or perhaps even provide the ability to reconstitute an entity at given points in
+time—meaning that these events could be used as part of an event sourcing, a con‐
+cept we’ll explore briefly in a moment.
+While this approach is definitely my preference, it’s not without downsides. Firstly, if
+the data associated with an event is large, we might have concerns about the size of
+the event. Modern message brokers (assuming you’re using one to implement your
+event broadcast mechanism) have fairly generous limits for message size; the default
+maximum size for a message in Kafka is 1 MB, and the latest release of RabbitMQ has
+a theoretical upper limit of 512 MB for a single message (down from the previous
+limit of 2 GB!), even though one could expect there to be some interesting perfor‐
+mance issues with large messages like this. But even the 1 MB afforded to us as the
+maximum size of a message on Kafka gives us a lot of scope to send quite a bit of
+data. Ultimately, if you’re venturing into a space in which you are starting to worry
+about the size of your events, then I’d recommend a hybrid approach in which some
+information is in the event but other (larger) data can be looked up if required.
+In Figure 4-14, Loyalty doesn’t need to know the email address or name of the cus‐
+tomer, and yet it nonetheless receives it via the event. This could lead to concerns if
+we are trying to limit the scope of which microservices can see what kind of data—for
+example, I might want to limit which microservices can see personally identifiable
+information (or PII), payment card details, or similar sensitive data. A way to solve
+this could be to send two different types of events—one that contains PII and can be
+seen by some microservices, and another that excludes PII and can be broadcast
+114 
+| 
+Chapter 4: Microservice Communication Styles

@@ -1,0 +1,24 @@
+Figure 5-2. Topics allow for multiple subscribers to receive the same messages, which is
+useful for event broadcast
+Guaranteed delivery
+So why use a broker? Fundamentally, they provide some capabilities that can be very
+useful for asynchronous communication. The properties they provide vary, but the
+most interesting feature is that of guaranteed delivery, something that all widely used
+brokers support in some way. Guaranteed delivery describes a commitment by the
+broker to ensure that the message is delivered.
+From the point of view of the microservice sending the message, this can be very use‐
+ful. It’s not a problem if the downstream destination is unavailable—the broker will
+hold on to the message until it can be delivered. This can reduce the number of
+things an upstream microservice needs to worry about. Compare that to a synchro‐
+nous direct call—for example, an HTTP request: if the downstream destination isn’t
+reachable, the upstream microservice will need to work out what to do with the
+request; should it retry the call or give up?
+For guaranteed delivery to work, a broker will need to ensure that any messages not
+yet delivered are going to be held in a durable fashion until they can be delivered. To
+deliver on this promise, a broker will normally run as some sort of cluster-based sys‐
+tem, ensuring that the loss of a single machine doesn’t cause a message to be lost.
+There is typically a lot involved in running a broker correctly, partly due to the chal‐
+lenges in managing cluster-based software. Often, the promise of guaranteed delivery
+Technology Choices 
+| 
+137

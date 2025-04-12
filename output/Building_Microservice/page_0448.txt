@@ -1,0 +1,40 @@
+It’s also worth noting that vertical scaling can make it easier to perform other types of
+scaling. As a concrete example, moving your database infrastructure to a larger
+machine may allow it to host the logically isolated databases for newly created micro‐
+services as part of functional decomposition.
+Your code or database is unlikely to need any changes to make use of the larger
+underlying infrastructure, assuming the operating system and chipsets remain the
+same. Even if changes are needed to your application to make use of the change of
+hardware, they might be limited to things like increasing the amount of memory
+available to your runtime through runtime flags.
+Limitations
+As we scale up the machines we are running on, our CPUs often don’t actually get
+faster; we just have more cores. This has been a shift over the last 5–10 years. It used
+to be that each new generation of hardware would deliver big improvements in CPU
+clock speed, meaning our programs got big jumps in performance. Clock speed
+improvements have drastically trailed off, though, and instead we get more and more
+CPU cores to play with. The problem is that often our software has not been written
+to take advantage of multicore hardware. This could mean that the shift of your
+application from a 4- to 8-core system may deliver little if any improvement, even if
+your existing system is CPU-bound. Changing the code to take advantage of multi‐
+core hardware can be a significant undertaking and can require a complete shift in
+programming idioms.
+Having a bigger machine is also likely to do little to improve robustness. A larger,
+newer server might have improved reliability, but ultimately if that machine is down,
+then the machine is down. Unlike the other forms of scaling we’ll look at, vertical
+scaling is unlikely to have much impact in improving your system’s robustness.
+Finally, as the machines get larger, they get more expensive—but not always in a way
+that is matched by the increased resources available to you. Sometimes this means it
+can be more cost effective to have a larger number of small machines, rather than a
+smaller number of large machines.
+Horizontal Duplication
+With horizontal duplication, you duplicate part of your system to handle more work‐
+loads. The exact mechanisms vary—we’ll look at implementations shortly—but fun‐
+damentally horizontal duplication requires you to have a way of distributing the work
+across these duplicates.
+As with vertical scaling, this type of scaling is on the simpler end of the spectrum and
+is often one of the things I’ll try early on. If your monolithic system can’t handle the
+load, spin up multiple copies of it and see if that helps!
+422 
+| 
+Chapter 13: Scaling

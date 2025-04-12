@@ -1,0 +1,56 @@
+189
+Developing business logic using event sourcing
+AGGREGATE METHODS ARE ALL ABOUT EVENTS
+The business logic handles a request to update an aggregate by calling a command
+method on the aggregate root. In a traditional application, a command method typi-
+cally validates its arguments and then updates one or more of the aggregate’s fields.
+Command methods in an event sourcing-based application work because they must
+generate events. As figure 6.4 shows, the outcome of invoking an aggregate’s com-
+mand method is a sequence of events that represent the state changes that must be
+made. These events are persisted in the database and applied to the aggregate to
+update its state.
+The requirement to generate events and apply them requires a restructuring—albeit
+mechanical—of the business logic. Event sourcing refactors a command method into
+two or more methods. The first method takes a command object parameter, which
+represents the request, and determines what state changes need to be performed. It
+validates its arguments, and without changing the state of the aggregate, returns a list
+of events representing the state changes. This method typically throws an exception if
+the command cannot be performed.
+Objects and ﬁeld values
+Updated objects
+and ﬁeld values
+«aggregate»
+Order
+S
+Event
+apply()
+«aggregate»
+Order
+S’
+Figure 6.3
+Applying event E 
+when the Order is in state S 
+must change the Order state to 
+S'. The event must contain the 
+data necessary to perform the 
+state change.
+«aggregate»
+Order
+S
+Event
+apply()
+Process(command)
+«aggregate»
+Order
+S’
+«aggregate»
+Order
+S
+Event
+Figure 6.4
+Processing a command 
+generates events without changing 
+the state of the aggregate. An 
+aggregate is updated by applying 
+an event.
+ 

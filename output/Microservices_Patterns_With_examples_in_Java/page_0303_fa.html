@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 303</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>الگوی API Gateway</h3>
+  <h4>8.3.2</h4>
+  <h3>توسعه API gateway خودتان</h3>
+  <p>
+   توسعه یک API gateway، به طور خاص دشوار نیست. اساساً یک application وب است که requests را به service های دیگر proxy می‌کند. می‌توانید یکی را با استفاده از فریم‌ورک وب مورد علاقه خود بسازید. با این حال، دو مشکل طراحی کلیدی وجود دارد که باید حل کنید:
+  </p>
+  <ul>
+   <li>
+    پیاده‌سازی یک مکانیزم برای تعریف قوانین routing به منظور به حداقل رساندن coding پیچیده
+   </li>
+   <li>
+    پیاده‌سازی صحیح رفتار proxy کردن HTTP، از جمله نحوه handling کردن headers HTTP
+   </li>
+  </ul>
+  <p>
+   در نتیجه، یک نقطه شروع بهتر برای توسعه یک API gateway، استفاده از یک فریم‌ورک است که برای آن هدف طراحی شده است. عملکرد داخلی آن، میزان کد مورد نیاز برای نوشتن را به میزان قابل توجهی کاهش می‌دهد.
+  </p>
+  <p>
+   ما به Netflix Zuul، یک project open source توسط Netflix نگاهی می‌اندازیم، و سپس Spring Cloud Gateway، یک project open source از Pivotal را در نظر می‌گیریم.
+  </p>
+  <p>
+   <strong>USING NETFLIX ZUUL</strong>
+  </p>
+  <p>
+   Netflix، فریم‌ورک Zuul را برای پیاده‌سازی edge functions ها مانند routing، rate limiting و authentication توسعه داد (https://github.com/Netflix/zuul). فریم‌ورک Zuul از مفهوم filters، request interceptors های قابل استفاده مجدد که شبیه به servlet filters ها یا middleware های NodeJS Express هستند، استفاده می‌کند. Zuul یک request HTTP را با جمع‌آوری یک زنجیره از filters های قابل اجرا مدیریت می‌کند که سپس request را تبدیل می‌کنند، service های backend را فراخوانی می‌کنند و response را قبل از ارسال دوباره به client تبدیل می‌کنند. اگرچه می‌توانید مستقیماً از Zuul استفاده کنید، اما استفاده از Spring Cloud Zuul، یک project open source از Pivotal، بسیار آسان‌تر است. Spring Cloud Zuul بر اساس Zuul ساخته شده است و از طریق convention-over-configuration، توسعه یک server مبتنی بر Zuul را به طرز چشمگیری آسان می‌کند.
+  </p>
+  <p>
+   Zuul، routing و edge functionality را مدیریت می‌کند. می‌توانید Zuul را با تعریف controller های Spring MVC که API composition را پیاده‌سازی می‌کنند، گسترش دهید. اما یک محدودیت عمده Zuul این است که فقط می‌تواند routing مبتنی بر path را پیاده‌سازی کند. به عنوان مثال، قادر به route کردن GET /orders به یک service و POST /orders به یک service متفاوت نیست. در نتیجه، Zuul از معماری query که در فصل 7 توضیح داده شد، پشتیبانی نمی‌کند.
+  </p>
+  <p>
+   <strong>ABOUT SPRING CLOUD GATEWAY</strong>
+  </p>
+  <p>
+   هیچ یک از گزینه‌هایی که تاکنون توضیح دادم، تمام requirements ها را برآورده نمی‌کنند. در واقع، من در جستجوی خود برای یک فریم‌ورک API gateway دست از کار کشیده بودم و توسعه یک API gateway مبتنی بر Spring MVC را شروع کرده بودم. اما بعد project Spring Cloud Gateway را کشف کردم (https://cloud.spring.io/spring-cloud-gateway/). این یک فریم‌ورک API gateway است که بر اساس چندین فریم‌ورک، از جمله Spring Framework 5، Spring Boot 2 و Spring Webflux، که یک فریم‌ورک وب reactive است که بخشی از Spring Framework 5 است و بر اساس Project Reactor ساخته شده است. Project Reactor یک فریم‌ورک reactive مبتنی بر NIO برای JVM است که انتزاع Mono را ارائه می‌دهد که کمی بعد در این فصل استفاده می‌شود.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

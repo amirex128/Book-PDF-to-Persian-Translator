@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 498</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   در نهایت، ما این interface را با یک proxy که messagesها را به
+   service delivery ارسال می‌کند، پیاده‌سازی می‌کنیم. اما در ابتدا، ما این API را با یک کلاس پیاده‌سازی می‌کنیم که
+   کد delivery management را فراخوانی می‌کند.
+  </p>
+  <p>
+   The DeliveryService interface یک interface coarse-grained است که برای
+   پیاده‌سازی توسط یک IPC mechanism مناسب است. این، متدهای schedule()، reschedule() و
+   cancel() را تعریف می‌کند، که با انواع پیام notification که قبلاً تعریف شد، مطابقت دارد.
+  </p>
+  <h3><strong>REFACTORING THE MONOLITH TO CALL THE DELIVERYSERVICE INTERFACE</strong></h3>
+  <p>
+   در مرحله بعد، همانطور که شکل 13.22 نشان می‌دهد، ما نیاز داریم که تمام مکان‌هایی را در FTGO monolith شناسایی کنیم
+   که delivery management را فراخوانی می‌کنند و آنها را تغییر دهیم تا از interface DeliveryService استفاده کنند.
+   این ممکن است مدتی طول بکشد و یکی از چالش برانگیزترین جنبه‌های استخراج است
+   یک service از monolith.
+  </p>
+  <p>
+   مطمئناً کمک می‌کند اگر monolith به زبانی statically typed، مانند Java، نوشته شده باشد،
+   زیرا ابزارها کار بهتری در شناسایی dependenciesها انجام می‌دهند. اگر اینطور نباشد، امیدوارم
+   شما برخی از تست‌های خودکار را با پوشش کافی از بخش‌هایی از کد دارید که
+   نیاز به تغییر دارند.
+  </p>
+  <h3><strong>IMPLEMENTING THE DELIVERYSERVICE INTERFACE</strong></h3>
+  <p>
+   گام نهایی، جایگزینی کلاس DeliveryServiceImpl با یک proxy است که ارسال می‌کند
+   پیام‌های notification به Delivery Service مستقل. اما به جای دور انداختن
+   implementation موجود بلافاصله، ما از یک design، که در شکل 13.23 نشان داده شده است، استفاده می‌کنیم، که
+   monolith را قادر می‌سازد تا به صورت پویا بین implementation موجود و
+   Delivery Service، سوئیچ کند. ما interface DeliveryService را با یک کلاس پیاده‌سازی می‌کنیم که
+   از یک feature toggle dynamic برای تعیین اینکه آیا implementation موجود را فراخوانی کند یا خیر
+   Delivery Service.
+  </p>
+  <p>
+   &lt;interface&gt;
+   <br/>
+   DeliveryService
+   <br/>
+   DeliveryServiceImpl
+   <br/>
+   void schedule(...)
+   <br/>
+   void reschedule(...)
+   <br/>
+   void cancel(...)
+   <br/>
+   Delivery
+   <br/>
+   management
+   <br/>
+   Delivery
+   <br/>
+   management
+   <br/>
+   client
+  </p>
+  <p>
+   <strong>Figure 13.22</strong>
+   <br/>
+   The second step is to change the FTGO monolith to
+   <br/>
+   invoke delivery management via the DeliveryService interface.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

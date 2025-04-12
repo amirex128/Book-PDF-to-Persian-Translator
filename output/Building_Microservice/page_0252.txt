@@ -1,0 +1,27 @@
+Figure 8-8. Different environments used for different parts of the pipeline
+The first environment our microservice runs in is wherever the developer was work‐
+ing on the code prior to check-in—probably their local laptop. After committing the
+code, the CI process kicks off with the fast tests. Both the fast and slow test stages
+deploy into our CI environment. If the slow tests pass, the microservice is deployed
+into the preproduction environment to allow for manual verification (which is
+entirely optional but still important for many). If this manual verification passes, the
+microservice is then deployed into production.
+Ideally, each environment in this process would be an exact copy of the production
+environment. This would give us even more confidence that our software will work
+when it reaches production. However, in reality, we often can’t afford to run multiple
+copies of our entire production environment due to how expensive this is.
+We also want to tune environments earlier in this process to allow for fast feedback.
+It’s vital that we know as early as possible whether or not our software works so that
+we can fix things quickly, if needed. The earlier we know about a problem with our
+software, the faster it is to fix it, and the lower the impact of the break. It’s much bet‐
+ter to find a problem on our local laptop than pick it up in preproduction testing, but
+likewise picking up a problem in preproduction testing might be much better for us
+than picking something up in production (although we will explore some important
+trade-offs around this in Chapter 9).
+This means that environments closer to the developer will be tuned to provide fast
+feedback, which may compromise how “production-like” they are. But as environ‐
+ments get closer to production, we will want them to be more and more like the end
+production environment to ensure that we catch problems.
+226 
+| 
+Chapter 8: Deployment

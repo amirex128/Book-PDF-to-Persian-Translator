@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 283</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        objects than is strictly necessary to maintain serializability)، اما از آنجایی که سربار بسیار کمتری دارند، یک compromise خوب هستند.
+    </p>
+    <p>
+        اگر هیچ <em>index</em> مناسبی وجود نداشته باشد که یک <em>range lock</em> را بتوان به آن متصل کرد، database می‌تواند به یک <em>shared lock</em> روی کل table بازگردد. این برای <em>performance</em> خوب نخواهد بود، زیرا همه <strong>Transactions</strong> های دیگر را که به table <em>write</em> می‌کنند، متوقف می‌کند، اما این یک موقعیت fallback ایمن است.
+    </p>
+    <h4>Serializable Snapshot Isolation (SSI)</h4>
+    <p>
+        این فصل تصویری تیره از <em>concurrency control</em> در databases ها به تصویر کشیده است. از یک سو، ما پیاده‌سازی‌هایی از <em>serializability</em> را داریم که عملکرد خوبی ندارند (<em>two-phase locking</em>) یا به خوبی مقیاس‌پذیر نیستند (اجرای سریال). از سوی دیگر، ما <em>weak isolation levels</em> را داریم که <em>good performance</em> دارند، اما مستعد race conditions مختلفی هستند (<em>lost updates, write skew, phantoms</em>، و غیره). آیا <em>serializable isolation</em> و <em>good performance</em> اساساً با یکدیگر در تضاد هستند؟
+    </p>
+    <p>
+        شاید نه: یک الگوریتم به نام <em>serializable snapshot isolation (SSI)</em> بسیار امیدوارکننده است. این <em>full serializability</em> را ارائه می‌دهد، اما در مقایسه با <em>snapshot isolation</em>، فقط یک <em>performance penalty</em> کوچک دارد. SSI نسبتاً جدید است: برای اولین بار در سال 2008 [40] توضیح داده شد و موضوع پایان‌نامه دکترای مایکل Cahill [51] است.
+    </p>
+    <p>
+        امروزه SSI هم در databases های تک‌node (سطح <em>serializable isolation</em> در PostgreSQL از نسخه 9.1 [41]) و هم در databases های distributed (FoundationDB از یک الگوریتم مشابه استفاده می‌کند) استفاده می‌شود. از آنجایی که SSI در مقایسه با سایر مکانیسم‌های <em>concurrency control</em> بسیار جوان است، هنوز عملکرد خود را در عمل ثابت می‌کند، اما این امکان را دارد که در آینده به default جدید تبدیل شود.
+    </p>
+    <h4>Pessimistic versus optimistic concurrency control</h4>
+    <p>
+        <em>Two-phase locking</em> یک مکانیسم <em>pessimistic concurrency control</em> است: این بر این اصل استوار است که اگر هر چیزی احتمالاً اشتباه پیش برود (همانطور که توسط یک <em>lock</em> که توسط یک <strong>Transaction</strong> دیگر نگهداری می‌شود نشان داده می‌شود)، بهتر است منتظر بمانیم تا وضعیت دوباره ایمن شود قبل از انجام هر کاری. این شبیه به <em>mutual exclusion</em> است، که برای محافظت از ساختارهای داده در <em>multi-threaded programming</em> استفاده می‌شود.
+    </p>
+    <p>
+        اجرای سریال، به معنایی، <em>pessimistic</em> است: اساساً معادل این است که هر <strong>Transaction</strong> یک <em>exclusive lock</em> روی کل database (یا یک partition از database) را برای مدت زمان <strong>Transaction</strong> دارد. ما <em>pessimism</em> را با اجرای بسیار سریع هر <strong>Transaction</strong> جبران می‌کنیم، بنابراین فقط نیاز دارد که "lock" را برای مدت کوتاهی نگه دارد.
+    </p>
+    <p>
+        در مقابل، <em>serializable snapshot isolation</em> یک تکنیک <em>optimistic concurrency control</em> است. <em>Optimistic</em> در این زمینه به این معنی است که به جای مسدود کردن اگر اتفاقی بالقوه خطرناک رخ دهد، <strong>Transactions</strong> ها به هر حال ادامه می‌دهند، به این امید که همه چیز درست می‌شود. هنگامی که یک <strong>Transaction</strong> می‌خواهد <em>commit</em> شود، database بررسی می‌کند که آیا اتفاق بدی افتاده است یا خیر (یعنی، آیا <em>isolation</em> نقض شده است). اگر چنین است، the trans-
+        <br>
+        Serializability
+        <br>
+        |
+        <br>
+        261
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

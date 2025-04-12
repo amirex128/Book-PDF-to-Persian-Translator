@@ -1,0 +1,45 @@
+349
+Developing secure services
+ The first quality attribute is application security. It’s essential to develop secure appli-
+cations, unless you want your company to be in the headlines for a data breach. Fortu-
+nately, most aspects of security in a microservice architecture are not any different
+than in a monolithic application. The FTGO team knew that much of what they had
+learned over the years developing the monolith also applied to microservices. But the
+microservice architecture forces you to implement some aspects of application-level
+security differently. For example, you need to implement a mechanism to pass the
+identity of the user from one service to another.
+ The second quality attribute you must address is service configurability. A service typ-
+ically uses one or more external services, such as message brokers and databases. The
+network location and credentials of each external service often depend on the envi-
+ronment that the service is running in. You can’t hard-wire the configuration proper-
+ties into the service. Instead, you must use an externalized configuration mechanism
+that provides a service with configuration properties at runtime.
+ The third quality attribute is observability. The FTGO team had implemented
+monitoring and logging for the existing application. But a microservice architecture
+is a distributed system, and that presents some additional challenges. Every request
+is handled by the API gateway and at least one service. Imagine, for example, that
+you’re trying to determine which of six services is causing a latency issue. Or imag-
+ine trying to understand how a request is handled when the log entries are scattered
+across five different services. In order to make it easier to understand the behavior
+of your application and troubleshoot problems, you must implement several observ-
+ability patterns.
+ I begin this chapter by describing how to implement security in a microservice
+architecture. Next, I discuss how to design services that are configurable. I cover a
+couple of different service configuration mechanisms. After that I talk about how to
+make your services easier to understand and troubleshoot by using the observability
+patterns. I end the chapter by showing how to simplify the implementation of these
+and other concerns by developing your services on top of a microservice chassis
+framework.
+ Let’s first look at security.
+11.1
+Developing secure services
+Cybersecurity has become a critical issue for every organization. Almost every day
+there are headlines about how hackers have stolen a company’s data. In order to
+develop secure software and stay out of the headlines, an organization needs to
+tackle a diverse range of security issues, including physical security of the hardware,
+encryption of data in transit and at rest, authentication and authorization, and pol-
+icies for patching software vulnerabilities. Most of these issues are the same regard-
+less of whether you’re using a monolithic or microservice architecture. This section
+focuses on how the microservice architecture impacts security at the application
+level.
+ 

@@ -1,0 +1,21 @@
+Figure 8-1. A simple, logical view of two microservices
+This logical view of our microservices can hide a wealth of complexity when it comes
+to actually running them on real infrastructure. Let’s take a look at what sorts of
+details might be hidden by a diagram like this.
+Multiple Instances
+When we think about the deployment topology of the two microservices (in
+Figure 8-2), it’s not as simple as one thing talking to another. To start with, it seems
+quite likely that we’ll have more than one instance of each service. Having multiple
+instances of a service allows you to handle more load and can also improve the
+robustness of your system, as you can more easily tolerate the failure of a single
+instance. So we potentially have one or more instances of Invoice talking to one or
+more instances of Order. Exactly how the communication between these instances is
+handled will depend on the nature of the communication mechanism, but if we
+assume that in this situation we’re using some form of HTTP-based API, a load bal‐
+ancer would be enough to handle routing of requests to different instances, as we see
+in Figure 8-2.
+Figure 8-2. Using a load balancer to map requests to specific instances of the Order
+microservice
+220 
+| 
+Chapter 8: Deployment

@@ -1,0 +1,35 @@
+running them but never actually check the numbers. Often this is because people
+don’t know what a “good” result looks like. You really need to have targets. When
+you provide a microservice to be used as part of a wider architecture, it’s common to
+have specific expectations that you commit to deliver—the SLOs I mentioned earlier.
+If as part of this you commit to deliver a certain level of performance, then it makes
+sense for any automated test to give you feedback as to whether or not you’re likely to
+meet (and hopefully exceed) that target.
+In lieu of specific performance targets, automated performance tests can still be very
+useful in helping you see how the performance of your microservice varies as you
+make changes. It can be a safety net to catch you if you make a change that causes a
+drastic degradation in performance. So an alternative to a specific target might be to
+fail the test if the delta in performance from one build to the next varies too much.
+Performance testing needs to be done in concert with understanding the real system
+performance (which we’ll discuss more in Chapter 10), and ideally you would use the
+same tools in your performance test environment for visualizing system behavior as
+those you use in production. This approach can make it much easier to compare like
+with like.
+Robustness Tests
+A microservice architecture is often only as reliable as its weakest link, and as a result
+it’s common for our microservices to build in mechanisms to allow them to improve
+their robustness in order to improve system reliability. We’ll explore this topic more
+in “Stability Patterns” on page 395, but examples include running multiple instances of
+a microservice behind a load balancer to tolerate the failure of an instance, or using
+circuit breakers to programmatically handle situations in which downstream micro‐
+services cannot be contacted.
+In such situations it can be useful to have tests that allow you to re-create certain fail‐
+ures to ensure that your microservice keeps operating as a whole. By their nature
+these tests can be a bit more tricky to implement. For example, you might need to
+create an artificial network time-out between a microservice under test and an exter‐
+nal stub. That said, they can be worthwhile, especially if you are creating shared func‐
+tionality that will be used across multiple microservices—for example, using a default
+service mesh implementation to handle circuit breaking.
+302 
+| 
+Chapter 9: Testing

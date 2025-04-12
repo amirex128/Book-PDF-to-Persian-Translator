@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 416</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <p>
+   pipeline برای deploy کردن نسخه‌های جدید از services، و users برای دسترسی به functionality imple-
+   mented توسط آن services.
+  </p>
+  <p>
+   A production environment باید چهار قابلیت کلیدی را پیاده‌سازی کند:
+  </p>
+  <p>
+   Service management interface—Enables developers برای create، update و config-
+   ure services. Ideally, این interface یک REST API است که توسط command-line و
+   GUI deployment tools فراخوانی می‌شود.
+  </p>
+  <p>
+   Runtime service management—تلاش می‌کند اطمینان حاصل کند که تعداد مورد نظر از ser-
+   vice instances در همه زمان‌ها در حال اجرا است. If a service instance crash می‌کند یا به نوعی
+   قادر به handle کردن requests نیست، the production environment باید آن را restart کند. If a
+   machine crash می‌کند، the production environment باید those service instances را
+   در یک machine متفاوت restart کند.
+  </p>
+  <p>
+   Monitoring—Provides developers با insight به آنچه services آنها در حال انجام است،
+   شامل log files و metrics. If there are problems, the production environ-
+   ment باید به developers هشدار دهد. فصل 11 monitoring را توضیح می‌دهد، که همچنین نامیده می‌شود
+   observability.
+  </p>
+  <p>
+   Request routing—Routes requests را از users به services.
+  </p>
+  <p>
+   In this chapter من چهار main deployment options را بررسی می‌کنم:
+  </p>
+  <p>
+   Deploying services به عنوان language-specific packages، مانند Java JAR یا WAR files.
+   It’s worthwhile exploring این گزینه، زیرا اگرچه من استفاده از
+   یکی از other options را توصیه می‌کنم، معایب آن، other options را تحریک می‌کند.
+  </p>
+  <p>
+   Deploying services به عنوان virtual machines، که deployment را با packag-
+   ing یک service به عنوان یک virtual machine image که technology stack از service را encapsule می‌کند، ساده می‌کند.
+  </p>
+  <p>
+   Deploying services به عنوان containers، که سبک‌تر از virtual
+   machines هستند. I show how to deploy the FTGO application’s Restaurant Service
+   با استفاده از Kubernetes، یک popular Docker orchestration framework.
+  </p>
+  <p>
+   Deploying services با استفاده از serverless deployment، که حتی مدرن‌تر از
+   containers است. We’ll look at how to deploy Restaurant Service با استفاده از AWS Lambda,
+   یک popular serverless platform.
+  </p>
+  <p>
+   Let’s first look at how to deploy services به عنوان language-specific packages.
+  </p>
+  <h4><span style="font-weight: bold;">12.1 Deploying services using the Language-specific 
+   packaging format pattern</span></h4>
+  <p>
+   Let’s imagine که شما می‌خواهید application FTGO’s Restaurant Service را مستقر کنید،
+   که یک Spring Boot-based Java application است. One way برای deploy این service با
+   استفاده از Service as a language-specific package pattern. When using this pattern،
+   what’s مستقر در production و what’s managed توسط the service runtime، یک service است
+   در language-specific package خود. In the case از Restaurant Service، که یا
+   executable JAR file یا یک WAR file است. For other languages، مانند NodeJS، یک service
+   یک directory از source code و modules است. For some languages، مانند GoLang، یک service
+   یک operating system-specific executable است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

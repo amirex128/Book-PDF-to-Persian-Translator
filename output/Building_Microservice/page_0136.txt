@@ -1,0 +1,38 @@
+collaboration, the event emitter doesn’t need to know what any downstream
+microservices are able to do, and in fact may not even know they exist—as a result,
+coupling is greatly reduced.
+The distribution of responsibility we see with our event-driven interactions can mir‐
+ror the distribution of responsibility we see with organizations trying to create more
+autonomous teams. Rather than holding all the responsibility centrally, we want to
+push it into the teams themselves to allow them to operate in a more autonomous
+fashion—a concept we will revisit in Chapter 15. Here, we are pushing responsibility
+from Warehouse into Notifications and Payment—this can help us reduce the com‐
+plexity of microservices like Warehouse and lead to a more even distribution of
+“smarts” in our system. We’ll explore that idea in more detail when we compare
+choreography and orchestration in Chapter 6.
+Events and Messages
+On occasion I’ve seen the terms messages and events get confused. An event is a fact—
+a statement that something happened, along with some information about exactly
+what happened. A message is a thing we send over an asynchronous communication
+mechanism, like a message broker.
+With event-driven collaboration, we want to broadcast that event, and a typical way
+to implement that broadcast mechanism would be to put the event into a message.
+The message is the medium; the event is the payload.
+Likewise, we might want to send a request as the payload of a message—in which case
+we would be implementing a form of asynchronous request-response.
+Implementation
+There are two main aspects we need to consider here: a way for our microservices to
+emit events, and a way for our consumers to find out those events have happened.
+Traditionally, message brokers like RabbitMQ try to handle both problems. Produc‐
+ers use an API to publish an event to the broker. The broker handles subscriptions,
+allowing consumers to be informed when an event arrives. These brokers can even
+handle the state of consumers—for example, by helping keep track of what messages
+they have seen before. These systems are normally designed to be scalable and resil‐
+ient, but that doesn’t come for free. It can add complexity to the development pro‐
+cess, because it is another system you may need to run to develop and test your
+services. Additional machines and expertise may also be required to keep this infra‐
+structure up and running. But once it is, it can be an incredibly effective way to
+implement loosely coupled, event-driven architectures. In general, I’m a fan.
+110 
+| 
+Chapter 4: Microservice Communication Styles

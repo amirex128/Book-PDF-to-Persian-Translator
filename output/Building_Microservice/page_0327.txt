@@ -1,0 +1,43 @@
+Performance Tests
+Performance tests are worth calling out explicitly as a way of ensuring that some of
+our cross-functional requirements can be met. When decomposing systems into
+smaller microservices, we increase the number of calls that will be made across net‐
+work boundaries. Where previously an operation might have involved one database
+call, it may now involve three or four calls across network boundaries to other serv‐
+ices, with a matching number of database calls. All of this can decrease the speed at
+which our systems operate. Tracking down sources of latency is especially important.
+When you have a call chain of multiple synchronous calls, if any part of the chain
+starts acting slowly, everything is affected, potentially leading to a significant impact.
+This makes having some way to performance test your applications even more
+important than it might be with a more monolithic system. Often the reason this sort
+of testing gets delayed is because initially there isn’t enough of the system there to
+test. I understand this problem, but all too often it leads to kicking the can down the
+road, with performance testing often only being done just before going live for the
+first time, if at all! Don’t fall into this trap.
+As with functional tests, you may want a mix. You may decide that you want perfor‐
+mance tests that isolate individual services, but start with tests that check core
+journeys in your system. You may be able to take end-to-end journey tests and sim‐
+ply run these at volume.
+To generate worthwhile results, you’ll often need to run given scenarios with gradu‐
+ally increasing numbers of simulated customers. This allows you to see how latency
+of calls varies with increasing load. This means that performance tests can take a
+while to run. In addition, you’ll want the system to match production as closely as
+possible, to ensure that the results you see will be indicative of the performance you
+can expect on the production systems. This can mean that you’ll need to acquire a
+more production-like volume of data and may need more machines to match the
+infrastructure—tasks that can be challenging. Even if you struggle to make the per‐
+formance environment truly production-like, the tests may still have value in track‐
+ing down bottlenecks. Just be aware that you may get false negatives—or, even worse,
+false positives.
+Due to the time it takes to run performance tests, it isn’t always feasible to run them
+on every check-in. It is a common practice to run a subset every day, and a larger set
+every week. Whatever approach you pick, make sure you run tests as regularly as you
+can. The longer you go without running performance tests, the harder it can be to
+track down the culprit. Performance problems are especially difficult to resolve, so if
+you can reduce the number of commits you need to look at to see a newly introduced
+problem, your life will be much easier.
+And make sure you also look at the results! I’ve been very surprised by the number of
+teams I have encountered who have put in a lot of work implementing tests and
+Cross-Functional Testing 
+| 
+301

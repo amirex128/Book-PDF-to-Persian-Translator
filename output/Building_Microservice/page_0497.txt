@@ -1,0 +1,38 @@
+doesn’t clash with behavior loaded into the rest of the web page? Ideally, the whole
+widget could be packaged in such a way that it wouldn’t break other aspects of the UI.
+The issue of how to deliver self-contained functionality into a UI without breaking
+other functionality has historically been especially problematic with single-page apps,
+partly because the concept of modularization doesn’t appear to have been a prime
+concern for how the supporting SPA frameworks were created. These challenges are
+worth exploring in more depth.
+Dependencies
+Although iFrames have been a heavily used technique in the past, we tend to avoid
+using them to splice different widgets into a single web page. iFrames have a host of
+challenges regarding sizing and in terms of making it difficult to communicate
+between the different parts of the frontend. Instead, widgets are normally either
+spliced into the UI using server-side templating or else dynamically inserted into the
+browser on the client side. In both cases, the challenge is that the widget is running in
+the same browser page with other parts of the frontend, meaning that you need to be
+careful that the different widgets don’t conflict with one another.
+For example, our recommendation widget might make use of React v16, whereas the
+basket widget is still using React v15. This can be a blessing, of course, as it can help
+us try out different technology (we could use different SPA frameworks for different
+widgets), but it can also help when it comes to updating the versions of frameworks
+being used. I’ve spoken to a number of teams that have had challenges in moving
+between Angular or React versions, largely due to the differences in conventions used
+in the newer framework versions. Upgrading an entire monolithic UI could be
+daunting, but if you can do it incrementally, updating parts of your frontend piece by
+piece, you can break the work up and also mitigate the risk of the upgrade introduc‐
+ing new problems.
+The downside is that you can end up with a lot of duplication between dependencies,
+which in turn can lead to a large bloat in terms of page load size. I could end up
+including multiple different versions of the React framework and its associated tran‐
+sitive dependencies, for example. It is unsurprising that many websites now have a
+page load size several times greater than the size of some operating systems. As a
+quick unscientific study, I checked the page load of the CNN website at the time of
+writing, and it was 7.9 MB, which is a great deal larger than the 5 MB for Alpine
+Linux for example. 7.9 MB is actually at the small end of some of the page load sizes
+I see.
+Pattern: Widget-Based Decomposition 
+| 
+471

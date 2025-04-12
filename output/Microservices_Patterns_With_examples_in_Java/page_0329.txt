@@ -1,0 +1,46 @@
+299
+Testing strategies for microservice architectures
+As you’ll see in this chapter, I describe a strategy that emphasizes testing the pieces of
+a service. It even minimizes the number of component tests, which test an entire service.
+ It’s clear how to test individual microservices such as Consumer Service, which
+don’t depend on any other services. But what about services such as Order Service,
+that do depend on numerous other services? And how can we be confident that the
+application as a whole works? This is the key challenge of testing applications that
+have a microservice architecture. The complexity of testing has moved from the
+individual services to the interactions between them. Let’s look at how to tackle this
+problem. 
+9.1.2
+The challenge of testing microservices
+Interprocess communication plays a much more important role in a microservices-
+based application than in a monolithic application. A monolithic application might
+communicate with a few external clients and services. For example, the monolithic
+version of the FTGO application uses a few third-party web services, such as Stripe
+for payments, Twilio for messaging, and Amazon SES for email, which have stable
+APIs. Any interaction between the modules of the application is through program-
+ming language-based APIs. Interprocess communication is very much on the edge
+of the application.
+ In contrast, interprocess communication is central to microservice architecture. A
+microservices-based application is a distributed system. Teams are constantly develop-
+ing their services and evolving their APIs. It’s essential that developers of a service
+write tests that verify that their service interacts with its dependencies and clients.
+ As described in chapter 3, services communicate with each other using a variety
+of interaction styles and IPC mechanisms. Some services use request/response-style
+interaction that’s implemented using a synchronous protocol, such as REST or gRPC.
+End-to-end
+Slow, brittle, costly
+Fast, reliable, cheap
+Component
+Integration
+Unit
+Acceptance tests for
+an application
+Acceptance tests
+for a service
+Verify that a service
+communicates with
+its dependencies
+Test the business logic
+Figure 9.5
+The test pyramid describes the relative proportions of each type of test that 
+you need to write. As you move up the pyramid, you should write fewer and fewer tests.
+ 

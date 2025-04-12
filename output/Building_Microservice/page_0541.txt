@@ -1,0 +1,29 @@
+these libraries packaged together into a single shared microservice, as shown in
+Figure 15-5.
+Figure 15-5. Teams contribute libraries with their custom behavior to a central
+microservice
+The idea here is that if the US team needs to implement US-specific logic, it makes
+a change in a library that is then included as part of the build of the central
+microservice.
+This approach reduces the need to run additional microservices. We don’t need to
+run one service per country—we can run one central microservice that handles the
+custom functionality for each country. The challenge here is that the country teams
+aren’t in charge of deciding when their custom functionality goes live. They can make
+the change and request that this new change be deployed, but the central team would
+have to schedule this deployment.
+Furthermore, it’s possible that a bug in one of these country-specific libraries could
+cause a production issue that the central team may then be responsible for resolving.
+This could make production troubleshooting more complex as a result.
+Nonetheless, this option might be worth considering if it helps you move away from
+a central microservice being under collective ownership, especially when you cannot
+justify running multiple variations of the same microservice.
+Change Reviews
+When adopting an internal open source approach, the concept of the review is a core
+principle—the change has to be reviewed before the change can be accepted. But even
+when working inside a team on a codebase where you have direct commit permis‐
+sions, there is still value in having your changes reviewed.
+I am a big fan of having my changes reviewed. I’ve always felt that my code has bene‐
+fited from a second pair of eyes. By far my most preferred form of review is the type
+Pluggable, Modular Microservices 
+| 
+515

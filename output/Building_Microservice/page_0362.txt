@@ -1,0 +1,41 @@
+benefit of scaling gradually or having the system run for a few months to understand
+what “good” looked like in terms of low-level metrics like CPU rate or response time.
+Our approach was to generate fake events to price part of the portfolio that was not
+booked into the downstream systems. Every minute or so, we used a tool called
+Nagios to run a command-line job that inserted a fake event into one of our queues.
+Our system picked it up and ran all the various calculations just like any other job,
+except the results appeared in the “junk” book, which was used only for testing. If a
+repricing wasn’t seen within a given time, Nagios reported this as an issue.
+In practice, I’ve found the use of synthetic transactions to perform semantic monitor‐
+ing like this to be a far better indicator of issues in systems than alerting on the lower-
+level metrics. They don’t replace the need for the lower-level detail, though—we’ll
+still want that information when we need to find out why a synthetic transaction
+failed.
+Implementing synthetic transactions.    In the past, implementing synthetic transactions
+was a fairly daunting task. But the world has moved on, and the means to implement
+them is at our fingertips! You are running tests for your systems, right? If not, go read
+Chapter 9 and come back. All done? Good!
+If we look at the tests we have that test a given service end to end, or even our whole
+system end to end, we have much of what we need to implement semantic monitor‐
+ing. Our system already exposes the hooks needed to launch the test and check the
+result. So why not just run a subset of these tests, on an ongoing basis, as a way of
+monitoring our system?
+There are some things we need to do, of course. First, we need to be careful about the
+data requirements of our tests. We may need to find a way for our tests to adapt to
+different live data if it changes over time, or else set a different source of data. For
+example, we could have a set of fake users we use in production with a known set of
+data.
+Likewise, we have to make sure we don’t accidentally trigger unforeseen side effects.
+A friend told me a story about an ecommerce company that accidentally ran its tests
+against its production ordering systems. It didn’t realize its mistake until a large
+number of washing machines arrived at the head office.
+A/B testing
+With an A/B test, you deploy two different versions of the same functionality, with
+users seeing either the “A” or the “B” functionality. You are then able to see which
+version of the functionality performs best. This is commonly used when trying to
+decide between two different approaches for how something should be done—for
+example, you might try two different customer registration forms to see which one is
+more effective in driving sign-ups.
+336 
+| 
+Chapter 10: From Monitoring to Observability

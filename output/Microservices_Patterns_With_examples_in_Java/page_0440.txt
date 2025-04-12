@@ -1,0 +1,43 @@
+410
+CHAPTER 12
+Deploying microservices
+The Istio Envoy proxy is a modified version of Envoy (www.envoyproxy.io). It’s a high-
+performance proxy that supports a variety of protocols, including TCP, low-level pro-
+tocols such as HTTP and HTTPS, and higher-level protocols. It also understands
+MongoDB, Redis, and DynamoDB protocols. Envoy also supports robust interservice
+communication with features such as circuit breakers, rate limiting, and automatic
+retries. It can secure communication within the application by using TLS for inter-
+Envoy communication.
+ Istio uses Envoy as a sidecar, a process or container that runs alongside the service
+instance and implements cross-cutting concerns. When running on Kubernetes, the
+Envoy proxy is a container within the service’s pod. In other environments that don’t
+have the pod concept, Envoy runs in the same container as the service. All traffic to
+and from a service flows through its Envoy proxy, which routes traffic according to the
+routing rules given to it by the control plane. For example, direct Service  Service
+communication becomes Service  Source Envoy  Destination Envoy  Service.
+Istio is configured using Kubernetes-style YAML configuration files. It has a command-
+line tool called istioctl that’s similar to kubectl. You use istioctl for creating,
+updating, and deleting rules and policies. When using Istio on Kubernetes, you can
+also use kubectl.
+ Let’s look at how to deploy a service with Istio. 
+DEPLOYING A SERVICE WITH ISTIO
+Deploying a service on Istio is quite straightforward. You define a Kubernetes Service
+and a Deployment for each of your application’s services. Listing 12.7 shows the defini-
+tion of Service and Deployment for Consumer Service. Although it’s almost identical
+to the definitions I showed earlier, there are a few differences. That’s because Istio has
+a few requirements for the Kubernetes services and pods:
+A Kubernetes service port must use the Istio naming convention of <proto-
+col>[-<suffix>], where protocol is http, http2, grpc, mongo, or redis. If the
+port is unnamed, Istio will treat the port as a TCP port and won’t apply rule-
+based routing.
+A pod should have an app label such as app: ftgo-consumer-service, which
+identifies the service, in order to support Istio distributed tracing.
+In order to run multiple versions of a service simultaneously, the name of a
+Kubernetes deployment must include the version, such as ftgo-consumer-
+service-v1, ftgo-consumer-service-v2, and so on. A deployment’s pods should
+have a version label, such as version: v1, which specifies the version, so that
+Istio can route to a specific version.
+Pattern: Sidecar
+Implement cross-cutting concerns in a sidecar process or container that runs alongside
+the service instance. See http://microservices.io/patterns/deployment/sidecar.html.
+ 

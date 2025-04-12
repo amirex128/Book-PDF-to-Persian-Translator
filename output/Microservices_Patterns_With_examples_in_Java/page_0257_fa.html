@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 257</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Querying using the API composition pattern</mark></h3>
+  <p>
+   شما باید از این گزینه برای یک عملیات <mark>query</mark> که به صورت داخلی توسط چندین <mark>service</mark> استفاده می‌شود، استفاده کنید. این عملیات همچنین می‌تواند برای عملیات <mark>query</mark> قابل دسترسی خارجی که منطق تجمیع آن‌ها برای بخشی از یک <mark>API gateway</mark> بیش از حد پیچیده است، استفاده شود.
+  </p>
+  <h5><mark>API COMPOSERS SHOULD USE A REACTIVE PROGRAMMING MODEL</mark></h5>
+  <p>
+   هنگام توسعه یک سیستم توزیع شده، به حداقل رساندن تأخیر یک نگرانی همیشگی است. هر زمان که امکان داشته باشد، یک <mark>API composer</mark> باید <mark>services</mark> <mark>provider</mark> را به صورت موازی فراخوانی کند تا زمان پاسخ برای یک عملیات <mark>query</mark> را به حداقل برساند. به عنوان مثال، <mark>Find Order Aggregator</mark>، باید چهار <mark>service</mark> را همزمان فراخوانی کند زیرا هیچ وابستگی بین فراخوانی‌ها وجود ندارد. با این حال، گاهی اوقات، یک <mark>API composer</mark> برای فراخوانی <mark>service</mark> دیگری به نتیجه یک <mark>Provider service</mark> نیاز دارد. در این صورت، لازم است که برخی از <mark>services</mark> <mark>provider</mark> را به صورت متوالی فراخوانی کند - اما امیدوارم که نه همه آن‌ها را.
+  </p>
+  <p>
+   منطق برای اجرای کارآمد ترکیبی از فراخوانی‌های <mark>service</mark> متوالی و موازی می‌تواند پیچیده باشد. برای اینکه یک <mark>API composer</mark> هم قابل نگهداری و هم با کارایی و مقیاس‌پذیری باشد، باید از یک طراحی واکنشی مبتنی بر <mark>Java Completable-Future’s</mark>، <mark>RxJava observables</mark>، یا یک انتزاع معادل دیگر استفاده کند. من این موضوع را در فصل 8 که الگوی <mark>API gateway</mark> را پوشش می‌دهم، بیشتر مورد بحث قرار می‌دهم.
+  </p>
+  <h5><mark>7.1.5 The benefits and drawbacks of the API composition pattern</mark></h5>
+  <p>
+   این الگو یک راه ساده و شهودی برای پیاده‌سازی عملیات <mark>query</mark> در یک معماری <mark>microservice</mark> است. اما دارای معایبی است:
+  </p>
+  <ul>
+   <li>
+    افزایش سربار
+   </li>
+   <li>
+    خطر کاهش دسترسی‌پذیری
+   </li>
+   <li>
+    عدم سازگاری <mark>data</mark> تراکنشی
+   </li>
+  </ul>
+  <p>
+   بیایید نگاهی به آن‌ها بیندازیم.
+  </p>
+  <h5><mark>INCREASED OVERHEAD</mark></h5>
+  <p>
+   یکی از معایب این الگو، سربار فراخوانی چندین <mark>services</mark> و <mark>querying</mark> چندین <mark>databases</mark> است. در یک application <mark>monolithic</mark>، یک <mark>client</mark> می‌تواند داده‌ها را با یک درخواست واحد بازیابی کند، که اغلب یک <mark>query</mark> <mark>database</mark> واحد را اجرا می‌کند. در مقایسه، استفاده از الگوی ترکیب <mark>API</mark> شامل چندین درخواست و <mark>database queries</mark> است. در نتیجه، منابع محاسباتی و شبکه بیشتری مورد نیاز است که هزینه اجرای application را افزایش می‌دهد.
+  </p>
+  <h5><mark>RISK OF REDUCED AVAILABILITY</mark></h5>
+  <p>
+   یکی دیگر از معایب این الگو، کاهش دسترسی‌پذیری است. همانطور که در فصل 3 توضیح داده شد، دسترسی‌پذیری یک عملیات با تعداد <mark>services</mark> درگیر کاهش می‌یابد. از آنجایی که پیاده‌سازی یک عملیات <mark>query</mark> شامل حداقل سه <mark>service</mark> است—<mark>API composer</mark> و حداقل دو <mark>provider services</mark>—دسترسی‌پذیری آن به طور قابل توجهی کمتر از یک <mark>service</mark> واحد خواهد بود. به عنوان مثال، اگر دسترسی‌پذیری یک <mark>service</mark> فردی 99.5٪ باشد، در این صورت دسترسی‌پذیری <mark>endpoint</mark> <mark>findOrder()</mark>، که چهار <mark>provider services</mark> را فراخوانی می‌کند، 99.5٪(4+1) = 97.5٪ است!
+  </p>
+  <p>
+   چندین استراتژی وجود دارد که می‌توانید برای بهبود دسترسی‌پذیری از آن‌ها استفاده کنید. اولین استراتژی این است که <mark>API composer</mark> در صورت عدم موفقیت یک <mark>Provider service</mark>، داده‌های ذخیره شده قبلی را برگرداند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

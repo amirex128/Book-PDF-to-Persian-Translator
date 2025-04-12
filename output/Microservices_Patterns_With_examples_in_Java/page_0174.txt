@@ -1,0 +1,49 @@
+144
+CHAPTER 4
+Managing transactions with sagas
+...
+SagaManager<CreateOrderSagaState>
+createOrderSagaManager,
+...) {
+return new OrderService(restaurantRepository,
+...
+createOrderSagaManager
+...);
+}
+@Bean
+public SagaManager<CreateOrderSagaState> createOrderSagaManager(CreateOrderS
+aga saga) {
+return new SagaManagerImpl<>(saga);
+}
+@Bean
+public CreateOrderSaga createOrderSaga(OrderServiceProxy orderService,
+ConsumerServiceProxy consumerService,
+...) {
+return new CreateOrderSaga(orderService, consumerService, ...);
+}
+@Bean
+public OrderCommandHandlers orderCommandHandlers() {
+return new OrderCommandHandlers();
+}
+@Bean
+public SagaCommandDispatcher
+orderCommandHandlersDispatcher(OrderCommandHan
+dlers orderCommandHandlers) {
+return new SagaCommandDispatcher("orderService", orderCommandHandlers.comma
+ndHandlers());
+}
+@Bean
+public KitchenServiceProxy kitchenServiceProxy() {
+return new KitchenServiceProxy();
+}
+@Bean
+public OrderServiceProxy orderServiceProxy() {
+return new OrderServiceProxy();
+}
+...
+}
+This class defines several Spring @Beans including orderService, createOrder-
+SagaManager, createOrderSaga, orderCommandHandlers, and orderCommandHandlers-
+Dispatcher. It also defines Spring @Beans for the various proxy classes, including
+kitchenServiceProxy and orderServiceProxy.
+ 

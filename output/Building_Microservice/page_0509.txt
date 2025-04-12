@@ -1,0 +1,39 @@
+7 Stewart has in turn credited Phil Calçado and Mustafa Sezgin for this recommendation.
+Stewart Gleadow from REA has suggested the guideline “one experience, one BFF.”
+So if the iOS and Android experiences are very similar, then it is easier to justify hav‐
+ing a single BFF.7 If, however, they diverge greatly, then having separate BFFs makes
+more sense. In the case of REA, although there was overlap between the two experi‐
+ences, different teams owned them and rolled out similar features in different ways.
+Sometimes the same feature might be deployed differently on a different mobile
+device—what amounts to a native experience for an Android application might need
+to be reworked to feel native on iOS.
+Another lesson from the REA story (and one we’ve covered many times already) is
+that software often works best when aligned around team boundaries, and BFFs are
+no exception. SoundCloud having a single mobile team makes having a single BFF
+seem sensible at first glance, as does REA having two different BFFs for the two sepa‐
+rate teams. It’s worth noting that the SoundCloud engineers I spoke to suggested that
+having one BFF for the Android and iOS listener applications was something they
+might reconsider—they had a single mobile team, but in reality they were a mix of
+Android and iOS specialists, and they found themselves mostly working on one or
+the other application, which implies they were really two teams in effect.
+Often the driver toward having a smaller number of BFFs is a desire to reuse server-
+side functionality to avoid too much duplication, but there are other ways to handle
+this, which we’ll cover next.
+Reuse and BFFs
+One of the concerns of having a single BFF per user interface is that you can end up
+with lots of duplication among the BFFs. For example, they may end up performing
+the same types of aggregation, have the same or similar code for interfacing with
+downstream services, and so on. If you are looking to extract common functionality,
+then often one of the challenges is in finding it. That duplication may occur in the
+BFFs themselves, but it can also end up being baked into the different clients. Due to
+the fact that these clients use very different technology stacks, identifying the fact that
+this duplication is occurring can be difficult. With organizations tending to have a
+common technology stack for server-side components, having multiple BFFs with
+duplication may be easier to spot and factor out.
+Some people react to this by wanting to merge the BFFs back together, and they end
+up with a general-purpose aggregating gateway. My concern around regressing to a
+single aggregating gateway is that we can end up losing more than we gain, especially
+as there can be other ways to approach this duplication.
+Pattern: Backend for Frontend (BFF) 
+| 
+483

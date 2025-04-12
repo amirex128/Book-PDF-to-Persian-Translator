@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 158</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        به همین دلایل، REST به نظر می‌رسد که سبک غالب برای public APIs است. The main focus از frameworkهای RPC بر روی requests بین services که متعلق به همان سازمان هستند، متمرکز است، که معمولاً در همان datacenter قرار دارند.
+    </p>
+    <h4>Data encoding و evolution برای RPC</h4>
+    <p>
+        برای evolvability، این مهم است که clients و servers RPC می‌توانند به طور مستقل تغییر داده و deploy شوند. در مقایسه با داده‌هایی که از طریق databases جریان دارند (همانطور که در بخش قبل توضیح داده شد)، ما می‌توانیم یک فرض ساده‌کننده را در مورد dataflow از طریق services در نظر بگیریم: منطقی است که فرض کنیم که همه servers ابتدا به‌روزرسانی می‌شوند و همه clients در مرحله دوم. بنابراین، شما فقط به backward compatibility در requests، و forward compatibility در responses نیاز دارید.
+    </p>
+    <p>
+        The backward و forward compatibility properties از یک طرح RPC از هر encoding که استفاده می‌کند، به ارث می‌رسد:
+    </p>
+    <ul>
+        <li>Thrift، gRPC (Protocol Buffers) و Avro RPC می‌توانند با توجه به قوانین compatibility از encoding format مربوطه، تکامل یابند.</li>
+        <li>در SOAP، requests و responses با XML schemas مشخص می‌شوند. این‌ها می‌توانند تکامل یابند، اما برخی از pitfalls ظریف وجود دارد [47].</li>
+        <li>APIs RESTful به طور معمول از JSON (بدون یک schema formally specified) برای responses استفاده می‌کنند و پارامترهای request JSON یا URI-encoded/form-encoded برای requests. اضافه کردن پارامترهای request اختیاری و اضافه کردن فیلدهای جدید به objectهای response معمولاً تغییراتی در نظر گرفته می‌شوند که compatibility را حفظ می‌کنند.</li>
+    </ul>
+    <p>
+        Service compatibility با این واقعیت دشوارتر می‌شود که RPC اغلب برای communication در سراسر مرزهای سازمانی استفاده می‌شود، بنابراین ارائه دهنده یک service اغلب هیچ کنترلی بر روی clients خود ندارد و نمی‌تواند آن‌ها را مجبور به ارتقاء کند. بنابراین، compatibility نیاز به مدت طولانی، شاید به طور نامحدود، حفظ می‌شود. اگر یک تغییر compatibility-breaking مورد نیاز باشد، service provider اغلب در نهایت multiple versions از service API را در کنار هم نگهداری می‌کند.
+    </p>
+    <p>
+        هیچ توافقی در مورد چگونگی عملکرد API versioning وجود ندارد (یعنی، چگونه یک client می‌تواند نشان دهد که از کدام version از API می‌خواهد استفاده کند [48]). برای APIs RESTful، رویکردهای common استفاده از یک version number در URL یا در header HTTP Accept است.
+    </p>
+    <p>
+        برای services که از API keys برای شناسایی یک client خاص استفاده می‌کنند، یک گزینه دیگر این است که یک API version درخواست شده client را در server ذخیره کنید و به این انتخاب version اجازه دهید از طریق یک interface administrative جداگانه به‌روزرسانی شود [49].
+    </p>
+    <h4>Message-Passing Dataflow</h4>
+    <p>
+        ما به راه‌های مختلفی نگاه می‌کردیم که data encoded از یک process به دیگری جریان می‌یابد. تاکنون، ما در مورد REST و RPC (که در آن یک فرآیند یک request را از طریق network به یک فرآیند دیگر ارسال می‌کند و انتظار یک response را در اسرع وقت دارد) بحث کرده‌ایم،
+    </p>
+    <p>
+        136 | Chapter 4: Encoding and Evolution
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

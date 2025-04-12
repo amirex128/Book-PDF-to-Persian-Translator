@@ -1,0 +1,40 @@
+You get the fastest feedback on your development laptop—but that is far from
+production-like. You could roll out every commit to an environment that is a faithful
+reproduction of your actual production environment, but that will likely take longer
+and cost more. So finding the balance is key, and continuing to review the trade-off
+between fast feedback and the need for production-like environments can be an
+incredibly important ongoing activity.
+The challenges of creating a production-like environment are also part of why more
+people are doing forms of testing in production, including techniques such as smoke
+testing and parallel runs. We’ll come back to this topic in Chapter 8.
+Artifact Creation
+As we move our microservice into different environments, we actually have to have
+something to deploy. It turns out there are a number of different options for what
+type of deployment artifact you can use. In general, which artifact you create will
+depend greatly on the technology you have chosen to adopt for deployment. We’ll be
+looking at that in depth in the next chapter, but I wanted to give you some very
+important tips about how artifact creation should fit into your CI/CD build process.
+To keep things simple, we’ll sidestep exactly what type of artifact we are creating—
+just consider it a single deployable blob for the moment. Now, there are two impor‐
+tant rules we need to consider. Firstly, as I mentioned earlier, we should build an arti‐
+fact once and once only. Building the same thing over and over again is a waste of
+time and bad for the planet, and it can theoretically introduce problems if the build
+configuration isn’t exactly the same each time. On some programming languages, a
+different build flag can make the software behave quite differently. Secondly, the arti‐
+fact you verify should be the artifact you deploy! If you build a microservice, test it,
+say “yes, it’s working,” and then build it again for deployment into production, how
+do you know that the software you validated is the same software you deployed?
+Taking these two ideas together, we have a pretty simple approach. Build your
+deployable artifact once and once only, and ideally do it pretty early in the pipeline. I
+would typically do this after compiling the code (if required) and running my fast
+tests. Once created, this artifact is stored in an appropriate repository—this could be
+something like Artifactory or Nexus, or perhaps a container registry. Your choice of
+deployment artifact likely dictates the nature of the artifact store. This same artifact
+can then be used for all stages in the pipeline that follow, up to and including deploy‐
+ment into production. So coming back to our earlier pipeline, we can see in
+Figure 7-4 that we create an artifact for our Catalog service during the first stage of
+the pipeline and then deploy the same build-123 artifact as part of the slow tests,
+performance tests, and production stages.
+204 
+| 
+Chapter 7: Build

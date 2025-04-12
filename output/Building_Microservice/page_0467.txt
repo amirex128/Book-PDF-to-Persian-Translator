@@ -1,0 +1,23 @@
+maintain a reverse proxy within our microservice’s logical boundary, use a hidden
+Redis node, or divert read queries to read replicas of a database.
+Figure 13-12. The Catalog implements caching internally, making it invisible to
+consumers
+The major issue with this form of caching is that it has reduced scope for optimizing
+for latency, as a round trip by consumers to the microservice is still needed. By cach‐
+ing at or near to the perimeter of a microservice, the cache can ensure that we don’t
+need to carry out further expensive operations (like database queries), but the call
+needs to be made. This also reduces the effectiveness of this form of caching for any
+form of robustness.
+This might make this form of caching seem less useful, but there is huge value to
+transparently improving performance for all consumers of a microservice just by
+making a decision to implement caching internally. A microservice that is widely
+used across an organization may benefit hugely by implementing some form of inter‐
+nal caching, helping perhaps to improve response times for a number of consumers
+while also allowing the microservice to scale more effectively.
+In the case of our top ten scenario, we’d have to consider whether or not this form of
+caching might help. Our decision would come down to what our main worry is. If it’s
+about the end-to-end latency of the operation, how much time would a server-side
+cache save? Client-side caching would likely give us a better performance benefit.
+Caching 
+| 
+441

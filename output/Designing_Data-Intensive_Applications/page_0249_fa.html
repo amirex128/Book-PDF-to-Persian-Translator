@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 249</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Replication and Durability</h4>
+    <p>
+        از نظر تاریخی، <em>durability</em> به معنای نوشتن به یک <em>archive tape</em> بود. سپس به عنوان نوشتن به یک دیسک یا SSD درک شد. اخیراً، به معنای <em>replication</em> تطبیق داده شده است.
+    </p>
+    <p>
+        کدام پیاده‌سازی بهتر است؟
+    </p>
+    <p>
+        حقیقت این است که هیچ چیز کامل نیست:
+    </p>
+    <ul>
+        <li>
+            اگر شما به دیسک <em>write</em> کنید و machine از بین برود، حتی اگر داده‌های شما از دست نرود، تا زمانی که machine را تعمیر یا دیسک را به machine دیگری منتقل نکنید، غیرقابل دسترس است. <em>Replicated systems</em> می‌توانند در دسترس باقی بمانند.
+        </li>
+        <li>
+            یک <em>correlated fault</em> — یک <em>power outage</em> یا یک باگ که هر node را در یک ورودی خاص <em>crash</em> می‌کند—می‌تواند تمام <em>replicas</em> را به یکباره از کار بیندازد (به "Reliability" در صفحه 6 مراجعه کنید)، و هر داده‌ای را که فقط در حافظه است، از دست بدهد. بنابراین نوشتن به دیسک هنوز برای <em>in-memory databases</em> مرتبط است.
+        </li>
+        <li>
+            در یک <em>asynchronously replicated system</em>، <em>recent writes</em> ممکن است زمانی که <em>leader</em> در دسترس نیست، از بین بروند (به "Handling Node Outages" در صفحه 156 مراجعه کنید).
+        </li>
+        <li>
+            به ویژه نشان داده شده است که SSDها، زمانی که برق ناگهان قطع می‌شود، گاهی <em>guarantees</em> ای را که قرار است ارائه دهند، نقض می‌کنند: حتی <em>fsync</em> هم تضمین نمی‌شود که به درستی کار کند [12]. <em>Disk firmware</em> می‌تواند دارای باگ باشد، درست مانند هر نوع دیگری از software [13, 14].
+        </li>
+        <li>
+            تعاملات ظریف بین <em>storage engine</em> و پیاده‌سازی <em>filesystem</em> می‌تواند منجر به باگ‌هایی شود که ردیابی آنها دشوار است، و ممکن است باعث شود فایل‌ها روی دیسک پس از crash خراب شوند [15, 16].
+        </li>
+        <li>
+            داده‌ها روی دیسک می‌توانند به تدریج بدون اینکه این مسئله شناسایی شود، خراب شوند [17]. اگر داده‌ها برای مدتی خراب شده باشند، <em>replicas</em> و <em>recent backups</em> نیز ممکن است خراب شوند. در این حالت، باید سعی کنید داده‌ها را از یک <em>historical backup</em> بازیابی کنید.
+        </li>
+        <li>
+            یک مطالعه روی SSDها نشان داد که بین 30٪ تا 80٪ از درایوها در طول چهار سال اول عملیات، حداقل یک بلوک بد ایجاد می‌کنند [18]. هارد دیسک‌های مغناطیسی نرخ کمتری از سکتورهای بد، اما نرخ شکست کامل بالاتری نسبت به SSDها دارند.
+        </li>
+        <li>
+            اگر یک SSD از برق جدا شود، بسته به دما، می‌تواند در عرض چند هفته شروع به از دست دادن داده‌ها کند [19].
+        </li>
+    </ul>
+    <p>
+        در عمل، هیچ تکنیکی وجود ندارد که بتواند <em>absolute guarantees</em> ارائه دهد. فقط تکنیک‌های مختلف کاهش ریسک وجود دارد، از جمله نوشتن به دیسک، <em>replicating</em> به machine های remote، و <em>backups</em>—و آنها می‌توانند و باید با هم استفاده شوند. مانند همیشه، عاقلانه است که هر "guarantees" نظری را با کمی تردید در نظر بگیرید.
+    </p>
+    <p>
+        The Slippery Concept of a Transaction
+        <br>
+        |
+        <br>
+        227
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

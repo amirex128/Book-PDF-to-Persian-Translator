@@ -1,0 +1,26 @@
+Figure 4-13. The Notifications microservice needs to request further details from the
+Customer microservice that aren’t included in the event
+There are some downsides with this approach. Firstly, the Notifications microser‐
+vice now has to know about the Customer microservice, adding additional domain
+coupling. While domain coupling, as we discussed in Chapter 2, is on the looser end
+of the coupling spectrum, we’d still like to avoid it where possible. If the event that
+the Notifications microservice received contained all the information it needed,
+then this callback wouldn’t be required. The callback from the receiving microservice
+can also lead to the other major downside—namely, that in a situation with a large
+number of receiving microservices, the microservice emitting the event might get a
+barrage of requests as a result. Imagine if five different microservices all received the
+same customer creation event, and all needed to request additional information—
+they’d all have to immediately send a request to the Customer microservice to get
+what they needed. As the number of microservices interested in a particular event
+increases, the impact of these calls could become significant.
+Fully detailed events
+The alternative, which I prefer, is to put everything into an event that you would be
+happy otherwise sharing via an API. If you’d let the Notifications microservice ask
+for the email address and name of a given customer, why not just put that informa‐
+tion in the event in the first place? In Figure 4-14, we see this approach—Notifica
+tions is now more self-sufficient and is able to do its job without needing to
+communicate with the Customer microservice. In fact, it might never need to know
+the Customer microservice exists.
+Pattern: Event-Driven Communication 
+| 
+113

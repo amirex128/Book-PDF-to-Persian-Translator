@@ -1,0 +1,44 @@
+248
+CHAPTER 7
+Implementing queries in a microservice architecture
+and update orders. One challenge, however, with using PutItem() is ensuring that
+simultaneous updates to the same item are handled correctly.
+ Consider, for example, the scenario where two event handlers simultaneously
+attempt to update the same item. Each event handler calls OrderHistoryDaoDynamoDb
+to load the item from DynamoDB, change it in memory, and update it in DynamoDB
+using PutItem(). One event handler could potentially overwrite the change made by
+the other event handler. OrderHistoryDaoDynamoDb can prevent lost updates by using
+DynamoDB’s optimistic locking mechanism. But an even simpler and more efficient
+approach is to use the UpdateItem() operation.
+ The UpdateItem() operation updates individual attributes of the item, creating
+the item if necessary. Since different event handlers update different attributes of the
+Order item, using UpdateItem makes sense. This operation is also more efficient
+because there’s no need to first retrieve the order from the table.
+ One challenge with updating the database in response to events is, as mentioned
+earlier, detecting and discarding duplicate events. Let’s look at how to do that when
+using DynamoDB. 
+DETECTING DUPLICATE EVENTS
+All of Order History Service’s event handlers are idempotent. Each one sets one
+or more attributes of the Order item. Order History Service could, therefore, sim-
+ply ignore the issue of duplicate events. The downside of ignoring the issue, though,
+is that Order item will sometimes be temporarily out-of-date. That’s because an
+event handler that receives a duplicate event will set an Order item’s attributes to
+previous values. The Order item won’t have the correct values until later events are
+redelivered.
+ As described earlier, one way to prevent data from becoming out-of-date is to
+detect and discard duplicate events. OrderHistoryDaoDynamoDb can detect duplicate
+events by recording in each item the events that have caused it to be updated. It can
+then use the UpdateItem() operation’s conditional update mechanism to only update
+an item if an event isn’t a duplicate.
+ A conditional update is only performed if a condition expression is true. A condition
+expression tests whether an attribute exists or has a particular value. The Order-
+HistoryDaoDynamoDb DAO can track events received from each aggregate instance
+using an attribute called «aggregateType»«aggregateId» whose value is the highest
+received event ID. An event is a duplicate if the attribute exists and its value is less
+than or equal to the event ID. The OrderHistoryDaoDynamoDb DAO uses this condi-
+tion expression:
+attribute_not_exists(«aggregateType»«aggregateId») 
+OR «aggregateType»«aggregateId» < :eventId
+The condition expression only allows the update if the attribute doesn’t exist or the
+eventId is greater than the last processed event ID.
+ 

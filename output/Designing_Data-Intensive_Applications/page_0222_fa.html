@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 222</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        (به قسمت II برای تعریف shared nothing مراجعه کنید). بنابراین، یک dataset بزرگ را می‌توان در سراسر بسیاری از دیسک‌ها توزیع کرد و بار query را می‌توان در سراسر many processors توزیع کرد.
+    </p>
+    <p>
+        For queries که روی یک partition واحد عمل می‌کنند، هر node می‌تواند به طور مستقل queries را برای partition خود اجرا کند، بنابراین throughput query را می‌توان با افزودن nodes بیشتر scale کرد. Queries بزرگ و پیچیده به طور بالقوه می‌توانند در سراسر many nodes parallelized شوند، اگرچه این کار به طور قابل توجهی دشوارتر می‌شود.
+    </p>
+    <p>
+        Partitioned databases در دهه 1980 توسط محصولاتی مانند Teradata و Tandem NonStop SQL [1] پیشگام شدند و اخیراً توسط databases NoSQL و data warehouses مبتنی بر Hadoop دوباره کشف شدند. برخی از سیستم‌ها برای workloads transactional و برخی دیگر برای analytics طراحی شده‌اند ("Transaction Processing or Analytics?" در صفحه 90 را ببینید): این تفاوت بر نحوه تنظیم سیستم تأثیر می‌گذارد، اما اصول اساسی partitioning برای هر دو نوع workloads اعمال می‌شود.
+    </p>
+    <p>
+        در این فصل ما ابتدا به رویکردهای مختلف برای partitioning large datasets نگاه خواهیم کرد و مشاهده خواهیم کرد که چگونه indexing of data با partitioning تعامل دارد. سپس در مورد rebalancing صحبت خواهیم کرد، که در صورتی که شما می‌خواهید nodes را در cluster خود اضافه یا حذف کنید، ضروری است. در نهایت، ما یک overview از چگونگی هدایت requests توسط databases به partitions مناسب و اجرای queries دریافت خواهیم کرد.
+    </p>
+    <h4>Partitioning and Replication</h4>
+    <p>
+        Partitioning معمولاً با replication ترکیب می‌شود تا کپی‌هایی از هر partition در multiple nodes ذخیره شوند. این بدان معناست که، حتی اگر هر record دقیقاً به یک partition تعلق داشته باشد، ممکن است هنوز هم در چندین node مختلف برای fault toler‐ance ذخیره شود.
+    </p>
+    <p>
+        یک node ممکن است بیش از یک partition را ذخیره کند. اگر یک leader–follower replication model استفاده شود، ترکیب partitioning و replication می‌تواند شبیه به شکل 6-1 باشد. The leader از هر partition به یک node اختصاص داده می‌شود و followers آن به other nodes اختصاص داده می‌شوند. هر node ممکن است leader برای برخی از partitions و یک follower برای other par‐titions باشد.
+    </p>
+    <p>
+        Everything که ما در فصل 5 در مورد replication از databases بحث کردیم، به طور مساوی در مورد replication of partitions اعمال می‌شود. انتخاب partitioning scheme عمدتاً مستقل از انتخاب replication scheme است، بنابراین ما در این فصل موضوع replication را ساده در نظر می‌گیریم و نادیده می‌گیریم.
+    </p>
+    <p>
+        200 | Chapter 6: Partitioning
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

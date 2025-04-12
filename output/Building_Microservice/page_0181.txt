@@ -1,0 +1,38 @@
+DRY is what leads us to create code that can be reused. We pull duplicated code into
+abstractions that we can then call from multiple places. Perhaps we go as far as mak‐
+ing a shared library that we can use everywhere! It turns out, though, that sharing
+code in a microservice environment is a bit more involved than that. As always, we
+have more than one option to consider.
+Sharing Code via Libraries
+One thing we want to avoid at all costs is overly coupling a microservice and con‐
+sumers such that any small change to the microservice itself can cause unnecessary
+changes to the consumer. Sometimes, however, the use of shared code can create this
+very coupling. For example, at one client we had a library of common domain objects
+that represented the core entities in use in our system. This library was used by all the
+services we had. But when a change was made to one of them, all services had to be
+updated. Our system communicated via message queues, which also had to be
+drained of their now invalid contents, and woe betide you if you forgot.
+If your use of shared code ever leaks outside your service boundary, you have intro‐
+duced a potential form of coupling. Using common code like logging libraries is fine,
+as they are internal concepts that are invisible to the outside world. The website real‐
+estate.com.au makes use of a tailored service template to help bootstrap new service
+creation. Rather than make this code shared, the company copies it for every new ser‐
+vice to ensure that coupling doesn’t leak in.
+The really important point about sharing code via libraries is that you cannot update
+all uses of the library at once. Although multiple microservices might all use the same
+library, they do so typically by packaging that library into the microservice deploy‐
+ment. To upgrade the version of the library being used, you’d therefore need to rede‐
+ploy the microservice. If you want to update the same library everywhere at exactly
+the same time, it could lead to a widespread deployment of multiple different micro‐
+services all at the same time, with all the associated headaches.
+So if you are using libraries for code reuse across microservice boundaries, you have
+to accept that multiple different versions of the same library might be out there at the
+same time. You can of course look to update all of these to the last version over time,
+but as long as you are OK with this fact, then by all means reuse code via libraries. If
+you really do need to update that code for all users at exactly the same time, then
+you’ll actually want to look at reusing code via a dedicated microservice instead.
+There is one specific use case associated with reuse through libraries that is worth
+exploring further, though.
+DRY and the Perils of Code Reuse in a Microservice World 
+| 
+155

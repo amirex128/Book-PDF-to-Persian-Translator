@@ -1,0 +1,54 @@
+149
+Business logic organization patterns
+business logic: the procedural Transaction script pattern, and the object-oriented
+Domain model pattern.
+5.1.1
+Designing business logic using the Transaction script pattern
+Although I’m a strong advocate of the object-oriented approach, there are some situa-
+tions where it is overkill, such as when you are developing simple business logic. In such
+a situation, a better approach is to write procedural code and use what the book Patterns
+of Enterprise Application Architecture by Martin Fowler (Addison-Wesley Professional, 2002)
+calls the Transaction script pattern. Rather than doing any object-oriented design, you
+write a method called a transaction script to handle each request from the presentation
+tier. As figure 5.2 shows, an important characteristic of this approach is that the classes
+that implement behavior are separate from those that store state.
+When using the Transaction script pattern, the scripts are usually located in service
+classes, which in this example is the OrderService class. A service class has one
+method for each request/system operation. The method implements the business
+logic for that request. It accesses the database using data access objects (DAOs), such
+as the OrderDao. The data objects, which in this example is the Order class, are pure
+data with little or no behavior.
+This style of design is highly procedural and relies on few of the capabilities of object-
+oriented programming (OOP) languages. This what you would create if you were writ-
+ing the application in C or another non-OOP language. Nevertheless, you shouldn’t be
+Pattern: Transaction script
+Organize the business logic as a collection of procedural transaction scripts, one for
+each type of request.
+createOrder()
+reviseOrder()
+cancelOrder()
+...
+OrderService
+Classes with
+behavior
+Classes
+with state
+save(Order)
+ﬁndOrderById()
+...
+OrderDao
+orderId
+orderLineItems
+...
+Order
+Figure 5.2
+Organizing business logic 
+as transaction scripts. In a typical 
+transaction script–based design, one 
+set of classes implements behavior 
+and another set stores state. The 
+transaction scripts are organized into 
+classes that typically have no state. 
+The scripts use data classes, which 
+typically have no behavior.
+ 

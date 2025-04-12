@@ -1,0 +1,39 @@
+authorization-related configuration to an upstream gateway, then that doesn’t seem
+terribly “independent” to me.
+Therefore, we’d want to push the decision about whether or not the call should be
+authorized into the same microservice where the functionality being requested lives.
+This makes the microservice more self-contained and also gives us the option to
+implement zero trust if we want.
+Decentralizing Authorization
+Given the challenges of centralized authorization in a microservices environment,
+we’d like to push this logic to the downstream microservice. The Order microservice
+is where the functionality for accessing order details lives, so it would make logical
+sense for that service to decide if the call is valid. In this specific case, though, the
+Order microservice needs information about what human is making the request. So
+how do we get that information to the Order microservice?
+At the simplest level, we could just require that the identifier for the person making
+the request be sent to the Order microservice. If using HTTP, for example, we could
+just stick the username in a header. But in such a case, what’s to stop a malicious
+party from inserting just any old name into the request to get the information they
+need? Ideally, we want a way to make sure that the request is really being made on
+behalf of an authenticated user and that we can pass along additional information
+about that user—for example, the groups that user might fall in.
+Historically, there are a variety of different ways that this has been handled (including
+techniques like nested SAML assertions, which, yes, are as painful as they sound), but
+recently the most common solution to this particular problem has been to use JSON
+Web Tokens.
+JSON Web Tokens
+JWTs allow you to store multiple claims about an individual into a string that can be
+passed around. This token can be signed to ensure that the structure of the token
+hasn’t been manipulated, and it can also optionally be encrypted to provide crypto‐
+graphic guarantees around who can read the data. Although JWTs can be used for
+generic exchanges of information where it is important to ensure that the data hasn’t
+been tampered with, they are most commonly used to help transmit information to
+aid authorization.
+Once signed, the JWTs can easily be passed via a variety of protocols, and the tokens
+can optionally be configured to expire after a certain period of time. They are widely
+supported, with a number of identity providers that support generating JWTs, and a
+large number of libraries for using JWTs inside your own code.
+382 
+| 
+Chapter 11: Security

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 117</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   1 داستان واقعی.
+  </p>
+  <p>
+   2 Maarten van Steen and Andrew S. Tanenbaum, Distributed Systems, 3rd ed. (Scotts Valley, CA: CreateSpace
+   Independent Publishing Platform, 2017).
+  </p>
+  <h4>تغییر <strong>Interfaces</strong></h4>
+  <p>
+   هنگامی که ما تغییراتی را در یک <strong>interface</strong> در داخل یک فرآیند در نظر می‌گیریم، عمل راه‌اندازی تغییر ساده است. کدی که <strong>interface</strong> را پیاده‌سازی می‌کند و کدی که <strong>interface</strong> را فراخوانی می‌کند، همگی در یک فرآیند بسته‌بندی شده‌اند. در واقع، اگر من یک <strong>method signature</strong> را با استفاده از یک <strong>IDE</strong> با قابلیت <strong>refactoring</strong> تغییر دهم، اغلب خود <strong>IDE</strong> به طور خودکار فراخوانی‌ها به این متد در حال تغییر را <strong>refactor</strong> می‌کند. راه‌اندازی چنین تغییری را می‌توان به صورت اتمی انجام داد—هر دو طرف <strong>interface</strong> در یک فرآیند واحد بسته‌بندی شده‌اند.
+  </p>
+  <p>
+   با ارتباط بین microservicesها، با این حال، microservice که یک <strong>interface</strong> را به نمایش می‌گذارد و microservicesهای مصرف‌کننده که از آن <strong>interface</strong> استفاده می‌کنند، microservicesهایی هستند که به طور جداگانه قابل استقرار هستند. هنگام ایجاد یک تغییر <em>backward-incompatible</em> در یک <strong>microservice interface</strong>، ما یا باید یک استقرار <strong>lockstep</strong> با <strong>consumers</strong> انجام دهیم و اطمینان حاصل کنیم که آنها برای استفاده از <strong>interface</strong> جدید به‌روز شده‌اند، یا راهی برای فازبندی راه‌اندازی قرارداد microservice جدید پیدا کنیم. ما این مفهوم را با جزئیات بیشتری در ادامه این فصل بررسی خواهیم کرد.
+  </p>
+  <h4>Error Handling</h4>
+  <p>
+   در داخل یک فرآیند، اگر من یک متد را فراخوانی کنم، ماهیت خطاها تمایل دارد که کاملاً سرراست باشد. به طور ساده، خطاها یا مورد انتظار هستند و به راحتی قابل رسیدگی هستند، یا فاجعه‌بار هستند تا جایی که ما فقط خطا را به <strong>call stack</strong> منتقل می‌کنیم. خطاها، در کل، قطعی هستند.
+  </p>
+  <p>
+   با یک سیستم توزیع‌شده، ماهیت خطاها می‌تواند متفاوت باشد. شما در برابر مجموعه‌ای از خطاها آسیب‌پذیر هستید که خارج از کنترل شما هستند. شبکه‌ها زمان‌بندی می‌کنند. microservicesهای پایین‌دست ممکن است موقتاً در دسترس نباشند. شبکه‌ها قطع می‌شوند، <strong>containers</strong> به دلیل مصرف بیش از حد حافظه کشته می‌شوند، و در شرایط حاد، بخش‌هایی از <strong>data center</strong> شما می‌تواند آتش بگیرد.1
+  </p>
+  <p>
+   در کتاب <em>Distributed Systems</em>،2 <strong>Andrew Tanenbaum</strong> و <strong>Maarten Steen</strong>، حالت‌های شکست پنج گانه را که می‌توانید هنگام نگاه کردن به یک ارتباط <strong>inter-process</strong> مشاهده کنید، شکسته‌اند. در اینجا یک نسخه ساده شده است:
+  </p>
+  <ul>
+   <li>شکست <strong>Crash</strong></li>
+  </ul>
+  <p>
+   همه چیز خوب بود تا اینکه سرور خراب شد. راه‌اندازی مجدد!
+  </p>
+  <p>From In-Process to Inter-Process | 91</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+hardware to serve multiple microservices, it can reduce licensing costs, and it can also
+help reduce the work around management of the database itself.
+Figure 8-6. The same physical database infrastructure hosting two logically isolated
+databases
+The important thing to realize here is that although these two databases might be run
+from the same hardware and database engine, they are still logically isolated data‐
+bases. They cannot interfere with each other (unless you allow that). The one major
+thing to consider is that if this shared database infrastructure fails, you might impact
+multiple microservices, which could have catastrophic impact.
+In my experience, organizations that manage their own infrastructure and run in an
+“on-prem” fashion tend to be much more likely to have multiple different databases
+hosted from shared database infrastructure, for the cost reasons I outlined before.
+Provisioning and managing hardware is painful (and historically at least, databases
+are less likely to run on virtualized infrastructure), so you want less of that.
+On the other hand, teams that run on public cloud providers are much more likely to
+provision dedicated database infrastructure on a per-microservice basis, as shown in
+Figure 8-7. The costs of provisioning and managing this infrastructure are much
+lower. AWS’s Relational Database Service (RDS), for example, can automatically han‐
+dle concerns like backups, upgrades, and multiavailability zone failover, and similar
+products are available from the other public cloud providers. This makes it much
+more cost effective to have more isolated infrastructure for your microservice, giving
+each microservice owner more control rather than having to rely on a shared service.
+224 
+| 
+Chapter 8: Deployment

@@ -1,0 +1,39 @@
+up to date. Write-behind caches in the context of microservices makes this much less
+clear.
+While write-behind caches are often used for in-process optimization, I’ve seen them
+much more rarely used for microservice architectures, partly due to the fact that
+other, more straightforward forms of caching are good enough, but largely due to the
+complexity of handling the loss of unwritten cached data.
+The Golden Rule of Caching
+Be careful about caching in too many places! The more caches between you and the
+source of fresh data, the more stale the data can be, and the harder it can be to deter‐
+mine the freshness of the data that a client eventually sees. It can also be more
+difficult to reason about where data needs to be invalidated. The trade-off around
+caching—balancing freshness of data against optimization of your system for load or
+latency—is a delicate one, and if you cannot easily reason about how fresh (or not)
+data might be, this becomes difficult.
+Consider a situation in which the Inventory microservice is caching stock levels.
+Requests to Inventory for stock levels may get served out of this server-side cache,
+speeding up the request accordingly. Let’s also now assume we’ve set a TTL for this
+internal cache to be one minute, meaning our server-side cache could be up to one
+minute behind the actual stock level. Now, it turns out we are also caching on the
+client side inside Recommendation, where we’re also using a TTL of one minute.
+When an entry in the client-side cache expires, we make a request from Recommenda
+tion to Inventory to get an up-to-date stock level, but unbeknownst to us, our
+request hits the server-side cache, which at this point could also be up to one minute
+old. So we could end up storing a record in our client-side cache that is already up to
+one minute old from the start. This means that the stock levels Recommendation is
+using could potentially be up to two minutes out of date, even though from the point
+of view of Recommendation, we think they could be only up to one minute out of date.
+There are a number of ways to avoid problems like this. Using a timestamp-based
+expiration for a start would be better than TTLs, but it’s also an example of what hap‐
+pens when caching is effectively nested. If you cache the result of an operation that in
+turn is based on cached inputs, how clear can you be about how up to date the end
+result is?
+Coming back to the famous quote from Knuth earlier, premature optimization can
+cause issues. Caching adds complexity, and we want to add as little complexity as
+possible. The ideal number of places to cache is zero. Anything else should be an
+optimization you have to make—but be aware of the complexity it can bring.
+Caching 
+| 
+447

@@ -1,0 +1,71 @@
+187
+Developing business logic using event sourcing
+ Consider, for example, the Order aggregate. As figure 6.2 shows, rather than store
+each Order as a row in an ORDER table, event sourcing persists each Order aggregate as
+one or more rows in an EVENTS table. Each row is a domain event, such as Order
+Created, Order Approved, Order Shipped, and so on.
+When an application creates or updates an aggregate, it inserts the events emitted by
+the aggregate into the EVENTS table. An application loads an aggregate from the event
+store by retrieving its events and replaying them. Specifically, loading an aggregate
+consists of the following three steps:
+1
+Load the events for the aggregate.
+2
+Create an aggregate instance by using its default constructor.
+3
+Iterate through the events, calling apply().
+For example, the Eventuate Client framework, covered later in section 6.2.2, uses code
+similar to the following to reconstruct an aggregate:
+Class aggregateClass = ...;
+Aggregate aggregate = aggregateClass.newInstance();
+for (Event event : events) {
+aggregate = aggregate.applyEvent(event);
+}
+// use aggregate...
+It creates an instance of the class and iterates through the events, calling the aggre-
+gate’s applyEvent() method. If you’re familiar with functional programming, you
+may recognize this as a fold or reduce operation.
+event_id
+102
+103
+104
+105
+...
+EVENTS table
+event_type
+Order
+Created
+Order
+Approved
+Order
+Shipped
+Order
+Delivered
+...
+entity_type
+Order
+Order
+Order
+Order
+...
+entity_id
+101
+101
+101
+101
+...
+event_data
+{...}
+{...}
+{...}
+{...}
+...
+Unique event ID
+The type of the event
+Identiﬁes the aggregate
+The serialized event,
+such as JSON
+Figure 6.2
+Event sourcing persists each aggregate as a sequence of events. A RDBMS-based 
+application can, for example, store the events in an EVENTS table.
+ 

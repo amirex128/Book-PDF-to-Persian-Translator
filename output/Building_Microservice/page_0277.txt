@@ -1,0 +1,41 @@
+2 Senthil Padmanabhan and Pranav Jha, “WebAssembly at eBay: A Real-World Use Case,” eBay, May 22, 2019,
+https://oreil.ly/SfvHT.
+seems to imply that a certain amount of CPU and I/O is given to your function run‐
+time, but you can’t control those aspects directly. This may mean that you end up
+having to give more memory to a function even if it doesn’t need it just to get the
+CPU you need. Ultimately, if you feel that you need to do a lot of fine tuning around
+resources available to your functions, then I feel that, at this stage at least, FaaS is
+probably not a great option for you.
+Another limitation to be aware of is that function invocations can provide limits in
+terms of how long they can run for. Google Cloud functions, for example, are cur‐
+rently capped at 9 minutes of execution, while AWS Lambda functions can run for up
+to 15 minutes. Azure functions can run forever if you want (depending on the type of
+plan you are on). Personally, I think if you have functions running for long periods of
+time, this probably points to the sort of problem that functions aren’t a good fit for.
+Finally, most function invocations are considered to be stateless. Conceptually, this
+means that a function cannot access state left by a previous function invocation
+unless that state is stored elsewhere (for example, in a database). This has made it
+hard to have multiple functions chained together—consider one function orchestrat‐
+ing a series of calls to other downstream functions. A notable exception is Azure
+Durable Functions, which solves this problem in a really interesting way. Durable
+Functions supports the ability to suspend the state of a given function and allow it to
+restart where the invocation left off—this is all handled transparently through the use
+of reactive extensions. This is a solution that I think is significantly more developer
+friendly than AWS’s own Step Functions, which ties together multiple functions
+using JSON-based configuration.
+WebAssembly (Wasm)
+Wasm is an official standard that was originally defined to give developers a way of
+running sandboxed programs written in a variety of programming languages on cli‐
+ent browsers. Defining both a packaging format and a runtime environment, the goal
+of Wasm is to allow arbitrary code to run in a safe and efficient manner on client
+devices. This can allow for far more sophisticated client-side applications to be cre‐
+ated when using normal web browsers. As a concrete example, eBay used Wasm to
+deliver barcode scanner software, the core of which was written in C++ and which
+was previously available only to native Android or iOS applications, to the web.2
+The WebAssembly System Interface (WASI) was defined as a way to let Wasm move
+from the browser and work anywhere a compatible WASI implementation can be
+found. An example of this is the ability to run Wasm on content delivery networks
+like Fastly or Cloudflare.
+Deployment Options 
+| 
+251

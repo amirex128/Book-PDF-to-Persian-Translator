@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 238</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        به عنوان مثال، Espresso از LinkedIn از Helix [31] برای مدیریت cluster (که به نوبه خود به ZooKeeper متکی است) استفاده می‌کند و یک routing tier را همانطور که در شکل 6-8 نشان داده شده است، پیاده‌سازی می‌کند. HBase، SolrCloud و Kafka نیز از ZooKeeper برای پیگیری partition assignment استفاده می‌کنند.
+    </p>
+    <p>
+        MongoDB یک architecture مشابه دارد، اما به پیاده‌سازی config server خود و daemons mongos به عنوان the routing tier متکی است.
+    </p>
+    <p>
+        Cassandra و Riak یک رویکرد متفاوت را در پیش می‌گیرند: آن‌ها از یک gossip protocol بین nodes برای انتشار هرگونه تغییرات در cluster state استفاده می‌کنند. Requests را می‌توان به هر node ارسال کرد و آن node آن‌ها را به node مناسب برای the requested partition (رویکرد 1 در شکل 6-7) هدایت می‌کند. این model، پیچیدگی بیشتری را در database nodes قرار می‌دهد، اما از وابستگی به یک سرویس هماهنگی خارجی مانند ZooKeeper اجتناب می‌کند.
+    </p>
+    <p>
+        Couchbase به طور خودکار rebalance نمی‌کند، که طراحی را ساده می‌کند. به طور معمول با یک routing tier به نام moxi پیکربندی شده است، که در مورد تغییرات routing از cluster nodes یاد می‌گیرد [32].
+    </p>
+    <p>
+        هنگام استفاده از یک routing tier یا هنگامی که requests به یک node تصادفی ارسال می‌شود، clients هنوز هم نیاز به یافتن IP addresses برای اتصال دارند. این‌ها به اندازه تخصیص partitions به nodes سریع تغییر نمی‌کنند، بنابراین اغلب استفاده از DNS برای این منظور کافی است.
+    </p>
+    <h4>Parallel Query Execution</h4>
+    <p>
+        تاکنون ما بر روی queries بسیار ساده‌ای متمرکز شده‌ایم که یک key واحد را می‌خوانند یا می‌نویسند (به علاوه scatter/gather queries در مورد document-partitioned secondary indexes). این در مورد سطح دسترسی است که توسط اکثر datastores distributed NoSQL پشتیبانی می‌شود.
+    </p>
+    <p>
+        با این حال، محصولات massively parallel processing (MPP) relational database که اغلب برای analytics استفاده می‌شوند، در انواع queries که پشتیبانی می‌کنند، بسیار پیشرفته‌تر هستند.
+    </p>
+    <p>
+        یک query data warehouse معمولی شامل چندین join، filtering، grouping و operations aggregation است. The MPP query optimizer این query پیچیده را به تعدادی execution stages و partitions تقسیم می‌کند که بسیاری از آن‌ها می‌توانند به طور موازی بر روی nodes مختلف از cluster database اجرا شوند. Queries که شامل scanning بر روی بخش‌های بزرگی از dataset هستند، به ویژه از چنین execution parallel سود می‌برند.
+    </p>
+    <p>
+        Fast parallel execution از data warehouse queries یک موضوع تخصصی است و با توجه به اهمیت business از analytics، مورد توجه تجاری زیادی قرار می‌گیرد. ما در فصل 10 در مورد برخی از تکنیک‌ها برای execution query parallel بحث خواهیم کرد. برای یک overview دقیق‌تر از تکنیک‌های مورد استفاده در databases parallel، لطفاً به مراجع [1, 33] مراجعه کنید.
+    </p>
+    <h4>Summary</h4>
+    <p>
+        در این فصل ما راه‌های مختلفی از partitioning a large dataset را به زیرمجموعه‌های کوچکتر بررسی کردیم. Partitioning زمانی ضروری است که شما داده‌های زیادی دارید که ذخیره و پردازش آن در یک machine واحد دیگر امکان‌پذیر نیست.
+    </p>
+    <p>
+        216 | Chapter 6: Partitioning
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

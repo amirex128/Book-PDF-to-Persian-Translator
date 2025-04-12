@@ -1,0 +1,51 @@
+211
+Using sagas and event sourcing together
+6.3.2
+Creating an orchestration-based saga
+Saga orchestrators are created by some service methods. Other service methods, such
+as OrderService.createOrder(), do two things: create or update an aggregate and
+create a saga orchestrator. The service must perform both actions in a way that guar-
+antees that if it does the first action, then the second action will be done eventually.
+How the service ensures that both of these actions are performed depends on the
+kind of event store it uses.
+CREATING A SAGA ORCHESTRATOR WHEN USING AN RDBMS-BASED EVENT STORE
+If a service uses an RDBMS-based event store, it can update the event store and create
+a saga orchestrator within the same ACID transaction. For example, imagine that the
+OrderService uses Eventuate Local and the Eventuate Tram saga framework. Its
+createOrder() method would look like this:
+class OrderService
+@Autowired
+private SagaManager<CreateOrderSagaState> createOrderSagaManager;
+@Transactional
+      
+public EntityWithIdAndVersion<Order> createOrder(OrderDetails orderDetails) {
+EntityWithIdAndVersion<Order> order =
+orderRepository.save(new CreateOrder(orderDetails));  
+CreateOrderSagaState data =
+new CreateOrderSagaState(order.getId(), orderDetails);
+  
+createOrderSagaManager.create(data, Order.class, order.getId());
+return order;
+}
+...
+It’s a combination of the OrderService in listing 6.4 and the OrderService described
+in chapter 4. Because Eventuate Local uses an RDBMS, it can participate in the same
+ACID transaction as the Eventuate Tram saga framework. But if a service uses a
+NoSQL-based event store, creating a saga orchestrator isn’t as straightforward. 
+CREATING A SAGA ORCHESTRATOR WHEN USING A NOSQL-BASED EVENT STORE
+A service that uses a NoSQL-based event store will most likely be unable to atomically
+update the event store and create a saga orchestrator. The saga orchestration frame-
+work might use an entirely different database. Even if it uses the same NoSQL data-
+base, the application won’t be able to create or update two different objects atomically
+because of the NoSQL database’s limited transaction model. Instead, a service must
+have an event handler that creates the saga orchestrator in response to a domain
+event emitted by the aggregate.
+ For example, figure 6.11 shows how Order Service creates a CreateOrderSaga
+using an event handler for the OrderCreated event. Order Service first creates an
+Ensure the createOrder() executes
+within a database transaction.
+Create the Order 
+aggregate.
+Create the 
+CreateOrderSaga.
+ 

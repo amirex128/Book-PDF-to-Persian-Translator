@@ -1,0 +1,30 @@
+Figure 10-1. A single microservice instance on a single host
+First, we’ll want to get information from the host itself. CPU, memory—all of these
+things can be useful. Next, we’ll want to have access to the logs from the microservice
+instance itself. If a user reports an error, we should be able to see the error in these
+logs, hopefully giving us a way to work out what went wrong. At this point, with our
+single host, we can probably get by with just logging locally to the host and using
+command-line tools to look at the log.
+Finally, we might want to monitor the application itself—observing it from the out‐
+side. At a bare minimum, monitoring the response time of the microservice is a good
+idea. If you have a web server fronting your microservice instance, you could perhaps
+just look at the logs of the web server. Or perhaps you can get a bit more advanced,
+using something like a health check endpoint to see if the microservice is up and
+“healthy” (we’ll explore what this means later).
+Time passes, loads increase, and we find ourselves needing to scale…
+Single Microservice, Multiple Servers
+Now we have multiple copies of the service running on separate hosts, as shown in
+Figure 10-2, with requests to the different instances distributed via a load balancer.
+Things start to get a bit trickier now. We still want to monitor all the same things as
+before, but we need to do so in such a way that we can isolate the problem. When the
+CPU is high, is it a problem we are seeing on all hosts, which would point to an issue
+with the service itself? Or is it isolated to a single host, implying that the host itself
+has the problem—perhaps a rogue OS process?
+At this point, we still want to track the host-level metrics, and perhaps maybe even
+alert on them when they pass some sort of threshold. But now we want to see what
+they are across all hosts, as well as individual hosts. In other words, we want to aggre‐
+gate them up and still be able to drill down. So we need something that can collect all
+these metrics from across the hosts and allow us to slice and dice them.
+Single Microservice, Multiple Servers 
+| 
+307

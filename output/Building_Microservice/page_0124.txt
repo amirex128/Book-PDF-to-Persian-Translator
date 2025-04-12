@@ -1,0 +1,26 @@
+Figure 4-4. Moving Fraud Detection to a background process can reduce concerns
+around the length of the call chain
+Of course, we could also replace the use of blocking calls with some style of non‐
+blocking interaction without changing the workflow here, an approach we’ll explore
+next.
+Pattern: Asynchronous Nonblocking
+With asynchronous communication, the act of sending a call out over the network
+doesn’t block the microservice issuing the call. It is able to carry on with any other
+processing without having to wait for a response. Nonblocking asynchronous com‐
+munication comes in many forms, but we’ll be looking in more detail at the three
+most common styles I see in microservice architecture. They are:
+Communication through common data
+The upstream microservice changes some common data, which one or more
+microservices later make use of.
+Request-response
+A microservice sends a request to another microservice asking it to do some‐
+thing. When the requested operation completes, whether successfully or not, the
+upstream microservice receives the response. Specifically, any instance of the
+upstream microservice should be able to handle the response.
+Event-driven interaction
+A microservice broadcasts an event, which can be thought of as a factual state‐
+ment about something that has happened. Other microservices can listen for the
+events they are interested in and react accordingly.
+98 
+| 
+Chapter 4: Microservice Communication Styles

@@ -1,0 +1,45 @@
+128
+CHAPTER 4
+Managing transactions with sagas
+4.3.2
+Countermeasures for handling the lack of isolation
+The saga transaction model is ACD, and its lack of isolation can result in anomalies
+that cause applications to misbehave. It’s the responsibility of the developer to write
+sagas in a way that either prevents the anomalies or minimizes their impact on the
+business. This may sound like a daunting task, but you’ve already seen an example of a
+strategy that prevents anomalies. An Order’s use of *_PENDING states, such as APPROVAL
+_PENDING, is an example of one such strategy. Sagas that update Orders, such as the
+Create Order Saga, begin by setting the state of an Order to *_PENDING. The *_PENDING
+state tells other transactions that the Order is being updated by a saga and to act
+accordingly.
+ An Order’s use of *_PENDING states is an example of what the 1998 paper “Seman-
+tic ACID properties in multidatabases using remote procedure calls and update prop-
+agations” by Lars Frank and Torben U. Zahle calls a semantic lock countermeasure
+(https://dl.acm.org/citation.cfm?id=284472.284478). The paper describes how to deal
+with the lack of transaction isolation in multi-database architectures that don’t use dis-
+tributed transactions. Many of its ideas are useful when designing sagas. It describes a
+set of countermeasures for handling anomalies caused by lack of isolation that either
+prevent one or more anomalies or minimize their impact on the business. The counter-
+measures described by this paper are as follows:
+Semantic lock—An application-level lock.
+Commutative updates—Design update operations to be executable in any order.
+Pessimistic view—Reorder the steps of a saga to minimize business risk.
+Reread value—Prevent dirty writes by rereading data to verify that it’s unchanged
+before overwriting it.
+Version file—Record the updates to a record so that they can be reordered.
+By value—Use each request’s business risk to dynamically select the concur-
+rency mechanism.
+Later in this section, I describe each of these countermeasures, but first I want to
+introduce some terminology for describing the structure of a saga that’s useful when
+discussing countermeasures.
+THE STRUCTURE OF A SAGA
+The countermeasures paper mentioned in the last section defines a useful model for
+the structure of a saga. In this model, shown in figure 4.8, a saga consists of three types
+of transactions:
+Compensatable transactions—Transactions that can potentially be rolled back using
+a compensating transaction.
+Pivot transaction—The go/no-go point in a saga. If the pivot transaction com-
+mits, the saga will run until completion. A pivot transaction can be a transaction
+that’s neither compensatable nor retriable. Alternatively, it can be the last com-
+pensatable transaction or the first retriable transaction.
+ 

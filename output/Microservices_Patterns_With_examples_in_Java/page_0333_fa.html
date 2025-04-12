@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 333</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   برای مثال، یک contract برای یک REST API، از یک مثال request و response HTTP تشکیل شده است. در ظاهر، ممکن است تعریف تعامل با استفاده از schema هایی که با استفاده از، به عنوان مثال، OpenAPI یا JSON schema نوشته شده‌اند، بهتر به نظر برسد. اما مشخص می‌شود که schema ها در نوشتن تست ها چندان مفید نیستند. یک تست می‌تواند response را با استفاده از schema تأیید کند، اما همچنان نیاز به فراخوانی provider با یک request نمونه دارد.
+  </p>
+  <p>
+   علاوه بر این، تست های consumer نیز به responses های نمونه نیاز دارند. این به این دلیل است که اگرچه تمرکز consumer-driven contract testing بر روی تست یک provider است، contract ها نیز برای تأیید اینکه consumer با contract مطابقت دارد یا خیر، استفاده می‌شوند. به عنوان مثال، یک consumer-side contract test برای یک client REST، از contract برای پیکربندی یک service HTTP stub استفاده می‌کند که تأیید می‌کند request HTTP با request contract مطابقت دارد و response HTTP contract را برمی‌گرداند. تست کردن هر دو طرف تعامل تضمین می‌کند که consumer و provider در مورد API توافق دارند. بعداً به نمونه‌هایی از نحوه نوشتن این نوع testing نگاهی خواهیم انداخت، اما ابتدا بیایید ببینیم چگونه با استفاده از Spring Cloud Contract، consumer contract tests را بنویسیم.
+  </p>
+  <p>
+   <strong>TESTING SERVICES USING SPRING CLOUD CONTRACT</strong>
+  </p>
+  <p>
+   دو فریم‌ورک محبوب contract testing عبارتند از Spring Cloud Contract (https://cloud.spring.io/spring-cloud-contract/)، که یک فریم‌ورک consumer contract testing برای application های Spring است، و خانواده فریم‌ورک‌های Pact (https://github.com/pact-foundation)، که از انواع زبان‌ها پشتیبانی می‌کنند. application FTGO یک application مبتنی بر فریم‌ورک Spring است، بنابراین در این فصل، من قصد دارم نحوه استفاده از Spring Cloud Contract را توضیح دهم. این، یک زبان domain-specific Groovy (DSL) را برای نوشتن contract ها ارائه می‌دهد. هر contract یک نمونه concrete از تعامل بین یک consumer و یک provider، مانند یک request و response HTTP است. کد Spring Cloud Contract، contract tests ها را برای provider ایجاد می‌کند. همچنین mocks ها، مانند یک mock HTTP server را برای consumer integration tests ها پیکربندی می‌کند.
+  </p>
+  <p>
+   بگویید، به عنوان مثال، شما روی API Gateway کار می‌کنید و می‌خواهید یک consumer contract test را برای Order Service بنویسید. شکل 9.8 این فرآیند را نشان می‌دهد که نیاز دارد شما با تیم‌های Order Service همکاری کنید. شما contract هایی را می‌نویسید که نحوه تعامل API Gateway با Order Service را تعریف می‌کنند. تیم Order Service از این contract ها برای تست کردن Order Service استفاده می‌کند، و شما از آنها برای تست کردن API Gateway استفاده می‌کنید. توالی مراحل به شرح زیر است:
+  </p>
+  <ol>
+   <li>
+    شما یک یا چند contract، مانند موردی که در listing 9.1 نشان داده شده است، می‌نویسید. هر contract شامل یک request HTTP است که API Gateway ممکن است به Order Service ارسال کند و یک response HTTP مورد انتظار. شما contract ها را، شاید از طریق یک request Git pull، به تیم Order Service می‌دهید.
+   </li>
+   <li>
+    تیم Order Service، Order Service را با استفاده از consumer contract tests ها تست می‌کند، که کد Spring Cloud Contract از contract ها تولید می‌کند.
+   </li>
+  </ol>
+  <p>
+   Pattern: Consumer-side contract test
+  </p>
+  <p>
+   Verify that the client of a service can communicate with the service. See https://
+   microservices.io/patterns/testing/consumer-side-contract-test.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

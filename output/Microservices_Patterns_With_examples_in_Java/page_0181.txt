@@ -1,0 +1,44 @@
+151
+Business logic organization patterns
+As with the Transaction script pattern, an OrderService class has a method for each
+request/system operation. But when using the Domain model pattern, the service
+methods are usually simple. That’s because a service method almost always delegates
+to persistent domain objects, which contain the bulk of the business logic. A service
+method might, for example, load a domain object from the database and invoke one
+of its methods. In this example, the Order class has both state and behavior. Moreover,
+its state is private and can only be accessed indirectly via its methods.
+ Using an object-oriented design has a number of benefits. First, the design is
+easy to understand and maintain. Instead of consisting of one big class that does
+everything, it consists of a number of small classes that each have a small number of
+responsibilities. In addition, classes such as Account, BankingTransaction, and
+OverdraftPolicy closely mirror the real world, which makes their role in the design
+easier to understand. Second, our object-oriented design is easier to test: each class
+can and should be tested independently. Finally, an object-oriented design is easier to
+extend because it can use well-known design patterns, such as the Strategy pattern and
+the Template method pattern, that define ways of extending a component without
+modifying the code.
+ The Domain model pattern works well, but there are a number of problems with
+this approach, especially in a microservice architecture. To address those problems,
+you need to use a refinement of OOD known as DDD. 
+5.1.3
+About Domain-driven design
+DDD, which is described in the book Domain-Driven Design by Eric Evans (Addison-
+Wesley Professional, 2003), is a refinement of OOD and is an approach for developing
+complex business logic. I introduced DDD in chapter 2 when discussing the useful-
+ness of DDD subdomains when decomposing an application into services. When using
+DDD, each service has its own domain model, which avoids the problems of a single,
+application-wide domain model. Subdomains and the associated concept of Bounded
+Context are two of the strategic DDD patterns.
+ DDD also has some tactical patterns that are building blocks for domain models.
+Each pattern is a role that a class plays in a domain model and defines the characteris-
+tics of the class. The building blocks that have been widely adopted by developers
+include the following:
+Entity—An object that has a persistent identity. Two entities whose attributes
+have the same values are still different objects. In a Java EE application, classes
+that are persisted using JPA @Entity are usually DDD entities.
+Value object—An object that is a collection of values. Two value objects whose
+attributes have the same values can be used interchangeably. An example of a
+value object is a Money class, which consists of a currency and an amount.
+Factory—An object or method that implements object creation logic that’s too
+complex to be done directly by a constructor. It can also hide the concrete
+ 

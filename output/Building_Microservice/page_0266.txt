@@ -1,0 +1,29 @@
+Cost of virtualization
+As you pack more and more virtual machines onto the same underlying hardware,
+you will find that you get diminishing returns in terms of the computing resources
+available to the VMs themselves. Why is this?
+Think of our physical machine as a sock drawer. If we put lots of wooden dividers
+into our drawer, can we store more socks or fewer? The answer is fewer: the dividers
+themselves take up room too! Our drawer might be easier to deal with and organize,
+and perhaps we could decide to put T-shirts in one of the spaces now rather than just
+socks, but more dividers means less overall space.
+In the world of virtualization, we have a similar overhead as our sock drawer dividers.
+To understand where this overhead comes from, let’s look at how most virtualization
+is done. Figure 8-14 shows a comparison of two types of virtualization. On the left,
+we see the various layers involved in what is called type 2 virtualization, and on the
+right we see container-based virtualization, which we’ll explore more shortly.
+Type 2 virtualization is the sort implemented by AWS, VMware, vSphere, Xen, and
+KVM. (Type 1 virtualization refers to technology in which the VMs run directly on
+hardware, not on top of another operating system.) On our physical infrastructure we
+have a host operating system. On this OS we run something called a hypervisor,
+which has two key jobs. First, it maps resources like CPU and memory from the vir‐
+tual host to the physical host. Second, it acts as a control layer, allowing us to manip‐
+ulate the virtual machines themselves.
+Figure 8-14. Comparison of standard type 2 virtualization and lightweight containers
+Inside the VMs, we get what look like completely different hosts. They can run their
+own operating systems, with their own kernels. They can be considered almost her‐
+metically sealed machines, kept isolated from the underlying physical host and the
+other virtual machines by the hypervisor.
+240 
+| 
+Chapter 8: Deployment

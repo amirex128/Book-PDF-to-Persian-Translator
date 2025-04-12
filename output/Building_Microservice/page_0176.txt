@@ -1,0 +1,24 @@
+service need to be stored and made visible to all services, no matter which version
+was used to create the data in the first place. This can be an additional source of
+complexity.
+Figure 5-3. Running multiple versions of the same service to support old endpoints
+Coexisting concurrent service versions for a short period of time can make perfect
+sense, especially when you’re doing something like a canary release (we’ll be discus‐
+sing this pattern more in “On to Progressive Delivery” on page 270). In these situations,
+we may be coexisting versions for only a few minutes or perhaps hours, and we nor‐
+mally will have only two different versions of the service present at the same time.
+The longer it takes for you to get consumers upgraded to the newer version and
+released, the more you should look to coexist different endpoints in the same micro‐
+service rather than coexist entirely different versions. I remain unconvinced that this
+work is worthwhile for the average project.
+Emulate the Old Interface
+If we’ve done all we can to avoid introducing a breaking interface change, our next
+job is to limit the impact. The thing we want to avoid is forcing consumers to
+upgrade in lockstep with us, as we always want to maintain the ability to release
+microservices independently of each other. One approach I have used successfully to
+handle this is to coexist both the old and new interfaces in the same running service.
+So if we want to release a breaking change, we deploy a new version of the service
+that exposes both the old and new versions of the endpoint.
+150 
+| 
+Chapter 5: Implementing Microservice Communication

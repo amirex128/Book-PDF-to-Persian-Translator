@@ -1,0 +1,41 @@
+Much of the time, all an API gateway is actually being used for is to manage access to
+an organization’s microservices from its own GUI clients (web pages, native mobile
+applications) via the public internet. There is no “third party” in the mix here. The
+need for some form of an API gateway for Kubernetes is essential, as Kubernetes
+natively handles networking only within the cluster and does nothing about handling
+communication to and from the cluster itself. But in such a use case, an API gateway
+designed for external third-party access is huge overkill.
+So if you want an API gateway, be really clear in what you expect from it. In fact, I’d
+go a bit further and say that you should probably avoid having an API gateway that
+does too much. But we’ll get to that next.
+Where to use them
+Once you start to understand what sort of use cases you have, it becomes a bit easier
+to see what type of gateway you need. If it’s just a case of exposing microservices run‐
+ning in Kubernetes, you could run your own reverse proxies—or better yet, you
+could look at a focused product like Ambassador, which was built from the ground
+up with that use case in mind. If you really find yourself needing to manage large
+numbers of third-party users accessing your API, then there are likely other products
+to look at. It’s possible, in fact, that you may end up with more than one gateway in
+the mix to better handle separation of concerns, and I can see that being sensible in
+many situations, although the usual caveats around increasing the overall system
+complexity and increasing network hops still apply.
+I have been involved from time to time in working directly with vendors to help with
+tool selection. I can say without any hesitation that I have experienced more mis-
+selling and poor or cutthroat behavior in the API gateway space than in any other—
+and as a result you won’t find references to some vendor products in this chapter. I’ve
+put a lot of that down to VC-backed companies that had built a product for the boom
+times of the API economy, only to find that market doesn’t exist, and so they are
+fighting on two fronts: they are fighting over the small number of users that actually
+need what the more complex gateways are offering, while also losing business to
+more focused API gateway products that are built for the vast majority of simpler
+needs.
+What to avoid
+Partly due to the apparent desperation of some API gateway vendors, all sorts of
+claims have been made for what these products can do. This has led to a lot of misuse
+of these products, and in turn to an unfortunate distrust of what is fundamentally
+quite a simple concept. Two key examples I’ve seen of misuse of API gateways is for
+call aggregation and protocol rewriting, but I’ve also seen a wider push to use API
+gateways for in-perimeter (east-west) calls too.
+164 
+| 
+Chapter 5: Implementing Microservice Communication

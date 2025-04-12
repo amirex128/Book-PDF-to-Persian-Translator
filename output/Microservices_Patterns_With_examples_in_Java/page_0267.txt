@@ -1,0 +1,46 @@
+237
+Designing CQRS views
+The data access module implements the database access logic. The event handlers
+and query API modules use the data access module to update and query the database.
+The event handlers module subscribes to events and updates the database. The query
+API module implements the query API.
+ You must make some important design decisions when developing a view module:
+You must choose a database and design the schema.
+When designing the data access module, you must address various issues, includ-
+ing ensuring that updates are idempotent and handling concurrent updates.
+When implementing a new view in an existing application or changing the
+schema of an existing application, you must implement a mechanism to effi-
+ciently build or rebuild the view.
+You must decide how to enable a client of the view to cope with the replication
+lag, described earlier.
+Let’s look at each of these issues.
+7.3.1
+Choosing a view datastore
+A key design decision is the choice of database and the design of the schema. The pri-
+mary purpose of the database and the data model is to efficiently implement the view
+module’s query operations. It’s the characteristics of those queries that are the pri-
+mary consideration when selecting a database. But the database must also efficiently
+implement the update operations performed by the event handlers.
+SQL VS. NOSQL DATABASES
+Not that long ago, there was one type of database to rule them all: the SQL-based
+RDBMS. As the Web grew in popularity, though, various companies discovered that
+an RDBMS couldn’t satisfy their web scale requirements. That led to the creation of
+CQRS view module
+Event
+handlers
+query()
+update()
+Query API
+Data access
+View database
+Events
+ﬁnd...()
+...
+Implements data
+access logic
+Figure 7.10
+The design of a CQRS 
+view module. Event handlers update 
+the view database, which is queried 
+by the Query API module.
+ 

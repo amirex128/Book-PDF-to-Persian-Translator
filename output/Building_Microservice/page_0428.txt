@@ -1,0 +1,24 @@
+5 The terminology of an “open” breaker, meaning requests can’t flow, can be confusing, but it comes from elec‐
+trical circuits. When the breaker is “open,” the circuit is broken and current cannot flow. Closing the breaker
+allows the circuit to be completed and current to flow once again.
+blown (open) state,5 as you can see in Figure 12-5. After a certain period of time, the
+client sends a few requests through to see if the downstream service has recovered,
+and if it gets enough healthy responses it resets the circuit breaker.
+Figure 12-5. An overview of circuit breakers
+How you implement a circuit breaker depends on what a “failed” request means, but
+when I’ve implemented them for HTTP connections, I’ve commonly taken failure to
+mean either a time-out or a subset of the 5XX HTTP return codes. In this way, when
+a downstream resource is timing out or returning errors, after a certain threshold is
+reached we automatically stop sending traffic and start failing fast. And we can auto‐
+matically start again when things are healthy.
+Getting the settings right can be a little tricky. You don’t want to blow the circuit
+breaker too readily, nor do you want to take too long to blow it. Likewise, you really
+want to make sure that the downstream service is healthy again before sending traffic.
+As with time-outs, I’d pick some sensible defaults and stick with them everywhere,
+and then change them for specific cases.
+While the circuit breaker is blown, you have some options. One is to queue up the
+requests and retry them later on. For some use cases, this might be appropriate, espe‐
+cially if you’re carrying out some work as part of an asynchronous job. If this call is
+402 
+| 
+Chapter 12: Resiliency

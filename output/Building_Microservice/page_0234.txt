@@ -1,0 +1,26 @@
+4 See “Managing Dependency Graphs” in Continuous Delivery, pp. 363–73.
+repositories at once. Additionally, changes cannot be made in an atomic fashion
+across separate repositories, at least not with Git.
+Reusing code across repositories
+When using this pattern, there is nothing to stop a microservice from depending on
+other code that is managed in different repositories. A simple mechanism for doing
+this is to have the code you want to reuse packaged into a library that then becomes
+an explicit dependency of the downstream microservices. We can see an example of
+that in Figure 7-7, where the Invoice and Payroll services both make use of the
+Connection library.
+Figure 7-7. Reusing code across different repositories
+If you wanted to roll out a change to the Connection library, you’d have to make the
+changes in the matching source code repository and wait for its build to complete,
+giving you a new versioned artifact. To actually deploy new versions of the Invoice
+or Payroll services using this new version of the library, you’d need to change the
+version of the Connection library they use. This might require a manual change (if
+you are depending on a specific version), or it could be configured to happen dynam‐
+ically, depending on the nature of the CI tooling you are using. The concepts behind
+this are outlined in more detail in the book Continuous Delivery by Jez Humble and
+Dave Farley.4
+The important thing to remember, of course, is that if you want to roll out the new
+version of the Connection library, then you also need to deploy the newly built
+Invoice and Payroll services. Remember, all the caveats we explored in “DRY and
+208 
+| 
+Chapter 7: Build

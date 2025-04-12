@@ -1,0 +1,48 @@
+391
+Deploying services using the Service as a virtual machine pattern
+There are a variety of tools that your deployment pipeline can use to build VM
+images. One early tool for creating EC2 AMIs is Aminator, created by Netflix, which
+used it to deploy its video-streaming service on AWS (https://github.com/Netflix/
+aminator). A more modern VM image builder is Packer, which unlike Aminator sup-
+ports a variety of virtualization technologies, including EC2, Digital Ocean, Virtual
+Box, and VMware (www.packer.io). To use Packer to create an AMI, you write a config-
+uration file that specifies the base image and a set of provisioners that install software
+and configure the AMI.
+About Elastic Beanstalk
+Elastic Beanstalk, which is provided by AWS, is an easy way to deploy your services
+using VMs. You upload your code, such as a WAR file, and Elastic Beanstalk deploys
+it as one or more load-balanced and managed EC2 instances. Elastic Beanstalk is
+perhaps not quite as fashionable as, say, Kubernetes, but it’s an easy way to deploy
+a microservices-based application on EC2.
+Interestingly, Elastic Beanstalk combines elements of the three deployment patterns
+described in this chapter. It supports several packaging formats for several lan-
+guages, including Java, Ruby, and .NET. It deploys the application as VMs, but rather
+than building an AMI, it uses a base image that installs the application on startup.
+Build time
+Runtime
+Requests
+Deployed as
+Service
+EC2 instance
+Autoscaling group
+Service
+EC2 instance
+Service
+EC2 instance
+Service
+code
+Deployment pipeline
+Creates
+VM image
+builder
+Elastic load
+balancer
+AMI
+(VM
+image)
+Figure 12.6
+The deployment pipeline packages a service as a virtual machine image, such as an EC2 
+AMI, containing everything required to run the service, including the language runtime. At runtime, 
+each service instance is a VM, such as an EC2 instance, instantiated from that image. An EC2 Elastic 
+Load Balancer routes requests to the instances.
+ 

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 243</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Using sagas and event sourcing together</mark></h3>
+  <h4><mark>6.3.3 Implementing an event sourcing-based saga participant</mark></h4>
+  <p>
+   تصور کنید که شما از <mark>event sourcing</mark> برای پیاده‌سازی یک <mark>service</mark> استفاده کرده‌اید که نیاز دارد در یک <mark>orchestration-based saga</mark> شرکت کند. جای تعجب نیست که اگر <mark>service</mark> شما از یک <mark>RDBMS-based</mark> <mark>event store</mark> مانند <mark>Eventuate Local</mark> استفاده می‌کند، می‌توانید به راحتی اطمینان حاصل کنید که به‌طور اتمی پیام‌های <mark>saga command</mark> را پردازش می‌کند و پاسخ‌ها را ارسال می‌کند. این می‌تواند <mark>event store</mark> را به عنوان بخشی از <mark>ACID transaction</mark> که توسط فریم‌ورک <mark>Eventuate Tram</mark> آغاز شده است، به‌روزرسانی کند. اما اگر <mark>service</mark> شما از یک <mark>event store</mark> استفاده می‌کند که نمی‌تواند در همان <mark>transaction</mark> با فریم‌ورک <mark>Eventuate Tram</mark> شرکت کند، باید از یک رویکرد کاملاً متفاوت استفاده کنید.
+  </p>
+  <p>
+   شما باید به چند مسئله مختلف بپردازید:
+  </p>
+  <ul>
+   <li><mark>Idempotent command message handling</mark></li>
+   <li><mark>Atomically sending a reply message</mark></li>
+  </ul>
+  <p>
+   بیایید ابتدا نگاهی به چگونگی پیاده‌سازی <mark>idempotent command message handlers</mark> بیندازیم.
+  </p>
+  <h5><mark>IDEMPOTENT COMMAND MESSAGE HANDLING</mark></h5>
+  <p>
+   اولین مشکلی که باید حل شود این است که چگونه یک <mark>event sourcing-based saga participant</mark> می‌تواند پیام‌های تکراری را شناسایی و دور بریزد تا <mark>idempotent command message handling</mark> را پیاده‌سازی کند. خوشبختانه، این یک مشکل آسان است که با استفاده از مکانیسم <mark>idempotent</mark> <mark>message handling</mark> که قبلاً توضیح داده شد، برطرف می‌شود. یک <mark>saga participant</mark>، <mark>message ID</mark> را در <mark>events</mark> که هنگام پردازش <mark>message</mark> تولید می‌شوند، ثبت می‌کند. قبل از به‌روزرسانی یک <mark>aggregate</mark>، <mark>saga participant</mark> تأیید می‌کند که قبلاً <mark>message</mark> را پردازش نکرده است و این کار را با جستجوی <mark>message ID</mark> در <mark>events</mark> انجام می‌دهد.
+  </p>
+  <h5><mark>ATOMICALLY SENDING REPLY MESSAGES</mark></h5>
+  <p>
+   دومین مشکلی که باید حل شود این است که چگونه یک <mark>event sourcing-based saga participant</mark> می‌تواند به‌طور اتمی پاسخ‌ها را ارسال کند. در اصل، یک <mark>saga orchestrator</mark> می‌تواند به <mark>events</mark> منتشر شده توسط یک <mark>aggregate</mark> مشترک شود، اما دو مشکل در این رویکرد وجود دارد. اولین مورد این است که یک <mark>saga command</mark> ممکن است در واقع وضعیت یک <mark>aggregate</mark> را تغییر ندهد. در این سناریو، <mark>aggregate</mark> یک <mark>event</mark> منتشر نمی‌کند، بنابراین هیچ پاسخی به <mark>saga orchestrator</mark> ارسال نمی‌شود. مشکل دوم این است که این رویکرد نیازمند آن است که <mark>saga orchestrator</mark> با <mark>saga participants</mark> که از <mark>event sourcing</mark> استفاده می‌کنند، متفاوت از آن‌هایی که استفاده نمی‌کنند، رفتار کند. این به این دلیل است که برای دریافت <mark>domain events</mark>، <mark>saga orchestrator</mark> باید علاوه بر <mark>reply channel</mark> خود، به <mark>event channel</mark> <mark>aggregate</mark> نیز مشترک شود.
+  </p>
+  <p>
+   یک رویکرد بهتر این است که <mark>saga participant</mark> به ارسال یک <mark>reply message</mark> به <mark>saga orchestrator</mark> خود ادامه دهد. اما به جای ارسال مستقیم <mark>reply message</mark>، یک <mark>saga participant</mark> از یک فرآیند دو مرحله‌ای استفاده می‌کند:
+  </p>
+  <ol>
+   <li>
+    هنگامی که یک <mark>saga command handler</mark> یک <mark>aggregate</mark> را ایجاد یا به‌روزرسانی می‌کند، ترتیب می‌دهد که یک <mark>SagaReplyRequested</mark> <mark>pseudo event</mark> به همراه <mark>events</mark> واقعی منتشر شده توسط <mark>aggregate</mark> در <mark>event store</mark> ذخیره شود.
+   </li>
+   <li>
+    یک <mark>event handler</mark> برای <mark>SagaReplyRequested</mark> <mark>pseudo event</mark> از داده‌های موجود در <mark>event</mark> برای ساختن <mark>reply message</mark> استفاده می‌کند، که سپس آن را در <mark>reply channel</mark> <mark>saga orchestrator</mark> می‌نویسد.
+   </li>
+  </ol>
+  <p>
+   بیایید به یک مثال نگاهی بیندازیم تا ببینیم این چگونه کار می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

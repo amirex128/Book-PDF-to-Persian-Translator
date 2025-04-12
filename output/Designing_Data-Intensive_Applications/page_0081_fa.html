@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 81</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>The SPARQL query language</h4>
+    <p>
+        SPARQL یک query language برای triple-stores با استفاده از the RDF data model است [43]. (این یک acronym برای SPARQL Protocol and RDF Query Language است که "sparkle" تلفظ می‌شود.) قبل از Cypher است و از آنجایی که pattern matching از Cypher از SPARQL قرض گرفته شده است، آن‌ها بسیار شبیه به هم هستند [37].
+    </p>
+    <p>
+        The same query as before—finding people who have moved from the US to Europe—در SPARQL حتی conciseتر از Cypher است (به Example 2-9 مراجعه کنید).
+    </p>
+    <p>
+        Example 2-9. The same query as Example 2-4, expressed in SPARQL
+    </p>
+    <pre><code class="language-sparql">PREFIX : &lt;urn:example:&gt;
+SELECT ?personName WHERE {
+  ?person :name ?personName.
+  ?person :bornIn  / :within* / :name "United States".
+  ?person :livesIn / :within* / :name "Europe".
+}
+</code></pre>
+    <p>
+        ساختار بسیار شبیه است. دو عبارت زیر معادل هستند (متغیرها با یک علامت سوال در SPARQL شروع می‌شوند):
+    </p>
+    <pre><code class="language-cypher">(person) -[:BORN_IN]-&gt; () -[:WITHIN*0..]-&gt; (location)   # Cypher
+?person :bornIn / :within* ?location.                   # SPARQL
+</code></pre>
+    <p>
+        از آنجایی که RDF بین properties و edges تمایز قائل نمی‌شود، بلکه فقط از predicates برای هر دو استفاده می‌کند، شما می‌توانید از همان syntax برای matching properties استفاده کنید. در عبارت زیر، متغیر usa به هر vertex که دارای یک name property است که value آن string "United States" است، متصل است:
+    </p>
+    <pre><code class="language-cypher">(usa {name:'United States'})   # Cypher
+?usa :name "United States".    # SPARQL
+</code></pre>
+    <p>
+        SPARQL یک query language خوب است—حتی اگر the semantic web هرگز اتفاق نیفتد، می‌تواند یک ابزار قدرتمند برای استفاده applications به صورت داخلی باشد.
+    </p>
+    <p>
+        Graph-Like Data Models | 59
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

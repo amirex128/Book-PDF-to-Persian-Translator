@@ -1,0 +1,47 @@
+363
+Designing configurable services
+1
+Command-line arguments
+2
+SPRING_APPLICATION_JSON, an operating system environment variable or JVM
+system property that contains JSON
+3
+JVM System properties
+4
+Operating system environment variables
+5
+A configuration file in the current directory
+A particular property value from a source earlier in this list overrides the same prop-
+erty from a source later in this list. For example, operating system environment vari-
+ables override properties read from a configuration file.
+ Spring Boot makes these properties available to the Spring Framework’s
+ApplicationContext. A service can, for example, obtain the value of a property using
+the @Value annotation:
+public class OrderHistoryDynamoDBConfiguration {
+@Value("${aws.region}")
+private String awsRegion;
+The Spring Framework initializes the awsRegion field to the value of the aws.region
+property. This property is read from one of the sources listed earlier, such as a config-
+uration file or from the AWS_REGION environment variable.
+ The push model is an effective and widely used mechanism for configuring a ser-
+vice. One limitation, however, is that reconfiguring a running service might be chal-
+lenging, if not impossible. The deployment infrastructure might not allow you to
+change the externalized configuration of a running service without restarting it. You
+can’t, for example, change the environment variables of a running process. Another
+limitation is that there’s a risk of the configuration property values being scattered
+throughout the definition of numerous services. As a result, you may want to consider
+using a pull-based model. Let’s look at how it works. 
+11.2.2 Using pull-based externalized configuration
+In the pull model, a service instance reads its configuration properties from a configura-
+tion server. Figure 11.8 shows how it works. On startup, a service instance queries the
+configuration service for its configuration. The configuration properties for accessing
+the configuration server, such as its network location, are provided to the service
+instance via a push-based configuration mechanism, such as environment variables.
+ There are a variety of ways to implement a configuration server, including the
+following:
+Version control system such as Git
+SQL and NoSQL databases
+Specialized configuration servers, such as Spring Cloud Config Server, Hashicorp
+Vault, which is a store for sensitive data such as credentials, and AWS Parameter
+Store
+ 

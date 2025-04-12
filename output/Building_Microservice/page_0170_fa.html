@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 170</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>Handling Change Between Microservices</h4>
+  <p>احتمالاً رایج‌ترین سؤالی که در مورد <em>microservices</em> دریافت می‌کنم، پس از "آن‌ها چقدر باید بزرگ باشند؟" این است که "چگونه <em>versioning</em> را مدیریت می‌کنید؟" وقتی این سؤال پرسیده می‌شود، به ندرت سؤالی در مورد اینکه چه نوع طرح شماره‌گذاری باید استفاده کنید، است و بیشتر در مورد نحوه مدیریت تغییرات در قراردادهای بین <em>microservices</em> است.</p>
+  <p>نحوه مدیریت تغییرات واقعاً به دو موضوع تقسیم می‌شود. در یک لحظه، ما به این نگاه خواهیم کرد که اگر شما نیاز به ایجاد یک تغییر اساسی داشته باشید، چه اتفاقی می‌افتد. اما قبل از آن، بیایید نگاهی بیندازیم به آنچه که می‌توانید برای اجتناب از ایجاد یک تغییر اساسی در وهله اول انجام دهید.</p>
+  <h4>Avoiding Breaking Changes</h4>
+  <p>اگر می‌خواهید از ایجاد <em>breaking changes</em> اجتناب کنید، چند ایده اصلی وجود دارد که ارزش بررسی دارند، که بسیاری از آن‌ها را قبلاً در ابتدای فصل لمس کردیم. اگر می‌توانید این ایده‌ها را عملی کنید، متوجه خواهید شد که اجازه دادن به <em>microservices</em> برای تغییر مستقل از یکدیگر بسیار آسان‌تر است.</p>
+  <ul>
+   <li><strong>Expansion changes</strong></li>
+   <p>چیزهای جدید را به یک <em>microservice interface</em> اضافه کنید؛ چیزهای قدیمی را حذف نکنید.</p>
+   <li><strong>Tolerant reader</strong></li>
+   <p>هنگام استفاده از یک <em>microservice interface</em>، در آنچه انتظار دارید، انعطاف‌پذیر باشید.</p>
+   <li><strong>Right technology</strong></li>
+   <p>فناوری را انتخاب کنید که ایجاد تغییرات <em>backward-compatible</em> را در <em>interface</em> آسان‌تر می‌کند.</p>
+   <li><strong>Explicit interface</strong></li>
+   <p>در مورد آنچه که یک <em>microservice</em> در معرض نمایش قرار می‌دهد، صریح باشید. این کار هم برای توسعه‌دهندگان که روی <em>microservice</em> کار می‌کنند و هم برای نگه‌دارندگان <em>microservice</em>، درک آنچه که می‌توان آزادانه تغییر داد را آسان‌تر می‌کند.</p>
+   <li><strong>Catch accidental breaking changes early</strong></li>
+   <p>مکانیسم‌هایی را برای تشخیص تغییرات <em>interface</em> که در <em>production</em> مصرف‌کنندگان را خراب می‌کنند، قبل از استقرار آن تغییرات، در نظر بگیرید.</p>
+  </ul>
+  <p>این ایده‌ها یکدیگر را تقویت می‌کنند، و بسیاری از آن‌ها بر این مفهوم کلیدی از پنهان کردن اطلاعات بنا شده‌اند که ما مکرراً در مورد آن بحث کرده‌ایم. بیایید به نوبه خود به هر ایده نگاهی بیندازیم.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

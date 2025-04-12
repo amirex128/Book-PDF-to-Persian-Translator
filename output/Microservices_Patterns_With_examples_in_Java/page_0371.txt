@@ -1,0 +1,77 @@
+341
+Developing component tests
+THE ORDERSERVICECOMPONENTTESTSTEPDEFINITIONS CLASS
+The OrderServiceComponentTestStepDefinitions class is the heart of the tests. This
+class defines the meaning of each step in Order Service’s component tests. The fol-
+lowing listing shows the usingCreditCard() method, which defines the meaning of
+the Given using … credit card step.
+@ContextConfiguration(classes = 
+OrderServiceComponentTestStepDefinitions.TestConfiguration.class)
+public class OrderServiceComponentTestStepDefinitions {
+...
+@Autowired
+protected SagaParticipantStubManager sagaParticipantStubManager;
+@Given("using a(.?) (.*) credit card")
+public void useCreditCard(String ignore, String creditCard) {
+if (creditCard.equals("valid"))
+  sagaParticipantStubManager
+   
+.forChannel("accountingService")
+.when(AuthorizeCommand.class).replyWithSuccess();
+else if (creditCard.equals("invalid"))
+sagaParticipantStubManager
+    
+Listing 10.13
+The @GivenuseCreditCard() method defines the meaning of the 
+Given using … credit card step.
+As a consumer of the Order Service
+I should be able to create an order
+Scenario: Order authorized
+Given a valid consumer
+Given using a valid credit card
+dockerCompose {
+...
+}
+ftgo-order-service:
+build: .
+ports:
+- "8082:8080"
+OrderService
+Component
+Test
+Order Service
+docker
+container
+src/component-test/resources/
+createorder.feature
+Docker-compose.yml
+build.gradle
+Written using the
+Cucumber testing framework
+Kafka
+MySQL
+Invokes
+REST API
+Runs
+Runs
+Runs
+Reads command
+and sends
+replies
+Reads events
+Reads
+Uses
+Uses
+OrderService
+Component
+Step
+Deﬁnitions
+Figure 10.7
+The component tests for Order Service use the Cucumber testing framework to 
+execute tests scenarios written using Gherkin acceptance testing DSL. The tests use Docker to run 
+Order Service along with its infrastructure services, such as Apache Kafka and MySQL.
+Send a 
+success reply.
+Send a failure 
+reply.
+ 

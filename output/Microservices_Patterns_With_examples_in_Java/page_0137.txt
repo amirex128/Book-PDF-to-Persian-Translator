@@ -1,0 +1,48 @@
+107
+Using asynchronous messaging to improve availability
+4
+Order Service sends a ValidateOrderDetails message to Restaurant Service.
+5
+Consumer Service receives a ValidateConsumerInfo message, verifies the con-
+sumer can place an order, and sends a ConsumerValidated message to Order
+Service.
+6
+Restaurant Service receives a ValidateOrderDetails message, verifies the
+menu item are valid and that the restaurant can deliver to the order’s delivery
+address, and sends an OrderDetailsValidated message to Order Service.
+7
+Order Service receives ConsumerValidated and OrderDetailsValidated and
+changes the state of the order to VALIDATED.
+8
+…
+Order Service can receive the ConsumerValidated and OrderDetailsValidated mes-
+sages in either order. It keeps track of which message it receives first by changing the
+state of the order. If it receives the ConsumerValidated first, it changes the state of the
+order to CONSUMER_VALIDATED, whereas if it receives the OrderDetailsValidated mes-
+sage first, it changes its state to ORDER_DETAILS_VALIDATED. Order Service changes
+the state of the Order to VALIDATED when it receives the other message.
+Synchronous
+Key
+Asynchronous
+Order Service
+Client
+Consumer Service
+Restaurant Service
+...
+createOrder
+Asynchronous
+Synchronous
+create order
+update order
+update order
+createOrder
+ValidateConsumerInfo
+ValidateOrderDetails
+ConsumerValidated
+OrderDetailsValidated
+...
+Figure 3.18
+Order Service creates an order without invoking any other service. It then asynchronously 
+validates the newly created Order by exchanging messages with other services, including Consumer Service 
+and Restaurant Service.
+ 

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 284</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   وظیفه طراحی <mark>API</mark> خارجی یک application، با تنوع <mark>clients</mark> آن حتی دشوارتر می‌شود. <mark>Clients</mark>های مختلف، معمولاً به داده‌های مختلفی نیاز دارند. یک <mark>UI</mark> مبتنی بر مرورگر دسکتاپ معمولاً اطلاعات بسیار بیشتری را نسبت به یک application موبایل نمایش می‌دهد. همچنین، <mark>clients</mark> مختلف از طریق انواع مختلف شبکه‌ها به <mark>services</mark> دسترسی پیدا می‌کنند. <mark>Clients</mark> در داخل <mark>firewall</mark> از یک <mark>LAN</mark> با عملکرد بالا استفاده می‌کنند و <mark>clients</mark> خارج از <mark>firewall</mark> از اینترنت یا شبکه تلفن همراه، که عملکرد کمتری دارند، استفاده می‌کنند. در نتیجه، همانطور که خواهید آموخت، اغلب منطقی نیست که یک <mark>API</mark> واحد و یک‌اندازه داشته باشیم.
+  </p>
+  <p>
+   این فصل با توصیف مسائل مختلف طراحی <mark>API</mark> خارجی آغاز می‌شود. سپس الگوهای <mark>API</mark> خارجی را شرح می‌دهم. من الگوی <mark>API gateway</mark> و سپس الگوی <mark>Backends for frontends</mark> را پوشش می‌دهم. پس از آن، در مورد نحوه طراحی و پیاده‌سازی یک <mark>API gateway</mark> بحث می‌کنم. من گزینه‌های مختلف موجود را مرور می‌کنم، که شامل محصولات <mark>API gateway</mark> آماده و فریم‌ورک‌هایی برای توسعه خودتان است. من طراحی و پیاده‌سازی یک <mark>API gateway</mark> را شرح می‌دهم که با استفاده از فریم‌ورک <mark>Spring Cloud Gateway</mark> ساخته شده است. همچنین نحوه ساخت یک <mark>API gateway</mark> را با استفاده از <mark>GraphQL</mark>، یک فریم‌ورک که زبان <mark>query</mark> مبتنی بر نمودار را ارائه می‌دهد، شرح می‌دهم.
+  </p>
+  <h4><mark>8.1 External API design issues</mark></h4>
+  <p>
+   به منظور بررسی مسائل مختلف مربوط به <mark>API</mark>، اجازه دهید application <mark>FTGO</mark> را در نظر بگیریم. همانطور که شکل 8.1 نشان می‌دهد، <mark>services</mark> این application توسط انواع مختلف <mark>clients</mark> مصرف می‌شوند. چهار نوع <mark>client</mark>، <mark>APIs</mark> <mark>services</mark> را مصرف می‌کنند:
+  </p>
+  <ul>
+   <li>
+    applicationهای وب، مانند application وب <mark>Consumer</mark>، که <mark>UI</mark> مبتنی بر مرورگر را برای مصرف‌کنندگان پیاده‌سازی می‌کند، application وب <mark>Restaurant</mark>، که <mark>UI</mark> مبتنی بر مرورگر را برای رستوران‌ها پیاده‌سازی می‌کند، و application وب <mark>Admin</mark>، که <mark>UI</mark> مدیر داخلی را پیاده‌سازی می‌کند
+   </li>
+   <li>
+    applicationهای <mark>JavaScript</mark> که در مرورگر در حال اجرا هستند
+   </li>
+   <li>
+    applicationهای موبایل، یکی برای مصرف‌کنندگان و دیگری برای پیک‌ها
+   </li>
+   <li>
+    applicationهایی که توسط توسعه‌دهندگان شخص ثالث نوشته شده‌اند
+   </li>
+  </ul>
+  <p>
+   applicationهای وب در داخل <mark>firewall</mark> اجرا می‌شوند، بنابراین آن‌ها از طریق یک <mark>LAN</mark> با پهنای باند بالا و تأخیر کم به <mark>services</mark> دسترسی دارند. <mark>Clients</mark> دیگر در خارج از <mark>firewall</mark> اجرا می‌شوند، بنابراین آن‌ها از طریق اینترنت یا شبکه تلفن همراه با پهنای باند کمتر و تأخیر بیشتر به <mark>services</mark> دسترسی دارند.
+  </p>
+  <p>
+   یک رویکرد برای طراحی <mark>API</mark> این است که <mark>clients</mark>، <mark>services</mark> را مستقیماً فراخوانی کنند. در ظاهر، این کاملاً ساده به نظر می‌رسد—به هر حال، این نحوه فراخوانی <mark>API</mark> یک application <mark>monolithic</mark> توسط <mark>clients</mark> است. اما این رویکرد به ندرت در یک معماری <mark>microservice</mark> استفاده می‌شود، به دلیل معایب زیر:
+  </p>
+  <ul>
+   <li>
+    <mark>APIs</mark> <mark>service</mark> با دانه‌بندی ریز، نیازمند آن هستند که <mark>clients</mark> چندین درخواست برای بازیابی داده‌های مورد نیاز خود ارسال کنند، که ناکارآمد است و می‌تواند منجر به یک تجربه کاربری ضعیف شود.
+   </li>
+   <li>
+    عدم وجود کپسوله‌سازی ناشی از آگاهی <mark>clients</mark> از هر <mark>service</mark> و <mark>API</mark> آن، تغییر معماری و <mark>APIs</mark> را دشوار می‌کند.
+   </li>
+   <li>
+    <mark>Services</mark> ممکن است از مکانیسم‌های <mark>IPC</mark> استفاده کنند که استفاده از آن‌ها برای <mark>clients</mark>، به‌ویژه آن <mark>clients</mark> در خارج از <mark>firewall</mark>، راحت یا عملی نیست.
+   </li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

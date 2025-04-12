@@ -1,0 +1,52 @@
+137
+The design of the Order Service and the Create Order Saga
+.step()
+.invokeParticipant(orderService.approve,
+CreateOrderSagaState::makeApproveOrderCommand)
+.build();
+}
+@Override
+public SagaDefinition<CreateOrderSagaState> getSagaDefinition() {
+return sagaDefinition;
+}
+The CreateOrderSaga’s constructor creates the saga definition and stores it in the
+sagaDefinition field. The getSagaDefinition() method returns the saga definition.
+ To see how CreateOrderSaga works, let’s look at the definition of the third step of
+the saga, shown in the following listing. This step of the saga invokes the Kitchen Ser-
+vice to create a Ticket. Its compensating transaction cancels that Ticket. The
+step(), invokeParticipant(), onReply(), and withCompensation() methods are
+part of the DSL provided by Eventuate Tram Saga.
+public class CreateOrderSaga ...
+public CreateOrderSaga(..., KitchenServiceProxy kitchenService,
+...) {
+...
+.step()
+.invokeParticipant(kitchenService.create,
+CreateOrderSagaState::makeCreateTicketCommand)
+.onReply(CreateTicketReply.class,
+CreateOrderSagaState::handleCreateTicketReply)
+.withCompensation(kitchenService.cancel,
+  
+CreateOrderSagaState::makeCancelCreateTicketCommand)
+...
+;
+The call to invokeParticipant() defines the forward transaction. It creates the Create-
+Ticket command message by calling CreateOrderSagaState.makeCreateTicket-
+Command() and sends it to the channel specified by kitchenService.create. The call
+to onReply() specifies that CreateOrderSagaState.handleCreateTicketReply()
+should be called when a successful reply is received from Kitchen Service. This
+method stores the returned ticketId in the CreateOrderSagaState. The call to
+withCompensation() defines the compensating transaction. It creates a RejectTicket-
+Command command message by calling CreateOrderSagaState.makeCancelCreate-
+Ticket() and sends it to the channel specified by kitchenService.create.
+ The other steps of the saga are defined in a similar fashion. The CreateOrder-
+SagaState creates each message, which is sent by the saga to the messaging endpoint
+Listing 4.3
+The definition of the third step of the saga
+Define the forward 
+transaction.
+Call handleCreateTicketReply() when
+a successful reply is received.
+Define the compensating
+transaction.
+ 

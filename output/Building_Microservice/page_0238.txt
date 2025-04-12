@@ -1,0 +1,29 @@
+Mapping to build
+With a single source code repository per microservice, mapping from the source code
+to a build process is straightforward. Any change in that source code repository can
+trigger a matching CI build. With a monorepo, it gets a bit more complex.
+A simple starting point is to map folders inside the monorepo to a build, as shown in
+Figure 7-10. A change made to the user-service folder would trigger the User ser‐
+vice build, for example. If you checked in code that changed files both in the user-
+service folder and the catalog-service folder, then both the User build and the
+Catalog build would get triggered.
+Figure 7-10. A single source repo with subdirectories mapped to independent builds
+This gets more complex as you have more involved folder structures. On larger
+projects you can end up with multiple different folders wanting to trigger the same
+build, and with some folders triggering more than one build. At the simple end of the
+spectrum, you might have a “common” folder used by all microservices, a change to
+which causes all microservices to be rebuilt. At the more complex end, teams end up
+needing to adopt more graph-based build tools like the open source Bazel tool to
+manage these dependencies more effectively (Bazel is an open source version of
+Google’s own internal build tool). Implementing a new build system can be a signifi‐
+cant undertaking, so it is not something to be done lightly—but Google’s own mono‐
+repo would be impossible without tools like this.
+One of the benefits of a monorepo approach is that we can practice finer-grained
+reuse across projects. With a multirepo model, if I want to reuse someone else’s code,
+it will likely have to be packaged as a versioned artifact that I can then include as part
+of my build (such as a Nuget package, a JAR file, or an NPM). With our unit of reuse
+being a library, we are potentially pulling in more code than we really want. Theoreti‐
+cally, with a monorepo I could just depend on a single source file from another
+212 
+| 
+Chapter 7: Build

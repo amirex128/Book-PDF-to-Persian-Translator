@@ -1,0 +1,56 @@
+288
+CHAPTER 8
+External API patterns
+OPTIMIZING LOADING USING BATCHING AND CACHING
+GraphQL can potentially execute a large number of resolvers when executing a query.
+Because the GraphQL server executes each resolver independently, there’s a risk of
+poor performance due to excessive round-trips to the services. Consider, for example,
+a query that retrieves a consumer, their orders, and the orders’ restaurants. If there
+are N orders, then a simplistic implementation would make one call to Consumer
+Service, one call to Order History Service, and then N calls to Restaurant Service.
+Even though the GraphQL engine will typically make the calls to Restaurant Service
+in parallel, there’s a risk of poor performance. Fortunately, you can use a few tech-
+niques to improve performance.
+ One important optimization is to use a combination of server-side batching and
+caching. Batching turns N calls to a service, such as Restaurant Service, into a sin-
+gle call that retrieves a batch of N objects. Caching reuses the result of a previous
+fetch of the same object to avoid making an unnecessary duplicate call. The combi-
+nation of batching and caching significantly reduces the number of round-trips to
+backend services.
+ A NodeJS-based GraphQL server can use the DataLoader module to implement
+batching and caching (https://github.com/facebook/dataloader). It coalesces loads
+that occur within a single execution of the event loop and calls a batch loading func-
+tion that you provide. It also caches calls to eliminate duplicate loads. The following list-
+ing shows how RestaurantServiceProxy can use DataLoader. The findRestaurant()
+method loads a Restaurant via DataLoader.
+const DataLoader = require('dataloader');
+class RestaurantServiceProxy {
+constructor() {
+this.dataLoader =
+      
+new DataLoader(restaurantIds =>
+this.batchFindRestaurants(restaurantIds));
+}
+findRestaurant(restaurantId) {
+         
+return this.dataLoader.load(restaurantId);
+}
+batchFindRestaurants(restaurantIds) {
+     
+...
+}
+}
+RestaurantServiceProxy and, hence, DataLoader are created for each request, so
+there’s no possibility of DataLoader mixing together different users’ data.
+ Let’s now look at how to integrate the GraphQL engine with a web framework so
+that it can be invoked by clients. 
+Listing 8.9
+Using a DataLoader to optimize calls to Restaurant Service
+Create a DataLoader, which uses 
+batchFindRestaurants() as the 
+batch loading functions.
+Load the specified Restaurant 
+via the DataLoader.
+Load a batch of 
+Restaurants.
+ 

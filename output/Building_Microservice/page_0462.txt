@@ -1,0 +1,37 @@
+aspects to discuss when it comes to caching in a microservice architecture. Let’s start
+by talking about what sorts of problems caches can help with.
+For Performance
+With microservices, we are often concerned about the adverse impact of network
+latency and about the cost of needing to interact with multiple microservices to get
+some data. Fetching data from a cache can help greatly here, as we avoid the need for
+network calls to be made, which also has the impact of reducing load on downstream
+microservices. Aside from avoiding network hops, it reduces the need to create the
+data on each request. Consider a situation in which we are asking for the list of the
+most popular items by genre. This might involve an expensive join query at the data‐
+base level. We could cache the results of this query, meaning we’ll need to regenerate
+the results only when the cached data becomes invalidated.
+For Scale
+If you can divert reads to caches, you can avoid contention on parts of your system to
+allow it to better scale. An example of this that we’ve already covered in this chapter
+is the use of database read replicas. The read traffic is served by the read replicas,
+reducing the load on the primary database node and allowing reads to be scaled effec‐
+tively. The reads on a replica are done against data that might be stale. The read rep‐
+lica will eventually get updated by the replication from primary to replica node—this
+form of cache invalidation is handled automatically by the database technology.
+More broadly, caching for scale is useful in any situation in which the origin is a
+point of contention. Putting caches between clients and the origin can reduce the
+load on the origin, better allowing it to scale.
+For Robustness
+If you have an entire set of data available to you in a local cache, you have the poten‐
+tial to operate even if the origin is unavailable—this in turn could improve the
+robustness of your system. There are a few things to note about caching for robust‐
+ness. The main thing is that you’d likely need to configure your cache invalidation
+mechanism to not automatically evict stale data, and to keep data in the cache until it
+can be updated. Otherwise, as data gets invalidated, it will be removed from the
+cache, resulting in a cache miss and a failure to get any data, as the origin is unavail‐
+able. This means you need to be prepared to read data that could be quite stale if the
+origin is offline. In some situations this might be fine, while in others it might be
+highly problematic.
+436 
+| 
+Chapter 13: Scaling

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 227</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>3 برای اطلاعات بیشتر، به <em>Jez Humble</em> و <em>David Farley, Continuous Delivery: Reliable Software Releases Through
+  Build, Test, and Deployment Automation (Upper Saddle River, NJ: Addison-Wesley, 2010).</em> مراجعه کنید.</p>
+  <h4>Build Pipelines and Continuous Delivery</h4>
+  <p>در انجام <em>CI</em>، همکاران من در <em>Thoughtworks</em> و من خیلی زود متوجه ارزش داشتن چندین مرحله در داخل یک <em>build</em> شدیم. <em>Tests</em> یک مورد بسیار رایج است که در آن این موضوع وارد عمل می‌شود. من ممکن است تعداد زیادی <em>tests</em> سریع و کوچک داشته باشم، و تعداد کمی <em>tests</em> کند و بزرگ. اگر ما همه <em>tests</em> را با هم اجرا کنیم، و اگر ما منتظر بمانیم تا <em>slow tests</em> با محدوده بزرگ ما تمام شوند، ممکن است نتوانیم بازخورد سریعی را در هنگام شکست <em>fast tests</em> دریافت کنیم. و اگر <em>fast tests</em> شکست بخورند، احتمالاً دلیلی برای اجرای <em>slower tests</em> وجود ندارد! یک راه‌حل برای این مشکل این است که مراحل مختلفی در <em>build</em> خود داشته باشیم، و آنچه را که به عنوان یک <em>build pipeline</em> شناخته می‌شود، ایجاد کنیم. بنابراین ما می‌توانیم یک مرحله اختصاصی برای تمام <em>fast tests</em> داشته باشیم، که ابتدا آن را اجرا می‌کنیم، و اگر همه آن‌ها قبول شوند، سپس یک مرحله جداگانه برای <em>slower tests</em> اجرا می‌کنیم.
+  <p>این مفهوم <em>build pipeline</em>، یک راه خوب برای ردیابی پیشرفت نرم‌افزار ما در حالی که هر مرحله را پاک می‌کند، به ما می‌دهد، و به ما در به‌دست آوردن بینشی در مورد کیفیت نرم‌افزارمان کمک می‌کند.
+  <p>ما یک <em>deployable artifact</em>، چیزی که در نهایت در <em>production</em> مستقر می‌شود، ایجاد می‌کنیم و از این <em>artifact</em> در سراسر <em>pipeline</em> استفاده می‌کنیم. در زمینه ما، این <em>artifact</em> به یک <em>microservice</em> که می‌خواهیم مستقر کنیم، مربوط می‌شود. در شکل 7-1، ما می‌بینیم که این اتفاق می‌افتد—از همان <em>artifact</em> در هر مرحله از <em>pipeline</em> استفاده می‌شود، و این باعث می‌شود که ما به نرم‌افزار، اطمینان بیشتری داشته باشیم که در <em>production</em> کار خواهد کرد.</p>
+  <p>شکل 7-1. یک فرآیند انتشار ساده برای <em>Catalog service</em> ما که به عنوان یک <em>build pipeline</em> مدل‌سازی شده است</p>
+  <p><em>Continuous delivery (CD)</em> بر اساس این مفهوم ساخته شده است، و سپس برخی از موارد دیگر نیز. همانطور که در کتاب <em>Jez Humble</em> و <em>Dave Farley</em> با همین نام شرح داده شده است،3 <em>CD</em> رویکردی است که ما به موجب آن بازخورد مداوم را در مورد آمادگی برای تولید هر <em>check-in</em> دریافت می‌کنیم، و علاوه بر این، هر <em>check-in</em> را به عنوان یک <em>release candidate</em> در نظر می‌گیریم.
+  <p>برای اینکه این مفهوم را کاملاً در خود جای دهیم، ما باید تمام فرآیندهای درگیر در دریافت نرم‌افزار خود از <em>check-in</em> تا <em>production</em> را مدل‌سازی کنیم، و ما باید بدانیم که هر نسخه از نرم‌افزار از نظر پاک شدن برای انتشار در چه وضعیتی است. در <em>CD</em>، ما این کار را با</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0227/image_1.png" alt="Image from page 227" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

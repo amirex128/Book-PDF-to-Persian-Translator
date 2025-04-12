@@ -1,0 +1,44 @@
+434
+CHAPTER 13
+Refactoring to microservices
+third strategy, because it’s how functionality is migrated from the monolith into the
+strangler application.
+ Let’s take a look at each of these strategies, starting with implementing new fea-
+tures as services.
+13.2.1 Implement new features as services
+The Law of Holes states that “if you find yourself in a hole, stop digging” (https://
+en.m.wikipedia.org/wiki/Law_of_holes). This is great advice to follow when your mono-
+lithic application has become unmanageable. In other words, if you have a large, com-
+plex monolithic application, don’t implement new features by adding code to the
+monolith. That will make your monolith even larger and more unmanageable. Instead,
+you should implement new features as services.
+ This is a great way to begin migrating your monolithic application to a microser-
+vice architecture. It reduces the growth rate of the monolith. It accelerates the devel-
+opment of the new features, because you’re doing development in a brand new code
+base. It also quickly demonstrates the value of adopting the microservice architecture.
+INTEGRATING THE NEW SERVICE WITH THE MONOLITH
+Figure 13.2 shows the application’s architecture after implementing a new feature as a
+service. Besides the new service and monolith, the architecture includes two other ele-
+ments that integrate the service into the application:
+API gateway—Routes requests for new functionality to the new service and
+routes legacy requests to the monolith.
+Integration glue code—Integrates the service with the monolith. It enables the ser-
+vice to access data owned by the monolith and to invoke functionality imple-
+mented by the monolith.
+The integration glue code isn’t a standalone component. Instead, it consists of adapt-
+ers in the monolith and the service that use one or more interprocess communication
+mechanisms. For example, integration glue for Delayed Delivery Service, described
+in section 13.4.1, uses both REST and domain events. The service retrieves customer
+contract information from the monolith by invoking a REST API. The monolith pub-
+lishes Order domain events so that Delayed Delivery Service can track the state of
+Orders and respond to orders that won’t be delivered on time. Section 13.3.1 describes
+the integration glue code in more detail.
+WHEN TO IMPLEMENT A NEW FEATURE AS A SERVICE
+Ideally, you should implement every new feature in the strangler application rather
+than in the monolith. You’ll implement a new feature as either a new service or as part
+of an existing service. This way you’ll avoid ever having to touch the monolith code
+base. Unfortunately, though, not every new feature can be implemented as a service.
+ That’s because the essence of a microservice architecture is a set of loosely coupled
+services that are organized around business capabilities. A feature might, for instance,
+be too small to be a meaningful service. You might, for example, just need to add a
+ 

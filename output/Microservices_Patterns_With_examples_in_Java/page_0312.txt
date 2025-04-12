@@ -1,0 +1,64 @@
+282
+CHAPTER 8
+External API patterns
+DEFINING A GRAPHQL SCHEMA
+A GraphQL API is centered around a schema, which consists of a collection of types
+that define the structure of the server-side data model and the operations, such as
+queries, that a client can perform. GraphQL has several different kinds of types. The
+example code in this section uses just two kinds of types: object types, which are the
+type Query{
+orders(consumerId:Int!): [Order]
+order(orderId : int!): Order
+consumer(consumerId : int!): Consumer
+}
+type Order {
+orderId: ID,
+consumerId: Int,
+consumer: Consumer
+restaurant: Restaurant
+deliveryInfo : DeliveryInfo
+...
+const resolvers = {
+Query:{
+orders: resolveOrders,
+order: resolveOrder,
+...
+},
+Order:{
+consumer: resolveOrderConsumer,
+restaurant: resolveOrderRestaurant,
+deliveryInfo: resolveOrderDeliveryInfo
+},
+...
+function resolveOrder(_. {orderId}, context){
+return context.orderServiceProxy.ﬁndOrder(orderI
+d);
+}
+function resolveOrderDeliveryInfo({orderId}, args,
+context) {
+return context.deliveryServiceProxy.ﬁndDeliveryF
+orOrder(orderId);
+}
+Apollo graphQL engine
+ConsumerServiceProxy
+OrderServiceProxy
+RestaurantServiceProxy
+DeliveryServiceProxy
+Consumer Service
+invokes
+invokes
+invokes
+invokes
+Order Service
+Restaurant Service
+Delivery Service
+Express web framework
+Apollo
+graphQL
+client
+FTGO API gateway
+http://.../graphql?query={orders(consumerId:1){orde
+rId,restaurant{id}}}
+Figure 8.10
+The design of the GraphQL-based FTGO API Gateway
+ 

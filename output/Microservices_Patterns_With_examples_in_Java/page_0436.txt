@@ -1,0 +1,56 @@
+406
+CHAPTER 12
+Deploying microservices
+ A NodePort service is accessible via a cluster-wide port on all the nodes in the clus-
+ter. Any traffic to that port on any cluster node is load balanced to the backend pods.
+You must select an available port in the range of 30000–32767. For example, listing 12.6
+shows a service that routes traffic to port 30000 of Consumer Service.
+apiVersion: v1
+kind: Service
+metadata:
+name: ftgo-api-gateway
+spec:
+type: NodePort
+  
+ports:
+- nodePort: 30000
+  
+port: 80
+targetPort: 8080
+selector:
+app: ftgo-api-gateway
+---
+API Gateway is within the cluster using the URL http://ftgo-api-gateway and out-
+side the URL http://<node-ip-address>:3000/, where node-ip-address is the IP
+address of one of the nodes. After configuring a NodePort service you can, for exam-
+ple, configure an AWS Elastic Load Balancer (ELB) to load balance requests from the
+internet across the nodes. A key benefit of this approach is that the ELB is entirely
+under your control. You have complete flexibility when configuring it.
+ A NodePort type service isn’t the only option, though. You can also use a Load-
+Balancer service, which automatically configures a cloud-specific load balancer. The
+load balancer will be an ELB if Kubernetes is running on AWS. One benefit of this
+type of service is that you no longer have to configure your own load balancer. The
+drawback, however, is that although Kubernetes does give a few options for configur-
+ing the ELB, such the SSL certificate, you have a lot less control over its configuration. 
+12.4.4 Zero-downtime deployments
+Imagine you’ve updated Restaurant Service and want to deploy those changes into
+production. Updating a running service is a simple three-step process when using
+Kubernetes:
+1
+Build a new container image and push it to the registry using the same process
+described earlier. The only difference is that the image will be tagged with a dif-
+ferent version tag—for example, ftgo-restaurant-service:1.1.0.RELEASE.
+2
+Edit the YAML file for the service’s deployment so that it references the new image.
+3
+Update the deployment using the kubectl apply -f command.
+Kubernetes will then perform a rolling upgrade of the pods. It will incrementally cre-
+ate pods running version 1.1.0.RELEASE and terminate the pods running version
+Listing 12.6
+The YAML definition of a NodePort service that routes traffic to port 
+8082 of Consumer Service
+Specifies a type 
+of NodePort
+The cluster-
+wide port
+ 

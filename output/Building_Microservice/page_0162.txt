@@ -1,0 +1,19 @@
+works as a load distribution mechanism. This is an example of the competing con‐
+sumers pattern we touched on briefly in Chapter 4.
+Figure 5-1. A queue allows for one consumer group
+With topics, you can have multiple consumer groups. In Figure 5-2, an event repre‐
+senting an order being paid for is put onto the Order Status topic. A copy of that
+event is received by both the Warehouse microservice and the Notifications micro‐
+service, which are in separate consumer groups. Only one instance of each consumer
+group will see that event.
+At first glance, a queue just looks like a topic with a single consumer group. A large
+part of the distinction between the two is that when a message is sent over a queue,
+there is knowledge of what the message is being sent to. With a topic, this informa‐
+tion is hidden from the sender of the message—the sender is unaware of who (if any‐
+one) will end up receiving the message.
+Topics are a good fit for event-based collaboration, whereas queues would be more
+appropriate for request/response communication. This should be considered as gen‐
+eral guidance rather than a strict rule, however.
+136 
+| 
+Chapter 5: Implementing Microservice Communication

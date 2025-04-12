@@ -1,0 +1,43 @@
+205
+Implementing an event store
+also performs an optimistic locking check by updating the entity version in the
+entities table using this UPDATE statement:
+UPDATE entities SET entity_version = ?
+WHERE entity_type = ? and entity_id = ? and entity_version = ?
+This statement verifies that the version is unchanged since it was retrieved by the find()
+operation. It also updates the entity_version to the new version. The update() opera-
+tion performs these updates within a transaction in order to ensure atomicity.
+ Now that we’ve looked at how Eventuate Local stores an aggregate’s events and snap-
+shots, let’s see how a client subscribes to events using Eventuate Local’s event broker. 
+CONSUMING EVENTS BY SUBSCRIBING TO EVENTUATE LOCAL’S EVENT BROKER
+Services consume events by subscribing to the event broker, which is implemented
+using Apache Kafka. The event broker has a topic for each aggregate type. As described
+in chapter 3, a topic is a partitioned message channel. This enables consumers to scale
+horizontally while preserving message ordering. The aggregate ID is used as the parti-
+tion key, which preserves the ordering of events published by a given aggregate. To
+consume an aggregate’s events, a service subscribes to the aggregate’s topic.
+ Let’s now look at the event relay—the glue between the event database and the
+event broker. 
+THE EVENTUATE LOCAL EVENT RELAY PROPAGATES EVENTS FROM THE DATABASE TO 
+THE MESSAGE BROKER
+The event relay propagates events inserted into the event database to the event bro-
+ker. It uses transaction log tailing whenever possible and polling for other databases.
+For example, the MySQL version of the event relay uses the MySQL master/slave rep-
+lication protocol. The event relay connects to the MySQL server as if it were a slave
+and reads the MySQL binlog, a record of updates made to the database. Inserts into
+the EVENTS table, which correspond to events, are published to the appropriate
+Apache Kafka topic. The event relay ignores any other kinds of changes.
+ The event relay is deployed as a standalone process. In order to restart correctly,
+it periodically saves the current position in the binlog—filename and offset—in a
+special Apache Kafka topic. On startup, it first retrieves the last recorded position
+from the topic. The event relay then starts reading the MySQL binlog from that
+position.
+ The event database, message broker, and event relay comprise the event store.
+Let’s now look at the framework a Java application uses to access the event store. 
+6.2.2
+The Eventuate client framework for Java
+The Eventuate client framework enables developers to write event sourcing-based
+applications that use the Eventuate Local event store. The framework, shown in fig-
+ure 6.10, provides the foundation for developing event sourcing-based aggregates, ser-
+vices, and event handlers.
+ 

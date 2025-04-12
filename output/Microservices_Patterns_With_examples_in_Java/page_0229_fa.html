@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 229</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Developing business logic using event sourcing</strong></h3>
+  <p>
+   در این مثال، method به نام reviseOrder() با یک process() method و یک apply() method جایگزین می‌شود.
+  </p>
+  <p>
+   که توسط یک aggregate خاص منتشر می‌شود، می‌تواند تغییر کند. Developers می‌توانند ساختار از یک event type را با اضافه کردن، حذف کردن و تغییر نام یا نوع از یک field تغییر دهند.
+  </p>
+  <p>
+   خوشبختانه، بسیاری از این نوع تغییرات، تغییرات backward-compatible هستند. به عنوان مثال، اضافه کردن یک field به یک event بعید است که بر consumers تأثیر بگذارد. یک consumer، fieldsهای ناشناخته را نادیده می‌گیرد. اما سایر تغییرات، backward compatible نیستند. به عنوان مثال، تغییر نام از یک event یا نام از یک field نیاز دارد که consumers از آن event type تغییر کنند.
+  </p>
+  <h4><strong style="color:darkblue">MANAGING SCHEMA CHANGES THROUGH UPCASTING</strong></h4>
+  <p>
+   در دنیای SQL database، تغییرات به یک database schema معمولاً با استفاده از schema migrations مدیریت می‌شوند. هر schema change توسط یک migration نشان داده می‌شود، یک اسکریپت SQL که schema را تغییر می‌دهد و داده‌ها را به یک schema جدید منتقل می‌کند. schema migrations در یک version control system ذخیره می‌شوند و با استفاده از یک ابزار مانند Flyway به یک database اعمال می‌شوند.
+  </p>
+  <p>
+   یک application event sourcing می‌تواند از یک رویکرد مشابه برای handling non-backward-compatible changes استفاده کند. اما به جای migration events به نسخه جدید schema در situ، frameworks از event sourcing events را هنگام بارگذاری آنها از event store transform می‌کنند. یک component که معمولاً upcaster نامیده می‌شود، eventsهای جداگانه را از یک نسخه قدیمی به یک نسخه جدیدتر update می‌کند. در نتیجه، کد application فقط با schema event فعلی سروکار دارد.
+  </p>
+  <p>
+   اکنون که ما به نحوه عملکرد event sourcing نگاهی انداختیم، بیایید مزایا و معایب آن را در نظر بگیریم.
+  </p>
+  <h4><strong style="color:darkblue">6.1.8: Benefits of event sourcing</strong></h4>
+  <p>
+   Event sourcing دارای مزایا و معایبی است. مزایا عبارتند از:
+  </p>
+  <ul>
+   <li>Reliably publishes domain events</li>
+   <li>Preserves the history of aggregates</li>
+   <li>Mostly avoids the O/R impedance mismatch problem</li>
+   <li>Provides developers with a time machine</li>
+  </ul>
+  <p>
+   بیایید هر مزیت را با جزئیات بیشتری بررسی کنیم.
+  </p>
+  <h4><strong style="color:darkblue">RELIABLY PUBLISHES DOMAIN EVENTS</strong></h4>
+  <p>
+   یک مزیت اصلی از event sourcing این است که به طور قابل‌اعتمادی events را هر زمان که state از یک aggregate تغییر می‌کند، منتشر می‌کند. این یک پایه خوب برای معماری microservice event-driven است. همچنین، از آنجایی که هر event می‌تواند identity از user را که تغییر را ایجاد کرده است، ذخیره کند، event sourcing یک audit log را فراهم می‌کند که دقیق بودن آن تضمین شده است. stream از events می‌تواند برای اهداف مختلف دیگری، از جمله اطلاع‌رسانی به users، application integration، analytics و monitoring استفاده شود.
+  </p>
+  <h4><strong style="color:darkblue">PRESERVES THE HISTORY OF AGGREGATES</strong></h4>
+  <p>
+   یکی دیگر از مزایای event sourcing این است که کل تاریخچه از هر aggregate را ذخیره می‌کند. شما به راحتی می‌توانید temporal queries را پیاده‌سازی کنید که state گذشته از یک aggregate را بازیابی می‌کند. برای تعیین state از یک aggregate در یک نقطه زمانی معین، شما eventsها را fold می‌کنید
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Database deployment and scaling
+As with our microservices, we’ve so far mostly talked about a database in a logical
+sense. In Figure 8-3, we ignored any concerns about the redundancy or scaling needs
+of the underlying database.
+Broadly speaking, a physical database deployment might be hosted on multiple
+machines, for a host of reasons. A common example would be to split load for reads
+and writes between a primary node and one or more nodes that are designated for
+read-only purposes (these nodes are typically referred to as read replicas). If we were
+implementing this idea for our Order service, we might end up with a situation like
+the one shown in Figure 8-5.
+Figure 8-5. Using read replicas to distribute load
+All read-only traffic goes to one of the read replica nodes, and you can further scale
+read traffic by adding additional read nodes. Due to the way that relational databases
+work, it’s more difficult to scale writes by adding additional machines (typically
+sharding models are required, which adds additional complexity), so moving read-
+only traffic to these read replicas can often free up more capacity on the write node to
+allow for more scaling.
+Added to this complex picture is the fact that the same database infrastructure can
+support multiple logically isolated databases. So the databases for Invoice and Order
+might both be served by the same underlying database engine and hardware, as
+shown in Figure 8-6. This can have significant benefits—it allows you to pool
+From Logical to Physical 
+| 
+223

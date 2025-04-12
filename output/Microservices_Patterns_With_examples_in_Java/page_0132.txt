@@ -1,0 +1,42 @@
+102
+CHAPTER 3
+Interprocess communication in a microservice architecture
+DOMAIN EVENT PUBLISHING
+Eventuate Tram has APIs for publishing and consuming domain events. Chapter 5
+explains that domain events are events that are emitted by an aggregate (business
+object) when it’s created, updated, or deleted. A service publishes a domain event
+using the DomainEventPublisher interface. Here is an example:
+DomainEventPublisher domainEventPublisher;
+String accountId = ...;
+DomainEvent domainEvent = new AccountDebited(...);
+domainEventPublisher.publish("Account", accountId, Collections.singletonList(
+domainEvent));
+A service consumes domain events using the DomainEventDispatcher. An example
+follows:
+DomainEventHandlers domainEventHandlers = DomainEventHandlersBuilder
+.forAggregateType("Order")
+.onEvent(AccountDebited.class, domainEvent -> { ... })
+.build();
+new DomainEventDispatcher("eventDispatcherId",
+domainEventHandlers,
+messageConsumer);
+Events aren’t the only high-level messaging pattern supported by Eventuate Tram. It
+also supports command/reply-based messaging. 
+COMMAND/REPLY-BASED MESSAGING
+A client can send a command message to a service using the CommandProducer inter-
+face. For example
+CommandProducer commandProducer = ...;
+Map<String, String> extraMessageHeaders = Collections.emptyMap();
+String commandId = commandProducer.send("CustomerCommandChannel",
+new DoSomethingCommand(),
+"ReplyToChannel",
+extraMessageHeaders);
+A service consumes command messages using the CommandDispatcher class. Command-
+Dispatcher uses the MessageConsumer interface to subscribe to specified events. It dis-
+patches each command message to the appropriate handler method. Here’s an example:
+CommandHandlers commandHandlers =CommandHandlersBuilder
+.fromChannel(commandChannel)
+.onMessage(DoSomethingCommand.class, (command) -
+> { ... ; return withSuccess(); })
+.build();
+ 

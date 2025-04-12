@@ -1,0 +1,39 @@
+its own totally dedicated database infrastructure, but that is more infrastructure to
+manage. We could use middleware to provide temporal decoupling between two
+microservices, but now we have a broker to worry about.
+Isolation, like so many of the other techniques we have looked at, can help improve
+the robustness of our applications, but it’s rare that it does so for free. Deciding on
+the acceptable trade-offs around isolation versus cost and increased complexity, like
+so many other things, can be vital.
+Redundancy
+Having more of something can be a great way to improve the robustness of a compo‐
+nent. Having more than one person who knows how the production database works
+seems sensible, in case someone leaves the company or is away on leave. Having
+more than one microservice instance makes sense as it allows you to tolerate the fail‐
+ure of one of those instances and still have a chance of delivering the required
+functionality.
+Working out how much redundancy you need, and where, will depend on how well
+you understand potential failure modes of each component, the impact of that func‐
+tionality being unavailable, and the cost of adding the redundancy.
+On AWS, for example, you do not get an SLA for the uptime of a single EC2 (virtual
+machine) instance. You have to work on the assumption that it can and will die on
+you. So it makes sense to have more than one. But going further, EC2 instances are
+deployed into availability zones (virtual data centers), and you also have no guaran‐
+tees regarding the availability of a single availability zone, meaning you’d want that
+second instance to be on a different availability zone to spread the risk.
+Having more copies of something can help when it comes to implementing redun‐
+dancy, but it can also be beneficial when it comes to scaling our applications to han‐
+dle increased load. In the next chapter we’ll look at examples of system scaling, and
+see how scaling for redundancy or scaling for load can differ.
+Middleware
+In “Message Brokers” on page 135, we looked at the role of middleware in the form of
+message brokers to help with implementing both request-response and event-based
+interactions. One of the useful properties of most message brokers is their ability to
+provide guaranteed delivery. You send a message to a downstream party, and the
+broker guarantees to deliver it, with some caveats that we explored earlier. Internally,
+to provide this guarantee, the message broker software will have to implement things
+like retries and time-outs on your behalf—the same sorts of operations are being car‐
+ried out as you would have to do yourself, but they are being done in software written
+Stability Patterns 
+| 
+405

@@ -1,0 +1,46 @@
+234
+CHAPTER 7
+Implementing queries in a microservice architecture
+subscribing to events published by multiple services. This kind of view doesn’t belong
+to any particular service, so it makes sense to implement it as a standalone service. A
+good example of such a service is Order History Service, which is a query service
+that implements the findOrderHistory() query operation. As figure 7.9 shows, this
+service subscribes to events published by several services, including Order Service,
+Delivery Service, and so on.
+Order History Service has event handlers that subscribe to events published by sev-
+eral services and update the Order History View Database. I describe the implemen-
+tation of this service in more detail in section 7.4.
+ A query service is also a good way to implement a view that replicates data owned
+by a single service yet because of the need to separate concerns isn’t part of that service.
+For example, the FTGO developers can define an Available Restaurants Service,
+which implements the findAvailableRestaurants() query operation described ear-
+lier. It subscribes to events published by Restaurant Service and updates a database
+designed for efficient geospatial queries.
+ In many ways, CQRS is an event-based generalization of the popular approach of
+using RDBMS as the system of record and a text search engine, such as Elasticsearch,
+to handle text queries. What’s different is that CQRS uses a broader range of database
+Order Service
+Kitchen Service
+Order History
+Service
+ﬁndOrderHistory()
+ﬁndOrder()
+Delivery Service
+Accounting Service
+Order history
+view database
+Event
+handlers
+Order
+events
+Ticket
+events
+Delivery
+events
+Accounting
+events
+Figure 7.9
+The design of Order History Service, which is a query-side service. It 
+implements the findOrderHistory() query operation by querying a database, which 
+it maintains by subscribing to events published by multiple other services.
+ 

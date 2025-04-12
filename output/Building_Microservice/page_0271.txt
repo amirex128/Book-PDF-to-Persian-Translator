@@ -1,0 +1,37 @@
+capable of running things like microservice instances. Alongside this, Microsoft also
+support a larger Windows Server Core, which is there to support running legacy
+Windows applications as containers. The issue is that these things are still pretty big
+when compared to their Linux equivalents—early versions of Nano Server would still
+be well over 1 GB in size, compared to small-footprint Linux operating systems like
+Alpine that would take up only a few megabytes.
+While Microsoft has continued to try and reduce the size of Nano Server, this size
+disparity still exists. In practice, though, due to the way that common layers across
+container images can be cached, this may not be a massive issue.
+Of special interest in the world of Windows containers is the fact that they support
+different levels of isolation. A standard Windows container uses process isolation,
+much like its Linux counterparts. With process isolation, each container runs in part
+of the same underlying kernel, which manages the isolation between the containers.
+With Windows containers, you also have the option of providing more isolation by
+running containers inside their own Hyper-V VM. This gives you something closer
+to the isolation level of full virtualization, but the nice thing is that you can choose
+between Hyper-V or process isolation when you launch the container—the image
+doesn’t need to change.
+Having flexibility about running images in different types of isolation can have its
+benefits. In some situations, your threat model may dictate that you want stronger
+isolation between your running processes than simple process-level isolation. For
+example, you might be running “untrusted” third-party code alongside your own
+processes. In such a situation, being able to run those container workloads as Hyper-
+V containers is very useful. Note, of course, that Hyper-V isolation is likely to have
+an impact in terms of spin-up time and a runtime cost closer to that of normal
+virtualization.
+Blurred Lines
+There is a growing trend of people looking for solutions that provide the stronger iso‐
+lation provided by VMs while having the lightweight nature of containers. Examples
+include Microsoft’s Hyper-V containers, which allow for separate kernels, and Fire‐
+cracker, which is confusingly called a kernel-based VM. Firecracker has proved popu‐
+lar as an implementation detail of service offerings like AWS Lambda, where there is
+a need to fully isolate workloads from different customers while still trying to keep
+spin-up time down and reduce the operational footprint of the workloads.
+Deployment Options 
+| 
+245

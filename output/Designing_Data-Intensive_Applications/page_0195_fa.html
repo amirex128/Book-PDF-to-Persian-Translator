@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 195</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        convergent way، که به این معنی است که همه replicas باید به همان value نهایی برسند، هنگامی که تمام تغییرات replicate شده‌اند.
+    </p>
+    <p>
+        راه‌های مختلفی برای دستیابی به convergent conflict resolution وجود دارد:
+    </p>
+    <ul>
+        <li>Give each write یک unique ID (به عنوان مثال، یک timestamp، یک عدد تصادفی طولانی، یک UUID یا یک hash از key و value)، write با بالاترین ID را به عنوان برنده انتخاب کنید و سایر writes را دور بریزید. اگر یک timestamp استفاده شود، این تکنیک به عنوان last write wins (LWW) شناخته می‌شود. اگرچه این رویکرد محبوب است، اما به طور خطرناکی مستعد data loss است [35]. ما در پایان این فصل در مورد LWW با جزئیات بیشتر بحث خواهیم کرد ("Detecting Concurrent Writes" در صفحه 184).</li>
+        <li>Give each replica یک unique ID، و به writes که در یک replica با شماره بالاتر منشأ شده‌اند، همیشه بر writes که در یک replica با شماره پایین‌تر منشأ شده‌اند، تقدم دهید. این رویکرد نیز به data loss اشاره دارد.</li>
+        <li>به نوعی values را با هم merge کنید—به عنوان مثال، آن‌ها را به ترتیب حروف الفبا مرتب کنید و سپس آن‌ها را concatenate کنید (در شکل 5-7، the merged title ممکن است چیزی شبیه "B/C") باشد.</li>
+        <li>Record the conflict در یک data structure صریح که تمام اطلاعات را حفظ می‌کند و application code را می‌نویسد که conflict را در زمانی در آینده حل می‌کند (شاید با درخواست از user).</li>
+    </ul>
+    <h4>Custom conflict resolution logic</h4>
+    <p>
+        از آنجایی که مناسب‌ترین روش برای حل یک conflict ممکن است به application بستگی داشته باشد، اکثر ابزارهای multi-leader replication به شما اجازه می‌دهند که منطق conflict resolution را با استفاده از application code بنویسید. آن کد ممکن است در زمان write یا در زمان read اجرا شود:
+    </p>
+    <ul>
+        <li>On write</li>
+        <li>به محض اینکه سیستم database یک conflict را در log of replicated changes تشخیص می‌دهد، the conflict handler را فراخوانی می‌کند. به عنوان مثال، Bucardo به شما اجازه می‌دهد تا یک snippet از Perl را برای این منظور بنویسید. این handler معمولاً نمی‌تواند یک user را prompt کند—این در یک فرآیند background اجرا می‌شود و باید سریع اجرا شود.</li>
+        <li>On read</li>
+        <li>هنگامی که یک conflict شناسایی می‌شود، همه writes conflicting ذخیره می‌شوند. دفعه بعد که data خوانده می‌شود، این نسخه‌های متعدد از data به application برگردانده می‌شوند. The application ممکن است user را prompt کند یا به طور خودکار conflict را حل کند و نتیجه را به database برگرداند. به عنوان مثال، CouchDB به این شکل عمل می‌کند.</li>
+    </ul>
+    <p>
+        توجه داشته باشید که conflict resolution معمولاً در سطح یک ردیف یا document مجزا اعمال می‌شود، نه برای یک transaction کامل [36]. بنابراین، اگر شما یک transaction دارید که به طور اتمی چندین write مختلف انجام می‌دهد (فصل 7 را ببینید)، هر write هنوز هم به طور جداگانه برای اهداف conflict resolution در نظر گرفته می‌شود.
+    </p>
+    <p>
+        Multi-Leader Replication | 173
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

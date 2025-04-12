@@ -1,0 +1,39 @@
+7 Charity Majors, “Metrics: Not the Observability Droids You’re Looking For,” Honeycomb (blog), October 24,
+2017, https://oreil.ly/TEETp.
+Due to the nature of this sort of data, we may want to store and report these metrics
+at different resolutions. For example, I might want a CPU sample for my servers at
+the resolution of one sample every 10 seconds for the last 30 minutes, in order to bet‐
+ter react to a situation that is currently unfolding. On the other hand, the CPU sam‐
+ples from my servers from last month are likely needed only for general trend
+analysis, so I might be happy with calculating an average CPU sample on a per-hour
+basis. This is often done on standard metrics platforms to help keep query times
+down and also reduce data storage. For something as simple as a CPU rate this might
+be fine, but the process of aggregating old data does cause us to lose information. The
+issue with the need for this data to be aggregated is that you often have to decide what
+to aggregate beforehand—you have to guess in advance as to what information it’s
+OK to lose.
+Standard metrics tools can be absolutely fine for understanding trends or simple fail‐
+ure modes. They can be vital, in fact. But they often don’t help us make our systems
+more observable, as they restrict the sorts of questions we want to ask. Things start
+getting interesting when we go from simple pieces of information like response time,
+CPU, or disk space use to thinking more broadly about the types of information we
+want to capture.
+Low versus high cardinality
+Many tools, especially the more recent ones, have been built to accommodate the
+storage and retrieval of high-cardinality data. There are a number of ways to describe
+cardinality, but you can think of it as the number of fields that can be easily queried
+in a given data point. The more potential fields we might want to query of our data,
+the higher the cardinality we need to support. Fundamentally, this gets more prob‐
+lematic with time-series databases for reasons that I won’t expand on here but which
+are related to the way many of these systems are built.
+For example, I might want to capture and query on the name of the microservice,
+customer ID, request ID, build number of software, and product ID, all over time.
+Then I decide to capture information about the machine at that stage—the OS,
+system architecture, cloud provider, and so on. I could need to capture all of that
+information for each data point I collect. As I increase the number of things I might
+want to query on, the cardinality increases, and the more problems systems will have
+that aren’t built with this use case in mind. As Charity Majors,7 founder of Honey‐
+comb, explains:
+322 
+| 
+Chapter 10: From Monitoring to Observability

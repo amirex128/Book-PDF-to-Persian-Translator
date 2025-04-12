@@ -1,0 +1,54 @@
+193
+Developing business logic using event sourcing
+public List<Event> process(ConfirmReviseOrder command) {
+  
+OrderRevision orderRevision = command.getOrderRevision();
+switch (state) {
+case REVISION_PENDING:
+LineItemQuantityChange licd =
+orderLineItems.lineItemQuantityChange(orderRevision);
+return singletonList(new OrderRevised(orderRevision,
+licd.currentOrderTotal, licd.newOrderTotal));
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public void apply(OrderRevised event) {
+OrderRevision orderRevision = event.getOrderRevision();
+if (!orderRevision.getRevisedLineItemQuantities().isEmpty()) {
+orderLineItems.updateLineItems(orderRevision);
+}
+this.state = APPROVED;
+}
+As you can see, each method has been replaced by a process() method and one or
+more apply() methods. The reviseOrder() method has been replaced by process
+(ReviseOrder) and apply(OrderRevisionProposed). Similarly, confirmRevision()
+has been replaced by process(ConfirmReviseOrder) and apply(OrderRevised). 
+6.1.3
+Handling concurrent updates using optimistic locking
+It’s not uncommon for two or more requests to simultaneously update the same
+aggregate. An application that uses traditional persistence often uses optimistic lock-
+ing to prevent one transaction from overwriting another’s changes. Optimistic locking
+typically uses a version column to detect whether an aggregate has changed since it
+was read. The application maps the aggregate root to a table that has a VERSION col-
+umn, which is incremented whenever the aggregate is updated. The application
+updates the aggregate using an UPDATE statement like this:
+UPDATE AGGREGATE_ROOT_TABLE
+SET VERSION = VERSION + 1 ...
+WHERE VERSION = <original version>
+This UPDATE statement will only succeed if the version is unchanged from when the
+application read the aggregate. If two transactions read the same aggregate, the first
+one that updates the aggregate will succeed. The second one will fail because the ver-
+sion number has changed, so it won’t accidentally overwrite the first transaction’s
+changes.
+ An event store can also use optimistic locking to handle concurrent updates. Each
+aggregate instance has a version that’s read along with the events. When the applica-
+tion inserts events, the event store verifies that the version is unchanged. A simple
+Verify that the 
+revision can be 
+confirmed and 
+return an Order-
+Revised event.
+Revise the 
+Order.
+ 

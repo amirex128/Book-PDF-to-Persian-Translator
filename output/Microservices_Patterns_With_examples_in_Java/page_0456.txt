@@ -1,0 +1,44 @@
+426
+CHAPTER 12
+Deploying microservices
+wait, your service will be accessible via the API gateway’s endpoint URL. AWS Lambda
+will provision as many instances of each Restaurant Service lambda function that are
+needed to support the load. If you change the code, you can easily update the lambda
+by rebuilding the ZIP file and rerunning serverless deploy. No servers involved!
+ The evolution of infrastructure is remarkable. Not that long ago, we manually
+deployed applications on physical machines. Today, highly automated public clouds
+provide a range of virtual deployment options. One option is to deploy services as vir-
+tual machines. Or better yet, we can package services as containers and deploy them
+using sophisticated Docker orchestration frameworks such as Kubernetes. Sometimes
+we even avoid thinking about infrastructure entirely and deploy services as light-
+weight, ephemeral lambda functions. 
+Summary
+You should choose the most lightweight deployment pattern that supports your
+service’s requirements. Evaluate the options in the following order: serverless,
+containers, virtual machines, and language-specific packages.
+A serverless deployment isn’t a good fit for every service, because of long-tail
+latencies and the requirement to use an event/request-based programming
+model. When it is a good fit, though, serverless deployment is an extremely
+compelling option because it eliminates the need to administer operating sys-
+tems and runtimes and provides automated elastic provisioning and request-
+based pricing.
+Docker containers, which are a lightweight, OS-level virtualization technol-
+ogy, are more flexible than serverless deployment and have more predictable
+latency. It’s best to use a Docker orchestration framework such as Kuberne-
+tes, which manages containers on a cluster of machines. The drawback of
+using containers is that you must administer the operating systems and run-
+times and most likely the Docker orchestration framework and the VMs that
+it runs on.
+The third deployment option is to deploy your service as a virtual machine. On
+one hand, virtual machines are a heavyweight deployment option, so deploy-
+ment is slower and it will most likely use more resources than the second
+option. On the other hand, modern clouds such as Amazon EC2 are highly
+automated and provide a rich set of features. Consequently, it may sometimes
+be easier to deploy a small, simple application using virtual machines than to
+set up a Docker orchestration framework.
+Deploying your services as language-specific packages is generally best avoided
+unless you only have a small number of services. For example, as described in
+chapter 13, when starting on your journey to microservices you’ll probably
+deploy the services using the same mechanism you use for your monolithic
+application, which is most likely this option. You should only consider setting
+ 

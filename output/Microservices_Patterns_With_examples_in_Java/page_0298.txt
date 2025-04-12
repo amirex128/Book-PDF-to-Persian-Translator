@@ -1,0 +1,45 @@
+268
+CHAPTER 8
+External API patterns
+services using a single request. This new architecture has a number of benefits. The
+API modules are isolated from one another, which improves reliability and observabil-
+ity, and the client API module is independently scalable. 
+8.2.4
+API gateway design issues
+Now that we’ve looked at the API gateway pattern and its benefits and drawbacks, let’s
+examine various API gateway design issues. There are several issues to consider when
+designing an API gateway:
+Performance and scalability
+Writing maintainable code by using reactive programming abstractions
+Handling partial failure
+Being a good citizen in the application’s architecture
+We’ll look at each one.
+PERFORMANCE AND SCALABILITY
+An API gateway is the application’s front door. All external requests must first pass
+through the gateway. Although most companies don’t operate at the scale of Netflix,
+which handles billions of requests per day, the performance and scalability of the API
+gateway is usually very important. A key design decision that affects performance and
+scalability is whether the API gateway should use synchronous or asynchronous I/O.
+ In the synchronous I/O model , each network connection is handled by a dedicated
+thread. This is a simple programming model and works reasonably well. For example,
+it’s the basis of the widely used Java EE servlet framework, although this framework
+provides the option of completing a request asynchronously. One limitation of syn-
+chronous I/O, however, is that operating system threads are heavyweight, so there is a
+limit on the number of threads, and hence concurrent connections, that an API gate-
+way can have.
+ The other approach is to use the asynchronous (nonblocking) I/O model . In this
+model, a single event loop thread dispatches I/O requests to event handlers. You have
+a variety of asynchronous I/O technologies to choose from. On the JVM you can use
+one of the NIO-based frameworks such as Netty, Vertx, Spring Reactor, or JBoss
+Undertow. One popular non-JVM option is NodeJS, a platform built on Chrome’s
+JavaScript engine.
+ Nonblocking I/O is much more scalable because it doesn’t have the overhead of
+using multiple threads. The drawback, though, is that the asynchronous, callback-
+based programming model is much more complex. The code is more difficult to
+write, understand, and debug. Event handlers must return quickly to avoid blocking
+the event loop thread.
+ Also, whether using nonblocking I/O has a meaningful overall benefit depends on
+the characteristics of the API gateway’s request-processing logic. Netflix had mixed results
+when it rewrote Zuul, its edge server, to use NIO (see https://medium.com/netflix-
+techblog/zuul-2-the-netflix-journey-to-asynchronous-non-blocking-systems-45947377fb5c).
+ 

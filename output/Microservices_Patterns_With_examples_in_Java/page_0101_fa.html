@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 101</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <p>
+   یک گزینه دیگر استفاده از مکانیسم مذاکره محتوای <strong>HTTP</strong> و شامل کردن
+   شماره نسخه در نوع <strong>MIME</strong> است. به عنوان مثال، یک کلاینت نسخه 1.x را درخواست می‌کند
+   از یک <strong>Order</strong> با استفاده از یک <strong>request</strong> مانند این:
+  </p>
+  <pre>
+   <code>
+    GET /orders/xyz HTTP/1.1
+    Accept: application/vnd.example.resource+json; version=1
+    ...
+   </code>
+  </pre>
+  <p>
+   این <strong>request</strong> به <strong>Order Service</strong> می‌گوید که کلاینت انتظار دارد یک <strong>response</strong> از نسخه 1.x دریافت کند.
+  </p>
+  <p>
+   به منظور پشتیبانی از چندین نسخه از یک <strong>API</strong>، <strong>adapters</strong> سرویس که
+   <strong>APIs</strong> را پیاده‌سازی می‌کنند، شامل منطقی خواهند بود که بین نسخه‌های قدیمی و جدید ترجمه می‌کند.
+   همچنین، همانطور که در فصل 8 توضیح داده شد، <strong>API gateway</strong> تقریباً مطمئناً از <strong>APIs</strong> نسخه‌بندی شده استفاده خواهد کرد.
+   حتی ممکن است مجبور شود از چندین نسخه قدیمی‌تر یک <strong>API</strong> پشتیبانی کند.
+  </p>
+  <p>
+   اکنون به مسئله فرمت‌های پیام نگاه می‌کنیم، که انتخاب آنها می‌تواند بر چگونگی تأثیر بگذارد
+   تکامل یک <strong>API</strong> آسان خواهد بود.
+  </p>
+  <h4>3.1.4 Message formats</h4>
+  <p>
+   اساس <strong>IPC</strong>، تبادل پیام‌ها است. پیام‌ها معمولاً حاوی داده هستند، بنابراین
+   یک تصمیم طراحی مهم، قالب آن داده‌ها است. انتخاب فرمت پیام
+   می‌تواند بر کارایی <strong>IPC</strong>، قابلیت استفاده <strong>API</strong> و تکامل‌پذیری آن تأثیر بگذارد. اگر شما
+   از یک سیستم پیام‌رسانی یا پروتکل‌هایی مانند <strong>HTTP</strong> استفاده می‌کنید، باید فرمت پیام خود را انتخاب کنید. بعضی از
+   مکانیسم‌های <strong>IPC</strong> - مانند <strong>gRPC</strong>، که به زودی درباره آن یاد خواهید گرفت - ممکن است
+   فرمت پیام را دیکته کنید. در هر دو صورت، استفاده از یک <strong>cross-language</strong>، ضروری است.
+   فرمت پیام. حتی اگر شما <strong>microservices</strong> خود را در یک زبان واحد امروزه می‌نویسید،
+   احتمالاً در آینده از زبان‌های دیگر استفاده خواهید کرد. شما نباید، به عنوان مثال، استفاده کنید
+   سریال‌سازی <strong>Java</strong>.
+  </p>
+  <p>
+   دو دسته اصلی از فرمت‌های پیام وجود دارد: متن و باینری. بیایید نگاهی بیندازیم به
+   هر کدام.
+  </p>
+  <p>
+   <strong>TEXT-BASED MESSAGE FORMATS</strong>
+  </p>
+  <p>
+   اولین دسته، فرمت‌های متنی مانند <strong>JSON</strong> و <strong>XML</strong> است. یک مزیت از این
+   فرمت‌ها این است که نه تنها برای انسان قابل خواندن هستند، بلکه خود توصیف‌گر نیز هستند. یک پیام <strong>JSON</strong>
+   مجموعه‌ای از ویژگی‌های نام‌گذاری شده است. به طور مشابه، یک پیام <strong>XML</strong> در واقع یک
+   مجموعه‌ای از عناصر و مقادیر نام‌گذاری شده است. این فرمت به مصرف‌کننده یک پیام این امکان را می‌دهد
+   برای انتخاب مقادیر مورد علاقه و نادیده گرفتن بقیه. در نتیجه، بسیاری از تغییرات
+   به <strong>schema</strong> پیام می‌تواند به راحتی <strong>backward-compatible</strong> باشد.
+  </p>
+  <p>
+   ساختار اسناد <strong>XML</strong> توسط یک <strong>XML schema</strong> (www.w3.org/
+   <strong>XML/Schema</strong>) مشخص شده است. با گذشت زمان، جامعه توسعه‌دهندگان متوجه شده‌اند که <strong>JSON</strong> نیز
+   به یک مکانیسم مشابه نیاز دارد. یک گزینه محبوب استفاده از استاندارد <strong>JSON Schema</strong> است
+   (http://json-schema.org). یک <strong>JSON schema</strong> نام‌ها و انواع <strong>properties</strong> یک پیام را تعریف می‌کند و اینکه آیا
+   آنها اختیاری هستند یا مورد نیاز. علاوه بر مفید بودن <strong>documentaion</strong>، یک <strong>JSON schema</strong> می‌تواند توسط یک اپلیکیشن برای اعتبارسنجی پیام‌های ورودی استفاده شود.
+  </p>
+  <p>
+   یک نکته منفی استفاده از فرمت‌های پیام مبتنی بر متن این است که پیام‌ها تمایل به
+   مفصل بودن دارند، به خصوص <strong>XML</strong>. هر پیام سربار داشتن نام‌ها را دارد
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+470
+CHAPTER 13
+Refactoring to microservices
+ After implementing Order History Service, the FTGO team can then extract the
+services in the order described in section 13.3.2: Order Service, Consumer Service,
+Kitchen Service, and so on. As the FTGO team extracts each service, the maintain-
+ability and testability of their application gradually improves, and their development
+velocity increases. 
+Summary
+Before migrating to a microservice architecture, it’s important to be sure that
+your software delivery problems are a result of having outgrown your mono-
+lithic architecture. You might be able to accelerate delivery by improving your
+software development process.
+It’s important to migrate to microservices by incrementally developing a stran-
+gler application. A strangler application is a new application consisting of
+microservices that you build around the existing monolithic application. You
+should demonstrate value early and often in order to ensure that the business
+supports the migration effort.
+A great way to introduce microservices into your architecture is to implement
+new features as services. Doing so enables you to quickly and easily develop a
+feature using a modern technology and development process. It’s a good way to
+quickly demonstrate the value of migrating to microservices.
+One way to break up the monolith is to separate the presentation tier from the
+backend, which results in two smaller monoliths. Although it’s not a huge
+improvement, it does mean that you can deploy each monolith independently.
+This allows, for example, the UI team to iterate more easily on the UI design
+without impacting the backend.
+The main way to break up the monolith is by incrementally migrating function-
+ality from the monolith into services. It’s important to focus on extracting the
+services that provide the most benefit. For example, you’ll accelerate develop-
+ment if you extract a service that implements functionality that’s being actively
+developed.
+Newly developed services almost always have to interact with the monolith. A
+service often needs to access a monolith’s data and invoke its functionality. The
+monolith sometimes needs to access a service’s data and invoke its functionality.
+To implement this collaboration, develop integration glue, which consists of
+inbound and outbound adapters in the monolith.
+To prevent the monolith’s domain model from polluting the service’s domain
+model, the integration glue should use an anti-corruption layer, which is a layer
+of software that translates between domain models.
+One way to minimize the impact on the monolith of extracting a service is to
+replicate the data that was moved to the service back to the monolith’s data-
+base. Because the monolith’s schema is left unchanged, this eliminates the
+need to make potentially widespread changes to the monolith code base.
+ 

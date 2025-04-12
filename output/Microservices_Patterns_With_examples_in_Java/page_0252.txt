@@ -1,0 +1,64 @@
+222
+CHAPTER 7
+Implementing queries in a microservice architecture
+restaurant’s perspective, and delivery status, including its location and estimated deliv-
+ery time if in transit.
+ Because its data resides in a single database, the monolithic FTGO application can
+easily retrieve the order details by executing a single SELECT statement that joins the
+various tables. In contrast, in the microservices-based version of the FTGO applica-
+tion, the data is scattered around the following services:
+
+Order Service—Basic order information, including the details and status
+
+Kitchen Service—Status of the order from the restaurant’s perspective and the
+estimated time it will be ready for pickup
+
+Delivery Service—The order’s delivery status, estimated delivery information,
+and its current location
+
+Accounting Service—The order’s payment status
+Any client that needs the order details must ask all of these services. 
+7.1.2
+Overview of the API composition pattern
+One way to implement query operations, such as findOrder(), that retrieve data owned
+by multiple services is to use the API composition pattern. This pattern implements a
+Order
+Order Service
+id:3492-2323
+restaurant:Ajanta
+Ticket
+Kitchen Service
+FTGO application
+OrderDetails ﬁndOrder(orderId)
+FTGO frontend
+Order status view
+Order id:
+Restaurant:
+Status:
+ETA:
+Payment:
+3492-2323
+Ajanta
+En route
+6:25 pm
+Paid
+id:3492-2323
+status:PREPARED
+Delivery
+Delivery Service
+id:45-4545
+orderId:3492-2323
+status:ENROUTE
+eta:6:25 pm
+Bill
+Accounting Service
+id:343-45611
+orderId:3492-2323
+status:PAID
+Order status
+Data from multiple services
+Mobile device or web application
+Figure 7.1
+The findOrder() operation is invoked by a FTGO frontend module and returns the 
+details of an Order.
+ 

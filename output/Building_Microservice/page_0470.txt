@@ -1,0 +1,41 @@
+will be operating on out-of-date data for the remaining four minutes and 59 seconds.
+So the simplicity of implementation needs to be balanced against how much toler‐
+ance you have around operating on out-of-date data.
+Conditional GETs
+Worth a mention, as this is overlooked, is the ability to issue conditional GET
+requests with HTTP. As we’ve just touched on, HTTP provides the ability to specify
+Cache-Control and Expires headers on responses to enable smarter client-side cach‐
+ing. But if we’re working directly with HTTP, we have another option in our arsenal
+of HTTP goodies: entity tags, or ETags. An ETag is used to determine whether the
+value of a resource has changed. If I update a customer record, the URI to the
+resource is the same but the value is different, so I would expect the ETag to change.
+This becomes powerful when we’re using what is called a conditional GET. When
+making a GET request, we can specify additional headers, telling the service to send
+us the resource only if certain criteria are met.
+For example, let’s imagine we fetch a customer record, and its ETag comes back as
+o5t6fkd2sa. Later on, perhaps because a Cache-Control directive has told us the
+resource should be considered stale, we want to make sure we get the latest version.
+When issuing the subsequent GET request, we can pass in an If-None-Match:
+o5t6fkd2sa. This tells the server that we want the resource at the specified URI,
+unless it already matches this ETag value. If we already have the up-to-date version,
+the service sends us a 304 Not Modified response, telling us we have the latest ver‐
+sion. If there is a newer version available, we get a 200 OK with the changed resource
+and a new ETag for the resource.
+Of course, with a conditional GET, we still make the request from client to server. If
+you are caching to reduce network round trips, this may not help you much. Where it
+is useful is in avoiding the cost of needlessly regenerating resources. With TTL-based
+invalidation, the client asks for a new copy of the resource, even if the resource hasn’t
+changed—the microservice receiving this request then has to regenerate that
+resource, even if it ends up being exactly the same as what the client already has. If
+the cost of creating the response is high, perhaps requiring an expensive set of data‐
+base queries, then conditional GET requests can be an effective mechanism.
+Notification-based
+With notification-based invalidation, we use events to help subscribers know if their
+local cache entries need to be invalidated. To my mind, this is the most elegant mech‐
+anism for invalidation, though that is balanced by its relative complexity with respect
+to TTL-based invalidation.
+In Figure 13-14, our Recommendation microservice is maintaining a client-side
+cache. Entries in that cache are invalidated when the Inventory microservice fires a
+444 
+| 
+Chapter 13: Scaling

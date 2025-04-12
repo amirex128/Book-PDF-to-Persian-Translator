@@ -1,0 +1,41 @@
+370
+CHAPTER 11
+Developing production-ready services
+described in chapter 12, this is often not the best approach. In some environments,
+such as AWS Lambda, there isn’t even a “permanent” filesystem to write the logs to!
+Instead, your service should log to stdout. The deployment infrastructure will then
+decide what to do with the output of your service. 
+THE LOG AGGREGATION INFRASTRUCTURE
+The logging infrastructure is responsible for aggregating the logs, storing them, and
+enabling the user to search them. One popular logging infrastructure is the ELK
+stack. ELK consists of three open source products:
+Elasticsearch—A text search-oriented NoSQL database that’s used as the logging
+server
+Logstash—A log pipeline that aggregates the service logs and writes them to
+Elasticsearch
+Kibana—A visualization tool for Elasticsearch
+Other open source log pipelines include Fluentd and Apache Flume. Examples of log-
+ging servers include cloud services, such as AWS CloudWatch Logs, as well as numerous
+commercial offerings. Log aggregation is a useful debugging tool in a microservice
+architecture.
+ Let’s now look at distributed tracing, which is another way of understanding the
+behavior of a microservices-based application. 
+11.3.3 Using the Distributed tracing pattern
+Imagine you’re a FTGO developer who is investigating why the getOrderDetails()
+query has slowed down. You’ve ruled out the problem being an external networking
+issue. The increased latency must be caused by either the API gateway or one of the
+services it has invoked. One option is to look at each service’s average response time.
+The trouble with this option is that it’s an average across requests rather than the tim-
+ing breakdown for an individual request. Plus more complex scenarios might involve
+many nested service invocations. You may not even be familiar with all services. As a
+result, it can be challenging to troubleshoot and diagnose these kinds of performance
+problems in a microservice architecture.
+A good way to get insight into what your application is doing is to use distributed trac-
+ing. Distributed tracing is analogous to a performance profiler in a monolithic applica-
+tion. It records information (for example, start time and end time) about the tree of
+service calls that are made when handling a request. You can then see how the services
+Pattern: Distributed tracing
+Assign each external request a unique ID and record how it flows through the system
+from one service to the next in a centralized server that provides visualization and
+analysis. See http://microservices.io/patterns/observability/distributed-tracing.html.
+ 

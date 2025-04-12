@@ -1,0 +1,44 @@
+305
+Testing strategies for microservice architectures
+The request element is an HTTP request for the REST endpoint GET /orders/
+{orderId}. The response element is an HTTP response that describes an Order
+expected by API Gateway. The Groovy contracts are part of the provider’s code base.
+Each consumer team writes contracts that describe how their service interacts with
+the provider and gives them, perhaps via a Git pull request, to the provider team.
+The provider team is responsible for packaging the contracts as a JAR and publish-
+ing them to a Maven repository. The consumer-side tests download the JAR from the
+repository.
+ Each contract’s request and response play dual roles of test data and the specifi-
+cation of expected behavior. In a consumer-side test, the contract is used to config-
+ure a stub, which is similar to a Mockito mock object and simulates the behavior of
+Order Service. It enables API Gateway to be tested without running Order Service.
+In the provider-side test, the generated test class invokes the provider with the con-
+tract’s request and verifies that it returns a response that matches the contract’s
+response. The next chapter discusses the details of how to use Spring Cloud Con-
+tract, but now we’re going to look at how to use consumer contract testing for mes-
+saging APIs. 
+CONSUMER CONTRACT TESTS FOR MESSAGING APIS
+A REST client isn’t the only kind of consumer that has expectations of a provider’s API.
+Services that subscribe to domain events and use asynchronous request/response-based
+communication are also consumers. They consume some other service’s messaging
+API, and make assumptions about the nature of that API. We must also write con-
+sumer contract tests for these services.
+ Spring Cloud Contract also provides support for testing messaging-based interac-
+tions. The structure of a contract and how it’s used by the tests depend on the type of
+interaction. A contract for domain event publishing consists of an example domain
+event. A provider test causes the provider to emit an event and verifies that it matches
+the contract’s event. A consumer test verifies that the consumer can handle that event.
+In the next chapter, I describe an example test.
+ A contract for an asynchronous request/response interaction is similar to an
+HTTP contract. It consists of a request message and a response message. A provider
+test invokes the API with the contract’s request message and verifies that the response
+matches the contract’s response. A consumer test uses the contract to configure a stub
+subscriber, which listens for the contract’s request message and replies with the speci-
+fied response. The next chapter discusses an example test. But first we’ll take a look at
+the deployment pipeline, which runs these and other tests. 
+9.1.3
+The deployment pipeline
+Every service has a deployment pipeline. Jez Humble’s book, Continuous Delivery
+(Addison-Wesley, 2010) describes a deployment pipeline as the automated process of get-
+ting code from the developer’s desktop into production. As figure 9.9 shows, it consists
+ 

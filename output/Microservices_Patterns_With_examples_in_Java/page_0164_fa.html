@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 164</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>من در مورد این کلاس با جزئیات بیشتر در فصل 5 بحث خواهم کرد. در حال حاضر، بیایید روی متد createOrder() تمرکز کنیم. فهرست زیر، متد createOrder() از OrderService را نشان می‌دهد. این متد ابتدا یک Order (سفارش) ایجاد می‌کند و سپس یک CreateOrderSaga (حماسه ایجاد سفارش) برای validate (اعتبارسنجی) order (سفارش) ایجاد می‌کند.</p>
+  <pre><code class="language-java">@Transactional
+ public class OrderService {
+  @Autowired
+  private SagaManager&lt;CreateOrderSagaState&gt; createOrderSagaManager;
+  @Autowired
+  private OrderRepository orderRepository;
+  @Autowired
+  private DomainEventPublisher eventPublisher;
+  public Order createOrder(OrderDetails orderDetails) {
+  ...
+  ResultWithEvents&lt;Order&gt; orderAndEvents = Order.createOrder(...);
+  Order order = orderAndEvents.result;
+  orderRepository.save(order);
+  eventPublisher.publish(Order.class,
+  Long.toString(order.getId()),
+  orderAndEvents.events);
+  CreateOrderSagaState data =
+  new CreateOrderSagaState(order.getId(), orderDetails);
+  
+  createOrderSagaManager.create(data, Order.class, order.getId());
+  return order;
+  }
+  ...
+ }
+</code></pre>
+  <p>متد createOrder() (ایجاد سفارش) یک Order (سفارش) را با فراخوانی متد factory (کارخانه) Order.createOrder() ایجاد می‌کند. سپس Order (سفارش) را با استفاده از OrderRepository (مخزن سفارش) که یک repository (مخزن) مبتنی بر JPA است، persist (پایدار) می‌کند. این CreateOrderSaga (حماسه ایجاد سفارش) را با فراخوانی SagaManager.create() (مدیر حماسه.ایجاد) ایجاد می‌کند، که یک CreateOrderSagaState (حالت حماسه ایجاد سفارش) حاوی ID (شناسه) Order (سفارش) تازه ذخیره شده و OrderDetails (جزئیات سفارش) را منتقل می‌کند. SagaManager (مدیر حماسه)، saga orchestrator (ارکستراتور حماسه) را نمونه‌سازی می‌کند، که باعث می‌شود یک command message (پیام دستور) به اولین participant (شرکت‌کننده) saga (حماسه) ارسال کند، و the saga orchestra-tor (ارکستراتور حماسه) را در database (پایگاه داده) persist (پایدار) می‌کند.</p>
+  <p>بیایید با جزئیات بیشتر به CreateOrderSaga (حماسه ایجاد سفارش) و کلاس‌های مرتبط با آن نگاهی بیندازیم.</p>
+  <p>Listing (فهرست) 4.1</p>
+  <p>The OrderService (کلاس OrderService) و متد createOrder() (ایجاد سفارش) آن</p>
+  <br>
+  <p>Ensure (اطمینان حاصل کنید) that (که) service (سرویس)</p>
+  <p>methods (متدها) are transactional (تراکنشی) هستند.</p>
+  <p>Create (ایجاد) the (the)</p>
+  <p>Order (سفارش).</p>
+  <p>Persist (پایدار کنید) the (the)</p>
+  <p>Order (سفارش) in the (در) database (پایگاه داده).</p>
+  <p>Publish (انتشار) domain (دامنه)</p>
+  <p>events (رویدادها).</p>
+  <p>Create (ایجاد) a (یک)</p>
+  <p>CreateOrderSaga (حماسه ایجاد سفارش).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

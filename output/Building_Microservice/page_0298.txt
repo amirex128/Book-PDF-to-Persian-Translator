@@ -1,0 +1,40 @@
+8 Sam Newman, Monolith to Microservices (Sebastopol: O’Reilly, 2019).
+versions of a microservice running side by side, and use the toggle to route to either
+the old or the new version. Here, the canary implementation has to be somewhere in
+the routing/networking path, rather than being in one microservice.
+When I first did a canary release we controlled the rollout manually. We could con‐
+figure the percentage of our traffic seeing the new functionality, and over a period of
+a week we gradually increased this until everyone saw the new functionality. Over the
+week, we kept an eye on our error rates, bug reports, and the like. Nowadays, it’s
+more common to see this process handled in an automated fashion. Tools like Spin‐
+naker for example have the ability to automatically ramp up calls based on metrics,
+such as increasing the percentage of calls to a new microservice version if the error
+rates are at an acceptable level.
+Parallel Run
+With a canary release, a request to a piece of functionality will be served by either the
+old or the new version. This means we can’t compare how the two versions of func‐
+tionality would handle the same request, something that can be important if you
+want to make sure that the new functionality works in exactly the same way as the old
+version of functionality.
+With a parallel run you do exactly that—you run two different implementations of
+the same functionality side by side, and send a request to the functionality to both
+implementations. With a microservice architecture, the most obvious approach
+might be to dispatch a service call to two different versions of the same service and
+compare the results. An alternative is to coexist both implementations of the func‐
+tionality inside the same service, which can often make comparison easier.
+When executing both implementations, it’s important to realize that you likely only
+want the results of one of the invocations. One implementation is considered the
+source of truth—this is the implementation you currently trust, and is typically the
+existing implementation. Depending on the nature of the functionality you are com‐
+paring with a parallel run, you might have to give this nuance careful thought—you
+wouldn’t want to send two identical order updates to a customer, or pay an invoice
+twice for example!
+I explore the parallel run pattern in a lot more detail in Chapter 3 of my book Mono‐
+lith to Microservices.8 There I explore its use in helping migrate functionality from a
+monolithic system to a microservice architecture, where we want to ensure that our
+new microservice behaves in the same way as the equivilent monolith functionality.
+In another context, GitHub makes use of this pattern when reworking core parts of
+its codebase, and have released an open source tool Scientist to help with this process.
+272 
+| 
+Chapter 8: Deployment

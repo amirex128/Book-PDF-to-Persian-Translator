@@ -1,0 +1,39 @@
+Removing tests is sometimes a fraught exercise, and I suspect those who attempt it
+have much in common with people who want to remove certain airport security
+measures. No matter how ineffective the security measures might be, any conversa‐
+tion about removing them is often countered with knee-jerk reactions about not car‐
+ing about people’s safety or wanting terrorists to win. It is hard to have a balanced
+conversation about the value something adds versus the burden it entails. It can also
+be a difficult risk/reward trade-off. Do you get thanked if you remove a test? Maybe.
+But you’ll certainly get blamed if a test you removed lets a bug through. When it
+comes to the larger-scoped test suites, however, this is exactly what we need to be able
+to do. If the same feature is covered in 20 different tests, perhaps we can get rid of
+half of them, as those 20 tests take 10 minutes to run! What this requires is a better
+understanding of risk, which is something humans are famously bad at. As a result,
+this intelligent curation and management of larger-scoped, high-burden tests
+happens incredibly infrequently. Wishing people did this more isn’t the same thing as
+making it happen.
+The Great Pile-Up
+The long feedback cycles associated with end-to-end tests aren’t just a problem when
+it comes to developer productivity. With a long test suite, any breaks take a while to
+fix, which reduces the amount of time that the end-to-end tests can be expected to be
+passing. If we deploy only software that has passed through all our tests successfully
+(which we should!), it means fewer of our services get through to the point of being
+deployable into production.
+This can lead to a pile-up. While a broken integration test stage is being fixed, more
+changes from upstream teams can pile in. Aside from the fact that this can make fix‐
+ing the build harder, it means the scope of changes to be deployed increases. The
+ideal way to handle this is to not let people check in if the end-to-end tests are failing,
+but given a long test suite time, that is often impractical. Try saying, “You 30 develop‐
+ers: no check-ins until we fix this seven-hour-long build!” Allowing check-ins on a
+broken end-to-end test suite, though, is really fixing the wrong problem. If you allow
+check-ins on a broken build, the build may stay broken for longer, undermining its
+effectiveness as a way to give you fast feedback about the quality of the code. The
+right answer is to make the test suite faster.
+The larger the scope of a deployment and the higher the risk of a release, the more
+likely we are to break something. So we want to make sure we can release small, well-
+tested changes frequently. When end-to-end tests slow down our ability to release
+small changes, they can end up doing more harm than good.
+290 
+| 
+Chapter 9: Testing

@@ -1,0 +1,42 @@
+354
+CHAPTER 11
+Developing production-ready services
+user identity. In a microservice architecture, we need a different mechanism for
+passing user identity from one service to another.
+Centralized session —Because an in-memory security context doesn’t make sense,
+neither does an in-memory session. In theory, multiple services could access a
+database-based session, except that it would violate the principle of loose cou-
+pling. We need a different session mechanism in a microservice architecture.
+Let’s begin our exploration of security in a microservice architecture by looking at
+how to handle authentication.
+HANDLING AUTHENTICATION IN THE API GATEWAY
+There are a couple of different ways to handle authentication. One option is for the
+individual services to authenticate the user. The problem with this approach is that it
+permits unauthenticated requests to enter the internal network. It relies on every
+development team correctly implementing security in all of their services. As a result,
+there’s a significant risk of an application containing security vulnerabilities.
+ Another problem with implementing authentication in the services is that differ-
+ent clients authenticate in different ways. Pure API clients supply credentials with
+each request using, for example, basic authentication. Other clients might first log in
+and then supply a session token with each request. We want to avoid requiring services
+to handle a diverse set of authentication mechanisms.
+ A better approach is for the API gateway to authenticate a request before forward-
+ing it to the services. Centralizing API authentication in the API gateway has the
+advantage that there’s only one place to get right. As a result, there’s a much smaller
+chance of a security vulnerability. Another benefit is that only the API gateway has to
+deal with the various different authentication mechanisms. It hides this complexity
+from the services.
+ Figure 11.3 shows how this approach works. Clients authenticate with the API gate-
+way. API clients include credentials in each request. Login-based clients POST the
+user’s credentials to the API gateway’s authentication and receive a session token.
+Once the API gateway has authenticated a request, it invokes one or more services.
+A service invoked by the API gateway needs to know the principal making the request.
+It must also verify that the request has been authenticated. The solution is for the API
+gateway to include a token in each service request. The service uses the token to vali-
+date the request and obtain information about the principal. The API gateway might
+also give the same token to session-oriented clients to use as the session token.
+Pattern: Access token
+The API gateway passes a token containing information about the user, such as their
+identity and their roles, to the services that it invokes. See http://microservices.io/
+patterns/security/access-token.html.
+ 

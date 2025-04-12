@@ -1,0 +1,44 @@
+469
+Breaking apart the monolith: extracting delivery management
+Using a feature toggle significantly reduces the risk of rolling out Delivery Service. We
+can deploy Delivery Service and test it. And then, once we’re sure it works, we can flip
+the toggle to route traffic to it. If we then discover that Delivery Service isn’t working
+as expected, we can switch back to the old implementation.
+Once we’re sure that Delivery Service is working as expected, we can then remove
+the delivery management code from the monolith.
+ Delivery Service and Delayed Order Service are examples of the services that
+the FTGO team will develop during their journey to the microservice architecture.
+Where they go next after implementing these services depends on the priorities of the
+business. One possible path is to extract Order History Service, described in chap-
+ter 7. Extracting this service partially eliminates the need for Delivery Service to
+replicate data back to the monolith.
+About feature toggles
+Feature toggles, or feature flags, let you deploy code changes without necessarily
+releasing them to users. They also enable you to dynamically change the behavior
+of the application by deploying new code. This article by Martin Fowler provides an
+excellent overview of the topic: https://martinfowler.com/articles/feature-toggles
+.html.
+«interface»
+DeliveryService
+void schedule(...)
+void reschedule(...)
+void cancel(...)
+FeatureToggleBased
+DeliveryServiceImpl
+DeliveryServiceImpl
+DeliveryServiceProxy
+Delivery
+management
+Invokes
+Invokes
+Sends
+message
+Delivery
+management
+client
+Delivery notiﬁcations
+Figure 13.23
+The final step is to implement DeliveryService with a proxy class that sends 
+messages Delivery Service. A feature toggle controls whether the FTGO monolith uses the old 
+implementation or the new Delivery Service.
+ 

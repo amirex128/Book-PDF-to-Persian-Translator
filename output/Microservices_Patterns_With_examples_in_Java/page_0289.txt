@@ -1,0 +1,41 @@
+259
+The API gateway pattern
+that’s used by third-party applications. That’s because third-party developers need
+an API that’s stable.
+ Very few organizations can force third-party developers to upgrade to a new API.
+Organizations that have an unstable API risk losing developers to a competitor.
+Consequently, you must carefully manage the evolution of an API that’s used by third-
+party developers. You typically have to maintain older versions for a long time—pos-
+sibly forever.
+ This requirement is a huge burden for an organization. It’s impractical to make
+the developers of the backend services responsible for maintaining long-term back-
+ward compatibility. Rather than expose services directly to third-party developers,
+organizations should have a separate public API that’s developed by a separate team.
+As you’ll learn later, the public API is implemented by an architectural component
+known as an API gateway. Let’s look at how an API gateway works. 
+8.2
+The API gateway pattern
+As you’ve just seen, there are numerous drawbacks with services accessing services
+directly. It’s often not practical for a client to perform API composition over the inter-
+net. The lack of encapsulation makes it difficult for developers to change service
+decomposition and APIs. Services sometimes use communication protocols that
+aren’t suitable outside the firewall. Consequently, a much better approach is to use an
+API gateway.
+An API gateway is a service that’s the entry point into the application from the outside
+world. It’s responsible for request routing, API composition, and other functions,
+such as authentication. This section covers the API gateway pattern. I discuss its bene-
+fits and drawbacks and describe various design issues you must address when develop-
+ing an API gateway.
+8.2.1
+Overview of the API gateway pattern
+Section 8.1.1 described the drawbacks of clients, such as the FTGO mobile applica-
+tion, making multiple requests in order to display information to the user. A much
+better approach is for a client to make a single request to an API gateway, a service
+that serves as the single entry point for API requests into an application from outside
+the firewall. It’s similar to the Facade pattern from object-oriented design. Like a facade,
+an API gateway encapsulates the application’s internal architecture and provides an API
+to its clients. It may also have other responsibilities, such as authentication, monitoring,
+Pattern: API gateway
+Implement a service that’s the entry point into the microservices-based application
+from external API clients. See http://microservices.io/patterns/apigateway.html.
+ 

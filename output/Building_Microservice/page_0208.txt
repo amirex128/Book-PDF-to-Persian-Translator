@@ -1,0 +1,36 @@
+3 Robert Kubis, “Google Cloud Spanner: Global Consistency at Scale,” Devoxx, November 7, 2017, YouTube
+video, 33:22, https://oreil.ly/XHvY5.
+4 Hector Garcia-Molina and Kenneth Salem, “Sagas,” ACM Sigmod Record 16, no. 3 (1987): 249–59.
+Database Distributed Transactions
+I am arguing against the general use of distributed transactions to coordinate state
+change across microservices. In such situations, each microservice is managing its
+own local durable state (e.g., in its database). Distributed transactional algorithms are
+being used successfully for some large-scale databases, Google’s Spanner being one
+such system. In this situation, the distributed transaction is being applied transpar‐
+ently from an application’s point of view by the underling database, and the dis‐
+tributed transaction is just being used to coordinate state changes within a single
+logical database (albeit one that might be distributed across multiple machines, and
+potentially across multiple data centers).
+What Google has managed to achieve with Spanner is impressive, but it’s also worth
+noting that what it had to do to make this work gives you an idea of the challenges
+involved. Let’s just say it involves very expensive data centers and satellite-based
+atomic clocks (really). For a good overview of how Spanner makes this work, I rec‐
+ommend the presentation “Google Cloud Spanner: Global Consistency at Scale.”3
+Sagas
+Unlike a two-phase commit, a saga is by design an algorithm that can coordinate
+multiple changes in state, but avoids the need for locking resources for long periods
+of time. A saga does this by modeling the steps involved as discrete activities that can
+be executed independently. Using sagas comes with the added benefit of forcing us to
+explicitly model our business processes, which can have significant benefits.
+The core idea, first outlined in “Sagas” by Hector Garcia-Molina and Kenneth Salem,4
+addresses how best to handle operations known as long lived transactions (LLTs).
+These transactions might take a long time (minutes, hours, or perhaps even days) and
+as part of that process require changes to be made to a database.
+If you directly mapped an LLT to a normal database transaction, a single database
+transaction would span the entire life cycle of the LLT. This could result in multiple
+rows or even full tables being locked for long periods of time while the LLT is taking
+place, causing significant issues if other processes are trying to read or modify these
+locked resources.
+182 
+| 
+Chapter 6: Workflow

@@ -1,0 +1,40 @@
+2 Note that there are actually three different tools in this space with the same name! The openapi-diff tool at
+https://github.com/Azure/openapi-diff seems to get closest to a tool that actually passes or fails compatibility.
+This versioning scheme allows us to pack a lot of information and expectations into
+just three fields. The full specification outlines in very simple terms the expectations
+clients can have of changes to these numbers, and it can simplify the process of com‐
+municating about whether changes should impact consumers. Unfortunately, I
+haven’t seen this approach used enough in distributed systems to understand its
+effectiveness in that context—something that hasn’t really changed since the first edi‐
+tion of this book.
+Catch Accidental Breaking Changes Early
+It’s crucial that we pick up changes that will break consumers as soon as possible,
+because even if we choose the best possible technology, an innocent change of a
+microservice could cause consumers to break. As we’ve already touched on, using
+schemas can help us pick up structural changes, assuming we use some sort of tooling
+to help compare schema versions. There is a wide range of tooling out there to do this
+for different schema types. We have Protolock for protocol buffers, json-schema-diff-
+validator for JSON Schema, and openapi-diff for the OpenAPI specification.2 More
+tools seem to be cropping up all the time in this space. What you’re looking for,
+though, is something that won’t just report on the differences between two schemas
+but will pass or fail based on compatibility; this would allow you to fail a CI build if
+incompatible schemas are found, ensuring that your microservice won’t get deployed.
+The open source Confluent Schema Registry supports JSON Schema, Avro, and pro‐
+tocol buffers and is capable of comparing newly uploaded versions for backward
+compatibility. Although it was built to help as part of an ecosystem in which Kafka is
+being used, and needs Kafka to run, there is nothing to stop you from using it to store
+and validate schemas being used for non-Kafka-based communication.
+Schema comparison tools can help us catch structural breakages, but what about
+semantic breakages? Or what if you aren’t making use of schemas in the first place?
+Then we’re looking at testing. This is a topic we’ll explore in more detail in “Contract
+Tests and Consumer-Driven Contracts (CDCs)” on page 292, but I wanted to highlight
+consumer-driven contract testing, which explicitly helps in this area—Pact being an
+excellent example of a tool aimed specifically at this problem. Just remember, if you
+don’t have schemas, expect your testing to have to do more work to catch breaking
+changes.
+If you’re supporting multiple different client libraries, running tests using each
+library you support against the latest service is another technique that can help. Once
+you realize you are going to break a consumer, you have the choice to either try to
+148 
+| 
+Chapter 5: Implementing Microservice Communication

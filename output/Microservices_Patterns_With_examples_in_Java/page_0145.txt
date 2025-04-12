@@ -1,0 +1,56 @@
+115
+Transaction management in a microservice architecture
+This saga consists of the following local transactions:
+1
+Order Service—Create an Order in an APPROVAL_PENDING state.
+2
+Consumer Service—Verify that the consumer can place an order.
+3
+Kitchen Service—Validate order details and create a Ticket in the CREATE
+_PENDING.
+4
+Accounting Service—Authorize consumer’s credit card.
+5
+Kitchen Service—Change the state of the Ticket to AWAITING_ACCEPTANCE.
+6
+Order Service—Change the state of the Order to APPROVED.
+Later, in section 4.2, I describe how the services that participate in a saga communi-
+cate using asynchronous messaging. A service publishes a message when a local trans-
+action completes. This message then triggers the next step in the saga. Not only does
+using messaging ensure the saga participants are loosely coupled, it also guarantees
+that a saga completes. That’s because if the recipient of a message is temporarily
+unavailable, the message broker buffers the message until it can be delivered.
+ On the surface, sagas seem straightforward, but there are a few challenges to using
+them. One challenge is the lack of isolation between sagas. Section 4.3 describes how
+to handle this problem. Another challenge is rolling back changes when an error
+occurs. Let’s take a look at how to do that. 
+SAGAS USE COMPENSATING TRANSACTIONS TO ROLL BACK CHANGES
+A great feature of traditional ACID transactions is that the business logic can easily
+roll back a transaction if it detects the violation of a business rule. It executes a ROLL-
+BACK statement, and the database undoes all the changes made so far. Unfortunately,
+sagas can’t be automatically rolled back, because each step commits its changes to the
+local database. This means, for example, that if the authorization of the credit card
+fails in the fourth step of the Create Order Saga, the FTGO application must explicitly
+Order Service
+Saga
+Create order
+Txn:1
+Approve order
+Txn:6
+Consumer Service
+Create order
+Txn:1
+Verify consumer
+Txn:2
+Kitchen Service
+Create ticket
+Txn:3
+Approve ticket
+Txn:5
+Accounting Service
+Authorize card
+Txn:4
+Figure 4.2
+Creating an Order using a saga. The createOrder() operation is implemented by a 
+saga that consists of local transactions in several services.
+ 

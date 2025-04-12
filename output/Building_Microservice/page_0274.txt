@@ -1,0 +1,40 @@
+automation and management of your systems. As we’ll discuss shortly, one of the
+ways we can address the overhead of managing multiple hosts is with automation,
+and so constraining our options for resolving this may well be doubly damaging.
+I would also question some of the value of the features provided by these application
+containers. Many of them tout the ability to manage clusters to support shared in-
+memory session state, something we absolutely want to avoid in any case due to the
+challenges this creates when scaling our services. And the monitoring capabilities
+they provide won’t be sufficient when we consider the sorts of joined-up monitoring
+we want to do in a microservices world, as we’ll see in Chapter 10. Many of them also
+have quite slow spin-up times, impacting developer feedback cycles.
+There are other sets of problems too. Attempting to do proper life-cycle management
+of applications on top of platforms like the JVM can be problematic and more com‐
+plex than simply restarting a JVM. Analyzing resource use and threads is also much
+more complex, as you have multiple applications sharing the same process. And
+remember, even if you do get value from technology-specific containers, they aren’t
+free. Aside from the fact that many of them are commercial and thus have a cost
+implication, they add a resource overhead in and of themselves.
+Ultimately, this approach is again an attempt to optimize for scarcity of resources
+that simply may not hold up anymore. Whether or not you decide to have multiple
+services per host as a deployment model, I would strongly suggest looking at self-
+contained deployable microservices as artifacts, with each microservice instance run‐
+ning as its own isolated process.
+Fundamentally, the lack of isolation this model provides is one of the main reasons
+why this model is increasingly rare for people adopting microservice architectures.
+Platform as a Service (PaaS)
+When using Platform as a Service (PaaS), you are working at a higher-level abstrac‐
+tion than a single host. Some of these platforms rely on taking a technology-specific
+artifact, such as a Java WAR file or Ruby gem, and automatically provisioning and
+running it for you. Some of these platforms will transparently attempt to handle scal‐
+ing the system up and down for you; others will allow you some control over how
+many nodes your service might run on, but they handle the rest.
+As was the case when I wrote the first edition, most of the best, most polished PaaS
+solutions are hosted. Heroku set the benchmark for delivering a developer-friendly
+interface and arguably has remained the gold standard for PaaS, despite limited
+growth in terms of its featureset over the last few years. Platforms like Heroku don’t
+just run your application instance; they also provide capabilities such as running
+database instances for you—something that can be very painful to do yourself.
+248 
+| 
+Chapter 8: Deployment

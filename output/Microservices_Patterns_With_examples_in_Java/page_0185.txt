@@ -1,0 +1,66 @@
+155
+Designing a domain model using the DDD aggregate pattern
+Aggregates decompose a domain model into chunks, which are individually easier to
+understand. They also clarify the scope of operations such as load, update, and delete.
+These operations act on the entire aggregate rather than on parts of it. An aggregate
+is often loaded in its entirety from the database, thereby avoiding any complications of
+lazy loading. Deleting an aggregate removes all of its objects from a database.
+AGGREGATES ARE CONSISTENCY BOUNDARIES
+Updating an entire aggregate rather than its parts solves the consistency issues, such
+as the example described earlier. Update operations are invoked on the aggregate
+root, which enforces invariants. Also, concurrency is handled by locking the aggregate
+root using, for example, a version number or a database-level lock. For example,
+instead of updating line items’ quantities directly, a client must invoke a method on
+the root of the Order aggregate, which enforces invariants such as the minimum order
+amount. Note, though, that this approach doesn’t require the entire aggregate to be
+updated in the database. An application might, for example, only update the rows cor-
+responding to the Order object and the updated OrderLineItem. 
+IDENTIFYING AGGREGATES IS KEY
+In DDD, a key part of designing a domain model is identifying aggregates, their
+boundaries, and their roots. The details of the aggregates’ internal structure is sec-
+ondary. The benefit of aggregates, however, goes far beyond modularizing a domain
+model. That’s because aggregates must obey certain rules. 
+5.2.3
+Aggregate rules
+DDD requires aggregates to obey a set of rules. These rules ensure that an aggregate is
+a self-contained unit that can enforce its invariants. Let’s look at each of the rules.
+«
+»
+aggregate root
+Order
+quantity
+«
+»
+aggregate root
+Consumer
+Order aggregate
+Consumer aggregate
+...
+«
+»
+aggregate root
+Restaurant
+«
+»
+value object
+OrderLineItem
+Restaurant aggregate
+«
+»
+value object
+DeliveryInfo
+«
+»
+value object
+PaymentInfo
+«
+»
+value object
+DeliveryInfo
+«
+»
+value object
+PaymentInfo
+Figure 5.5
+Structuring a domain model as a set of aggregates makes the boundaries explicit.
+ 

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 168</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>باید از <em>schemas</em> استفاده کنند. <em>SOAP</em> از طریق استفاده از <em>WSDL</em> کار می‌کند، در حالی که <em>gRPC</em> نیازمند استفاده از یک <em>protocol buffer specification</em> است. سایر انتخاب‌های فناوری که ما بررسی کرده‌ایم، استفاده از <em>schemas</em> را اختیاری می‌کنند، و این جایی است که اوضاع جالب‌تر می‌شود.</p>
+  <p>همانطور که قبلاً بحث کردم، من طرفدار داشتن <em>explicit schemas</em> برای <em>microservice endpoints</em> هستم، به دو دلیل اصلی. اولاً، آن‌ها راهی طولانی را در جهت ارائه یک <em>explicit representation</em> از آنچه یک <em>microservice endpoint</em> در معرض نمایش قرار می‌دهد و آنچه می‌تواند بپذیرد، طی می‌کنند. این کار هم برای توسعه‌دهندگانی که روی <em>microservice</em> کار می‌کنند و هم برای مصرف‌کنندگانشان زندگی را آسان‌تر می‌کند. <em>Schemas</em> ممکن است جایگزین نیاز به <em>good documentation</em> نشوند، اما مطمئناً می‌توانند به کاهش مقدار <em>documentation</em> مورد نیاز کمک کنند.</p>
+  <p>دلیل دیگری که من <em>explicit schemas</em> را دوست دارم، این است که آن‌ها از نظر گرفتن <em>accidental breakages</em> از <em>microservice endpoints</em> چگونه کمک می‌کنند. ما در یک لحظه بررسی خواهیم کرد که چگونه تغییرات بین <em>microservices</em> را مدیریت کنیم، اما ابتدا ارزش دارد که انواع مختلف <em>breakages</em> و نقشی که <em>schemas</em> می‌توانند ایفا کنند را بررسی کنیم.</p>
+  <h4>Structural Versus Semantic Contract Breakages</h4>
+  <p>به طور کلی، می‌توانیم <em>contract breakages</em> را به دو دسته تقسیم کنیم—<em>structural breakages</em> و <em>semantic breakages</em>. یک <em>structural breakage</em> موقعیتی است که در آن ساختار <em>endpoint</em> به گونه‌ای تغییر می‌کند که یک <em>consumer</em> اکنون ناسازگار است—این می‌تواند نشان‌دهنده حذف <em>fields</em> یا <em>methods</em>، یا افزودن <em>new required fields</em> باشد. یک <em>semantic breakage</em> به موقعیتی اشاره دارد که در آن ساختار <em>microservices endpoint</em> یکسان باقی می‌ماند، اما رفتار به گونه‌ای تغییر می‌کند که انتظارات مصرف‌کنندگان را از بین می‌برد.</p>
+  <p>بیایید یک مثال ساده بزنیم. شما یک <em>microservice</em> به نام <em>Hard Calculations</em> بسیار پیچیده دارید که یک متد <code>calculate</code> را در <em>endpoint</em> خود در معرض نمایش قرار می‌دهد. این متد <code>calculate</code> دو عدد صحیح را می‌گیرد، که هر دو <em>fields</em> مورد نیاز هستند. اگر شما <em>Hard Calculations</em> را به گونه‌ای تغییر دهید که متد <code>calculate</code> اکنون فقط یک عدد صحیح می‌گیرد، در این صورت <em>consumers</em> خراب می‌شوند—آن‌ها درخواست‌هایی را با دو عدد صحیح ارسال می‌کنند که <em>Hard Calculations microservice</em> رد خواهد کرد. این یک نمونه از یک <em>structural change</em> است، و به طور کلی چنین تغییراتی را می‌توان آسان‌تر تشخیص داد.</p>
+  <p>یک <em>semantic changes</em> مشکل‌سازتر است. این جایی است که ساختار <em>endpoint</em> تغییر نمی‌کند اما رفتار <em>endpoint</em> تغییر می‌کند. با بازگشت به متد <code>calculate</code> خود، تصور کنید که در نسخه اول، دو عدد صحیح ارائه شده با هم جمع می‌شوند و نتایج برگردانده می‌شوند. تا اینجای کار، همه چیز خوب است. حالا ما <em>Hard Calculations</em> را تغییر می‌دهیم تا متد <code>calculate</code> اعداد صحیح را در هم ضرب کند و نتیجه را برگرداند. <em>Semantics</em> متد <code>calculate</code> به گونه‌ای تغییر کرده است که می‌تواند انتظارات <em>consumers</em> را از بین ببرد.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+313
+Writing unit tests for a service
+createOrderSagaManager = mock(SagaManager.class);
+cancelOrderSagaManager = mock(SagaManager.class);
+reviseOrderSagaManager = mock(SagaManager.class);
+orderService = new OrderService(orderRepository, eventPublisher,  
+restaurantRepository, createOrderSagaManager,
+cancelOrderSagaManager, reviseOrderSagaManager);
+}
+@Test
+public void shouldCreateOrder() {
+when(restaurantRepository
+       
+.findById(AJANTA_ID)).thenReturn(Optional.of(AJANTA_RESTAURANT_);
+when(orderRepository.save(any(Order.class))).then(invocation -> {  
+Order order = (Order) invocation.getArguments()[0];
+order.setId(ORDER_ID);
+return order;
+});
+Order order = orderService.createOrder(CONSUMER_ID,
+   
+AJANTA_ID, CHICKEN_VINDALOO_MENU_ITEMS_AND_QUANTITIES);
+verify(orderRepository).save(same(order));        
+verify(eventPublisher).publish(Order.class, ORDER_ID,     
+singletonList(
+new OrderCreatedEvent(CHICKEN_VINDALOO_ORDER_DETAILS)));
+verify(createOrderSagaManager)
+                  
+.create(new CreateOrderSagaState(ORDER_ID,
+CHICKEN_VINDALOO_ORDER_DETAILS),
+Order.class, ORDER_ID);
+}
+}
+The setUp() method creates an OrderService injected with mock dependencies.
+The @Test shouldCreateOrder() method verifies that OrderService.createOrder()
+invokes OrderRepository to save the newly created Order, publishes an OrderCreated-
+Event, and creates a CreateOrderSaga.
+ Now that we’ve seen how to unit test the domain logic classes, let’s look at how to
+unit test the adapters that interact with external systems. 
+9.2.5
+Developing unit tests for controllers
+Services, such as Order Service, typically have one or more controllers that handle
+HTTP requests from other services and the API gateway. A controller class consists of
+a set of request handler methods. Each method implements a REST API endpoint. A
+method’s parameters represent values from the HTTP request, such as path variables.
+It typically invokes a domain service or a repository and returns a response object.
+Create an OrderService injected
+with mock dependencies.
+Configure RestaurantRepository.findById() 
+to return the Ajanta restaurant.
+Configure OrderRepository.save()
+to set Order’s ID.
+ Invoke
+OrderService
+.create().
+Verify that 
+OrderService saved 
+the newly created 
+Order in the database.
+Verify that
+OrderService
+published
+an Order-
+CreatedEvent.
+Verify that Order-
+Service created a 
+CreateOrderSaga.
+ 

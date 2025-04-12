@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 121</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   دومین انتخاب. اگر سبک همکاری <strong>event-driven</strong> را انتخاب می‌کنید، با این حال، انتخاب‌های پیاده‌سازی من به انتخاب‌های <strong>asynchronous</strong> <strong>nonblocking</strong> محدود می‌شود.
+  </p>
+  <p>
+   هنگام انتخاب فناوری مناسب، مجموعه‌ای از ملاحظات دیگر نیز وارد عمل می‌شوند که فراتر از سبک ارتباط هستند—به عنوان مثال، نیاز به ارتباط با <strong>lower-latency</strong>، جنبه‌های مربوط به امنیت، یا توانایی مقیاس‌پذیری. بعید است که شما بتوانید یک انتخاب فناوری منطقی داشته باشید بدون اینکه الزامات (و محدودیت‌های) فضای مشکل خاص خود را در نظر بگیرید. وقتی در فصل 5 به گزینه‌های فناوری نگاه می‌کنیم، در مورد برخی از این مسائل بحث خواهیم کرد.
+  </p>
+  <h4>ترکیب و تطبیق</h4>
+  <p>
+   مهم است که توجه داشته باشید که یک معماری microservice به طور کلی ممکن است ترکیبی از سبک‌های همکاری داشته باشد، و این معمولاً هنجار است. برخی از تعاملات، منطقی هستند به عنوان <strong>request-response</strong>، در حالی که برخی دیگر به عنوان <strong>event-driven</strong> منطقی هستند. در واقع، برای یک microservice واحد معمول است که بیش از یک شکل از همکاری را پیاده‌سازی کند.
+  </p>
+  <p>
+   یک microservice <strong>Order</strong> را در نظر بگیرید که یک <strong>request-response API</strong> را ارائه می‌دهد که به سفارشات اجازه می‌دهد قرار داده شوند یا تغییر داده شوند و سپس زمانی که این تغییرات انجام می‌شوند، رویدادها را منتشر می‌کند.
+  </p>
+  <p>
+   با این اوصاف، بیایید با جزئیات بیشتری به این سبک‌های مختلف ارتباط نگاه کنیم.
+  </p>
+  <h4>الگو: Synchronous Blocking</h4>
+  <p>
+   با یک <strong>synchronous blocking call</strong>، یک microservice نوعی <strong>call</strong> را به یک فرآیند <strong>downstream</strong> (احتمالاً یک microservice دیگر) ارسال می‌کند و تا زمان تکمیل <strong>call</strong>، و احتمالاً تا دریافت پاسخ، عملیات را مسدود می‌کند. در شکل 4-2، <strong>Order Processor</strong> یک <strong>call</strong> را به microservice <strong>Loyalty</strong> ارسال می‌کند تا به آن اطلاع دهد که مقداری امتیاز باید به حساب مشتری اضافه شود.
+  </p>
+  <p>
+   شکل 4-2. <strong>Order Processor</strong> یک <strong>synchronous call</strong> را به microservice <strong>Loyalty</strong> ارسال می‌کند، عملیات را مسدود می‌کند، و منتظر پاسخ می‌ماند
+  </p>
+  <p>
+   به طور معمول، یک <strong>synchronous blocking call</strong>، فراخوانی است که منتظر پاسخی از فرآیند <strong>downstream</strong> است. این ممکن است به این دلیل باشد که نتیجه <strong>call</strong> برای برخی از عملیات‌های دیگر مورد نیاز است، یا فقط به این دلیل که می‌خواهد مطمئن شود که <strong>call</strong> کار کرده است و در صورت عدم موفقیت، نوعی تلاش مجدد را انجام دهد. در نتیجه، تقریباً هر <strong>synchronous blocking call</strong> که من می‌بینم، همچنین یک <strong>request-response call</strong> را نیز تشکیل می‌دهد، چیزی که ما به زودی به آن نگاه خواهیم کرد.
+  </p>
+  <p>Pattern: Synchronous Blocking | 95</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0121/image_1.png" alt="Image from page 121" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

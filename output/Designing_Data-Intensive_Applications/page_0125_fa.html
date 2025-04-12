@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 125</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        the total sales per store yesterday، شما فقط باید به totals در امتداد the appro‐priate dimension نگاه کنید—نیازی به scan کردن میلیون‌ها ردیف نیست.
+    </p>
+    <p>
+        The disadvantage این است که یک data cube همان انعطاف‌پذیری را query کردن data خام ندارد. به عنوان مثال، هیچ راهی برای محاسبه اینکه چه نسبتی از فروش از آیتم‌هایی که بیش از 100 دلار قیمت دارند، وجود ندارد، زیرا قیمت یکی از dimensions نیست.
+    </p>
+    <p>
+        بنابراین اکثر data warehouses سعی می‌کنند تا حد امکان data خام را حفظ کنند و از aggregates مانند data cubes فقط به عنوان یک boost performance برای queries خاص استفاده می‌کنند.
+    </p>
+    <h4>Summary</h4>
+    <p>
+        در این فصل ما سعی کردیم بفهمیم که databases چگونه storage و retrieval را مدیریت می‌کنند. چه اتفاقی می‌افتد وقتی شما داده‌ها را در یک database ذخیره می‌کنید و database چه می‌کند وقتی دوباره data را query می‌کنید؟
+    </p>
+    <p>
+        در یک سطح بالا، ما دیدیم که storage engines به دو دسته گسترده تقسیم می‌شوند: آن‌هایی که برای transaction processing (OLTP) بهینه شده‌اند و آن‌هایی که برای analytics (OLAP) بهینه شده‌اند. تفاوت‌های بزرگی بین الگوهای دسترسی در آن use cases وجود دارد:
+    </p>
+    <ul>
+        <li>سیستم‌های OLTP معمولاً user-facing هستند، به این معنی که ممکن است حجم زیادی از درخواست‌ها را ببینند. به منظور مدیریت load، applications معمولاً فقط به تعداد کمی از records در هر query دست می‌زنند. application رکوردهایی را با استفاده از نوعی key درخواست می‌کند و storage engine از یک index برای یافتن data برای key درخواستی استفاده می‌کند. Disk seek time اغلب در اینجا bottleneck است.</li>
+        <li>Data warehouses و سیستم‌های analytic مشابه، کمتر شناخته شده هستند، زیرا آن‌ها در درجه اول توسط business analysts استفاده می‌شوند، نه توسط end users. آن‌ها حجم بسیار کمتری از queries را نسبت به سیستم‌های OLTP مدیریت می‌کنند، اما هر query معمولاً بسیار demanding است و نیاز به میلیون‌ها records برای scan کردن در یک زمان کوتاه دارد. Disk bandwidth (نه seek time) اغلب در اینجا bottleneck است و column-oriented storage یک راه‌حل فزاینده محبوب برای این نوع workload است.</li>
+    </ul>
+    <p>
+        در سمت OLTP، ما storage engines را از دو مدرسه اصلی تفکر دیدیم:
+    </p>
+    <ul>
+        <li>The log-structured school، که فقط به اضافه کردن به فایل‌ها و حذف فایل‌های منسوخ شده اجازه می‌دهد، اما هرگز یک فایل را که نوشته شده است، به‌روزرسانی نمی‌کند. Bitcask، SSTables، LSM-trees، LevelDB، Cassandra، HBase، Lucene و موارد دیگر به این گروه تعلق دارند.</li>
+        <li>The update-in-place school، که با دیسک به عنوان مجموعه‌ای از صفحات با اندازه ثابت که می‌توانند overwrite شوند، برخورد می‌کند. B-trees بزرگترین نمونه از این فلسفه هستند، که در همه relational databases اصلی و همچنین بسیاری از غیر relational ها استفاده می‌شوند.</li>
+    </ul>
+    <p>
+        Storage engines log-structured یک توسعه نسبتاً اخیر هستند. ایده اصلی آن‌ها این است که به طور سیستماتیک random-access writes را به sequential writes روی دیسک تبدیل می‌کنند، که به دلیل ویژگی‌های performance از hard drives و SSDs، throughput write بالاتری را فعال می‌کند.
+    </p>
+    <p>
+        Summary | 103
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

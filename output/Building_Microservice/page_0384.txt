@@ -1,0 +1,38 @@
+where systems stop working when keys are changed. This is often due to the fact that
+it can be unclear as to what is using a particular credential. If the scope of the creden‐
+tial is limited, the potential impact of rotation is significantly reduced. But if the cre‐
+dential has broad use, working out the impact of a change can be difficult. This isn’t
+to put you off rotation but just to make you aware of the potential risks, and I remain
+convinced it is the right thing to do. The most sensible way forward would likely be
+to adopt tooling to help automate this process while also limiting the scope of each
+set of credentials at the same time.
+Revocation
+Having a policy in place to ensure that key credentials are rotated on a regular basis
+can be a sensible way to limit the impact of credential leakage, but what happens if
+you know that a given credential has fallen into the wrong hands? Do you have to
+wait until a scheduled rotation kicks in for that credential to no longer be valid? That
+may not be practical—or sensible. Instead, you’d ideally like to be able to automati‐
+cally revoke and potentially regenerate credentials when something like this happens.
+The use of tools that allow for centralized secrets management can help here, but this
+may require that your microservices are able to reread newly generated values. If your
+microservice is directly reading secrets from something like the Kubernetes secrets
+store or Vault, it can be notified when these values have changed, allowing your
+microservice to make use of the changed values. Alternatively, if your microservice
+reads these secrets only on startup, then you may need to do a rolling restart of your
+system to reload these credentials. If you are regularly rotating credentials, though,
+chances are you’ve already had to solve the problem of your microservices being able
+to reread this information. If you’re comfortable with regular rotation of credentials,
+chances are you’re already set up to handle emergency revocation as well.
+Scanning for Keys
+Accidentally checking in private keys to source code repositories is a common way
+for credentials to be leaked to unauthorized parties—it happens a surprising amount.
+GitHub automatically scans repositories for some types of secrets, but you can also
+run your own scanning too. It would be great if you could pick up secrets before you
+check in, and git-secrets lets you do just that. It can scan existing commits for poten‐
+tial secrets, but by setting it up as a commit hook, it can stop commits even being
+made. There is also the similar gitleaks, which, in addition to supporting pre-commit
+hooks and general scanning of commits, has a few features that make it potentially
+more useful as a general tool for scanning local files.
+358 
+| 
+Chapter 11: Security

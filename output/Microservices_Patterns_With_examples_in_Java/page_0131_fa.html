@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 131</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the Asynchronous messaging pattern</h3>
+  <p>
+   برای ارسال و دریافت پیام‌ها، <strong>Eventuate Tram</strong> همچنین از <strong>inter-</strong> سبک‌های <strong>action</strong>
+   سطح بالاتری مانند <strong>request/response asynchronous</strong> و انتشار <strong>domain event</strong> پشتیبانی می‌کند.
+  </p>
+  <p>
+   <strong>Eventuate Tram</strong> همچنین دو مکانیسم مهم را پیاده‌سازی می‌کند:
+  </p>
+  <ul>
+   <li>
+    پیام‌رسانی <strong>Transactional</strong>—پیام‌ها را به عنوان بخشی از یک <strong>database transaction</strong> منتشر می‌کند.
+   </li>
+   <li>
+    تشخیص پیام تکراری—<strong>consumer</strong> پیام <strong>Eventuate Tram</strong>، پیام‌های تکراری را تشخیص می‌دهد و
+    آنها را دور می‌اندازد، که برای اطمینان از اینکه یک <strong>consumer</strong>
+    پیام‌ها را دقیقاً یک بار پردازش می‌کند، همانطور که در بخش 3.3.6 مورد بحث قرار گرفت، ضروری است.
+   </li>
+  </ul>
+  <p>
+   بیایید به <strong>APIs Eventuate Tram</strong> نگاهی بیندازیم.
+  </p>
+  <h4>BASIC MESSAGING</h4>
+  <p>
+   <strong>API</strong> پیام‌رسانی اصلی از دو <strong>Java interface</strong> تشکیل شده است: <strong>MessageProducer</strong> و <strong>Message-</strong>
+   <strong>Consumer</strong>. یک سرویس <strong>producer</strong> از رابط <strong>MessageProducer</strong> برای انتشار پیام‌ها استفاده می‌کند
+   به کانال‌های پیام. در اینجا مثالی از استفاده از این <strong>interface</strong> آمده است:
+  </p>
+  <pre>
+   <code>
+    MessageProducer messageProducer = ...;
+    String channel = ...;
+    String payload = ...;
+    messageProducer.send(destination, MessageBuilder.withPayload(payload).build())
+   </code>
+  </pre>
+  <p>
+   یک سرویس <strong>consumer</strong> از <strong>MessageConsumer interface</strong> برای اشتراک در پیام‌ها استفاده می‌کند:
+  </p>
+  <pre>
+   <code>
+    MessageConsumer messageConsumer;
+    messageConsumer.subscribe(subscriberId, Collections.singleton(destination), 
+    message -> { ... })
+   </code>
+  </pre>
+  <p>
+   <strong>MessageProducer</strong> و <strong>MessageConsumer</strong>، اساس <strong>APIs</strong> سطح بالاتر هستند
+   برای <strong>request/response asynchronous</strong> و انتشار <strong>domain event</strong>.
+  </p>
+  <p>
+   بیایید در مورد نحوه انتشار و اشتراک در رویدادها صحبت کنیم.
+  </p>
+  <p>
+   چه چیزی!؟ چرا فریم‌ورک‌های <strong>Eventuate</strong>؟
+  </p>
+  <p>
+   نمونه‌های کد در این کتاب از فریم‌ورک‌های <strong>open source Eventuate</strong> که من توسعه داده‌ام استفاده می‌کنند
+   برای پیام‌رسانی <strong>transactional</strong>، <strong>event sourcing</strong>، و <strong>sagas</strong>. من استفاده از خودم را انتخاب کردم
+   فریم‌ورک‌ها زیرا، بر خلاف، به عنوان مثال، تزریق وابستگی و فریم‌ورک <strong>Spring</strong>، وجود ندارد
+   فریم‌ورک‌های گسترده‌ای برای بسیاری از ویژگی‌های معماری <strong>microser-</strong> وجود دارد.
+   معماری سرویس نیاز دارد. بدون فریم‌ورک <strong>Eventuate Tram</strong>، بسیاری از نمونه‌ها
+   باید از <strong>APIs</strong> پیام‌رسانی سطح پایین مستقیماً استفاده می‌کردند، که آنها را بسیار پیچیده‌تر می‌کند
+   و مفاهیم مهم را پنهان می‌کند. یا آنها از فریم‌ورکی استفاده می‌کنند که
+   به طور گسترده پذیرفته نشده است، که همچنین باعث انتقاد می‌شود.
+  </p>
+  <p>
+   در عوض، مثال‌ها از فریم‌ورک‌های <strong>Eventuate Tram</strong> استفاده می‌کنند، که یک ساده دارند،
+   <strong>API</strong> با درک آسان که جزئیات پیاده‌سازی را پنهان می‌کند. شما می‌توانید از اینها استفاده کنید
+   فریم‌ورک‌ها در اپلیکیشن‌های خود. از طرف دیگر، می‌توانید <strong>Eventuate Tram</strong> را مطالعه کنید
+   فریم‌ورک‌ها و خودتان مفاهیم را دوباره پیاده‌سازی کنید.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

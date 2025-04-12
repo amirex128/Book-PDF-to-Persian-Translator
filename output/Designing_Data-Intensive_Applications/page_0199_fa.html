@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 199</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        vi. Dynamo به کاربران خارج از Amazon در دسترس نیست. Confusingly، AWS یک محصول database hosted را ارائه می‌دهد که DynamoDB نامیده می‌شود، که از یک architecture کاملاً متفاوت استفاده می‌کند: این بر اساس replication single-leader است.
+    </p>
+    <p>
+        هر write کافی نیست، زیرا نمی‌توان به ساعت‌ها اعتماد کرد که به اندازه کافی برای مرتب کردن صحیح این events در leader 2 sync شده باشند (فصل 8 را ببینید).
+    </p>
+    <p>
+        To order این events به درستی، یک تکنیک به نام version vectors می‌تواند استفاده شود که ما بعداً در این فصل در مورد آن بحث خواهیم کرد ("Detecting Concurrent Writes" در صفحه 184 را ببینید).
+    </p>
+    <p>
+        با این حال، تکنیک‌های conflict detection در بسیاری از سیستم‌های multi-leader replication به خوبی پیاده‌سازی نشده‌اند. به عنوان مثال، در زمان نوشتن، PostgreSQL BDR ordering causal از writes را ارائه نمی‌دهد [27] و Tungsten Replicator برای MySQL حتی تلاش نمی‌کند تا conflicts را شناسایی کند [34].
+    </p>
+    <p>
+        If you are using یک سیستم با multi-leader replication، ارزش دارد که از این issues آگاه باشید، با دقت documentation را بخوانید و database خود را کاملاً تست کنید تا اطمینان حاصل کنید که واقعاً guarantees که شما معتقدید دارد را ارائه می‌دهد.
+    </p>
+    <h4>Leaderless Replication</h4>
+    <p>
+        The replication approaches که ما تاکنون در این فصل بحث کرده‌ایم—single-leader و multi-leader replication—بر اساس این ایده هستند که یک client یک write request را به یک node (leader) ارسال می‌کند و سیستم database مراقب کپی کردن آن write به other replicas است. یک leader، order را که در آن writes باید پردازش شوند، تعیین می‌کند و followers writes از leader را به همان ترتیب اعمال می‌کنند.
+    </p>
+    <p>
+        برخی از systems data storage یک رویکرد متفاوت را در پیش می‌گیرند و مفهوم یک leader را کنار می‌گذارند و به هر replica اجازه می‌دهند که به طور مستقیم writes را از clients بپذیرد. برخی از قدیمی‌ترین systems data replicated، leaderless بودند [1, 44]، اما ایده در دوران تسلط relational databases، عمدتاً فراموش شد. این دوباره به یک architecture fashionable برای databases پس از استفاده Amazon از آن برای سیستم Dynamo داخلی خود [37] تبدیل شد.vi Riak, Cassandra و Voldemort datastores open source با leaderless replication models هستند که از Dynamo الهام گرفته‌اند، بنابراین این نوع database همچنین به عنوان Dynamo-style شناخته می‌شود.
+    </p>
+    <p>
+        در برخی از پیاده‌سازی‌های leaderless، client به طور مستقیم writes خود را به چندین replicas ارسال می‌کند، در حالی که در موارد دیگر، یک node coordinator این کار را از طرف client انجام می‌دهد. با این حال، بر خلاف یک leader database، آن coordinator یک ordering خاص از writes را اعمال نمی‌کند. همانطور که خواهیم دید، این تفاوت در طراحی، عواقب عمیقی برای روش استفاده از database دارد.
+    </p>
+    <h4>Writing to the Database When a Node Is Down</h4>
+    <p>
+        تصور کنید شما یک database با سه replicas دارید و یکی از replicas در حال حاضر در دسترس نیست—شاید در حال reboot شدن برای نصب یک update system است. در یک leader-based
+    </p>
+    <p>
+        Leaderless Replication | 177
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

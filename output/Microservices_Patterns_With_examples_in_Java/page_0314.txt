@@ -1,0 +1,57 @@
+284
+CHAPTER 8
+External API patterns
+type DeliveryInfo {
+status : DeliveryStatus
+estimatedDeliveryTime : Int
+assignedCourier :String
+}
+enum DeliveryStatus {
+PREPARING
+READY_FOR_PICKUP
+PICKED_UP
+DELIVERED
+}
+Despite having a different syntax, the Consumer, Order, Restaurant, and Delivery-
+Info object types are structurally similar to the corresponding Java classes. One differ-
+ence is the ID type, which represents a unique identifier.
+ This schema defines three queries:
+
+orders()—Returns the Orders for the specified Consumer
+
+order()—Returns the specified Order
+
+consumer()—Returns the specified Consumer
+These queries may seem not different from the equivalent REST endpoints, but
+GraphQL gives the client tremendous control over the data that’s returned. To under-
+stand why, let’s look at how a client executes GraphQL queries. 
+EXECUTING GRAPHQL QUERIES
+The principal benefit of using GraphQL is that its query language gives the client
+incredible control over the returned data. A client executes a query by making a
+request containing a query document to the server. In the simple case, a query docu-
+ment specifies the name of the query, the argument values, and the fields of the result
+object to return. Here’s a simple query that retrieves firstName and lastName of the
+consumer with a particular ID:
+query {
+consumer(consumerId:1)
+  
+{
+  
+firstName
+lastName
+}
+}
+This query returns those fields of the specified Consumer.
+ Here’s a more elaborate query that returns a consumer, their orders, and the ID
+and name of each order’s restaurant:
+query {
+consumer(consumerId:1)
+{
+id
+firstName
+lastName
+Specifies the query called consumer, 
+which fetches a consumer
+The fields of the 
+Consumer to return
+ 

@@ -1,0 +1,46 @@
+217
+Using sagas and event sourcing together
+RDBMS-based event store, such as Eventuate Local, can use the same approach. An
+application that uses a NoSQL-based event store, such as Eventuate SaaS, can use an
+analogous approach, despite having a very limited transaction model.
+ The trick is to persist a SagaCommandEvent, which represents a command to send.
+An event handler then subscribes to SagaCommandEvents and sends each command
+message to the appropriate channel. Figure 6.13 shows how this works.
+The saga orchestrator uses a two-step process to send commands:
+1
+A saga orchestrator emits a SagaCommandEvent for each command that it wants
+to send. SagaCommandEvent contains all the data needed to send the command,
+such as the destination channel and the command object. These events are per-
+sisted in the event store.
+2
+An event handler processes these SagaCommandEvents and sends command
+messages to the destination message channel.
+This two-step approach guarantees that the command will be sent at least once.
+ Because the event store provides at-least-once delivery, an event handler might be
+invoked multiple times with the same event. That will cause the event handler for
+SagaCommandEvents to send duplicate command messages. Fortunately, though, a
+saga participant can easily detect and discard duplicate commands using the following
+2. Handle SagaCommandEvent
+by sending a command.
+1. Emit a SagaCommandEvent
+for each command to send.
+SagaCommandEvent
+SagaCreatedEvent
+SagaCommandEvent
+SagaUpdatedEvent
+SagaCommandEvent
+«saga»
+CreateOrderSaga
+SagaCommand
+EventHandler
+Event store
+Persisted as
+Service
+Service Command
+Channel
+Sends
+command
+Message broker
+Figure 6.13
+How an event sourcing-based saga orchestrator sends commands to saga participants
+ 

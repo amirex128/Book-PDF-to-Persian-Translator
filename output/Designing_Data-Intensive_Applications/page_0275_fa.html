@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 275</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        اگرچه این یک ایده بدیهی به نظر می‌رسد، طراحان database، فقط اخیراً—حدود سال 2007—تصمیم گرفتند که یک حلقه تک رشته‌ای برای اجرای <strong>Transactions</strong> امکان‌پذیر است [45]. اگر <em>multi-threaded concurrency</em> برای به دست آوردن عملکرد خوب در طول 30 سال گذشته ضروری تلقی می‌شد، چه چیزی تغییر کرد تا اجرای تک رشته‌ای را ممکن کند؟
+    </p>
+    <p>
+        دو پیشرفت باعث این بازنگری شد:
+    </p>
+    <ul>
+        <li>
+            RAM به اندازه‌ای ارزان شد که برای بسیاری از موارد استفاده، اکنون امکان نگه داشتن کل <em>active dataset</em> در حافظه وجود دارد (به "Keeping everything in memory" در صفحه 88 مراجعه کنید). وقتی تمام داده‌هایی که یک <strong>Transaction</strong> نیاز به دسترسی به آنها دارد در حافظه است، <strong>Transactions</strong> می‌توانند بسیار سریع‌تر از زمانی که مجبور به انتظار برای بارگذاری داده‌ها از دیسک هستند، اجرا شوند.
+        </li>
+        <li>
+            طراحان database متوجه شدند که <strong>OLTP transactions</strong> معمولاً کوتاه هستند و فقط تعداد کمی <em>reads</em> و <em>writes</em> انجام می‌دهند (به "Transaction Processing or Analytics?" در صفحه 90 مراجعه کنید). در مقابل، <em>long-running analytic queries</em> معمولاً <em>read-only</em> هستند، بنابراین می‌توانند در یک <em>consistent snapshot</em> (با استفاده از <em>snapshot isolation</em>) خارج از حلقه اجرای سریال اجرا شوند.
+        </li>
+    </ul>
+    <p>
+        رویکرد اجرای <strong>Transactions</strong> به صورت سریال در VoltDB/H-Store، Redis، و Datomic پیاده‌سازی شده است [46, 47, 48]. یک سیستم طراحی شده برای اجرای تک رشته‌ای گاهی اوقات می‌تواند بهتر از یک سیستم که از <em>concurrency</em> پشتیبانی می‌کند، عمل کند، زیرا می‌تواند از سربار هماهنگی <em>locking</em> اجتناب کند. با این حال، <em>throughput</em> آن به <em>core</em> تک CPU محدود می‌شود. به منظور استفاده حداکثری از آن <em>single thread</em>، <strong>Transactions</strong> ها باید متفاوت از فرم سنتی خود ساختاردهی شوند.
+    </p>
+    <h4>Encapsulating transactions in stored procedures</h4>
+    <p>
+        در روزهای اولیه databases ها، هدف این بود که یک <em>database transaction</em> بتواند یک جریان کامل از فعالیت user را در بر گیرد. به عنوان مثال، رزرو بلیط هواپیما یک فرآیند چند مرحله‌ای است (جستجوی مسیرها، کرایه‌ها، و صندلی‌های موجود. تصمیم‌گیری در مورد یک برنامه سفر. رزرو صندلی‌ها در هر یک از پروازهای برنامه سفر. وارد کردن جزئیات مسافر. پرداخت). طراحان database فکر می‌کردند که خوب است اگر کل این فرآیند یک <strong>Transaction</strong> بود تا بتوان آن را به صورت <em>atomically committed</em> کرد.
+    </p>
+    <p>
+        متاسفانه، انسان‌ها در تصمیم‌گیری و پاسخگویی بسیار کند هستند. اگر یک <em>database transaction</em> نیاز به انتظار ورودی از یک user داشته باشد، database باید از تعداد بالقوه زیادی از <strong>Transactions</strong> همزمان، که اکثر آنها بیکار هستند، پشتیبانی کند. اکثر databases ها نمی‌توانند این کار را به طور مؤثر انجام دهند، و بنابراین تقریباً تمام applications های <strong>OLTP</strong> با اجتناب از انتظار تعاملی برای یک user در یک <strong>Transaction</strong>، <strong>Transactions</strong> ها را کوتاه نگه می‌دارند. در وب، این بدان معنی است که یک <strong>Transaction</strong> در همان درخواست <em>HTTP</em> <em>committed</em> می‌شود—یک <strong>Transaction</strong> چندین درخواست را پوشش نمی‌دهد. یک درخواست <em>HTTP</em> جدید، یک <strong>Transaction</strong> جدید را شروع می‌کند.
+    </p>
+    <p>
+        حتی اگر انسان از مسیر بحرانی خارج شده باشد، <strong>Transactions</strong> ها همچنان به سبک client/server تعاملی، یک statement در یک زمان اجرا می‌شوند.
+        <br>
+        Serializability
+        <br>
+        |
+        <br>
+        253
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

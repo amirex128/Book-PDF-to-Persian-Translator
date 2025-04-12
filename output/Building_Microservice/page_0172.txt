@@ -1,0 +1,41 @@
+Example 5-4. A restructured Customer resource: the data is all still there, but can our
+consumers find it?
+<customer>
+  <naming>
+    <firstname>Sam</firstname>
+    <lastname>Newman</lastname>
+    <nickname>Magpiebrain</nickname>
+    <fullname>Sam "Magpiebrain" Newman</fullname>
+  </naming>
+  <email>sam@magpiebrain.com</email>
+</customer>
+The example of a client trying to be as flexible as possible in consuming a service
+demonstrates Postel’s law (otherwise known as the robustness principle), which states:
+“Be conservative in what you do, be liberal in what you accept from others.” The
+original context for this piece of wisdom was the interaction of devices over net‐
+works, where you should expect all sorts of odd things to happen. In the context of
+microservice-based interactions, it leads us to try and structure our client code to be
+tolerant of changes to payloads.
+Right Technology
+As we’ve already explored, some technology can be more brittle when it comes to
+allowing us to change interfaces—I’ve already highlighted my own personal frustra‐
+tions with Java RMI. On the other hand, some integration implementations go out of
+their way to make it as easy as possible for changes to be made without breaking cli‐
+ents. At the simple end of the spectrum, protocol buffers, the serialization format
+used as part of gRPC, have the concept of field number. Each entry in a protocol
+buffer has to define a field number, which client code expects to find. If new fields are
+added, the client doesn’t care. Avro allows for the schema to be sent along with the
+payload, allowing clients to potentially interpret a payload much like a dynamic type.
+At the more extreme end of the spectrum, the REST concept of HATEOAS is largely
+all about enabling clients to make use of REST endpoints even when they change by
+making use of the previously discussed hypermedia links. This does call for you to
+buy into the entire HATEOAS mindset, of course.
+Explicit Interface
+I am a big fan of a microservice exposing an explicit schema that denotes what its
+endpoints do. Having an explicit schema makes it clear to consumers what they can
+expect, but it also makes it much clearer to a developer working on a microservice as
+to what things should remain untouched to ensure you don’t break consumers. Put
+another way, an explicit schema goes a long way toward making the boundaries of
+146 
+| 
+Chapter 5: Implementing Microservice Communication

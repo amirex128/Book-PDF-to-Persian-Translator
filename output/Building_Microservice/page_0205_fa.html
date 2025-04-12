@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 205</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>Distributed Transactions—Two-Phase Commits</h4>
+  <p>الگوریتم <em>two-phase commit</em> (که گاهی اوقات به <em>2PC</em> خلاصه می‌شود) اغلب در تلاش برای دادن توانایی به ما برای ایجاد تغییرات تراکنشی در یک سیستم توزیع شده استفاده می‌شود، که در آن چندین فرآیند جداگانه ممکن است نیاز به به‌روزرسانی به عنوان بخشی از عملیات کلی داشته باشند. <em>Distributed transactions</em>، و <em>two-phased commits</em> به طور خاص‌تر، اغلب توسط تیم‌هایی که به معماری <em>microservice</em> منتقل می‌شوند، به عنوان راهی برای حل چالش‌هایی که با آن مواجه می‌شوند، در نظر گرفته می‌شوند. اما همانطور که خواهیم دید، آن‌ها ممکن است مشکلات شما را حل نکنند و حتی باعث ایجاد سردرگمی بیشتری در سیستم شما شوند.</p>
+  <p><em>2PC</em> به دو فاز تقسیم می‌شود (از این رو نام <em>two-phase commit</em>): یک فاز رای‌گیری و یک فاز <em>commit</em>. در طول فاز رای‌گیری، یک <em>central coordinator</em> با تمام <em>workers</em> که قرار است بخشی از <em>transaction</em> باشند تماس می‌گیرد و از آن‌ها برای تأیید اینکه آیا تغییری در وضعیت می‌تواند ایجاد شود یا خیر، درخواست می‌کند. در شکل 6-3، ما دو <em>request</em> را می‌بینیم: یکی برای تغییر وضعیت مشتری به <em>VERIFIED</em>، و دیگری برای حذف یک ردیف از جدول <em>PendingEnrollments</em>. اگر همه <em>workers</em> موافقت کنند که تغییر وضعیت درخواستی می‌تواند رخ دهد، الگوریتم به فاز بعدی می‌رود. اگر هر <em>worker</em> بگوید که تغییر نمی‌تواند رخ دهد، شاید به این دلیل که تغییر وضعیت درخواستی، برخی از شرایط محلی را نقض می‌کند، کل عملیات لغو می‌شود.</p>
+  <p>شکل 6-3. در فاز اول یک <em>two-phase commit</em>، <em>workers</em> رأی می‌دهند تا تصمیم بگیرند که آیا می‌توانند تغییری در وضعیت محلی ایجاد کنند</p>
+  <p>مهم است که برجسته کنیم که تغییر بلافاصله پس از اینکه یک <em>worker</em> نشان داد که می‌تواند تغییر را ایجاد کند، اعمال نمی‌شود. در عوض، <em>worker</em> تضمین می‌کند که می‌تواند آن تغییر را در مقطعی در آینده ایجاد کند. <em>How would the worker</em></p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0205/image_1.png" alt="Image from page 205" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

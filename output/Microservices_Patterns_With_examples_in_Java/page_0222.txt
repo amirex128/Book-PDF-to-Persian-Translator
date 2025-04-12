@@ -1,0 +1,62 @@
+192
+CHAPTER 6
+Developing business logic with event sourcing
+public Order() {
+}
+public List<Event> process(CreateOrderCommand command) {   
+... validate command ...
+return events(new OrderCreatedEvent(command.getOrderDetails()));
+}
+public void apply(OrderCreatedEvent event) {
+  
+OrderDetails orderDetails = event.getOrderDetails();
+this.orderLineItems = new OrderLineItems(orderDetails.getLineItems());
+this.orderMinimum = orderDetails.getOrderMinimum();
+this.state = APPROVAL_PENDING;
+}
+This class’s fields are similar to those of the JPA-based Order. The only difference is
+that the aggregate’s id isn’t stored in the aggregate. The Order’s methods are quite
+different. The createOrder() factory method has been replaced by process() and
+apply() methods. The process() method takes a CreateOrder command and emits
+an OrderCreated event. The apply() method takes the OrderCreated and initializes
+the fields of the Order.
+ We’ll now look at the slightly more complex business logic for revising an order.
+Previously this business logic consisted of three methods: reviseOrder(), confirm-
+Revision(), and rejectRevision(). The event sourcing version replaces these three
+methods with three process() methods and some apply() methods. The following list-
+ing shows the event sourcing version of reviseOrder() and confirmRevision().
+public class Order {
+public List<Event> process(ReviseOrder command) {
+  
+OrderRevision orderRevision = command.getOrderRevision();
+switch (state) {
+case APPROVED:
+LineItemQuantityChange change =
+orderLineItems.lineItemQuantityChange(orderRevision);
+if (change.newOrderTotal.isGreaterThanOrEqual(orderMinimum)) {
+throw new OrderMinimumNotMetException();
+}
+return singletonList(new OrderRevisionProposed(orderRevision,
+change.currentOrderTotal, change.newOrderTotal));
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public void apply(OrderRevisionProposed event) {
+  
+this.state = REVISION_PENDING;
+}
+Listing 6.2
+The process() and apply() methods that revise an Order aggregate
+Validates the command and
+returns an OrderCreatedEvent
+Apply the OrderCreatedEvent by
+initializing the fields of the Order.
+Verify that the Order 
+can be revised and 
+that the revised 
+order meets the 
+order minimum.
+Change the state of the Order 
+to REVISION_PENDING.
+ 

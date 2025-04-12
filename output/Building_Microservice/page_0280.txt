@@ -1,0 +1,25 @@
+single aggregate is self-contained inside the function, making it easier to ensure a
+consistent implementation of the life-cycle management of the aggregate.
+Figure 8-19. An Expenses service being deployed as multiple functions, each one han‐
+dling a different aggregate
+With this model, our microservice instance no longer maps to a single unit of deploy‐
+ment. Instead, our microservice is now more of a logical concept consisting of multi‐
+ple different functions that can theoretically be deployed independently of each other.
+A few caveats here. Firstly, I would strongly urge you to maintain a coarser-grained
+external interface. To upstream consumers, they are still talking to the Expenses ser‐
+vice—they are unaware that requests get mapped to smaller-scoped aggregates. This
+ensures that should you change your mind and want to recombine things or even
+restructure the aggregate model, you won’t impact upstream consumers.
+The second issue relates to data. Should these aggregates continue to use a shared
+database? On this issue, I am somewhat relaxed. Assuming that the same team man‐
+ages all these functions, and that conceptually it remains a single “service,” I’d be OK
+with them still using the same database, as Figure 8-20 shows.
+Over time, though, if the needs of each aggregate function diverge, I’d be inclined to
+look to separate out their data usage, as seen in Figure 8-21, especially if you start to
+see coupling in the data tier impair your ability to change them easily. At this stage,
+you could argue that these functions would now be microservices in their own
+right—although as I’ve just explained, there may be value in still representing them as
+a single microservice to upstream consumers.
+254 
+| 
+Chapter 8: Deployment

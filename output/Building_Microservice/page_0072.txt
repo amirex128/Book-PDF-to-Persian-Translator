@@ -1,0 +1,27 @@
+the order request, but the Warehouse makes no attempt to look at or process the
+field—it just treats it like a blob of data and doesn’t care about the contents. Instead,
+it just sends it along. A change in the format of the the Shipping Manifest would
+still require a change to both the Order Processor and the Shipping microservice,
+but as the Warehouse doesn’t care about what is actually in the manifest, it doesn’t
+need to change.
+Common Coupling
+Common coupling occurs when two or more microservices make use of a common
+set of data. A simple and common example of this form of coupling would be multi‐
+ple microservices making use of the same shared database, but it could also manifest
+itself in the use of shared memory or a shared filesystem.
+The main issue with common coupling is that changes to the structure of the data can
+impact multiple microservices at once. Consider the example of some of MusicCorp’s
+services in Figure 2-7. As we discussed earlier, MusicCorp operates around the world,
+so it needs various bits of information about the countries in which it operates. Here,
+multiple services are all reading static reference data from a shared database. If the
+schema of this database changed in a backward-incompatible way, it would require
+changes to each consumer of the database. In practice, shared data like this tends to
+be very difficult to change as a result.
+Figure 2-7. Multiple services accessing shared static reference data related to countries
+from the same database
+The example in Figure 2-7 is, relatively speaking, fairly benign. This is because by its
+very nature static reference data doesn’t tend to change often, and also because this
+data is read-only—as a result I tend to be relaxed about sharing static reference data
+46 
+| 
+Chapter 2: How to Model Microservices

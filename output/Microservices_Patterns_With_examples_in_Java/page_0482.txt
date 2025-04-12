@@ -1,0 +1,49 @@
+452
+CHAPTER 13
+Refactoring to microservices
+1
+Order Service
+– Create an Order in an APPROVAL_PENDING state.
+2
+Monolith
+– Verify that the consumer can place an order.
+– Validate order details and create a Ticket.
+– Authorize consumer’s credit card.
+3
+Order Service
+– Change state of Order to APPROVED.
+This saga consists of three local transactions, one in the monolith and two in Order
+Service. The first transaction, which is in Order Service, creates an Order in the
+APPROVAL_PENDING state. The second transaction, which is in the monolith, verifies
+that the consumer can place orders, authorizes their credit card, and creates a
+Ticket. The third transaction, which is in Order Service, changes the state of the
+Order to APPROVED.
+ The monolith’s transaction is the saga’s pivot transaction—the point of no return
+for the saga. If the monolith’s transaction completes, then the saga will run until com-
+pletion. Only the first and second steps of this saga can fail. The third transaction
+can’t fail, so the second transaction in the monolith never needs to be rolled back. As
+a result, all the complexity of supporting compensatable transactions is in Order
+Service, which is much more testable than the monolith.
+ If all the sagas that you need to write when extracting a service have this struc-
+ture, you’ll need to make far fewer changes to the monolith. What’s more, it’s possi-
+ble to carefully sequence the extraction of services to ensure that the monolith’s
+transactions are either pivot transactions or retriable transactions. Let’s look at how
+to do that. 
+SEQUENCING THE EXTRACTION OF SERVICES TO AVOID IMPLEMENTING COMPENSATING TRANSACTIONS 
+IN THE MONOLITH
+As we just saw, extracting Kitchen Service requires the monolith to implement com-
+pensating transactions, whereas extracting Order Service doesn’t. This suggests that
+the order in which you extract services matters. By carefully ordering the extraction of
+services, you can potentially avoid having to make widespread modifications to the
+monolith to support compensatable transactions. We can ensure that the monolith’s
+transactions are either pivot transactions or retriable transactions. For example, if we
+first extract Order Service from the FTGO monolith and then extract Consumer
+Service, extracting Kitchen Service will be straightforward. Let’s take a closer look
+at how to do that.
+ Once we have extracted Consumer Service, the createOrder() command uses the
+following saga:
+1
+Order Service: create an Order in an APPROVAL_PENDING state.
+2
+Consumer Service: verify that the consumer can place an order.
+ 

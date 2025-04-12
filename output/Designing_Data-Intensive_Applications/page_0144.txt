@@ -1,0 +1,36 @@
+Avro
+Apache Avro [20] is another binary encoding format that is interestingly different
+from Protocol Buffers and Thrift. It was started in 2009 as a subproject of Hadoop, as
+a result of Thrift not being a good fit for Hadoop’s use cases [21].
+Avro also uses a schema to specify the structure of the data being encoded. It has two
+schema languages: one (Avro IDL) intended for human editing, and one (based on
+JSON) that is more easily machine-readable.
+Our example schema, written in Avro IDL, might look like this:
+record Person {
+    string               userName;
+    union { null, long } favoriteNumber = null;
+    array<string>        interests;
+}
+The equivalent JSON representation of that schema is as follows:
+{
+    "type": "record",
+    "name": "Person",
+    "fields": [
+        {"name": "userName",       "type": "string"},
+        {"name": "favoriteNumber", "type": ["null", "long"], "default": null},
+        {"name": "interests",      "type": {"type": "array", "items": "string"}}
+    ]
+}
+First of all, notice that there are no tag numbers in the schema. If we encode our
+example record (Example 4-1) using this schema, the Avro binary encoding is just 32
+bytes long—the most compact of all the encodings we have seen. The breakdown of
+the encoded byte sequence is shown in Figure 4-5.
+If you examine the byte sequence, you can see that there is nothing to identify fields
+or their datatypes. The encoding simply consists of values concatenated together. A
+string is just a length prefix followed by UTF-8 bytes, but there’s nothing in the enco‐
+ded data that tells you that it is a string. It could just as well be an integer, or some‐
+thing else entirely. An integer is encoded using a variable-length encoding (the same
+as Thrift’s CompactProtocol).
+122 
+| 
+Chapter 4: Encoding and Evolution

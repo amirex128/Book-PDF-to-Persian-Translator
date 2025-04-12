@@ -1,0 +1,42 @@
+252
+CHAPTER 7
+Implementing queries in a microservice architecture
+.map(this::toOrder)
+      
+.collect(toList()),
+Optional.ofNullable(result
+.getLastLowLevelResult()
+.getQueryResult().getLastEvaluatedKey())
+.map(this::toStartKeyToken));
+}
+After building a QuerySpec, this method then executes a query and builds an Order-
+History, which contains the list of Orders, from the returned items.
+ The findOrderHistory() method implements pagination by serializing the value
+returned by getLastEvaluatedKey() into a JSON token. If a client specifies a start
+token in OrderHistoryFilter, then findOrderHistory() serializes it and invokes
+withExclusiveStartKey() to set the start key.
+ As you can see, you must address numerous issues when implementing a CQRS
+view, including picking a database, designing the data model that efficiently imple-
+ments updates and queries, handling concurrent updates, and dealing with duplicate
+events. The only complex part of the code is the DAO, because it must properly han-
+dle concurrency and ensure that updates are idempotent. 
+Summary
+Implementing queries that retrieve data from multiple services is challenging
+because each service’s data is private.
+There are two ways to implement these kinds of query: the API composition
+pattern and the Command query responsibility segregation (CQRS) pattern.
+The API composition pattern, which gathers data from multiple services, is the
+simplest way to implement queries and should be used whenever possible.
+A limitation of the API composition pattern is that some complex queries require
+inefficient in-memory joins of large datasets.
+The CQRS pattern, which implements queries using view databases, is more
+powerful but more complex to implement.
+A CQRS view module must handle concurrent updates as well as detect and dis-
+card duplicate events.
+CQRS improves separation of concerns by enabling a service to implement a
+query that returns data owned by a different service.
+Clients must handle the eventual consistency of CQRS views. 
+Create an Order from 
+an item returned by 
+the query.
+ 

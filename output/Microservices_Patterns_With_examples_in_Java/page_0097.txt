@@ -1,0 +1,48 @@
+67
+Overview of interprocess communication in a microservice architecture
+styles, which are a technology-independent way of describing how clients and services
+interact. Next I discuss the importance of precisely defining APIs in a microservice
+architecture, including the concept of API-first design. After that, I discuss the
+important topic of API evolution. Finally, I discuss different options for message for-
+mats and how they can determine ease of API evolution. Let’s begin by looking at
+interaction styles.
+3.1.1
+Interaction styles
+It’s useful to first think about the style of interaction between a service and its clients
+before selecting an IPC mechanism for a service’s API. Thinking first about the inter-
+action style will help you focus on the requirements and avoid getting mired in the
+details of a particular IPC technology. Also, as described in section 3.4, the choice of
+interaction style impacts the availability of your application. Furthermore, as you’ll see
+in chapters 9 and 10, it helps you select the appropriate integration testing strategy.
+ There are a variety of client-service interaction styles. As table 3.1 shows, they can
+be categorized in two dimensions. The first dimension is whether the interaction is
+one-to-one or one-to-many:
+One-to-one—Each client request is processed by exactly one service.
+One-to-many—Each request is processed by multiple services.
+The second dimension is whether the interaction is synchronous or asynchronous:
+Synchronous—The client expects a timely response from the service and might
+even block while it waits.
+Asynchronous—The client doesn’t block, and the response, if any, isn’t necessar-
+ily sent immediately.
+The following are the different types of one-to-one interactions:
+Request/response—A service client makes a request to a service and waits for a
+response. The client expects the response to arrive in a timely fashion. It might
+event block while waiting. This is an interaction style that generally results in
+services being tightly coupled.
+Asynchronous request/response—A service client sends a request to a service, which
+replies asynchronously. The client doesn’t block while waiting, because the ser-
+vice might not send the response for a long time.
+Table 3.1
+The various interaction styles can be characterized in two dimensions: one-to-one vs one-to-
+many and synchronous vs asynchronous.
+one-to-one
+one-to-many
+Synchronous
+Request/response
+—
+Asynchronous
+Asynchronous request/response
+One-way notifications
+Publish/subscribe
+Publish/async responses
+ 

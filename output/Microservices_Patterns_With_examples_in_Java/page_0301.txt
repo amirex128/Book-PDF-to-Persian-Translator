@@ -1,0 +1,43 @@
+271
+Implementing an API gateway
+behavior of an application and troubleshoot problems. An API gateway, like other ser-
+vices in the architecture, must implement the patterns that have been selected for the
+architecture. 
+8.3
+Implementing an API gateway
+Let’s now look at how to implement an API gateway. As mentioned earlier, the respon-
+sibilities of an API gateway are as follows:
+Request routing—Routes requests to services using criteria such as HTTP request
+method and path. The API gateway must route using the HTTP request method
+when the application has one or more CQRS query services. As discussed in
+chapter 7, in such an architecture commands and queries are handled by sepa-
+rate services.
+API composition—Implements a GET REST endpoint using the API composition
+pattern, described in chapter 7. The request handler combines the results of
+invoking multiple services.
+Edge functions—Most notable among these is authentication.
+Protocol translation—Translates between client-friendly protocols and the client-
+unfriendly protocols used by services.
+Being a good citizen in the application’s architecture.
+There are a couple of different ways to implement an API gateway:
+Using an off-the-shelf API gateway product/service—This option requires little or no
+development but is the least flexible. For example, an off-the-shelf API gateway
+typically does not support API composition
+Developing your own API gateway using either an API gateway framework or a web frame-
+work as the starting point—This is the most flexible approach, though it requires
+some development effort.
+Let’s look at these options, starting with using an off-the-shelf API gateway product or
+service.
+8.3.1
+Using an off-the-shelf API gateway product/service
+Several off-the-self services and products implement API gateway features. Let’s first
+look at a couple of services that are provided by AWS. After that, I’ll discuss some
+products that you can download, configure, and run yourself.
+AWS API GATEWAY
+The AWS API gateway, one of the many services provided by Amazon Web Services, is
+a service for deploying and managing APIs. An AWS API gateway API is a set of REST
+resources, each of which supports one or more HTTP methods. You configure the API
+gateway to route each (Method, Resource) to a backend service. A backend service is
+either an AWS Lambda Function, described later in chapter 12, an application-
+defined HTTP service, or an AWS service. If necessary, you can configure the API
+ 

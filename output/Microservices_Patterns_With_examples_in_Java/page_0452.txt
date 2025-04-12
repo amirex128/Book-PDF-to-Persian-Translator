@@ -1,0 +1,57 @@
+422
+CHAPTER 12
+Deploying microservices
+public class FindRestaurantRequestHandler 
+extends AbstractAutowiringHttpRequestHandler {
+@Autowired
+private RestaurantService restaurantService;
+@Override
+protected Class<?> getApplicationContextClass() {
+return CreateRestaurantRequestHandler.class;
+  
+}
+@Override
+protected APIGatewayProxyResponseEvent
+handleHttpRequest(APIGatewayProxyRequestEvent request, Context context) {
+long restaurantId;
+try {
+restaurantId = Long.parseLong(request.getPathParameters()
+          .get("restaurantId"));
+} catch (NumberFormatException e) {
+return makeBadRequestResponse(context);
+  
+}
+Optional<Restaurant> possibleRestaurant = restaurantService.findById(restaur
+antId);
+return possibleRestaurant
+  
+.map(this::makeGetRestaurantResponse)
+.orElseGet(() -> makeRestaurantNotFoundResponse(context,
+restaurantId));
+}
+private APIGatewayProxyResponseEvent makeBadRequestResponse(Context context) {
+...
+}
+private APIGatewayProxyResponseEvent
+makeRestaurantNotFoundResponse(Context context, long restaurantId) { ... }
+private
+APIGatewayProxyResponseEvent
+makeGetRestaurantResponse(Restaurant restaurant) { ... }
+}
+As you can see, it’s quite similar to a servlet, except that instead of a service()
+method, which takes an HttpServletRequest and returns HttpServletResponse, it
+has a handleHttpRequest(), which takes an APIGatewayProxyRequestEvent and returns
+APIGatewayProxyResponseEvent.
+ Let’s now take a look at its superclass, which implements dependency injection. 
+Listing 12.9
+The handler class for GET /restaurant/{restaurantId}
+The Spring Java 
+configuration class to use 
+for the application context
+Returns a 400 - bad request 
+response if the restaurantId 
+is missing or invalid
+Returns either the 
+restaurant or a 404 - 
+not found response
+ 

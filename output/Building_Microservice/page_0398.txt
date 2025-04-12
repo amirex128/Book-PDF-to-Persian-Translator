@@ -1,0 +1,39 @@
+When you use either plain old HTTPS or mutual TLS, data won’t be visible to inter‐
+mediate parties—this is because TLS encrypts the data being sent. This can be prob‐
+lematic if you explicitly want the data sent in the open—for example, reverse proxies
+like Squid or Varnish are able to cache HTTP responses, but that isn’t possible with
+HTTPS.
+Manipulation of data
+We could imagine a number of situations in which manipulating data being sent
+could be bad—changing the amount of money being sent, for example. So in
+Figure 11-6, we need to make sure the potential attacker is unable to change the
+request being sent to Payment from the Order Processor.
+Typically, the types of protections that make data invisible will also ensure that the
+data can’t be manipulated (HTTPS does that, for instance). However, we could
+decide to send data in the open but still want to ensure it cannot be manipulated. For
+HTTP, one such approach is to use a hash-based message authentication code
+(HMAC) to sign the data being sent. With HMAC, a hash is generated and sent with
+the data, and the receiver can check the hash against the data to confirm that the data
+hasn’t been changed.
+Data at Rest
+Data lying about is a liability, especially if it is sensitive. Hopefully we’ve done every‐
+thing we can to ensure attackers cannot breach our network, and also that they can‐
+not breach our applications or operating systems to get access to the underlying data.
+However, we need to be prepared in case they do—defense in depth is key.
+Many of the high-profile security breaches we hear of involve data at rest being
+acquired by an attacker, and that data being readable by the attacker. This happens
+either because the data was stored in an unencrypted form or because the mechanism
+used to protect the data had a fundamental flaw.
+The mechanisms by which data at rest can be protected are many and varied, but
+there are some general things to bear in mind.
+Go with the well known
+In some cases, you can offload the job of encrypting data to existing software—for
+example, by making use of your database’s built-in support for encryption. However,
+if you find a need to encrypt and decrypt data in your own system, make sure you’re
+going with well-known and tested implementations. The easiest way you can mess up
+data encryption is to try to implement your own encryption algorithms, or even try
+to implement someone else’s. Whatever programming language you use, you’ll have
+access to reviewed, regularly patched implementations of well-regarded encryption
+372 
+| 
+Chapter 11: Security

@@ -1,0 +1,39 @@
+Service Discovery
+Once you have more than a few microservices lying around, your attention inevitably
+turns to knowing where on earth everything is. Perhaps you want to know what is
+running in a given environment so you know what you should be monitoring. Maybe
+it’s as simple as knowing where your Accounts microservice is so that its consumers
+know where find it. Or perhaps you just want to make it easy for developers in your
+organization to know what APIs are available so they don’t reinvent the wheel.
+Broadly speaking, all of these use cases fall under the banner of service discovery. And
+as always with microservices, we have quite a few different options at our disposal for
+dealing with it.
+All of the solutions we’ll look at handle things in two parts. First, they provide some
+mechanism for an instance to register itself and say, “I’m here!” Second, they provide
+a way to find the service once it’s registered. Service discovery gets more complicated,
+though, when we are considering an environment in which we are constantly
+destroying and deploying new instances of services. Ideally, we’d want whatever solu‐
+tion we pick to cope with this.
+Let’s look at some of the most common solutions to service delivery and consider our
+options.
+Domain Name System (DNS)
+It’s nice to start simple. DNS lets us associate a name with the IP address of one or
+more machines. We could decide, for example, that our Accounts microservice is
+always found at accounts.musiccorp.net. We would then have that entry point to the
+IP address of the host running that microservice, or perhaps we’d have it resolve to a
+load balancer that is distributing load across a number of instances. This means we’d
+have to handle updating these entries as part of deploying our service.
+When dealing with instances of a service in different environments, I have seen a
+convention-based domain template work well. For example, we might have a tem‐
+plate defined as <servicename>-<environment>.musiccorp.net, giving us entries like
+accounts-uat.musiccorp.net or accounts-dev.musiccorp.net.
+A more advanced way of handling different environments is to have different domain
+name servers for these environments. So I could assume that accounts.musiccorp.net
+is where I always find the Accounts microservice, but it could resolve to different
+hosts depending on where I do the lookup. If you already have your environments
+sitting in different network segments and are comfortable with managing your own
+DNS servers and entries, this could be quite a neat solution, but it is a lot of work if
+you aren’t getting other benefits from this setup.
+Service Discovery 
+| 
+157

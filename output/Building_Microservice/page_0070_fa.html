@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 70</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   مشکل اصلی <strong>pass-through coupling</strong> این است که تغییری در داده‌های مورد نیاز در پایین‌دست می‌تواند باعث ایجاد تغییر قابل توجه‌تری در بالادست شود. در مثال ما، اگر <strong>Shipping</strong> اکنون نیاز به تغییر قالب یا محتوای داده‌ها داشته باشد، پس احتمالاً هم <strong>Warehouse</strong> و هم <strong>Order Processor</strong> نیاز به تغییر خواهند داشت.
+  </p>
+  <p>
+   چندین راه برای رفع این مشکل وجود دارد. اولین راه این است که در نظر بگیرید آیا منطقی است که microservice فراخوان، میانجی را دور بزند یا خیر. در مثال ما، این ممکن است به این معنی باشد که <strong>Order Processor</strong> مستقیماً با <strong>Shipping</strong> صحبت می‌کند، همانطور که در شکل 2-5 نشان داده شده است. با این حال، این باعث ایجاد برخی از مشکلات دیگر می‌شود. <strong>Order Processor</strong> ما <strong>domain coupling</strong> خود را افزایش می‌دهد، زیرا <strong>Shipping</strong> یک microservice دیگر است که باید در مورد آن بدانیم—اگر این تنها مشکل بود، این ممکن است همچنان خوب باشد، زیرا <strong>domain coupling</strong> البته شکل <em>coupling</em> آزادتر است. با این حال، این راه‌حل در اینجا پیچیده‌تر می‌شود، زیرا قبل از اینکه بسته را با استفاده از <strong>Shipping</strong> ارسال کنیم، باید موجودی را با <strong>Warehouse</strong> رزرو کنیم، و پس از اتمام حمل و نقل، باید موجودی را بر این اساس به‌روزرسانی کنیم. این امر پیچیدگی و منطق بیشتری را به <strong>Order Processor</strong> وارد می‌کند که قبلاً در داخل <strong>Warehouse</strong> پنهان شده بود.
+  </p>
+  <p>
+   شکل 2-5. یک راه برای دور زدن <strong>pass-through coupling</strong> شامل برقراری ارتباط مستقیم با <strong>service</strong> پایین‌دست است.
+  </p>
+  <p>
+   برای این مثال خاص، من ممکن است یک تغییر ساده‌تر (اگرچه ظریف‌تر) را در نظر بگیرم—یعنی، به‌طور کلی نیاز به یک <strong>Shipping Manifest</strong> را از <strong>Order Pro</strong>
+   cessor پنهان کنم. ایده واگذاری کار مدیریت موجودی و ترتیب ارسال بسته به <strong>service Warehouse</strong> ما منطقی است، اما ما از این واقعیت که برخی از پیاده‌سازی‌های سطح پایین‌تر را لو داده‌ایم خوشمان نمی‌آید—یعنی، این واقعیت که
+  </p>
+  <p>44 | Chapter 2: How to Model Microservices</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0070/image_1.png" alt="Image from page 70" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

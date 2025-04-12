@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 511</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   برای این‌که بتونیم domain logic Delivery Service را تعریف کنیم، ما به موارد زیر نیاز داریم:
+  </p>
+  <ul>
+   <li>
+    ما نیاز داریم APIها را طراحی کنیم.
+   </li>
+   <li>
+    در مرحله بعد، ما به تعریف یک service نیاز داریم.
+   </li>
+   <li>
+    و در نهایت، data‌ها را sync کنیم.
+   </li>
+  </ul>
+  <p>
+   با توجه به موارد بالا، در نظر بگیرید که چگونه باید معماری را طراحی کنیم.
+  </p>
+  <p>
+   در این context، ما ابتدا در مورد یک 
+   API از جنس REST صحبت می‌کنیم، که معمولاً یک راه‌حل ساده و آسان است.
+  </p>
+  <p>
+   برخی از مفاهیم در این زمینه عبارتند از:
+  </p>
+  <ul>
+   <li>
+    حتی اگر یک 
+    service را طراحی می‌کنیم، به یک interface نیاز داریم.
+   </li>
+   <li>
+    یکی از راه‌هایی که ما می‌توانیم از آن استفاده کنیم، فراخوانی یک API توسط
+    CustomerContactInfoRepository است.
+   </li>
+  </ul>
+  <p>
+   برای مثال، در زیر یک نمونه‌ API را می‌بینیم.
+  </p>
+  <p>
+   در بخش قبلی، ما به این نتیجه رسیدیم که در اینجا برای آن، باید از یک 
+   REST API استفاده کنیم.
+  </p>
+  <p>
+   در نظر داشته باشید که چگونه یک monolith به یک 
+   API ساده، دسترسی پیدا می‌کند.
+  </p>
+  <p>
+   ما باید یک رابط مناسب بین serviceها ایجاد کنیم.
+  </p>
+  <h3><strong>HOW THE FTGO MONOLITH ACCESSES THE DELIVERY SERVICE DATA</strong></h3>
+  <p>
+   service به dataها در monolith دسترسی دارد.
+  </p>
+  <p>
+   در این بخش، ما از یک رویکرد متفاوت برای تولید یک system از این context استفاده می‌کنیم.
+  </p>
+  <p>
+   ما از یک روش پیام‌رسانی استفاده می‌کنیم.
+  </p>
+  <p>
+   به دلیل رویکرد messaging، ما به جای این‌که یک API بزرگ ایجاد کنیم، به این نتیجه می‌رسیم که یک event را publish کنیم.
+  </p>
+  <p>
+   ما با استفاده از یک event به صورت asynchronous، به یک تعامل دست پیدا می‌کنیم.
+  </p>
+  <p>
+   این امر از طریق سه متد امکان‌پذیر است:
+  </p>
+  <ul>
+   <li>
+    به‌جای استفاده از یک API، از eventها استفاده می‌کنیم.
+   </li>
+   <li>
+    به‌عنوان‌مثال، ما می‌توانیم یک event را به نام Order event داشته باشیم.
+   </li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

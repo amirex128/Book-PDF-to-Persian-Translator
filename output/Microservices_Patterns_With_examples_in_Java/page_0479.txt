@@ -1,0 +1,43 @@
+449
+Designing how the service and the monolith collaborate
+services. You find all the places in the code that change a particular entity and insert a
+call to an event publishing API. The problem with this approach is that changing a
+monolith isn’t always easy. It might be time consuming and error prone to locate all
+the places and insert calls to publish events. To make matters worse, some of the
+monolith’s business logic might consist of stored procedures that can’t easily publish
+domain events.
+ Another approach is to publish domain events at the database level. You can, for
+example, use either transaction logic tailing or polling, described in chapter 3. A key
+benefit of using transaction tailing is that you don’t have to change the monolith. The
+main drawback of publishing events at the database level is that it’s often difficult to
+identify the reason for the update and publish the appropriate high-level business
+event. As a result, the service will typically publish events representing changes to
+tables rather than business entities.
+ Fortunately, it’s usually easier for the monolith to subscribe to domain events pub-
+lished as services. Quite often, you can write event handlers using a framework, such
+as Eventuate Tram. But sometimes it’s even challenging for the monolith to subscribe
+to events. For example, the monolith might be written in a language that doesn’t have
+a message broker client. In that situation, you need to write a small “helper” applica-
+tion that subscribes to events and updates the monolith’s database directly.
+ Now that we’ve looked at how to design the integration glue that enables a ser-
+vice and the monolith to collaborate, let’s look at another challenge you might face
+when migrating to microservices: maintaining data consistency across a service and
+a monolith. 
+13.3.2 Maintaining data consistency across a service and a monolith
+When you develop a service, you might find it challenging to maintain data consis-
+tency across the service and the monolith. A service operation might need to update
+data in the monolith, or a monolith operation might need to update data in the ser-
+vice. For example, imagine you extracted Kitchen Service from the monolith. You
+would need to change the monolith’s order-management operations, such as create-
+Order() and cancelOrder(), to use sagas in order to keep the Ticket consistent with
+the Order.
+ The problem with using sagas, however, is that the monolith might not be a will-
+ing participant. As described in chapter 4, sagas must use compensating transactions
+to undo changes. Create Order Saga, for example, includes a compensating transac-
+tion that marks an Order as rejected if it’s rejected by Kitchen Service. The prob-
+lem with compensating transactions in the monolith is that you might need to make
+numerous and time-consuming changes to the monolith in order to support them.
+The monolith might also need to implement countermeasures to handle the lack of
+isolation between sagas. The cost of these code changes can be a huge obstacle to
+extracting a service.
+ 

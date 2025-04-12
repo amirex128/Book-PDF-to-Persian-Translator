@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 141</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Transaction management (مدیریت تراکنش) در یک microservice (ریز سرویس) architecture (معماری)</strong></h3>
+  <p>به عنوان مثال، همانطور که در فصل 2 توضیح داده شد، operation (عملیات) createOrder() (ایجاد سفارش) چندین service (سرویس)، از جمله Order Service (سرویس سفارش)، Kitchen Service (سرویس آشپزخانه) و Accounting Service (سرویس حسابداری) را در بر می‌گیرد. عملیاتی مانند اینها به یک مکانیزم transaction management (مدیریت تراکنش) نیاز دارند که در سراسر services (سرویس‌ها) کار کند.</p>
+  <p>Mary (مری) متوجه شد که، همانطور که در فصل 2 ذکر شد، رویکرد سنتی برای distributed transaction management (مدیریت تراکنش توزیع شده) انتخاب خوبی برای applications (برنامه‌های) مدرن نیست.</p>
+  <p>به جای یک ACID transaction (تراکنش اتمی)، یک operation (عملیات) که services (سرویس‌ها) را در بر می‌گیرد، باید از چیزی که به عنوان saga (حماسه) شناخته می‌شود، یک sequence (توالی) message-driven (مبتنی بر پیام) از local transactions (تراکنش‌های محلی)، برای حفظ data consistency (سازگاری داده‌ها) استفاده کند. یکی از چالش‌ها با sagas (حماسه‌ها) این است که آنها ACD (Atomicity (اتمی)، Consistency (سازگاری)، Durability (پایداری)) هستند. آنها فاقد ویژگی isolation (انزوا) transactions (تراکنش‌های) ACID سنتی هستند. در نتیجه، یک application (برنامه) باید از چیزی که به عنوان countermeasures (اقدامات متقابل) شناخته می‌شود، techniques (تکنیک‌های) طراحی که از impact (تاثیر) anomalies (ناهنجاری‌ها) concurrency (همزمانی) ناشی از فقدان isolation (انزوا) جلوگیری یا کاهش می‌دهد، استفاده کند.</p>
+  <p>از بسیاری جهات، بزرگترین مانعی که Mary (مری) و توسعه‌دهندگان FTGO هنگام اتخاذ microservices (ریز سرویس‌ها) با آن مواجه خواهند شد، حرکت از یک database (پایگاه داده) واحد با ACID transactions (تراکنش‌های اتمی) به یک architecture (معماری) multi-database (چند پایگاه داده) با ACD sagas (حماسه‌ها) است. آنها به سادگی model (مدل) ACID transaction (تراکنش اتمی) عادت کرده‌اند. اما در واقعیت، حتی monolithic applications (برنامه‌های یکپارچه) مانند FTGO application (برنامه FTGO) معمولاً از ACID transactions (تراکنش‌های اتمی) کتاب درسی استفاده نمی‌کنند. به عنوان مثال، بسیاری از applications (برنامه‌ها) از یک سطح isolation (انزوا) transaction (تراکنش) پایین‌تر برای بهبود performance (عملکرد) استفاده می‌کنند. همچنین، بسیاری از processes (فرآیندهای) business (تجاری) مهم، مانند انتقال پول بین حساب‌ها در بانک‌های مختلف، در نهایت consistent (سازگار) هستند. حتی Starbucks (استارباکس) از two-phase commit (تعهد دو مرحله‌ای) استفاده نمی‌کند (www.enterpriseintegrationpatterns.com/ramblings/18_starbucks.html).</p>
+  <p>من این فصل را با نگاهی به چالش‌های transaction management (مدیریت تراکنش) در microservice (ریز سرویس) architecture (معماری) شروع می‌کنم و توضیح می‌دهم که چرا رویکرد سنتی برای distributed transaction management (مدیریت تراکنش توزیع شده) یک option (گزینه) نیست. در ادامه، توضیح می‌دهم که چگونه data consistency (سازگاری داده‌ها) را با استفاده از sagas (حماسه‌ها) حفظ کنیم. پس از آن، به دو روش مختلف هماهنگ‌سازی sagas (حماسه‌ها) نگاه می‌کنم: choreography (طراحی رقص)، جایی که participants (شرکت‌کنندگان) events (رویدادها) را بدون یک point (نقطه) متمرکز control (کنترل) تبادل می‌کنند، و orchestration (ارکستراسیون)، جایی که یک controller (کنترلر) متمرکز به participants (شرکت‌کنندگان) saga (حماسه) می‌گوید چه operation (عملیاتی) را انجام دهند. من در مورد چگونگی استفاده از countermeasures (اقدامات متقابل) برای جلوگیری یا کاهش impact (تاثیر) anomalies (ناهنجاری‌ها) concurrency (همزمانی) ناشی از کمبود isolation (انزوا) بین sagas (حماسه‌ها) بحث می‌کنم. در نهایت، من پیاده‌سازی یک example saga (حماسه مثال) را شرح می‌دهم.</p>
+  <p>بیایید با نگاهی به چالش مدیریت transactions (تراکنش‌ها) در یک microservice (ریز سرویس) architecture (معماری) شروع کنیم.</p>
+  <h4><strong>4.1 Transaction management (مدیریت تراکنش) در یک microservice (ریز سرویس) architecture (معماری)</strong></h4>
+  <p>تقریباً هر request (درخواستی) که توسط یک enterprise application (برنامه سازمانی) مدیریت می‌شود، در یک transaction (تراکنش) database (پایگاه داده) اجرا می‌شود. توسعه‌دهندگان enterprise application (برنامه سازمانی) از frameworks (چارچوب‌ها) و libraries (کتابخانه‌ها) استفاده می‌کنند که transaction management (مدیریت تراکنش) را ساده می‌کند. برخی از frameworks (چارچوب‌ها) و libraries (کتابخانه‌ها) یک programmatic API (رابط برنامه‌نویسی) برای شروع، commit (تعهد) و rollback (بازگشت) transactions (تراکنش‌ها) به صراحت ارائه می‌دهند. سایر frameworks (چارچوب‌ها)، مانند Spring framework (فریم‌ورک Spring)، یک مکانیزم declarative (اعلامی) ارائه می‌دهند. Spring (Spring) یک annotation (حاشیه‌نویسی) @Transactional ارائه می‌دهد که برای فراخوانی method (متد) ترتیب می‌دهد تا ...</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

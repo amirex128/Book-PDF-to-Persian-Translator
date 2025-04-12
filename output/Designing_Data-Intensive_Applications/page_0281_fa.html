@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 281</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        queue ممکن است ایجاد شود اگر چندین <strong>Transactions</strong> بخواهند به یک object یکسان دسترسی داشته باشند، بنابراین یک <strong>Transaction</strong> ممکن است مجبور شود منتظر بماند تا چندین <strong>Transaction</strong> دیگر تکمیل شوند قبل از اینکه بتواند کاری انجام دهد.
+    </p>
+    <p>
+        به همین دلیل، databases هایی که 2PL را اجرا می‌کنند، می‌توانند <em>latencies</em> کاملاً ناپایداری داشته باشند، و در <em>high percentiles</em> (به "Describing Performance" در صفحه 13 مراجعه کنید) اگر در workload رقابت وجود داشته باشد، می‌توانند بسیار کند باشند. ممکن است فقط یک <strong>Transaction</strong> کند، یا یک <strong>Transaction</strong> که به داده‌های زیادی دسترسی دارد و <em>locks</em> زیادی را به دست می‌آورد، طول بکشد تا بقیه system متوقف شوند. این بی‌ثباتی زمانی مشکل‌ساز است که <em>robust operation</em> مورد نیاز باشد.
+    </p>
+    <p>
+        اگرچه <em>deadlocks</em> می‌توانند با سطح <em>lock-based read committed isolation</em> رخ دهند، اما آنها بسیار مکررتر در زیر 2PL <em>serializable isolation</em> رخ می‌دهند (بسته به الگوهای دسترسی <strong>Transaction</strong> شما). این می‌تواند یک مشکل performance اضافی باشد: وقتی یک <strong>Transaction</strong> به دلیل <em>deadlock</em> <em>aborted</em> می‌شود و دوباره تلاش می‌شود، باید کار خود را دوباره انجام دهد. اگر <em>deadlocks</em> مکرر باشند، این می‌تواند به معنای تلاش قابل توجهی باشد که به هدر رفته است.
+    </p>
+    <h4>Predicate locks</h4>
+    <p>
+        در توصیف قبلی <em>locks</em>، ما یک جزئیات ظریف اما مهم را نادیده گرفتیم.
+    </p>
+    <p>
+        در "Phantoms causing write skew" در صفحه 250 ما در مورد مشکل <em>phantoms</em> بحث کردیم—یعنی، یک <em>transaction</em> نتایج یک query جستجوی <em>transaction</em> دیگر را تغییر می‌دهد. یک database با <em>serializable isolation</em> باید از <em>phantoms</em> جلوگیری کند.
+    </p>
+    <p>
+        در مثال booking اتاق جلسه، این بدان معنی است که اگر یک <strong>Transaction</strong> برای رزروهای موجود برای یک اتاق در یک بازه زمانی مشخص جستجو کرده باشد (به مثال 7-2 مراجعه کنید)، <strong>Transaction</strong> دیگری مجاز به درج یا <em>update</em> همزمان رزرو دیگری برای همان اتاق و بازه زمانی نیست. (درج همزمان رزرو برای اتاق‌های دیگر، یا برای همان اتاق در زمان دیگری که بر رزرو پیشنهادی تأثیری ندارد، اشکالی ندارد.)
+    </p>
+    <p>
+        چگونه این را پیاده‌سازی می‌کنیم؟ از نظر مفهومی، ما به یک <em>predicate lock</em> [3] نیاز داریم. این به طور مشابه با <em>shared/exclusive lock</em> که قبلاً توضیح داده شد عمل می‌کند، اما به جای تعلق داشتن به یک object خاص (به عنوان مثال، یک <em>row</em> در یک table)، به تمام object هایی که با یک <em>search condition</em> مطابقت دارند، مانند:
+    </p>
+    <pre><code class="language-sql">SELECT * FROM bookings
+  WHERE room_id = 123 AND
+    end_time   > '2018-01-01 12:00' AND
+    start_time < '2018-01-01 13:00';
+</code></pre>
+    <p>
+        یک <em>predicate lock</em> دسترسی را به شرح زیر محدود می‌کند:
+    </p>
+    <ul>
+        <li>
+            اگر <em>transaction</em> A می‌خواهد object هایی را که با یک condition مطابقت دارند، مانند آن query SELECT، بخواند، باید یک <em>shared-mode predicate lock</em> را روی شرایط query به دست آورد. اگر یک <em>transaction</em> B دیگر در حال حاضر دارای یک <em>exclusive lock</em> روی هر object است که با آن شرایط مطابقت دارد، A باید منتظر بماند تا B <em>lock</em> خود را آزاد کند قبل از اینکه اجازه داشته باشد <em>query</em> خود را انجام دهد.
+            <br>
+            Serializability
+            <br>
+            |
+            <br>
+            259
+        </li>
+    </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

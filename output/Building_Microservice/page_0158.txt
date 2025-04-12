@@ -1,0 +1,41 @@
+required for each operation. Ultimately, this is a trade-off. If you decide to adopt a
+HATEOAS-style of REST, I would suggest you start by having your clients navigate
+these controls first and then optimize later if necessary. Remember that using HTTP
+provides us with a large amount of help out of the box, which we discussed earlier.
+The evils of premature optimization have been well documented before, so I don’t
+need to expand on them here. Also note that a lot of these approaches were devel‐
+oped to create distributed hypertext systems, and not all of them fit! Sometimes you’ll
+find yourself just wanting good old-fashioned RPC.
+Despite these disadvantages, REST over HTTP is a sensible default choice for service-
+to-service interactions. If you want to know more, I recommend REST in Practice:
+Hypermedia and Systems Architecture (O’Reilly) by Jim Webber, Savas Parastatidis,
+and Ian Robinson, which covers the topic of REST over HTTP in depth.
+Where to use it
+Due to its widespread use in the industry, a REST-over-HTTP-based API is an obvi‐
+ous choice for a synchronous request-response interface if you are looking to allow
+access from as wide a variety of clients as possible. It would be a mistake to think of a
+REST API as just being a “good enough for most things” choice, but there is some‐
+thing to that. It’s a widely understood style of interface that most people are familiar
+with, and it guarantees interoperability from a huge variety of technologies.
+Due in large part to the capabilities of HTTP and the extent to which REST builds on
+these capabilities (rather than hiding them), REST-based APIs excel in situations in
+which you want large-scale and effective caching of requests. It’s for this reason that
+they are the obvious choice for exposing APIs to external parties or client interfaces.
+They may well suffer, though, when compared to more efficient communication pro‐
+tocols, and although you can construct asynchronous interaction protocols over the
+top of REST-based APIs, that’s not really a great fit compared to the alternatives for
+general microservice-to-microservice communication.
+Despite intellectually appreciating the goals behind HATEOAS, I haven’t seen much
+evidence that the additional work to implement this style of REST delivers worth‐
+while benefits in the long run, nor can I recall in the last few years talking to any
+teams implementing a microservice architecture that can speak to the value of using
+HATEOAS. My own experiences are obviously only one set of data points, and I
+don’t doubt that for some people HATEOAS may have worked well. But this concept
+does not seem to have caught on as much as I thought it would. It could be that the
+concepts behind HATEOAS are too alien for us to grasp, or it could be the lack of
+tools or standards in this space, or perhaps the model just doesn’t work for the sorts
+of systems we have ended up building. It’s also possible, of course, that the concepts
+behind HATEOAS don’t really mix well with how we build microservices.
+132 
+| 
+Chapter 5: Implementing Microservice Communication

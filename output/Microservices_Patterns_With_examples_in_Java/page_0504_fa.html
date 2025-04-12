@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 504</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   برنامه‌ریزی برای این‌که چه dataای به service، منتقل شود، نیازمند این است که شما
+   مسائل مختلفی را در نظر بگیرید. در اینجا به برخی از این مسائل اشاره می‌کنیم.
+  </p>
+  <p>
+   یکی از راه‌ها، این است که با تغییر کد monolith، داده‌ها را به سرویس منتقل کنیم. با این حال، این می‌تواند باعث شود که
+   تغییرات گسترده در monolith ایجاد شود.
+  </p>
+  <h3><strong>HOW THE FTGO MONOLITH ACCESSES THE DELIVERY SERVICE DATA</strong></h3>
+  <p>
+   The FTGO monolith، نیاز دارد به dataای که به Delivery Service منتقل شده است، دسترسی داشته باشد،
+   مانند Courier plansها. در تئوری، monolith می‌تواند service را query کند، اما این کار
+   نیازمند تغییرات گسترده در monolith است. در عوض، رویکرد بهتر این است که
+   monolith، data را به Delivery Service با publish کردن domain eventsهای Courier،
+   CourierLocationUpdated و CourierAvailabilityUpdated، تکرار کند. Delivery Service
+   دارای یک CourierEventSubscriber است که به domain eventsها subscribe کرده و
+   version از Courier را آپدیت می‌کند.
+  </p>
+  <p>
+   Monolith
+   <br/>
+   Event
+   <br/>
+   subscriber
+   <br/>
+   Delayed Order Service
+   <br/>
+   Domain
+   <br/>
+   event
+   <br/>
+   publisher
+   <br/>
+   REST
+   <br/>
+   endpoint
+   <br/>
+   Customer
+   <br/>
+   ContactInfo
+   <br/>
+   Proxy
+   <br/>
+   &lt;Repository&gt;
+   <br/>
+   Customer
+   <br/>
+   ContactInfo
+   <br/>
+   Repository
+   <br/>
+   Ubiquitous language of service
+   <br/>
+   Ubiquitous language of monolith
+   <br/>
+   Anti-corruption layer
+   <br/>
+   Event channel
+   <br/>
+   Order
+   <br/>
+   event
+   <br/>
+   Event
+   <br/>
+   publisher
+  </p>
+  <p>
+   <strong>Figure 13.12</strong>
+   <br/>
+   The integration glue provides Delayed Delivery Service with access to the data owned by
+   the monolith.
+  </p>
+  <p>
+   بنابراین، یکی از این مسائل این است که monolith چگونه به داده‌های سرویس دسترسی پیدا می‌کند.
+  </p>
+  <p>
+   اکنون، پس از استخراج Delivery Service، به داده‌هایی که باید monolith به service دسترسی داشته باشد، نیاز داریم. به عنوان مثال:
+  </p>
+  <p>
+   با پیاده‌سازی این تعامل، ما این ویژگی را حفظ می‌کنیم که برای استخراج features به تغییر کمتری در monolith نیاز داریم.
+  </p>
+  <h3><strong>THE DESIGN OF THE DELIVERY SERVICE API</strong></h3>
+  <p>
+   همانطور که در طول این کتاب دیده‌اید، رویکرد ترجیحی، استفاده از پیام‌رسانی ناهمزمان است،
+   زیرا coupling شل را ترویج می‌کند و
+   availability را افزایش می‌دهد.
+  </p>
+  <p>
+   API Delivery Service، شامل یک کانال notification message است و سه نوع از messagesها را تعریف می‌کند:
+   ScheduleDelivery, ReviseDelivery یا CancelDelivery. A
+   notification message حاوی اطلاعات Order است که توسط Delivery Service مورد نیاز است.
+  </p>
+  <p>
+   بنابراین، یک مزیت مهم از این رویکرد این است که Delivery
+   Service دانش دقیقی از چرخه حیات Order ندارد.
+  </p>
+  <p>
+   به طور کلی، یک service به جای این‌که به طور مستقیم به monolith متکی باشد، به تبادل data از طریق domain eventsها تکیه می‌کند.
+  </p>
+  <p>
+   این امر از طریق یک ساختار در معماری ما تسهیل می‌شود:
+  </p>
+  <p>
+   در این بخش به چگونگی تعامل با monolith و service می‌پردازیم.
+  </p>
+  <h3><strong>13.5.2 Overview of Delivery Service</strong></h3>
+  <p>
+   Service جدید که ما طراحی می‌کنیم مسئول زمان‌بندی، rescheduling و
+   لغو deliveriesها است.
+  </p>
+  <p>
+   همانطور که در شکل 13.17 نشان داده شده است،
+   application FTGO پس از استخراج Delivery Service را نشان می‌دهد.
+  </p>
+  <p>
+   معماری شامل monolith FTGO و Delivery Service است.
+  </p>
+  <p>
+   آنها با استفاده از integration glue، که شامل APIsها در هر دوی آنها می‌شود، همکاری می‌کنند.
+  </p>
+  <p>
+   Delivery Service دارای domain model و database خود است.
+  </p>
+  <p>
+   در این معماری ما نیاز داریم که مشخص کنیم:
+  </p>
+  <ol>
+   <li>
+    کدام behavior و data به Delivery Service منتقل می‌شوند؟
+   </li>
+   <li>
+    چه APIای را Delivery Service به monolith ارائه می‌کند؟
+   </li>
+   <li>
+    چه APIای را monolith به Delivery Service ارائه می‌کند؟
+   </li>
+  </ol>
+  <p>
+   این مسائل به هم مرتبط هستند، زیرا توزیع responsibilities بین
+   monolith و service، بر APIsها تأثیر می‌گذارد. به عنوان مثال، Delivery Service نیاز خواهد داشت
+   فراخوانی یک API ارائه شده توسط monolith برای دسترسی به data در data-
+   base monolith و بالعکس.
+  </p>
+  <p>
+   APIهای زیادی در application ما وجود دارد که در شکل 13.17 نشان داده شده است.
+  </p>
+  <p>
+   APIها نشان‌دهنده نقاط پایانی هستند. در نتیجه، استفاده از API، یکی از مهمترین مسائل طراحی service است.
+  </p>
+  <p>
+   به‌عنوان‌مثال، وقتی می‌خواهیم یک service را ایجاد کنیم، باید از APIی استفاده کنیم که در شکل 13.17 نشان داده شده است.
+  </p>
+  <h3><strong>DESIGNING THE DELIVERY SERVICE API</strong></h3>
+  <p>
+   به‌عنوان بخشی از تعامل، ما به یک API نیاز داریم.
+  </p>
+  <p>
+   API باید به گونه‌ای طراحی شود که به راحتی بتواند توسط آن مورد استفاده قرار گیرد، یعنی
+   باید ساده باشد.
+  </p>
+  <p>
+   Delivery Service باید یک API ارائه دهد که monolith را قادر می‌سازد تا schedule، revise،
+   و cancel deliveriesها را انجام دهد.
+  </p>
+  <p>
+   یک مزیت مهم از این رویکرد این است که Delivery
+   Service دانش دقیقی از چرخه حیات Order ندارد.
+  </p>
+  <p>
+   این API، تنها راه همکاری Delivery Service و FTGO monolith نیست.
+  </p>
+  <p>
+   در مرحله بعد، ما یک نمونه را بررسی می‌کنیم.
+  </p>
+  <p>
+   نمودار 13.15، یک طراحی سطح بالا از integration glue را نشان می‌دهد.
+  </p>
+  <h3><strong>13.5.4 The design of the Delivery Service integration glue</strong></h3>
+  <p>
+   به‌منظور ایجاد یک تعامل با monolith و service، ما به یک integration glue نیاز داریم.
+  </p>
+  <p>
+   FTGO monolith به service نیاز دارد. به عنوان مثال، یک service را فراخوانی می‌کنیم و data را مبادله می‌کنیم.
+  </p>
+  <p>
+   FTGO monolith از داده‌هایی که به Delivery Service تعلق دارد، استفاده می‌کند.
+  </p>
+  <p>
+   در حالی‌که این‌ dataها، dataهای زیادی را تشکیل می‌دهند.
+  </p>
+  <p>
+   با این حال، یک راه بهتر برای ایجاد تعامل، این است که با استفاده از eventsها، data را از monolith به Delivery Service منتقل کنیم.
+  </p>
+  <p>
+   همان‌طور که در شکل 13.20 نشان داده شده است، ما نیاز داریم به:
+  </p>
+  <ul>
+   <li>
+    ارائه دسترسی به data مورد نیاز service از طریق یک API با REST
+   </li>
+   <li>
+    با استفاده از domain eventsها، data را بین monolith و service همگام‌سازی کنید.
+   </li>
+  </ul>
+  <p>
+   ما می‌توانیم از domain eventsهای courier استفاده کنیم و همچنین از داده‌هایی که در مورد Order موجود است.
+  </p>
+  <p>
+   Delivery Service، از این eventsها استفاده می‌کند.
+  </p>
+  <p>
+   بنابراین، ما به یک event handler نیاز داریم.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

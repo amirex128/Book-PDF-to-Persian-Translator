@@ -1,0 +1,46 @@
+76
+CHAPTER 3
+Interprocess communication in a microservice architecture
+Clients must know the locations (URLs) of the service instances(s). As described
+in section 3.2.4, this is a nontrivial problem in a modern application. Clients must
+use what is known as a service discovery mechanism to locate service instances.
+Fetching multiple resources in a single request is challenging.
+It’s sometimes difficult to map multiple update operations to HTTP verbs.
+Despite these drawbacks, REST seems to be the de facto standard for APIs, though
+there are a couple of interesting alternatives. GraphQL, for example, implements
+flexible, efficient data fetching. Chapter 8 discusses GraphQL and covers the API
+gateway pattern.
+ gRPC is another alternative to REST. Let’s take a look at how it works. 
+3.2.2
+Using gRPC
+As mentioned in the preceding section, one challenge with using REST is that
+because HTTP only provides a limited number of verbs, it’s not always straightforward
+to design a REST API that supports multiple update operations. An IPC technology
+that avoids this issue is gRPC (www.grpc.io), a framework for writing cross-language
+clients and servers (see https://en.wikipedia.org/wiki/Remote_procedure_call for
+more). gRPC is a binary message-based protocol, and this means—as mentioned ear-
+lier in the discussion of binary message formats—you’re forced to take an API-first
+approach to service design. You define your gRPC APIs using a Protocol Buffers-based
+IDL, which is Google’s language-neutral mechanism for serializing structured data.
+You use the Protocol Buffer compiler to generate client-side stubs and server-side skel-
+etons. The compiler can generate code for a variety of languages, including Java, C#,
+NodeJS, and GoLang. Clients and servers exchange binary messages in the Protocol
+Buffers format using HTTP/2.
+ A gRPC API consists of one or more services and request/response message defini-
+tions. A service definition is analogous to a Java interface and is a collection of strongly
+typed methods. As well as supporting simple request/response RPC, gRPC support
+streaming RPC. A server can reply with a stream of messages to the client. Alterna-
+tively, a client can send a stream of messages to the server.
+ gRPC uses Protocol Buffers as the message format. Protocol Buffers is, as men-
+tioned earlier, an efficient, compact, binary format. It’s a tagged format. Each field of
+a Protocol Buffers message is numbered and has a type code. A message recipient can
+extract the fields that it needs and skip over the fields that it doesn’t recognize. As a
+result, gRPC enables APIs to evolve while remaining backward-compatible.
+ Listing 3.1 shows an excerpt of the gRPC API for the Order Service. It defines sev-
+eral methods, including createOrder(). This method takes a CreateOrderRequest as
+a parameter and returns a CreateOrderReply.
+service OrderService {
+rpc createOrder(CreateOrderRequest) returns (CreateOrderReply) {}
+Listing 3.1
+An excerpt of the gRPC API for the Order Service
+ 

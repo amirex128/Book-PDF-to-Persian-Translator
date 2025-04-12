@@ -1,0 +1,25 @@
+The major issue with pass-through coupling is that a change to the required data
+downstream can cause a more significant upstream change. In our example, if
+Shipping now needs the format or content of the data to be changed, then both
+Warehouse and Order Processor would likely need to change.
+There are a few ways this can be fixed. The first is to consider whether it makes sense
+for the calling microservice to just bypass the intermediary. In our example, this
+might mean Order Processor speaks directly to Shipping, as in Figure 2-5. How‐
+ever, this causes some other headaches. Our Order Processor is increasing its
+domain coupling, as Shipping is yet another microservice it needs to know about—if
+that was the only issue, this might still be fine, as domain coupling is of course a
+looser form of coupling. This solution gets more complex here, though, as stock has
+to be reserved with Warehouse before we dispatch the package using Shipping, and
+after the shipping has been done we need to update the stock accordingly. This
+pushes more complexity and logic into Order Processor that was previously hidden
+inside Warehouse.
+Figure 2-5. One way to work around pass-through coupling involves communicating
+directly with the downstream service
+For this specific example, I might consider a simpler (albeit more nuanced) change—
+namely, to totally hide the requirement for a Shipping Manifest from Order Pro
+cessor. The idea of delegating the work of both managing stock and arranging for
+dispatch of the package to our Warehouse service makes sense, but we don’t like the
+fact that we have leaked some lower-level implementation—namely, the fact that the
+44 
+| 
+Chapter 2: How to Model Microservices

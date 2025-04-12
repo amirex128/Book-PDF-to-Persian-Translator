@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 252</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   از دیدگاه رستوران، و وضعیت تحویل، از جمله موقعیت مکانی و زمان تحویل تخمینی آن، اگر در حال حمل و نقل باشد.
+  </p>
+  <p>
+   از آنجایی که داده‌های آن در یک <mark>database</mark> واحد قرار دارد، application <mark>monolithic FTGO</mark> می‌تواند به راحتی جزئیات سفارش را با اجرای یک عبارت <mark>SELECT</mark> واحد که جداول مختلف را <mark>join</mark> می‌کند، بازیابی کند. در مقابل، در نسخه مبتنی بر <mark>microservices</mark> application <mark>FTGO</mark>، داده‌ها در <mark>services</mark> زیر پراکنده شده‌اند:
+  </p>
+  <ul>
+   <li>
+    <mark>Order Service</mark>— اطلاعات سفارش اولیه، از جمله جزئیات و وضعیت
+   </li>
+   <li>
+    <mark>Kitchen Service</mark>— وضعیت سفارش از دیدگاه رستوران و زمان تخمینی آماده شدن آن برای تحویل
+   </li>
+   <li>
+    <mark>Delivery Service</mark>— وضعیت تحویل سفارش، اطلاعات تحویل تخمینی و موقعیت مکانی فعلی آن
+   </li>
+   <li>
+    <mark>Accounting Service</mark>— وضعیت پرداخت سفارش
+   </li>
+  </ul>
+  <p>
+   هر <mark>client</mark> که به جزئیات سفارش نیاز دارد، باید از همه این <mark>services</mark> درخواست کند.
+  </p>
+  <h5><mark>7.1.2 Overview of the API composition pattern</mark></h5>
+  <p>
+   یک راه برای پیاده‌سازی عملیات <mark>query</mark>، مانند <mark>findOrder()</mark>، که داده‌های متعلق به چندین <mark>services</mark> را بازیابی می‌کند، استفاده از الگوی ترکیب <mark>API</mark> است. این الگو یک
+  </p>
+  <p>
+   <mark>Order</mark>
+   <br />
+   <mark>Order Service</mark>
+   <br />
+   <mark>id:3492-2323</mark>
+   <br />
+   <mark>restaurant:Ajanta</mark>
+  </p>
+  <p>
+   <mark>Ticket</mark>
+   <br />
+   <mark>Kitchen Service</mark>
+  </p>
+  <p>
+   application <mark>FTGO</mark>
+   <br />
+   <mark>OrderDetails findOrder(orderId)</mark>
+  </p>
+  <p>
+   <mark>FTGO frontend</mark>
+  </p>
+  <p>
+   <mark>Order status view</mark>
+  </p>
+  <p>
+   <mark>Order id:</mark>
+   <br />
+   <mark>Restaurant:</mark>
+   <br />
+   <mark>Status:</mark>
+   <br />
+   <mark>ETA:</mark>
+   <br />
+   <mark>Payment:</mark>
+   <br />
+   <mark>3492-2323</mark>
+   <br />
+   <mark>Ajanta</mark>
+   <br />
+   <mark>En route</mark>
+   <br />
+   <mark>6:25 pm</mark>
+   <br />
+   <mark>Paid</mark>
+  </p>
+  <p>
+   <mark>id:3492-2323</mark>
+   <br />
+   <mark>status:PREPARED</mark>
+  </p>
+  <p>
+   <mark>Delivery</mark>
+   <br />
+   <mark>Delivery Service</mark>
+   <br />
+   <mark>id:45-4545</mark>
+   <br />
+   <mark>orderId:3492-2323</mark>
+   <br />
+   <mark>status:ENROUTE</mark>
+   <br />
+   <mark>eta:6:25 pm</mark>
+  </p>
+  <p>
+   <mark>Bill</mark>
+   <br />
+   <mark>Accounting Service</mark>
+   <br />
+   <mark>id:343-45611</mark>
+   <br />
+   <mark>orderId:3492-2323</mark>
+   <br />
+   <mark>status:PAID</mark>
+  </p>
+  <p>
+   وضعیت سفارش
+   <br />
+   <mark>Data</mark> از چندین <mark>services</mark>
+   <br />
+   دستگاه تلفن همراه یا application وب
+  </p>
+  <p>
+   شکل 7.1
+   <br />
+   عملیات <mark>findOrder()</mark> توسط یک ماژول <mark>FTGO frontend</mark> فراخوانی می‌شود و جزئیات یک <mark>Order</mark> را برمی‌گرداند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

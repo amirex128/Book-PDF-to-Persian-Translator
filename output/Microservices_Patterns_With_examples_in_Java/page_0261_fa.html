@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 261</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Using the CQRS pattern</mark></h3>
+  <p>
+   اما ابتدا، بیایید به مثالی از یک عملیات <mark>query</mark> نگاهی بیندازیم که پیاده‌سازی آن چالش‌برانگیز است، با وجود اینکه به یک <mark>service</mark> واحد محلی است.
+  </p>
+  <h5><mark>A CHALLENGING SINGLE SERVICE QUERY: FINDAVAILABLERESTAURANTS()</mark></h5>
+  <p>
+   همانطور که دیدید، پیاده‌سازی <mark>queries</mark> که داده‌ها را از چندین <mark>services</mark> بازیابی می‌کنند می‌تواند چالش‌برانگیز باشد. اما حتی <mark>queries</mark> که به یک <mark>service</mark> واحد محلی هستند نیز می‌توانند دشوار باشند. چند دلیل وجود دارد که چرا این ممکن است اتفاق بیفتد. یکی این است که، همانطور که به زودی مورد بحث قرار می‌گیرد، گاهی اوقات مناسب نیست که <mark>service</mark>ای که مالک داده است، <mark>query</mark> را پیاده‌سازی کند. دلیل دیگر این است که گاهی اوقات <mark>database</mark> (یا مدل داده) یک <mark>service</mark>، <mark>query</mark> را به طور کارآمد پشتیبانی نمی‌کند.
+  </p>
+  <p>
+   به عنوان مثال، عملیات <mark>query</mark> <mark>findAvailableRestaurants()</mark> را در نظر بگیرید. این <mark>query</mark> رستوران‌هایی را پیدا می‌کند که برای تحویل به یک آدرس معین در یک زمان معین در دسترس هستند. قلب این <mark>query</mark> یک جستجوی فضایی (مبتنی بر مکان) برای رستوران‌هایی است که در یک فاصله مشخص از آدرس تحویل قرار دارند. این بخش مهمی از فرآیند سفارش است و توسط ماژول <mark>UI</mark> که رستوران‌های موجود را نمایش می‌دهد، فراخوانی می‌شود.
+  </p>
+  <p>
+   چالش اصلی هنگام پیاده‌سازی این عملیات <mark>query</mark>، انجام یک <mark>query</mark> فضایی کارآمد است. نحوه پیاده‌سازی <mark>query</mark> <mark>findAvailableRestaurants()</mark> به قابلیت‌های <mark>database</mark>ای که رستوران‌ها را ذخیره می‌کند، بستگی دارد. به عنوان مثال، پیاده‌سازی <mark>query</mark> <mark>findAvailableRestaurants()</mark> با استفاده از <mark>MongoDB</mark> یا افزونه‌های فضایی <mark>Postgres</mark> و <mark>MySQL</mark> ساده است. این <mark>databases</mark> از انواع داده‌های فضایی، <mark>indexes</mark> و <mark>queries</mark> پشتیبانی می‌کنند. هنگام استفاده از یکی از این <mark>databases</mark>، <mark>Restaurant Service</mark> یک <mark>Restaurant</mark> را به عنوان یک رکورد <mark>database</mark> که دارای یک ویژگی موقعیت مکانی است، <mark>persist</mark> می‌کند. این رستوران‌های موجود را با استفاده از یک <mark>query</mark> فضایی که توسط یک <mark>geospatial index</mark> بر روی ویژگی موقعیت مکانی بهینه شده است، پیدا می‌کند.
+  </p>
+  <p>
+   اگر application <mark>FTGO</mark> رستوران‌ها را در نوع دیگری از <mark>database</mark> ذخیره کند، پیاده‌سازی <mark>query</mark> <mark>findAvailableRestaurant()</mark> چالش‌برانگیزتر است. این باید یک <mark>replica</mark> از داده‌های رستوران را در قالبی که برای پشتیبانی از <mark>query</mark> فضایی طراحی شده است، حفظ کند. به عنوان مثال، application می‌تواند از <mark>Geospatial Indexing Library</mark> برای <mark>DynamoDB</mark>
+   (<mark>https://github.com/awslabs/dynamodb-geo</mark>) استفاده کند که از یک جدول به عنوان یک <mark>geospatial index</mark> استفاده می‌کند. از طرف دیگر، application می‌تواند یک <mark>replica</mark> از داده‌های رستوران را در یک نوع <mark>database</mark> کاملاً متفاوت ذخیره کند، موقعیتی بسیار شبیه به استفاده از یک <mark>text search database</mark> برای <mark>text queries</mark>.
+  </p>
+  <p>
+   چالش استفاده از <mark>replicas</mark> این است که آن‌ها را هر زمان که <mark>data</mark> اصلی تغییر می‌کند، به‌روز نگه دارید. همانطور که در زیر خواهید آموخت، <mark>CQRS</mark> مشکل همگام‌سازی <mark>replicas</mark> را حل می‌کند.
+  </p>
+  <h5><mark>THE NEED TO SEPARATE CONCERNS</mark></h5>
+  <p>
+   یکی دیگر از دلایلی که چرا <mark>single service queries</mark> چالش‌برانگیز هستند این است که گاهی اوقات <mark>service</mark>ای که مالک <mark>data</mark> است، نباید <mark>query</mark> را پیاده‌سازی کند.
+   <br />
+   عملیات <mark>query</mark> <mark>findAvailableRestaurants()</mark> داده‌هایی را بازیابی می‌کند که متعلق به <mark>Restaurant Service</mark> است. این <mark>service</mark> به صاحبان رستوران این امکان را می‌دهد که مشخصات و موارد منوی رستوران خود را مدیریت کنند. این ویژگی‌های مختلف یک رستوران، از جمله نام، آدرس، غذاها، منو و ساعات کار آن را ذخیره می‌کند. با توجه به اینکه این <mark>service</mark> مالک
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

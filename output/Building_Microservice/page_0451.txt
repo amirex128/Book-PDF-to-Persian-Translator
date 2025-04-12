@@ -1,0 +1,25 @@
+Figure 13-3. FoodCo making use of read replicas to scale read traffic
+Key benefits
+Horizontal duplication is relatively straightforward. It’s rare that the application
+needs to be updated, as the work to distribute the load can often be done elsewhere—
+for example, through a queue running on a message broker or perhaps in a load bal‐
+ancer. If vertical scaling isn’t available to me, this form of scaling is typically the next
+thing I’d look at.
+Assuming the work can be easily spread across the duplicates, it’s an elegant way of
+spreading the load and reducing contention for raw computing resources.
+Limitations
+As with virtually all the scaling options we’ll look at, horizontal duplication requires
+more infrastructure, which can of course cost more money. It can be a bit of a blunt
+instrument too—you might run multiple full copies of your monolithic application,
+for example, even if only part of that monolith is actually experiencing scaling issues.
+Much of the work here is in implementing your load distribution mechanisms. These
+can range from the simple, such as HTTP load balancing, to the more complex, such
+as using a message broker or configuring database read replicas. You are relying on
+this load distribution mechanism to do its job—coming to grips with how it works
+and with any limitations of your specific choice will be key.
+Some systems might place additional requirements on the load distribution mecha‐
+nism. For example, they might require that each request associated with the same
+user session gets directed to the same replica. This can be solved through the use of a
+The Four Axes of Scaling 
+| 
+425

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 98</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <ul>
+   <li>
+    <strong>One-way notifications</strong>—یک <strong>client service</strong> درخواستی را به یک سرویس ارسال می‌کند، اما هیچ پاسخی
+    انتظار نمی‌رود یا ارسال نمی‌شود.
+   </li>
+  </ul>
+  <p>
+   مهم است که به یاد داشته باشید که سبک تعامل <strong>request/response synchronous</strong>
+   بیشتر متعامد با فناوری‌های <strong>IPC</strong> است. به عنوان مثال، یک سرویس می‌تواند تعامل داشته باشد
+   با سرویس دیگری با استفاده از تعامل سبک <strong>request/response</strong> با <strong>REST</strong> یا پیام‌رسانی.
+   حتی اگر دو سرویس با استفاده از یک <strong>message broker</strong> ارتباط برقرار می‌کنند، سرویس کلاینت
+   ممکن است منتظر پاسخ <strong>block</strong> شود. لزوماً به این معنی نیست که آنها
+   <strong>loosely coupled</strong> هستند. این چیزی است که من بعداً در این فصل هنگام بحث در مورد تأثیر
+   ارتباطات بین سرویس‌ها بر <strong>availability</strong>، دوباره به آن می‌پردازم.
+  </p>
+  <p>
+   موارد زیر انواع مختلفی از تعاملات یک به چند هستند:
+  </p>
+  <ul>
+   <li>
+    <strong>Publish/subscribe</strong>—یک کلاینت یک پیام <strong>notification</strong> را منتشر می‌کند، که توسط
+    صفر یا بیشتر سرویس‌های مورد علاقه، مصرف می‌شود.
+   </li>
+   <li>
+    <strong>Publish/async responses</strong>—یک کلاینت یک پیام <strong>request</strong> را منتشر می‌کند و سپس منتظر می‌ماند
+    به مدت معینی برای پاسخ از سرویس‌های مورد علاقه.
+   </li>
+  </ul>
+  <p>
+   هر سرویس معمولاً از ترکیبی از این سبک‌های تعامل استفاده می‌کند. بسیاری از
+   سرویس‌ها در اپلیکیشن FTGO دارای <strong>APIs</strong> هم <strong>synchronous</strong> و هم <strong>asynchronous</strong> برای
+   عملیات هستند، و بسیاری نیز رویدادها را منتشر می‌کنند.
+  </p>
+  <p>
+   بیایید نگاهی بیندازیم به نحوه تعریف <strong>API</strong> یک سرویس.
+  </p>
+  <h4>3.1.2 Defining APIs in a microservice architecture</h4>
+  <p>
+   <strong>APIs</strong> یا <strong>interfaces</strong> برای توسعه نرم‌افزار ضروری هستند. یک اپلیکیشن شامل
+   ماژول‌ها است. هر ماژول دارای یک <strong>interface</strong> است که مجموعه‌ای از عملیات را تعریف می‌کند که
+   کلاینت‌های ماژول می‌توانند فراخوانی کنند. یک <strong>interface</strong> که به خوبی طراحی شده است، عملکرد مفیدی را در حالی که
+   پیاده‌سازی را پنهان می‌کند، در معرض دید قرار می‌دهد. این به پیاده‌سازی این امکان را می‌دهد که بدون تأثیر
+   بر کلاینت‌ها تغییر کند.
+  </p>
+  <p>
+   در یک اپلیکیشن <strong>monolithic</strong>، یک <strong>interface</strong> معمولاً با استفاده از یک برنامه
+   ساختار زبان نویسی مانند یک <strong>Java interface</strong> مشخص می‌شود. یک <strong>Java interface</strong> مجموعه‌ای از
+   متدها را مشخص می‌کند که یک کلاینت می‌تواند فراخوانی کند. کلاس پیاده‌سازی از کلاینت پنهان است.
+   علاوه بر این، از آنجایی که جاوا یک زبان <strong>statically typed</strong> است، اگر <strong>interface</strong> به
+   ناسازگار با کلاینت شود، اپلیکیشن کامپایل نخواهد شد.
+  </p>
+  <p>
+   <strong>APIs</strong> و <strong>interfaces</strong> به همان اندازه در یک معماری <strong>microservice</strong> مهم هستند. یک
+   <strong>API</strong> سرویس، یک قرارداد بین سرویس و کلاینت‌های آن است. همانطور که در فصل 2 توضیح داده شد،
+   یک <strong>API</strong> سرویس شامل عملیات است، که کلاینت‌ها می‌توانند فراخوانی کنند، و رویدادها، که
+   توسط سرویس منتشر می‌شوند. یک عملیات دارای نام، پارامترها و یک نوع بازگشتی است. یک
+   رویداد دارای یک نوع و مجموعه‌ای از فیلدها است و، همانطور که در بخش 3.3 توضیح داده شد، به یک
+   کانال پیام منتشر می‌شود.
+  </p>
+  <p>
+   چالش این است که یک <strong>API</strong> سرویس با استفاده از یک سازه زبان برنامه‌نویسی ساده تعریف نمی‌شود.
+   طبق تعریف، یک سرویس و کلاینت‌های آن با هم کامپایل نمی‌شوند. اگر یک
+   نسخه جدیدی از یک سرویس با یک <strong>API</strong> ناسازگار، مستقر شود، خطای کامپایل وجود ندارد.
+   در عوض، شکست‌های زمان اجرا وجود خواهد داشت.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

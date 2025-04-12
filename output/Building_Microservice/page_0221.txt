@@ -1,0 +1,37 @@
+7 See Pat Helland, “Life Beyond Distributed Transactions: An Apostate’s Opinion,” acmqueue 14, no. 5
+(December 12, 2016).
+Should I use choreography or orchestration (or a mix)?
+The implementation of choreographed sagas can bring with it ideas that may be
+unfamiliar to you and your team. They typically assume heavy use of event-driven
+collaboration, which isn’t widely understood. However, in my experience, the extra
+complexity associated with tracking the progress of a saga is almost always out‐
+weighed by the benefits associated with having a more loosely coupled architecture.
+Stepping aside from my own personal tastes, though, the general advice I give regard‐
+ing orchestration versus choreography is that I am very relaxed in the use of orches‐
+trated sagas when one team owns implementation of the entire saga. In such a
+situation, the more inherently coupled architecture is much easier to manage within
+the team boundary. If you have multiple teams involved, I greatly prefer the more
+decomposed choreographed saga, as it is easier to distribute responsibility for imple‐
+menting the saga to the teams, with the more loosely coupled architecture allowing
+these teams to work more in isolation.
+It’s worth noting that as a general rule, you’ll be more likely to gravitate toward
+request-response–based calls with orchestration, whereas choreography tends to
+make heavier use of events. This isn’t a hard rule, just a general observation. My own
+general leaning toward choreography is likely a function of the fact that I tend to
+gravitate toward event-driven interaction models—if you are finding the use of
+event-driven collaboration difficult to get your head around, choreography might not
+be for you.
+Sagas Versus Distributed Transactions
+As I hope I have broken down by now, distributed transactions come with some sig‐
+nificant challenges, and outside of some very specific situations I tend to avoid them.
+Pat Helland, a pioneer in distributed systems, distills the fundamental challenges that
+come with implementing distributed transactions for the kinds of applications we
+build today:7
+In most distributed transaction systems, the failure of a single node causes transaction
+commit to stall. This in turn causes the application to get wedged. In such systems, the
+larger it gets, the more likely the system is going to be down. When flying an airplane
+that needs all of its engines to work, adding an engine reduces the availability of the
+airplane.
+Sagas 
+| 
+195

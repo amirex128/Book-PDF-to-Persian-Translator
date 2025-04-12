@@ -1,0 +1,36 @@
+Fundamentally, the nature of the call aggregation and filtering is largely driven by the
+requirements of the external user interfaces. As such, it would make natural sense for
+the gateway to be owned by the team(s) creating the UI. Unfortunately, especially in
+an organization in which you have a dedicated frontend team, that team may not
+have the skills to build such a vital backend component.
+Regardless of who ends up owning the central gateway, it has the potential to become
+a bottleneck for delivery. If multiple teams need to make changes to the gateway,
+development on it will require coordination between those teams, slowing things
+down. If one team owns it, that team can become a bottleneck when it comes to
+delivery. We’ll see how the backend for frontend pattern can help resolve these issues
+shortly.
+Different Types of User Interfaces
+If the challenges around ownership can be managed, a central aggregating gateway
+might still work well, until we consider the issue of different devices and their differ‐
+ent needs. As we’ve discussed, the affordances of a mobile device are very different.
+We have less screen real estate, which means we can display less data. Opening lots of
+connections to server-side resources can drain battery life and limited data plans.
+Additionally, the nature of the interactions we want to provide on a mobile device
+can differ drastically. Think of a typical bricks-and-mortar retailer. On a desktop app,
+I might allow you to look at the items for sale and order them online or reserve them
+in a store. On the mobile device, though, I might want to allow you to scan bar codes
+to do price comparisons or give you context-based offers while in store. As we’ve
+built more and more mobile applications, we’ve come to realize that people use them
+very differently, and therefore the functionality we need to expose will differ too.
+So in practice, our mobile devices will want to make different and fewer calls and will
+want to display different (and probably less) data than their desktop counterparts.
+This means that we need to add additional functionality to our API backend to sup‐
+port different types of user interfaces. In Figure 14-10, we see MusicCorp’s web inter‐
+face and mobile interface both using the same gateway for the customer summary
+screen, but each client wants a different set of information. The web interface wants
+more information about the customer and also has a brief summary of the items in
+each order. This leads us to implement two different aggregating and filtering calls in
+our backend gateway.
+Pattern: Central Aggregating Gateway 
+| 
+477

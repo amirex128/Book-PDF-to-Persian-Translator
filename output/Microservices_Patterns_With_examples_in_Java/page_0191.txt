@@ -1,0 +1,44 @@
+161
+Publishing domain events
+Monitoring domain events to verify that the application is behaving correctly.
+Analyzing events to model user behavior.
+The trigger for the notification in all these scenarios is the state change of an aggre-
+gate in an application’s database. 
+5.3.2
+What is a domain event?
+A domain event is a class with a name formed using a past-participle verb. It has proper-
+ties that meaningfully convey the event. Each property is either a primitive value or a
+value object. For example, an OrderCreated event class has an orderId property.
+ A domain event typically also has metadata, such as the event ID, and a timestamp.
+It might also have the identity of the user who made the change, because that’s useful
+for auditing. The metadata can be part of the event object, perhaps defined in a
+superclass. Alternatively, the event metadata can be in an envelope object that wraps
+the event object. The ID of the aggregate that emitted the event might also be part of
+the envelope rather than an explicit event property.
+ The OrderCreated event is an example of a domain event. It doesn’t have any
+fields, because the Order’s ID is part of the event envelope. The following listing
+shows the OrderCreated event class and the DomainEventEnvelope class.
+interface DomainEvent {}
+interface OrderDomainEvent extends DomainEvent {}
+class OrderCreated implements OrderDomainEvent {}
+class DomainEventEnvelope<T extends DomainEvent> {
+private String aggregateType;      
+private Object aggregateId;
+private T event;
+...
+}
+The DomainEvent interface is a marker interface that identifies a class as a domain
+event. OrderDomainEvent is a marker interface for events, such as OrderCreated, which
+are published by the Order aggregate. The DomainEventEnvelope is a class that con-
+tains event metadata and the event object. It’s a generic class that’s parameterized by
+the domain event type. 
+5.3.3
+Event enrichment
+Let’s imagine, for example, that you’re writing an event consumer that processes Order
+events. The OrderCreated event class shown previously captures the essence of what has
+happened. But your event consumer may need the order details when processing an
+Listing 5.1
+The OrderCreated event and the DomainEventEnvelope class
+The event’s 
+metadata
+ 

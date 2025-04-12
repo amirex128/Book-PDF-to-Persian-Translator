@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 136</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3 (فصل 3)</strong></h3>
+  <h4><strong>Interprocess communication (ارتباط بین فرآیندی) در یک microservice (ریز سرویس) architecture (معماری)</strong></h4>
+  <p>یکی از مشکلات replication (تکثیر) این است که مشکل نحوه به‌روزرسانی داده‌ها توسط یک service (سرویس) که متعلق به سایر services (سرویس‌ها) است را حل نمی‌کند.</p>
+  <p>یک راه برای حل این مشکل این است که یک service، تعامل با سایر services (سرویس‌ها) را تا بعد از پاسخ به client (مشتری) خود به تاخیر بیندازد. در ادامه، به چگونگی عملکرد آن نگاهی خواهیم انداخت.</p>
+  <h4><strong>FINISH PROCESSING AFTER RETURNING A RESPONSE (اتمام پردازش پس از بازگشت پاسخ)</strong></h4>
+  <p>یک راه دیگر برای حذف ارتباط synchronous (همزمان) در طول پردازش request (درخواست) این است که یک service درخواست را به صورت زیر مدیریت کند:</p>
+  <ol>
+   <li>Validate (اعتبارسنجی) request (درخواست) با استفاده از داده‌های موجود محلی.</li>
+   <li>دیتابیس (پایگاه داده) خود را به‌روزرسانی کنید، از جمله درج messages (پیام‌ها) در جدول OUTBOX.</li>
+   <li>یک response (پاسخ) را به client (مشتری) خود بازگردانید.</li>
+  </ol>
+  <p>در حین handling (مدیریت) یک request (درخواست)، service به طور synchronous (همزمان) با هیچ service (سرویس) دیگری تعامل ندارد. در عوض، آن به صورت asynchronous (ناهمزمان) messages (پیام‌ها) را به سایر services (سرویس‌ها) ارسال می‌کند. این رویکرد تضمین می‌کند که services (سرویس‌ها) به طور loosely coupled (شل و غیر متصل) هستند. همانطور که در فصل بعد خواهید آموخت، این اغلب با استفاده از یک saga (حماسه) پیاده‌سازی می‌شود.</p>
+  <p>به عنوان مثال، اگر Order Service (سرویس سفارش) از این رویکرد استفاده کند، یک order (سفارش) را در یک حالت PENDING (در انتظار) ایجاد می‌کند و سپس order (سفارش) را به صورت asynchronous (ناهمزمان) با تبادل messages (پیام‌ها) با سایر services (سرویس‌ها) validate (اعتبارسنجی) می‌کند. Figure (شکل) 3.18 آنچه را که هنگام فراخوانی operation (عملیات) createOrder() اتفاق می‌افتد، نشان می‌دهد. توالی events (رویدادها) به شرح زیر است:</p>
+  <ol>
+   <li>Order Service یک Order را در حالت PENDING (در انتظار) ایجاد می‌کند.</li>
+   <li>Order Service یک response (پاسخ) را به client (مشتری) خود بازمی‌گرداند که شامل order ID (شناسه سفارش) است.</li>
+   <li>Order Service یک پیام ValidateConsumerInfo را به Consumer Service (سرویس مصرف‌کننده) ارسال می‌کند.</li>
+  </ol>
+  <p>Services (سرویس‌ها) events (رویدادها) را publish (منتشر) می‌کنند</p>
+  <p>when (هنگامی) که data (داده‌های) آنها تغییر می‌کند.</p>
+  <p>Replicated data (داده‌های تکثیر شده) Order Service (سرویس سفارش) را قادر می‌سازد تا</p>
+  <p>request (درخواست) createOrder() را بدون</p>
+  <p>synchronously (همزمان) فراخوانی services (سرویس‌ها) انجام دهد.</p>
+  <br>
+  <img src="figure_3_17.png" alt="Figure 3.17">
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

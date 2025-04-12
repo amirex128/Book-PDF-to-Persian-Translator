@@ -1,0 +1,52 @@
+150
+CHAPTER 5
+Designing business logic in a microservice architecture
+ashamed to use a procedural design when it’s appropriate. This approach works well
+for simple business logic. The drawback is that this tends not to be a good way to
+implement complex business logic. 
+5.1.2
+Designing business logic using the Domain model pattern
+The simplicity of the procedural approach can be quite seductive. You can write code with-
+out having to carefully consider how to organize the classes. The problem is that if your
+business logic becomes complex, you can end up with code that’s a nightmare to main-
+tain. In fact, in the same way that a monolithic application has a habit of continually grow-
+ing, transaction scripts have the same problem. Consequently, unless you’re writing an
+extremely simple application, you should resist the temptation to write procedural code
+and instead apply the Domain model pattern and develop an object-oriented design.
+In an object-oriented design, the business logic consists of an object model, a network
+of relatively small classes. These classes typically correspond directly to concepts from
+the problem domain. In such a design some classes have only either state or behavior,
+but many contain both, which is the hallmark of a well-designed class. Figure 5.3
+shows an example of the Domain model pattern.
+Pattern: Domain model
+Organize the business logic as an object model consisting of classes that have state
+and behavior.
+createOrder()
+reviseOrder()
+cancelOrder()
+...
+OrderService
+deliveryTime
+deliveryAddress
+DeliveryInformation
+ﬁndOrderById()
+...
+OrderRepository
+Some classes have only state.
+Many classes have
+state and behavior.
+Uses
+Some classes have only behavior.
+«private»
+orderId
+orderLineItems
+...
+revise()
+cancel()
+«static»
+create()
+Order
+Figure 5.3
+Organizing business logic as a domain model. The majority of 
+the business logic consists of classes that have state and behavior.
+ 

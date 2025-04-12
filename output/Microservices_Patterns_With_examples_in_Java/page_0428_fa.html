@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 428</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <p>
+   The docker run command image را از registry در صورت نیاز، pull می‌کند. It then cre-
+   ates و container را شروع می‌کند، که دستور java -jar را که در the
+   Dockerfile مشخص شده است، اجرا می‌کند.
+  </p>
+  <p>
+   Using the docker run command ممکن است ساده به نظر برسد، اما چندین prob-
+   lems وجود دارد. One این است که docker run یک راه قابل اعتماد برای deploy کردن یک service نیست، زیرا
+   یک container را که در یک machine واحد در حال اجرا است، ایجاد می‌کند. The Docker engine برخی از basic را فراهم می‌کند
+   management features، مانند راه‌اندازی مجدد خودکار containers اگر crash کنند یا اگر
+   machine reboot شود. But it doesn’t handle machine crashes.
+  </p>
+  <p>
+   Another problem این است که services معمولاً در isolation وجود ندارند. They depend on
+   other services، مانند databases و message brokers. It would be nice برای deploy کردن یا
+   undeploy کردن یک service و dependencies آن به عنوان یک واحد.
+  </p>
+  <p>
+   A better approach که به ویژه در طول توسعه مفید است، استفاده از Docker است
+   Compose. Docker Compose ابزاری است که به شما اجازه می‌دهد یک set از contain-
+   ers را با استفاده از یک فایل YAML تعریف کنید، و سپس آن containers را به عنوان یک گروه شروع و متوقف کنید. What’s
+   more، the YAML file یک راه مناسب برای مشخص کردن numerous externalized configura-
+   tion properties است. To learn more about Docker Compose، من خواندن Docker را توصیه می‌کنم
+   in Action by Jeff Nickoloff (Manning, 2016) و نگاهی به docker-compose.yml
+   file در the example code.
+  </p>
+  <p>
+   The problem با Docker Compose، though، این است که به یک machine واحد محدود می‌شود.
+   To deploy services به طور قابل اطمینان، شما باید از یک Docker orchestration framework استفاده کنید، مانند
+   Kubernetes، که یک set از machines را به یک pool از resources تبدیل می‌کند. I describe how to
+   use Kubernetes later، در بخش 12.4. First، بیایید the benefits و drawbacks از
+   استفاده از containers را بررسی کنیم.
+  </p>
+  <h4><span style="font-weight: bold;">12.3.2 Benefits of deploying services as containers</span></h4>
+  <p>
+   Deploying services به عنوان containers دارای چندین benefit است. First، containers دارای many از
+   the benefits از virtual machines:
+  </p>
+  <p>
+   Encapsulation از the technology stack که در آن the API برای مدیریت ser-
+   vices شما به the container API تبدیل می‌شود.
+  </p>
+  <p>
+   Service instances are isolated.
+  </p>
+  <p>
+   Service instances’s resources are constrained.
+  </p>
+  <p>
+   But unlike virtual machines, containers یک technology سبک‌وزن هستند. Container
+   images معمولاً fast to build هستند. For example, در laptop من، بسته بندی یک Spring Boot application به عنوان یک container image، تنها 5 ثانیه طول می‌کشد. Moving a container
+   image over the network، مانند to and from the container registry، نیز نسبتاً
+   fast است، عمدتاً به این دلیل که فقط a subset از image’s layers باید منتقل شود. Con-
+   tainers همچنین بسیار سریع شروع می‌شوند، زیرا هیچ process lengthy OS boot وجود ندارد. When a
+   container starts, all that runs، service است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

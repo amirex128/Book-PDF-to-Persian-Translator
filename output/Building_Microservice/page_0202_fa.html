@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 202</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>1 این موضوع تغییر کرده است، با پشتیبانی از <em>multidocument ACID transactions</em> که به عنوان بخشی از <em>Mongo 4.0</em> منتشر شده است. من خودم از این ویژگی <em>Mongo</em> استفاده نکرده‌ام؛ فقط می‌دانم که وجود دارد!</p>
+  <p>2 <em>Martin Kleppmann, Designing Data-Intensive Applications (Sebastopol: O’Reilly, 2017)</em>.</p>
+  <h4>ACID Transactions</h4>
+  <p>به طور معمول، وقتی در مورد <em>database transactions</em> صحبت می‌کنیم، در مورد <em>ACID transactions</em> صحبت می‌کنیم. <em>ACID</em> مخفف ویژگی‌های اصلی <em>database transactions</em> است که منجر به سیستمی می‌شود که ما می‌توانیم به آن تکیه کنیم تا دوام و سازگاری ذخیره‌سازی داده‌های خود را تضمین کنیم. <em>ACID</em> مخفف <em>atomicity</em>، <em>consistency</em>، <em>isolation</em>، و <em>durability</em> است، و در اینجا آمده است که این ویژگی‌ها چه چیزی را به ما می‌دهند:</p>
+  <ul>
+   <li><strong>Atomicity</strong></li>
+   <p>اطمینان حاصل می‌کند که عملیات انجام شده در داخل <em>transaction</em> یا همه کامل می‌شوند یا همه ناموفق می‌شوند. اگر هر یک از تغییراتی که ما در تلاشیم ایجاد کنیم به دلایلی شکست بخورند، در این صورت کل عملیات لغو می‌شود، و انگار هیچ تغییری هرگز ایجاد نشده است.</p>
+   <li><strong>Consistency</strong></li>
+   <p>هنگامی که تغییراتی در <em>database</em> ما ایجاد می‌شود، ما اطمینان حاصل می‌کنیم که در یک حالت معتبر و ثابت باقی می‌ماند.</p>
+   <li><strong>Isolation</strong></li>
+   <p>به چندین <em>transactions</em> اجازه می‌دهد تا همزمان و بدون تداخل با یکدیگر عمل کنند. این امر با اطمینان از اینکه هرگونه تغییر حالت موقت ایجاد شده در طول یک <em>transaction</em> برای <em>other transactions</em> نامرئی است، به دست می‌آید.</p>
+   <li><strong>Durability</strong></li>
+   <p>اطمینان حاصل می‌کند که پس از اتمام یک <em>transaction</em>، ما اطمینان داریم که داده‌ها در صورت بروز هرگونه <em>system failure</em> از دست نمی‌روند.</p>
+  </ul>
+  <p>شایان ذکر است که همه <em>databases</em>، <em>ACID transactions</em> را ارائه نمی‌دهند. تمام سیستم‌های <em>relational database</em> که من تا به حال استفاده کرده‌ام، این کار را انجام می‌دهند، همانطور که بسیاری از <em>NoSQL databases</em> جدیدتر مانند <em>Neo4j</em> این کار را انجام می‌دهند. <em>MongoDB</em> سال‌ها <em>ACID transactions</em> را فقط در مورد تغییرات انجام شده در یک <em>single document</em> پشتیبانی می‌کرد، که می‌تواند در صورت تمایل به ایجاد یک <em>atomic update</em> به بیش از یک <em>document</em>، مشکلاتی ایجاد کند.1</p>
+  <p>این کتاب برای بررسی دقیق این مفاهیم نیست؛ من مطمئناً برخی از این توضیحات را برای اختصار ساده کرده‌ام. برای کسانی که مایل به بررسی بیشتر این مفاهیم هستند، من <em>Designing Data-Intensive Applications</em> را توصیه می‌کنم.2</p>
+  <p>ما بیشتر در مورد <em>atomicity</em> در آنچه در ادامه می‌آید، نگران خواهیم بود. این به این معنا نیست که سایر ویژگی‌ها نیز مهم نیستند، اما مقابله با نحوه برخورد با <em>atomicity</em> از عملیات <em>database</em>، تمایل دارد که اولین مسئله‌ای باشد که وقتی شروع به جدا کردن عملکرد به <em>microservices</em> می‌کنیم، با آن برخورد می‌کنیم.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

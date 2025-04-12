@@ -1,0 +1,37 @@
+15 I can’t take credit for that!
+This identity provider could be an externally hosted system or something inside your
+own organization. Google, for example, provides an OpenID Connect identity pro‐
+vider. For enterprises, though, it is common to have your own identity provider,
+which may be linked to your company’s directory service. A directory service could be
+something like the Lightweight Directory Access Protocol (LDAP) or Active Direc‐
+tory. These systems allow you to store information about principals, such as what
+roles they play in the organization. Often the directory service and the identity
+provider are one and the same, while at other times they are separate but linked.
+Okta, for example, is a hosted SAML identity provider that handles tasks like two-
+factor authentication but can link to your company’s directory services as the source
+of truth.
+So the identity provider gives the system information about who the principal is, but
+the system decides what that principal is allowed to do.
+SAML is a SOAP-based standard and is known for being fairly complex to work with
+despite the libraries and tooling available to support it, and since the first edition of
+this book it has rapidly fallen out of favor.15 OpenID Connect is a standard that has
+emerged as a specific implementation of OAuth 2.0, based on the way Google and
+others handle SSO. It uses simpler REST calls, and due in part to its relative simplicity
+and widespread support, it is the dominant mechanism for end-user SSO, and has
+gained significant inroads into enterprises.
+Single Sign-On Gateway
+We could decide to handle the redirection to, and handshaking with, the identity
+provider within each microservice, so that any unauthenticated request from an out‐
+side party is properly dealt with. Obviously, this could mean a lot of duplicated func‐
+tionality across our microservices. A shared library could help, but we’d have to be
+careful to avoid the coupling that can come from shared code (see “DRY and the Per‐
+ils of Code Reuse in a Microservice World” on page 154 for more). A shared library
+also wouldn’t help if we had microservices written in different technology stacks.
+Rather than having each service manage handshaking with our identity provider, a
+more common approach is to use a gateway to act as a proxy, sitting between your
+services and the outside world (as shown in Figure 11-7). The idea is that we can cen‐
+tralize the behavior for redirecting the user and perform the handshake in only one
+place.
+Authentication and Authorization 
+| 
+377

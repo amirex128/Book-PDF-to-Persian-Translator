@@ -1,0 +1,38 @@
+that Puppet, Chef, and the like, while they will continue to play a useful role in opera‐
+tions, will likely move further and further away from day-to-day development
+activities.
+Kubernetes and Container Orchestration
+As containers started gaining traction, many people started looking at solutions for
+how to manage containers across multiple machines. Docker had two attempts at this
+(with Docker Swarm and Docker Swarm Mode, respectively); companies like
+Rancher and CoreOS came up with their own takes; and more general purpose plat‐
+forms like Mesos were used to run containers alongside other sorts of workloads.
+Ultimately, though, despite a lot of effort on these products, Kubernetes has in the
+last couple of years come to dominate this space.
+Before we speak to Kubernetes itself, we should discuss why there’s a need for a tool
+like it in the first place.
+The Case for Container Orchestration
+Broadly speaking, Kubernetes can variously be described as a container orchestration
+platform or, to use a term that has fallen out of favor, a container scheduler. So what
+are these platforms, and why might we want them?
+Containers are created by isolating a set of resources on an underlying machine.
+Tools like Docker allow us to define what a container should look like and create an
+instance of that container on a machine. But most solutions require that our software
+be defined on multiple machines, perhaps to handle sufficient load, or to ensure that
+the system has redundancy in place to tolerate the failure of a single node. Container
+orchestration platforms handle how and where container workloads are run. The
+term “scheduling” starts to make more sense in this context. The operator says, “I
+want this thing to run,” and the orchestrator works out how to schedule that job—
+finding available resources, reallocating them if necessary, and handling the details
+for the operator.
+The various container orchestration platforms also handle desired state management
+for us, ensuring that the expected state of a set of containers (microservice instances,
+in our case) is maintained. They also allow us to specify how we want these
+workloads to be distributed, allowing us to optimize for resource utilization, latency
+between processes, or robustness reasons.
+Without such a tool, you’ll have to manage the distribution of your containers, some‐
+thing that I can tell you from firsthand experience gets old very fast. Writing scripts
+to manage launching and networking container instances is not fun.
+Kubernetes and Container Orchestration 
+| 
+259

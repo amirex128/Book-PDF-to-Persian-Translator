@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 210</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        base که تنها یک replica دارد. هنگامی که ما متوجه شدیم که چگونه این کار را در یک replica واحد انجام دهیم، ما می‌توانیم رویکرد را به یک database leaderless با multiple replicas تعمیم دهیم.
+    </p>
+    <p>
+        شکل 5-13 نشان می‌دهد که دو client به طور همزمان آیتم‌هایی را به یک shopping cart اضافه می‌کنند. (اگر آن مثال برای شما too inane به نظر می‌رسد، به جای آن تصور کنید که دو کنترل‌کننده ترافیک هوایی به طور همزمان هواپیماهایی را به بخشی که در حال ردیابی آن هستند، اضافه می‌کنند.) در ابتدا، cart خالی است. بین آن‌ها، clients پنج write را به database انجام می‌دهند:
+    </p>
+    <ol>
+        <li>Client 1، milk را به cart اضافه می‌کند. این اولین write به آن key است، بنابراین server با موفقیت آن را ذخیره می‌کند و version 1 را به آن اختصاص می‌دهد. server همچنین value را به همراه شماره version به client بازمی‌گرداند.</li>
+        <li>Client 2، eggs را به cart اضافه می‌کند، بدون اینکه بداند که client 1 به طور همزمان milk را اضافه کرده است (client 2 فکر می‌کرد که eggs تنها آیتم در cart است). server، version 2 را به این write اختصاص می‌دهد و eggs و milk را به عنوان دو values جداگانه ذخیره می‌کند. سپس هر دو value را به همراه شماره version 2 به client برمی‌گرداند.</li>
+        <li>Client 1، که از write از client 2 بی‌خبر است، می‌خواهد flour را به cart اضافه کند، بنابراین فکر می‌کند که محتویات current cart باید [milk, flour] باشد. این value را به همراه شماره version 1 که server قبلاً به client 1 داده بود، به server ارسال می‌کند.
+        The server می‌تواند از شماره version تشخیص دهد که write از [milk, flour] value قبلی از [milk] را supersedes می‌کند، اما با [eggs] concurrent است. بنابراین، server version 3 را به [milk, flour] اختصاص می‌دهد، value version 1 از [milk] را overwrite می‌کند، اما value version 2 از [eggs] را نگه می‌دارد و هر دو remaining values را به client برمی‌گرداند.</li>
+        <li>در همین حال، client 2 می‌خواهد ham را به cart اضافه کند، بدون اینکه بداند client 1 به تازگی flour را اضافه کرده است. Client 2، دو value [milk] و [eggs] را از server در the last response دریافت کرد، بنابراین client اکنون آن values را merge می‌کند و ham را اضافه می‌کند تا یک value جدید، [eggs, milk, ham] را تشکیل دهد. آن value را به همراه شماره version 2 قبلی به server ارسال می‌کند. server تشخیص می‌دهد که version 2، [eggs] را overwrite می‌کند، اما با [milk, flour] concurrent است، بنابراین دو remaining values [milk, flour] با version 3 و [eggs, milk, ham] با version 4 هستند.</li>
+        <li>در نهایت، client 1 می‌خواهد bacon را اضافه کند. این قبلاً [milk, flour] و [eggs] را از server در version 3 دریافت کرد، بنابراین آن‎ها را merge می‌کند، bacon را اضافه می‌کند و the final value [milk, flour, eggs, bacon] را به server ارسال می‌کند، به همراه شماره version 3. این [milk, flour] را overwrite می‌کند (توجه داشته باشید که [eggs] قبلاً در گام آخر over‐written شده بود) اما با [eggs, milk, ham] concurrent است، بنابراین server آن دو concurrent values را نگه می‌دارد.</li>
+    </ol>
+    <p>
+        188 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+162
+CHAPTER 5
+Designing business logic in a microservice architecture
+OrderCreated event. One option is for it to retrieve that information from the Order-
+Service. The drawback of an event consumer querying the service for the aggregate is
+that it incurs the overhead of a service request.
+ An alternative approach known as event enrichment is for events to contain informa-
+tion that consumers need. It simplifies event consumers because they no longer need
+to request that data from the service that published the event. In the OrderCreated
+event, the Order aggregate can enrich the event by including the order details. The
+following listing shows the enriched event.
+class OrderCreated implements OrderEvent {
+private List<OrderLineItem> lineItems;
+private DeliveryInformation deliveryInformation;       
+private PaymentInformation paymentInformation;
+private long restaurantId;
+private String restaurantName;
+...
+}
+Because this version of the OrderCreated event contains the order details, an event
+consumer, such as the Order History Service (discussed in chapter 7) no longer
+needs to fetch that data when processing an OrderCreated event.
+ Although event enrichment simplifies consumers, the drawback is that it risks mak-
+ing the event classes less stable. An event class potentially needs to change whenever
+the requirements of its consumers change. This can reduce maintainability because
+this kind of change can impact multiple parts of the application. Satisfying every con-
+sumer can also be a futile effort. Fortunately, in many situations it’s fairly obvious
+which properties to include in an event.
+ Now that we’ve covered the basics of domain events, let’s look at how to discover
+them. 
+5.3.4
+Identifying domain events
+There are a few different strategies for identifying domain events. Often the require-
+ments will describe scenarios where notifications are required. The requirements
+might include language such as “When X happens do Y.” For example, one require-
+ment in the FTGO application is “When an Order is placed send the consumer an
+email.” A requirement for a notification suggests the existence of a domain event.
+ Another approach, which is increasing in popularity, is to use event storming. Event
+storming is an event-centric workshop format for understanding a complex domain. It
+involves gathering domain experts in a room, lots of sticky notes, and a very large sur-
+face—a whiteboard or paper roll—to stick the notes on. The result of event storming
+is an event-centric domain model consisting of aggregates and events.
+ 
+Listing 5.2
+The enriched OrderCreated event 
+Data that its 
+consumers 
+typically need
+ 

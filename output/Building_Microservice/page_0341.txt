@@ -1,0 +1,37 @@
+The log aggregation tool will need to know how to parse this string to extract the
+information we might want to query on—the timestamp, microservice name, or log
+level, for example. In this example, that is workable, as these pieces of data occur in
+static places across our logs—the date is the first column, the time is the second col‐
+umn, and so on. This is more problematic, though, if we want to find log lines related
+to a given customer—the customer ID is in both log lines but is shown in different
+locations. This is where we might start thinking about writing out more structured
+log lines, perhaps using a JSON format, so we can find information like a customer or
+order ID in a consistent location. Again, the log aggregation tool will need to be con‐
+figured to parse and extract the required information from the log. The other thing to
+note is that if you log JSON, that might make it more difficult to be directly read by a
+human without additional tooling to parse out the required values—simply reading
+the log in a plain text viewer may not be terribly useful.
+Correlating log lines
+With a large number of services interacting to provide any given end-user capability,
+a single initiating call can end up generating multiple downstream service calls. For
+example, let’s consider an example in MusicCorp, as shown in Figure 10-5. We are
+signing up a customer to our new streaming service. The customer selects their
+chosen streaming package and clicks submit. Behind the scenes, when the button is
+clicked in the UI, it hits the Gateway that sits on the perimeter of our system. This in
+turn passes the call on to the Streaming microservice. This microservice communi‐
+cates with Payment to take the first payment, uses the Customer microservice to
+update the fact that this customer now has streaming enabled, and sends an email to
+the customer using our Email microservice confirming they are now subscribed.
+What happens if the call to the Payment microservice ends up generating an odd
+error? We’ll talk at length about handling failures in Chapter 12, but consider the dif‐
+ficulty of diagnosing what happened.
+The problem is that the only microservice registering an error is our Payment micro‐
+service. If we are lucky, we can work out what request caused the problem, and we
+may even be able to look at the parameters of the call. But we can’t see this error in
+the wider context in which it occurs. In this particular example, even if we assume
+that each interaction generates only a single log line, we’d have five log lines with
+information about this flow of calls. Being able to see these log lines grouped together
+can be incredibly useful.
+Building Blocks for Observability 
+| 
+315

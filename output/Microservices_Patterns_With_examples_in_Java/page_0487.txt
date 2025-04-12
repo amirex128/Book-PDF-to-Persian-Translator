@@ -1,0 +1,56 @@
+457
+Implementing a new feature as a service: handling misdelivered orders
+Let’s look at the design of the integration glue that provides Delayed Order Service
+access to the monolith’s data. 
+13.4.2 Designing the integration glue for Delayed Delivery Service
+Even though a service that implements a new feature defines its own entity classes, it
+usually accesses data that’s owned by the monolith. Delayed Delivery Service is no
+exception. It has a DelayedOrderNotification entity, which represents a notification
+that it has sent to the consumer. But as I just mentioned, its Order and Restaurant enti-
+ties replicate data from the FTGO monolith. It also needs to query user contact infor-
+mation in order to notify the user. Consequently, we need to implement integration
+glue that enables Delivery Service to access the monolith’s data.
+ Figure 13.15 shows the design of the integration glue. The FTGO monolith pub-
+lishes Order and Restaurant domain events. Delivery Service consumes these events
+and updates its replicas of those entities. The FTGO monolith implements a REST
+Monolith
+???
+API gateway
+REST
+API
+Integration
+glue
+Delayed
+Order
+Service
+GetDelayedOrders()
+REST
+API
+Notiﬁcation
+Service
+CRM system
+Create case.
+Send apology
+notiﬁcation.
+Need to design.
+???
+«Service»
+DelayedDelivery
+Service
+«stereotype»
+Order
+«entity»
+Notiﬁcation
+«entity»
+Restaurant
+«repository»
+Customer
+ContactInfo
+Repository
+«entity»
+OpeningHours
+Figure 13.14
+The design of Delayed Delivery Service. The integration glue provides Delayed Delivery 
+Service access to data owned by the monolith, such as the Order and Restaurant entities, and the customer 
+contact information.
+ 

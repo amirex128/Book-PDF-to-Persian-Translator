@@ -1,0 +1,30 @@
+machine or a single VM), as shown in Figure 8-10. Purely from a host management
+point of view, this model is simpler. In a world in which one team manages the infra‐
+structure and another team manages the software, the infrastructure team’s workload
+is often a function of the number of hosts it has to manage. If more services are
+packed on to a single host, the host management workload doesn’t increase as the
+number of services increases.
+Figure 8-10. Multiple microservices per host
+There are some challenges with this model, though. First, it can make monitoring
+more difficult. For example, when tracking CPU, do I need to track the CPU of one
+service independent of the others? Or do I care about the CPU of the host as a whole?
+Side effects can also be hard to avoid. If one service is under significant load, it can
+end up reducing the resources available to other parts of the system. This was an
+issue that Gilt, an online fashion retailer, encountered. Starting with a Ruby on Rails
+monolith, Gilt decided to move to microservices to make it easier to scale the applica‐
+tion and also to better accomodate a growing number of developers. Initially Gilt
+coexisted many microservices on a single box, but uneven load on one of the micro‐
+services would have an adverse impact on everything else running on that host. This
+made impact analysis of host failures more complex as well—taking a single host out
+of commission can have a large ripple effect.
+Deployment of services can be somewhat more complex too, as ensuring one deploy‐
+ment doesn’t affect another leads to additional headaches. For example, if each
+microservice has different (and potentially contradictory) dependencies that need to
+be installed on the shared host, how can I make that work?
+This model can also inhibit the autonomy of teams. If services for different teams are
+installed on the same host, who gets to configure the host for their services? In all
+likelihood, this ends up getting handled by a centralized team, meaning it takes more
+coordination to get services deployed.
+Principles of Microservice Deployment 
+| 
+229

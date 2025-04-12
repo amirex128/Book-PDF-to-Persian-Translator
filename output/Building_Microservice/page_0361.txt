@@ -1,0 +1,39 @@
+12 Charity Majors (@mipsytipsy), Twitter, July 7, 2019, 9:48 a.m., https://oreil.ly/4VUAX.
+Testing in Production
+Not testing in prod is like not practicing with the full orchestra because your solo sounded
+fine at home.12
+—Charity Majors
+As we’ve covered multiple times throughout the book, from our discussion of con‐
+cepts like canary deployments in “Canary Release” on page 271 to our look at the bal‐
+ancing act with regard to pre- and post-production testing, carrying out some form
+of testing in production can be an incredibly useful—and safe—activity. We’ve
+looked at a number of different types of in-production testing in this book, and there
+are more forms besides, so I felt that it would be useful to summarize some of the
+different types of testing in production we’ve already looked at and also share some
+other examples of testing in production that are commonly used. It surprises me how
+many people who are scared by the concept of testing in production are already
+doing it without really realizing they are.
+All forms of testing in production are arguably a form of “monitoring” activity. We
+are carrying out these forms of testing in production to ensure that our production
+system is running as we expect, and many forms of testing in production can be
+incredibly effective in picking up problems before our users even notice.
+Synthetic transactions
+With synthetic transactions, we inject fake user behavior into our production system.
+This fake user behavior has known inputs and expected outputs. For MusicCorp, for
+example, we could artificially create a new customer and then check that the cus‐
+tomer was successfully created. These transactions would be fired on a regular basis,
+giving us the chance to pick up problems as quickly as possible.
+I first did this back in 2005. I was part of a small Thoughtworks team that was build‐
+ing a system for an investment bank. Throughout the trading day, lots of events came
+in that represented changes in the market. Our job was to react to these changes and
+look at the impact on the bank’s portfolio. We were working under some fairly tight
+deadlines, a sour goal was to complete all our calculations less than 10 seconds after
+the event arrived. The system itself consisted of around five discrete services, at least
+one of which was running on a computing grid that, among other things, was scav‐
+enging unused CPU cycles on around 250 desktop hosts in the bank’s disaster recov‐
+ery center.
+The number of moving parts in the system meant a lot of noise was being generated
+from many of the lower-level metrics we were gathering. We also didn’t have the
+Building Blocks for Observability 
+| 
+335

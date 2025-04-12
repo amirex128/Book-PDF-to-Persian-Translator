@@ -1,0 +1,46 @@
+112
+CHAPTER 4
+Managing transactions with sagas
+automatically executed within a transaction. As a result, it’s straightforward to write
+transactional business logic.
+ Or, to be more precise, transaction management is straightforward in a monolithic
+application that accesses a single database. Transaction management is more chal-
+lenging in a complex monolithic application that uses multiple databases and mes-
+sage brokers. And in a microservice architecture, transactions span multiple services,
+each of which has its own database. In this situation, the application must use a more
+elaborate mechanism to manage transactions. As you’ll learn, the traditional approach
+of using distributed transactions isn’t a viable option for modern applications. Instead, a
+microservices-based application must use sagas.
+ Before I explain sagas, let’s first look at why transaction management is challeng-
+ing in a microservice architecture.
+4.1.1
+The need for distributed transactions in a microservice 
+architecture
+Imagine that you’re the FTGO developer responsible for implementing the create-
+Order() system operation. As described in chapter 2, this operation must verify that
+the consumer can place an order, verify the order details, authorize the consumer’s
+credit card, and create an Order in the database. It’s relatively straightforward to
+implement this operation in the monolithic FTGO application. All the data required
+to validate the order is readily accessible. What’s more, you can use an ACID transac-
+tion to ensure data consistency. You might use Spring’s @Transactional annotation
+on the createOrder() service method.
+ In contrast, implementing the same operation in a microservice architecture is
+much more complicated. As figure 4.1 shows, the needed data is scattered around
+multiple services. The createOrder() operation accesses data in numerous services.
+It reads data from Consumer Service and updates data in Order Service, Kitchen
+Service, and Accounting Service.
+ Because each service has its own database, you need to use a mechanism to main-
+tain data consistency across those databases. 
+4.1.2
+The trouble with distributed transactions
+The traditional approach to maintaining data consistency across multiple services,
+databases, or message brokers is to use distributed transactions. The de facto standard
+for distributed transaction management is the X/Open Distributed Transaction Pro-
+cessing (DTP) Model (X/Open XA—see https://en.wikipedia.org/wiki/X/Open_XA).
+XA uses two-phase commit (2PC) to ensure that all participants in a transaction either
+commit or rollback. An XA-compliant technology stack consists of XA-compliant data-
+bases and message brokers, database drivers, and messaging APIs, and an interprocess
+communication mechanism that propagates the XA global transaction ID. Most SQL
+databases are XA compliant, as are some message brokers. Java EE applications can,
+for example, use JTA to perform distributed transactions.
+ 

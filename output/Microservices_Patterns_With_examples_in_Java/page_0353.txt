@@ -1,0 +1,69 @@
+323
+Writing integration tests
+ For example, chapter 8 describes how the FTGO application’s API Gateway makes
+REST API calls to numerous services, including ConsumerService, Order Service,
+and Delivery Service. The OrderService’s GET /orders/{orderId} endpoint is one
+of the endpoints invoked by the API Gateway. In order to be confident that API Gateway
+and Order Service can communicate without using an end-to-end test, we need to
+write integration tests.
+ As stated in the preceding chapter, a good integration testing strategy is to use
+consumer-driven contract tests. The interaction between API Gateway and GET
+/orders/{orderId} can be described using a set of HTTP-based contracts. Each con-
+tract consists of an HTTP request and an HTTP reply. The contracts are used to test
+API Gateway and Order Service.
+ Figure 10.3 shows how to use Spring Cloud Contract to test REST-based interac-
+tions. The consumer-side API Gateway integration tests use the contracts to configure
+an HTTP stub server that simulates the behavior of Order Service. A contract’s
+request specifies an HTTP request from the API gateway, and the contract’s response
+specifies the response that the stub sends back to the API gateway. Spring Cloud Con-
+tract uses the contracts to code-generate the provider-side Order Service integration
+tests, which test the controllers using Spring Mock MVC or Rest Assured Mock MVC.
+The contract’s request specifies the HTTP request to make to the controller, and the
+contract’s response specifies the controller’s expected response.
+ The consumer-side OrderServiceProxyTest invokes OrderServiceProxy, which
+has been configured to make HTTP requests to WireMock. WireMock is a tool for effi-
+ciently mocking HTTP servers—in this test it simulates Order Service. Spring Cloud
+Wiremock-
+based HTTP
+stub server
+Order
+controller
+Provider-side integration
+test for Order Service
+Consumer-side integration
+test forAPI gateway
+Spring Cloud
+Contract
+Tests
+Tests
+Uses
+Conﬁgures
+Conﬁgures
+Generates
+Reads
+HTTP
+OrderService
+ProxyTest
+class HttpTest
+extends BaseHttp {
+}
+abstract class BaseHttp {
+@Before
+public void setup() {
+RestAssuredMockMvc
+.standaloneSetup(...);
+}
+}
+Contract.make {
+request {..}
+response {...}
+}
+}
+OrderService
+Proxy
+Figure 10.3
+The contracts are used to verify that the adapter classes on both sides of the 
+REST-based communication between API Gateway and Order Service conform to the contract. 
+The consumer-side tests verify that OrderServiceProxy invokes Order Service correctly. The 
+provider-side tests verify that OrderController implements the REST API endpoints correctly.
+ 

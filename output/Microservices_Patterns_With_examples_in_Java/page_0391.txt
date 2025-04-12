@@ -1,0 +1,44 @@
+361
+Designing configurable services
+select the appropriate set at runtime. That’s because doing so would introduce a secu-
+rity vulnerability and limit where it can be deployed. Additionally, sensitive data such
+as credentials should be stored securely using a secrets storage mechanism, such as
+Hashicorp Vault (www.vaultproject.io) or AWS Parameter Store (https://docs.aws
+.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
+Instead, you should supply the appropriate configuration properties to the service at
+runtime by using the Externalized configuration pattern.
+An externalized configuration mechanism provides the configuration property values
+to a service instance at runtime. There are two main approaches:
+Push model—The deployment infrastructure passes the configuration properties
+to the service instance using, for example, operating system environment vari-
+ables or a configuration file.
+Pull model—The service instance reads its configuration properties from a con-
+figuration server.
+We’ll look at each approach, starting with the push model.
+Pattern: Externalized configuration
+Supply configuration property values, such as database credentials and network
+location, to a service at runtime. See http://microservices.io/patterns/externalized-
+configuration.html.
+Order
+History
+Service
+Environment-speciﬁc conﬁguration
+Environment-speciﬁc conﬁguration
+Apache
+Kafka
+consumer
+Apache Kafka
+bootstrap.servers=kafka1:9092
+..
+aws.access.key.id=...
+aws.secret.access.key=...
+aws.region=...
+«Order event channel»
+DynamoDB
+adapter
+AWS DynamoDB
+«Delivery event channel»
+Figure 11.6
+Order History Service uses Apache Kafka and AWS DynamoDB. It needs to be 
+configured with each service’s network location, credentials, and so on.
+ 

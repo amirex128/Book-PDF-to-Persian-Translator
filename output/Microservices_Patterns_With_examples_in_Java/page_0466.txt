@@ -1,0 +1,54 @@
+436
+CHAPTER 13
+Refactoring to microservices
+13.2.2 Separate presentation tier from the backend
+One strategy for shrinking a monolithic application is to split the presentation layer
+from the business logic and data access layers. A typical enterprise application consists
+of the following layers:
+Presentation logic—This consists of modules that handle HTTP requests and gener-
+ate HTML pages that implement a web UI. In an application that has a sophisti-
+cated user interface, the presentation tier is often a substantial body of code.
+Business logic—This consists of modules that implement the business rules, which
+can be complex in an enterprise application.
+Data access logic—This consists of modules that access infrastructure services
+such as databases and message brokers.
+There is usually a clean separation between the presentation logic and the business
+and data access logic. The business tier has a coarse-grained API consisting of one or
+more facades that encapsulate the business logic. This API is a natural seam along
+which you can split the monolith into two smaller applications, as shown in figure 13.3.
+Business logic
+Business logic
+REST
+API
+REST
+client
+Web
+app
+Browser
+Browser
+HTML pages
+HTML pages
+Monolith containing
+presentation logic and
+backend business logic
+Smaller, independently
+deployable presentation
+logic monolith
+MySQL
+Database
+adapter
+MySQL
+Database
+adapter
+Web
+application
+Split
+Smaller, independently
+deployable backend
+monolith
+An API that is callable
+by any future services
+Figure 13.3
+Splitting the frontend from the backend enables each to be deployed independently. It also exposes 
+an API for services to invoke.
+ 

@@ -1,0 +1,38 @@
+Parallel Versus Sequential Calls
+When working with request-response interactions, you’ll often encounter a situation
+in which you will need to make multiple calls before you can continue with some
+processing.
+Consider a situation in which MusicCorp needs to check on the price for a given item
+from three different stockists, which we do by issuing API calls. We want to get the
+prices back from all three stockists before deciding which one we want to order new
+stock from. We could decide to make the three calls in sequence—waiting for each
+one to finish before proceeding with the next. In such a situation, we’d be waiting for
+the sum of latencies of each of the calls. If the API call to each provider took one sec‐
+ond to return, we’d be waiting three seconds before we can decide who we should
+order from.
+A better option would be to run these three requests in parallel; then the overall
+latency of the operation would be based on the slowest API call, rather than on the
+sum of latencies of each API call.
+Reactive extensions and mechanisms like async/await can be very useful in helping to
+run calls in parallel, and this can result in significant improvements in the latency of
+some operations.
+Where to Use It
+Request-response calls make perfect sense for any situation in which the result of a
+request is needed before further processing can take place. They also fit really well in
+situations where a microservice wants to know if a call didn’t work so that it can carry
+out some sort of compensating action, like a retry. If either aligns with your situation,
+then request-response is a sensible approach; the only remaining question is to decide
+on a synchronous versus asynchronous implementation, with the same trade-offs we
+discussed earlier.
+Pattern: Event-Driven Communication
+Event-driven communication looks quite odd compared to request-response calls.
+Rather than a microservice asking some other microservice to do something, a
+microservice emits events that may or may not be received by other microservices. It
+is an inherently asynchronous interaction, as the event listeners will be running on
+their own thread of execution.
+An event is a statement about something that has occurred, nearly always something
+that has happened inside the world of the microservice that is emitting the event.
+The microservice emitting the event has no knowledge of the intent of other
+108 
+| 
+Chapter 4: Microservice Communication Styles

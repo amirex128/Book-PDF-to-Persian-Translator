@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 351</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   <strong>Part 2</strong>
+  </p>
+  <p>
+   یک contract، از یک message تشکیل شده است، در مورد تعاملات از نوع publish/subscribe، یا دو message، در مورد تعاملات از نوع request/response و asynchronous request/response.
+  </p>
+  <p>
+   Contracts ها برای تست کردن هم consumer و هم provider استفاده می‌شوند که تضمین می‌کند در مورد API توافق دارند. بسته به اینکه آیا شما در حال تست کردن consumer هستید یا provider، به روش‌های کمی متفاوت استفاده می‌شوند:
+  </p>
+  <ul>
+   <li>
+    Consumer-side tests—اینها تست هایی برای adapter های consumer هستند. آنها از contract ها برای پیکربندی stubs ها که provider را شبیه‌سازی می‌کنند، استفاده می‌کنند و شما را قادر می‌سازند تا integration tests ها را برای یک consumer بنویسید که به یک provider در حال اجرا نیاز ندارد.
+   </li>
+   <li>
+    Provider-side tests—اینها تست هایی برای adapter های provider هستند. آنها از contract ها برای تست کردن adapters ها با استفاده از mocks ها برای dependencies های adapters's استفاده می‌کنند.
+   </li>
+  </ul>
+  <p>
+   بعداً در این بخش، نمونه‌هایی از این نوع تست ها را شرح می‌دهم — اما ابتدا بیایید نگاهی بیندازیم که چگونه تست های persistence را بنویسیم.
+  </p>
+  <h4>10.1.1 Persistence integration tests</h4>
+  <p>
+   Service ها معمولاً داده‌ها را در یک database ذخیره می‌کنند. به عنوان مثال، Order Service، aggregates ها، مانند Order را، در MySQL با استفاده از JPA persistent می‌کند. به طور مشابه، Order History Service یک view از نوع CQRS را در AWS DynamoDB نگهداری می‌کند. unit tests هایی که قبلاً نوشتیم، فقط objects های in-memory را تست می‌کنند. به منظور اطمینان از اینکه یک service به درستی کار می‌کند، ما باید persistence integration tests ها را بنویسیم که تأیید می‌کنند که logic دسترسی به database یک service همانطور که انتظار می‌رود، کار می‌کند. در مورد Order Service، این به معنای تست کردن JPA repositories ها، مانند OrderRepository است.
+  </p>
+  <p>
+   هر فاز از یک persistence integration test به شرح زیر رفتار می‌کند:
+  </p>
+  <ul>
+   <li>
+    Setup—Database را با ایجاد database schema و initialize کردن آن به یک state شناخته شده تنظیم کنید. همچنین ممکن است یک transaction database را شروع کند.
+   </li>
+   <li>
+    Execute—یک operation database را انجام دهید.
+   </li>
+   <li>
+    Verify—در مورد state database و objects بازیابی شده از database، assertion هایی ایجاد کنید.
+   </li>
+   <li>
+    Teardown—یک فاز اختیاری که ممکن است تغییرات ایجاد شده در database را با، به عنوان مثال، rolling back the transaction که توسط فاز setup شروع شده است، undo کند.
+   </li>
+  </ul>
+  <p>
+   Listing 10.1 یک persistence integration test را برای Order aggregate و OrderRepository نشان می‌دهد. به جز تکیه بر JPA برای ایجاد database schema، persistence integration tests ها هیچ فرضی در مورد state database ندارند. در نتیجه، تست ها نیازی به roll back کردن تغییراتی که در database ایجاد می‌کنند، ندارند، که از مشکلات caching داده های ORM در حافظه جلوگیری می‌کند.
+  </p>
+  <pre><code class="language-java">@RunWith(SpringRunner.class)
+@SpringBootTest(classes = OrderJpaTestConfiguration.class)
+public class OrderJpaTest {</code></pre>
+  <p>
+   <strong>Listing 10.1</strong>
+   An integration test that verifies that an Order can be persisted
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+Mapping to microservices
+So far in our discussions of the various deployment options, the mapping from a
+microservice instance to a deployment mechanism has been pretty straightforward. A
+single microservice instance could be deployed onto a virtual machine, packaged as a
+single container, or even dropped onto an application container like Tomcat or IIS.
+With FaaS, things get a bit more confused.
+Function per microservice.    Now obviously a single microservice instance can be
+deployed as a single function, as shown in Figure 8-18. This is probably a sensible
+place to start. This keeps the concept of a microservice instance as a unit of deploy‐
+ment, which is the model we’ve been exploring the most so far.
+Figure 8-18. Our Expenses service is implemented as a single function
+When invoked, the FaaS platform will trigger a single entry point in your deployed
+function. This means that if you’re going to have a single function deployment for
+your entire service, you’ll need to have some way of dispatching from that entry point
+to the different pieces of functionality in your microservice. If you were implement‐
+ing the Expenses service as a REST-based microservice, you might have various
+resources exposed, like /receipt, /claim, or /report. With this model, a request for
+any of these resources would come in through this same entry point, so you’d need to
+direct the inbound call to the appropriate piece of functionality based on the inbound
+request path.
+Function per aggregate.    So how would we break up a microservice instance into
+smaller functions? If you’re making use of domain-driven design, you may already
+have explicitly modeled your aggregates (a collection of objects that are managed as a
+single entity, typically referring to real-world concepts). If your microservice instance
+handles multiple aggregates, one model that makes sense to me is to break out a func‐
+tion for each aggregate, as shown in Figure 8-19. This ensures that all the logic for a
+Deployment Options 
+| 
+253

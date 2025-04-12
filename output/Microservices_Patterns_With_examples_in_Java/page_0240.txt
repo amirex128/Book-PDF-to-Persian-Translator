@@ -1,0 +1,45 @@
+210
+CHAPTER 6
+Developing business logic with event sourcing
+Eventuate Tram saga framework and update the event store within an ACID transac-
+tion. But if the event store uses a NoSQL database, which can’t participate in the same
+transaction as the Eventuate Tram saga framework, it will have to take a different
+approach.
+ Let’s take a closer look at some of the different scenarios and issues you’ll need to
+address:
+Implementing choreography-based sagas
+Creating an orchestration-based saga
+Implementing an event sourcing-based saga participant
+Implementing saga orchestrators using event sourcing
+We’ll begin by looking at how to implement choreography-based sagas using event
+sourcing.
+6.3.1
+Implementing choreography-based sagas using event sourcing
+The event-driven nature of event sourcing makes it quite straightforward to imple-
+ment choreography-based sagas. When an aggregate is updated, it emits an event.
+An event handler for a different aggregate can consume that event and update its
+aggregate. The event sourcing framework automatically makes each event handler
+idempotent.
+ For example, chapter 4 discusses how to implement Create Order Saga using cho-
+reography. ConsumerService, KitchenService, and AccountingService subscribe to
+the OrderService’s events and vice versa. Each service has an event handler similar
+to the one shown in listing 6.5. The event handler updates the corresponding aggre-
+gate, which emits another event.
+ Event sourcing and choreography-based sagas work very well together. Event sourc-
+ing provides the mechanisms that sagas need, including messaging-based IPC, mes-
+sage de-duplication, and atomic updating of state and message sending. Despite its
+simplicity, choreography-based sagas have several drawbacks. I talk about some draw-
+backs in chapter 4, but there’s a drawback that’s specific to event sourcing.
+ The problem with using events for saga choreography is that events now have a
+dual purpose. Event sourcing uses events to represent state changes, but using events
+for saga choreography requires an aggregate to emit an event even if there is no state
+change. For example, if updating an aggregate would violate a business rule, then the
+aggregate must emit an event to report the error. An even worse problem is when a
+saga participant can’t create an aggregate. There’s no aggregate that can emit an
+error event.
+ Because of these kinds of issues, it’s best to implement more complex sagas using
+orchestration. The following sections explain how to integrate orchestration-based
+sagas and event sourcing. As you’ll see, it involves solving some interesting problems.
+ Let’s first look at how a service method such as OrderService.createOrder() cre-
+ates a saga orchestrator. 
+ 

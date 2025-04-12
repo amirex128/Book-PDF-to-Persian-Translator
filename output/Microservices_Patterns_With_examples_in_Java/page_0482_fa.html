@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 482</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <ol>
+   <li>
+    Order Service
+    <ul>
+     <li>
+      – Create an Order in an APPROVAL_PENDING state.
+     </li>
+    </ul>
+   </li>
+   <li>
+    Monolith
+    <ul>
+     <li>
+      – Verify that the consumer can place an order.
+     </li>
+     <li>
+      – Validate order details and create a Ticket.
+     </li>
+     <li>
+      – Authorize consumer’s credit card.
+     </li>
+    </ul>
+   </li>
+   <li>
+    Order Service
+    <ul>
+     <li>
+      – Change state of Order to APPROVED.
+     </li>
+    </ul>
+   </li>
+  </ol>
+  <p>
+   This saga consists of three local transactions, one in the monolith and two in Order
+   Service. The first transaction, which is in Order Service, creates an Order in the
+   APPROVAL_PENDING state. The second transaction, which is in the monolith, verifies
+   that the consumer can place orders, authorizes their credit card, and creates a
+   Ticket. The third transaction, which is in Order Service, changes the state of the
+   Order to APPROVED.
+  </p>
+  <p>
+   The monolith’s transaction is the saga’s pivot transaction—the point of no return
+   for the saga. If the monolith’s transaction completes, then the saga will run until com-
+   pletion. Only the first and second steps of this saga can fail. The third transaction
+   can’t fail, so the second transaction in the monolith never needs to be rolled back. As
+   a result, all the complexity of supporting compensatable transactions is in Order
+   Service, which is much more testable than the monolith.
+  </p>
+  <p>
+   If all the sagas that you need to write when extracting a service have this struc-
+   ture, you’ll need to make far fewer changes to the monolith. What’s more, it’s possi-
+   ble to carefully sequence the extraction of services to ensure that the monolith’s
+   transactions are either pivot transactions or retriable transactions. Let’s look at how
+   to do that.
+  </p>
+  <h3><strong>SEQUENCING THE EXTRACTION OF SERVICES TO AVOID IMPLEMENTING COMPENSATING TRANSACTIONS IN THE MONOLITH</strong></h3>
+  <p>
+   همانطور که دیدیم، استخراج Kitchen Service، مستلزم آن است که monolith، com-
+   pensating transactionsها را پیاده‌سازی کند، در حالی که استخراج Order Service اینگونه نیست. این نشان می‌دهد که
+   ترتیب استخراج servicesها مهم است. با مرتب کردن دقیق استخراج
+   servicesها، شما به طور بالقوه می‌توانید از ایجاد تغییرات گسترده در
+   monolith برای پشتیبانی از compensating transactionsها اجتناب کنید. ما می‌توانیم اطمینان حاصل کنیم که transactionsهای monolith
+   یا pivot transactionsها هستند یا retriable transactionsها. به عنوان مثال، اگر ما
+   ابتدا Order Service را از FTGO monolith استخراج کنیم و سپس Consumer
+   Service را استخراج کنیم، استخراج Kitchen Service آسان خواهد بود. بیایید نگاهی دقیق‌تر
+   به نحوه انجام این کار بیندازیم.
+  </p>
+  <p>
+   هنگامی که ما Consumer Service را استخراج کردیم، command createOrder() از
+   saga زیر استفاده می‌کند:
+  </p>
+  <ol>
+   <li>
+    Order Service: create an Order in an APPROVAL_PENDING state.
+   </li>
+   <li>
+    Consumer Service: verify that the consumer can place an order.
+   </li>
+  </ol>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

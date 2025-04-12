@@ -1,0 +1,38 @@
+1 This has changed, with support for multidocument ACID transactions being released as part of Mongo 4.0. I
+haven’t used this feature of Mongo myself; I just know it exists!
+2 Martin Kleppmann, Designing Data-Intensive Applications (Sebastopol: O’Reilly, 2017).
+ACID Transactions
+Typically when we talk about database transactions, we are talking about ACID
+transactions. ACID is an acronym outlining the key properties of database transac‐
+tions that lead to a system we can rely on to ensure the durability and consistency of
+our data storage. ACID stands for atomicity, consistency, isolation, and durability, and
+here is what these properties give us:
+Atomicity
+Ensures that the operations attempted within the transaction either all complete
+or all fail. If any of the changes we’re trying to make fail for some reason, then
+the whole operation is aborted, and it’s as though no changes were ever made.
+Consistency
+When changes are made to our database, we ensure it is left in a valid, consistent
+state.
+Isolation
+Allows multiple transactions to operate at the same time without interfering.
+This is achieved by ensuring that any interim state changes made during one
+transaction are invisible to other transactions.
+Durability
+Makes sure that once a transaction has been completed, we are confident the data
+won’t get lost in the event of some system failure.
+It’s worth noting that not all databases provide ACID transactions. All relational
+database systems I’ve ever used do, as do many of the newer NoSQL databases like
+Neo4j. MongoDB for many years supported ACID transactions only on changes
+being made to a single document, which could cause issues if you wanted to make an
+atomic update to more than one document.1
+This isn’t the book for a detailed exploration into these concepts; I’ve certainly sim‐
+plified some of these descriptions for the sake of brevity. For those who would like to
+explore these concepts further, I recommend Designing Data-Intensive Applications.2
+We’ll mostly concern ourselves with atomicity in what follows. That’s not to say that
+the other properties aren’t also important, but grappling with how to deal with the
+atomicity of database operations tends to be the first issue we hit when we start
+breaking apart functionality into microservices.
+176 
+| 
+Chapter 6: Workflow

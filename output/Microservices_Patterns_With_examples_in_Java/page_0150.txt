@@ -1,0 +1,57 @@
+120
+CHAPTER 4
+Managing transactions with sagas
+RELIABLE EVENT-BASED COMMUNICATION
+There are a couple of interservice communication-related issues that you must con-
+sider when implementing choreography-based sagas. The first issue is ensuring that a
+saga participant updates its database and publishes an event as part of a database
+transaction. Each step of a choreography-based saga updates the database and pub-
+lishes an event. For example, in the Create Order Saga, Kitchen Service receives a
+Consumer Verified event, creates a Ticket, and publishes a Ticket Created event.
+It’s essential that the database update and the publishing of the event happen atomi-
+cally. Consequently, to communicate reliably, the saga participants must use transac-
+tional messaging, described in chapter 3.
+ The second issue you need to consider is ensuring that a saga participant must
+be able to map each event that it receives to its own data. For example, when Order
+Service receives a Credit Card Authorized event, it must be able to look up the
+corresponding Order. The solution is for a saga participant to publish events con-
+taining a correlation id, which is data that enables other participants to perform the
+mapping.
+Accounting Service
+4. createPendingAuthorization()
+6. authorizeCard()
+Kitchen Service
+3. createTicket()
+6. rejectTicket()
+Order
+Service
+1. createOrder()
+7. rejectOrder()
+Consumer Service
+2. verifyConsumerDetails()
+Order events
+Message broker
+Consumer veriﬁed
+Publish
+Key
+Subscribe
+Consumer events
+Ticket events
+Credit card events
+2
+Order created
+1
+Ticket created
+3
+Credit card authorization failed
+5
+6
+4
+5a
+7
+5b
+Figure 4.5
+The sequence of events in the Create Order Saga when the authorization of the consumer’s credit 
+card fails. Accounting Service publishes the Credit Card Authorization Failed event, which causes 
+Kitchen Service to reject the Ticket, and Order Service to reject the Order.
+ 

@@ -1,0 +1,43 @@
+78
+CHAPTER 3
+Interprocess communication in a microservice architecture
+Because the client is blocked waiting for a response, the danger is that the failure
+could cascade to the client’s clients and so on and cause an outage.
+Consider, for example, the scenario shown in figure 3.2, where the Order Service is
+unresponsive. A mobile client makes a REST request to an API gateway, which, as dis-
+cussed in chapter 8, is the entry point into the application for API clients. The API
+gateway proxies the request to the unresponsive Order Service.
+A naive implementation of the OrderServiceProxy would block indefinitely, waiting
+for a response. Not only would that result in a poor user experience, but in many
+applications it would consume a precious resource, such as a thread. Eventually the
+API gateway would run out of resources and become unable to handle requests. The
+entire API would be unavailable.
+ It’s essential that you design your services to prevent partial failures from cascading
+throughout the application. There are two parts to the solution:
+You must use design RPI proxies, such as OrderServiceProxy, to handle unre-
+sponsive remote services.
+You need to decide how to recover from a failed remote service.
+First we’ll look at how to write robust RPI proxies.
+Pattern: Circuit breaker
+An RPI proxy that immediately rejects invocations for a timeout period after the num-
+ber of consecutive failures exceeds a specified threshold. See http://microservices
+.io/patterns/reliability/circuit-breaker.html.
+API
+gateway
+Unresponsive remote service
+Mobile
+app
+Order
+Service
+Order
+Service
+proxy
+Create
+order
+endpoint
+POST/orders
+POST/orders
+Figure 3.2
+An API gateway must protect itself from unresponsive services, such as the Order 
+Service.
+ 

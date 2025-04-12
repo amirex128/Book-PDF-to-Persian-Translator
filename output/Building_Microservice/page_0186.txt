@@ -1,0 +1,42 @@
+specifically, it can serve SRV records, which give you both an IP and a port for a
+given name. This means if part of your system uses DNS already and can support
+SRV records, you can just drop in Consul and start using it without any changes to
+your existing system.
+Consul also builds in other capabilities that you might find useful, such as the ability
+to perform health checks on nodes. Thus Consul could well overlap the capabilities
+provided by other dedicated monitoring tools, although you would more likely use
+Consul as a source of this information and then pull it into a more comprehensive
+monitoring setup.
+Consul uses a RESTful HTTP interface for everything from registering a service to
+querying the key/value store or inserting health checks. This makes integration with
+different technology stacks very straightforward. Consul also has a suite of tools that
+work well with it, further improving its usefulness. One example is consul-template,
+which provides a way to update text files based on entries in Consul. At first glance,
+this doesn’t seem that interesting, until you consider the fact that with consul-
+template you can now change a value in Consul—perhaps the location of a microser‐
+vice, or a configuration value—and have configuration files all across your system
+dynamically update. Suddenly, any program that reads its configuration from a text
+file can have its text files updated dynamically without needing to know anything
+about Consul itself. A great use case for this would be dynamically adding or remov‐
+ing nodes to a load balancer pool using a software load balancer like HAProxy.
+Another tool that integrates well with Consul is Vault, a secrets management tool
+we’ll revisit in “Secrets” on page 356. Secrets management can be painful, but the com‐
+bination of Consul and Vault can certainly make life easier.
+etcd and Kubernetes
+If you’re running on a platform that manages container workloads for you, chances
+are you already have a service discovery mechanism provided for you. Kubernetes is
+no different, and it comes partly from etcd, a configuration management store bun‐
+dled with Kubernetes. etcd has capabilities similar to those of Consul, and Kuber‐
+netes uses it for managing a wide array of configuration information.
+We’ll explore Kubernetes in more detail in “Kubernetes and Container Orchestra‐
+tion” on page 259, but in a nutshell, the way service discovery works on Kubernetes is
+that you deploy a container in a pod, and then a service dynamically identifies which
+pods should be part of a service by pattern matching on metadata associated with the
+pod. It’s a pretty elegant mechanism and can be very powerful. Requests to a service
+will then get routed to one of the pods that make up that service.
+The capabilities that you get out of the box with Kubernetes may well result in you
+just wanting to make do with what comes with the core platform, eschewing the use
+of dedicated tools like Consul, and for many this makes a lot of sense, especially if the
+160 
+| 
+Chapter 5: Implementing Microservice Communication

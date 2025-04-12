@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 185</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        شکل 5-3. A user یک write را انجام می‌دهد، و به دنبال آن یک read از یک replica stale. برای جلوگیری از این anomaly، ما نیاز به read-after-write consistency داریم.
+    </p>
+    <p>
+        در این شرایط، ما نیاز به read-after-write consistency داریم، که همچنین به عنوان read-your-writes consistency [24] شناخته می‌شود. این یک guarantee است که اگر user صفحه را دوباره بارگیری کند، همیشه هر updates که خودشان submit کرده‌اند، را خواهند دید. این در مورد سایر users وعده‌ای نمی‌دهد: updates از other users ممکن است تا مدتی بعد قابل مشاهده نباشد. با این حال، user را مطمئن می‌کند که ورودی خودشان به درستی ذخیره شده است.
+    </p>
+    <p>
+        چگونه می‌توانیم read-after-write consistency را در یک سیستم با leader-based replication پیاده‌سازی کنیم؟ تکنیک‌های مختلفی وجود دارد. برای ذکر چند مورد:
+    </p>
+    <ul>
+        <li>هنگام خواندن چیزی که user ممکن است آن را اصلاح کرده باشد، آن را از leader بخوانید. در غیر این صورت، آن را از یک follower بخوانید. این نیاز به این دارد که شما یک روش برای دانستن اینکه آیا چیزی ممکن است تغییر کرده باشد، داشته باشید، بدون اینکه واقعاً آن را query کنید. به عنوان مثال، اطلاعات profile user در یک social network معمولاً فقط توسط owner از profile قابل ویرایش است، نه توسط هیچ کس دیگری. بنابراین، یک rule ساده این است: همیشه profile خود user را از leader بخوانید و profiles از هر user دیگر را از یک follower.</li>
+        <li>If most things in the application are potentially editable by the user, that approach won’t be effective, as most things would have to be read from the leader (negating the benefit of read scaling). In that case, other criteria may be used to decide whether to read from the leader. For example, you could track the time of the last update and, for one minute after the last update, make all reads from the leader. You could also monitor the replication lag on followers and pre‐vent queries on any follower that is more than one minute behind the leader.</li>
+        <li>The client می‌تواند timestamp از most recent write خود را به خاطر بسپارد—سپس سیستم می‌تواند اطمینان حاصل کند که replica serving هر reads برای آن user، updates را حداقل تا آن timestamp منعکس می‌کند. اگر یک replica به اندازه کافی به‌روز نباشد، یا read را می‌توان توسط یک replica دیگر handle کرد یا query می‌تواند منتظر بماند تا the replica has</li>
+    </ul>
+    <p>
+        Problems with Replication Lag | 163
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0185/image_1.png" alt="Image from page 185" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

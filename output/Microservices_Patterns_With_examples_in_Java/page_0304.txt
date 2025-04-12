@@ -1,0 +1,60 @@
+274
+CHAPTER 8
+External API patterns
+ Spring Cloud Gateway provides a simple yet comprehensive way to do the following:
+Route requests to backend services.
+Implement request handlers that perform API composition.
+Handle edge functions such as authentication.
+Figure 8.8 shows the key parts of an API gateway built using this framework.
+The API gateway consists of the following packages:
+
+ApiGatewayMain package—Defines the Main program for the API gateway.
+One or more API packages—An API package implements a set of API endpoints.
+For example, the Orders package implements the Order-related API endpoints.
+Proxy package—Consists of proxy classes that are used by the API packages to
+invoke the services.
+«@SpringBootApplication»
+ApiGatewayApplication
+«@Bean»
+orderProxyRouting
+«@Bean»
+orderHandlerRouting
+GET/orders/{orderId}
+=>
+OrderHandlers::getOrderDetails
+orders*
+=>
+http://orderservice
+mono<ServerResponse>
+getOrderDetails(ServerRequest){
+...
+}
+mono<OrderInfo>
+ﬁndOrderById()(orderId){
+...WebClient
+.get()
+.url("http://order-service/..."}
+}
+static void main(String[]args){
+...
+}
+Remote proxies«package»
+Orders«API package»
+«proxy»
+....
+«proxy»
+DeliveryService
+ﬁndDeliveryByOrder()
+«proxy»
+OrderService
+ﬁndOrderById()
+Order handlers
+Spring Cloud Gateway
+Spring 5
+getOrderDetails()
+Spring webFlux
+Project reactor
+«Spring Conﬁguration»OrderConﬁguration
+Figure 8.8
+The architecture of an API gateway built using Spring Cloud Gateway
+ 

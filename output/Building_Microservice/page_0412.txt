@@ -1,0 +1,39 @@
+17 Laura Bell et al., Agile Application Security (Sebastopol: O’Reilly, 2017).
+have just stopped using the token at a certain point in the flow. I’ve not yet looked at
+enough examples of this problem to determine the right solution here, but it is an
+issue to be aware of.
+Finally, in some situations you can end up needing so much information in the JWT
+token that the token size itself becomes a problem. Although this situation is rare, it
+does happen. Several years ago I was chatting to one team about using a token to
+manage authorization for a particular aspect of its system that handled rights man‐
+agement for music. The logic around this was incredibly complex—my client worked
+out that for any given track it could potentially need up to 10,000 entries in a token to
+deal with the different scenarios. We realized, though, that at least in that domain, it
+was only one particular use case that needed this large amount of information,
+whereas the bulk of the system could make do with a simple token with fewer fields.
+In such a situation, it made sense to deal with the more complex rights management
+authorization process in a different way—essentially using the JWT token for the ini‐
+tial “simple” authorization, and then doing a subsequent lookup on a data store to
+fetch the additional fields as required. This meant the bulk of the system could just
+work off the tokens.
+Summary
+As I hope I’ve articulated in this chapter, building a secure system isn’t about doing
+one thing. It necessitates a holistic view of your system, using some sort of threat
+modeling exercise, to understand what type of security controls need to be put in
+place.
+When thinking of these controls, a mix is essential to building a secure system.
+Defense in depth doesn’t just mean having multiple protections in place; it also
+means you have a multifaceted approach to building a more secure system.
+We also return again to a core theme of the book: having a system decomposed into
+finer-grained services gives us many more options for solving problems. Not only can
+having microservices potentially reduce the impact of any given breach, but it also
+allows us to consider trade-offs between the overhead of more complex and secure
+approaches, where data is sensitive, and a more lightweight approach when the risks
+are lower.
+For a broader look at application security in general, I recommend Agile Application
+Security by Laura Bell et al.17
+Next, we’ll look at how we can make our systems more reliable, as we turn to the
+topic of resilience.
+386 
+| 
+Chapter 11: Security

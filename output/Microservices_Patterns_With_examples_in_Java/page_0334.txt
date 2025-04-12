@@ -1,0 +1,65 @@
+304
+CHAPTER 9
+Testing microservices: Part 1
+3
+The Order Service team publishes the contracts that tested Order Service to a
+Maven repository.
+4
+You use the published contracts to write tests for API Gateway.
+Because you test API Gateway using the published contracts, you can be confident that
+it works with the deployed Order Service.
+ The contracts are the key part of this testing strategy. The following listing shows an
+example Spring Cloud Contract. It consists of an HTTP request and an HTTP response.
+org.springframework.cloud.contract.spec.Contract.make {
+request {
+                   
+method 'GET'
+url '/orders/1223232'
+}
+response {
+       
+status 200
+headers {
+header('Content-Type': 'application/json;charset=UTF-8')
+}
+body("{ ... }")
+}
+}
+Listing 9.1
+A contract that describes how API Gateway invokes Order Service
+Writes
+Code generated
+from
+Contract.make {
+request {..}
+response {...}
+}
+}
+Order Service
+consumer
+contract tests
+API gateway
+API gateway team
+Reads
+Tests
+Develops
+Tests
+Develops
+Publishes
+Published
+contract
+Maven repository
+Order
+Service
+Order Service team
+API gateway
+integration test
+Figure 9.8
+The API Gateway team writes the contracts. The Order Service team 
+uses those contracts to test Order Service and publishes them to a repository. The 
+API Gateway team uses the published contracts to test API Gateway.
+The HTTP request’s 
+method and path
+The HTTP response’s status 
+code, headers, and body
+ 

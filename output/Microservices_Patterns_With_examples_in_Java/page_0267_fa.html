@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 267</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Designing CQRS views</mark></h3>
+  <p>
+   ماژول <mark>view</mark> <mark>CQRS</mark> دارای یک <mark>API</mark> است که از یک یا چند عملیات <mark>query</mark> تشکیل شده است. این عملیات <mark>query</mark> را با <mark>querying</mark> یک <mark>database</mark> پیاده‌سازی می‌کند که با اشتراک در <mark>events</mark> منتشر شده توسط یک یا چند <mark>services</mark>، آن را حفظ می‌کند. همانطور که شکل 7.10 نشان می‌دهد، یک ماژول <mark>view</mark> از یک <mark>view database</mark> و سه زیر ماژول تشکیل شده است.
+  </p>
+  <p>
+   ماژول دسترسی به <mark>data</mark>، منطق دسترسی به <mark>database</mark> را پیاده‌سازی می‌کند. ماژول‌های <mark>event handlers</mark> و <mark>query API</mark> از ماژول دسترسی به <mark>data</mark> برای به‌روزرسانی و <mark>query</mark> کردن <mark>database</mark> استفاده می‌کنند. ماژول‌های <mark>event handlers</mark> به <mark>events</mark> مشترک می‌شوند و <mark>database</mark> را به‌روزرسانی می‌کنند. ماژول <mark>query API</mark>، <mark>query API</mark> را پیاده‌سازی می‌کند.
+  </p>
+  <p>
+   شما باید هنگام توسعه یک ماژول <mark>view</mark> چند تصمیم طراحی مهم بگیرید:
+  </p>
+  <ul>
+   <li>
+    شما باید یک <mark>database</mark> را انتخاب و <mark>schema</mark> را طراحی کنید.
+   </li>
+   <li>
+    هنگام طراحی ماژول دسترسی به <mark>data</mark>، شما باید به مسائل مختلفی از جمله اطمینان از <mark>idempotent</mark> بودن به‌روزرسانی‌ها و رسیدگی به به‌روزرسانی‌های همزمان بپردازید.
+   </li>
+   <li>
+    هنگام پیاده‌سازی یک <mark>view</mark> جدید در یک application موجود یا تغییر <mark>schema</mark> یک application موجود، شما باید یک مکانیسم برای ساخت یا بازسازی کارآمد <mark>view</mark> پیاده‌سازی کنید.
+   </li>
+   <li>
+    شما باید تصمیم بگیرید که چگونه یک <mark>client</mark> از <mark>view</mark> را قادر سازید تا با <mark>replication lag</mark>، که قبلاً توضیح داده شد، مقابله کند.
+   </li>
+  </ul>
+  <p>
+   بیایید به هر یک از این مسائل نگاهی بیندازیم.
+  </p>
+  <h4><mark>7.3.1 Choosing a view datastore</mark></h4>
+  <p>
+   یک تصمیم طراحی کلیدی، انتخاب <mark>database</mark> و طراحی <mark>schema</mark> است. هدف اصلی <mark>database</mark> و مدل <mark>data</mark>، پیاده‌سازی کارآمد عملیات <mark>query</mark> ماژول <mark>view</mark> است. این ویژگی‌های آن <mark>queries</mark> هستند که هنگام انتخاب یک <mark>database</mark>، ملاحظات اصلی هستند. اما <mark>database</mark> نیز باید عملیات به‌روزرسانی انجام شده توسط <mark>event handlers</mark> را به طور کارآمد پیاده‌سازی کند.
+  </p>
+  <h5><mark>SQL VS. NOSQL DATABASES</mark></h5>
+  <p>
+   نه چندان دور، یک نوع <mark>database</mark> وجود داشت که بر همه آن‌ها حاکم بود: <mark>RDBMS</mark> مبتنی بر <mark>SQL</mark>. با این حال، با افزایش محبوبیت وب، شرکت‌های مختلفی متوجه شدند که یک <mark>RDBMS</mark> نمی‌تواند الزامات مقیاس وب آن‌ها را برآورده کند. این منجر به ایجاد
+  </p>
+  <p>
+   ماژول <mark>view CQRS</mark>
+   <br />
+   <mark>Event</mark>
+   <br />
+   <mark>handlers</mark>
+   <br />
+   <mark>query()</mark>
+   <br />
+   <mark>update()</mark>
+   <br />
+   <mark>Query API</mark>
+   <br />
+   دسترسی به <mark>Data</mark>
+   <br />
+   <mark>View database</mark>
+   <br />
+   <mark>Events</mark>
+   <br />
+   <mark>ﬁnd...()</mark>
+   <br />
+   ...
+   <br />
+   منطق دسترسی به <mark>data</mark> را پیاده‌سازی می‌کند
+  </p>
+  <p>
+   شکل 7.10
+   <br />
+   طراحی یک ماژول <mark>view CQRS</mark>. <mark>Event handlers</mark>، <mark>database</mark> <mark>view</mark> را به‌روزرسانی می‌کنند، که توسط ماژول <mark>Query API</mark> <mark>query</mark> می‌شود.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

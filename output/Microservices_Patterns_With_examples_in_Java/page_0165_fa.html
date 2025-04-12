@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 165</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>The design of the Order Service (طراحی Order Service) و the Create Order Saga (حماسه ایجاد سفارش)</strong></h3>
+  <h4><strong>4.4.2 The implementation of the Create Order Saga (پیاده‌سازی Create Order Saga (حماسه ایجاد سفارش))</strong></h4>
+  <p>شکل 4.11 کلاس‌هایی را نشان می‌دهد که Create Order Saga (حماسه ایجاد سفارش) را پیاده‌سازی می‌کنند. مسئولیت‌های هر کلاس به شرح زیر است:</p>
+  <ul>
+   <li>CreateOrderSaga (حماسه ایجاد سفارش) - یک کلاس singleton (تک‌نمونه) که state machine (ماشین حالت) saga (حماسه) را تعریف می‌کند. این CreateOrderSagaState (حالت حماسه ایجاد سفارش) را برای ایجاد command messages (پیام‌های دستور) فراخوانی می‌کند و آنها را با استفاده از کانال‌های message (پیام‌رسانی) که توسط کلاس‌های proxy (پراکسی) participant (شرکت‌کننده) saga (حماسه)، مانند KitchenServiceProxy (پراکسی سرویس آشپزخانه) مشخص شده‌اند، به participants (شرکت‌کنندگان) ارسال می‌کند.</li>
+  </ul>
+  <br>
+  <p>Eventuate tram sagas (حماسه‌های ترام Eventuate)</p>
+  <p>create() (ایجاد)</p>
+  <p>... (و...)</p>
+  <p>SagaManager (مدیر حماسه)</p>
+  <p>«interface (رابط)»</p>
+  <p>SimpleSaga (حماسه ساده)</p>
+  <p>SagaDeﬁnition (تعریف حماسه)</p>
+  <p>CommandEndpoint (endpoint دستور)</p>
+  <p>SagaDeﬁnition (تعریف حماسه)</p>
+  <p>getSagaDeﬁnition() (دریافت تعریف حماسه)</p>
+  <p>«table (جدول)»</p>
+  <p>SAGA_INSTANCE (نمونه حماسه)</p>
+  <p>Eventuate tram (ترام Eventuate)</p>
+  <p>Uses (استفاده می‌کند)</p>
+  <p>Implements (پیاده‌سازی می‌کند)</p>
+  <p>Creates (ایجاد می‌کند)</p>
+  <p>Manages (مدیریت می‌کند)</p>
+  <p>Invokes (فراخوانی می‌کند)</p>
+  <p>Order (سفارش) database (پایگاه داده)</p>
+  <p>CreateOrderSaga (حماسه ایجاد سفارش)</p>
+  <p>replies (پاسخ‌ها)</p>
+  <p>OrderService (سرویس سفارش)</p>
+  <p>requests (درخواست‌ها)</p>
+  <p>Stores (ذخیره می‌کند) the (the) state (حالت)</p>
+  <p>of saga instances (نمونه‌های حماسه)</p>
+  <p>The state of a saga (حالت یک حماسه)</p>
+  <p>Describes a (توضیح می‌دهد)</p>
+  <p>message channel (کانال پیام‌رسانی)</p>
+  <p>Describes the (توضیح می‌دهد) the</p>
+  <p>steps (مراحل) of a saga (حماسه)</p>
+  <p>Abstract superclass (کلاس والد انتزاعی)</p>
+  <p>for saga (برای حماسه)</p>
+  <p>orchestrators (ارکستراتورها)</p>
+  <p>orderId (شناسه سفارش)</p>
+  <p>orderDetails (جزئیات سفارش)</p>
+  <p>... (و...)</p>
+  <p>CreateOrder (ایجاد سفارش)</p>
+  <p>SagaState (حالت حماسه)</p>
+  <p>CreateOrder (ایجاد سفارش)</p>
+  <p>Saga (حماسه)</p>
+  <p>Kitchen (آشپزخانه)</p>
+  <p>ServiceProxy (پراکسی سرویس)</p>
+  <p>this.sagaDeﬁnition= (این.تعریف حماسه =)</p>
+  <p>step() (مرحله)</p>
+  <p>.withCompensation(...) (.باجبران(...))</p>
+  <p>.step() (مرحله)</p>
+  <p>.invokeParticipant(...) (.فراخوانی شرکت کننده(...))</p>
+  <p>.step() (مرحله)</p>
+  <p>.invokeParticipant(...) (.فراخوانی شرکت کننده(...))</p>
+  <p>.onReply(...) (.در پاسخ(...))</p>
+  <p>.withCompensation(...) (.باجبران(...))</p>
+  <p>OrderService (سرویس سفارش)</p>
+  <p>Proxy (پراکسی)</p>
+  <p>OrderService (سرویس سفارش)</p>
+  <p>The SagaManager (مدیر حماسه) handles (مدیریت می‌کند) persisting (پایدار کردن) a saga (حماسه), (,) (,) (,) sending (ارسال) the command messages (پیام‌های دستور) that (که) it (آن) generates (ایجاد می‌کند)، subscribing (اشتراک) to reply messages (پیام‌های پاسخ)، (,) (,) (,) and (و) invoking (فراخوانی) the saga (حماسه) to handle (مدیریت کردن) replies (پاسخ‌ها).</p>
+  <br>
+  <img src="figure_4_11.png" alt="Figure 4.11">
+  <p>The OrderService's sagas (حماسه‌های سرویس سفارش)، such as Create Order Saga (مانند حماسه ایجاد سفارش)، are implemented (پیاده‌سازی شده) using (با استفاده از)</p>
+  <p>the Eventuate Tram Saga framework (فریم‌ورک حماسه Eventuate Tram).</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

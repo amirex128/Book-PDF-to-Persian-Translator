@@ -1,0 +1,50 @@
+208
+CHAPTER 6
+Developing business logic with event sourcing
+3
+Applies the generated events by calling apply()
+4
+Saves the generated events in the event store
+The update() method is similar. It has two parameters, an aggregate ID and a com-
+mand, and performs the following steps:
+1
+Retrieves the aggregate from the event store
+2
+Invokes process() to process the command
+3
+Applies the generated events by calling apply()
+4
+Saves the generated events in the event store
+The AggregateRepository class is primarily used by services, which create and update
+aggregates in response to external requests. For example, the following listing shows
+how OrderService uses an AggregateRepository to create an Order.
+public class OrderService {
+private AggregateRepository<Order, OrderCommand> orderRepository;
+public OrderService(AggregateRepository<Order, OrderCommand> orderRepository)
+{
+this.orderRepository = orderRepository;
+}
+public EntityWithIdAndVersion<Order> createOrder(OrderDetails orderDetails) {
+return orderRepository.save(new CreateOrder(orderDetails));
+}
+}
+OrderService is injected with an AggregateRepository for Orders. Its create()
+method invokes AggregateRepository.save() with a CreateOrder command. 
+SUBSCRIBING TO DOMAIN EVENTS
+The Eventuate Client framework also provides an API for writing event handlers. List-
+ing 6.5 shows an event handler for CreditReserved events. The @EventSubscriber
+annotation specifies the ID of the durable subscription. Events that are published when
+the subscriber isn’t running will be delivered when it starts up. The @EventHandler-
+Method annotation identifies the creditReserved() method as an event handler.
+@EventSubscriber(id="orderServiceEventHandlers")
+public class OrderServiceEventHandlers {
+@EventHandlerMethod
+public void creditReserved(EventHandlerContext<CreditReserved> ctx) {
+CreditReserved event = ctx.getEvent();
+...
+}
+Listing 6.4
+OrderService uses an AggregateRepository
+Listing 6.5
+An event handler for OrderCreatedEvent
+ 

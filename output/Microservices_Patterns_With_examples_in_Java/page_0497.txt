@@ -1,0 +1,40 @@
+467
+Breaking apart the monolith: extracting delivery management
+HOW THE FTGO MONOLITH ACCESSES THE DELIVERY SERVICE DATA
+The FTGO monolith needs to read the data that’s been moved to Delivery Service,
+such as the Courier plans. In theory, the monolith could query the service, but that
+requires extensive changes to the monolith. For the time being, it’s easier to leave the
+monolith’s domain model and database schema unchanged and replicate data from
+the service back to the monolith.
+ The easiest way to accomplish that is for Delivery Service to publish Courier and
+Delivery domain events. The service publishes a CourierPlanUpdated event when it
+updates a Courier’s plan, and a DeliveryScheduleUpdate event when it updates a
+Delivery. The monolith consumes these domain events and updates its database.
+ Now that we’ve looked at how the FTGO monolith and Delivery Service interact,
+let’s see how to change the monolith. 
+13.5.5 Changing the FTGO monolith to interact with Delivery Service
+In many ways, implementing Delivery Service is the easier part of the extraction
+process. Modifying the FTGO monolith is much more difficult. Fortunately, replicat-
+ing data from the service back to the monolith reduces the size of the change. But we
+still need to change the monolith to manage deliveries by invoking Delivery Service.
+Let’s look at how to do that.
+DEFINING A DELIVERYSERVICE INTERFACE
+The first step is to encapsulate the delivery management code with a Java interface
+corresponding to the messaging-based API defined earlier. This interface, shown in
+figure 13.21, defines methods for scheduling, rescheduling, and canceling deliveries.
+«interface»
+DeliveryService
+DeliveryServiceImpl
+void schedule(...)
+void reschedule(...)
+void cancel(...)
+Delivery
+management
+Delivery
+management
+client
+Figure 13.21
+The first step is to define DeliveryService, which 
+is a coarse-grained, remotable API for invoking the delivery 
+management logic.
+ 

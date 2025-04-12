@@ -1,0 +1,57 @@
+439
+Strategies for refactoring a monolith to microservices
+SPLITTING THE DOMAIN MODEL
+In order to extract a service, you need to extract its domain model out of the monolith’s
+domain model. You’ll need to perform major surgery to split the domain models. One
+challenge you’ll encounter is eliminating object references that would otherwise span
+service boundaries. It’s possible that classes that remain in the monolith will reference
+classes that have been moved to the service or vice versa. For example, imagine that, as
+figure 13.5 shows, you extract Order Service, and as a result its Order class references
+the monolith’s Restaurant class. Because a service instance is typically a process, it
+doesn’t make sense to have object references that cross service boundaries. Somehow
+you need to eliminate these types of object reference.
+One good way to solve this problem is to think in terms of DDD aggregates, described
+in chapter 5. Aggregates reference each other using primary keys rather than object ref-
+erences. You would, therefore, think of the Order and Restaurant classes as aggre-
+gates and, as figure 13.6 shows, replace the reference to Restaurant in the Order class
+with a restaurantId field that stores the primary key value.
+FTGO monolith
+Extracted service
+«Entity»
+Restaurant
+Object reference that spans
+service boundaries
+«Entity»
+Order
+Delivery Service
+FTGO monolith
+?
+«Entity»
+Restaurant
+«Entity»
+Order
+Figure 13.5
+The Order domain class has a reference to a Restaurant class. If we extract 
+Order into a separate service, we need to do something about its reference to Restaurant, 
+because object references between processes don’t make sense.
+Replace with primary key.
+Delivery Service
+FTGO monolith
+«Entity»
+Restaurant
+«Entity»
+Order
+restaurantId
+Object reference that spans
+service boundaries
+Delivery Service
+FTGO monolith
+?
+«Entity»
+Restaurant
+«Entity»
+Order
+Figure 13.6
+The Order class’s reference to Restaurant is replaced with the Restaurant's 
+primary key in order to eliminate an object that would span process boundaries.
+ 

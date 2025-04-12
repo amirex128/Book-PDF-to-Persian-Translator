@@ -1,0 +1,38 @@
+explicitness in how backward-incompatible changes will be made can greatly simplify
+things.
+You don’t necessarily need reams of paper and huge meetings to reach agreement on
+how changes will be handled. But assuming you aren’t going down the route of lock‐
+step releases, I’d suggest that both the owner and the consumer of a microservice
+need to be clear on a few things:
+• How will you raise the issue that the interface needs to change?
+• How will the consumers and microservice teams collaborate to agree on what the
+change will look like?
+• Who is expected to do the work to update the consumers?
+• When the change is agreed on, how long will consumers have to shift over to the
+new interface before it is removed?
+Remember, one of the secrets to an effective microservice architecture is to embrace a
+consumer-first approach. Your microservices exist to be called by other consumers.
+The consumers’ needs are paramount, and if you are making changes to a microser‐
+vice that are going to cause upstream consumers problems, this needs to be taken
+into account.
+In some situations, of course, it might not be possible to change the consumers. I’ve
+heard from Netflix that they had issues (at least historically) with old set-top boxes
+using older versions of the Netflix APIs. These set-top boxes cannot be upgraded
+easily, so the old endpoints have to remain available unless and until the number of
+older set-top boxes drops to a level at which they can have their support disabled.
+Decisions to stop old consumers from being able to access your endpoints can some‐
+times end up being financial ones—how much money does it cost you to support the
+old interface, balanced against how much money you make from those consumers.
+Tracking Usage
+Even if you do agree on a time by which consumers should stop using the old inter‐
+face, would you know if they had actually stopped using it? Making sure you have
+logging in place for each endpoint your microservice exposes can help, as can
+ensuring that you have some sort of client identifier so you can chat to the team in
+question if you need to work with them to get them to migrate away from your old
+interface. This could be something as simple as asking consumers to put their identi‐
+fer in the user-agent header when making HTTP requests, or you could require that
+all calls go via some sort of API gateway where clients need keys to identify
+themselves.
+Managing Breaking Changes 
+| 
+153

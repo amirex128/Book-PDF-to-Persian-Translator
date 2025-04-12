@@ -1,0 +1,56 @@
+280
+CHAPTER 8
+External API patterns
+API composition pattern and write code that invokes the services and combines
+the results.
+ Another challenge, mentioned earlier, is that different clients need slightly differ-
+ent data. For example, unlike the mobile application, the desktop SPA application dis-
+plays your rating for the order. One way to tailor the data returned by the endpoint, as
+described in chapter 3, is to give the client the ability to specify the data they need. An
+endpoint can, for example, support query parameters such as the expand parameter,
+which specifies the related resources to return, and the field parameter, which speci-
+fies the fields of each resource to return. The other option is to define multiple ver-
+sions of this endpoint as part of applying the Backends for frontends pattern. This is a
+lot of work for just one of the many API endpoints that the FTGO’s API Gateway
+needs to implement.
+ Implementing an API gateway with a REST API that supports a diverse set of cli-
+ents well is time consuming. Consequently, you may want to consider using a graph-
+based API framework, such as GraphQL, that’s designed to support efficient data
+fetching. The key idea with graph-based API frameworks is that, as figure 8.9 shows,
+the server’s API consists of a graph-based schema. The graph-based schema defines a
+set of nodes (types), which have properties (fields) and relationships with other nodes.
+The client retrieves data by executing a query that specifies the required data in terms
+of the graph’s nodes and their properties and relationships. As a result, a client can
+retrieve the data it needs in a single round-trip to the API gateway.
+Graph-based API technology has a couple of important benefits. It gives clients con-
+trol over what data is returned. Consequently, developing a single API that’s flexible
+Consumer
+Consumer
+Restaurant
+Delivery
+Consumer Service
+API gateway
+Graph-based API framework
+Graph schema
+Order
+Order Service
+Restaurant
+Restaurant Service
+Delivery
+Delivery Service
+Order
+Schema
+=>
+Service
+mapping
+Client
+Query
+Query
+Query
+Query
+Query
+Figure 8.9
+The API gateway’s API consists of a graph-based schema that’s mapped to the services. A client 
+issues a query that retrieves multiple graph nodes. The graph-based API framework executes the query by 
+retrieving data from one or more services.
+ 

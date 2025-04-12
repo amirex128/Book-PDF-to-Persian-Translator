@@ -1,0 +1,41 @@
+Docker
+Containers were in limited use before the emergence of Docker pushed the concept
+mainstream. The Docker toolchain handles much of the work around containers.
+Docker manages the container provisioning, handles some of the networking prob‐
+lems for you, and even provides its own registry concept that allows you to store
+Docker applications. Before Docker, we didn’t have the concept of an “image” for
+containers—this aspect, along with a much nicer set of tools for working with con‐
+tainers, helped containers become much easier to use.
+The Docker image abstraction is a useful one for us, as the details of how our micro‐
+service is implemented are hidden. We have the builds for our microservice create a
+Docker image as a build artifact and store the image in the Docker registry, and away
+we go. When you launch an instance of a Docker image, you have a generic set of
+tools for managing that instance, no matter the underlying technology used—micro‐
+services written in Go, Python, NodeJS, or whatever can all be treated the same.
+Docker can also alleviate some of the downsides of running lots of services locally for
+dev and test purposes. Previously, I might have used a tool like Vagrant that allows
+me to host multiple independent VMs on my development machine. This would
+allow me to have a production-like VM running my service instances locally. This
+was a pretty heavyweight approach, though, and I’d be limited in how many VMs I
+could run. With Docker, it’s easy just to run Docker directly on my developer
+machine, probably using Docker Desktop. Now I can just build a Docker image for
+my microservice instance, or pull down a prebuilt image, and run it locally. These
+Docker images can (and should) be identical to the container image that I will even‐
+tually run in production.
+When Docker first emerged, its scope was limited to managing containers on one
+machine. This was of limited use—what if you wanted to manage containers across
+multiple machines? This is something that is essential if you want to maintain system
+health, if you have a machine die on you, or if you just want to run enough containers
+to handle the system’s load. Docker came out with two totally different products of its
+own to solve this problem, confusingly called “Docker Swarm” and “Docker Swarm
+Mode”—who said naming stuff was hard again? Really, though, when it comes to
+managing lots of containers across many machines, Kubernetes is king here, even
+if you might use the Docker toolchain for building and managing individual
+containers.
+Fitness for microservices
+Containers as a concept work wonderfully well for microservices, and Docker made
+containers significantly more viable as a concept. We get our isolation but at a man‐
+ageable cost. We also hide underlying technology, allowing us to mix different tech
+246 
+| 
+Chapter 8: Deployment

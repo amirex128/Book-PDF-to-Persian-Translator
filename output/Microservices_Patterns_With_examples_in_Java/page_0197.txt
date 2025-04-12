@@ -1,0 +1,45 @@
+167
+Publishing domain events
+this.idSupplier = idSupplier;
+}
+public void publish(A aggregate, List<E> events) {
+eventPublisher.publish(aggregateType, idSupplier.apply(aggregate), 
+(List<DomainEvent>) events);
+}
+}
+The publish() method retrieves the aggregate’s ID and invokes DomainEventPublisher
+.publish(). The following listing shows the TicketDomainEventPublisher, which
+publishes domain events for the Ticket aggregate.
+public class TicketDomainEventPublisher extends 
+AbstractAggregateDomainEventPublisher<Ticket, TicketDomainEvent> {
+public TicketDomainEventPublisher(DomainEventPublisher eventPublisher) {
+super(eventPublisher, Ticket.class, Ticket::getId);
+}
+}
+This class only publishes events that are a subclass of TicketDomainEvent.
+ Now that we’ve looked at how to publish domain events, let’s see how to con-
+sume them. 
+5.3.6
+Consuming domain events
+Domain events are ultimately published as messages to a message broker, such as
+Apache Kafka. A consumer could use the broker’s client API directly. But it’s more
+convenient to use a higher-level API such as the Eventuate Tram framework’s Domain-
+EventDispatcher, described in chapter 3. A DomainEventDispatcher dispatches
+domain events to the appropriate handle method. Listing 5.9 shows an example event
+handler class. KitchenServiceEventConsumer subscribes to events published by
+Restaurant Service whenever a restaurant’s menu is updated. It’s responsible for
+keeping Kitchen Service’s replica of the data up-to-date.
+public class KitchenServiceEventConsumer {
+@Autowired
+private RestaurantService restaurantService;
+public DomainEventHandlers domainEventHandlers() {       
+return DomainEventHandlersBuilder
+.forAggregateType("net.chrisrichardson.ftgo.restaurantservice.Restaurant")
+.onEvent(RestaurantMenuRevised.class, this::reviseMenu)
+Listing 5.8
+A type-safe interface for publishing Ticket aggregates' domain events
+Listing 5.9
+Dispatching events to event handler methods
+Maps events to 
+event handlers
+ 

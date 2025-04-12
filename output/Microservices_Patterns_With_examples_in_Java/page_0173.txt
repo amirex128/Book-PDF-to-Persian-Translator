@@ -1,0 +1,56 @@
+143
+The design of the Order Service and the Create Order Saga
+The following listing shows the OrderCommandHandlers class. Its commandHandlers()
+method maps command message types to handler methods. Each handler method
+takes a command message as a parameter, invokes OrderService, and returns a reply
+message.
+public class OrderCommandHandlers {
+@Autowired
+private OrderService orderService;
+public CommandHandlers commandHandlers() {
+  
+return SagaCommandHandlersBuilder
+.fromChannel("orderService")
+.onMessage(ApproveOrderCommand.class, this::approveOrder)
+.onMessage(RejectOrderCommand.class, this::rejectOrder)
+...
+.build();
+}
+public Message approveOrder(CommandMessage<ApproveOrderCommand> cm) {
+long orderId = cm.getCommand().getOrderId();
+orderService.approveOrder(orderId);
+return withSuccess();
+}
+public Message rejectOrder(CommandMessage<RejectOrderCommand> cm) {
+long orderId = cm.getCommand().getOrderId();
+orderService.rejectOrder(orderId);
+return withSuccess();
+}
+The approveOrder() and rejectOrder() methods update the specified Order by
+invoking OrderService. The other services that participate in sagas have similar com-
+mand handler classes that update their domain objects. 
+4.4.4
+The OrderServiceConfiguration class
+The Order Service uses the Spring framework. The following listing is an excerpt of
+the OrderServiceConfiguration class, which is an @Configuration class that instanti-
+ates and wires together the Spring @Beans.
+@Configuration
+public class OrderServiceConfiguration {
+@Bean
+public OrderService orderService(RestaurantRepository restaurantRepository,
+Listing 4.6
+The command handlers for Order Service
+Listing 4.7
+The OrderServiceConfiguration is a Spring @Configuration
+ class that defines the Spring @Beans for the Order Service.
+Route each command 
+message to the appropriate 
+handler method.
+Change the state 
+of the Order to 
+authorized.
+Return a generic 
+success message.
+Change the state of 
+the Order to rejected.
+ 

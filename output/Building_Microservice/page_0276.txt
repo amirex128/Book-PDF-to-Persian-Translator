@@ -1,0 +1,42 @@
+Function as a Service, or FaaS, has become such a major part of serverless that for
+many the two terms are interchangeable. This is unfortunate, as it overlooks the
+importance of other serverless products like databases, queues, storage solutions, and
+the like. Nonetheless, it speaks to the excitement that FaaS has generated that it’s
+dominated the discussion.
+It was AWS’s Lambda product, launched in 2014, that ignited the excitement around
+FaaS. At one level, the concept is delightfully simple. You deploy some code (a “func‐
+tion”). That code is dormant, until something happens to trigger that code. You’re in
+charge of deciding what that trigger might be—it could be a file arriving in a certain
+location, an item appearing on a message queue, a call coming in via HTTP, or some‐
+thing else.
+When your function triggers, it runs, and when it finishes, it shuts down. The under‐
+lying platform handles spinning these functions up or down on demand and will
+handle concurrent executions of your functions so that you can have multiple copies
+running at once where appropriate.
+The benefits here are numerous. Code that isn’t running isn’t costing you money—
+you pay only for what you use. This can make FaaS a great option for situations in
+which you have low or unpredictable load. The underlying platform handles spinning
+the functions up and down for you, giving you some degree of implicit high availabil‐
+ity and robustness without you having to do any work. Fundamentally, the use of a
+FaaS platform, as with many of the other serverless offerings, allows you to drastically
+reduce the amount of operational overhead you need to worry about.
+Limitations
+Under the hood, all the FaaS implementations I’m aware of make use of some sort of
+container technology. This is hidden from you—typically you don’t have to worry
+about building a container that will be run, you just provide some packaged form of
+the code. This means, though, that you lack a degree of control over what exactly can
+be run; as a result you need the FaaS provider to support your language of choice.
+Azure Functions have done the best here in terms of the major cloud vendors, sup‐
+porting a wide variety of different runtimes, whereas Google Cloud’s own Cloud
+Functions offering supports very few languages by comparison (at the time of writ‐
+ing, Google supports only Go, some Node versions, and Python). It’s worth noting
+that AWS does now allow you to define your own custom runtime for your func‐
+tions, theoretically enabling you to implement support for languages that aren’t pro‐
+vided out of the box, although this then becomes another piece of operational
+overhead you have to maintain.
+This lack of control over the underlying runtime also extends to the lack of control
+over the resources given to each function invocation. Across Google Cloud, Azure,
+and AWS, you can only control the memory given to each function. This in turn
+250 
+| 
+Chapter 8: Deployment

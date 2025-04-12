@@ -1,0 +1,40 @@
+Testing
+With any type of automated functional test, you have a delicate balancing act. The
+more functionality a test executes—i.e., the broader the scope of the test—the more
+confidence you have in your application. On the other hand, the larger the scope of
+the test, the harder it is to set up test data and supporting fixtures, the longer the test
+can take to run, and the harder it can be to work out what is broken when it fails. In
+Chapter 9 I’ll share a number of techniques for making testing work in this more
+challenging environment.
+End-to-end tests for any type of system are at the extreme end of the scale in terms of
+the functionality they cover, and we are used to them being more problematic to
+write and maintain than smaller-scoped unit tests. Often this is worth it, though,
+because we want the confidence that comes from having an end-to-end test use our
+systems in the same way a user might.
+But with a microservice architecture, the scope of our end-to-end tests becomes very
+large. We would now need to run tests across multiple processes, all of which need to
+be deployed and appropriately configured for the test scenarios. We also need to be
+prepared for the false negatives that occur when environmental issues, such as service
+instances dying or network time-outs of failed deployments, cause our tests to fail.
+These forces mean that as your microservice architecture grows, you will get a dimin‐
+ishing return on investment when it comes to end-to-end testing. The testing will
+cost more but won’t manage to give you the same level of confidence that it did in the
+past. This will drive you toward new forms of testing, such as contract-driven testing
+or testing in production, as well as the exploration of progressive delivery techniques
+such as parallel runs or canary releases, which we’ll look at in Chapter 8.
+Latency
+With a microservice architecture, processing that might previously have been done
+locally on one processor can now end up being split across multiple separate micro‐
+services. Information that previously flowed within only a single process now needs
+to be serialized, transmitted, and deserialized over networks that you might be exer‐
+cising more than ever before. All of this can result in worsening latency of your
+system.
+Although it can be difficult to measure the exact impact on latency of operations at
+the design or coding phase, this is another reason it’s important to undertake any
+microservice migration in an incremental fashion. Make a small change and then
+measure the impact. This assumes that you have some way of measuring the end-to-
+end latency for the operations you care about—distributed tracing tools like
+Jaeger can help here. But you also need to have an understanding of what latency is
+30 
+| 
+Chapter 1: What Are Microservices?

@@ -1,0 +1,41 @@
+read across multiple database nodes to ensure consistency. But in general people
+don’t do transactional reads, do they? Because transactional reads are slow. They
+require locks. A read can block an entire system.
+As we’ve already discussed, distributed systems have to expect failure. Consider our
+transactional read across a set of consistent nodes. I ask a remote node to lock a given
+record while the read is initiated. I complete the read and ask the remote node to
+release its lock, but now I can’t talk to it. What happens now? Locks are really hard to
+get right even in a single process system and are significantly more difficult to imple‐
+ment well in a distributed system.
+Remember when we talked about distributed transactions in Chapter 6? The core
+reason they are challenging is because of this problem with ensuring consistency
+across multiple nodes.
+Getting multinode consistency right is so hard that I would strongly, strongly suggest
+that if you need it, don’t try to invent it yourself. Instead, pick a data store or lock
+service that offers these characteristics. Consul, for example, which we discussed in
+“Dynamic Service Registries” on page 159, implements a strongly consistent key-
+value store designed to share configuration between multiple nodes. Along with
+“Friends don’t let friends write their own crypto” should go “Friends don’t let friends
+write their own distributed consistent data store.” If you think you need to write your
+own CP data store, read all the papers on the subject first, then get a PhD, and then
+look forward to spending a few years getting it wrong. Meanwhile, I’ll be using some‐
+thing off the shelf that does it for me, or more likely trying really hard to build even‐
+tually consistent AP systems instead.
+Sacrificing Partition Tolerance?
+We get to pick two, right? So we’ve got our eventually consistent AP system. We have
+our consistent but hard-to-build-and-scale CP system. Why not a CA system? Well,
+how can we sacrifice partition tolerance? If our system has no partition tolerance, it
+can’t run over a network. In other words, it needs to be a single process operating
+locally. CA systems don’t exist in distributed systems.
+AP or CP?
+Which is right, AP or CP? Well, the reality is that it depends. As the people building
+the system, we know the trade-off exists. We know that AP systems scale more easily
+and are simpler to build, and we know that a CP system will require more work due
+to the challenges in supporting distributed consistency. But we may not understand
+the business impact of this trade-off. For our inventory system, if a record is out of
+date by five minutes, is that OK? If the answer is yes, an AP system might be the
+answer. But what about the balance held for a customer in a bank? Can that be out of
+date? Without knowing the context in which the operation is being used, we can’t
+CAP Theorem 
+| 
+411

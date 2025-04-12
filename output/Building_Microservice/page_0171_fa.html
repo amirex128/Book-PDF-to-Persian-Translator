@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 171</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>Expansion Changes</h4>
+  <p>احتمالاً آسان‌ترین نقطه برای شروع، این است که فقط چیزهای جدید را به یک <em>microservice contract</em> اضافه کنید و هیچ چیز دیگری را حذف نکنید. مثال افزودن یک <em>field</em> جدید به یک <em>payload</em> را در نظر بگیرید—با فرض اینکه <em>client</em> به نوعی نسبت به این تغییرات تحمل دارد، این نباید تأثیر مادی داشته باشد. به عنوان مثال، افزودن یک <em>dateOfBirth field</em> جدید به یک <em>customer record</em> باید خوب باشد.</p>
+  <h4>Tolerant Reader</h4>
+  <p>نحوه پیاده‌سازی <em>consumer</em> یک <em>microservice</em> می‌تواند تأثیر زیادی در آسان‌تر کردن تغییرات <em>backward-compatible</em> داشته باشد. به طور خاص، ما می‌خواهیم از <em>client code</em> که بیش از حد به <em>interface</em> یک <em>microservice</em> متصل می‌شود، اجتناب کنیم. بیایید یک <em>Email microservice</em> را در نظر بگیریم که کار آن ارسال ایمیل به مشتریان ما از زمان به زمان است. از آن خواسته می‌شود که یک ایمیل "سفارش ارسال شده" را به یک مشتری با <em>ID</em> 1234 ارسال کند؛ به سراغ آن می‌رود و مشتری را با آن <em>ID</em> بازیابی می‌کند و چیزی شبیه پاسخ نشان داده شده در <em>Example 5-3</em> را دریافت می‌کند.</p>
+  <p><strong>Example 5-3. Sample response from the Customer service</strong></p>
+  <pre><code class="language-xml">
+<customer>
+  <firstname>Sam</firstname>
+  <lastname>Newman</lastname>
+  <email>sam@magpiebrain.com</email>
+  <telephoneNumber>555-1234-5678</telephoneNumber>
+</customer>
+  </code></pre>
+  <p>اکنون، برای ارسال ایمیل، <em>Email microservice</em> فقط به <code>firstname</code>، <code>lastname</code>، و <code>email fields</code> نیاز دارد. ما نیازی به دانستن <code>telephoneNumber</code> نداریم. ما می‌خواهیم به سادگی <em>fields</em> را که به آن‌ها اهمیت می‌دهیم بیرون بکشیم و بقیه را نادیده بگیریم. برخی از <em>binding technology</em>ها، به‌ویژه آن‌هایی که توسط زبان‌های <em>strongly typed</em> استفاده می‌شوند، می‌توانند سعی کنند همه <em>fields</em> را پیوند دهند، خواه <em>consumer</em> آن‌ها را بخواهد یا نه. اگر متوجه شدیم که هیچ‌کس از <code>telephoneNumber</code> استفاده نمی‌کند و تصمیم گرفتیم آن را حذف کنیم، چه اتفاقی می‌افتد؟ این می‌تواند باعث شود که <em>consumers</em> بی‌جهت خراب شوند.</p>
+  <p>به همین ترتیب، اگر بخواهیم <em>Customer object</em> خود را برای پشتیبانی از جزئیات بیشتر <em>restructure</em> کنیم، شاید برخی از ساختارهای بیشتر را اضافه کنیم، مانند <em>Example 5-4</em>؟ داده‌هایی که <em>Email service</em> ما می‌خواهد هنوز وجود دارد، با همان نام، اما اگر کد ما فرضیات بسیار صریحی را در مورد جایی که <code>firstname</code> و <code>lastname fields</code> ذخیره می‌شوند، داشته باشد، در این صورت می‌تواند دوباره خراب شود. در این مورد، ما می‌توانیم به جای آن از <em>XPath</em> برای بیرون کشیدن <em>fields</em> استفاده کنیم که به آن‌ها اهمیت می‌دهیم، و به ما اجازه می‌دهد در مورد جایی که <em>fields</em> قرار دارند، تا زمانی که بتوانیم آن‌ها را پیدا کنیم، <em>ambivalent</em> باشیم. این الگو—از پیاده‌سازی یک <em>reader</em> که قادر به نادیده گرفتن تغییراتی است که به آن‌ها اهمیت نمی‌دهیم—چیزی است که <em>Martin Fowler</em> آن را <em>tolerant reader</em> می‌نامد.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

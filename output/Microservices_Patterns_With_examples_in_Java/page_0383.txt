@@ -1,0 +1,43 @@
+353
+Developing secure services
+6
+A request handler uses the security context to determine whether to allow a
+user to perform the requested operation and obtain their identity.
+The FTGO application uses role-based authorization. It defines several roles corre-
+sponding to the different kinds of users, including CONSUMER, RESTAURANT, COURIER,
+and ADMIN. It uses Spring Security’s declarative security mechanism to restrict access to
+URLs and service methods to specific roles. Roles are also interwoven into the busi-
+ness logic. For example, a consumer can only access their orders, whereas an adminis-
+trator can access all orders.
+ The security design used by the monolithic FTGO application is only one possible
+way to implement security. For example, one drawback of using an in-memory session
+is that it requires all requests for a particular session to be routed to the same applica-
+tion instance. This requirement complicates load balancing and operations. You must,
+for example, implement a session draining mechanism that waits for all sessions to
+expire before shutting down an application instance. An alternative approach, which
+avoids these problems, is to store the session in a database.
+ You can sometimes eliminate the server-side session entirely. For example, many
+applications have API clients that provide their credentials, such as an API key and
+secret, in every request. As a result, there’s no need to maintain a server-side session.
+Alternatively, the application can store session state in the session token. Later in
+this section, I describe one way to use a session token to store the session state. But
+let’s begin by looking at the challenges of implementing security in a microservice
+architecture. 
+11.1.2 Implementing security in a microservice architecture
+A microservice architecture is a distributed architecture. Each external request is han-
+dled by the API gateway and at least one service. Consider, for example, the get-
+OrderDetails() query, discussed in chapter 8. The API gateway handles this query by
+invoking several services, including Order Service, Kitchen Service, and Accounting
+Service. Each service must implement some aspects of security. For instance, Order
+Service must only allow a consumer to see their orders, which requires a combina-
+tion of authentication and authorization. In order to implement security in a micros-
+ervice architecture we need to determine who is responsible for authenticating the
+user and who is responsible for authorization.
+ One challenge with implementing security in a microservices application is that we
+can’t just copy the design from a monolithic application. That’s because two aspects of
+the monolithic application’s security architecture are nonstarters for a microservice
+architecture:
+In-memory security context—Using an in-memory security context, such as a thread-
+local, to pass around user identity. Services can’t share memory, so they can’t
+use an in-memory security context, such as a thread-local, to pass around the
+ 

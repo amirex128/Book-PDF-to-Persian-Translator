@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 92</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        storage engines: log-structured storage engines و page-oriented storage engines مانند B-trees.
+    </p>
+    <h4>Data Structures That Power Your Database</h4>
+    <p>
+        ساده‌ترین database جهان را در نظر بگیرید که به عنوان دو تابع Bash پیاده‌سازی شده است:
+    </p>
+    <pre><code class="language-bash">#!/bin/bash
+db_set () {
+    echo "$1,$2" &gt;&gt; database
+}
+db_get () {
+    grep "^$1," database | sed -e "s/^$1,//" | tail -n 1
+}
+</code></pre>
+    <p>
+        این دو تابع یک key-value store را پیاده‌سازی می‌کنند. شما می‌توانید db_set key value را فراخوانی کنید، که key و value را در database ذخیره می‌کند. key و value می‌توانند (تقریباً) هر چیزی که دوست دارید باشند—به عنوان مثال، value می‌تواند یک document JSON باشد. سپس می‌توانید db_get key را فراخوانی کنید، که آخرین value مرتبط با آن key خاص را جستجو می‌کند و آن را برمی‌گرداند.
+    </p>
+    <p>
+        و کار می‌کند:
+    </p>
+    <pre><code class="language-bash">$ db_set 123456 '{"name":"London","attractions":["Big Ben","London Eye"]}'
+$ db_set 42 '{"name":"San Francisco","attractions":["Golden Gate Bridge"]}'
+$ db_get 42
+{"name":"San Francisco","attractions":["Golden Gate Bridge"]}
+</code></pre>
+    <p>
+        The underlying storage format بسیار ساده است: یک فایل متنی که هر خط آن شامل یک key-value pair است که با یک کاما از هم جدا شده‌اند (تقریباً مانند یک فایل CSV، با نادیده گرفتن مسائل مربوط به escaping). هر فراخوانی به db_set به انتهای فایل اضافه می‌شود، بنابراین اگر شما یک key را چندین بار به‌روزرسانی کنید، نسخه‌های قدیمی value بازنویسی نمی‌شوند—شما باید به آخرین occurrence یک key در یک فایل نگاه کنید تا آخرین value را پیدا کنید (از این رو tail -n 1 در db_get):
+    </p>
+    <pre><code class="language-bash">$ db_set 42 '{"name":"San Francisco","attractions":["Exploratorium"]}'
+$ db_get 42
+{"name":"San Francisco","attractions":["Exploratorium"]}
+$ cat database
+123456,{"name":"London","attractions":["Big Ben","London Eye"]}
+42,{"name":"San Francisco","attractions":["Golden Gate Bridge"]}
+42,{"name":"San Francisco","attractions":["Exploratorium"]}
+</code></pre>
+    <p>
+        70 | Chapter 3: Storage and Retrieval
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

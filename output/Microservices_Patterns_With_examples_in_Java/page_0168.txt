@@ -1,0 +1,55 @@
+138
+CHAPTER 4
+Managing transactions with sagas
+defined by a KitchenServiceProxy. Let’s take a look at each of those classes, starting
+with CreateOrderSagaState. 
+THE CREATEORDERSAGASTATE CLASS
+The CreateOrderSagaState class, shown in the following listing, represents the state
+of a saga instance. An instance of this class is created by OrderService and is persisted
+in the database by the Eventuate Tram Saga framework. Its primary responsibility is to
+create the messages that are sent to saga participants.
+public class CreateOrderSagaState {
+private Long orderId;
+private OrderDetails orderDetails;
+private long ticketId;
+public Long getOrderId() {
+return orderId;
+}
+private CreateOrderSagaState() {
+}
+public CreateOrderSagaState(Long orderId, OrderDetails orderDetails) {  
+this.orderId = orderId;
+this.orderDetails = orderDetails;
+}
+CreateTicket makeCreateTicketCommand() {
+return new CreateTicket(getOrderDetails().getRestaurantId(),
+getOrderId(), makeTicketDetails(getOrderDetails()));
+}
+void handleCreateTicketReply(CreateTicketReply reply) {   
+logger.debug("getTicketId {}", reply.getTicketId());
+setTicketId(reply.getTicketId());
+}
+CancelCreateTicket makeCancelCreateTicketCommand() {
+  
+return new CancelCreateTicket(getOrderId());
+}
+...
+The CreateOrderSaga invokes the CreateOrderSagaState to create the command
+messages. It sends those command messages to the endpoints defined by the Saga-
+ParticipantProxy classes. Let’s take a look at one of those classes: KitchenService-
+Proxy. 
+Listing 4.4
+CreateOrderSagaState stores the state of a saga instance
+Invoked by the
+OrderService to
+instantiate a
+CreateOrderSagaState
+Creates a CreateTicket 
+command message
+Saves the ID 
+of the newly 
+created Ticket
+Creates 
+CancelCreateTicket 
+command message
+ 

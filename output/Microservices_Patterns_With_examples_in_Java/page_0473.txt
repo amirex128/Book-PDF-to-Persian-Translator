@@ -1,0 +1,47 @@
+443
+Designing how the service and the monolith collaborate
+13.3
+Designing how the service and the monolith 
+collaborate
+A service is rarely standalone. It usually needs to collaborate with the monolith. Some-
+times a service needs to access data owned by the monolith or invoke its operations.
+For example, Delayed Delivery Service, described in detail in section 13.4.1, requires
+access to the monolith’s orders and customer contact info. The monolith might also
+need to access data owned by the service or invoke its operations. For example, later
+in section 13.5, when discussing how to extract delivery management into a service, I
+describe how the monolith needs to invoke Delivery Service.
+ One important concern is maintaining data consistency between the service and
+monolith. In particular, when you extract a service from the monolith, you invariably
+split what were originally ACID transactions. You must be careful to ensure that data
+consistency is still maintained. As described later in this section, sometimes you use
+sagas to maintain data consistency.
+ The interaction between a service and the monolith is, as described earlier, facili-
+tated by integration glue code. Figure 13.8 shows the structure of the integration glue.
+It consists of adapters in the service and monolith that communicate using some kind
+of IPC mechanism. Depending on the requirements, the service and monolith might
+interact over REST or they might use messaging. They might even communicate using
+multiple IPC mechanisms.
+For example, Delayed Delivery Service uses both REST and domain events. It
+retrieves customer contact info from the monolith using REST. It tracks the state of
+Orders by subscribing to domain events published by the monolith.
+Monolith
+Service
+Inbound
+adapter
+Integration
+glue
+API
+adapter
+API
+adapter
+Outbound
+adapter
+Outbound
+adapter
+Inbound
+adapter
+Figure 13.8
+When migrating a monolith to microservices, the services and monolith often need to access each 
+other’s data. This interaction is facilitated by the integration glue, which consists of adapters that implement APIs. 
+Some APIs are messaging based. Other APIs are RPI based.
+ 

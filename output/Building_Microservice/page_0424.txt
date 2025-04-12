@@ -1,0 +1,27 @@
+In the case of AdvertCorp, we had two time-out related issues. Firstly, we had a miss‐
+ing time-out on the HTTP request pool, meaning that when asking for a worker to
+make a downstream HTTP request, the request thread would block forever until a
+worker became available. Secondly, when we finally had an HTTP worker available to
+make a request to the turnip ad system, we were waiting way too long before giving
+up on the call. So as Figure 12-3 shows, we needed to add one new time-out and
+change an existing one.
+Figure 12-3. Changing time-outs on AdvertCorp system
+The time-outs for the downstream HTTP requests had been set to 30 seconds—so we
+would wait 30 seconds for a response from the turnip system before giving up. The
+issue is that in the wider context that this call was being made, waiting that long made
+no sense. The turnip-related ads were being requested as a result of one of our users
+looking at our website using a browser. Even back when this happened, no one wai‐
+ted 30 seconds for a page to load. Think about what happens if a web page doesn’t
+load after 5, 10, or perhaps 15 seconds. What do you do? You refresh the page. So we
+were waiting 30 seconds for the turnip ad system to respond, but well before that the
+original request was no longer valid as the user had just refreshed, causing an addi‐
+tional inbound request. This in turn caused another request to come in for the ad sys‐
+tem, and so it went.
+When looking at the normal behavior of the turnip ad system, we could see that we
+would normally expect a response in much less than a second, so waiting for 30 sec‐
+onds was overkill. Furthermore, we had a target to render a page to the user within
+4–6 seconds. Based on this, we made the time-out much more aggressive, setting it to
+1 second. We also put a 1 second time-out on waiting for an HTTP worker to be
+398 
+| 
+Chapter 12: Resiliency

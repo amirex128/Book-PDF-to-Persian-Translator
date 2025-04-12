@@ -1,0 +1,50 @@
+463
+Breaking apart the monolith: extracting delivery management
+Delivery Service and the FTGO monolith to collaborate. But first, let’s look at the
+design of Delivery Service’s domain model. 
+13.5.3 Designing the Delivery Service domain model
+To be able to extract delivery management, we first need to identify the classes that
+implement it. Once we’ve done that, we can decide which classes to move to Delivery
+Service to form its domain logic. In some cases, we’ll need to split classes. We’ll
+also need to decide which data to replicate between the service and the monolith.
+ Let’s start by identifying the classes that implement delivery management.
+IDENTIFYING WHICH ENTITIES AND THEIR FIELDS ARE PART OF DELIVERY MANAGEMENT
+The first step in the process of designing Delivery Service is to carefully review the
+delivery management code and identify the participating entities and their fields. Fig-
+ure 13.18 shows the entities and fields that are part of delivery management. Some
+fields are inputs to the delivery-scheduling algorithm, and others are the outputs. The
+figure shows which of those fields are also used by other functionality implemented by
+the monolith.
+The delivery scheduling algorithm reads various attributes including the Order’s
+restaurant, promisedDeliveryTime, and deliveryAddress, and the Courier’s location,
+availability, and current plans. It updates the Courier’s plans, the Order’s scheduled-
+PickupTime, and scheduledDeliveryTime. As you can see, the fields used by delivery
+management are also used by the monolith. 
+Order
+«Monolith Read/Write»
+«Service Read»
+state
+deliveryAddress
+promisedDeliveryTime
+preparedByTime
+«Service Read/Write»
+«Monolith Read»
+scheduledPickupTime
+scheduledDeliveryTime
+Restaurant
+«Read»
+address
+Courier
+«Monolith Read/Write»
+«Service Read»
+Location
+availability
+«Service Read/Write»
+«Monolith Read»
+Plan
+Task
+Figure 13.18
+The entities and fields that are accessed by delivery management 
+and other functionality implemented by the monolith. A field can be read or written 
+or both. It can be accessed by delivery management, the monolith, or both.
+ 

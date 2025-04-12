@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 250</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        ii. به نظر می‌رسد، یک counter نادرست در یک application ایمیل یک مشکل خاص نیست. از طرف دیگر، به جای یک counter خوانده نشده، به موجودی حساب مشتری و به جای یک ایمیل، به یک <em>payment transaction</em> فکر کنید.
+    </p>
+    <h4>Single-Object and Multi-Object Operations</h4>
+    <p>
+        برای مرور، در <strong>ACID</strong>، atomicity و <em>isolation</em> توصیف می‌کنند که database باید در صورت انجام چندین <em>writes</em> توسط یک client در داخل همان <em>transaction</em>، چه کاری انجام دهد:
+    </p>
+    <p>
+        Atomicity
+    </p>
+    <p>
+        اگر یک <em>error</em> در میانه یک sequence از <em>writes</em> رخ دهد، transaction باید <em>aborted</em> شود، و <em>writes</em> انجام شده تا آن نقطه باید <em>discarded</em> شوند. به عبارت دیگر، database شما را از نگرانی در مورد <em>partial failure</em> نجات می‌دهد، با دادن یک <em>all-or-nothing guarantee</em>.
+    </p>
+    <p>
+        Isolation
+    </p>
+    <p>
+        <em>Concurrently running transactions</em> نباید با یکدیگر تداخل داشته باشند. به عنوان مثال، اگر یک <em>transaction</em> چندین <em>writes</em> انجام دهد، transaction دیگری باید یا همه یا هیچ یک از آن <em>writes</em> را ببیند، اما نه یک زیرمجموعه.
+    </p>
+    <p>
+        این تعاریف فرض می‌کنند که شما می‌خواهید چندین object (rows, documents, records) را به طور همزمان تغییر دهید. چنین <em>multi-object transactions</em> اغلب مورد نیاز هستند اگر چندین قطعه از داده‌ها نیاز به همگام‌سازی داشته باشند. شکل 7-2 یک مثال از یک application ایمیل را نشان می‌دهد.
+    </p>
+    <p>
+        برای نمایش تعداد پیام‌های خوانده نشده برای یک user، می‌توانید چیزی شبیه به این را <em>query</em> کنید:
+    </p>
+    <pre><code class="language-sql">SELECT COUNT(*) FROM emails WHERE recipient_id = 2 AND unread_flag = true
+</code></pre>
+    <p>
+        با این حال، ممکن است متوجه شوید که این <em>query</em> اگر ایمیل‌های زیادی وجود داشته باشد، خیلی کند است، و تصمیم بگیرید که تعداد پیام‌های خوانده نشده را در یک فیلد جداگانه ذخیره کنید (نوعی <em>denormalization</em>). اکنون، هر زمان که یک پیام جدید وارد می‌شود، باید counter خوانده نشده را نیز افزایش دهید، و هر زمان که یک پیام به عنوان خوانده شده علامت‌گذاری می‌شود، باید counter خوانده نشده را نیز کاهش دهید.
+    </p>
+    <p>
+        در شکل 7-2، user 2 یک <em>anomaly</em> را تجربه می‌کند: لیست صندوق پستی یک پیام خوانده نشده را نشان می‌دهد، اما counter صفر پیام خوانده نشده را نشان می‌دهد زیرا increment counter هنوز اتفاق نیفتاده است.ii Isolation این مسئله را با اطمینان از اینکه user 2 یا ایمیل درج شده و counter به‌روزرسانی شده را می‌بیند، یا هیچ‌کدام را، اما نه یک <em>inconsistent halfway point</em>، جلوگیری می‌کرد.
+    </p>
+    <p>
+        228
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

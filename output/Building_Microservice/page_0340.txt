@@ -1,0 +1,37 @@
+Before Anything Else
+Before you do anything else to build out your microservice archi‐
+tecture, get a log aggregation tool up and running. Consider it a
+prerequisite for building a microservice architecture. You’ll thank
+me later.
+Now, it’s also true to say that log aggregation has its limitations, and over time you
+may well want to look at more sophisticated tooling to augment or even replace some
+of what log aggregation provides. All that being said, it’s still an excellent place to
+start.
+Common format
+If you are going to aggregate your logs, you’ll want to be able to run queries across
+them to extract useful information. For this to work, it’s important that you pick a
+sensible standard log format—otherwise your queries will end up being difficult or
+perhaps impossible to write. You want the date, time, microservice name, log level,
+and so on in consistent places in each log.
+Some log forwarding agents give you the ability to reformat logs prior to forwarding
+them to your central log store. Personally, I’d avoid this wherever possible. The issue
+is that reformatting logs can be computationally intensive, to the point where I’ve
+seen real production issues caused by CPU being tied up carrying out this task. It’s
+much better to change the logs as they are written by your microservice itself. I’d
+keep the use of log forwarding agents to do log reformatting to places where I am
+unable to change the source log format—for example, legacy or third-party software.
+I would have thought that in the time since I wrote the first edition of this book a
+common industry standard for logging would have gained traction, but that doesn’t
+seem to have happened. Lots of variations seem to exist; they normally involve taking
+the standard access log format supported by web servers like Apache and nginx and
+expanding on it by adding more columns of data. The key thing is that within your
+own microservice architecture you pick a format that you standardize on internally.
+If you are using a fairly simple log format, you’ll just be emitting simple lines of text
+that have specific pieces of information at specific places in the log line. In
+Example 10-1, we see an example format.
+Example 10-1. Some example logs
+15-02-2020 16:00:58 Order INFO [abc-123] Customer 2112 has placed order 988827
+15-02-2020 16:01:01 Payment INFO [abc-123] Payment $20.99 for 988827 by cust 2112
+314 
+| 
+Chapter 10: From Monitoring to Observability

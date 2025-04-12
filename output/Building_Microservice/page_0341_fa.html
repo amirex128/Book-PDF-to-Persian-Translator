@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 341</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        ابزار <strong>log aggregation</strong> باید بداند چگونه این رشته را تجزیه کند تا اطلاعاتی را که ممکن است بخواهیم در مورد آنها پرس‌وجو کنیم—به عنوان مثال، <strong>timestamp</strong>، نام <strong>microservice</strong>، یا <strong>log level</strong>—را استخراج کند. در این مثال، این کار امکان‌پذیر است، زیرا این قطعات داده در مکان‌های ثابت در سراسر <strong>logs</strong> ما رخ می‌دهند—تاریخ ستون اول است، زمان ستون دوم است، و به همین ترتیب. با این حال، اگر بخواهیم خطوط <strong>log</strong> مربوط به یک مشتری داده شده را پیدا کنیم، این مشکل‌سازتر است—شناسه مشتری در هر دو خط <strong>log</strong> وجود دارد اما در مکان‌های مختلف نشان داده می‌شود. اینجاست که ما ممکن است به نوشتن خطوط <strong>log</strong> ساختاریافته‌تر، شاید با استفاده از یک قالب <strong>JSON</strong>، فکر کنیم، بنابراین می‌توانیم اطلاعاتی مانند شناسه مشتری یا سفارش را در یک مکان ثابت پیدا کنیم. باز هم، ابزار <strong>log aggregation</strong> باید پیکربندی شود تا اطلاعات مورد نیاز را از <strong>log</strong> تجزیه و استخراج کند. نکته دیگر این است که اگر شما <strong>JSON</strong> را <strong>log</strong> می‌کنید، این ممکن است خواندن مستقیم آن توسط انسان را بدون ابزارهای اضافی برای تجزیه مقادیر مورد نیاز دشوارتر کند—به سادگی خواندن <strong>log</strong> در یک <strong>plain text viewer</strong> ممکن است خیلی مفید نباشد.
+    </p>
+    <h4>Correlating log lines</h4>
+    <p>
+        با تعداد زیادی <strong>service</strong> که برای ارائه هر قابلیت کاربر نهایی با هم تعامل دارند، یک فراخوانی اولیه واحد می‌تواند در نهایت چندین فراخوانی <strong>service downstream</strong> ایجاد کند. به عنوان مثال، بیایید مثالی را در <strong>MusicCorp</strong> در نظر بگیریم، همانطور که در شکل 10-5 نشان داده شده است. ما در حال ثبت نام یک مشتری در سرویس <strong>streaming</strong> جدید خود هستیم. مشتری بسته <strong>streaming</strong> انتخابی خود را انتخاب می‌کند و روی دکمه <strong>submit</strong> کلیک می‌کند. در پشت صحنه، وقتی روی دکمه در <strong>UI</strong> کلیک می‌شود، به <strong>Gateway</strong> می‌رسد که در محیط سیستم ما قرار دارد. این به نوبه خود تماس را به <strong>Streaming microservice</strong> منتقل می‌کند. این <strong>microservice</strong> با <strong>Payment</strong> ارتباط برقرار می‌کند تا اولین پرداخت را انجام دهد، از <strong>Customer microservice</strong> استفاده می‌کند تا این واقعیت را که این مشتری اکنون <strong>streaming</strong> فعال دارد، به‌روزرسانی کند، و با استفاده از <strong>Email microservice</strong> ما ایمیلی را برای مشتری ارسال می‌کند و تأیید می‌کند که اکنون مشترک شده است.
+    </p>
+    <p>
+        اگر تماس با <strong>microservice Payment</strong> در نهایت یک خطای عجیب ایجاد کند، چه اتفاقی می‌افتد؟ ما به تفصیل در مورد رسیدگی به شکست‌ها در فصل 12 صحبت خواهیم کرد، اما دشواری تشخیص آنچه رخ داده است را در نظر بگیرید.
+    </p>
+    <p>
+        مشکل این است که تنها <strong>microservice</strong> ثبت کننده خطا، <strong>microservice Payment</strong> ما است. اگر خوش شانس باشیم، می‌توانیم بفهمیم کدام درخواست باعث ایجاد مشکل شده است، و ما حتی ممکن است بتوانیم به پارامترهای تماس نگاه کنیم. اما ما نمی‌توانیم این خطا را در زمینه گسترده‌تری که در آن رخ می‌دهد، ببینیم. در این مثال خاص، حتی اگر فرض کنیم که هر تعامل فقط یک خط <strong>log</strong> واحد ایجاد می‌کند، ما پنج خط <strong>log</strong> با اطلاعاتی در مورد این جریان تماس خواهیم داشت. توانایی دیدن این خطوط <strong>log</strong> که با هم گروه‌بندی شده‌اند می‌تواند فوق‌العاده مفید باشد.
+    </p>
+    <p>
+        Building Blocks for Observability | 315
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

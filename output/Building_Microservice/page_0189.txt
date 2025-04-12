@@ -1,0 +1,41 @@
+Service meshes and API gateways can potentially allow microservices to share code
+without requiring the creation of new client libraries or new microservices. Put (very)
+simply, service meshes and API gateways can work as proxies between microservices.
+This can mean that they may be used to implement some microservice-agnostic
+behavior that might otherwise have to be done in code, such as service discovery or
+logging.
+If you are using an API gateway or a service mesh to implement shared, common
+behavior for your microservices, it’s essential that this behavior is totally generic—in
+other words, that the behavior in the proxy bears no relation to any specific behavior
+of an individual microservice.
+Now, after explaining that, I also have to explain that the world isn’t always as clear-
+cut as that. A number of API gateways attempt to provide capabilities for east-west
+traffic too, but that’s something we’ll discuss shortly. Firstly, let’s look at API gate‐
+ways and the sorts of things they can do.
+API Gateways
+Being focused more on north-south traffic, the API gateway’s main concern in a
+microservices environment is mapping requests from external parties to internal
+microservices. This responsibility is akin to what you could achieve with a simple
+HTTP proxy, and in fact API gateways typically build more features on top of exist‐
+ing HTTP proxy products, and they largely function as reverse proxies. In addition,
+API gateways can be used to implement mechanisms like API keys for external par‐
+ties, logging, rate limiting, and the like. Some API gateway products will also provide
+developer portals, often targeted at external consumers.
+Part of the confusion around the API gateway has to do with history. A while back,
+there was a huge amount of interest in what was called “the API economy.” The
+industry had started to understand the power of offering APIs to managed solutions,
+from SaaS products like Salesforce to platforms like AWS, as it was clear that an API
+gave customers a lot more flexibility in how their software was used. This caused a
+number of people to start looking at the software they already had and consider the
+benefits of exposing that functionality to their customers not just via a GUI but also
+via an API. The hope was that this would open up larger market opportunities, and,
+well, make more money. Amid this interest, a crop of API gateway products emerged
+to help make achieving those goals possible. Their featureset leaned heavily on man‐
+aging API keys for third parties, enforcing rate limits, and tracking use for charge‐
+back purposes. The reality is that while APIs have absolutely been shown to be an
+excellent way to deliver services to some customers, the size of the API economy
+wasn’t quite as big as some had hoped, and a lot of companies found that they had
+purchased API gateway products laden with features they never actually needed.
+Service Meshes and API Gateways 
+| 
+163

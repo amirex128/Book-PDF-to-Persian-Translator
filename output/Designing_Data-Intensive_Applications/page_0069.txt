@@ -1,0 +1,42 @@
+db.observations.mapReduce(
+    function map() { 
+        var year  = this.observationTimestamp.getFullYear();
+        var month = this.observationTimestamp.getMonth() + 1;
+        emit(year + "-" + month, this.numAnimals); 
+    },
+    function reduce(key, values) { 
+        return Array.sum(values); 
+    },
+    {
+        query: { family: "Sharks" }, 
+        out: "monthlySharkReport" 
+    }
+);
+The filter to consider only shark species can be specified declaratively (this is a
+MongoDB-specific extension to MapReduce).
+The JavaScript function map is called once for every document that matches
+query, with this set to the document object.
+The map function emits a key (a string consisting of year and month, such as
+"2013-12" or "2014-1") and a value (the number of animals in that observation).
+The key-value pairs emitted by map are grouped by key. For all key-value pairs
+with the same key (i.e., the same month and year), the reduce function is called
+once.
+The reduce function adds up the number of animals from all observations in a
+particular month.
+The final output is written to the collection monthlySharkReport.
+For example, say the observations collection contains these two documents:
+{
+    observationTimestamp: Date.parse("Mon, 25 Dec 1995 12:34:56 GMT"),
+    family:     "Sharks",
+    species:    "Carcharodon carcharias",
+    numAnimals: 3
+}
+{
+    observationTimestamp: Date.parse("Tue, 12 Dec 1995 16:17:18 GMT"),
+    family:     "Sharks",
+    species:    "Carcharias taurus",
+    numAnimals: 4
+}
+Query Languages for Data 
+| 
+47

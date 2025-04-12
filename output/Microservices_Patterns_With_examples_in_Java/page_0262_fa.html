@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 262</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   <mark>data</mark>، منطقی است، حداقل در ظاهر، که آن را برای پیاده‌سازی این عملیات <mark>query</mark> پیاده‌سازی کند.
+   <br />
+   اما مالکیت <mark>data</mark> تنها عامل مورد توجه نیست.
+  </p>
+  <p>
+   شما همچنین باید نیاز به جداسازی نگرانی‌ها و اجتناب از اضافه بار <mark>services</mark> با مسئولیت‌های زیاد را در نظر بگیرید. به عنوان مثال، مسئولیت اصلی تیمی که <mark>Restaurant Service</mark> را توسعه می‌دهد، فعال کردن مدیران رستوران برای مدیریت پروفایل و موارد منوی رستوران‌هایشان است. این کاملاً با پیاده‌سازی یک <mark>query</mark> بحرانی با حجم بالا متفاوت است. علاوه بر این، اگر آن‌ها مسئول عملیات <mark>query</mark> <mark>findAvailableRestaurants()</mark> بودند، تیم دائماً از استقرار تغییری که از قرار دادن سفارش‌ها توسط مصرف‌کنندگان جلوگیری می‌کند، می‌ترسید.
+  </p>
+  <p>
+   منطقی است که <mark>Restaurant Service</mark> صرفاً داده‌های رستوران را به یک <mark>service</mark> دیگر ارائه دهد که عملیات <mark>query</mark> <mark>findAvailableRestaurants()</mark> را پیاده‌سازی می‌کند و به احتمال زیاد متعلق به تیم <mark>Order Service</mark> است. مانند عملیات <mark>query</mark> <mark>findOrderHistory()</mark>، و هنگامی که نیاز به حفظ <mark>geospatial index</mark> وجود دارد، یک نیاز برای حفظ یک <mark>replica</mark> سازگار نهایی از برخی <mark>data</mark> برای پیاده‌سازی یک <mark>query</mark> وجود دارد. بیایید ببینیم چگونه می‌توان این کار را با استفاده از <mark>CQRS</mark> انجام داد.
+  </p>
+  <h4><mark>7.2.2 Overview of CQRS</mark></h4>
+  <p>
+   مثال‌های شرح داده شده در بخش 7.2.1 سه مشکل را برجسته کردند که معمولاً هنگام پیاده‌سازی <mark>queries</mark> در یک معماری <mark>microservice</mark> با آن‌ها مواجه می‌شویم:
+  </p>
+  <ul>
+   <li>
+    استفاده از الگوی ترکیب <mark>API</mark> برای بازیابی <mark>data</mark> پراکنده در چندین <mark>services</mark> منجر به <mark>joins</mark> درون حافظه‌ای پرهزینه و ناکارآمد می‌شود.
+   </li>
+   <li>
+    <mark>service</mark>ای که مالک <mark>data</mark> است، <mark>data</mark> را به شکلی یا در یک <mark>database</mark> ذخیره می‌کند که به طور کارآمد از <mark>query</mark> مورد نیاز پشتیبانی نمی‌کند.
+   </li>
+   <li>
+    نیاز به جداسازی نگرانی‌ها به این معنی است که <mark>service</mark>ای که مالک <mark>data</mark> است، <mark>service</mark>ای نیست که باید عملیات <mark>query</mark> را پیاده‌سازی کند.
+   </li>
+  </ul>
+  <p>
+   راه‌حل برای هر سه این مشکلات استفاده از الگوی <mark>CQRS</mark> است.
+  </p>
+  <h5><mark>CQRS SEPARATES COMMANDS FROM QUERIES</mark></h5>
+  <p>
+   همانطور که از نامش پیداست، جداسازی مسئولیت <mark>Command Query</mark>، همه چیز در مورد جداسازی یا جداسازی نگرانی‌ها است. همانطور که شکل 7.8 نشان می‌دهد، یک مدل <mark>data</mark>ی پایدار و ماژول‌هایی را که از آن استفاده می‌کنند به دو بخش تقسیم می‌کند: سمت دستور و سمت <mark>query</mark>. ماژول‌ها و مدل <mark>data</mark>ی سمت دستور، عملیات ایجاد، به‌روزرسانی و حذف را پیاده‌سازی می‌کنند (به اختصار <mark>CUD</mark>—به عنوان مثال، <mark>HTTP POSTs</mark>، <mark>PUTs</mark> و <mark>DELETEs</mark>). ماژول‌ها و مدل <mark>data</mark>ی سمت <mark>query</mark>، <mark>queries</mark> را پیاده‌سازی می‌کنند (مانند <mark>HTTP GETs</mark>). سمت <mark>query</mark> مدل <mark>data</mark> خود را با اشتراک در <mark>events</mark> منتشر شده توسط سمت دستور، با مدل <mark>data</mark> سمت دستور همگام نگه می‌دارد.
+  </p>
+  <p>
+   نسخه‌های غیر <mark>CQRS</mark> و <mark>CQRS</mark> <mark>service</mark>، هر دو دارای یک <mark>API</mark> هستند که شامل عملیات <mark>CRUD</mark> مختلف است. در یک <mark>service</mark> مبتنی بر غیر <mark>CQRS</mark>، آن عملیات معمولاً توسط یک مدل <mark>domain</mark> پیاده‌سازی می‌شوند که به یک <mark>database</mark> نگاشت شده است. برای عملکرد، ممکن است چند <mark>query</mark> از مدل <mark>domain</mark> عبور کرده و مستقیماً به <mark>database</mark> دسترسی داشته باشند. یک مدل <mark>data</mark>ی پایدار واحد هم از دستورات و هم از <mark>queries</mark> پشتیبانی می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

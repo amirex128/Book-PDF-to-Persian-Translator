@@ -1,0 +1,43 @@
+Challenges
+In terms of ease of consumption, historically you wouldn’t be able to generate client-
+side code for your REST over HTTP application protocol like you can with RPC
+implementations. This has often lead to people creating REST APIs that provide cli‐
+ent libraries for consumers to make use of. These client libraries give you a binding to
+the API to make client integration easier. The problem is that client libraries can
+cause some challenges with regards to coupling between the client and the server,
+something we’ll discuss in “DRY and the Perils of Code Reuse in a Microservice
+World” on page 154.
+In recent years this problem has been somewhat alleviated. The OpenAPI specifica‐
+tion that grew out of the Swagger project now provides you with the ability to define
+enough information on a REST endpoint to allow for the generation of client-side
+code in a variety of languages. In my experience, I haven’t seen many teams actually
+making use of this functionality, even if they were already using Swagger for docu‐
+mentation. I have a suspicion that this may be due to the difficulties of retrofitting its
+use into current APIs. I do also have concerns about a specification that was previ‐
+ously used just for documentation now being used to define a more explicit contract.
+This can lead to a much more complex specification—comparing an OpenAPI
+schema with a protocol buffer schema, for example, is quite a stark contrast. Despite
+my reservations, though, it’s good that this option now exists.
+Performance may also be an issue. REST over HTTP payloads can actually be more
+compact than SOAP because REST supports alternative formats like JSON or even
+binary, but it will still be nowhere near as lean a binary protocol as Thrift might be.
+The overhead of HTTP for each request may also be a concern for low-latency
+requirements. All mainstream HTTP protocols in current use require the use of the
+Transmission Control Protocol (TCP) under the hood, which has inefficiencies com‐
+pared with other networking protocols, and some RPC implementations allow you to
+use alternative networking protocols to TCP such as the User Datagram Protocol
+(UDP).
+The limitations placed on HTTP due to the requirement to use TCP are being
+addressed. HTTP/3, which is currently in the process of being finalized, is looking to
+shift over to using the newer QUIC protocol. QUIC provides the same sorts of capa‐
+bilities as TCP (such as improved guarantees over UDP) but with some significant
+enhancements that have been shown to deliver improvements in latency and reduc‐
+tions in bandwidth. It’s likely to be several years before HTTP/3 has a widespread
+impact on the public internet, but it seems reasonable to assume that organizations
+can benefit earlier than this within their own networks.
+With respect to HATEOAS specifically, you can encounter additional performance
+issues. As clients need to navigate multiple controls to find the right endpoints for a
+given operation, this can lead to very chatty protocols—multiple round trips may be
+Technology Choices 
+| 
+131

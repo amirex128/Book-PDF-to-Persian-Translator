@@ -1,0 +1,40 @@
+previously to include an Expires: Never HTTP header. This hadn’t had any effect
+earlier, as we were overriding this header. Now we weren’t.
+Our application made heavy use of Squid to cache HTTP traffic, and we noticed the
+problem quite quickly, as we were seeing more requests bypassing Squid itself to hit
+our application servers. We fixed the cache header code and pushed out a release, and
+we also manually cleared the relevant region of the Squid cache. However, that wasn’t
+enough.
+As we just discussed, you can cache in multiple places—but sometimes having lots of
+caches makes your life harder, not easier. When it comes to serving up content to
+users of a public-facing web application, you could have multiple caches between you
+and your customer. Not only might you be fronting your website with something like
+a content delivery network, but some ISPs make use of caching. Can you control
+those caches? And even if you could, there is one cache that you have little control
+over: the cache in a user’s browser.
+Those pages with Expires: Never stuck in the caches of many of our users and
+would never be invalidated until the cache became full or the user cleaned them out
+manually. Clearly we couldn’t make either thing happen; our only option was to
+change the URLs of these pages so they were refetched.
+Caching can be very powerful indeed, but you need to understand the full path of
+data that is cached from source to destination to really appreciate its complexities and
+what can go wrong.
+Autoscaling
+If you are lucky enough to have fully automatable provisioning of virtual hosts and
+can fully automate the deployment of your microservice instances, then you have the
+building blocks to allow you to automatically scale your microservices.
+For example, you could have the scaling triggered by well-known trends. You might
+know that your system’s peak load is between 9 a.m. and 5 p.m., so you bring up
+additional instances at 8:45 a.m., and turn them off at 5:15 p.m. If you’re using some‐
+thing like AWS (which has very good support for autoscaling built in), turning off
+instances you don’t need any longer will help save money. You’ll need data to under‐
+stand how your load changes over time, from day to day, and from week to week.
+Some businesses have obvious seasonal cycles too, so you may need data going back a
+fair way to make proper judgment calls.
+On the other hand, you could be reactive, bringing up additional instances when you
+see an increase in load or an instance failure, and removing instances when you no
+longer need them. Knowing how fast you can scale up once you spot an upward trend
+is key. If you know you’ll get only a couple of minutes’ notice about an increase in
+Autoscaling 
+| 
+449

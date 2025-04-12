@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 423</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <h4><span style="font-weight: bold;">LACK OF ISOLATION WHEN RUNNING MULTIPLE SERVICE INSTANCES ON THE SAME MACHINE</span></h4>
+  <p>
+   The problem is even worse when running multiple instances در همان machine.
+   The lack از isolation به این معنی است که یک service instance که بد رفتار می‌کند می‌تواند بر other ser-
+   vice instances تأثیر بگذارد. As a result, the application در معرض خطر غیر قابل اعتماد بودن قرار می‌گیرد، به خصوص when run-
+   ning multiple service instances در همان machine.
+  </p>
+  <h4><span style="font-weight: bold;">LESS-EFFICIENT RESOURCE UTILIZATION</span></h4>
+  <p>
+   Each service instance دارای overhead از یک virtual machine کامل است، شامل
+   operating system آن. Moreover, a typical public IaaS virtual machine یک مجموعه محدود ارائه می‌دهد
+   از VM sizes، بنابراین VM احتمالاً underutilized خواهد بود. This is less likely to be a prob-
+   lem برای Java-based services، زیرا آنها نسبتاً heavyweight هستند. But this pattern
+   ممکن است یک راه inefficient از deploying lightweight NodeJS و GoLang services باشد.
+  </p>
+  <h4><span style="font-weight: bold;">RELATIVELY SLOW DEPLOYMENTS</span></h4>
+  <p>
+   Building a VM image معمولاً به چند دقیقه نیاز دارد به دلیل سایز از
+   the VM. There are lots از bits برای انتقال از طریق شبکه. Also, instantiating a VM
+   از a VM image زمان‌بر است، به دلیل، بار دیگر، مقدار data که
+   باید از طریق شبکه منتقل شود. The operating system که در داخل VM در حال اجرا است نیز
+   مقدار زمانی برای boot می‌برد، اگرچه slow یک اصطلاح نسبی است. This process، که شاید
+   minutes طول می‌کشد، بسیار سریع‌تر از the traditional deployment process است. But it’s much
+   سریع‌تر از deployment patterns سبک‌تری که به زودی در مورد آنها خواهید خواند.
+  </p>
+  <h4><span style="font-weight: bold;">SYSTEM ADMINISTRATION OVERHEAD</span></h4>
+  <p>
+   You’re responsible برای patching the operation system و runtime. System administra-
+   tion ممکن است اجتناب‌ناپذیر به نظر برسد، اما later در بخش 12.5، I describe
+   serverless deployment، که این نوع از system administration را حذف می‌کند.
+  </p>
+  <p>
+   Let’s now look at یک راه جایگزین برای deploy microservices که more light-
+   weight است، اما هنوز هم بسیاری از benefits از virtual machines را دارد.
+  </p>
+  <h4><span style="font-weight: bold;">12.3 Deploying services using the Service as 
+   a container pattern</span></h4>
+  <p>
+   Containers یک mechanism deployment مدرن‌تر و سبک‌تر هستند. They’re an
+   operating-system-level virtualization mechanism. A container, as figure 12.7 نشان می‌دهد،
+   معمولاً از یک process اما گاهی اوقات multiple processes running در یک sandbox، که
+   آن را از other containers جدا می‌کند، تشکیل شده است. A container که یک Java service را اجرا می‌کند، به عنوان مثال،
+   به طور معمول از the JVM process تشکیل می‌شود.
+  </p>
+  <p>
+   From the perspective از یک process که در یک container در حال اجرا است، انگار که در حال اجرا است
+   its own machine. It typically دارای IP address خود است، که port conflicts را حذف می‌کند. All
+   Java processes می‌توانند، به عنوان مثال، در پورت 8080 listen کنند. Each container همچنین دارای
+   root filesystem خود است. The container runtime از operating system mechanisms برای جدا کردن استفاده می‌کند
+   the containers از یکدیگر. The most popular example از a container runtime
+   Docker است، اگرچه موارد دیگری نیز وجود دارد، مانند Solaris Zones.
+  </p>
+  <p>
+   Pattern: Deploy a service as a container
+   Deploy services packaged به عنوان container images در production. Each service instance
+   یک container است. See http://microservices.io/patterns/deployment/service-per-container
+   .html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

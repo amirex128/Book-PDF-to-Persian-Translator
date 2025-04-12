@@ -1,0 +1,37 @@
+instance its own ring-fenced set of resources, making them a great choice for micro‐
+service deployments.
+Kubernetes can be very useful if you are looking to run container workloads across
+multiple machines. It’s not something I’d recommend for just a few microservices, as
+it brings with it its own sources of complexity. Where possible, use a managed Kuber‐
+netes cluster, as this allows you to avoid some of this complexity.
+FaaS is an interesting emerging pattern in deploying code. Rather than having to
+specify how many copies of something you want, you just give your code to the FaaS
+platform and say, “When this happens, run this code.” This is really nice from a
+developer point of view, and I think an abstraction like this is likely the future for a
+large amount of server-side development. The current implementations aren’t
+without problems, though. In terms of microservices, deploying a whole microservice
+as a single “function” on a FaaS platform is a totally fine way to start.
+One final note: separate in your mind the concepts of deployment and release. Just
+because you’ve deployed something to production doesn’t mean it has to be released
+to your users. By separating these concepts, you open up the opportunity to roll out
+your software in different ways—for example, by using canary releases or parallel
+runs. All of this and more is covered in depth in Chapter 8.
+Testing
+It makes a lot of sense to have a suite of automated functional tests to give you fast
+feedback on the quality of your software before the users see it, and this is absolutely
+something you should do. Microservices give you a lot of options in terms of the dif‐
+ferent types of tests you can write, as we explored in Chapter 9.
+When compared to other types of architectures, though, end-to-end tests can be
+especially problematic for microservice architectures. They can end up being more
+expensive to write and maintain for microservice architectures than for simpler non‐
+distributed architectures, and the tests themselves can end up having a lot more fail‐
+ures that don’t necessarily point to a problem with your code. End-to-end tests that
+span multiple teams are particularly challenging.
+Over time, look to reduce your reliance on end-to-end tests; consider replacing some
+of the effort put into this form of testing with consumer-driven contracts, schema
+compatibility checking, and testing in production. These activities can deliver much
+more effectively than end-to-end tests on quickly catching issues on more distributed
+systems.
+556 
+| 
+Afterword: Bringing It All Together

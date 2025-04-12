@@ -1,0 +1,51 @@
+374
+CHAPTER 11
+Developing production-ready services
+Metrics are sampled periodically. A metric sample has the following three properties:
+Name—The name of the metric, such as jvm_memory_max_bytes or placed_orders
+Value—A numeric value
+Timestamp—The time of the sample
+In addition, some monitoring systems support the concept of dimensions, which are
+arbitrary name-value pairs. For example, jvm_memory_max_bytes is reported with dimen-
+sions such as area="heap",id="PS Eden Space" and area="heap",id="PS Old Gen".
+Dimensions are often used to provide additional information, such as the machine
+name or service name, or a service instance identifier. A monitoring system typically
+aggregates (sums or averages) metric samples along one or more dimensions.
+ Many aspects of monitoring are the responsibility of operations. But a service
+developer is responsible for two aspects of metrics. First, they must instrument their
+service so that it collects metrics about its behavior. Second, they must expose those
+service metrics, along with metrics from the JVM and the application framework, to
+the metrics server.
+ Let’s first look at how a service collects metrics.
+COLLECTING SERVICE-LEVEL METRICS
+How much work you need to do to collect metrics depends on the frameworks that
+your application uses and the metrics you want to collect. A Spring Boot-based service
+can, for example, gather (and expose) basic metrics, such as JVM metrics, by including
+View
+Notify
+Metrics
+Service
+User
+Service instance
+Deployment infrastructure
+Metrics sample:
+name=cpu_percent
+value=68
+timestamp=34938934893
+dimensions:
+machine=node1
+...
+Application framework
+Language runtime
+Application code
+Metrics library
+Visualization
+Metrics
+ingestion
+Alerts
+Metrics
+database
+Figure 11.14
+Metrics at every level of the stack are collected and stored in a metrics service, which 
+provides visualization and alerting.
+ 

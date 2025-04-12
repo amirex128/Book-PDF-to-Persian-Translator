@@ -1,0 +1,57 @@
+381
+Developing services using the Microservice chassis pattern
+TLS-based IPC between services. As a result, you no longer need to implement these
+particular concerns in the services.
+ When using a service mesh, the microservice chassis is much simpler. It only needs
+to implement concerns that are tightly integrated with the application code, such as
+externalized configuration and health checks. The microservice chassis must support
+distributed tracing by propagating distributed tracing information, such as the B3
+standard headers I discussed earlier in section 11.3.3.
+The service mesh concept is an extremely promising idea. It frees the developer from
+having to deal with various cross-cutting concerns. Also, the ability of a service mesh to
+The current state of service mesh implementations
+There are various service mesh implementations, including the following:
+Istio (https://istio.io)
+Linkerd (https://linkerd.io)
+Conduit (https://conduit.io)
+As of the time of writing, Linkerd is the most mature, with Istio and Conduit still under
+active development. For more information about this exciting new technology, take a
+look at each product’s documentation.
+API
+gateway
+Microservice
+chassis
+Order
+Service
+Service
+mesh
+Microservice
+chassis
+Restaurant
+Service
+Microservice
+chassis
+Deployment infrastructure
+Circuit breaker
+Service discovery
+Distributed tracing
+Smart trafﬁc routing
+Load balancing
+Logging
+Microservice chassis
+Functionality moved from
+microservice chassis to
+service mesh
+Fewer functions
+Externalized conﬁg.
+Distributed tracing
+Application metrics
+Health check
+...
+Secure communications
+Figure 11.17
+All network traffic in and out of a service flows through the service mesh. The service 
+mesh implements various functions including circuit breakers, distributed tracing, service discovery, 
+and load balancing. Fewer functions are implemented by the microservice chassis. It also secures 
+interprocess communication by using TLS-based IPC between services.
+ 

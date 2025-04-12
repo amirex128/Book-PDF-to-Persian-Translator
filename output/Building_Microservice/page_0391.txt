@@ -1,0 +1,41 @@
+process listings) to hide traces of the external attacker. We spotted this only when we
+were able to check the hashes of the programs running on the machine against the
+official packages. In the end, we basically had to reinstall the entire server from
+scratch.
+The ability to simply wipe a server from existence and totally rebuild can be incredi‐
+bly effective not just in the wake of a known attack but also in terms of reducing the
+impact of persistent attackers. You might not be aware of the presence of a malicious
+party on your system, but if you are routinely rebuilding your servers and rotating
+credentials, you may be drastically limiting the impact of what they can do without
+your realizing it.
+Your ability to rebuild a given microservice, or even an entire system, comes down to
+the quality of your automation and backups. If you can deploy and configure each
+microservice from scratch based on information stored in source control, you’re off
+to a good start. Of course, you need to combine that with a rock-solid backup resto‐
+ration process for the data. As with backups, the best way to make sure automated
+deployment and configuration of your microservices works is to do it a lot—and the
+easiest way to achieve that is just to use the same process for rebuilding a microser‐
+vice as you do for every deployment. This is of course how most container-based
+deployment processes work. You deploy a new set of containers running the new ver‐
+sion of your microservice and shut down the old set. Making this normal operating
+procedure makes a rebuild almost a nonevent.
+There is one caveat here, especially if you are deploying on a container platform like
+Kubernetes. You might be frequently blowing away and redeploying container
+instances, but what about the underlying container platform itself? Do you have the
+ability to rebuild that from scratch? If you’re using a fully managed Kubernetes pro‐
+vider, spinning up a new cluster might not be too difficult, but if you’ve installed and
+manage the cluster yourself, then this may be a nontrivial amount of work.
+Being able to rebuild your microservice and recover its data in an
+automated fashion helps you recover in the wake of an attack and
+also has the advantage of making your deployments easier across
+the board, having positive benefits for development, test, and pro‐
+duction operations activities.
+Implicit Trust Versus Zero Trust
+Our microservice architecture consists of lots of communication between things.
+Human users interact with our system via user interfaces. These user interfaces in
+turn make calls to microservices, and microservices end up calling yet more micro‐
+services. When it comes to application security, we need to consider the issue of trust
+among all those points of contact. How do we establish an acceptable level of trust?
+Implicit Trust Versus Zero Trust 
+| 
+365

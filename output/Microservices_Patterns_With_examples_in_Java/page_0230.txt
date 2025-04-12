@@ -1,0 +1,41 @@
+200
+CHAPTER 6
+Developing business logic with event sourcing
+that occurred up until that point. It’s straightforward, for example, to calculate the
+available credit of a customer at some point in the past. 
+MOSTLY AVOIDS THE O/R IMPEDANCE MISMATCH PROBLEM
+Event sourcing persists events rather than aggregating them. Events typically have a
+simple, easily serializable structure. As mentioned earlier, a service can snapshot a
+complex aggregate by serializing a memento of its state, which adds a level of indirec-
+tion between an aggregate and its serialized representation. 
+PROVIDES DEVELOPERS WITH A TIME MACHINE
+Event sourcing stores a history of everything that’s happened in the lifetime of an
+application. Imagine that the FTGO developers need to implement a new require-
+ment to customers who added an item to their shopping cart and then removed it. A
+traditional application wouldn’t preserve this information, so could only market to
+customers who add and remove items after the feature is implemented. In contrast, an
+event sourcing-based application can immediately market to customers who have done
+this in the past. It’s as if event sourcing provides developers with a time machine for
+traveling to the past and implementing unanticipated requirements. 
+6.1.9
+Drawbacks of event sourcing
+Event sourcing isn’t a silver bullet. It has the following drawbacks:
+It has a different programming model that has a learning curve.
+It has the complexity of a messaging-based application.
+Evolving events can be tricky.
+Deleting data is tricky.
+Querying the event store is challenging.
+Let’s look at each drawback.
+DIFFERENT PROGRAMMING MODEL THAT HAS A LEARNING CURVE
+It’s a different and unfamiliar programming model, and that means a learning curve.
+In order for an existing application to use event sourcing, you must rewrite its busi-
+ness logic. Fortunately, that’s a fairly mechanical transformation that you can do when
+you migrate your application to microservices. 
+COMPLEXITY OF A MESSAGING-BASED APPLICATION
+Another drawback of event sourcing is that message brokers usually guarantee at-least-
+once delivery. Event handlers that aren’t idempotent must detect and discard dupli-
+cate events. The event sourcing framework can help by assigning each event a mono-
+tonically increasing ID. An event handler can then detect duplicate events by tracking
+the highest-seen event ID. This even happens automatically when event handlers
+update aggregates. 
+ 

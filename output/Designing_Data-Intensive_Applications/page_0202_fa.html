@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 202</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در databases Dynamo-style، پارامترهای n, w و r معمولاً قابل تنظیم هستند. A common choice این است که n را یک عدد فرد (معمولاً 3 یا 5) قرار دهید و w = r = (n + 1) / 2 (به سمت بالا گرد شده) را تنظیم کنید. با این حال، شما می‌توانید اعداد را آنطور که صلاح می‌دانید تغییر دهید. به عنوان مثال، یک workload با writes کم و reads زیاد ممکن است از تنظیم w = n و r = 1 سود ببرد. این باعث می‌شود که reads سریع‌تر شوند، اما این downside را دارد که تنها یک node fail شده باعث می‌شود که تمام writes database fail شوند.
+    </p>
+    <p>
+        ممکن است بیش از n nodes در cluster وجود داشته باشد، اما هر value داده شده
+        فقط در n nodes ذخیره می‌شود. این به dataset اجازه می‌دهد تا partitioned شود، که از datasets پشتیبانی می‌کند که بزرگتر از آن چیزی هستند که شما می‌توانید در یک node جا دهید.
+    </p>
+    <p>
+        ما در فصل 6 به partitioning باز خواهیم گشت.
+    </p>
+    <p>
+        The quorum condition, w + r &gt; n، به سیستم اجازه می‌دهد تا nodes unavailable را به شرح زیر تحمل کند:
+    </p>
+    <ul>
+        <li>If w &lt; n، ما هنوز می‌توانیم writes را پردازش کنیم اگر یک node در دسترس نباشد.</li>
+        <li>If r &lt; n، ما هنوز می‌توانیم reads را پردازش کنیم اگر یک node در دسترس نباشد.</li>
+        <li>With n = 3, w = 2, r = 2 ما می‌توانیم یک node unavailable را تحمل کنیم.</li>
+        <li>With n = 5, w = 3, r = 3 ما می‌توانیم دو nodes unavailable را تحمل کنیم. این case در شکل 5-11 نشان داده شده است.</li>
+        <li>Normally، reads و writes همیشه به همه n replicas به طور موازی ارسال می‌شوند. پارامترهای w و r تعیین می‌کنند که ما منتظر چند node می‌مانیم—یعنی، چند عدد از nodes n باید موفقیت را گزارش دهند قبل از اینکه ما read یا write را موفقیت‌آمیز در نظر بگیریم.</li>
+    </ul>
+    <p>
+        شکل 5-11. If w + r &gt; n، حداقل یکی از r replicas که شما از آن‌ها می‌خوانید، باید most recent successful write را دیده باشد.
+    </p>
+    <p>
+        180 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0202/image_1.png" alt="Image from page 202" /></div>
+<div class="page-image"><img src="page_0202/image_2.png" alt="Image from page 202" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

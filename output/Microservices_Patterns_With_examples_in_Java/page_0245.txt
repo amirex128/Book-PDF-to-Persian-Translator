@@ -1,0 +1,48 @@
+215
+Using sagas and event sourcing together
+1
+Create Order Saga sends an AuthorizeAccount command to Accounting-
+Service via a messaging channel. The Eventuate Saga framework’s SagaCommand-
+Dispatcher invokes AccountingServiceCommandHandler to handle the command
+message.
+2
+AccountingServiceCommandHandler sends the command to the specified
+Account aggregate.
+3
+The aggregate emits two events, AccountAuthorized and SagaReplyRequested-
+Event.
+4
+SagaReplyRequestedEventHandler handles SagaReplyRequestedEvent by send-
+ing a reply message to CreateOrderSaga.
+The AccountingServiceCommandHandler shown in the following listing handles the
+AuthorizeAccount command message by calling AggregateRepository.update() to
+update the Account aggregate.
+public class AccountingServiceCommandHandler {
+@Autowired
+private AggregateRepository<Account, AccountCommand> accountRepository;
+public void authorize(CommandMessage<AuthorizeCommand> cm) {
+AuthorizeCommand command = cm.getCommand();
+accountRepository.update(command.getOrderId(),
+command,
+replyingTo(cm)
+.catching(AccountDisabledException.class,
+() -> withFailure(new AccountDisabledReply()))
+.build());
+}
+...
+The authorize() method invokes an AggregateRepository to update the Account
+aggregate. The third argument to update(), which is the UpdateOptions, is computed
+by this expression:
+replyingTo(cm)
+.catching(AccountDisabledException.class,
+() -> withFailure(new AccountDisabledReply()))
+.build()
+These UpdateOptions configure the update() method to do the following:
+1
+Use the message id as an idempotency key to ensure that the message is pro-
+cessed exactly once. As mentioned earlier, the Eventuate framework stores the
+idempotency key in all generated events, enabling it to detect and ignore dupli-
+cate attempts to update an aggregate.
+Listing 6.6
+Handles command messages sent by sagas
+ 

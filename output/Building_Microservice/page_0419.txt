@@ -1,0 +1,42 @@
+requirements, but only you know exactly what the requirements themselves might be.
+So keep your own requirements in mind as you read on.
+Having an autoscaling system capable of reacting to increased load or the failure of
+individual nodes might be fantastic, but it could be overkill for a reporting system
+that needs to run only twice a month, where being down for a day or two isn’t that
+big of a deal. Likewise, figuring out how to do zero-downtime deployments to elimi‐
+nate interruption of service might make sense for your online ecommerce system, but
+for your corporate intranet knowledge base, it’s probably a step too far.
+How much failure you can tolerate or how fast your system needs to be is driven by
+the users of your system. That information in turn helps you understand which tech‐
+niques will make the most sense for you. That said, your users won’t always be able to
+articulate what their exact requirements are. So you need to ask questions to help
+extract the right information and help them understand the relative costs of provid‐
+ing different levels of service.
+As I mentioned previously, these cross-functional requirements can vary from service
+to service, but I would suggest defining some general cross-functionals and then
+overriding them for particular use cases. When it comes to considering if and how to
+scale out your system to better handle load or failure, start by trying to understand
+the following requirements:
+Response time/latency
+How long should various operations take? It can be useful to measure this with
+different numbers of users to understand how increasing load will impact the
+response time. Given the nature of networks, you’ll always have outliers, so set‐
+ting targets for a given percentile of the responses monitored can be useful. The
+target should also include the number of concurrent connections/users you will
+expect your software to handle. So you might say, “We expect the website to have
+a 90th-percentile response time of 2 seconds when handling 200 concurrent con‐
+nections per second.”
+Availability
+Can you expect a service to be down? Is this considered a 24/7 service? Some
+people like to look at periods of acceptable downtime when measuring availabil‐
+ity, but how useful is this to someone calling your service? Either I should be able
+to rely on your service responding or I shouldn’t. Measuring periods of down‐
+time is really more useful from a historical reporting angle.
+Durability of data
+How much data loss is acceptable? How long should data be kept for? This is
+highly likely to change on a case-by-case basis. For example, you might choose to
+keep user session logs for a year or less to save space, but your financial transac‐
+tion records might need to be kept for many years.
+How Much Is Too Much? 
+| 
+393

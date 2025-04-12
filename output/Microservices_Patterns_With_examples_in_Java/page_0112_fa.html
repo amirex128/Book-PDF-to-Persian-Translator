@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 112</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <p>
+   این رویکرد به <strong>service discovery</strong> ترکیبی از دو <strong>pattern</strong> است. اولین <strong>pat-</strong>
+   <strong>tern</strong>، الگوی <strong>Self registration</strong> است. یک نمونه سرویس، <strong>API</strong> ثبت <strong>service registry</strong> را فراخوانی می‌کند
+   برای ثبت موقعیت شبکه خود. همچنین ممکن است یک <strong>health check</strong> ارائه دهد
+   <strong>URL</strong>، که در فصل 11 با جزئیات بیشتری توضیح داده شده است. <strong>URL health check</strong> یک <strong>API end-</strong>
+   <strong>point</strong> است که <strong>service registry</strong> به صورت دوره‌ای برای تأیید اینکه نمونه سرویس،
+   سالم است و برای رسیدگی به <strong>requests</strong> در دسترس است. یک <strong>service registry</strong> ممکن است به یک سرویس نیاز داشته باشد
+   نمونه برای فراخوانی دوره‌ای یک <strong>API “heartbeat”</strong> به منظور جلوگیری از ثبت نام آن
+   منقضی شدن.
+  </p>
+  <p>
+   الگوی دوم، الگوی <strong>Client-side discovery</strong> است. هنگامی که یک کلاینت سرویس می‌خواهد
+   یک سرویس را فراخوانی کند، <strong>service registry</strong> را <strong>query</strong> می‌کند تا لیستی از نمونه‌های سرویس را دریافت کند.
+   برای بهبود عملکرد، یک کلاینت ممکن است نمونه‌های سرویس را <strong>cache</strong> کند. کلاینت سرویس
+  </p>
+  <p>
+   الگو: <strong>Self registration</strong>
+  </p>
+  <p>
+   یک نمونه سرویس خود را با <strong>service registry</strong> ثبت می‌کند. به http://microser
+   <strong>vices.io/patterns/self-registration.html</strong> مراجعه کنید.
+  </p>
+  <p>
+   سرویس
+   نمونه 1
+   سرویس سفارش
+   10.232.23.1
+   درخواست تعادل بار
+   10.232.23.1
+   10.232.23.2
+   10.232.23.3
+   10.232.23.2
+   ثبت("سرویس-سفارش"، "10.232.23.1")
+   پرس و جو("سرویس-سفارش")
+   <strong>Query API</strong>
+   <strong>Registration API</strong>
+   10.232.23.3
+   سرویس
+   نمونه 2
+   سرویس
+   نمونه 3
+   کتابخانه <strong>service discovery</strong>
+   سرویس
+   کلاینت
+   سرویس
+   سرویس-سفارش
+   سرویس-سفارش
+   سرویس-سفارش
+   ...
+   <strong>Service registry</strong>
+   آدرس <strong>IP</strong>
+   10.232.23.1
+   10.232.23.2
+   10.232.23.3
+   ...
+   <strong>RPC/rest</strong>
+   کلاینت
+   کتابخانه <strong>service discovery</strong>
+   کتابخانه <strong>service discovery</strong>
+   کتابخانه <strong>service discovery</strong>
+   <strong>Client-side discovery</strong>
+   الگوی <strong>Self registration</strong>
+  </p>
+  <p>
+   شکل 3.5
+   <strong>service registry</strong>، نمونه‌های سرویس را پیگیری می‌کند. کلاینت‌ها،
+   <strong>service registry</strong> را <strong>query</strong> می‌کنند تا موقعیت‌های شبکه نمونه‌های سرویس موجود را پیدا کنند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

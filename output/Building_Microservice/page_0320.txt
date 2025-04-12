@@ -1,0 +1,29 @@
+So with CDCs, we can identify a breaking change prior to our software going into
+production without having to use a potentially expensive end-to-end test.
+Figure 9-10. Integrating consumer-driven tests into the test pyramid
+Pact
+Pact is a consumer-driven testing tool that was originally developed in-house at
+realestate.com.au but is now open source. Originally just for Ruby and focused only
+on HTTP protocols, Pact now supports multiple languages and platforms, such as the
+JVM, JavaScript, Python, and .NET, and can also be used with messaging
+interactions.
+With Pact, you start by defining the expectations of the producer using a DSL in one
+of the supported languages. Then you launch a local Pact server and run this expecta‐
+tion against it to create the Pact specification file. The Pact file is just a formal JSON
+specification; you could obviously handcode this, but using the language-specific
+SDK is much easier.
+A really nice property of this model is that the locally running mock server used to
+generate the Pact file also works as a local stub for downstream microservices. By
+defining your expectations locally, you are defining how this local stub service should
+respond. This can replace the need for tools like mountebank (or your own hand-
+rolled stubbing or mocking solutions).
+On the producer side, you then verify that this consumer specification is met by using
+the JSON Pact specification to drive calls against your microservice and verify
+responses. For this to work, the producer needs access to the Pact file. As we dis‐
+cussed earlier in “Mapping Source Code and Builds to Microservices” on page 205,
+we expect the consumer and producer to be in different builds. This means that we
+need some way for this JSON file, which will be generated to the consumer build, to
+be made available by the producer.
+294 
+| 
+Chapter 9: Testing

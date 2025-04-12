@@ -1,0 +1,55 @@
+224
+CHAPTER 7
+Implementing queries in a microservice architecture
+required data, the aggregator might need to perform an inefficient, in-memory join
+of large datasets. Later on, you’ll see examples of query operations that can’t be
+implemented using this pattern. Fortunately, though, there are many scenarios where
+this pattern is applicable. To see it in action, we’ll look at an example. 
+7.1.3
+Implementing the findOrder() query operation using the API 
+composition pattern
+The findOrder() query operation corresponds to a simple primary key-based equi-
+join query. It’s reasonable to expect that each of the Provider services has an API end-
+point for retrieving the required data by orderId. Consequently, the findOrder()
+query operation is an excellent candidate to be implemented by the API composition
+pattern. The API composer invokes the four services and combines the results together.
+Figure 7.3 shows the design of the Find Order Composer.
+In this example, the API composer is a service that exposes the query as a REST endpoint.
+The Provider services also implement REST APIs. But the concept is the same if the ser-
+vices used some other interprocess communication protocol, such as gRPC, instead of
+HTTP. The Find Order Composer implements a REST endpoint GET /order/{orderId}.
+It invokes the four services and joins the responses using the orderId. Each Provider ser-
+vice implements a REST endpoint that returns a response corresponding to a single
+aggregate. The OrderService retrieves its version of an Order by primary key and the
+other services use the orderId as a foreign key to retrieve their aggregates.
+ As you can see, the API composition pattern is quite simple. Let’s look at a couple
+of design issues you must address when applying this pattern. 
+Find Order
+Composer
+Order Service
+«aggregate»
+Order
+GET/orders/
+{orderId}
+GET/charges?
+orderId=
+{orderId}
+GET/tickets?
+orderId=
+{orderId}
+GET/deliveries?
+orderId=
+{orderId}
+Kitchen Service
+«aggregate»
+RestaurantOrder
+Delivery Service
+«aggregate»
+Delivery
+Accounting Service
+«aggregate»
+Charge
+GET/order/{orderId}
+Figure 7.3
+Implementing findOrder() using the API composition pattern
+ 

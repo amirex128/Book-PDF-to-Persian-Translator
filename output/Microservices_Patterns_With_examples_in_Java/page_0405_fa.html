@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 405</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Designing observable services</span></h3>
+  <p>
+   the Micrometer Metrics library را به عنوان یک dependency و استفاده از چند خط از configura-
+   tion. Spring Boot’s autoconfiguration مراقب configuring the metrics library و
+   exposing the metrics است. A service فقط نیاز دارد تا از Micrometer Metrics API به طور مستقیم استفاده کند
+   اگر metrics مخصوص application را جمع‌آوری می‌کند.
+  </p>
+  <p>
+   فهرست زیر نشان می‌دهد که چگونه OrderService می‌تواند metrics را در مورد تعداد
+   orders placed، approved و rejected جمع‌آوری کند. It uses MeterRegistry، که the interface-
+   provided Micrometer Metrics است، تا custom metrics را جمع‌آوری کند. Each method یک
+   counter که به درستی نام‌گذاری شده است، را افزایش می‌دهد.
+  </p>
+  <pre><code class="language-java">
+  public class OrderService {
+  @Autowired
+  private MeterRegistry meterRegistry;
+  public Order createOrder(...) {
+  ...
+  meterRegistry.counter("placed_orders").increment();
+  return order;
+  }
+  public void approveOrder(long orderId) {
+  ...
+  meterRegistry.counter("approved_orders").increment();
+  }
+  public void rejectOrder(long orderId) {
+  ...
+  meterRegistry.counter("rejected_orders").increment();
+  }
+  </code></pre>
+  <h4><span style="font-weight: bold;">DELIVERING METRICS TO THE METRICS SERVICE</span></h4>
+  <p>
+   A service metrics را به Metrics Service به یکی از دو روش تحویل می‌دهد: push یا pull. With
+   the push model, a service instance metrics را با فراخوانی به Metrics Service ارسال می‌کند
+   یک API. AWS Cloudwatch metrics، به عنوان مثال، push model را پیاده‌سازی می‌کند.
+  </p>
+  <p>
+   With the pull model, the Metrics Service (or its agent که به صورت محلی در حال اجرا است) یک
+   service API را برای بازیابی metrics از service instance فراخوانی می‌کند. Prometheus، یک popular
+   open source monitoring و alerting system، از pull model استفاده می‌کند.
+  </p>
+  <p>
+   The FTGO application’s Order Service از micrometer-registry-prometheus استفاده می‌کند
+   library تا با Prometheus ادغام شود. Because این library در classpath است، Spring
+   Boot یک GET /actuator/prometheus endpoint را نمایش می‌دهد، که metrics را در
+   format که Prometheus انتظار دارد، برمی‌گرداند. The custom metrics از OrderService به شرح زیر گزارش می‌شود:
+  </p>
+  <pre><code class="language-text">
+  $ curl -v http://localhost:8080/actuator/prometheus | grep _orders
+  # HELP placed_orders_total
+  # TYPE placed_orders_total counter
+  </code></pre>
+  <p>
+   Listing 11.1
+   OrderService tracks the number از orders placed، approved، و
+   rejected.
+   The Micrometer Metrics
+   library API برای مدیریت
+   application-specific meters
+   Increments the
+   placedOrders counter
+   when an order has
+   successfully been
+   placed
+   Increments the
+   approvedOrders
+   counter when an
+   order has been
+   approved
+   Increments the
+   rejectedOrders
+   counter when an
+   order has been
+   rejected
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

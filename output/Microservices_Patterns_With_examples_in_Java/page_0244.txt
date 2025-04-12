@@ -1,0 +1,60 @@
+214
+CHAPTER 6
+Developing business logic with event sourcing
+EXAMPLE EVENT SOURCING-BASED SAGA PARTICIPANT
+This example looks at Accounting Service, one of the participants of Create Order
+Saga. Figure 6.12 shows how Accounting Service handles the Authorize Command
+sent by the saga. Accounting Service is implemented using the Eventuate Saga frame-
+work. The Eventuate Saga framework is an open source framework for writing sagas
+that use event sourcing. It’s built on the Eventuate Client framework.
+This figure shows how Create Order Saga and AccountingService interact. The
+sequence of events is as follows:
+AccountCreated
+....
+AccountAuthorized
+AccountAuthorized
+SagaReplyRequested
+Event store
+Event dispatcher
+Eventuate API
+Accounting Service
+SagaReplyRequested
+Order Service
+Aggregate
+repository
+SagaReply
+requested
+EventHandler
+Eventuate saga framework
+Saga command
+dispatcher
+Authorize
+command
+Authorize
+reply
+Account
+command channel
+Create order saga
+reply channel
+Create
+order
+saga
+Account
+authorize()
+Authorize account
+command handler
+Authorize
+the account.
+Send command to
+accounting service.
+Handle SagaReply
+requested event
+and send reply.
+Emit
+SagaReply
+requested
+event.
+Figure 6.12
+How the event sourcing-based Accounting Service participates in Create 
+Order Saga
+ 

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 316</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        نمی‌داند که دقیق‌تر از این است [58]. اگر ما فقط زمان +/– 100 ms را بدانیم، ارقام میکروثانیه در <em>timestamp</em> اساساً بی‌معنی هستند.
+    </p>
+    <p>
+        حدود عدم قطعیت را می‌توان بر اساس منبع زمان شما محاسبه کرد. اگر شما یک گیرنده GPS یا یک ساعت اتمی (سزیم) که مستقیماً به کامپیوتر شما متصل است، داشته باشید، بازه <em>error</em> مورد انتظار توسط سازنده گزارش می‌شود. اگر شما زمان را از یک server دریافت می‌کنید، عدم قطعیت بر اساس <em>quartz drift</em> مورد انتظار از زمان آخرین همگام‌سازی شما با سرور، به اضافه عدم قطعیت سرور NTP، به اضافه زمان <em>network round-trip</em> به سرور است (برای یک تقریب اول، و با فرض اینکه شما به سرور اعتماد دارید).
+    </p>
+    <p>
+        متاسفانه، اکثر system ها این عدم قطعیت را نشان نمی‌دهند: به عنوان مثال، وقتی شما clock_gettime() را فراخوانی می‌کنید، <em>return value</em>، <em>error</em> مورد انتظار از <em>timestamp</em> را به شما نمی‌گوید، بنابراین شما نمی‌دانید که آیا <em>confidence interval</em> آن پنج میلی‌ثانیه است یا پنج سال.
+    </p>
+    <p>
+        یک استثنا جالب، <em>API</em> TrueTime از Google در Spanner است [41]، که صریحاً <em>confidence interval</em> را روی ساعت محلی گزارش می‌دهد. وقتی از آن زمان فعلی را می‌پرسید، دو value دریافت می‌کنید: [earliest, latest]، که اولین و آخرین <em>timestamp</em> ممکن است. بر اساس محاسبات عدم قطعیت خود، ساعت می‌داند که زمان فعلی واقعی در جایی در آن <em>interval</em> است. عرض <em>interval</em>، از جمله، به این بستگی دارد که از آخرین همگام‌سازی ساعت <em>quartz</em> محلی با یک منبع ساعت دقیق‌تر، چقدر گذشته است.
+    </p>
+    <h4>Synchronized clocks for global snapshots</h4>
+    <p>
+        در "Snapshot Isolation and Repeatable Read" در صفحه 237 ما در مورد <em>snapshot iso‐lation</em> بحث کردیم، که یک ویژگی بسیار مفید در databases ها است که نیاز به پشتیبانی از <strong>Transactions</strong> های <em>read-write</em> کوچک و سریع و <em>large, long-running read-only transactions</em> (به عنوان مثال، برای <em>backups</em> یا <em>analytics</em>) دارند. به <strong>Transactions</strong> های <em>read-only</em> اجازه می‌دهد تا database را در یک حالت <em>consistent</em> در یک نقطه زمانی خاص، بدون <em>locking</em> و تداخل با <em>read-write transactions</em>، ببینند.
+    </p>
+    <p>
+        رایج‌ترین پیاده‌سازی <em>snapshot isolation</em> به یک <em>monotonically increasing transaction ID</em> نیاز دارد. اگر یک <em>write</em> بعد از <em>snapshot</em> اتفاق افتاد (یعنی، <em>write</em> دارای یک <em>transaction ID</em> بزرگتر از <em>snapshot</em> است)، آن <em>write</em> برای <em>snapshot transaction</em> نامرئی است. در یک database تک node، یک counter ساده برای تولید <em>transaction IDs</em> کافی است.
+    </p>
+    <p>
+        با این حال، وقتی یک database در سراسر machine های زیادی، به‌طور بالقوه در چندین <em>datacenters</em>، توزیع می‌شود، ایجاد یک <em>transaction ID</em> <em>monotonically increasing</em> (در سراسر تمام partitions) دشوار است، زیرا به هماهنگی نیاز دارد. <em>Transaction ID</em> باید <em>causality</em> را منعکس کند: اگر <em>transaction</em> B یک value را می‌خواند که توسط <em>transaction</em> A نوشته شده است، سپس B باید <em>transaction ID</em> بالاتری نسبت به A داشته باشد—در غیر این صورت، <em>snapshot</em>
+        <br>
+        294
+        <br>
+        |
+        <br>
+        Chapter 8: The Trouble with Distributed Systems
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

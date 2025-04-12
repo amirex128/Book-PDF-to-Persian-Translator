@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 116</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>عملکرد</h4>
+  <p>
+   عملکرد یک فراخوانی <strong>in-process</strong> با عملکرد یک فراخوانی <strong>inter-process</strong> اساساً متفاوت است. هنگامی که من یک فراخوانی <strong>in-process</strong> انجام می‌دهم، کامپایلر و <strong>runtime</strong> زیربنایی می‌توانند مجموعه‌ای از بهینه‌سازی‌ها را برای کاهش تأثیر فراخوانی انجام دهند، از جمله <strong>inlining</strong> فراخوانی به طوری که انگار هرگز در وهله اول فراخوانی وجود نداشته است. هیچ بهینه‌سازی از این دست با فراخوانی‌های <strong>inter-process</strong> امکان‌پذیر نیست. بسته‌ها باید ارسال شوند. انتظار داشته باشید که سربار یک فراخوانی <strong>inter-process</strong> در مقایسه با سربار یک فراخوانی <strong>in-process</strong> قابل توجه باشد. اولی بسیار قابل اندازه‌گیری است—فقط یک بسته واحد در یک مرکز داده در میلی‌ثانیه اندازه‌گیری می‌شود—در حالی که شما نیازی به نگرانی در مورد سربار انجام یک فراخوانی متد ندارید.
+  </p>
+  <p>
+   این اغلب می‌تواند شما را به این سمت سوق دهد که <strong>APIs</strong> را دوباره ارزیابی کنید. یک <strong>API</strong> که در <strong>in-process</strong> منطقی است، ممکن است در موقعیت‌های <strong>inter-process</strong> منطقی نباشد. من می‌توانم هزار فراخوانی را در یک <strong>API boundary</strong> در <strong>in-process</strong> بدون نگرانی انجام دهم. آیا می‌خواهم هزار فراخوانی شبکه را بین دو microservices انجام دهم؟ شاید نه.
+  </p>
+  <p>
+   هنگامی که من یک <strong>parameter</strong> را به یک متد منتقل می‌کنم، ساختار داده‌ای که منتقل می‌کنم معمولاً حرکت نمی‌کند—آنچه محتمل‌تر است این است که من یک <strong>pointer</strong> به یک مکان حافظه را منتقل می‌کنم. عبور از یک <strong>object</strong> یا ساختار داده به متد دیگر، مستلزم تخصیص حافظه بیشتر برای کپی کردن داده‌ها نیست.
+  </p>
+  <p>
+   از سوی دیگر، هنگام برقراری تماس بین microservicesها از طریق یک شبکه، داده‌ها در واقع باید به شکلی <strong>serialized</strong> شوند که بتوان آنها را از طریق یک شبکه منتقل کرد. سپس داده‌ها باید در انتهای دیگر ارسال و <strong>deserialized</strong> شوند. بنابراین ما ممکن است نیاز داشته باشیم که نسبت به اندازه <strong>payloads</strong> که بین فرآیندها ارسال می‌شود، بیشتر توجه داشته باشیم. آخرین باری که از اندازه یک ساختار داده که در داخل یک فرآیند منتقل می‌کردید، خبر داشتید چه زمانی بود؟ واقعیت این است که شما احتمالاً نیازی به دانستن نداشتید. اکنون شما می‌دانید. این ممکن است شما را به کاهش مقدار داده‌های ارسالی یا دریافتی سوق دهد (شاید اگر در مورد <strong>information hiding</strong> فکر کنیم چیز بدی نباشد)، مکانیسم‌های <strong>serialization</strong> کارآمدتری را انتخاب کنید، یا حتی داده‌ها را به یک سیستم فایل منتقل کنید و در عوض یک <strong>reference</strong> به آن مکان فایل را منتقل کنید.
+  </p>
+  <p>
+   این تفاوت‌ها ممکن است فوراً باعث ایجاد مشکل نشوند، اما شما قطعاً باید از آنها آگاه باشید. من تلاش‌های زیادی را برای پنهان کردن این واقعیت که حتی یک فراخوانی شبکه در حال انجام است، از توسعه‌دهنده، دیده‌ام. تمایل ما به ایجاد انتزاع‌ها برای پنهان کردن جزئیات بخش بزرگی از آنچه به ما اجازه می‌دهد تا کارهای بیشتری را به طور مؤثرتر انجام دهیم، اما گاهی اوقات ما انتزاع‌هایی ایجاد می‌کنیم که بیش از حد پنهان می‌کنند. یک توسعه‌دهنده باید بداند که آیا در حال انجام کاری است که منجر به یک فراخوانی شبکه می‌شود یا خیر. در غیر این صورت، نباید تعجب کنید اگر در ادامه با برخی از گلوگاه‌های عملکردی ناخوشایند مواجه شوید که ناشی از تعاملات عجیب و غریب بین <strong>service</strong> است که برای توسعه‌دهنده نوشتن کد قابل مشاهده نبود.
+  </p>
+  <p>90 | Chapter 4: Microservice Communication Styles</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

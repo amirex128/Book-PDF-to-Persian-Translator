@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 414</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <p>
+   Deployment ترکیبی از دو مفهوم مرتبط است: process و architecture.
+   The deployment process از stepهایی تشکیل شده است که باید توسط افراد انجام شود—
+   developers و operations—به منظور قرار دادن نرم‌افزار در production. The deploy-
+   ment architecture ساختار محیطی را تعریف می‌کند که در آن نرم‌افزار
+   اجرا می‌شود. Both aspects از deployment به طور رادیکالی از زمانی که من اولین بار شروع کردم
+   developing Enterprise Java applications در اواخر دهه 1990. The manual process از developers
+   throwing code over the wall to production، بسیار خودکار شده است. As figure 12.1
+   نشان می‌دهد، physical production environments جایگزین light-
+   weight و ephemeral computing infrastructure شده‌اند.
+  </p>
+  <p>
+   Back in the 1990s، اگر شما می‌خواستید یک application را در production مستقر کنید، first
+   step پرتاب application خود همراه با یک set از operating instructions over the بود
+   wall to operations. You might, for example, file یک trouble ticket asking operations to
+   deploy the application. Whatever happened next کاملاً responsibility از
+   operations بود، مگر اینکه آنها با مشکلی روبرو می‌شدند که برای رفع آن به کمک شما نیاز داشتند. Typi-
+   cally, operations application servers گران قیمت و سنگین وزن مانند WebLogic یا WebSphere را خریداری و نصب کردند.
+   Then they would log in به application server
+   console و applications شما را مستقر می‌کنند. They would lovingly مراقبت از آن machines، as
+   if they were pets، installing patches و updating the software.
+  </p>
+  <p>
+   In the mid 2000s، the expensive application servers با open
+   source, lightweight web containers مانند Apache Tomcat و Jetty جایگزین شدند. You could still
+   run multiple applications در هر web container، اما داشتن یک application در هر web
+   container امکان‌پذیر شد. Also, virtual machines شروع به جایگزینی physical machines کردند.
+   Physical
+   machine
+   Application
+   Physical
+   machine
+   Virtual
+   machine
+   Application
+   Physical
+   machine
+   Virtual
+   machine
+   Container
+   runtime
+   Application
+   Physical
+   machine
+   1990s
+   2006
+   2013
+   2014
+   AWS EC2
+   released
+   Initial Docker
+   release
+   AWS Lambda
+   introduced
+   Hidden
+   infrastructure
+   Serverless
+   runtime
+   Application
+   Lightweight,
+   ephemeral,
+   automated
+   Heavyweight,
+   permanent,
+   manual
+   Time
+  </p>
+  <p>
+   Figure 12.1
+   Heavyweight و long-lived physical machines از بین رفته‌اند
+   by increasingly lightweight و ephemeral technologies.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

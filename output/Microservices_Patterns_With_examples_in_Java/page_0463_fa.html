@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 463</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>Strategies for refactoring a monolith to microservices</strong></h2>
+  <p>
+   که شما نیاز دارید که برخی تغییرات را ایجاد کنید تا از migration به servicesها پشتیبانی کنید. Sec-
+   شن 13.3.2 در مورد چگونگی اصلاح monolith صحبت می‌کند تا بتواند در sagasهایی شرکت کند که database consistency را در سراسر monolith و
+   servicesها حفظ می‌کنند. مشکل ایجاد تغییرات گسترده در monolith این است که زمان‌بر است،
+   هزینه‌بر است و خطرناک است. به هر حال، احتمالاً به همین دلیل است که می‌خواهید به microservicesها مهاجرت کنید
+   در وهله اول.
+  </p>
+  <p>
+   خوشبختانه، استراتژی‌هایی وجود دارد که می‌توانید برای کاهش دامنه تغییرات
+   که شما نیاز دارید انجام دهید، استفاده کنید. به عنوان مثال، در بخش 13.2.3، من استراتژی تکثیر را توضیح می‌دهم
+   data از یک service استخراج شده به database monolith. و در بخش 13.3.2،
+   من نشان می‌دهم که چگونه می‌توانید با دقت توالی استخراج servicesها را برای کاهش تأثیر
+   بر روی monolith قرار دهید. با اعمال این استراتژی‌ها، می‌توانید میزان کار را کاهش دهید
+   که برای refactor کردن monolith مورد نیاز است.
+  </p>
+  <h3><strong>TECHNICAL DEPLOYMENT INFRASTRUCTURE: YOU DON’T NEED ALL OF IT YET</strong></h3>
+  <p>
+   در سراسر این کتاب من در مورد بسیاری از technologyهای جدید و درخشان بحث کرده‌ام، از جمله deploy-
+   ment platformsها مانند Kubernetes و AWS Lambda و service discovery mecha-
+   nismsها. ممکن است وسوسه شوید که migrat کردن به microservicesها را با انتخاب
+   technologiesها و ساختن آن infrastructure آغاز کنید. شما حتی ممکن است از
+   business peopleها و از vendor PaaS دوستانه‌تان برای شروع خرج کردن پول
+   بر روی این نوع infrastructure.
+  </p>
+  <p>
+   همانطور که به نظر می‌رسد ساختن این infrastructure در ابتدا وسوسه‌انگیز است، من توصیه می‌کنم فقط
+   یک سرمایه‌گذاری اولیه minimal در توسعه آن انجام دهید. تنها چیزی که شما نمی‌توانید بدون آن زندگی کنید
+   یک deployment pipeline است که انجام می‌دهد automating testing. به عنوان مثال، اگر
+   شما فقط تعداد انگشت شماری service دارید، شما به یک deployment پیچیده و
+   infrastructure observability نیاز ندارید. در ابتدا، شما حتی می‌توانید با استفاده از یک hard-
+   coded configuration file برای service discovery کنار بیایید. من پیشنهاد می‌کنم هرگونه تصمیم‌گیری در مورد
+   technical infrastructure که شامل سرمایه‌گذاری قابل توجهی است را تا زمانی که واقعی
+   experience را با microservice architecture کسب کرده‌اید، به تعویق بیندازید. این فقط زمانی است که شما چند service
+   running داشته باشید که شما تجربه انتخاب technologiesها را خواهید داشت.
+  </p>
+  <p>
+   اکنون بیایید به استراتژی‌هایی نگاهی بیندازیم که می‌توانید برای migrating به یک microservice
+   architecture استفاده کنید.
+  </p>
+  <h3><strong>13.2 Strategies for refactoring a monolith to microservices</strong></h3>
+  <p>
+   سه استراتژی اصلی برای strangling monolith و جایگزینی افزایشی وجود دارد
+   با microservices:
+  </p>
+  <ol>
+   <li>
+    Implement new features as services.
+   </li>
+   <li>
+    Separate the presentation tier and backend.
+   </li>
+   <li>
+    Break up the monolith by extracting functionality into services.
+   </li>
+  </ol>
+  <p>
+   اولین استراتژی، monolith را از رشد باز می‌دارد. این معمولاً یک راه سریع برای
+   نشان دادن value of microservices است و به ایجاد پشتیبانی برای migration کمک می‌کند
+   effort. دو استراتژی دیگر monolith را از هم جدا می‌کنند. هنگام refactoring شما
+   monolith، شما ممکن است گاهی از استراتژی دوم استفاده کنید، اما مطمئناً از
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

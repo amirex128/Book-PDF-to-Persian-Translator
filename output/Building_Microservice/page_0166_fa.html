@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 166</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p><em>Flink</em>، برخی از وظایف را می‌توان به جای آن در داخل <em>Kafka</em> انجام داد. با استفاده از <em>KSQL</em>، می‌توانید عبارات <em>SQL-like</em> را تعریف کنید که می‌تواند یک یا چند <em>topic</em> را در پرواز پردازش کند. این می‌تواند چیزی شبیه به یک نمای <em>database</em> به‌روزرسانی شده پویا به شما بدهد، که منبع داده‌ها <em>Kafka topics</em> به جای یک <em>database</em> است. این قابلیت‌ها برخی از امکانات بسیار جالب را برای نحوه مدیریت داده‌ها در سیستم‌های توزیع شده باز می‌کند. اگر می‌خواهید این ایده‌ها را با جزئیات بیشتری بررسی کنید، می‌توانم کتاب <em>Designing Event-Driven Systems (O’Reilly)</em> نوشته <em>Ben Stopford</em> را توصیه کنم. (من باید کتاب <em>Ben</em> را توصیه کنم، زیرا من پیشگفتار آن را نوشتم!) برای یک <em>deep dive</em> در <em>Kafka</em> به طور کلی، <em>Kafka: The Definitive Guide (O’Reilly)</em> نوشته <em>Neha Narkhede, Gwen Shapira</em> و <em>Todd Palino</em> را پیشنهاد می‌کنم.</p>
+  <h4>Serialization Formats</h4>
+  <p>برخی از انتخاب‌های فناوری که ما به آن‌ها نگاه کردیم—به طور خاص، برخی از پیاده‌سازی‌های <em>RPC</em>—در مورد نحوه <em>serialize</em> و <em>deserialize</em> کردن داده‌ها، برای شما انتخاب‌هایی را انجام می‌دهند. برای مثال، با <em>gRPC</em>، هر داده‌ای که ارسال می‌شود به <em>protocol buffer format</em> تبدیل می‌شود. با این حال، بسیاری از گزینه‌های فناوری، آزادی زیادی را از نظر نحوه تبدیل داده‌ها برای <em>network calls</em> به ما می‌دهند. <em>Kafka</em> را به عنوان <em>broker</em> مورد نظر خود انتخاب کنید، و می‌توانید <em>messages</em> را در قالب‌های مختلف ارسال کنید. بنابراین کدام <em>format</em> را باید انتخاب کنید؟</p>
+  <h4>Textual Formats</h4>
+  <p>استفاده از <em>textual formats</em> استاندارد، به <em>clients</em> انعطاف‌پذیری زیادی در نحوه استفاده از <em>resources</em> می‌دهد. <em>REST APIs</em> اغلب از یک <em>textual format</em> برای <em>request</em> و <em>response bodies</em> استفاده می‌کنند، حتی اگر از نظر تئوری می‌توانید داده‌های <em>binary</em> را از طریق <em>HTTP</em> ارسال کنید. در واقع، این نحوه عملکرد <em>gRPC</em> است—با استفاده از <em>HTTP</em> در زیر، اما ارسال <em>binary protocol buffers</em>.</p>
+  <p><em>JSON</em> <em>XML</em> را به عنوان <em>text serialization format</em> مورد نظر تصاحب کرده است. شما می‌توانید به تعدادی از دلایلی اشاره کنید که چرا این اتفاق افتاده است، اما دلیل اصلی این است که یکی از مصرف‌کنندگان اصلی <em>APIs</em> اغلب یک مرورگر است، جایی که <em>JSON</em> بسیار مناسب است. <em>JSON</em> تا حدی در نتیجه واکنش‌های شدید در برابر <em>XML</em> محبوب شد، و طرفداران، فشردگی و سادگی نسبی آن را در مقایسه با <em>XML</em> به عنوان یک عامل پیروزی دیگر ذکر می‌کنند.
+  <p>واقعیت این است که به ندرت یک تفاوت عظیم بین اندازه یک <em>JSON payload</em> و آن یک <em>XML payload</em> وجود دارد، به خصوص که این <em>payloads</em> معمولاً فشرده می‌شوند. همچنین شایان ذکر است که بخشی از سادگی <em>JSON</em> هزینه‌ای دارد—در عجله ما برای اتخاذ <em>protocols</em> ساده‌تر، <em>schemas</em> از پنجره بیرون رفتند (در این مورد بعداً توضیح داده می‌شود).</p>
+  <p><em>Avro</em> یک <em>serialization format</em> جالب است. <em>JSON</em> را به عنوان یک ساختار اساسی در نظر می‌گیرد و از آن برای تعریف یک <em>schema-based format</em> استفاده می‌کند. <em>Avro</em> به عنوان یک <em>format</em> برای <em>message payloads</em> محبوبیت زیادی پیدا کرده است، تا حدی به دلیل توانایی آن در ارسال <em>schema</em> به عنوان بخشی از <em>payload</em>، که می‌تواند پشتیبانی از <em>multiple different messaging formats</em> را بسیار آسان‌تر کند.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

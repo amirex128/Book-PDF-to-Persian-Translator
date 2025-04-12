@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 119</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the Asynchronous messaging pattern</h3>
+  <p>
+   <strong>IMPLEMENTING ONE-WAY NOTIFICATIONS</strong>
+  </p>
+  <p>
+   پیاده‌سازی <strong>one-way notifications</strong> با استفاده از پیام‌رسانی <strong>asynchronous</strong> ساده است.
+   کلاینت یک پیام، معمولاً یک پیام <strong>command</strong>، را به یک کانال نقطه به نقطه ارسال می‌کند
+   متعلق به سرویس. سرویس در کانال مشترک می‌شود و <strong>mes-</strong>
+   پیام را پردازش می‌کند. آن یک <strong>reply</strong> را برنمی‌گرداند.
+  </p>
+  <p>
+   <strong>IMPLEMENTING PUBLISH/SUBSCRIBE</strong>
+  </p>
+  <p>
+   پیام‌رسانی از تعامل سبک انتشار/اشتراک پشتیبانی داخلی دارد. یک کلاینت
+   یک پیام را به یک کانال انتشار-اشتراک که توسط چندین مصرف‌کننده خوانده می‌شود، منتشر می‌کند.
+   همانطور که در فصل‌های 4 و 5 توضیح داده شد، سرویس‌ها از انتشار/اشتراک برای انتشار استفاده می‌کنند
+   <strong>domain events</strong>، که نشان‌دهنده تغییراتی در <strong>domain objects</strong> است. سرویسی که منتشر می‌کند
+   <strong>domain events</strong> دارای یک کانال انتشار-اشتراک است که نام آن از
+   کلاس <strong>domain</strong>. به عنوان مثال، <strong>Order Service</strong>، رویدادهای <strong>Order</strong> را به یک <strong>Order</strong> منتشر می‌کند
+   کانال، و <strong>Delivery Service</strong>، رویدادهای <strong>Delivery</strong> را به یک <strong>Delivery chan-</strong>
+   <strong>nel</strong> منتشر می‌کند. سرویسی که به رویدادهای یک <strong>domain object</strong> خاص علاقه‌مند است، فقط باید
+   در کانال مناسب مشترک شوید.
+  </p>
+  <p>
+   <strong>IMPLEMENTING PUBLISH/ASYNC RESPONSES</strong>
+  </p>
+  <p>
+   سبک تعامل <strong>publish/async responses</strong> یک سبک تعامل سطح بالاتری است که
+   با ترکیب عناصر انتشار/اشتراک و <strong>request/response</strong> پیاده‌سازی شده است. یک <strong>cli-</strong>
+   یک کلاینت پیامی را منتشر می‌کند که یک هدر کانال <strong>reply</strong> را به یک انتشار-اشتراک مشخص می‌کند
+   کانال. یک مصرف‌کننده، یک پیام <strong>reply</strong> حاوی یک <strong>correlation id</strong> را به <strong>reply</strong> می‌نویسد
+   کانال. کلاینت، پاسخ‌ها را با استفاده از <strong>correlation id</strong> برای مطابقت با <strong>reply</strong> جمع‌آوری می‌کند
+   پیام‌ها با <strong>request</strong>.
+  </p>
+  <p>
+   هر سرویس در اپلیکیشن شما که دارای یک <strong>API asynchronous</strong> است از یکی یا
+   بیشتر از این تکنیک‌های پیاده‌سازی استفاده می‌کند. سرویسی که دارای یک <strong>API asynchronous</strong> برای
+   فراخوانی عملیات، یک کانال پیام برای <strong>requests</strong> خواهد داشت. به طور مشابه، یک سرویس که
+   رویدادها را منتشر می‌کند، آنها را به یک کانال پیام <strong>event</strong> منتشر می‌کند.
+  </p>
+  <p>
+   همانطور که در بخش 3.1.2 توضیح داده شد، نوشتن یک مشخصات <strong>API</strong> برای یک <strong>ser-</strong>
+   <strong>vice</strong>، مهم است. بیایید نگاهی بیندازیم به نحوه انجام این کار برای یک <strong>API asynchronous</strong>.
+  </p>
+  <h4>3.3.3 Creating an API specification for a messaging-based service API</h4>
+  <p>
+   مشخصات <strong>API asynchronous</strong> یک سرویس، همانطور که شکل 3.9 نشان می‌دهد، باید مشخص کند
+   نام‌های کانال‌های پیام، انواع پیام‌هایی که از طریق هر کدام رد و بدل می‌شوند
+   کانال و فرمت‌های آنها. شما همچنین باید فرمت پیام‌ها را با استفاده از
+   یک استاندارد مانند <strong>JSON</strong>، <strong>XML</strong> یا <strong>Protobuf</strong>. اما برخلاف <strong>REST</strong> و <strong>Open API</strong>،
+   هیچ استاندارد گسترده‌ای برای مستندسازی کانال‌ها و انواع پیام‌ها وجود ندارد.
+   در عوض، شما باید یک سند غیررسمی بنویسید.
+  </p>
+  <p>
+   <strong>API asynchronous</strong> یک سرویس شامل عملیات، که توسط کلاینت‌ها فراخوانی می‌شود و رویدادها،
+   منتشر شده توسط سرویس‌ها. آنها به روش‌های مختلف مستند شده‌اند. بیایید نگاهی بیندازیم به
+   هر کدام، با شروع از عملیات.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

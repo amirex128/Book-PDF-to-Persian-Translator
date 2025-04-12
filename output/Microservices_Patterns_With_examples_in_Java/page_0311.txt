@@ -1,0 +1,43 @@
+281
+Implementing an API gateway
+enough to support diverse clients becomes feasible. Another benefit is that even though
+the API is much more flexible, this approach significantly reduces the development
+effort. That’s because you write the server-side code using a query execution frame-
+work that’s designed to support API composition and projections. It’s as if, rather than
+force clients to retrieve data via stored procedures that you need to write and main-
+tain, you let them execute queries against the underlying database.
+This section talks about how to develop an API gateway using Apollo GraphQL. I’m
+only going to cover a few of the key features of GraphQL and Apollo GraphQL. For
+more information, you should consult the GraphQL and Apollo GraphQL docu-
+mentation.
+ The GraphQL-based API gateway, shown in figure 8.10, is written in JavaScript
+using the NodeJS Express web framework and the Apollo GraphQL server. The key
+parts of the design are as follows:
+GraphQL schema—The GraphQL schema defines the server-side data model and
+the queries it supports.
+Resolver functions—The resolve functions map elements of the schema to the
+various backend services.
+Proxy classes—The proxy classes invoke the FTGO application’s services.
+There’s also a small amount of glue code that integrates the GraphQL server with the
+Express web framework. Let’s look at each part, starting with the GraphQL schema.
+Schema-driven API technologies
+The two most popular graph-based API technologies are GraphQL (http://graphql.org)
+and Netflix Falcor (http://netflix.github.io/falcor/). Netflix Falcor models server-side
+data as a virtual JSON object graph. The Falcor client retrieves data from a Falcor
+server by executing a query that retrieves properties of that JSON object. The client
+can also update properties. In the Falcor server, the properties of the object graph
+are mapped to backend data sources, such as services with REST APIs. The server
+handles a request to set or get properties by invoking one or more backend data
+sources.
+GraphQL, developed by Facebook and released in 2015, is another popular graph-
+based API technology. It models the server-side data as a graph of objects that have
+fields and references to other objects. The object graph is mapped to backend data
+sources. GraphQL clients can execute queries that retrieve data and mutations that
+create and update data. Unlike Netflix Falcor, which is an implementation, GraphQL
+is a standard, with clients and servers available for a variety of languages, including
+NodeJS, Java, and Scala.
+Apollo GraphQL is a popular JavaScript/NodeJS implementation (www.apollographql
+.com). It’s a platform that includes a GraphQL server and client. Apollo GraphQL
+implements some powerful extensions to the GraphQL specification, such as sub-
+scriptions that push changed data to the client.
+ 

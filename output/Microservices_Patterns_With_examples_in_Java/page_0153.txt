@@ -1,0 +1,55 @@
+123
+Coordinating sagas
+Order Service first creates an Order and a Create Order Saga orchestrator. After that,
+the flow for the happy path is as follows:
+1
+The saga orchestrator sends a Verify Consumer command to Consumer Service.
+2
+Consumer Service replies with a Consumer Verified message.
+3
+The saga orchestrator sends a Create Ticket command to Kitchen Service.
+4
+Kitchen Service replies with a Ticket Created message.
+5
+The saga orchestrator sends an Authorize Card message to Accounting Service.
+6
+Accounting Service replies with a Card Authorized message.
+7
+The saga orchestrator sends an Approve Ticket command to Kitchen Service.
+8
+The saga orchestrator sends an Approve Order command to Order Service.
+Note that in final step, the saga orchestrator sends a command message to Order
+Service, even though it’s a component of Order Service. In principle, the Create
+Order Saga could approve the Order by updating it directly. But in order to be consis-
+tent, the saga treats Order Service as just another participant.
+ Diagrams such as figure 4.6 each depict one scenario for a saga, but a saga is likely
+to have numerous scenarios. For example, the Create Order Saga has four scenarios.
+In addition to the happy path, the saga can fail due to a failure in either Consumer
+Service, Kitchen Service, or Accounting Service. It’s useful, therefore, to model a
+saga as a state machine, because it describes all possible scenarios. 
+MODELING SAGA ORCHESTRATORS AS STATE MACHINES
+A good way to model a saga orchestrator is as a state machine. A state machine con-
+sists of a set of states and a set of transitions between states that are triggered by
+events. Each transition can have an action, which for a saga is the invocation of a
+saga participant. The transitions between states are triggered by the completion of a
+local transaction performed by a saga participant. The current state and the specific
+outcome of the local transaction determine the state transition and what action, if
+any, to perform. There are also effective testing strategies for state machines. As a
+result, using a state machine model makes designing, implementing, and testing
+sagas easier.
+ Figure 4.7 shows the state machine model for the Create Order Saga. This state
+machine consists of numerous states, including the following:
+
+Verifying Consumer—The initial state. When in this state, the saga is waiting
+for the Consumer Service to verify that the consumer can place the order.
+
+Creating Ticket—The saga is waiting for a reply to the Create Ticket command.
+
+Authorizing Card—Waiting for Accounting Service to authorize the con-
+sumer’s credit card.
+
+Order Approved—A final state indicating that the saga completed successfully.
+
+Order Rejected—A final state indicating that the Order was rejected by one of
+the participants.
+ 

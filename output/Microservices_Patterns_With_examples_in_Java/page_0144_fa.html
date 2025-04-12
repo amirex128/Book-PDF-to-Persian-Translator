@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 144</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>consistency (سازگاری)، availability (دسترسی‌پذیری) و partition tolerance (تحمل تقسیم) (https://en.wikipedia.org/wiki/CAP _theorem). امروزه، معماران ترجیح می‌دهند سیستمی داشته باشند که available (در دسترس) باشد تا سیستمی که consistent (سازگار) است.</p>
+  <p>در ظاهر، distributed transactions (تراکنش‌های توزیع شده) جذاب هستند. از دیدگاه developer (توسعه‌دهنده)، آنها همان model (مدل) برنامه‌نویسی را به عنوان local transactions (تراکنش‌های محلی) دارند. اما به دلیل مشکلاتی که تاکنون ذکر شد، distributed transactions (تراکنش‌های توزیع شده) یک technology (فناوری) مناسب برای applications (برنامه‌های) مدرن نیستند. فصل 3 نحوه ارسال messages (پیام‌ها) را به عنوان بخشی از یک transaction (تراکنش) database (پایگاه داده) بدون استفاده از distributed transactions (تراکنش‌های توزیع شده) شرح داد. برای حل مشکل پیچیده‌تر حفظ data consistency (سازگاری داده‌ها) در یک microservice (ریز سرویس) architecture (معماری)، یک application (برنامه) باید از یک مکانیزم متفاوت استفاده کند که بر اساس مفهوم services (سرویس‌های) loosely coupled (شل و غیر متصل) و asynchronous (ناهمزمان) ساخته شده است. اینجاست که sagas (حماسه‌ها) وارد می‌شوند.</p>
+  <h4><strong>4.1.3 Using the Saga pattern (استفاده از الگوی Saga) برای حفظ data consistency (سازگاری داده‌ها)</strong></h4>
+  <p>Sagas (حماسه‌ها) مکانیزم‌هایی برای حفظ data consistency (سازگاری داده‌ها) در یک microservice (ریز سرویس) architecture (معماری) بدون نیاز به استفاده از distributed transactions (تراکنش‌های توزیع شده) هستند. شما یک saga (حماسه) را برای هر system command (دستور سیستم) که نیاز به به‌روزرسانی data (داده‌ها) در چندین service (سرویس) دارد، تعریف می‌کنید. یک saga (حماسه) یک sequence (توالی) از local transactions (تراکنش‌های محلی) است. هر local transaction (تراکنش محلی) data (داده‌ها) را در یک service (سرویس) واحد با استفاده از frameworks (چارچوب‌ها) و libraries (کتابخانه‌های) ACID transaction (تراکنش اتمی) آشنا که قبلاً ذکر شد، به‌روزرسانی می‌کند.</p>
+  <p>operation (عملیات) system (سیستم) گام اول saga (حماسه) را آغاز می‌کند. تکمیل یک local transaction (تراکنش محلی) باعث اجرای local transaction (تراکنش محلی) بعدی می‌شود. بعداً، در بخش 4.2، خواهید دید که چگونه هماهنگی مراحل با استفاده از asynchronous messaging (پیام‌رسانی ناهمزمان) پیاده‌سازی می‌شود. یک مزیت مهم asynchronous messaging (پیام‌رسانی ناهمزمان) این است که تضمین می‌کند که تمام مراحل یک saga (حماسه) اجرا می‌شوند، حتی اگر یک یا چند participant (شرکت‌کننده) saga (حماسه) به طور موقت unavailable (غیرقابل دسترس) باشند.</p>
+  <p>Sagas (حماسه‌ها) از ACID transactions (تراکنش‌های اتمی) در چند مورد مهم متفاوت هستند. همانطور که در بخش 4.3 به تفصیل شرح می‌دهم، آنها فاقد ویژگی isolation (انزوا) ACID transactions (تراکنش‌های اتمی) هستند. همچنین، از آنجایی که هر local transaction (تراکنش محلی) تغییرات خود را commit (تعهد) می‌کند، یک saga (حماسه) باید با استفاده از compensating transactions (تراکنش‌های جبرانی) بازگردانده شود. بعداً در این بخش بیشتر در مورد compensating transactions (تراکنش‌های جبرانی) صحبت خواهم کرد. بیایید نگاهی به یک example saga (حماسه مثال) بیندازیم.</p>
+  <h4><strong>AN EXAMPLE SAGA: THE CREATE ORDER SAGA (یک مثال از حماسه: حماسه ایجاد سفارش)</strong></h4>
+  <p>example saga (حماسه مثال) که در این فصل استفاده می‌شود، Create Order Saga (حماسه ایجاد سفارش) است که در شکل 4.2 نشان داده شده است. Order Service (سرویس سفارش) operation (عملیات) createOrder() (ایجاد سفارش) را با استفاده از این saga (حماسه) پیاده‌سازی می‌کند. اولین local transaction (تراکنش محلی) saga (حماسه) توسط request (درخواست) خارجی برای ایجاد یک order (سفارش) آغاز می‌شود. پنج local transactions (تراکنش محلی) دیگر هر کدام با تکمیل transaction (تراکنش) قبلی، trigger (راه‌اندازی) می‌شوند.</p>
+  <p>Pattern (الگو): Saga (حماسه)</p>
+  <p>Maintain data consistency (حفظ سازگاری داده‌ها) در سراسر services (سرویس‌ها) با استفاده از یک sequence (توالی) از local transactions (تراکنش‌های محلی)</p>
+  <p>که با استفاده از asynchronous messaging (پیام‌رسانی ناهمزمان) هماهنگ شده‌اند. See (به) http://microservices.io/patterns/data/saga.html مراجعه کنید.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

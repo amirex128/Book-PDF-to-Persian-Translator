@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 473</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <h3><strong>13.3 Designing how the service and the monolith collaborate</strong></h3>
+  <p>
+   یک service به ندرت standalone است. این معمولاً نیاز دارد که با monolith همکاری کند. Some-
+   times یک service نیاز دارد که به data متعلق به monolith دسترسی داشته باشد یا عملیات آن را فراخوانی کند.
+   <br/>
+   به عنوان مثال، Delayed Delivery Service، که با جزئیات در بخش 13.4.1 توضیح داده شد، نیاز دارد
+   دسترسی به orders و customer contact infoهای monolith را داشته باشد. monolith همچنین ممکن است
+   نیاز داشته باشد که به data متعلق به service دسترسی داشته باشد یا عملیات آن را فراخوانی کند. به عنوان مثال، بعداً
+   در بخش 13.5، هنگام بحث در مورد چگونگی استخراج delivery management به یک service، من
+   توضیح می‌دهم که چگونه monolith نیاز دارد Delivery Service را فراخوانی کند.
+  </p>
+  <p>
+   یک نگرانی مهم، حفظ data consistency بین service و
+   monolith است. به طور خاص، هنگامی که شما یک service را از monolith استخراج می‌کنید، شما به ناچار
+   چیزی را که در اصل ACID transactions بودند، split می‌کنید. شما باید مراقب باشید تا اطمینان حاصل کنید که data
+   consistency هنوز حفظ شده است. همانطور که بعداً در این بخش توضیح داده شد، گاهی اوقات شما استفاده می‌کنید
+   sagasها برای حفظ data consistency.
+  </p>
+  <p>
+   تعامل بین یک service و monolith، همانطور که قبلاً توضیح داده شد، توسط facili-
+   tated شده توسط integration glue code. شکل 13.8 ساختار integration glue را نشان می‌دهد.
+   این شامل adaptersها در service و monolith است که با استفاده از نوعی
+   IPC mechanism ارتباط برقرار می‌کنند. بسته به requirementsها، service و monolith ممکن است
+   با استفاده از REST تعامل داشته باشند یا ممکن است از messaging استفاده کنند. آنها حتی ممکن است با استفاده از
+   چندین IPC mechanism ارتباط برقرار کنند.
+  </p>
+  <p>
+   به عنوان مثال، Delayed Delivery Service از REST و domain eventsها استفاده می‌کند. این
+   customer contact info را از monolith با استفاده از REST بازیابی می‌کند. این state of را ردیابی می‌کند
+   Ordersها با subscribe کردن به domain eventsهایی که توسط monolith منتشر می‌شوند.
+  </p>
+  <p>
+   Monolith
+   <br/>
+   Service
+   <br/>
+   Inbound
+   <br/>
+   adapter
+   <br/>
+   Integration
+   <br/>
+   glue
+   <br/>
+   API
+   <br/>
+   adapter
+   <br/>
+   API
+   <br/>
+   adapter
+   <br/>
+   Outbound
+   <br/>
+   adapter
+   <br/>
+   Outbound
+   <br/>
+   adapter
+   <br/>
+   Inbound
+   <br/>
+   adapter
+  </p>
+  <p>
+   <strong>Figure 13.8</strong>
+   <br/>
+   When migrating a monolith to microservices, the services and monolith often need to access each
+   other’s data. This interaction is facilitated by the integration glue, which consists of adapters that implement APIs.
+   Some APIs are messaging based. Other APIs are RPI based.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

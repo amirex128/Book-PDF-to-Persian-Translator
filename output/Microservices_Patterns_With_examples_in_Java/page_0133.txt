@@ -1,0 +1,45 @@
+103
+Using asynchronous messaging to improve availability
+CommandDispatcher dispatcher = new CommandDispatcher("subscribeId", 
+commandHandlers, messageConsumer, messageProducer);
+Throughout this book, you’ll see code examples that use these APIs for sending and
+receiving messages.
+ As you’ve seen, the Eventuate Tram framework implements transactional messag-
+ing for Java applications. It provides a low-level API for sending and receiving messages
+transactionally. It also provides the higher-level APIs for publishing and consuming
+domain events and for sending and processing commands.
+ Let’s now look at a service design approach that uses asynchronous messaging to
+improve availability. 
+3.4
+Using asynchronous messaging to improve availability
+As you’ve seen, a variety of IPC mechanisms have different trade-offs. One particular
+trade-off is how your choice of IPC mechanism impacts availability. In this section,
+you’ll learn that synchronous communication with other services as part of request
+handling reduces application availability. As a result, you should design your services
+to use asynchronous messaging whenever possible.
+ Let’s first look at the problem with synchronous communication and how it
+impacts availability.
+3.4.1
+Synchronous communication reduces availability
+REST is an extremely popular IPC mechanism. You may be tempted to use it for inter-
+service communication. The problem with REST, though, is that it’s a synchronous
+protocol: an HTTP client must wait for the service to send a response. Whenever
+services communicate using a synchronous protocol, the availability of the applica-
+tion is reduced.
+ To see why, consider the scenario shown in figure 3.15. The Order Service has a
+REST API for creating an Order. It invokes the Consumer Service and the Restaurant
+Service to validate the Order. Both of those services also have REST APIs.
+Client
+Order
+Service
+Consumer
+Service
+Restaurant
+Service
+POST/orders
+GET/consumers/id
+GET/restaurant/id
+Figure 3.15
+The Order Service invokes other services using REST. It’s straightforward, but it 
+requires all the services to be simultaneously available, which reduces the availability of the API.
+ 

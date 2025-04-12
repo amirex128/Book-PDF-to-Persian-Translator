@@ -1,0 +1,36 @@
+wider ecosystem of tooling around Consul isn’t of interest to you. However, if you’re
+running in a mixed environment, where you have workloads running on Kubernetes
+and elsewhere, then having a dedicated service discovery tool that could be used
+across both platforms may be the way to go.
+Rolling your own
+One approach I have used myself and seen used elsewhere is to roll your own system.
+On one project, we were making heavy use of AWS, which offers the ability to add
+tags to instances. When launching service instances, I would apply tags to help define
+what the instance was and what it was used for. These allowed for some rich meta‐
+data to be associated with a given host—for example:
+• service = accounts
+• environment = production
+• version = 154
+I then used the AWS APIs to query all the instances associated with a given AWS
+account so I could find the machines I cared about. Here, AWS itself is handling the
+storing of the metadata associated with each instance and providing us with the abil‐
+ity to query it. I then built command-line tools for interacting with these instances
+and provided graphical interfaces to view instance status at a glance. All of this
+becomes quite a simple undertaking if you can programmatically gather information
+about the service interfaces.
+The last time I did this we didn’t go as far as having services use the AWS APIs to
+find their service dependencies, but there is no reason why you couldn’t. Obviously, if
+you want upstream services to be alerted when the location of a downstream service
+changes, you’re on your own.
+Nowadays, this is not the route I would go. The crop of tooling in this space is mature
+enough that this would be a case of not just reinventing the wheel but recreating a
+much worse wheel.
+Don’t Forget the Humans!
+The systems we’ve looked at so far make it easy for a service instance to register itself
+and look up other services it needs to talk to. But as humans we sometimes want this
+information too. Making the information available in ways that allow for humans to
+consume it, perhaps by using APIs to pull this detail into humane registries (a topic
+we’ll look at in a moment), can be vital.
+Service Discovery 
+| 
+161

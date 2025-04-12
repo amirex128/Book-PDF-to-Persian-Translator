@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 434</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 12</span></h3>
+  <h3><span style="font-weight: bold;">Deploying microservices</span></h3>
+  <pre><code class="language-text">
+  httpGet:
+  path: /actuator/health
+  port: 8080
+  initialDelaySeconds: 60
+  periodSeconds: 20
+  </code></pre>
+  <p>
+   This deployment definition Kubernetes را پیکربندی می‌کند تا Restaurant Service’s را فراخوانی کند
+   health check endpoint. As described در فصل 11، a health check endpoint،
+   Kubernetes را قادر می‌سازد تا health از service instance را تعیین کند. Kubernetes پیاده‌سازی می‌کند
+   دو checks متفاوت. The first check is readinessProbe، که از آن برای تعیین
+   استفاده می‌کند که آیا باید traffic را به یک service instance هدایت کند یا خیر. In this example, Kubernetes
+   /actuator/health HTTP endpoint را هر 20 ثانیه پس از یک initial 30-
+   second delay فراخوانی می‌کند، که به آن فرصت می‌دهد تا مقداردهی اولیه شود. If some number (default is 1) از
+   consecutive readinessProbes succeeds، Kubernetes service را ready در نظر می‌گیرد،
+   در حالی که اگر some number (default, 3) از consecutive readinessProbes شکست بخورد، it’s consid-
+   ered not to be ready. Kubernetes فقط traffic را به service instance هدایت خواهد کرد when
+   the readinessProbe نشان می‌دهد که آن ready است.
+  </p>
+  <p>
+   The second health check، livenessProbe است. It’s configured به همان شیوه
+   readinessProbe. But rather than determine که آیا traffic باید به a ser-
+   vice instance هدایت شود، the livenessProbe تعیین می‌کند که آیا Kubernetes باید خاتمه دهد
+   و service instance را restart کند. If some number (default, 3) از consecutive liveness-
+   Probes fail در یک ردیف، Kubernetes service را خاتمه می‌دهد و restart می‌کند.
+  </p>
+  <p>
+   Once you’ve written the YAML file، شما می‌توانید deployment را با
+   استفاده از the kubectl apply command ایجاد یا به‌روزرسانی کنید:
+  </p>
+  <pre><code class="language-text">
+  kubectl apply -f ftgo-restaurant-service/src/deployment/kubernetes/ftgo-
+  restaurant-service.yml
+  </code></pre>
+  <p>
+   This command یک request را به the Kubernetes API server انجام می‌دهد که منجر به cre-
+   ation از deployment و the pods می‌شود.
+  </p>
+  <p>
+   To create this deployment، شما باید first the Kubernetes Secret را به نام ایجاد کنید
+   ftgo-db-secret. One quick و insecure way برای انجام این کار به شرح زیر است:
+  </p>
+  <pre><code class="language-text">
+  kubectl create secret generic ftgo-db-secret \
+  --from-literal=username=mysqluser --from-literal=password=mysqlpw
+  </code></pre>
+  <p>
+   This command یک secret حاوی database user ID و password را که مشخص شده است ایجاد می‌کند
+   on the command line. See the Kubernetes documentation (https://kubernetes
+   .io/docs/concepts/configuration/secret/#creating-your-own-secrets) برای ایمن‌تر
+   ways برای create secrets.
+  </p>
+  <h4><span style="font-weight: bold;">CREATING A KUBERNETES SERVICE</span></h4>
+  <p>
+   At this point the pods در حال اجرا هستند و the Kubernetes deployment بهترین تلاش خود را انجام خواهد داد تا
+   keep them running. The problem این است که the pods IP به صورت پویا اختصاص داده شده‌اند
+   addresses و، as such، برای یک client که می‌خواهد a HTTP
+   request را انجام دهد، چندان مفید نیستند. As described در فصل 3، the solution استفاده از a service discovery mechanism است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

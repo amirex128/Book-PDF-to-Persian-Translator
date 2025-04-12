@@ -1,0 +1,46 @@
+131
+Handling the lack of isolation
+order that exceeded the consumer credit limit. To reduce the risk of that happening,
+this countermeasure would reorder the Cancel Order Saga:
+1
+Order Service—Change the state of the Order to cancelled.
+2
+Delivery Service—Cancel the delivery.
+3
+Customer Service—Increase the available credit.
+In this reordered version of the saga, the available credit is increased in a retriable
+transaction, which eliminates the possibility of a dirty read. 
+COUNTERMEASURE: REREAD VALUE
+The reread value countermeasure prevents lost updates. A saga that uses this counter-
+measure rereads a record before updating it, verifies that it’s unchanged, and then
+updates the record. If the record has changed, the saga aborts and possibly restarts. This
+countermeasure is a form of the Optimistic Offline Lock pattern (https://martinfowler
+.com/eaaCatalog/optimisticOfflineLock.html).
+ The Create Order Saga could use this countermeasure to handle the scenario
+where the Order is cancelled while it’s in the process of being approved. The transac-
+tion that approves the Order verifies that the Order is unchanged since it was created
+earlier in the saga. If it’s unchanged, the transaction approves the Order. But if the
+Order has been cancelled, the transaction aborts the saga, which causes its compensat-
+ing transactions to be executed. 
+COUNTERMEASURE: VERSION FILE
+The version file countermeasure is so named because it records the operations that are
+performed on a record so that it can reorder them. It’s a way to turn noncommutative
+operations into commutative operations. To see how this countermeasure works, con-
+sider a scenario where the Create Order Saga executes concurrently with a Cancel
+Order Saga. Unless the sagas use the semantic lock countermeasure, it’s possible that
+the Cancel Order Saga cancels the authorization of the consumer’s credit card before
+the Create Order Saga authorizes the card.
+ One way for the Accounting Service to handle these out-of-order requests is for it
+to record the operations as they arrive and then execute them in the correct order. In
+this scenario, it would first record the Cancel Authorization request. Then, when the
+Accounting Service receives the subsequent Authorize Card request, it would notice
+that it had already received the Cancel Authorization request and skip authorizing
+the credit card. 
+COUNTERMEASURE: BY VALUE
+The final countermeasure is the by value countermeasure. It’s a strategy for selecting
+concurrency mechanisms based on business risk. An application that uses this
+countermeasure uses the properties of each request to decide between using sagas
+and distributed transactions. It executes low-risk requests using sagas, perhaps apply-
+ing the countermeasures described in the preceding section. But it executes high-risk
+requests involving, for example, large amounts of money, using distributed transactions.
+ 

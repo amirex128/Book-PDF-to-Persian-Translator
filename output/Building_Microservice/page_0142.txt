@@ -1,0 +1,42 @@
+Proceed with Caution
+Some of this asynchronous stuff seems fun, right? Event-driven architectures seem to
+lead to significantly more decoupled, scalable systems. And they can. But these com‐
+munication styles do lead to an increase in complexity. This isn’t just the complexity
+required to manage publishing and subscribing to messages, as we just discussed, but
+also complexity in the other problems we might face. For example, when considering
+long-running async request-response, we have to think about what to do when the
+response comes back. Does it come back to the same node that initiated the request?
+If so, what happens if that node is down? If not, do I need to store information some‐
+where so I can react accordingly? Short-lived async can be easier to manage if you’ve
+got the right APIs, but even so, it is a different way of thinking for programmers who
+are accustomed to intra-process synchronous message calls.
+It’s time for a cautionary tale. Back in 2006, I was working on building a pricing sys‐
+tem for a bank. We would look at market events and work out which items in a port‐
+folio needed to be repriced. Once we determined the list of things to work through,
+we put these all onto a message queue. We were making use of a grid to create a pool
+of pricing workers, allowing us to scale up and down the pricing farm on request.
+These workers used the competing consumers pattern, each one gobbling messages
+as fast as possible until there was nothing left to process.
+The system was up and running, and we were feeling rather smug. One day, though,
+just after we pushed a release out, we hit a nasty problem: our workers kept dying.
+And dying. And dying.
+Eventually, we tracked down the problem. A bug had crept in whereby a certain type
+of pricing request would cause a worker to crash. We were using a transacted queue:
+as the worker died, its lock on the request timed out, and the pricing request was put
+back on the queue—only for another worker to pick it up and die. This was a classic
+example of what Martin Fowler calls a catastrophic failover.
+Aside from the bug itself, we’d failed to specify a maximum retry limit for the job on
+the queue. So we fixed the bug, and configured a maximum retry. But we also realized
+we needed a way to view and potentially replay these bad messages. We ended up
+having to implement a message hospital (or dead letter queue), where messages got
+sent if they failed. We also created a UI to view those messages and retry them if
+needed. These sorts of problems aren’t immediately obvious if you are familiar only
+with synchronous point-to-point communication.
+The associated complexity with event-driven architectures and asynchronous pro‐
+gramming in general leads me to believe that you should be cautious in how eagerly
+you start adopting these ideas. Ensure you have good monitoring in place, and
+strongly consider the use of correlation IDs, which allow you to trace requests across
+process boundaries, as we’ll cover in depth in Chapter 10.
+116 
+| 
+Chapter 4: Microservice Communication Styles

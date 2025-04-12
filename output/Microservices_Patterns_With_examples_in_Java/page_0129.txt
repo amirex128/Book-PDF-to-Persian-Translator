@@ -1,0 +1,40 @@
+99
+Communicating using the Asynchronous messaging pattern
+business entities, and that may or may not be possible to do efficiently. Because of
+these drawbacks and limitations, it’s often better—and in some cases, necessary—to
+use the more sophisticated and performant approach of tailing the database transac-
+tion log. 
+PUBLISHING EVENTS BY APPLYING THE TRANSACTION LOG TAILING PATTERN
+A sophisticated solution is for MessageRelay to tail the database transaction log (also
+called the commit log). Every committed update made by an application is repre-
+sented as an entry in the database’s transaction log. A transaction log miner can read
+the transaction log and publish each change as a message to the message broker. Fig-
+ure 3.14 shows how this approach works.
+The Transaction Log Miner reads the transaction log entries. It converts each relevant
+log entry corresponding to an inserted message into a message and publishes that mes-
+sage to the message broker. This approach can be used to publish messages written to
+an OUTBOX table in an RDBMS or messages appended to records in a NoSQL database.
+Pattern: Transaction log tailing
+Publish changes made to the database by tailing the transaction log. See http://micro-
+services.io/patterns/data/transaction-log-tailing.html.
+Database
+OUTBOX table
+Transaction log
+Transaction log
+miner
+INSERT INTO OUTBOX ...
+Message
+broker
+Changes
+Publish
+Order
+Service
+Committed inserts into
+the OUTBOX table are
+recorded in the database’s
+transaction log.
+Reads the transaction log
+Figure 3.14
+A service publishes messages inserted into the OUTBOX table by mining 
+the database’s transaction log.
+ 

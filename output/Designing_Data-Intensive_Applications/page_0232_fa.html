@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 232</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Strategies for Rebalancing</h4>
+    <p>
+        راه‌های مختلفی برای اختصاص partitions به nodes وجود دارد [23]. بیایید هر کدام را به نوبه خود با هم بحث کنیم.
+    </p>
+    <h4>How not to do it: hash mod N</h4>
+    <p>
+        هنگام partitioning توسط hash از یک key، ما قبلاً گفتیم (شکل 6-3) که بهترین کار این است که hashes ممکن را به ranges تقسیم کنید و هر range را به یک partition اختصاص دهید (به عنوان مثال، key را به partition 0 اختصاص دهید اگر 0 ≤ hash(key) &lt; b0، به partition 1 اگر b0 ≤ hash(key) &lt; b1 و غیره).
+    </p>
+    <p>
+        شاید شما تعجب کرده باشید که چرا ما فقط از mod (عملگر %) در بسیاری از زبان‌های برنامه‌نویسی استفاده نمی‌کنیم. به عنوان مثال، hash(key) mod 10 یک عدد بین 0 و 9 را برمی‌گرداند (اگر ما hash را به عنوان یک عدد decimal بنویسیم، hash mod 10 رقمی خواهد بود). اگر ما 10 nodes داشته باشیم، که از 0 تا 9 شماره‌گذاری شده‌اند، این به نظر می‌رسد یک راه آسان برای اختصاص هر key به یک node باشد.
+    </p>
+    <p>
+        مشکل رویکرد mod N این است که اگر تعداد nodes N تغییر کند، اکثر keys نیاز به انتقال از یک node به node دیگر خواهند داشت. به عنوان مثال، فرض کنید hash(key) = 123456. اگر شما در ابتدا 10 nodes داشته باشید، آن key روی node 6 شروع می‌شود (زیرا 123456 mod 10 = 6). وقتی شما به 11 nodes رشد می‌کنید، key نیاز به انتقال به node 3 دارد (123456 mod 11 = 3)، و هنگامی که شما به 12 nodes رشد می‌کنید، نیاز به انتقال به node 0 دارد (123456 mod 12 = 0). این جابجایی‌های مکرر، rebalancing را بیش از حد گران می‌کند.
+    </p>
+    <p>
+        ما به یک رویکردی نیاز داریم که داده‌ها را بیش از حد لازم جابجا نکند.
+    </p>
+    <h4>Fixed number of partitions</h4>
+    <p>
+        خوشبختانه، یک راه‌حل نسبتاً ساده وجود دارد: partitions بیشتری را نسبت به nodes ایجاد کنید، و چندین partition را به هر node اختصاص دهید. به عنوان مثال، یک database که روی یک cluster از 10 nodes در حال اجرا است، ممکن است از ابتدا به 1000 partitions تقسیم شود، به طوری که تقریباً 100 partitions به هر node اختصاص داده شود.
+    </p>
+    <p>
+        اکنون، اگر یک node به cluster اضافه شود، node جدید می‌تواند چند partition را از هر node موجود بدزدد تا زمانی که partitions دوباره به طور منصفانه توزیع شوند. این فرآیند در شکل 6-6 نشان داده شده است. اگر یک node از cluster حذف شود، همین اتفاق برعکس می‌افتد.
+    </p>
+    <p>
+        Only entire partitions بین nodes منتقل می‌شوند. تعداد partitions تغییر نمی‌کند و همچنین نگاشت keys به partitions. تنها چیزی که تغییر می‌کند، تخصیص partitions به nodes است. این تغییر تخصیص فوری نیست—مدتی طول می‌کشد تا مقدار زیادی از داده‌ها از طریق شبکه منتقل شود—بنابراین تخصیص قدیمی از partitions برای هر reads و writes که در حالی که transfer در حال انجام است، استفاده می‌شود.
+    </p>
+    <p>
+        210 | Chapter 6: Partitioning
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

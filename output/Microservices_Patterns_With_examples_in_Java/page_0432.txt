@@ -1,0 +1,44 @@
+402
+CHAPTER 12
+Deploying microservices
+Let’s now look at key Kubernetes concepts you’ll need to master to deploy services on
+Kubernetes. 
+KEY KUBERNETES CONCEPTS
+As mentioned in the introduction to this section, Kubernetes is quite complex. But it’s
+possible to use Kubernetes productively once you master a few key concepts, called
+objects. Kubernetes defines many types of objects. From a developer’s perspective, the
+most important objects are the following:
+Pod—A pod is the basic unit of deployment in Kubernetes. It consists of one or
+more containers that share an IP address and storage volumes. The pod for a
+service instance often consists of a single container, such as a container running
+the JVM. But in some scenarios a pod contains one or more sidecar containers,
+which implement supporting functions. For example, an NGINX server could
+have a sidecar that periodically does a git pull to download the latest version
+of the website. A pod is ephemeral, because either the pod’s containers or the
+node it’s running on might crash.
+Deployment—A declarative specification of a pod. A deployment is a controller
+that ensures that the desired number of instances of the pod (service instances)
+are running at all times. It supports versioning with rolling upgrades and roll-
+backs. Later in section 12.4.2, you’ll see that each service in a microservice
+architecture is a Kubernetes deployment.
+Service—Provides clients of an application service with a static/stable network
+location. It’s a form of infrastructure-provided service discovery, described in
+chapter 3. A service has an IP address and a DNS name that resolves to that IP
+address and load balances TCP and UDP traffic across one or more pods. The
+IP address and a DNS name are only accessible within the Kubernetes. Later, I
+describe how to configure services that are accessible from outside the cluster.
+ConfigMap—A named collection of name-value pairs that defines the external-
+ized configuration for one or more application services (see chapter 11 for an
+overview of externalized configuration). The definition of a pod’s container
+can reference a ConfigMap to define the container’s environment variables. It
+can also use a ConfigMap to create configuration files inside the container. You
+can store sensitive information, such as passwords, in a form of ConfigMap
+called a Secret.
+Now that we’ve reviewed the key Kubernetes concepts, let’s see them in action by look-
+ing at how to deploy an application service on Kubernetes. 
+12.4.2 Deploying the Restaurant service on Kubernetes
+As mentioned earlier, to deploy a service on Kubernetes, you need to define a deploy-
+ment. The easiest way to create a Kubernetes object such as a deployment is by writing
+a YAML file. Listing 12.4 is a YAML file defining a deployment for Restaurant Service.
+This deployment specifies running two replicas of a pod. The pod has just one container.
+ 

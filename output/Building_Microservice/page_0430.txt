@@ -1,0 +1,41 @@
+go back to normal. Scripting the process to manually open and close a circuit breaker
+as part of an automated deployment process could be a sensible next step.
+Circuit breakers help our application fail fast—and failing fast is always better than
+failing slow. The circuit breakers allow us to fail before wasting valuable time (and
+resources) waiting for an unhealthy downstream microservice to respond. Rather
+than waiting until we try to use the downstream microservice to fail, we could check
+the status of our circuit breakers earlier. If a microservice we will rely on as part of an
+operation is currently unavailable, we can abort the operation before we even start.
+Isolation
+The more one microservice depends on another microservice being available, the
+more the health of one impacts the ability of the other to do its job. If we can use
+technology that allows a downstream server to be offline, for example, through the
+use of middleware or some other type of call buffering system, upstream microservi‐
+ces are less likely to be affected by outages, planned or unplanned, of downstream
+microservices.
+There is another benefit to increasing isolation between services. When services are
+isolated from each other, much less coordination is needed between service owners.
+The less coordination needed between teams, the more autonomy those teams have,
+as they are able to operate and evolve their services more freely.
+Isolation also applies in terms of how we move from the logical to the physical. Con‐
+sider two microservices that appear to be entirely isolated from one another. They
+don’t communicate with each other in any way. A problem with one of them
+shouldn’t impact the other, right? But what if both microservices are running on the
+same host, and one of the microservices starts using up all the CPU, causing that host
+to have issues?
+Consider another example. Two microservices each have their own, logically isolated
+database. But both databases are deployed onto the same database infrastructure. A
+failure in that database infrastructure would impact both microservices.
+When we consider how we want to deploy our microservices, we also want to strive
+to ensure a degree of failure isolation to avoid problems like this. For example, ensur‐
+ing that microservices are running on independent hosts with their own ring-fenced
+operating system and computing resources is a sensible step—this is what we achieve
+when we run microservice instances in their own virtual machine or container. This
+kind of isolation, though, can have a cost.
+We can isolate our microservices from each other more effectively by running them
+on different machines. This means we need more infrastructure, and tooling to man‐
+age that infrastructure. This has a direct cost and can also add to the complexity of
+our system exposing new avenues of potential failure. Each microservice could have
+404 
+| 
+Chapter 12: Resiliency

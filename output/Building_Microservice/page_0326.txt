@@ -1,0 +1,42 @@
+Cross-Functional Testing
+The bulk of this chapter has been focused on testing specific pieces of functionality,
+and how this differs when you are testing a microservice-based system. However,
+there is another category of testing that is important to discuss. Nonfunctional
+requirements is an umbrella term used to describe those characteristics your system
+exhibits that cannot simply be implemented like a normal feature. They include
+aspects like the acceptable latency of a web page, the number of users a system should
+support, how accessible your user interface should be to people with disabilities, or
+how secure your customer data should be.
+The term nonfunctional never sat well with me. Some of the things that get covered
+by this term seem very functional in nature! A previous colleague of mine, Sarah
+Taraporewalla, coined the phrase cross-functional requirements (CFR) instead, which
+I greatly prefer. It speaks more to the fact that these system behaviors really only
+emerge as the result of lots of cross-cutting work.
+Many if not most CFRs can really only be met in production. That said, we can define
+test strategies to help us see if we are at least moving toward meeting these goals.
+These sorts of tests fall into the Property Testing quadrant. A great example of this
+type of test is the performance test, which we’ll discuss in more depth shortly.
+You may want to track some CFRs at an individual microservice level. For example,
+you may decide that the durability of service you require from your payment service
+is significantly higher, but you are happy with more downtime for your music recom‐
+mendation service, knowing that your core business can survive if you are unable to
+recommend artists similar to Metallica for 10 minutes or so. These trade-offs will end
+up having a large impact on how you design and evolve your system, and once again
+the fine-grained nature of a microservice-based system gives you many more chances
+to make these trade-offs. When looking at the CFRs a given microservice or team
+might have to take responsibility for, it’s common for them to surface as part of a
+team’s service-level objectives (SLOs), a topic we explore further in “Are We Doing
+OK?” on page 327.
+Tests around CFRs should follow the pyramid too. Some tests will have to be end-to-
+end, like load tests, but others won’t. For example, once you’ve found a performance
+bottleneck in an end-to-end load test, write a smaller-scoped test to help you catch
+the problem in the future. Other CFRs fit faster tests quite easily. I remember work‐
+ing on a project for which we had insisted on ensuring that our HTML markup was
+using proper accessibility features to help people with disabilities use our website.
+Checking the generated markup to make sure that the appropriate controls were
+there could be done very quickly without the need for any networking round trips.
+All too often, considerations about CFRs come far too late. I strongly suggest looking
+at your CFRs as early as possible and reviewing them regularly.
+300 
+| 
+Chapter 9: Testing

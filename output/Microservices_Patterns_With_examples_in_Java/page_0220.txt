@@ -1,0 +1,59 @@
+190
+CHAPTER 6
+Developing business logic with event sourcing
+ The other methods each take a particular event type as a parameter and update
+the aggregate. There’s one of these methods for each event. It’s important to note
+that these methods can’t fail, because an event represents a state change that has hap-
+pened. Each method updates the aggregate based on the event.
+ The Eventuate Client framework, an event-sourcing framework described in more
+detail in section 6.2.2, names these methods process() and apply(). A process()
+method takes a command object, which contains the arguments of the update
+request, as a parameter and returns a list of events. An apply() method takes an event
+as a parameter and returns void. An aggregate will define multiple overloaded ver-
+sions of these methods: one process() method for each command class and one
+apply() method for each event type emitted by the aggregate. Figure 6.5 shows an
+example.
+Returns events without updating the Order
+Applies events to update the Order
+public class Order {
+public List<Event> process(ReviseOrder command) {
+OrderRevision orderRevision = command.getOrderRevision();
+switch (state) {
+case AUTHORIZED:
+LineItemQuantityChange change =
+orderLineItems.lineItemQuantityChange(orderRevision);
+if (change.newOrderTotal.isGreaterThanOrEqual(orderMinimum)) {
+throw new OrderMinimumNotMetException();
+}
+return singletonList(
+new OrderRevisionProposed(
+orderRevision, change.currentOrderTotal,
+change.newOrderTotal));
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public class Order {
+public void apply(OrderRevisionProposed event) {
+this.state = REVISION_PENDING;
+}
+public class Order {
+public List<DomainEvent> revise(OrderRevision orderRevision) {
+switch (state) {
+case AUTHORIZED:
+LineItemQuantityChange change =
+orderLineItems.lineItemQuantityChange(orderRevision);
+if (change.newOrderTotal.isGreaterThanOrEqual(orderMinimum)) {
+throw new OrderMinimumNotMetException();
+}
+this.state = REVISION_PENDING;
+return …;
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+Figure 6.5
+Event sourcing splits a method that updates an aggregate into a process() method, which takes 
+a command and returns events, and one or more apply() methods, which take an event and update the 
+aggregate.
+ 

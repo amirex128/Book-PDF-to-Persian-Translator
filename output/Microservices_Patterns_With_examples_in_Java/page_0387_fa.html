@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 387</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Developing secure services</span></h3>
+  <p>
+   One issue با JWT این است که به دلیل اینکه یک token خودمحصور است، غیرقابل برگشت است. By
+   design، یک service عملیات request را پس از تأیید signature و
+   expiration date از JWT انجام می‌دهد. As a result، هیچ راه عملی برای revoking یک JWT مجزا وجود ندارد
+   که به دست یک third party مخرب افتاده باشد. The solution این است که JWTs را صادر کنیم
+   با short expiration times، زیرا این امر آنچه را که یک party مخرب می‌تواند انجام دهد، محدود می‌کند. One
+   drawback از JWTs با عمر کوتاه، این است که application باید به نوعی به طور مداوم
+   JWTs را دوباره صادر کند تا session فعال بماند. Fortunately, این یکی از many protocols است
+   که توسط یک standard security به نام OAuth 2.0 حل می‌شوند. Let’s look at how that works.
+  </p>
+  <h4><span style="font-weight: bold;">USING OAUTH 2.0 IN A MICROSERVICE ARCHITECTURE</span></h4>
+  <p>
+   Let’s say شما می‌خواهید یک User Service را برای FTGO application که man-
+   ages یک user database حاوی اطلاعات user، مانند credentials و roles است، پیاده‌سازی کنید. The
+   API gateway User Service را فراخوانی می‌کند تا یک client request را authenticate کند و یک JWT به دست آورد.
+   You could design a User Service API و آن را با استفاده از your favorite web frame-
+   work پیاده‌سازی کنید. But that’s generic functionality که به FTGO application مربوط نمی‌شود -
+   توسعه چنین service، استفاده کارآمد از منابع توسعه نخواهد بود.
+  </p>
+  <p>
+   Fortunately, شما نیازی به توسعه این نوع زیرساخت security ندارید. You can
+   از یک service یا framework آماده که یک standard به نام OAuth 2.0 را پیاده‌سازی می‌کند، استفاده کنید.
+   OAuth 2.0 یک authorization protocol است که در اصل برای فعال کردن یک user از
+   a public cloud service، مانند GitHub یا Google، برای اعطای یک third-party application
+   access به اطلاعات خود بدون آشکار کردن password آن. For example, OAuth 2.0 است
+   the mechanism که به شما امکان می‌دهد به طور ایمن به یک سرویس Continuous مبتنی بر cloud third party (CI)
+   service access به GitHub repository خود.
+  </p>
+  <p>
+   Although the original focus از OAuth 2.0 authorizing access به public cloud
+   services بود، شما همچنین می‌توانید از آن برای authentication و authorization در application خود استفاده کنید.
+   Let’s take a quick look at how a microservice architecture ممکن است از OAuth 2.0 استفاده کند.
+  </p>
+  <p>
+   The key concepts در OAuth 2.0 به شرح زیر است:
+  </p>
+  <p>
+   
+   Authorization Server—یک API برای authenticating users و به دست آوردن فراهم می‌کند
+   یک access token و یک refresh token. Spring OAuth یک مثال عالی از a است
+   framework برای ساختن یک OAuth 2.0 authorization server.
+  </p>
+  <p>
+   
+   Access Token—A token که به یک Resource Server access می‌دهد. The format از
+   the access token به پیاده‌سازی وابسته است. But some implementations،
+   مانند Spring OAuth، از JWTs استفاده می‌کنند.
+  </p>
+  <h4><span style="font-weight: bold;">About OAuth 2.0</span></h4>
+  <p>
+   OAuth 2.0 یک موضوع پیچیده است. In this chapter، من فقط می‌توانم یک مرور کلی مختصر ارائه کنم و
+   توضیح دهید که چگونه می‌توان از آن در یک microservice architecture استفاده کرد. For more information
+   on OAuth 2.0، check out the online book OAuth 2.0 Servers by Aaron Parecki
+   (www.oauth.com). فصل 7 از Spring Microservices in Action (Manning, 2017) نیز
+   این موضوع را پوشش می‌دهد (https://livebook.manning.com/#!/book/spring-microservices-in-
+   action/chapter-7/).
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 183</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>Service Discovery</h4>
+  <p>هنگامی که شما بیش از چند <em>microservices</em> دارید، توجه شما ناگزیر به این سمت معطوف می‌شود که بدانید همه چیز دقیقاً کجاست. شاید شما می‌خواهید بدانید چه چیزی در یک محیط مشخص در حال اجرا است، بنابراین می‌دانید که چه چیزی را باید نظارت کنید. شاید به سادگی دانستن اینکه <em>Accounts microservice</em> شما کجاست، کافی باشد تا مصرف‌کنندگان آن بدانند که کجا آن را پیدا کنند. یا شاید شما فقط می‌خواهید این کار را برای توسعه‌دهندگان در سازمان خود آسان کنید تا بدانند کدام <em>APIs</em> در دسترس هستند تا چرخ را دوباره اختراع نکنند.</p>
+  <p>به طور کلی، همه این موارد استفاده تحت عنوان <em>service discovery</em> قرار می‌گیرند. و مثل همیشه با <em>microservices</em>، ما گزینه‌های مختلفی در اختیار داریم تا با آن مقابله کنیم.</p>
+  <p>همه راه‌حل‌هایی که به آن‌ها نگاه خواهیم کرد، کارها را در دو بخش انجام می‌دهند. اول، آن‌ها مکانیسمی را برای یک نمونه فراهم می‌کنند تا خود را ثبت کند و بگوید: "من اینجا هستم!" ثانیاً، آن‌ها راهی برای یافتن <em>service</em> پس از ثبت نام، ارائه می‌دهند. با این حال، <em>service discovery</em> زمانی پیچیده‌تر می‌شود که ما محیطی را در نظر می‌گیریم که در آن ما به طور مداوم در حال از بین بردن و استقرار نمونه‌های جدید از <em>services</em> هستیم. در حالت ایده‌آل، ما می‌خواهیم هر راه‌حلی که انتخاب می‌کنیم، با این موضوع مقابله کند.</p>
+  <p>بیایید به برخی از رایج‌ترین راه‌حل‌ها برای <em>service delivery</em> نگاهی بیندازیم و گزینه‌های خود را بررسی کنیم.</p>
+  <h4>Domain Name System (DNS)</h4>
+  <p>خوب است ساده شروع کنید. <em>DNS</em> به ما امکان می‌دهد نامی را با آدرس <em>IP</em> یک یا چند دستگاه مرتبط کنیم. به عنوان مثال، ما می‌توانیم تصمیم بگیریم که <em>Accounts microservice</em> ما همیشه در <em>accounts.musiccorp.net</em> یافت می‌شود. سپس ما آن نقطه ورود را به آدرس <em>IP</em> میزبان در حال اجرای آن <em>microservice</em> خواهیم داشت، یا شاید آن را به یک <em>load balancer</em> که بار را در تعدادی از نمونه‌ها توزیع می‌کند، تبدیل کنیم. این بدان معناست که ما باید به عنوان بخشی از استقرار <em>service</em> خود، به به‌روزرسانی این ورودی‌ها بپردازیم.
+  <p>هنگام برخورد با نمونه‌های یک <em>service</em> در محیط‌های مختلف، من دیده‌ام که یک <em>convention-based domain template</em> به خوبی کار می‌کند. به عنوان مثال، ممکن است یک <em>template</em> به عنوان <em><servicename>-<environment>.musiccorp.net</em> تعریف کرده باشیم، که ورودی‌هایی مانند <em>accounts-uat.musiccorp.net</em> یا <em>accounts-dev.musiccorp.net</em> را به ما می‌دهد.</p>
+  <p>یک راه پیشرفته‌تر برای مدیریت محیط‌های مختلف، داشتن <em>domain name servers</em> مختلف برای این محیط‌ها است. بنابراین من می‌توانم فرض کنم که <em>accounts.musiccorp.net</em> جایی است که من همیشه <em>Accounts microservice</em> را پیدا می‌کنم، اما این می‌تواند بسته به جایی که <em>lookup</em> را انجام می‌دهم، به میزبان‌های مختلفی تبدیل شود. اگر قبلاً محیط‌های خود را در بخش‌های شبکه مختلف قرار داده‌اید و در مدیریت <em>DNS servers</em> و ورودی‌های خود راحت هستید، این می‌تواند یک راه‌حل بسیار خوب باشد، اما اگر مزایای دیگری از این تنظیمات دریافت نمی‌کنید، کار زیادی می‌طلبد.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

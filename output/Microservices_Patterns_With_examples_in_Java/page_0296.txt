@@ -1,0 +1,46 @@
+266
+CHAPTER 8
+External API patterns
+The public API team owns and operates their API gateway, the mobile team owns and
+operates theirs, and so on. In theory, different API gateways could be developed using
+different technology stacks. But that risks duplicating code for common functionality,
+such as the code that implements edge functions. Ideally, all API gateways use the
+same technology stack. The common functionality is a shared library implemented by
+the API gateway team.
+ Besides clearly defining responsibilities, the BFF pattern has other benefits. The
+API modules are isolated from one another, which improves reliability. One misbehav-
+ing API can’t easily impact other APIs. It also improves observability, because different
+API modules are different processes. Another benefit of the BFF pattern is that each
+API is independently scalable. The BFF pattern also reduces startup time because
+each API gateway is a smaller, simpler application. 
+ 
+ 
+Mobile API
+gateway
+Mobile client
+Mobile API
+API layer
+Common layer
+Browser API
+gateway
+Browser API
+API layer
+Common layer
+Public API
+gateway
+Public API
+API layer
+Common layer
+Mobile client team
+Browser client team
+Owns
+Owns
+Owns
+Public API team
+Browser JavaScript
+application
+3rd-party application
+Figure 8.7
+The Backends for frontends pattern defines a separate API gateway for each client. Each 
+client team owns their API gateway. An API gateway team owns the common layer.
+ 

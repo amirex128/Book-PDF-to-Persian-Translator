@@ -1,0 +1,43 @@
+464
+CHAPTER 13
+Refactoring to microservices
+DECIDING WHICH DATA TO MIGRATE TO DELIVERY SERVICE
+Now that we’ve identified which entities and fields participate in delivery manage-
+ment, the next step is to decide which of them we should move to the service. In an
+ideal scenario, the data accessed by the service is used exclusively by the service, so we
+could simply move that data to the service and be done. Sadly, it’s rarely that simple,
+and this situation is no exception. All the entities and fields used by the delivery man-
+agement are also used by other functionality implemented by the monolith.
+ As a result, when determining which data to move to the service, we need to keep
+in mind two issues. The first is: how does the service access the data that remains in
+the monolith? The second is: how does the monolith access data that’s moved to the
+service? Also, as described earlier in section 13.3, we need to carefully consider how to
+maintain data consistency between the service and the monolith.
+ The essential responsibility of Delivery Service is managing courier plans and
+updating the Order’s scheduledPickupTime and scheduledDeliveryTime fields. It
+makes sense, therefore, for it to own those fields. We could also move the Cou-
+rier.location and Courier.availability fields to Delivery Service. But because
+we’re trying to make the smallest possible change, we’ll leave those fields in the mono-
+lith for now. 
+THE DESIGN OF THE DELIVERY SERVICE DOMAIN LOGIC
+Figure 13.19 shows the design of the Delivery Service’s domain model. The core of
+the service consists of domain classes such as Delivery and Courier. The Delivery-
+ServiceImpl class is the entry point into the delivery management business logic. It
+implements the DeliveryService and CourierService interfaces, which are invoked
+by DeliveryServiceEventsHandler and DeliveryServiceNotificationsHandlers,
+described later in this section.
+ The delivery management business logic is mostly code copied from the monolith.
+For example, we’ll copy the Order entity from the monolith to Delivery Service,
+rename it to Delivery, and delete all fields except those used by delivery manage-
+ment. We’ll also copy the Courier entity and delete most of its fields. In order to
+develop the domain logic for Delivery Service, we will need to untangle the code
+from the monolith. We’ll need to break numerous dependencies, which is likely to be
+time consuming. Once again, it’s a lot easier to refactor code when using a statically
+typed language, because the compiler will be your friend.
+ Delivery Service is not a standalone service. Let’s look at the design of the inte-
+gration glue that enables Delivery Service and the FTGO monolith to collaborate. 
+ 
+ 
+ 
+ 
+ 

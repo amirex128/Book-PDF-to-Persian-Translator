@@ -1,0 +1,40 @@
+organizational changes would just require that the owner of an existing microservice
+changes. Consider a situation in which the team in charge of warehousing operations
+previously also handled functionality around working out how many items should be
+ordered from suppliers. Let’s say that we decide to move this responsibility to a dedi‐
+cated forecasting team that wants to pull information from current sales and planned
+promotions to work out what needs to be ordered. If the warehousing team had a
+dedicated Supplier Ordering microservice, this could just be moved to the new
+forecasting team. On the other hand, if this functionality was previously integrated
+into a larger-scoped system owned by warehousing, then it might need to be split out.
+Even when we work within an existing organizational structure, there is a danger that
+we won’t get our boundaries in the right place. Many years ago, a few colleagues and I
+were working with a client in California, helping the company adopt some cleaner
+code practices and move more toward automated testing. We’d started with some of
+the low-hanging fruit, such as service decomposition, when we noticed something
+much more worrying. I can’t go into too much detail as to what the application did,
+but it was a public-facing application with a large, global customer base.
+The team, and system, had grown. Originally one person’s vision, the system had
+taken on more and more features, and more and more users. Eventually, the organi‐
+zation decided to increase the capacity of the team by having a new group of develop‐
+ers based in Brazil take on some of the work. The system got split up, with the front
+half of the application being essentially stateless, implementing the public-facing
+website, as shown in Figure 2-19. The back half of the system was simply a remote
+procedure call (RPC) interface over a data store. Essentially, imagine you’d taken a
+repository layer in your codebase and made this a separate service.
+Changes frequently had to be made to both services. Both services spoke in terms of
+low-level, RPC-style method calls, which were overly brittle (we’ll discuss this further
+in Chapter 4). The service interface was very chatty as well, resulting in performance
+issues. This led to the need for elaborate RPC-batching mechanisms. I called this
+“onion architecture,” as it had lots of layers and made me cry when we had to cut
+through it.
+Now on the face of it, the idea of splitting the previously monolithic system along
+geographical/organizational lines makes perfect sense, as we’ll expand on in Chap‐
+ter 15. Here, however, rather than taking a vertical, business-focused slice through
+the stack, the team picked what was previously an in-process API and made a hori‐
+zontal slice. A better model would have been for the team in California to have one
+end-to-end vertical slice, consisting of the related parts of the frontend and data
+access functionality, with the team in Brazil taking another slice.
+Alternatives to Business Domain Boundaries 
+| 
+67

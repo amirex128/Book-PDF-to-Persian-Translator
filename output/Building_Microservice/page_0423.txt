@@ -1,0 +1,27 @@
+Figure 12-2. An outline of the issues that caused the outage
+What was worse was that the downstream service we were talking to represented
+functionality that less than 5% of our customer base used, and it generated even less
+revenue than that. When you get down to it, we discovered the hard way that systems
+that just act slow are much harder to deal with than systems that just fail fast. In a
+distributed system, latency kills.
+Even if we’d had the time-outs on the pool set correctly, we were also sharing a single
+HTTP connection pool for all outbound requests. This meant that one slow down‐
+stream service could exhaust the number of available workers all by itself, even if
+everything else was healthy. Lastly, it was clear due to the frequent time-outs and
+errors that the downstream service in question wasn’t healthy, but despite this we
+kept sending traffic its way. In our situation, this meant we were actually making a
+bad situation worse, as the downstream service had no chance to recover. We ended
+up implementing three fixes to avoid this happening again: getting our time-outs
+right, implementing bulkheads to separate out different connection pools, and imple‐
+menting a circuit breaker to avoid sending calls to an unhealthy system in the first
+place.
+Time-Outs
+Time-outs are easy to overlook, but in a distributed system they are important to get
+right. How long can I wait before I should give up on a call to a downstream service?
+If you wait too long to decide that a call has failed, you can slow the whole system
+down. Time out too quickly, and you’ll consider a call that might have worked as
+failed. Have no time-outs at all, and a downstream service being down could hang
+your whole system.
+Stability Patterns 
+| 
+397

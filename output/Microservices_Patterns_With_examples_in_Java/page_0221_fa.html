@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 221</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">Developing business logic using event sourcing</strong></h3>
+  <p>
+   در این مثال، method به نام reviseOrder() با یک method به نام process() و یک method به نام apply() جایگزین می‌شود. method به نام process()، یک command به نام ReviseOrder را به عنوان یک پارامتر می‌گیرد. این class command با اعمال Introduce Parameter Object refactoring (https://refactoring.com/catalog/introduceParameterObject.html) به method به نام reviseOrder() تعریف می‌شود. method به نام process() یا یک event به نام OrderRevisionProposed را برمی‌گرداند، یا اگر برای revision از Order خیلی دیر شده باشد یا اگر revision پیشنهادی، minimum order را برآورده نکند، یک exception را throw می‌کند. method به نام apply() برای event به نام OrderRevisionProposed، state از Order را به REVISION_PENDING تغییر می‌دهد.
+  </p>
+  <p>
+   یک aggregate با استفاده از مراحل زیر ایجاد می‌شود:
+  </p>
+  <ol>
+   <li>Instantiate aggregate root using its default constructor.</li>
+   <li>Invoke process() to generate the new events.</li>
+   <li>Update the aggregate by iterating through the new events, calling its apply().</li>
+   <li>Save the new events in the event store.</li>
+  </ol>
+  <p>
+   یک aggregate با استفاده از مراحل زیر update می‌شود:
+  </p>
+  <ol>
+   <li>Load aggregate’s events from the event store.</li>
+   <li>Instantiate the aggregate root using its default constructor.</li>
+   <li>Iterate through the loaded events, calling apply() on the aggregate root.</li>
+   <li>Invoke its process() method to generate new events.</li>
+   <li>Update the aggregate by iterating through the new events, calling apply().</li>
+   <li>Save the new events in the event store.</li>
+  </ol>
+  <p>
+   برای دیدن این موارد در عمل، بیایید اکنون به نسخه event sourcing از Order aggregate نگاهی بیندازیم.
+  </p>
+  <h4><strong style="color:darkblue">EVENT SOURCING-BASED ORDER AGGREGATE</strong></h4>
+  <p>
+   Listing 6.1 fields از Order aggregate و methods آن را که مسئول ایجاد آن هستند، نشان می‌دهد. نسخه event sourcing از Order aggregate شباهت‌هایی به نسخه مبتنی بر JPA که در فصل 5 نشان داده شده است، دارد. fields آن تقریباً یکسان هستند و events مشابهی را منتشر می‌کند. آنچه متفاوت است این است که business logic آن بر حسب processing commands که events را emit می‌کنند و applying those events، که state آن را update می‌کند، پیاده‌سازی شده است.
+  </p>
+  <p>
+   هر method که aggregate مبتنی بر JPA را ایجاد یا update می‌کند، مانند createOrder() و reviseOrder()، در نسخه event sourcing توسط methods به نام process() و apply() جایگزین می‌شود.
+  </p>
+  <pre><code class="language-java">public class Order {
+private OrderState state;
+private Long consumerId;
+private Long restaurantId;
+private OrderLineItems orderLineItems;
+private DeliveryInformation deliveryInformation;
+private PaymentInformation paymentInformation;
+private Money orderMinimum;
+</code></pre>
+  <p>
+   Listing 6.1
+   <br>
+   The Order aggregate’s fields and its methods that initialize an instance
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

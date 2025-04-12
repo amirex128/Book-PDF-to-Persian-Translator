@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 116</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 3</strong></h3>
+  <h3><strong>Interprocess communication</strong> در یک معماری <strong>microservice</strong></h3>
+  <p>
+   <strong>brokerless</strong> و معماری‌های مبتنی بر <strong>broker</strong> و معیارهای انتخاب یک
+   <strong>message broker</strong> را توضیح می‌دهم. سپس در مورد چندین موضوع مهم از جمله مقیاس‌بندی مصرف‌کننده بحث می‌کنم
+   در حالی که ترتیب پیام‌ها را حفظ می‌کنید، تشخیص و دور انداختن پیام‌های تکراری،
+   و ارسال و دریافت پیام‌ها به عنوان بخشی از یک <strong>database transaction</strong>. بیایید با
+   نگاهی به نحوه عملکرد پیام‌رسانی شروع کنیم.
+  </p>
+  <h4>3.3.1 Overview of messaging</h4>
+  <p>
+   یک مدل مفید از پیام‌رسانی در کتاب <strong>Enterprise Integration Patterns</strong> تعریف شده است
+   (<strong>Addison-Wesley Professional, 2003</strong>) توسط <strong>Gregor Hohpe</strong> و <strong>Bobby Woolf</strong>. در این
+   مدل، پیام‌ها از طریق کانال‌های پیام رد و بدل می‌شوند. یک <strong>sender</strong> (یک اپلیکیشن یا
+   سرویس) یک پیام را به یک کانال می‌نویسد، و یک <strong>receiver</strong> (یک اپلیکیشن یا سرویس)
+   پیام‌ها را از یک کانال می‌خواند. بیایید به پیام‌ها نگاهی بیندازیم و سپس به کانال‌ها نگاهی بیندازیم.
+  </p>
+  <p>
+   <strong>ABOUT MESSAGES</strong>
+  </p>
+  <p>
+   یک پیام از یک <strong>header</strong> و یک <strong>message body</strong> تشکیل شده است (www.enterpriseintegrationpatterns
+   .com/Message.html). <strong>header</strong> مجموعه‌ای از جفت‌های نام-مقدار، <strong>metadata</strong> است
+   که داده‌های در حال ارسال را توصیف می‌کند. علاوه بر جفت‌های نام-مقدار ارائه شده توسط
+   <strong>sender</strong> پیام، <strong>header</strong> پیام شامل جفت‌های نام-مقدار، مانند یک پیام منحصربه‌فرد است
+   <strong>id</strong> توسط <strong>sender</strong> یا زیرساخت پیام‌رسانی تولید شده و یک
+   آدرس بازگشت اختیاری، که کانال پیام را مشخص می‌کند که یک <strong>reply</strong> باید به آن نوشته شود.
+  </p>
+  <p>
+   <strong>message body</strong> داده‌های در حال ارسال است، یا در قالب متن یا باینری.
+  </p>
+  <p>
+   انواع مختلفی از پیام‌ها وجود دارد:
+  </p>
+  <ul>
+   <li>
+    <strong>Document</strong>—یک پیام عمومی که فقط شامل داده است. <strong>receiver</strong> تصمیم می‌گیرد که چگونه
+    آن را تفسیر کند. <strong>reply</strong> به یک <strong>command</strong> نمونه‌ای از یک پیام <strong>document</strong> است.
+   </li>
+   <li>
+    <strong>Command</strong>—پیامی که معادل یک <strong>RPC request</strong> است. عملیات را مشخص می‌کند
+    برای فراخوانی و پارامترهای آن.
+   </li>
+   <li>
+    <strong>Event</strong>—پیامی که نشان می‌دهد چیزی قابل توجه در <strong>sender</strong> رخ داده است.
+    یک <strong>event</strong> اغلب یک <strong>domain event</strong> است، که نشان‌دهنده تغییر وضعیت یک <strong>domain</strong> است
+    <strong>object</strong> مانند یک <strong>Order</strong>، یا یک <strong>Customer</strong>.
+   </li>
+  </ul>
+  <p>
+   رویکرد به معماری <strong>microservice</strong> که در این کتاب توضیح داده شده است از <strong>commands</strong> استفاده می‌کند
+   و رویدادها به طور گسترده.
+  </p>
+  <p>
+   اکنون بیایید به کانال‌ها، مکانیسمی که سرویس‌ها از طریق آن ارتباط برقرار می‌کنند، نگاهی بیندازیم.
+  </p>
+  <p>
+   <strong>ABOUT MESSAGE CHANNELS</strong>
+  </p>
+  <p>
+   همانطور که شکل 3.7 نشان می‌دهد، پیام‌ها از طریق کانال‌ها رد و بدل می‌شوند (www.enterpriseintegra-
+   <strong>tionpatterns.com/MessageChannel.html</strong>). منطق کسب‌وکار در <strong>sender</strong> یک
+   رابط <strong>sending port</strong> را فراخوانی می‌کند، که مکانیسم ارتباطی اساسی را کپسوله می‌کند.
+   <strong>sending port</strong> توسط یک کلاس <strong>message sender adapter</strong> پیاده‌سازی شده است، که یک <strong>mes-</strong>
+   <strong>sage</strong> را از طریق یک کانال پیام به یک <strong>receiver</strong> ارسال می‌کند. یک کانال پیام یک <strong>abstraction</strong> از
+   زیرساخت پیام‌رسانی است. یک کلاس <strong>message handler adapter</strong> در <strong>receiver</strong> فراخوانی می‌شود به
+   پیام را مدیریت کند. این یک رابط <strong>receiving port</strong> را فراخوانی می‌کند که توسط <strong>consumer</strong>
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

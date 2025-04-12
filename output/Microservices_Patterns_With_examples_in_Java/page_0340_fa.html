@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 340</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Testing microservices:</h3>
+  <p>
+   <strong>Part 1</strong>
+  </p>
+  <p>
+   sociable unit tests ها را برای کلاس Order و dependencies آن پیاده‌سازی کنید. شما می‌توانید از آنها به عنوان compile-time tests استفاده کنید، زیرا آنها فوق‌العاده سریع اجرا می‌شوند. کلاس Order به value object از نوع Money متکی است، بنابراین مهم است که آن کلاس را نیز تست کنید. بیایید ببینیم چگونه این کار را انجام دهیم.
+  </p>
+  <h4>9.2.2</h4>
+  <h3>Writing unit tests for value objects</h3>
+  <p>
+   Value objects ها غیرقابل تغییر هستند، بنابراین تست کردن آنها آسان است. شما لازم نیست نگران side effects ها باشید. یک تست برای یک value object، معمولاً یک value object را در یک state خاص ایجاد می‌کند، یکی از متدهای آن را فراخوانی می‌کند و در مورد value بازگشتی assertion هایی ایجاد می‌کند. Listing 9.3، تست ها را برای value object Money نشان می‌دهد، که یک کلاس ساده است که یک value پولی را نشان می‌دهد. این تست ها، رفتار متدهای کلاس Money، از جمله add()، که دو object از نوع Money را اضافه می‌کند و multiply()، که یک object از نوع Money را در یک عدد صحیح ضرب می‌کند، تأیید می‌کنند. آنها solitary tests هستند زیرا کلاس Money به هیچ کلاس application دیگری وابسته نیست.
+  </p>
+  <pre><code class="language-java">public class MoneyTest {
+private final int M1_AMOUNT = 10;
+private final int M2_AMOUNT = 15;
+private Money m1 = new Money(M1_AMOUNT);
+private Money m2 = new Money(M2_AMOUNT);
+@Test
+public void shouldAdd() {
+         
+assertEquals(new Money(M1_AMOUNT + M2_AMOUNT), m1.add(m2));
+}
+@Test
+public void shouldMultiply() {     
+int multiplier = 12;
+assertEquals(new Money(M2_AMOUNT * multiplier), m2.multiply(multiplier));
+}
+...
+}</code></pre>
+  <p>
+   Entities و value objects، بلوک‌های سازنده business logic یک service هستند. اما برخی از business logic ها نیز در sagas و service های service قرار دارند. بیایید ببینیم چگونه آنها را تست کنیم.
+  </p>
+  <h4>9.2.3</h4>
+  <h3>Developing unit tests for sagas</h3>
+  <p>
+   یک saga، مانند کلاس CreateOrderSaga، business logic مهمی را پیاده‌سازی می‌کند، بنابراین باید تست شود. این یک object persistent است که پیام‌های command را به شرکت‌کنندگان saga ارسال می‌کند و به پاسخ‌های آنها رسیدگی می‌کند. همانطور که در فصل 4 توضیح داده شد، CreateOrderSaga پیام‌های command/reply را با چندین service، مانند Consumer Service و Kitchen Service، مبادله می‌کند. یک تست برای این کلاس، یک saga ایجاد می‌کند و تأیید می‌کند که ...
+  </p>
+  <p>
+   <strong>Listing 9.3</strong>
+   A simple, fast-running test for the Money value object
+  </p>
+  <p>
+   Verify that two
+   Money objects can
+   be added together.
+  </p>
+  <p>
+   Verify that a Money
+   object can be multiplied
+   by an integer.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

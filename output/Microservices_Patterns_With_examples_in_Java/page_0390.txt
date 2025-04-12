@@ -1,0 +1,49 @@
+360
+CHAPTER 11
+Developing production-ready services
+3
+The authentication server validates the client’s credentials and returns an access
+token and a refresh token.
+4
+The API gateway returns the access and refresh tokens to the client—as cookies,
+for example.
+5
+The client includes the access and refresh tokens in requests it makes to the API
+gateway.
+6
+The API gateway’s Session Authentication Interceptor validates the access
+token and includes it in requests it makes to the services.
+If the access token has expired or is about to expire, the API gateway obtains a new
+access token by making an OAuth 2.0 Refresh Grant request (www.oauth.com/
+oauth2-servers/access-tokens/refreshing-access-tokens/), which contains the refresh
+token, to the authorization server. If the refresh token hasn’t expired or been revoked,
+the authorization server returns a new access token. API Gateway passes the new
+access token to the services and returns it to the client.
+ An important benefit of using OAuth 2.0 is that it’s a proven security standard.
+Using an off-the-shelf OAuth 2.0 Authentication Server means you don’t have to
+waste time reinventing the wheel or risk developing an insecure design. But OAuth
+2.0 isn’t the only way to implement security in a microservice architecture. Regardless
+of which approach you use, the three key ideas are as follows:
+The API gateway is responsible for authenticating clients.
+The API gateway and the services use a transparent token, such as a JWT, to pass
+around information about the principal.
+A service uses the token to obtain the principal’s identity and roles.
+Now that we’ve looked at how to make services secure, let’s see how to make them
+configurable. 
+11.2
+Designing configurable services
+Imagine that you’re responsible for Order History Service. As figure 11.6 shows, the
+service consumes events from Apache Kafka and reads and writes AWS DynamoDB
+table items. In order for this service to run, it needs various configuration properties,
+including the network location of Apache Kafka and the credentials and network loca-
+tion for AWS DynamoDB.
+ The values of these configuration properties depend on which environment the
+service is running in. For example, the developer and production environments will
+use different Apache Kafka brokers and different AWS credentials. It doesn’t make
+sense to hard-wire a particular environment’s configuration property values into the
+deployable service because that would require it to be rebuilt for each environment.
+Instead, a service should be built once by the deployment pipeline and deployed into
+multiple environments.
+ Nor does it make sense to hard-wire different sets of configuration properties into
+the source code and use, for example, the Spring Framework’s profile mechanism to
+ 

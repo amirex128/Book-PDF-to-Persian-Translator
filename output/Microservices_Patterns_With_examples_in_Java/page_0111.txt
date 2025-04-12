@@ -1,0 +1,42 @@
+81
+Communicating using the synchronous Remote procedure invocation pattern
+OVERVIEW OF SERVICE DISCOVERY
+As you’ve just seen, you can’t statically configure a client with the IP addresses of the
+services. Instead, an application must use a dynamic service discovery mechanism. Ser-
+vice discovery is conceptually quite simple: its key component is a service registry,
+which is a database of the network locations of an application’s service instances.
+ The service discovery mechanism updates the service registry when service instances
+start and stop. When a client invokes a service, the service discovery mechanism que-
+ries the service registry to obtain a list of available service instances and routes the
+request to one of them.
+ There are two main ways to implement service discovery:
+The services and their clients interact directly with the service registry.
+The deployment infrastructure handles service discovery. (I talk more about
+that in chapter 12.)
+Let’s look at each option. 
+APPLYING THE APPLICATION-LEVEL SERVICE DISCOVERY PATTERNS
+One way to implement service discovery is for the application’s services and their cli-
+ents to interact with the service registry. Figure 3.5 shows how this works. A service
+instance registers its network location with the service registry. A service client invokes
+a service by first querying the service registry to obtain a list of service instances. It
+then sends a request to one of those instances.
+Service
+instance 1
+Order service
+10.232.23.1
+10.232.23.2
+10.232.23.3
+Service
+instance 2
+Service
+client
+Service
+instance 3
+?
+Dynamically
+assigned IP
+Dynamically created
+and destroyed
+Figure 3.4
+Service instances have dynamically assigned IP addresses.
+ 

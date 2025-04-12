@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 227</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        first column of a compound key، اما اگر یک value ثابت برای first column مشخص کند، می‌تواند یک range scan کارآمد را بر روی columns دیگر از key انجام دهد.
+    </p>
+    <p>
+        The concatenated index approach یک data model elegant را برای one-to-many relationships فعال می‌کند. به عنوان مثال، در یک سایت social media، یک user ممکن است updates زیادی را ارسال کند. اگر primary key برای updates به (user_id, update_timestamp) انتخاب شود، سپس شما می‌توانید به طور کارآمد تمام updates که توسط یک user خاص در یک time inter‐val خاص، مرتب شده بر اساس timestamp، انجام شده‌اند را بازیابی کنید. Users مختلف ممکن است در partitions مختلف ذخیره شوند، اما در داخل هر user، the updates بر اساس timestamp در یک partition واحد ذخیره می‌شوند.
+    </p>
+    <h4>Skewed Workloads and Relieving Hot Spots</h4>
+    <p>
+        همانطور که بحث شد، hashing یک key برای تعیین partition آن می‌تواند به کاهش hot spots کمک کند.
+    </p>
+    <p>
+        با این حال، نمی‌تواند به طور کامل از آن‌ها اجتناب کند: در حالت حاد، جایی که همه reads و writes برای همان key هستند، شما همچنان با همه requests که به همان parti‐tion هدایت می‌شوند، پایان می‌یابید.
+    </p>
+    <p>
+        این نوع workload شاید غیرمعمول باشد، اما غیرقابل شنیدن نیست: به عنوان مثال، در یک سایت social media، یک user celebrity با میلیون‌ها follower ممکن است یک storm of activity را ایجاد کند، زمانی که کاری انجام می‌دهد [14]. این event می‌تواند منجر به حجم زیادی از writes به همان key شود (جایی که key شاید user ID از celebrity، یا ID از action که مردم در مورد آن نظر می‌دهند، باشد). Hashing the key کمک نمی‌کند، زیرا hash از دو IDs یکسان همچنان یکسان است.
+    </p>
+    <p>
+        امروزه، اکثر systems data قادر به جبران خودکار برای چنین workload skewed بسیار بالا نیستند، بنابراین این مسئولیت application است که skew را کاهش دهد. به عنوان مثال، اگر یک key شناخته شده است که بسیار hot است، یک تکنیک ساده این است که یک عدد تصادفی را به ابتدای یا انتهای key اضافه کنید. فقط یک عدد تصادفی decimal دو رقمی، writes را به key به طور مساوی در سراسر 100 keys مختلف تقسیم می‌کند و به آن keys اجازه می‌دهد تا به partitions مختلف توزیع شوند.
+    </p>
+    <p>
+        با این حال، با تقسیم writes در سراسر keys مختلف، هر reads اکنون باید کار اضافی انجام دهد، زیرا آن‌ها باید data را از همه 100 keys بخوانند و آن را ترکیب کنند. این technique همچنین نیاز به bookkeeping اضافی دارد: فقط منطقی است که عدد تصادفی را برای تعداد کمی از hot keys اضافه کنید. برای اکثریت قریب به اتفاق keys با throughput write کم، این overhead غیرضروری خواهد بود. بنابراین، شما همچنین نیاز به یک روش برای پیگیری دارید که کدام keys در حال تقسیم شدن هستند.
+    </p>
+    <p>
+        شاید در آینده، data systems قادر به تشخیص و جبران خودکار برای workloads skewed باشند. اما در حال حاضر، شما نیاز دارید که trade-offs را برای application خودتان در نظر بگیرید.
+    </p>
+    <p>
+        Partitioning of Key-Value Data | 205
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

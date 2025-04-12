@@ -1,0 +1,58 @@
+325
+Writing integration tests
+return MockMvcBuilders.standaloneSetup(controllers)
+.setMessageConverters(...);
+}
+@Before
+public void setup() {
+OrderService orderService = mock(OrderService.class);
+  
+OrderRepository orderRepository = mock(OrderRepository.class);
+OrderController orderController =
+new OrderController(orderService, orderRepository);
+when(orderRepository.findById(1223232L))
+            
+.thenReturn(Optional.of(OrderDetailsMother.CHICKEN_VINDALOO_ORDER));
+...
+RestAssuredMockMvc.standaloneSetup(controllers(orderController));  
+}
+}
+The argument 1223232L that’s passed to the mock OrderRepository’s findById()
+method matches the orderId specified in the contract shown in listing 10.3. This test
+verifies that Order Service has a GET /orders/{orderId} endpoint that matches its
+client’s expectations.
+ Let’s take a look at the corresponding client test. 
+CONSUMER-SIDE INTEGRATION TEST FOR API GATEWAY’S ORDERSERVICEPROXY
+API Gateway’s OrderServiceProxy invokes the GET /orders/{orderId} endpoint. List-
+ing 10.4 shows the OrderServiceProxyIntegrationTest test class, which verifies that
+it conforms to the contracts. This class is annotated with @AutoConfigureStubRunner,
+provided by Spring Cloud Contract. It tells Spring Cloud Contract to run the Wire-
+Mock server on a random port and configure it using the specified contracts. Order-
+ServiceProxyIntegrationTest configures OrderServiceProxy to make requests to
+the WireMock port.
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes=TestConfiguration.class,
+webEnvironment= SpringBootTest.WebEnvironment.NONE)
+@AutoConfigureStubRunner(ids =
+        
+{"net.chrisrichardson.ftgo.contracts:ftgo-order-service-contracts"},
+workOffline = false)
+@DirtiesContext
+public class OrderServiceProxyIntegrationTest {
+@Value("${stubrunner.runningstubs.ftgo-order-service-contracts.port}")  
+Listing 10.4
+A consumer-side integration test for API Gateway's 
+OrderServiceProxy
+Create
+OrderRepository
+injected with mocks.
+Configure OrderResponse to return an Order when findById()
+is invoked with the orderId specified in the contract.
+Configure Spring MVC with
+OrderController.
+Tell Spring Cloud Contract
+to configure WireMock with
+Order Service’s contracts.
+Obtain the randomly assigned port 
+that WireMock is running on.
+ 

@@ -1,0 +1,42 @@
+Client libraries
+I’ve spoken to more than one team that has insisted that creating client libraries for
+your services is an essential part of creating services in the first place. The argument
+is that this makes it easy to use your service and avoids the duplication of code
+required to consume the service itself.
+The problem, of course, is that if the same people create both the server API and the
+client API, there is a danger that logic that should exist on the server will start leaking
+into the client. I should know: I’ve done this myself. The more logic that creeps into
+the client library, the more cohesion starts to break down, and you find yourself hav‐
+ing to change multiple clients to roll out fixes to your server. You also limit technol‐
+ogy choices, especially if you mandate that the client library has to be used.
+A model I like for client libraries is the one for Amazon Web Services (AWS). The
+underlying SOAP or REST web service calls can be made directly, but everyone ends
+up using just one of the various existing software development kits (SDKs), which
+provide abstractions over the underlying API. These SDKs, though, are written by the
+wider community, or else by people inside AWS other than those who work on the
+API itself. This degree of separation seems to work and avoids some of the pitfalls of
+client libraries. Part of the reason this works so well is that the client is in charge of
+when the upgrade happens. If you go down the path of client libraries yourself, make
+sure this is the case.
+Netflix in particular places special emphasis on the client library, but I worry that
+people view that purely through the lens of avoiding code duplication. In fact, the cli‐
+ent libraries used by Netflix are as much if not more about ensuring reliability and
+scalability of their systems. The Netflix client libraries handle service discovery, fail‐
+ure modes, logging, and other aspects that aren’t actually about the nature of the ser‐
+vice itself. Without these shared clients, it would be hard to ensure that each piece of
+client/server communications behaved well at the massive scale at which Netflix
+operates. Their use at Netflix has certainly made it easy to get up and running and
+increase productivity while also ensuring the system behaves well. However, accord‐
+ing to at least one person at Netflix, over time this has led to a degree of coupling
+between client and server that has been problematic.
+If the client library approach is something you’re thinking about, it can be important
+to separate out client code to handle the underlying transport protocol, which can
+deal with things like service discovery and failure, from things related to the destina‐
+tion service itself. Decide whether or not you are going to insist on the client library
+being used, or if you’ll allow people using different technology stacks to make calls to
+the underlying API. And finally, make sure that the clients are in charge of when to
+upgrade their client libraries: we need to ensure we maintain the ability to release our
+services independently of each other!
+156 
+| 
+Chapter 5: Implementing Microservice Communication

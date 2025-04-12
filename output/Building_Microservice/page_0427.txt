@@ -1,0 +1,41 @@
+Separation of concerns can also be a way to implement bulkheads. By teasing apart
+functionality into separate microservices, we reduce the chance of an outage in one
+area affecting another.
+Look at all the aspects of your system that can go wrong, both inside your microservi‐
+ces and between them. Do you have bulkheads in place? I’d suggest starting with sep‐
+arate connection pools for each downstream connection, at the very least. You may
+want to go further, however, and consider using circuit breakers too, which we’ll look
+at in a moment.
+In many ways, bulkheads are the most important of the patterns we’ve looked at so
+far. Time-outs and circuit breakers help you free up resources when they are becom‐
+ing constrained, but bulkheads can ensure they don’t become constrained in the first
+place. They can also give you the ability to reject requests in certain conditions to
+ensure that resources don’t become even more saturated; this is known as load shed‐
+ding. Sometimes rejecting a request is the best way to stop an important system from
+becoming overwhelmed and being a bottleneck for multiple upstream services.
+Circuit Breakers
+In your own home, circuit breakers exist to protect your electrical devices from spikes
+in power. If a spike occurs, the circuit breaker gets blown, protecting your expensive
+home appliances. You can also manually disable a circuit breaker to cut the power to
+part of your home, allowing you to work safely on the electrical system. In another
+pattern from Release It!, Nygard shows how the same idea can work wonders as a
+protection mechanism for our software.
+We can think of our circuit breakers as an automatic mechanism to seal a bulkhead,
+not only to protect the consumer from the downstream problem but also to poten‐
+tially protect the downstream service from more calls that may be having an adverse
+impact. Given the perils of cascading failure, I’d recommend mandating circuit
+breakers for all your synchronous downstream calls. You don’t have to write your
+own, either—in the years since I wrote the first edition of this book, circuit breaker
+implementations have become widely available.
+Coming back to AdvertCorp, consider the problem we had with the turnip system
+responding very slowly before eventually returning an error. Even if we’d gotten the
+time-outs right, we’d be waiting a long time before we got the error. And then we’d
+try it again the next time a request came in, and wait. It was bad enough that the
+downstream service was malfunctioning, but it was slowing down the entire system
+too.
+With a circuit breaker, after a certain number of requests to the downstream resource
+have failed (due either to error or to a time-out), the circuit breaker is blown. All fur‐
+ther requests that go through that circuit breaker fail fast while the breaker is in its
+Stability Patterns 
+| 
+401

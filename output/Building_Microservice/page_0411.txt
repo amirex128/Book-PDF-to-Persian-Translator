@@ -1,0 +1,43 @@
+A variation to this approach is to generate a JWT token when the user initially
+authenticates themselves with the system and then have that JWT token stored on the
+client device. It’s worth considering, though, that such a token will have to be valid
+for the duration of the logged-in session; as we’ve already discussed, we’d like to limit
+the period of validity for system-generated credentials to reduce the chances of them
+being misused, and to reduce the impact if we need to change the keys that are used
+for generating the encoded token. Generating a JWT token on a per-request basis
+seems to be the most common solution to this problem, as we show in Figure 11-9.
+Having some sort of token exchange done in the gateway can also make it much eas‐
+ier to adopt the use of JWT tokens without having to change any part of the authenti‐
+cation flow that involves communication with the client device—if you already have a
+working SSO solution in place, hiding the fact that JWT tokens are even used from
+the main user authentication flow will make such a change less disruptive.
+So with suitable JWT token generation, our downstream microservices are able to get
+all the information they need to confirm the identity of the user making the request,
+as well as additional information such as the groups or roles that user is in. The valid‐
+ity of this token can also be checked by the microservice simply by checking the sig‐
+nature of the JWT token as well. Compared to the previous solutions in this space
+(such as nested SAML assertions), JWT tokens have made the process of decentraliz‐
+ing authorization in a microservice architecture much simpler.
+Challenges
+There are a few issues around JWT tokens that are worth bearing in mind. The first is
+the issue of keys. In the case of signed JWT tokens, to verify a signature, the receiver
+of a JWT token is going to need some information that will need to be communicated
+out of band—normally a public key. All the issues of key management apply in this
+case. How does the microservice get the public key? What happens if the public key
+needs to change? Vault is an example of a tool that could be used by a microservice to
+retrieve (and handle rotation of) public keys, and it is already designed to work in a
+highly distributed environment. You could of course just hardcode a public key in a
+configuration file for the receiving microservice, but you would then have the issue of
+dealing with the public key changing.
+Secondly, getting the expiration right for a token can be tricky if long processing
+times are involved. Consider a situation in which a customer has placed an order.
+This kicks off a set of asynchronous processes that could take hours if not days to
+complete, without any subsequent involvement from the customer (taking payment,
+sending notification emails, getting the item packaged and shipped, etc.). Do you
+therefore have to generate a token with a matching period of validity? The question
+here is, at what point is having a longer-lived token more problematic than having no
+token? I’ve spoken to a few teams that have dealt with this issue. Some have generated
+a special longer-lived token that is scoped to work in only this specific context; others
+Authentication and Authorization 
+| 
+385

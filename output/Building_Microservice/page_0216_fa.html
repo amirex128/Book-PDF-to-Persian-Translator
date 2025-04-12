@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 216</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>شکل 6-9. نمونه‌ای از نحوه استفاده از یک <em>orchestrated saga</em> برای پیاده‌سازی فرآیند تکمیل سفارش ما</p>
+  <p>در اینجا، <em>Order Processor</em> مرکزی ما، که نقش <em>orchestrator</em> را ایفا می‌کند، فرآیند تکمیل ما را هماهنگ می‌کند. این می‌داند که چه <em>services</em> برای انجام عملیات مورد نیاز است، و تصمیم می‌گیرد که چه زمانی <em>calls</em> را به آن <em>services</em> انجام دهد. اگر <em>calls</em> شکست بخورند، می‌تواند تصمیم بگیرد که در نتیجه چه کاری انجام دهد. به طور کلی، <em>orchestrated sagas</em> تمایل به استفاده سنگین از تعاملات <em>request-response</em> بین <em>services</em> دارند: <em>Order Processor</em> یک <em>request</em> را به <em>services</em> (مانند <em>Payment Gateway</em>) ارسال می‌کند و انتظار دارد که یک <em>response</em> دریافت کند تا به آن اطلاع دهد که آیا <em>request</em> موفقیت‌آمیز بوده است و نتایج <em>request</em> را ارائه دهد.
+  <p>داشتن فرآیند کسب‌وکار ما که صریحاً در داخل <em>Order Processor</em> مدل‌سازی شده است، بسیار مفید است. این به ما امکان می‌دهد تا به یک مکان در سیستم خود نگاه کنیم و بفهمیم که این فرآیند چگونه قرار است کار کند. این می‌تواند ورود افراد جدید را آسان‌تر کند و به ایجاد درک بهتری از بخش‌های اصلی سیستم کمک کند.
+  <p>با این حال، چند نقطه ضعف نیز وجود دارد که باید در نظر گرفته شوند. اول، این به دلیل ماهیت خود، یک رویکرد تا حدودی <em>coupled</em> است. <em>Order Processor</em> ما باید در مورد همه <em>services</em> مرتبط بداند، که منجر به درجه بالاتری از <em>domain coupling</em> می‌شود. در حالی که <em>domain coupling</em> ذاتاً بد نیست، ما همچنان می‌خواهیم آن را تا حد امکان به حداقل برسانیم. در اینجا، <em>Order Processor</em> ما باید در مورد چیزهای زیادی بداند و آن‌ها را کنترل کند، که این شکل از <em>coupling</em> را دشوار می‌کند.
+  <p>مسئله دیگر، که ظریف‌تر است، این است که منطقی که در غیر این صورت باید به <em>services</em> منتقل شود، می‌تواند به جای آن شروع به جذب در <em>orchestrator</em> کند. اگر این اتفاق شروع به رخ دادن کند، ممکن است متوجه شوید که <em>services</em> شما <em>anemic</em> می‌شوند، با رفتار کمی از خودشان، فقط از <em>orchestrators</em> مانند <em>Order Processor</em> دستور می‌گیرند. این است</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0216/image_1.png" alt="Image from page 216" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

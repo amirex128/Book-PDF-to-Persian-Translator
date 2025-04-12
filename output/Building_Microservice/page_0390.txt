@@ -1,0 +1,40 @@
+9 I definitely came up with this term, but I also think it highly probable that I’m not the only one.
+10 Just as Niels Bohr argued that Schrödinger’s cat was both alive and dead until you actually opened the box to
+check.
+Avoid the Schrödinger Backup
+When creating backups, you want to avoid what I call the Schrö‐
+dinger backup.9 This is a backup that may or may not actually be a
+backup. Until you actually try and restore it, you really don’t know
+if it’s actually a backup use,10 or if it’s just a bunch of 1s and 0s
+written to disk. The best way to avoid this problem is to ensure that
+the backup is real by actually restoring it. Find ways to build regu‐
+lar restoration of backups into your software development process
+—for example, by using production backups to build your perfor‐
+mance test data.
+The “old” guidance about backups is that they should be kept off-site, the idea being
+that an incident in your offices or data center wouldn’t affect your backups if they
+were elsewhere. What does “off-site” mean, though, if your application is deployed in
+a public cloud? What matters is that your backups are stored in a way that they are as
+isolated as possible from your core systems, so that a compromise in the core system
+won’t also put your backups at risk. Code Spaces, which we mentioned earlier, had
+backups—but they were stored on AWS in the same account that was compromised.
+If your application runs on AWS, you could still store your backups there too, but
+you should do so on a separate account on separate cloud resources—you might even
+want to consider putting them into a different cloud region to mitigate the risk of a
+region-wide issue, or you could even store them with another provider.
+So make sure you back up critical data, keep those backups in a system separate to
+your main production environment, and make sure the backups actually work by
+regularly restoring them.
+Rebuild
+We can do our best to ensure that a malicious party doesn’t gain access to our sys‐
+tems, but what happens if they do? Well, often the most important thing you can do
+in the initial aftermath is get the system up and running again, but in such a way that
+you have removed access from the unauthorized party. This isn’t always straightfor‐
+ward, though. I recall one of our machines being hacked many years ago by a rootkit.
+A rootkit is a bundle of software that is designed to hide the activities of an unauthor‐
+ized party, and it’s a technique commonly used by attackers who want to remain
+undetected, allowing them time to explore the system. In our case, we found that the
+rootkit had altered core system commands like ls (listing files) or ps (to show
+364 
+| 
+Chapter 11: Security

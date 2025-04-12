@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 380</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   یک توسعه‌دهنده application در درجه اول مسئول پیاده‌سازی چهار جنبه مختلف
+   از security است:
+  </p>
+  <p>
+   Authentication—Verifying the identity از application یا human (a.k.a. the
+   principal) که در تلاش برای دسترسی به application است. به عنوان مثال، یک applica-
+   tion معمولاً credentials از یک principal، مانند user ID و password یا
+   یک API key و secret از application را تأیید می‌کند.
+  </p>
+  <p>
+   Authorization—Verifying that the principal مجاز به انجام عملیات درخواستی است
+   بر روی data مشخص شده. Applications اغلب از ترکیبی از role-
+   based security و access control lists (ACLs) استفاده می‌کنند. Role-based security به هر
+   user یک یا چند role اختصاص می‌دهد که به آنها اجازه می‌دهد operations خاصی را فراخوانی کنند.
+   ACLs به users یا roles اجازه می‌دهند تا یک operation را روی یک partic-
+   ular business object یا aggregate انجام دهند.
+  </p>
+  <p>
+   Auditing—Tracking the operations که یک principal برای شناسایی انجام می‌دهد
+   security issues، کمک به customer support و اجرای compliance.
+  </p>
+  <p>
+   Secure interprocess communication—ایده‌آل، همه communication در داخل و خارج از ser-
+   vices باید از طریق Transport Layer Security (TLS) باشد. Interservice communica-
+   tion ممکن است حتی نیاز به استفاده از authentication داشته باشد.
+  </p>
+  <p>
+   I describe auditing in detail در بخش 11.3 و به secure interservice com-
+   munication هنگام بحث در مورد service meshes در بخش 11.4.1 اشاره می‌کنم. این بخش بر روی
+   implementing authentication و authorization متمرکز است.
+  </p>
+  <p>
+   I begin by first describing how security is implemented in the FTGO monolith
+   application. I then describe the challenges with implementing security in a microser-
+   vice architecture و اینکه چگونه تکنیک‌هایی که در یک monolithic architecture خوب عمل می‌کنند نمی‌توانند
+   در یک microservice architecture استفاده شوند. بعد از آن، من نحوه پیاده‌سازی security را پوشش می‌دهم
+   در یک microservice architecture.
+  </p>
+  <p>
+   Let’s start by reviewing how the monolithic FTGO application handles security.
+  </p>
+  <h4><span style="font-weight: bold;">11.1.1 Overview of security in a traditional monolithic application</span></h4>
+  <p>
+   The FTGO application دارای چندین نوع human users است، از جمله consumers, cou-
+   riers و restaurant staff. آنها با استفاده از browser-based web به application دسترسی دارند
+   applications و mobile applications. All FTGO users باید برای دسترسی به appli-
+   cation وارد شوند. شکل 11.1 نشان می‌دهد که چگونه clients از monolithic FTGO application authen-
+   ticate کرده و requests را انجام می‌دهند.
+  </p>
+  <p>
+   When a user logs in with their user ID و password، client یک POST
+   request حاوی credentials کاربر را به FTGO application ارسال می‌کند. FTGO appli-
+   cation credentials را تأیید می‌کند و یک session token را به client برمی‌گرداند. The client
+   session token را در هر request بعدی به FTGO application قرار می‌دهد.
+  </p>
+  <p>
+   Figure 11.2 یک نمای سطح بالا از نحوه پیاده‌سازی FTGO application از secu-
+   rity را نشان می‌دهد. The FTGO application در Java نوشته شده است و از Spring Security framework استفاده می‌کند،
+   اما من design را با استفاده از اصطلاحات عمومی که برای سایر frame-
+   works، مانند Passport for NodeJS قابل استفاده هستند، توضیح خواهم داد.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

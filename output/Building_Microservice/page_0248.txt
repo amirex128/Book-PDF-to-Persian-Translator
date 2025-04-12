@@ -1,0 +1,22 @@
+The Database
+Taking this further, there is another major component that we’ve ignored up until
+this point—the database. As I’ve already discussed, we want a microservice to hide its
+internal state management, so any database used by a microservice for managing its
+state is considered to be hidden inside the microservice. This leads to the oft-stated
+mantra of “don’t share databases,” the case for which I hope has already been made
+sufficiently by now.
+But how does this work when we consider the fact that I have multiple microservice
+instances? Should each microservice instance have its own database? In a word, no. In
+most cases, if I go to any instance of my Order service, I want to be able to get infor‐
+mation about the same order. So we need some degree of shared state between differ‐
+ent instances of the same logical service. This is shown in Figure 8-4.
+Figure 8-4. Multiple instances of the same microservice can share a database
+But doesn’t this violate our “don’t share databases” rule? Not really. One of our major
+concerns is that when sharing a database across multiple different microservices, the
+logic associated with accessing and manipulating that state is now spread across dif‐
+ferent microservices. But here the data is being shared by different instances of the
+same microservice. The logic for accessing and manipulating state is still held within
+a single logical microservice.
+222 
+| 
+Chapter 8: Deployment

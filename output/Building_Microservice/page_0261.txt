@@ -1,0 +1,30 @@
+is no longer maintained, the underlying platform takes the required steps to bring the
+system back into desired state.
+As a simple example of how desired state management might work, you could specify
+the number of instances your microservice requires, perhaps also specifying how
+much memory and CPU those instances need. Some underlying platform takes this
+configuration and applies it, bringing the system into the desired state. It’s up to the
+platform to, among other things, identify which machines have spare resources that
+can be allocated to run the requested number of instances. As Figure 8-13 shows, if
+one of those instances dies, the platform recognizes that the current state doesn’t
+match the desired state and takes appropriate action by launching a replacement
+instance.
+Figure 8-13. A platform providing desired state management, spinning up a new
+instance when one dies
+The beauty of desired state management is that the platform itself manages how the
+desired state is maintained. It frees development and operations people alike from
+having to worry about exactly how things are being done—they just have to focus on
+getting the desired state definition right in the first place. It also means that in the
+event of a problem occurring, such as an instance dying, the underlying hardware
+failing, or a data center shutting down, the platform can handle the issue for you
+without human intervention being required.
+While it’s possible to build your own toolchain to apply desired state management,
+typically you use a platform that already supports it. Kubernetes is one such tool that
+embraces this idea, and you can also achieve something similar using concepts such
+as autoscaling groups on a public cloud provider like Azure or AWS. Another plat‐
+form that can provide this capability is Nomad. Unlike Kubernetes, which is focused
+on deploying and managing container-based workloads, Nomad has a very flexible
+model around running other sorts of application workloads as well, such as Java
+Principles of Microservice Deployment 
+| 
+235

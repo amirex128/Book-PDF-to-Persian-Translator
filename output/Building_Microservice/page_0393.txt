@@ -1,0 +1,39 @@
+11 Jan Schaumann (@jschauma), Twitter, November 5, 2020, 4:22 p.m., https://oreil.ly/QaCm2.
+Likewise, all data should be stored safely and all encryption keys held securely, and as
+we have to assume someone is listening, all sensitive data in transit within our system
+needs to be encrypted.
+Interestingly, if you have properly implemented a zero-trust mindset, you can start to
+do things that seem pretty odd:
+[With zero trust] you can actually make certain counter-intuitive access decisions and
+for example allow connections to internal services from the internet because you treat
+your “internal” network as equally trustworthy as the internet (i.e., not at all).
+—Jan Schaumann11
+Jan’s argument here is that if you assume that nothing inside your network is to be
+trusted, and that trust has to be reestablished, you can be much more flexible about
+the environment in which your microservice lives—you aren’t expecting the wider
+environment to be secure. But remember, zero trust isn’t something you turn on with
+a switch. It’s an underlying principle for how you decide to do things. It has to drive
+your decision making about how you build and evolve your system—it’s going to be
+something that you have to constantly invest in to get the rewards.
+It’s a Spectrum
+I don’t mean to imply that you have a stark choice between implicit and zero trust.
+The extent to which you trust (or don’t) other parties in your system could change
+based on the sensitivity of the information being accessed. You might decide, for
+example, to adopt a concept of zero trust for any microservices handling PII but be
+more relaxed in other areas. Again, the cost of any security implementation should be
+justified (and driven) by your threat model. Let your understanding of your threats
+and their associated impact drive your decision making around whether or not zero
+trust is worth it to you.
+As an example, lets look at MedicalCo, a company I worked with that managed sensi‐
+tive healthcare data pertaining to individuals. All information it held was classified
+based on a fairly sensible and straightforward approach:
+Public
+Data that could be freely shared with any external party. This information is
+effectively in the public domain.
+Private
+Information that should be available only to logged-in users. Access to this infor‐
+mation could be further limited due to authorization restrictions. This might
+include things such as which insurance plan a customer was on.
+Implicit Trust Versus Zero Trust 
+| 
+367

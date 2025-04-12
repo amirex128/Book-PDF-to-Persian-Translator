@@ -1,0 +1,48 @@
+456
+CHAPTER 13
+Refactoring to microservices
+The root cause for many of these delivery problems is the primitive delivery schedul-
+ing algorithm used by the FTGO application. A more sophisticated scheduler is under
+development but won’t be finished for a few months. The interim solution is for
+FTGO to proactively handle delayed or canceled orders by apologizing to the cus-
+tomer, and in some cases offering compensation before the customer complains.
+ Your job is to implement a new feature that will do the following:
+1
+Notify the customer when their order won’t be delivered on time.
+2
+Notify the customer when their order can’t be delivered because it can’t be
+picked up before the restaurant closes.
+3
+Notify customer service when an order can’t be delivered on time so that they
+can proactively rectify the situation by compensating the customer.
+4
+Track delivery statistics.
+This new feature is fairly simple. The new code must track the state of each Order, and
+if an Order can’t be delivered as promised, the code must notify the customer and cus-
+tomer support, by, for example, sending an email.
+ But how—or perhaps more precisely, where—should you implement this new fea-
+ture? One approach is to implement a new module in the monolith. The problem
+there is that developing and testing this code will be difficult. What’s more, this
+approach increases the size of the monolith and thereby makes monolith hell even
+worse. Remember the Law of Holes from earlier: when you’re in a hole, it’s best to stop
+digging. Rather than make the monolith larger, a much better approach is to imple-
+ment these new features as a service.
+13.4.1 The design of Delayed Delivery Service
+We’ll implement this feature as a service called Delayed Order Service. Figure 13.14
+shows the FTGO application’s architecture after implementing this service. The appli-
+cation consists of the FTGO monolith, the new Delayed Delivery Service, and an
+API Gateway. Delayed Delivery Service has an API that defines a single query opera-
+tion called getDelayedOrders(), which returns the currently delayed or undeliver-
+able orders. API Gateway routes the getDelayedOrders() request to the service and all
+other requests to the monolith. The integration glue provides Delayed Order Service
+with access to the monolith’s data.
+ The Delayed Order Service’s domain model consists of various entities, including
+DelayedOrderNotification, Order, and Restaurant. The core logic is implemented
+by the DelayedOrderService class. It’s periodically invoked by a timer to find orders
+that won’t be delivered on time. It does that by querying Orders and Restaurants. If
+an Order can’t be delivered on time, DelayedOrderService notifies the consumer and
+customer service.
+ Delayed Order Service doesn’t own the Order and Restaurant entities. Instead,
+this data is replicated from the FTGO monolith. What’s more, the service doesn’t
+store the customer contact information, but instead retrieves it from the monolith.
+ 

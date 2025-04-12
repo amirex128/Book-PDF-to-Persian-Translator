@@ -1,0 +1,53 @@
+343
+Developing component tests
+@ContextConfiguration(classes = 
+OrderServiceComponentTestStepDefinitions.TestConfiguration.class)
+public class OrderServiceComponentTestStepDefinitions {
+@Then("the order should be (.*)")
+public void theOrderShouldBe(String desiredOrderState) {
+Integer orderId =
+  
+this.response. then(). statusCode(200).
+extract(). path("orderId");
+assertNotNull(orderId);
+eventually(() -> {
+String state = given().
+when().
+get(baseUrl("/orders/" + orderId)).
+then().
+statusCode(200)
+.extract().
+path("state");
+assertEquals(desiredOrderState, state);
+  
+});
+}
+]
+The assertion of the expected state is wrapped in a call to eventually(), which
+repeatedly executes the assertion.
+ The following listing shows the verifyEventPublished() method, which defines
+the And an … event should be published step. It verifies that the expected domain
+event was published.
+@ContextConfiguration(classes = 
+OrderServiceComponentTestStepDefinitions.TestConfiguration.class)
+public class OrderServiceComponentTestStepDefinitions {
+@Autowired
+protected MessageTracker messageTracker;
+@And("an (.*) event should be published")
+public void verifyEventPublished(String expectedEventClass) throws ClassNot
+FoundException {
+messageTracker.assertDomainEventPublished("net.chrisrichardson.ftgo.order
+service.domain.Order",
+Listing 10.15
+The @ThentheOrderShouldBe() method verifies HTTP request was 
+successful.
+Listing 10.16
+The Cucumber step definitions class for the Order Service component 
+tests
+Verify that Order 
+was created 
+successfully.
+Verify the 
+state of 
+Order.
+ 

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 515</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   (ادامه)
+  </p>
+  <p>
+   INDEX
+   <br/>
+   event store implementation (continued)
+   <br/>
+   defining aggregates with ReflectiveMutable-
+   <br/>
+   CommandProcessingAggregate
+   <br/>
+   class 206–207
+   <br/>
+   defining domain events 207
+   <br/>
+   subscribing to domain events 208–209
+   <br/>
+   Eventuate Local event store 203–205
+   <br/>
+   consuming events by subscribing to event
+   <br/>
+   broker 205
+   <br/>
+   event relay propagates events from database to
+   <br/>
+   message broker 205
+   <br/>
+   schema 203–205
+   <br/>
+   event storming 162
+   <br/>
+   event-driven I/O 269
+   <br/>
+   @EventHandlerMethod annotation 208
+   <br/>
+   events. See Domain events
+   <br/>
+   @EventSubscriber annotation 208
+   <br/>
+   Eventuate framework 101, 202, 205–209
+   <br/>
+   and updating aggregates with the Aggregate-
+   <br/>
+   Repository class 207–208
+   <br/>
+   defining aggregate commands 207
+   <br/>
+   defining aggregates with ReflectiveMutable-
+   <br/>
+   CommandProcessingAggregate class
+   <br/>
+   206–207
+   <br/>
+   defining domain events 207
+   <br/>
+   subscribing to domain events 208–209
+   <br/>
+   Eventuate Local event store 203–205
+   <br/>
+   consuming events by subscribing to event
+   <br/>
+   broker 205
+   <br/>
+   event relay propagates events from database to
+   <br/>
+   message broker 205
+   <br/>
+   schema 203–205
+   <br/>
+   Eventuate Tram 100, 166
+   <br/>
+   Eventuate Tram Saga framework 140–142
+   <br/>
+   Exception tracking pattern 28, 366, 376–377
+   <br/>
+   Express framework 289–290
+   <br/>
+   external API patterns 253–291
+   <br/>
+   API gateway 76, 227, 254, 259–272
+   <br/>
+   API gateway implementation 271–291
+   <br/>
+   using GraphQL 279–291
+   <br/>
+   using Netflix Zuul 273
+   <br/>
+   using off-the-shelf products/services 271–272
+   <br/>
+   using Spring Cloud Gateway 273–275
+   <br/>
+   API gateway pattern 76, 227, 254, 259–271
+   <br/>
+   benefits of 267
+   <br/>
+   design issues 268–271
+   <br/>
+   drawbacks of 267
+   <br/>
+   Netflix example 267–268
+   <br/>
+   overview of 259–266
+   <br/>
+   Backends for frontends 254, 262, 264–266
+   <br/>
+   design issues 254–259
+   <br/>
+   browser-based JavaScript applications 258
+   <br/>
+   FTGO mobile client 255–258
+   <br/>
+   third-party applications 258–259
+   <br/>
+   web applications 258
+   <br/>
+   externalized configuration 361
+   <br/>
+   pull-based 363–364
+   <br/>
+   push-based 262–263
+   <br/>
+   Externalized Configuration pattern 28, 361
+  </p>
+  <p>
+   F
+   <br/>
+   Factory object, DDD 151
+   <br/>
+   fault isolation 6
+   <br/>
+   feature flags 469
+   <br/>
+   feature toggles 469
+   <br/>
+   filter expression 247
+   <br/>
+   filter parameter 229
+   <br/>
+   find() operation 204
+   <br/>
+   findAvailableRestaurants() query operation 231
+   <br/>
+   findCustomerContactInfo() method 447
+   <br/>
+   findOrder() operation 221–222, 224
+   <br/>
+   findOrderHistory() query operation 229–231,
+   <br/>
+   251–252
+   <br/>
+   defining index for 245–247
+   <br/>
+   implementing 247
+   <br/>
+   FindRestaurantRequestHandler class 421–422
+   <br/>
+   Fission framework 416
+   <br/>
+   Fluentd 370
+   <br/>
+   Flume 370
+   <br/>
+   fold operation 187
+   <br/>
+   FTGO application
+   <br/>
+   API design issues for mobile client 255–258
+   <br/>
+   changing monolith to interact with
+   <br/>
+   Delivery Service 467–470
+   <br/>
+   component tests for Order Service 340–345
+   <br/>
+   deploying with Kubernetes 399–415
+   <br/>
+   API gateway 405–406
+   <br/>
+   Restaurant Service 402–405
+   <br/>
+   service meshes 407–415
+   <br/>
+   zero-downtime deployments 406–407
+   <br/>
+   microservice architecture of 12–13
+   <br/>
+   monolithic architecture of 3–4
+   <br/>
+   ftgo-db-secret 404
+   <br/>
+   FtgoGraphQLClient class 290
+   <br/>
+   functional decomposition 10
+   <br/>
+   fuzzy boundaries 153–154
+  </p>
+  <p>
+   G
+   <br/>
+   GDPR (General Data Protection Regulation) 201
+   <br/>
+   generalization pattern 22
+   <br/>
+   GET REST endpoint 271
+   <br/>
+   getDelayedOrders() method 456
+   <br/>
+   getOrderDetails() query 368
+   <br/>
+   Gherkin
+   <br/>
+   executing specifications using Cucumber 338
+   <br/>
+   writing acceptance tests 337–338
+   <br/>
+   GoLang (Go language) 4, 380
+   <br/>
+   Google Cloud functions 416
+   <br/>
+   graph-based schema 280
+   <br/>
+   GraphQL 279, 281–291
+   <br/>
+   connecting schema to data 285–287
+   <br/>
+   defining schema 282–284
+   <br/>
+   executing queries 284–285
+   <br/>
+   integrating Apollo GraphQL server with
+   <br/>
+   Express 289–290
+   <br/>
+   load optimization using batching and caching 288
+   <br/>
+   writing client 290–291
+   <br/>
+   gRPC 76–77
+  </p>
+  <p>
+   H
+   <br/>
+   handleHttpRequest() method 421
+   <br/>
+   handleRequest() method 417
+   <br/>
+   health check 82, 365
+   <br/>
+   Health check API pattern 27, 366–368
+   <br/>
+   implementing endpoint 367–368
+   <br/>
+   invoking endpoint 368
+   <br/>
+   hexagonal architecture 3, 38–40
+   <br/>
+   high-level design patterns 20
+   <br/>
+   Honeybadger 377
+   <br/>
+   HttpServletResponse 422
+   <br/>
+   Humble, Jez 30
+  </p>
+  <p>
+   I
+   <br/>
+   idempotent message processing 96, 197
+   <br/>
+   CQRS views 240–241
+   <br/>
+   event sourcing-based saga participant 213
+   <br/>
+   with NoSQL-based event store 197
+   <br/>
+   with RDBMS-based event store 197
+   <br/>
+   idempotentUpdate() method 250–251
+   <br/>
+   IDL (interface definition language) 69
+   <br/>
+   -ilities 8, 34, 37
+   <br/>
+   Implementation view 35
+   <br/>
+   inbound adapters 3, 38
+   <br/>
+   infrastructure patterns 23–24
+   <br/>
+   init system, Linux 390
+   <br/>
+   in-memory security context 353
+   <br/>
+   instrumentation libraries 373
+   <br/>
+   integration glue 444–449
+   <br/>
+   designing API for 444–445
+   <br/>
+   for Delayed Delivery Service 457–459, 465–467
+   <br/>
+   CustomerContactInfoRepository
+   <br/>
+   interface 458
+   <br/>
+   design of API 465–466
+   <br/>
+   how Delivery Service accesses FTGO
+   <br/>
+   data 466
+   <br/>
+   how FTGO accesses data 467
+   <br/>
+   publishing and consuming Order and
+   <br/>
+   Restaurant domain events 458–459
+   <br/>
+   how monolith publishes and subscribes to
+   <br/>
+   domain events 448–449
+   <br/>
+   implementing anti-corruption layer 446–448
+   <br/>
+   picking interaction style and IPC
+   <br/>
+   mechanism 445–446
+   <br/>
+   integration tests 319–335
+   <br/>
+   asynchronous request/response
+   <br/>
+   interactions 330–335
+   <br/>
+   example contract 331–332
+   <br/>
+   tests for asynchronous request/response
+   <br/>
+   interaction 332–335
+   <br/>
+   persistence integration tests 321–322
+   <br/>
+   publish/subscribe-style interactions 326–330
+   <br/>
+   contract for publishing OrderCreated
+   <br/>
+   event 327–328
+   <br/>
+   tests for Order History Service 329–330
+   <br/>
+   tests for Order Service 328–329
+   <br/>
+   REST-based request/response style
+   <br/>
+   interactions 322–326
+   <br/>
+   example contract 324
+   <br/>
+   tests for API gateway OrderServiceProxy
+   <br/>
+   325–326
+   <br/>
+   tests for Order Service 324–325
+   <br/>
+   interaction styles 67–68, 87–89
+   <br/>
+   asynchronous 104–105
+   <br/>
+   one-way notifications 89
+   <br/>
+   publish/async responses 89
+   <br/>
+   publish/subscribe 89
+   <br/>
+   request/response and asynchronous request/
+   <br/>
+   response 87–88
+  </p>
+  <p>
+   interface definition language (IDL) 69
+   <br/>
+   invariants 153
+   <br/>
+   IPC (interprocess communication) 24, 65,
+   <br/>
+   93–109
+   <br/>
+   overview of 66–72
+   <br/>
+   defining APIs 68–69
+   <br/>
+   evolving APIs 69–71
+   <br/>
+   interaction styles 67–68
+   <br/>
+   message formats 71–72
+   <br/>
+   using asynchronous Messaging pattern 85–103
+   <br/>
+   competing receivers and message
+   <br/>
+   ordering 94–95
+   <br/>
+   creating API specification 89–90
+   <br/>
+   duplicate messages 95–97
+   <br/>
+   improving availability 103–108
+   <br/>
+   interaction styles 87–89
+   <br/>
+   libraries and frameworks for 100–103
+   <br/>
+   message brokers 90–94
+   <br/>
+   overview of 86–87
+   <br/>
+   transactional messaging 97–100
+   <br/>
+   using synchronous Remote procedure invoca-
+   tion pattern 72–85
+   <br/>
+   Circuit breaker pattern 77–80
+   <br/>
+   gRPC 76–77
+   <br/>
+   REST 73–76
+   <br/>
+   service discovery 80–85
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 189</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p><em>Service meshes</em> و <em>API gateways</em> به طور بالقوه می‌توانند به <em>microservices</em> اجازه دهند که کد را به اشتراک بگذارند بدون اینکه نیازی به ایجاد <em>client libraries</em> جدید یا <em>microservices</em> جدید داشته باشند. به زبان ساده (بسیار)، <em>service meshes</em> و <em>API gateways</em> می‌توانند به عنوان <em>proxies</em> بین <em>microservices</em> عمل کنند. این می‌تواند به این معنی باشد که آن‌ها ممکن است برای پیاده‌سازی برخی از رفتار‌های <em>microservice-agnostic</em> که در غیر این صورت باید در کد انجام می‌شد، مانند <em>service discovery</em> یا <em>logging</em>، استفاده شوند.
+  <p>اگر شما از یک <em>API gateway</em> یا یک <em>service mesh</em> برای پیاده‌سازی رفتار مشترک و رایج برای <em>microservices</em> خود استفاده می‌کنید، ضروری است که این رفتار کاملاً عمومی باشد—به عبارت دیگر، اینکه رفتار در <em>proxy</em> هیچ ارتباطی با هیچ رفتار خاصی از یک <em>microservice</em> جداگانه نداشته باشد.
+  <p>اکنون، پس از توضیح این، من همچنین باید توضیح دهم که جهان همیشه به این روشنی نیست. تعدادی از <em>API gateways</em> سعی می‌کنند قابلیت‌هایی را برای ترافیک شرق-غرب نیز ارائه دهند، اما این چیزی است که ما به زودی در مورد آن بحث خواهیم کرد. اول، بیایید به <em>API gateways</em> و انواع چیزهایی که می‌توانند انجام دهند، نگاهی بیندازیم.</p>
+  <h4>API Gateways</h4>
+  <p>با تمرکز بیشتر بر روی ترافیک شمال-جنوب، نگرانی اصلی <em>API gateway</em> در یک محیط <em>microservices</em>، نگاشت درخواست‌ها از طرف‌های خارجی به <em>microservices</em> داخلی است. این مسئولیت شبیه به چیزی است که شما می‌توانید با یک <em>HTTP proxy</em> ساده به آن برسید، و در واقع <em>API gateways</em> معمولاً ویژگی‌های بیشتری را بر روی محصولات <em>HTTP proxy</em> موجود ایجاد می‌کنند، و آن‌ها تا حد زیادی به عنوان <em>reverse proxies</em> عمل می‌کنند. علاوه بر این، <em>API gateways</em> می‌توانند برای پیاده‌سازی مکانیسم‌هایی مانند <em>API keys</em> برای طرف‌های خارجی، <em>logging</em>، <em>rate limiting</em> و موارد مشابه استفاده شوند. برخی از محصولات <em>API gateway</em>، پورتال‌های توسعه‌دهنده را نیز ارائه می‌دهند، که اغلب مخاطب مصرف‌کنندگان خارجی هستند.
+  <p>بخشی از سردرگمی در مورد <em>API gateway</em> مربوط به تاریخچه است. مدتی پیش، مقدار زیادی علاقه به چیزی وجود داشت که به آن "اقتصاد <em>API</em>" می‌گفتند. صنعت شروع به درک قدرت ارائه <em>APIs</em> به راه‌حل‌های مدیریت شده کرده بود، از محصولات <em>SaaS</em> مانند <em>Salesforce</em> تا پلتفرم‌هایی مانند <em>AWS</em>، زیرا مشخص بود که یک <em>API</em> به مشتریان انعطاف‌پذیری بیشتری در نحوه استفاده از نرم‌افزارشان می‌دهد. این امر باعث شد که تعدادی از افراد شروع به بررسی نرم‌افزارهایی کنند که قبلاً داشتند و مزایای قرار دادن آن عملکرد در معرض دید مشتریان خود، نه فقط از طریق یک <em>GUI</em>، بلکه از طریق یک <em>API</em> را در نظر بگیرند. امید این بود که این امر فرصت‌های بزرگ‌تر بازار را باز کند، و خوب، پول بیشتری به دست آورد. در میان این علاقه، تعدادی از محصولات <em>API gateway</em> پدیدار شدند تا به تحقق این اهداف کمک کنند. مجموعه ویژگی‌های آن‌ها به شدت به مدیریت <em>API keys</em> برای اشخاص ثالث، اعمال محدودیت‌های نرخ، و ردیابی استفاده برای مقاصد <em>charge-back</em> متمایل بود. واقعیت این است که در حالی که <em>APIs</em> قطعاً به عنوان یک راه عالی برای ارائه <em>services</em> به برخی از مشتریان نشان داده شده‌اند، اندازه اقتصاد <em>API</em> به اندازه آنچه برخی امیدوار بودند بزرگ نبود، و بسیاری از شرکت‌ها دریافتند که محصولات <em>API gateway</em> را خریداری کرده‌اند که مملو از ویژگی‌هایی است که هرگز واقعاً به آن‌ها نیاز نداشتند.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

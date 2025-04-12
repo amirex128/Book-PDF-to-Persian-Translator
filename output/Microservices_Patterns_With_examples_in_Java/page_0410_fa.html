@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 410</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 11</span></h3>
+  <h3><span style="font-weight: bold;">Developing production-ready services</span></h3>
+  <p>
+   Circuit breakers
+  </p>
+  <p>
+   Distributed tracing
+  </p>
+  <p>
+   It significantly reduces the amount از code که شما نیاز دارید بنویسید. You may not even need
+   to write any code. Instead, شما microservice chassis را برای مطابقت با require-
+   ments خود پیکربندی می‌کنید. A microservice chassis به شما امکان می‌دهد بر توسعه service’s busi-
+   ness logic خود تمرکز کنید.
+  </p>
+  <p>
+   The FTGO application از Spring Boot و Spring Cloud به عنوان microservice استفاده می‌کند
+   chassis. Spring Boot عملکردهایی مانند externalized configuration را فراهم می‌کند. Spring
+   Cloud عملکردهایی مانند circuit breakers را فراهم می‌کند. It also implements client-side ser-
+   vice discovery، اگرچه FTGO application به infrastructure برای service متکی است
+   discovery. Spring Boot و Spring Cloud تنها microservice chassis frame-
+   works نیستند. If, for example, شما در حال نوشتن services در GoLang هستید، می‌توانید از Go Kit استفاده کنید
+   (https://github.com/go-kit/kit) یا Micro (https://github.com/micro/micro).
+  </p>
+  <p>
+   One drawback از استفاده از یک microservice chassis این است که شما به یکی برای هر lan-
+   guage/platform combination که برای توسعه services استفاده می‌کنید، نیاز دارید. Fortunately, احتمال دارد
+   that many از functions که توسط a microservice chassis پیاده‌سازی شده‌اند، در عوض
+   توسط the infrastructure پیاده‌سازی خواهند شد. For example, as described در فصل 3، many
+   deployment environments service discovery را مدیریت می‌کنند. What’s more، بسیاری از the network-
+   related functions از یک microservice chassis توسط آنچه به عنوان a service شناخته می‌شود، مدیریت می‌شود
+   mesh، یک infrastructure layer که خارج از services در حال اجرا است.
+  </p>
+  <h4><span style="font-weight: bold;">11.4.2 From microservice chassis to service mesh</span></h4>
+  <p>
+   A microservice chassis یک راه خوب برای implement various cross-cutting است
+   concerns، مانند circuit breakers. But one obstacle to استفاده از a microservice chassis این است که شما نیاز دارید
+   یکی برای هر زبان برنامه‌نویسی که استفاده می‌کنید. For example, Spring Boot و Spring
+   Cloud مفید هستند اگر شما یک Java/Spring developer هستید، اما اگر شما
+   می‌خواهید یک NodeJS-based service را بنویسید، هیچ کمکی نمی‌کنند.
+  </p>
+  <p>
+   An emerging alternative که از این مشکل اجتناب می‌کند این است که برخی از این func-
+   tionality را خارج از service در آنچه که به عنوان a service شناخته می‌شود، implement کنید. A service mesh است net-
+   working infrastructure که communication را بین یک service و دیگر
+   services و external applications واسطه می‌کند. As figure 11.17 نشان می‌دهد، تمام network traffic در داخل و خارج
+   از یک service از طریق service mesh عبور می‌کند. It implements various concerns شامل
+   circuit breakers, distributed tracing, service discovery, load balancing, و rule-based
+   traffic routing. A service mesh همچنین می‌تواند interprocess communication را با استفاده از
+   Pattern: Service mesh
+   Route all network traffic in و out از services از طریق یک networking layer که imple-
+   ments various concerns، شامل circuit breakers, distributed tracing, service dis-
+   covery, load balancing و rule-based traffic routing است. See http://microservices.io/
+   patterns/deployment/service-mesh.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

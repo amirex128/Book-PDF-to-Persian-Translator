@@ -1,0 +1,39 @@
+3 Johnathan Ishmael, “Optimising Serverless for BBC Online,” Technology and Creativity at the BBC (blog),
+BBC, January 26, 2021, https://oreil.ly/gkSdp.
+I’ve previously entertained the idea of making each state transition of an aggregate its
+own function, but I’ve backed out of this idea due to the problems associated with
+inconsistency. When you have different independently deployable things, each man‐
+aging a different part of an overall state transition, ensuring things are done properly
+gets really quite difficult. It puts us into the space of sagas, which we discussed in
+Chapter 6. When implementing complex business processes, concepts like sagas are
+important, and the work is justifiable. I struggle, though, to see the value in adding
+this complexity at the level of managing a single aggregate that could easily be han‐
+dled by a single function.
+The way forward
+I remain convinced that the future for most developers is using a platform that hides
+much of the underlying detail from them. For many years, Heroku was the closest
+thing I could point to in terms of something that found the right balance, but now we
+have FaaS and the wider ecosystem of turnkey serverless offerings that chart a differ‐
+ent path.
+There are still issues to be ironed out with FaaS, but I feel that, while the current crop
+of offerings still need to change to resolve the issues with them, this is the sort of plat‐
+form that most developers will end up using. Not all applications will fit neatly into a
+FaaS ecosystem given the constraints, but for those that do, people are already seeing
+significant benefits. With more and more work going into Kubernetes-backed FaaS
+offerings, people who are unable to make direct use of the FaaS solutions provided by
+the main cloud providers will increasingly be able to take advantage of this new way
+of working.
+So, while FaS may not work for everything, it’s certainly something I urge people to
+explore. And for my clients who are looking at moving to cloud-based Kubernetes
+solutions, I’ve been urging many of them to explore FaaS first, as it may give them
+everything they need while hiding significant complexity and offloading a lot of
+work.
+I’m seeing more organizations making use of FaaS as part of a wider solution, picking
+FaaS for specific use cases where it fits well. A good example would be the BBC,
+which makes use of Lambda functions as part of its core technology stack that pro‐
+vides the BBC News website. The overall system uses a mix of Lambda and EC2
+instances—with the EC2 instances often being used in situations in which Lambda
+function invocations would be too expensive.3
+256 
+| 
+Chapter 8: Deployment

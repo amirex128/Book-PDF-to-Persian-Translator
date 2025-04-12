@@ -1,0 +1,41 @@
+1 Martin Fowler explores this in more detail in the context of schemaless data storage.
+Should You Use Schemas?
+By using schemas and comparing different versions of schemas, we can catch struc‐
+tural breakages. Catching semantic breakages requires the use of testing. If you don’t
+have schemas, or if you have schemas but decide not to compare schema changes for
+compatibility, then the burden of catching structural breakages before you get to pro‐
+duction also falls on testing. Arguably, the situation is somewhat analogous with
+static versus dynamic typing in programming languages. With a statically typed lan‐
+guage, the types are fixed at compile time—if your code does something with an
+instance of a type that isn’t allowed (like calling a method that doesn’t exist), then the
+compiler can catch that mistake. This can leave you to focus testing efforts on other
+sorts of problems. With a dynamically typed language, though, some of your testing
+will need to catch mistakes that a compiler picks up for statically typed languages.
+Now, I’m pretty relaxed about static versus dynamically typed languages, and I’ve
+found myself to be very productive (relatively speaking) in both. Certainly, dynami‐
+cally typed languages give you some significant benefits that for many people justify
+giving up on compile-time safety. Personally speaking, though, if we bring the discus‐
+sion back to microservice interactions, I haven’t found that a similarly balanced
+trade-off exists when it comes to schema versus “schemaless” communication. Put
+simply, I think that having an explicit schema more than offsets any perceived benefit
+of having schemaless communication.
+Really, the question isn’t actually whether you have a schema or not—it’s whether or
+not that schema is explicit. If you are consuming data from a schemaless API, you still
+have expectations as to what data should be in there and how that data should be
+structured. Your code that will handle the data will be written with a set of assump‐
+tions in mind as to how that data is structured. In such a case, I’d argue that you do
+have a schema, but it’s just totally implicit rather than explicit.1 A lot of my desire for
+an explicit schema is driven by the fact that I think it’s important to be as explicit as
+possible about what a microservice does (or doesn’t) expose.
+The main argument for schemaless endpoints seems to be that schemas need more
+work and don’t give enough value. This, in my humble opinion, is partly a failure of
+imagination and partly a failure of good tooling to help schemas have more value
+when it comes to using them to catch structural breakages.
+Ultimately, a lot of what schemas provide is an explicit representation of part of the
+structure contract between a client and a server. They help make things explicit and
+can greatly aid communication between teams as well as work as a safety net. In sit‐
+uations in which the cost of change is reduced—for example, when both client and
+server are owned by the same team—I am more relaxed about not having schemas.
+Schemas 
+| 
+143

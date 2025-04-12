@@ -1,0 +1,43 @@
+455
+Implementing a new feature as a service: handling misdelivered orders
+security framework, such as Spring Security or Passport for NodeJS. If the applica-
+tion is configured to use the default in-memory session, the HTTP response sets a ses-
+sion cookie, such as JSESSIONID. In order to support the migration to microservices,
+LoginHandler must also set the USERINFO cookie containing the JWT that describes
+the user. 
+THE API GATEWAY MAPS THE USERINFO COOKIE TO THE AUTHORIZATION HEADER
+The API gateway, as described in chapter 8, is responsible for request routing and API
+composition. It handles each request by making one or more requests to the monolith
+and the services. When the API gateway invokes a service, it validates the USERINFO
+cookie and passes it to the service in the HTTP request’s Authorization header. By
+mapping the cookie to the Authorization header, the API gateway ensures that it
+passes the user identity to the service in a standard way that’s independent of the type
+of client.
+ Eventually, we’ll most likely extract login and user management into services. But
+as you can see, by only making one small change to the monolith’s login handler, it’s
+now possible for services to access user information. This enables you focus on devel-
+oping services that provide the greatest value to the business and delay extracting less
+valuable services, such as user management.
+ Now that we’ve looked at how to handle security when refactoring to microser-
+vices, let’s see an example of implementing a new feature as a service. 
+13.4
+Implementing a new feature as a service: handling 
+misdelivered orders
+Let’s say you’ve been tasked with improving how FTGO handles misdelivered orders.
+A growing number of customers have been complaining about how customer ser-
+vice handles orders not being delivered. The majority of orders are delivered on
+time, but from time to time orders are either delivered late or not at all. For exam-
+ple, the courier gets delayed by unexpectedly bad traffic, so the order is picked up
+and delivered late. Or perhaps by the time the courier arrives at the restaurant, it’s
+closed, and the delivery can’t be made. To make matters worse, the first time cus-
+tomer service hears about the misdelivery is when they receive an angry email from
+an unhappy customer.
+A true story: My missing ice cream
+One Saturday night I was feeling lazy and placed an order using a well-known food
+delivery app to have ice cream delivered from Smitten. It never showed up. The only
+communication from the company was an email the next morning saying my order had
+been canceled. I also got a voicemail from a very confused customer service agent
+who clearly didn’t know what she was calling about. Perhaps the call was prompted
+by one of my tweets describing what happened. Clearly, the delivery company had not
+established any mechanisms for properly handling inevitable mistakes.
+ 

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 436</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>حالا بیایید در مورد آنچه اتفاق می‌افتد وقتی چیزی شکست می‌خورد، فکر کنیم. تصور کنید که چیزی به سادگی پیوند شبکه بین دو <em>data center</em> (مرکز داده) از کار می‌افتد. همگام‌سازی در این مرحله شکست می‌خورد. نوشته‌ها در <em>database</em> (پایگاه داده) اصلی در <em>DC1</em> به <em>DC2</em> منتقل نخواهند شد، و بالعکس. اکثر <em>databases</em> (پایگاه‌های داده) که از این تنظیمات پشتیبانی می‌کنند، همچنین از نوعی تکنیک صف برای اطمینان از اینکه ما می‌توانیم پس از این، بازیابی کنیم، پشتیبانی می‌کنند، اما در این بین چه اتفاقی می‌افتد؟</p>
+    <h5>Sacrificing Consistency (قربانی کردن انسجام)</h5>
+    <p>بیایید فرض کنیم که ما <em>Inventory microservice</em> (ریز سرویس انبار) را به‌طور کامل خاموش نمی‌کنیم. اگر من اکنون تغییری در داده‌های <em>DC1</em> ایجاد کنم، <em>database</em> (پایگاه داده) در <em>DC2</em> آن را نمی‌بیند. این بدان معناست که هر <em>requests</em> (درخواستی) که به گره موجودی ما در <em>DC2</em> داده می‌شود، داده‌های بالقوه منسوخ شده را می‌بیند. به عبارت دیگر، سیستم ما همچنان در دسترس است به این دلیل که هر دو گره قادر به ارائه <em>requests</em> (درخواست‌ها) هستند، و ما سیستم را علی‌رغم <em>partition</em> (پارتیشن) در حال اجرا نگه داشته‌ایم، اما <em>consistency</em> (انسجام) را از دست داده‌ایم؛ ما قرار نیست هر سه ویژگی را حفظ کنیم. این اغلب یک سیستم <em>AP</em> نامیده می‌شود، به دلیل <em>availability</em> (در دسترس بودن) و <em>partition tolerance</em> (تحمل پارتیشن) آن.</p>
+    <p>در طول این <em>partition</em> (پارتیشن)، اگر ما به پذیرش نوشته‌ها ادامه دهیم، در این صورت ما این واقعیت را می‌پذیریم که در زمانی در آینده باید آنها را دوباره همگام‌سازی کرد. هرچه <em>partition</em> (پارتیشن) بیشتر طول بکشد، این دوباره همگام‌سازی می‌تواند دشوارتر شود.</p>
+    <p>واقعیت این است که حتی اگر ما یک شکست شبکه بین گره‌های <em>database</em> (پایگاه داده) خود نداشته باشیم، تکثیر داده‌ها فوری نیست. همانطور که قبلاً اشاره شد، گفته می‌شود که سیستم‌هایی که مایل به واگذاری <em>consistency</em> (انسجام) برای حفظ <em>partition tolerance</em> (تحمل پارتیشن) و <em>availability</em> (در دسترس بودن) هستند، در نهایت <em>consistent</em> (منسجم) هستند؛ یعنی، ما انتظار داریم که در زمانی در آینده، همه گره‌ها داده‌های به‌روز شده را ببینند، اما این به‌طور همزمان اتفاق نخواهد افتاد، بنابراین ما باید با این احتمال زندگی کنیم که کاربران داده‌های قدیمی را ببینند.</p>
+    <h5>Sacrificing Availability (قربانی کردن در دسترس بودن)</h5>
+    <p>اگر ما نیاز به حفظ <em>consistency</em> (انسجام) داشته باشیم و بخواهیم چیز دیگری را رها کنیم، چه اتفاقی می‌افتد؟ خوب، برای حفظ <em>consistency</em> (انسجام)، هر گره <em>database</em> (پایگاه داده) باید بداند که کپی داده‌هایی که در اختیار دارد با گره <em>database</em> (پایگاه داده) دیگر یکسان است. اکنون در <em>partition</em> (پارتیشن)، اگر گره‌های <em>database</em> (پایگاه داده) نتوانند با یکدیگر صحبت کنند، آنها نمی‌توانند هماهنگی داشته باشند تا <em>consistency</em> (انسجام) را تضمین کنند. ما قادر به تضمین <em>consistency</em> (انسجام) نیستیم، بنابراین تنها گزینه ما این است که از پاسخگویی به <em>request</em> (درخواست) خودداری کنیم. به عبارت دیگر، ما <em>availability</em> (در دسترس بودن) را قربانی کرده‌ایم. سیستم ما منسجم و <em>partition tolerant</em> (تحمل پارتیشن) است، یا <em>CP</em>. در این حالت، <em>service</em> (سرویس) ما باید دریابد که چگونه عملکرد را تا زمانی که <em>partition</em> (پارتیشن) برطرف شود و گره‌های <em>database</em> (پایگاه داده) بتوانند دوباره همگام‌سازی شوند، کاهش دهد.</p>
+    <p><em>Consistency</em> (انسجام) در گره‌های متعدد واقعاً سخت است. موارد کمی (شاید هیچ‌چیز) در سیستم‌های توزیع‌شده سخت‌تر از آن نیست. لحظه‌ای به آن فکر کنید. تصور کنید که من می‌خواهم یک رکورد را از گره <em>database</em> (پایگاه داده) محلی بخوانم. چگونه می‌دانم که به‌روز است؟ من باید بروم و از گره دیگر بپرسم. اما من همچنین باید از آن گره <em>database</em> (پایگاه داده) بخواهم که در حین تکمیل خواندن، به آن اجازه به روزرسانی ندهد؛ به عبارت دیگر، من نیاز به شروع یک <em>transactional</em> (تراکنشی)</p>
+    <p><em>410 | Chapter 12: Resiliency</em></p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

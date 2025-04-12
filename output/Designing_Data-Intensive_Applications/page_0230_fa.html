@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 230</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        شکل 6-5. Partitioning secondary indexes توسط term.
+    </p>
+    <h4>Partitioning Secondary Indexes by Term</h4>
+    <p>
+        به جای اینکه هر partition، index secondary خود را داشته باشد (a local index)، ما می‌توانیم یک global index بسازیم که داده‌ها را در همه partitions پوشش می‌دهد. با این حال، ما نمی‌توانیم به سادگی آن index را در یک node ذخیره کنیم، زیرا احتمالاً به یک bottleneck تبدیل می‌شود و هدف از partitioning را شکست می‌دهد. A global index نیز باید partition شود، اما می‌توان آن را متفاوت از primary key index partition کرد.
+    </p>
+    <p>
+        شکل 6-5 نشان می‌دهد که این می‌تواند چگونه به نظر برسد: ماشین‌های قرمز از همه partitions در زیر color:red در index ظاهر می‌شوند، اما index partition شده است به طوری که رنگ‌هایی که با حروف a تا r شروع می‌شوند در partition 0 و رنگ‌هایی که با s تا z شروع می‌شوند در parti‐tion 1 ظاهر می‌شوند. The index روی make از ماشین به طور مشابه partition شده است (با مرز partition بین f و h).
+    </p>
+    <p>
+        ما این نوع index را term-partitioned می‌نامیم، زیرا term که ما به دنبال آن هستیم، partition از index را تعیین می‌کند. در اینجا، به عنوان مثال، یک term می‌تواند color:red باشد. The name term از full-text indexes می‌آید (یک نوع خاص از secondary index)، که در آن terms همه کلماتی هستند که در یک document رخ می‌دهند.
+    </p>
+    <p>
+        همانطور که قبلاً گفته شد، ما می‌توانیم index را خود term یا با استفاده از یک hash از term partition کنیم.
+        Partitioning by the term itself می‌تواند برای range scans مفید باشد (به عنوان مثال، روی یک property عددی، مانند قیمت درخواستی از ماشین)، در حالی که partitioning روی یک hash از term یک توزیع load even‌تری را ایجاد می‌کند.
+    </p>
+    <p>
+        مزیت یک global (term-partitioned) index نسبت به یک index document-partitioned این است که می‌تواند reads را کارآمدتر کند: به جای انجام scatter/gather در همه partitions، یک client فقط نیاز دارد که یک request را به partition که حاوی term است که آن می‌خواهد، ارسال کند. با این حال، downside از یک global index این است که writes کندتر و پیچیده‌تر هستند، زیرا یک write به یک document واحد ممکن است اکنون بر چندین
+    </p>
+    <p>
+        208 | Chapter 6: Partitioning
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0230/image_1.png" alt="Image from page 230" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

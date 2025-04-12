@@ -1,0 +1,39 @@
+13 We don’t encrypt passwords at rest, as encryption means that anyone with the right key can read the pass‐
+word back.
+algorithms. Use those! And subscribe to the mailing lists/advisory lists for the tech‐
+nology you choose to make sure you are aware of vulnerabilities as they are found, so
+you can keep them patched and up to date.
+For securing passwords, you should absolutely be using a technique called salted
+password hashing. This ensures that passwords are never held in plain text, and that
+even if an attacker brute-forces one hashed password they cannot then automatically
+read other passwords.13
+Badly implemented encryption could be worse than having none, as the false sense of
+security (pardon the pun) can lead you to take your eye off the ball.
+Pick your targets
+Assuming everything should be encrypted can simplify things somewhat. There is no
+guesswork about what should or should not be protected. However, you’ll still need
+to think about what data can be put into logfiles to help with problem identification,
+and the computational overhead of encrypting everything can become pretty onerous
+and require more powerful hardware as a result. This is even more challenging when
+you’re applying database migrations as part of refactoring schemas. Depending on
+the changes that are being made, the data may need to be decrypted, migrated, and
+reencrypted.
+By subdividing your system into more fine-grained services, you might identify an
+entire data store that can be encrypted wholesale, but that is unlikely. Limiting this
+encryption to a known set of tables is a sensible approach.
+Be frugal
+As disk space becomes cheaper and the capabilities of databases improve, the ease
+with which bulk amounts of information can be captured and stored is improving
+rapidly. This data is valuable—not only to businesses themselves, which increasingly
+see data as a valuable asset, but equally to the users who value their own privacy. The
+data that pertains to an individual or that could be used to derive information about
+an individual must be the data that we are most careful with.
+However, what if we made our lives a bit easier? Why not scrub as much information
+as possible that can be personally identifiable, and do it as soon as possible? When
+logging a request from a user, do we need to store the entire IP address forever, or
+could we replace the last few digits with x? Do we need to store someone’s name, age,
+gender, and date of birth in order to provide them with product offers, or is their age
+range and postal code enough information?
+Securing Data 
+| 
+373

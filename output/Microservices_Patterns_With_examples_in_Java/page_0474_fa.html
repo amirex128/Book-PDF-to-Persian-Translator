@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 474</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   در این بخش، ابتدا طراحی integration glue را توضیح می‌دهم. من در مورد prob-
+   lemsهایی که حل می‌کند و گزینه‌های پیاده‌سازی مختلف، صحبت می‌کنم. پس از آن من استراتژی‌های management transaction را توضیح می‌دهم، از جمله استفاده از sagasها. من در مورد اینکه چگونه گاهی اوقات requir-
+   ment برای حفظ data consistency، ترتیبی که در آن servicesها را استخراج می‌کنید، تغییر می‌دهد، بحث می‌کنم.
+  </p>
+  <p>
+   بیایید ابتدا به طراحی integration glue نگاهی بیندازیم.
+  </p>
+  <h3><strong>13.3.1 Designing the integration glue</strong></h3>
+  <p>
+   هنگام پیاده‌سازی یک feature به عنوان یک service یا استخراج یک service از monolith،
+   شما باید integration glue را توسعه دهید که service را قادر می‌سازد تا با
+   monolith همکاری کند. این شامل کد در service و monolith است که از نوعی
+   IPC mechanism استفاده می‌کند. ساختار integration glue به نوع IPC
+   mechanism که استفاده می‌شود، بستگی دارد. اگر، به عنوان مثال، service، monolith را با استفاده از REST فراخوانی می‌کند،
+   سپس integration glue شامل یک REST client در service و web controllersها
+   در monolith است. از طرف دیگر، اگر monolith به domain eventsهایی که
+   توسط service منتشر می‌شوند، subscribe می‌کند، سپس integration glue شامل یک event-publishing adapter در
+   service و event handlersها در monolith است.
+  </p>
+  <h3><strong>DESIGNING THE INTEGRATION GLUE API</strong></h3>
+  <p>
+   اولین گام در طراحی integration glue این است که تصمیم بگیرید که چه APIsهایی را ارائه می‌دهد
+   به domain logic. دو سبک مختلف از interface وجود دارد که می‌توانید از بین آنها انتخاب کنید،
+   بسته به اینکه شما در حال querying data هستید یا updating data. بیایید بگوییم که شما در حال کار کردن هستید-
+   ing on Delayed Delivery Service، که نیاز دارد customer contact info را بازیابی کند
+   از monolith. business logic service نیاز ندارد که IPC mecha-
+   nism را بداند که integration glue برای بازیابی اطلاعات استفاده می‌کند. بنابراین، آن mecha-
+   nism باید توسط یک interface encapsulated شود. از آنجایی که Delayed Delivery Service در حال
+   querying data است، تعریف کردن یک CustomerContactInfoRepository منطقی است:
+  </p>
+  <pre><code class="language-java">
+interface CustomerContactInfoRepository {
+CustomerContactInfo findCustomerContactInfo(long customerId)
+}
+  </code></pre>
+  <p>
+   business logic service می‌تواند این API را بدون دانستن اینکه چگونه integration
+   glue، data را بازیابی می‌کند، فراخوانی کند.
+  </p>
+  <p>
+   بیایید یک service متفاوت را در نظر بگیریم. تصور کنید که شما در حال استخراج delivery manage-
+   ment از FTGO monolith هستید. monolith نیاز دارد که Delivery Service را برای
+   schedule, reschedule، و cancel deliveriesها فراخوانی کند. یک بار دیگر، جزئیات زیربنایی
+   IPC mechanism برای business logic مهم نیستند و باید توسط
+   یک interface encapsulated شوند. در این سناریو، monolith باید یک service operation را فراخوانی کند، بنابراین استفاده از یک
+   repository منطقی نیست. یک رویکرد بهتر، تعریف یک service interface است، مانند
+   زیر:
+  </p>
+  <pre><code class="language-java">
+interface DeliveryService {
+void scheduleDelivery(...);
+void rescheduleDelivery(...);
+void cancelDelivery(...);
+}
+  </code></pre>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

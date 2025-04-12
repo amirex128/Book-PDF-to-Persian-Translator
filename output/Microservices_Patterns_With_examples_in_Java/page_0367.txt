@@ -1,0 +1,46 @@
+337
+Developing component tests
+10.2.2 Writing acceptance tests using Gherkin
+Writing acceptance tests in Java is challenging. There’s a risk that the scenarios and
+the Java tests diverge. There’s also a disconnect between the high-level scenarios and
+the Java tests, which consist of low-level implementation details. Also, there’s a risk
+that a scenario lacks precision or is ambiguous and can’t be translated into Java code.
+A much better approach is to eliminate the manual translation step and write execut-
+able scenarios.
+ Gherkin is a DSL for writing executable specifications. When using Gherkin, you
+define your acceptance tests using English-like scenarios, such as the one shown ear-
+lier. You then execute the specifications using Cucumber, a test automation frame-
+work for Gherkin. Gherkin and Cucumber eliminate the need to manually translate
+scenarios into runnable code.
+ The Gherkin specification for a service such as Order Service consists of a set of fea-
+tures. Each feature is described by a set of scenarios such as the one you saw earlier. A sce-
+nario has the given-when-then structure. The givens are the preconditions, the when is
+the action or event that occurs, and the then/and are the expected outcome.
+ For example, the desired behavior of Order Service is defined by several features,
+including Place Order, Cancel Order, and Revise Order. Listing 10.11 is an excerpt of
+the Place Order feature. This feature consists of several elements:
+Name—For this feature, the name is Place Order.
+Specification brief—This describes why the feature exists. For this feature, the
+specification brief is the user story.
+Scenarios—Order authorized and Order rejected due to expired credit card.
+Feature: Place Order
+As a consumer of the Order Service
+I should be able to place an order
+Scenario: Order authorized
+Given a valid consumer
+Given using a valid credit card
+Given the restaurant is accepting orders
+When I place an order for Chicken Vindaloo at Ajanta
+Then the order should be APPROVED
+And an OrderAuthorized event should be published
+Scenario: Order rejected due to expired credit card
+Given a valid consumer
+Given using an expired credit card
+Given the restaurant is accepting orders
+When I place an order for Chicken Vindaloo at Ajanta
+Then the order should be REJECTED
+And an OrderRejected event should be published
+...
+Listing 10.11
+The Gherkin definition of the Place Order feature and some of its scenarios
+ 

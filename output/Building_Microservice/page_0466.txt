@@ -1,0 +1,22 @@
+Figure 13-11. Multiple consumers of Catalog making use of a single shared cache
+Another thing to consider here is who is responsible for this shared cache. Depending
+on who owns it and how it is implemented, a shared cache like this can blur the lines
+between client-side caching and server-side caching, which we explore next.
+Server-side
+In Figure 13-12, we see our top ten sales example making use of caching on the server
+side. Here, the Catalog microservice itself maintains a cache on behalf of its consum‐
+ers. When the Sales microservice makes its request for the names of the CDs, this
+information is transparently served up by a cache.
+Here, the Catalog microservice has full responsibility for managing the cache. Due to
+the nature of how these caches are typically implemented—such as an in-memory
+data structure, or a local dedicated caching node—it’s easier to implement more
+sophisticated cache invalidation mechanisms. Write-through caches, for example
+(which we’ll look at shortly), would be much simpler to implement in this situation.
+Having a server-side cache also makes it easier to avoid the issue with different con‐
+sumers seeing different cached values that can occur with client-side caching.
+It’s worth noting that, although from the consumer point of view this caching is
+invisible (it’s an internal implementation concern), that doesn’t mean we’d have to
+implement this by caching in code in a microservice instance. We could, for example,
+440 
+| 
+Chapter 13: Scaling

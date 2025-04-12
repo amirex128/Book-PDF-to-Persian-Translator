@@ -1,0 +1,63 @@
+152
+CHAPTER 5
+Designing business logic in a microservice architecture
+classes that are instantiated. A factory might be implemented as a static method
+of a class.
+Repository—An object that provides access to persistent entities and encapsu-
+lates the mechanism for accessing the database.
+Service—An object that implements business logic that doesn’t belong in an
+entity or a value object.
+These building blocks are used by many developers. Some are supported by frame-
+works such as JPA and the Spring framework. There is one more building block that
+has been generally ignored (myself included!) except by DDD purists: aggregates. As
+it turns out, aggregates are an extremely useful concept when developing microser-
+vices. Let’s first look at some subtle problems with classic OOD that are solved by
+using aggregates. 
+5.2
+Designing a domain model using the 
+DDD aggregate pattern
+In traditional object-oriented design, a domain model is a collection of classes and
+relationships between classes. The classes are usually organized into packages. For
+example, figure 5.4 shows part of a domain model for the FTGO application. It’s a typ-
+ical domain model consisting of a web of interconnected classes.
+This example has several classes corresponding to business objects: Consumer, Order,
+Restaurant, and Courier. But interestingly, the explicit boundaries of each business
+object are missing from this kind of traditional domain model. It doesn’t specify, for
+Consumer
+Order
+state
+...
+creditcardId
+...
+deliveryTime
+quantity
+name
+price
+street1
+street2
+city
+state
+zip
+name
+...
+available
+...
+lat
+lon
+Restaurant
+Courier
+Location
+PaymentInfo
+DeliveryInfo
+OrderLineItem
+MenuItem
+Address
+Placed by
+For
+Assigned to
+Paid using
+Pays using
+Figure 5.4
+A traditional domain model is a web of interconnected classes. It doesn’t explicitly specify the 
+boundaries of business objects, such as Consumer and Order.
+ 

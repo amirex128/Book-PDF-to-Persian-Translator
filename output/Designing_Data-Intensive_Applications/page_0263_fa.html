@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 263</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        the database می‌تواند یک <em>consistent snapshot</em> از database را به application ارائه دهد. این به شرح زیر عمل می‌کند:
+    </p>
+    <ol>
+        <li>
+            در ابتدای هر <em>transaction</em>، database فهرستی از تمام <em>transactions</em> های دیگری که در حال انجام هستند (هنوز <em>committed</em> یا <em>aborted</em> نشده‌اند) در آن زمان تهیه می‌کند. هر <em>writes</em> که آن <em>transactions</em> انجام داده‌اند نادیده گرفته می‌شوند، حتی اگر transactions متعاقباً <em>commit</em> شوند.
+        </li>
+        <li>
+            هر <em>writes</em> که توسط <em>aborted transactions</em> انجام شده است، نادیده گرفته می‌شود.
+        </li>
+        <li>
+            هر <em>writes</em> که توسط <em>transactions</em> با <em>transaction ID</em> بعدی (یعنی که پس از شروع <em>transaction</em> فعلی شروع شده‌اند) انجام شده است، نادیده گرفته می‌شود، صرف نظر از اینکه آن <em>transactions</em> <em>committed</em> شده‌اند یا خیر.
+        </li>
+        <li>
+            همه <em>writes</em> های دیگر برای <em>queries</em> application قابل مشاهده هستند.
+        </li>
+    </ol>
+    <p>
+        این قوانین برای ایجاد و حذف objects اعمال می‌شود. در شکل 7-7، هنگامی که <em>transaction</em> 12 از حساب 2 می‌خواند، موجودی 500 دلار را می‌بیند زیرا حذف موجودی 500 دلاری توسط <em>transaction</em> 13 انجام شده است (طبق قانون 3، <em>transaction</em> 12 نمی‌تواند یک حذف انجام شده توسط <em>transaction</em> 13 را ببیند)، و ایجاد موجودی 400 دلاری هنوز قابل مشاهده نیست (با همان قانون).
+    </p>
+    <p>
+        به عبارت دیگر، یک object در صورت درست بودن هر دو شرط زیر قابل مشاهده است:
+    </p>
+    <ul>
+        <li>
+            در زمانی که <em>transaction</em> خواننده شروع شد، <em>transaction</em> که object را ایجاد کرد، قبلاً <em>committed</em> شده بود.
+        </li>
+        <li>
+            object برای حذف علامت‌گذاری نشده است، یا اگر شده است، <em>transaction</em> که درخواست حذف را داده بود، هنوز در زمانی که <em>transaction</em> خواننده شروع شد، <em>committed</em> نشده بود.
+        </li>
+    </ul>
+    <p>
+        یک <em>long-running transaction</em> ممکن است برای مدت طولانی به استفاده از یک <em>snapshot</em> ادامه دهد، و همچنان به خواندن values هایی ادامه دهد که (از دیدگاه other transactions) مدت‌هاست بازنویسی یا حذف شده‌اند. با هرگز <em>updating values in place</em> اما در عوض ایجاد یک نسخه جدید هر بار که یک value تغییر می‌کند، database می‌تواند یک <em>consistent snapshot</em> ارائه دهد در حالی که فقط یک <em>small overhead</em> ایجاد می‌کند.
+    </p>
+    <h4>Indexes and snapshot isolation</h4>
+    <p>
+        چگونه <em>indexes</em> در یک database چند نسخه کار می‌کنند؟ یک گزینه این است که <em>index</em> به سادگی به تمام نسخه‌های یک object اشاره کند و از یک <em>index query</em> بخواهیم که هر نسخه‌های object را که برای <em>transaction</em> فعلی قابل مشاهده نیستند، فیلتر کند. هنگامی که <em>garbage collection</em> نسخه‌های قدیمی object را که دیگر برای هیچ <em>transaction</em> قابل مشاهده نیستند، حذف می‌کند، ورودی‌های <em>index</em> مربوطه نیز می‌توانند حذف شوند.
+    </p>
+    <p>
+        در عمل، بسیاری از جزئیات پیاده‌سازی، <em>performance</em> از <em>multi-version concurrency control</em> را تعیین می‌کنند. به عنوان مثال، PostgreSQL دارای بهینه‌سازی‌هایی برای جلوگیری از <em>index updates</em> است اگر نسخه‌های مختلف از یک object یکسان بتوانند در یک صفحه قرار گیرند [31].
+    </p>
+    <p>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        241
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

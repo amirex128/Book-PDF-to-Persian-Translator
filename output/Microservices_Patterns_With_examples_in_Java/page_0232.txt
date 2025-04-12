@@ -1,0 +1,45 @@
+202
+CHAPTER 6
+Developing business logic with event sourcing
+QUERYING THE EVENT STORE IS CHALLENGING
+Imagine you need to find customers who have exhausted their credit limit. Because
+there isn’t a column containing the credit, you can’t write SELECT * FROM CUSTOMER
+WHERE CREDIT_LIMIT = 0. Instead, you must use a more complex and potentially ineffi-
+cient query that has a nested SELECT to compute the credit limit by folding events that
+set the initial credit and adjusting it. To make matters worse, a NoSQL-based event
+store will typically only support primary key-based lookup. Consequently, you must
+implement queries using the CQRS approach described in chapter 7. 
+6.2
+Implementing an event store
+An application that uses event sourcing stores its events in an event store. An event store
+is a hybrid of a database and a message broker. It behaves as a database because it has
+an API for inserting and retrieving an aggregate’s events by primary key. And it
+behaves as a message broker because it has an API for subscribing to events.
+ There are a few different ways to implement an event store. One option is to imple-
+ment your own event store and event sourcing framework. You can, for example, per-
+sist events in an RDBMS. A simple, albeit low-performance, way to publish events is for
+subscribers to poll the EVENTS table for events. But, as noted in section 6.1.4, one chal-
+lenge is ensuring that a subscriber processes all events in order.
+ Another option is to use a special-purpose event store, which typically provides a
+rich set of features and better performance and scalability. There are several of these
+to chose from:
+Event Store—A .NET-based open source event store developed by Greg Young,
+an event sourcing pioneer (https://eventstore.org).
+Lagom—A microservices framework developed by Lightbend, the company for-
+merly known as Typesafe (www.lightbend.com/lagom-framework).
+Axon—An open source Java framework for developing event-driven applications
+that use event sourcing and CQRS (www.axonframework.org).
+Eventuate—Developed by my startup, Eventuate (http://eventuate.io). There are
+two versions of Eventuate: Eventuate SaaS, a cloud service, and Eventuate Local,
+an Apache Kafka/RDBMS-based open source project.
+Although these frameworks differ in the details, the core concepts remain the same.
+Because Eventuate is the framework I’m most familiar with, that’s the one I cover
+here. It has a straightforward, easy-to-understand architecture that illustrates event
+sourcing concepts. You can use it in your applications, reimplement the concepts
+yourself, or apply what you learn here to build applications with one of the other
+event sourcing frameworks.
+ I begin the following sections by describing how the Eventuate Local event store
+works. Then I describe the Eventuate Client framework for Java, an easy-to-use frame-
+work for writing event sourcing-based business logic that uses the Eventuate Local
+event store.
+ 

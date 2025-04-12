@@ -1,0 +1,39 @@
+3 Cam Jackson, “Micro Frontends,” martinfowler.com, June 19, 2019, https://oreil.ly/U3K40.
+This model is the most common one for people building monolithic single-page
+applications, often with a dedicated frontend team. The requirements of our micro‐
+services are pretty straightforward—they just need to share information in a form
+that can be easily interpreted by the UI. In the case of a web-based UI, this means our
+microservices would likely need to provide data in a textual format, JSON being the
+most likely choice. The UI would then need to create the various components that
+make up the interface, handling synchronization of state and the like with the back‐
+end. Using a binary protocol for service-to-service communication would be more
+difficult for web-based clients but could be fine for native mobile devices or “thick”
+desktop applications.
+When to Use It
+There are some downsides to this approach. Firstly, by its nature as a monolithic
+entity, it can become a driver for (or be caused by) a dedicated frontend team. Having
+multiple teams share responsibility for this monolithic frontend can be challenging
+due to the multiple sources of contention. Secondly, we have little ability to tailor the
+responses for different sorts of devices. If using web technology, we can change the
+layout of a screen to accommodate different device constraints, but this doesn’t nec‐
+essarily extend to changing the calls being made to the supporting microservices. My
+mobile client may only be able to display 10 fields of an order, but if the microservice
+pulls back all one hundred fields of the order, we end up retrieving unnecessary data.
+One solution to this approach is for the user interface to specify what fields to pull
+back when it makes a request, but this assumes that each supporting microservice
+supports this form of interaction. In “GraphQL” on page 488, we’ll look at how the use
+of both the backend for frontend pattern and GraphQL can help in this case.
+Really, this pattern works best when you want all of the implementation and behavior
+of your UI in one deployable unit. For a single team developing both the frontend
+and all supporting microservices, that might be fine. Personally, if you have more
+than one team working on your software, I think you should fight against that urge,
+as it can result in you slipping into a layered architecture with the associated organi‐
+zational silos. If, however, you are unable to avoid a layered architecture and match‐
+ing organizational structure, this is probably the pattern you’ll end up using.
+Pattern: Micro Frontends
+The micro frontend approach is an organizational pattern whereby different parts of a
+frontend can be worked on and deployed independently. To quote from a highly rec‐
+ommended article by Cam Jackson on the topic,3 we can define micro frontends as
+464 
+| 
+Chapter 14: User Interfaces

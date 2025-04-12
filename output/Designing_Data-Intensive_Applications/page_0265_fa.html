@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 265</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        viii. اگرچه بیان ویرایش یک document متنی به عنوان یک stream از <em>atomic mutations</em> امکان‌پذیر است، اما کاملاً پیچیده است. برای برخی از اشاره‌گرها، به "Automatic Conflict Resolution" در صفحه 174 مراجعه کنید.
+    </p>
+    <p>
+        چندین نوع جالب دیگر از <em>conflicts</em> وجود دارد که می‌تواند بین <em>concurrently writing transactions</em> رخ دهد. شناخته‌شده‌ترین آنها، مشکل <em>lost update</em> است، که در شکل 7-1 با مثال دو <em>counter increments</em> همزمان نشان داده شده است.
+    </p>
+    <p>
+        مشکل <em>lost update</em> می‌تواند رخ دهد اگر یک application مقداری value را از database می‌خواند، آن را اصلاح می‌کند، و مقدار اصلاح شده را دوباره می‌نویسد (یک <em>read-modify-write cycle</em>). اگر دو <em>transactions</em> این کار را به طور همزمان انجام دهند، یکی از اصلاحات ممکن است از دست برود، زیرا <em>write</em> دوم شامل <em>modification</em> اول نیست. (ما گاهی اوقات می‌گوییم که <em>write</em> بعدی، <em>write</em> قبلی را <em>clobbers</em> می‌کند.) این الگو در سناریوهای مختلفی رخ می‌دهد:
+    </p>
+    <ul>
+        <li>
+            افزایش یک <em>counter</em> یا به‌روزرسانی موجودی حساب (نیاز به خواندن مقدار فعلی، محاسبه مقدار جدید و نوشتن مجدد مقدار <em>updated</em> دارد)
+        </li>
+        <li>
+            ایجاد یک تغییر محلی در یک value پیچیده، به عنوان مثال، افزودن یک عنصر به یک list در یک document <em>JSON</em> (نیاز به تجزیه document، ایجاد تغییر، و نوشتن مجدد document اصلاح شده)
+        </li>
+        <li>
+            دو user به طور همزمان یک صفحه ویکی را ویرایش می‌کنند، جایی که هر user تغییرات خود را با ارسال کل محتوای صفحه به server ذخیره می‌کند، و هر چیزی را که در حال حاضر در database وجود دارد، بازنویسی می‌کند.
+        </li>
+    </ul>
+    <p>
+        از آنجایی که این یک مشکل بسیار رایج است، راه‌حل‌های مختلفی توسعه یافته است.
+    </p>
+    <h4>Atomic write operations</h4>
+    <p>
+        بسیاری از databases ها operations update atomic را ارائه می‌دهند، که نیاز به پیاده‌سازی <em>read-modify-write cycles</em> را در کد application حذف می‌کند. اگر کد شما را بتوان بر حسب آن operations بیان کرد، آنها معمولاً بهترین راه‌حل هستند. به عنوان مثال، دستورالعمل زیر در اکثر relational databases ها <em>concurrency-safe</em> است:
+    </p>
+    <pre><code class="language-sql">UPDATE counters SET value = value + 1 WHERE key = 'foo';
+</code></pre>
+    <p>
+        به طور مشابه، <em>document databases</em> مانند MongoDB operations atomic را برای ایجاد <em>local modifications</em> در بخشی از یک document <em>JSON</em> ارائه می‌دهند، و Redis operations atomic را برای اصلاح ساختارهای داده مانند <em>priority queues</em> ارائه می‌دهد. همه <em>writes</em> را نمی‌توان به راحتی بر حسب operations atomic بیان کرد—به عنوان مثال، <em>updates</em> به یک صفحه ویکی شامل <em>text editing</em> دلخواه است viii—اما در شرایطی که operations atomic قابل استفاده هستند، آنها معمولاً بهترین انتخاب هستند.
+    </p>
+    <p>
+        Operations atomic معمولاً با گرفتن یک <em>exclusive lock</em> روی object هنگام خواندن آن پیاده‌سازی می‌شوند تا هیچ <em>transaction</em> دیگری نتواند آن را تا زمانی که <em>update</em> انجام نشده است، بخواند.
+        <br>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        243
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

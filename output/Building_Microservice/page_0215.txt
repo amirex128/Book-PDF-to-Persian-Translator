@@ -1,0 +1,33 @@
+These changes, if they can be accommodated, can make your life much easier, avoid‐
+ing the need to even create compensating transactions for some steps. This can be
+especially important if implementing a compensating transaction is difficult. You
+may be able to move a step later in the process to a stage at which it never needs to be
+rolled back.
+Mixing fail-backward and fail-forward situations
+It is totally appropriate to have a mix of failure recovery modes. Some failures may
+require a rollback (fail backward); others may be fail forward. For the order process‐
+ing, for example, once we’ve taken money from the customer, and the item has been
+packaged, the only step left is to dispatch the package. If for whatever reason we can’t
+dispatch the package (perhaps the delivery firm we use doesn’t have space in its vans
+to take an order today), it seems very odd to roll the whole order back. Instead, we’d
+probably just retry the dispatch (perhaps queuing it for the following day), and if that
+fails, we’d require human intervention to resolve the situation.
+Implementing Sagas
+So far we’ve looked at the logical model for how sagas work, but we need to go a bit
+deeper to examine ways of implementing the saga itself. We can look at two styles of
+saga implementation. Orchestrated sagas more closely follow the original solution
+space and rely primarily on centralized coordination and tracking. These can be com‐
+pared to choreographed sagas, which avoid the need for centralized coordination in
+favor of a more loosely coupled model but can make tracking the progress of a saga
+more complicated.
+Orchestrated sagas
+Orchestrated sagas use a central coordinator (what we’ll call an orchestrator from
+now on) to define the order of execution and to trigger any required compensating
+action. You can think of orchestrated sagas as a command-and-control approach: the
+orchestrator controls what happens and when, and with that comes a good degree of
+visibility into what is happening with any given saga.
+Taking the order fulfillment process in Figure 6-5, let’s see how this central coordina‐
+tion process would work as a set of collaborating services, as shown in Figure 6-9.
+Sagas 
+| 
+189

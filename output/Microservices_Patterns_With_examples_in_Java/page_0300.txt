@@ -1,0 +1,45 @@
+270
+CHAPTER 8
+External API patterns
+API-based API composer that invokes services concurrently typically uses callbacks. It
+could execute requests concurrently by calling ExecutorService.submitCallable().
+The problem there is that this method returns a Future, which has a blocking API. A
+more scalable approach is for an API composer to call ExecutorService.submit
+(Runnable) and for each Runnable to invoke a callback with the outcome of the
+request. The callback accumulates results, and once all of them have been received it
+sends back the response to the client.
+ Writing API composition code using the traditional asynchronous callback approach
+quickly leads you to callback hell. The code will be tangled, difficult to understand,
+and error prone, especially when composition requires a mixture of parallel and
+sequential requests. A much better approach is to write API composition code in a
+declarative style using a reactive approach. Examples of reactive abstractions for the
+JVM include the following:
+Java 8 CompletableFutures
+Project Reactor Monos
+RxJava (Reactive Extensions for Java) Observables, created by Netflix specifi-
+cally to solve this problem in its API gateway
+Scala Futures
+A NodeJS-based API gateway would use JavaScript promises or RxJS, which is reactive
+extensions for JavaScript. Using one of these reactive abstractions will enable you to
+write concurrent code that’s simple and easy to understand. Later in this chapter, I
+show an example of this style of coding using Project Reactor Monos and version 5 of
+the Spring Framework. 
+HANDLING PARTIAL FAILURES
+As well as being scalable, an API gateway must also be reliable. One way to achieve reli-
+ability is to run multiple instances of the gateway behind a load balancer. If one
+instance fails, the load balancer will route requests to the other instances.
+ Another way to ensure that an API gateway is reliable is to properly handle failed
+requests and requests that have unacceptably high latency. When an API gateway
+invokes a service, there’s always a chance that the service is slow or unavailable. An API
+gateway may wait a very long time, perhaps indefinitely, for a response, which con-
+sumes resources and prevents it from sending a response to its client. An outstanding
+request to a failed service might even consume a limited, precious resource such as a
+thread and ultimately result in the API gateway being unable to handle any other
+requests. The solution, as described in chapter 3, is for an API gateway to use the Cir-
+cuit breaker pattern when invoking services. 
+BEING A GOOD CITIZEN IN THE ARCHITECTURE
+In chapter 3 I described patterns for service discovery, and in chapter 11, I cover
+patterns for observability. The service discovery patterns enable a service client,
+such as an API gateway, to determine the network location of a service instance so
+that it can invoke it. The observability patterns enable developers to monitor the
+ 

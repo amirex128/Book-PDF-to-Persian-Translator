@@ -1,0 +1,44 @@
+232
+CHAPTER 7
+Implementing queries in a microservice architecture
+data, it makes sense, at least on the surface, for it to implement this query operation.
+But data ownership isn’t the only factor to consider.
+ You must also take into account the need to separate concerns and avoid overload-
+ing services with too many responsibilities. For example, the primary responsibility
+of the team that develops Restaurant Service is enabling restaurant managers to
+maintain their restaurants. That’s quite different from implementing a high-
+volume, critical query. What’s more, if they were responsible for the findAvailable-
+Restaurants() query operation, the team would constantly live in fear of deploying a
+change that prevented consumers from placing orders.
+ It makes sense for Restaurant Service to merely provide the restaurant data to
+another service that implements the findAvailableRestaurants() query operation
+and is most likely owned by the Order Service team. As with the findOrderHistory()
+query operation, and when needing to maintain geospatial index, there’s a require-
+ment to maintain an eventually consistent replica of some data in order to implement
+a query. Let’s look at how to accomplish that using CQRS. 
+7.2.2
+Overview of CQRS
+The examples described in section 7.2.1 highlighted three problems that are commonly
+encountered when implementing queries in a microservice architecture:
+Using the API composition pattern to retrieve data scattered across multiple
+services results in expensive, inefficient in-memory joins.
+The service that owns the data stores the data in a form or in a database that
+doesn’t efficiently support the required query.
+The need to separate concerns means that the service that owns the data isn’t
+the service that should implement the query operation.
+The solution to all three of these problems is to use the CQRS pattern.
+CQRS SEPARATES COMMANDS FROM QUERIES
+Command Query Responsibility Segregation, as the name suggests, is all about segrega-
+tion, or the separation of concerns. As figure 7.8 shows, it splits a persistent data model
+and the modules that use it into two parts: the command side and the query side. The
+command side modules and data model implement create, update, and delete opera-
+tions (abbreviated CUD—for example, HTTP POSTs, PUTs, and DELETEs). The
+query-side modules and data model implement queries (such as HTTP GETs). The
+query side keeps its data model synchronized with the command-side data model by
+subscribing to the events published by the command side.
+ Both the non-CQRS and CQRS versions of the service have an API consisting of
+various CRUD operations. In a non-CQRS-based service, those operations are typically
+implemented by a domain model that’s mapped to a database. For performance, a few
+queries might bypass the domain model and access the database directly. A single per-
+sistent data model supports both commands and queries.
+ 

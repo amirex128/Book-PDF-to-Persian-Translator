@@ -1,0 +1,42 @@
+Example 5-2. Hypermedia controls used on an album listing
+<album>
+  <name>Give Blood</name>
+  <link rel="/artist" href="/artist/theBrakes" /> 
+  <description>
+    Awesome, short, brutish, funny and loud. Must buy!
+  </description>
+  <link rel="/instantpurchase" href="/instantPurchase/1234" /> 
+</album>
+This hypermedia control shows us where to find information about the artist.
+And if we want to purchase the album, we now know where to go.
+In this document, we have two hypermedia controls. The client reading such a docu‐
+ment needs to know that a control with a relation of artist is where it needs to navi‐
+gate to get information about the artist, and that instantpurchase is part of the
+protocol used to purchase the album. The client has to understand the semantics of
+the API in much the same way that a human needs to understand that on a shopping
+website the cart is where the items to be purchased will be.
+As a client, I don’t need to know which URI scheme to access to buy the album; I just
+need to access the resource, find the buy control, and navigate to that. The buy con‐
+trol could change location, the URI could change, or the site could even send me to
+another service altogether, and as a client I wouldn’t care. This gives us a huge
+amount of decoupling between the client and the server.
+We are greatly abstracted from the underlying detail here. We could completely
+change the implementation of how the control is presented as long as the client can
+still find a control that matches its understanding of the protocol, in the same way
+that a shopping cart control might go from being a simple link to a more complex
+JavaScript control. We are also free to add new controls to the document, perhaps
+representing new state transitions that we can perform on the resource in question.
+We would end up breaking our consumers only if we fundamentally changed the
+semantics of one of the controls so it behaved very differently, or if we removed a
+control altogether.
+The theory is that, by using these controls to decouple the client and server, we gain
+significant benefits over time that hopefully offset the increase in the time it takes to
+get these protocols up and running. Unfortunately, although these ideas all seem sen‐
+sible in theory, I’ve found that this form of REST is rarely practiced, for reasons I’ve
+not entirely come to grips with. This makes HATEOAS in particular a much harder
+concept for me to promote for those already committed to the use of REST. Funda‐
+mentally, many of the ideas in REST are predicated on creating distributed hyperme‐
+dia systems, and this isn’t what most people end up building.
+130 
+| 
+Chapter 5: Implementing Microservice Communication

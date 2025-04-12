@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 109</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the synchronous Remote procedure invocation pattern</h3>
+  <p>
+   <strong>DEVELOPING ROBUST RPI PROXIES</strong>
+  </p>
+  <p>
+   هر زمان که یک سرویس، سرویس دیگری را به صورت <strong>synchronously</strong> فراخوانی می‌کند، باید از خود محافظت کند
+   با استفاده از رویکردی که توسط <strong>Netflix</strong> توضیح داده شده است (http://techblog.netflix.com/2012/02/fault-
+   <strong>tolerance-in-high-volume.html</strong>). این رویکرد شامل ترکیبی از <strong>fol-</strong>
+   مکانیسم‌های زیر:
+  </p>
+  <ul>
+   <li>
+    <strong>Network timeouts</strong>—هرگز برای مدت نامحدود <strong>block</strong> نکنید و همیشه از <strong>timeouts</strong> استفاده کنید.
+    هنگام انتظار برای پاسخ. استفاده از <strong>timeouts</strong> تضمین می‌کند که منابع هرگز گره نمی‌خورند
+    برای مدت نامحدود.
+   </li>
+   <li>
+    محدود کردن تعداد <strong>outstanding requests</strong> از یک کلاینت به یک سرویس—یک <strong>upper</strong> را تحمیل کنید
+    حد در تعداد <strong>outstanding requests</strong> که یک کلاینت می‌تواند به یک <strong>par-</strong>
+    <strong>ticular service</strong> انجام دهد. اگر به حد رسیده‌اید، احتمالاً بی‌فایده است که
+    <strong>requests</strong> اضافی انجام دهید، و آن تلاش‌ها باید فوراً شکست بخورند.
+   </li>
+   <li>
+    الگوی <strong>Circuit breaker</strong>—تعداد <strong>successful</strong> و <strong>failed requests</strong> را پیگیری کنید،
+    و اگر <strong>error rate</strong> از یک آستانه معین فراتر رفت، <strong>circuit breaker</strong> را فعال کنید تا
+    تلاش‌های بیشتر فوراً شکست بخورند. تعداد زیادی <strong>requests</strong> که شکست می‌خورند
+    نشان می‌دهد که سرویس در دسترس نیست و ارسال <strong>requests</strong> بیشتر بی‌فایده است.
+    پس از یک دوره <strong>timeout</strong>، کلاینت باید دوباره تلاش کند و در صورت موفقیت،
+    <strong>circuit breaker</strong> را ببندد.
+   </li>
+  </ul>
+  <p>
+   <strong>Netflix Hystrix</strong> (https://github.com/Netflix/Hystrix) یک کتابخانه <strong>open source</strong> است که
+   این الگوها و الگوهای دیگر را پیاده‌سازی می‌کند. اگر از <strong>JVM</strong> استفاده می‌کنید، قطعاً باید
+   هنگام پیاده‌سازی <strong>RPI proxies</strong> استفاده از <strong>Hystrix</strong> را در نظر بگیرید. و اگر در یک
+   محیط غیر <strong>JVM</strong>، شما باید از یک کتابخانه معادل استفاده کنید. به عنوان مثال، کتابخانه <strong>Polly</strong>
+   در جامعه <strong>.NET</strong> محبوب است (https://github.com/App-vNext/Polly).
+  </p>
+  <p>
+   <strong>RECOVERING FROM AN UNAVAILABLE SERVICE</strong>
+  </p>
+  <p>
+   استفاده از یک کتابخانه مانند <strong>Hystrix</strong> تنها بخشی از راه‌حل است. شما همچنین باید تصمیم بگیرید
+   به صورت موردی که سرویس‌های شما چگونه باید از یک سرویس <strong>remote</strong> غیرپاسخگو بازیابی شوند. یک
+   گزینه این است که یک سرویس به سادگی یک خطا را به کلاینت خود برگرداند. به عنوان مثال،
+   این رویکرد برای سناریوی نشان داده شده در شکل 3.2 منطقی است، جایی که <strong>request</strong> برای
+   ایجاد یک <strong>Order</strong> شکست می‌خورد. تنها گزینه این است که <strong>API gateway</strong> یک خطا را به
+   کلاینت موبایل بازگرداند.
+  </p>
+  <p>
+   در سناریوهای دیگر، بازگرداندن یک مقدار <strong>fallback</strong>، مانند یک مقدار پیش‌فرض یا یک
+   <strong>response cached</strong>، ممکن است منطقی باشد. به عنوان مثال، فصل 7 نحوه عملکرد <strong>API gate-</strong>
+   <strong>way</strong> را توضیح می‌دهد که می‌تواند عملیات <strong>query</strong> <strong>findOrder()</strong> را با استفاده از الگوی ترکیب <strong>API</strong> پیاده‌سازی کند.
+   همانطور که شکل 3.3 نشان می‌دهد، پیاده‌سازی <strong>GET /orders/{orderId} end-</strong>
+   <strong>point</strong>، چندین سرویس، از جمله <strong>Order Service</strong>، <strong>Kitchen Service</strong> و
+   <strong>Delivery Service</strong> را فراخوانی می‌کند و نتایج را ترکیب می‌کند.
+  </p>
+  <p>
+   احتمالاً داده‌های هر سرویس برای کلاینت به یک اندازه مهم نیستند. داده‌ها
+   از <strong>Order Service</strong> ضروری است. اگر این سرویس در دسترس نباشد، <strong>API gateway</strong>
+   باید یا یک نسخه <strong>cached</strong> از داده‌های خود یا یک خطا را برگرداند. داده‌ها از دیگر
+   سرویس‌ها کمتر بحرانی هستند. به عنوان مثال، یک کلاینت می‌تواند اطلاعات مفیدی را به کاربر
+   نمایش دهد، حتی اگر وضعیت تحویل در دسترس نباشد. اگر <strong>Delivery Service</strong> در دسترس نباشد،
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 110</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        index روی (date, temperature) به منظور جستجوی کارآمد برای تمام observations در طول سال 2013 که در آن دما بین 25 و 30 درجه سانتی‌گراد بود. با یک index یک‌بعدی، شما یا باید تمام records از سال 2013 (صرف نظر از دما) را scan کنید و سپس آن‌ها را بر اساس دما فیلتر کنید، یا بالعکس. یک index 2D می‌تواند به طور همزمان بر اساس timestamp و temperature محدود شود. این tech‐nique توسط HyperDex [36] استفاده می‌شود.
+    </p>
+    <h4>Full-text search و fuzzy indexes</h4>
+    <p>
+        همه indexes که تاکنون مورد بحث قرار گرفتند، فرض می‌کنند که شما data دقیق دارید و به شما اجازه می‌دهند که برای exact values از یک key، یا یک range از values از یک key با یک sort order query کنید. آنچه که آن‌ها به شما اجازه نمی‌دهند این است که به دنبال keys مشابه، مانند کلمات املایی اشتباه، باشید. چنین fuzzy querying نیاز به تکنیک‌های متفاوتی دارد.
+    </p>
+    <p>
+        به عنوان مثال، full-text search engines معمولاً به جستجوی یک کلمه اجازه می‌دهند تا شامل مترادف‌های کلمه شود، variations گرامری از کلمات را نادیده بگیرد، و به دنبال occurrences of words در نزدیکی یکدیگر در همان document باشد و از ویژگی‌های مختلف دیگری پشتیبانی کند که به تجزیه و تحلیل زبانی متن بستگی دارد. برای مقابله با typos در documents یا queries، Lucene قادر است text را برای کلمات در یک edit distance خاص (یک edit distance از 1 به این معنی است که یک حرف اضافه، حذف یا جایگزین شده است) جستجو کند [37].
+    </p>
+    <p>
+        همانطور که در "Making an LSM-tree out of SSTables" در صفحه 78 اشاره شد، Lucene از یک ساختار شبیه به SSTable برای term dictionary خود استفاده می‌کند. این structure به یک in-memory index کوچک نیاز دارد که به queries می‌گوید که در کدام offset در فایل مرتب شده، باید به دنبال یک key باشند. در LevelDB، این in-memory index یک collection sparse از برخی از keys است، اما در Lucene، the in-memory index یک finite state automaton بر روی کاراکترهای در keys است، شبیه به یک trie [38]. این automaton را می‌توان به یک Levenshtein automaton تبدیل کرد، که از search کارآمد برای کلمات در یک edit distance داده شده پشتیبانی می‌کند [39].
+    </p>
+    <p>
+        سایر تکنیک‌های fuzzy search به سمت document classification و machine learning می‌روند. برای اطلاعات بیشتر به یک کتاب درسی information retrieval مراجعه کنید [به عنوان مثال، 40].
+    </p>
+    <h4>Keeping everything in memory</h4>
+    <p>
+        Data structures که در این فصل مورد بحث قرار گرفتند، همگی پاسخ‌هایی به limitations of disks بوده‌اند. در مقایسه با main memory، مقابله با دیسک‌ها دشوار است. هم با magnetic disks و هم با SSDs، داده‌ها روی دیسک باید با دقت lay out شوند اگر شما می‌خواهید performance خوبی در reads و writes داشته باشید. با این حال، ما این awkwardness را تحمل می‌کنیم زیرا دیسک‌ها دو مزیت مهم دارند: آن‌ها با دوام هستند (محتوای آن‌ها در صورت قطع برق از بین نمی‌رود) و هزینه کمتری به ازای هر گیگابایت نسبت به RAM دارند.
+    </p>
+    <p>
+        از آنجایی که RAM ارزان‌تر می‌شود، argument cost-per-gigabyte فرسوده می‌شود. بسیاری از datasets به سادگی به آن بزرگی نیستند، بنابراین کاملاً امکان‌پذیر است که آن‌ها را به طور کامل در memory نگه داریم، poten‐
+    </p>
+    <p>
+        88 | Chapter 3: Storage and Retrieval
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

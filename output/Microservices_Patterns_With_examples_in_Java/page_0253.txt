@@ -1,0 +1,41 @@
+223
+Querying using the API composition pattern
+query operation by invoking the services that own the data and combining the results.
+Figure 7.2 shows the structure of this pattern. It has two types of participants:
+An API composer—This implements the query operation by querying the pro-
+vider services.
+A provider service—This is a service that owns some of the data that the query
+returns.
+Figure 7.2 shows three provider services. The API composer implements the query by
+retrieving data from the provider services and combining the results. An API com-
+poser might be a client, such as a web application, that needs the data to render a web
+page. Alternatively, it might be a service, such as an API gateway and its Backends for
+frontends variant described in chapter 8, which exposes the query operation as an API
+endpoint.
+Whether you can use this pattern to implement a particular query operation depends
+on several factors, including how the data is partitioned, the capabilities of the APIs
+exposed by the services that own the data, and the capabilities of the databases used
+by the services. For instance, even if the Provider services have APIs for retrieving the
+Pattern: API composition
+Implement a query that retrieves data from several services by querying each service
+via its API and combining the results. See http://microservices.io/patterns/data/api-
+composition.html.
+query()
+API composer
+Provider Service A
+Database A
+queryA()
+Provider Service B
+Database B
+queryB()
+Provider Service C
+Database C
+queryC()
+Implements the query operation
+by invoking the providers and
+combining the results.
+Services that own data
+Figure 7.2
+The API composition pattern consists of an API composer and two or more provider 
+services. The API composer implements a query by querying the providers and combining the results.
+ 

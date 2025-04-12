@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 276</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   یک <mark>primary key</mark> مرکب متشکل از دو ویژگی اسکالر. اولین ویژگی، یک <mark>partition key</mark> است. <mark>partition key</mark> به این دلیل نامیده می‌شود که مقیاس‌بندی محور <mark>Z</mark> <mark>DynamoDB</mark> (که در فصل 1 توضیح داده شد) از آن برای انتخاب پارتیشن ذخیره‌سازی یک آیتم استفاده می‌کند. ویژگی دوم، <mark>sort key</mark> است. یک عملیات <mark>query()</mark> آن آیتم‌هایی را برمی‌گرداند که دارای <mark>partition key</mark> مشخص شده هستند، یک <mark>sort key</mark> در محدوده مشخص شده دارند، و با عبارت فیلتر اختیاری مطابقت دارند. این آیتم‌ها را به ترتیبی که توسط <mark>sort key</mark> مشخص شده است، برمی‌گرداند.
+  </p>
+  <p>
+   عملیات <mark>query</mark> <mark>findOrderHistory()</mark>، سفارش‌های یک مصرف‌کننده را بر اساس افزایش سن مرتب می‌کند. بنابراین به یک <mark>primary key</mark> نیاز دارد که <mark>consumerId</mark> را به عنوان <mark>partition key</mark> و <mark>orderCreationDate</mark> را به عنوان <mark>sort key</mark> داشته باشد. اما منطقی نیست که (consumerId, orderCreationDate) <mark>primary key</mark> جدول <mark>ftgo-order-history</mark> باشد، زیرا منحصربه‌فرد نیست.
+  </p>
+  <p>
+   راه‌حل این است که <mark>findOrderHistory()</mark>، چیزی را که <mark>DynamoDB</mark> آن را یک <mark>secondary index</mark> در جدول <mark>ftgo-order-history</mark> می‌نامد، <mark>query</mark> کند. این <mark>index</mark> دارای (consumerId, orderCreationDate) به عنوان کلید غیر منحصربه‌فرد خود است. مانند یک <mark>index RDBMS</mark>، یک <mark>DynamoDB index</mark> به‌طور خودکار هر زمان که جدول آن به‌روزرسانی می‌شود، به‌روزرسانی می‌شود. اما برخلاف یک <mark>index RDBMS</mark> معمولی، یک <mark>DynamoDB index</mark> می‌تواند ویژگی‌های غیر کلیدی داشته باشد. ویژگی‌های غیر کلیدی عملکرد را بهبود می‌بخشند زیرا توسط <mark>query</mark> برگردانده می‌شوند، بنابراین application نیازی به دریافت آن‌ها از جدول ندارد. همچنین، همانطور که به زودی خواهید دید، می‌توان از آن‌ها برای فیلتر کردن استفاده کرد. شکل 7.14 ساختار جدول و این <mark>index</mark> را نشان می‌دهد.
+  </p>
+  <p>
+   <mark>index</mark> بخشی از تعریف جدول <mark>ftgo-order-history</mark> است و <mark>ftgo-order-history-by-consumer-id-and-creation-time</mark> نامیده می‌شود. ویژگی‌های <mark>index</mark>
+  </p>
+  <p>
+   <mark>orderId</mark>
+   <br />
+   <mark>cde-fgh</mark>
+   <br />
+   ...
+   <br />
+   <mark>Primary key</mark>
+   <br />
+   جدول <mark>ftgo-order-history</mark>
+  </p>
+  <p>
+   <mark>consumerId</mark>
+   <br />
+   <mark>xyz-abc</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>orderCreationTime</mark>
+   <br />
+   <mark>22939283232</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>status</mark>
+   <br />
+   <mark>CREATED</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>lineItems</mark>
+   <br />
+   [{...}.
+   <br />
+   {...},
+   <br />
+   ....]
+   <br />
+   ....
+   <br />
+   ...
+   <br />
+   ...
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>Primary key</mark>
+   <br />
+   <mark>ftgo-order-history-by-consumer-id-and-creation-time</mark>
+   <br />
+   <mark>global secondary index</mark>
+  </p>
+  <p>
+   <mark>consumerId</mark>
+   <br />
+   <mark>xyz-abc</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>orderCreationTime</mark>
+   <br />
+   <mark>22939283232</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>orderId</mark>
+   <br />
+   <mark>cde-fgh</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   ...
+   <br />
+   ...
+   <br />
+   ...
+  </p>
+  <p>
+   <mark>status</mark>
+   <br />
+   <mark>CREATED</mark>
+   <br />
+   ...
+  </p>
+  <p>
+   شکل 7.14
+   <br />
+   طراحی جدول و <mark>index</mark> <mark>OrderHistory</mark>
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

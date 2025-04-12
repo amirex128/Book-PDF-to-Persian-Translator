@@ -1,0 +1,48 @@
+139
+The design of the Order Service and the Create Order Saga
+THE KITCHENSERVICEPROXY CLASS
+The KitchenServiceProxy class, shown in listing 4.5, defines the command message
+endpoints for Kitchen Service. There are three endpoints:
+
+create—Creates a Ticket
+
+confirmCreate—Confirms the creation
+
+cancel—Cancels a Ticket
+Each CommandEndpoint specifies the command type, the command message’s destina-
+tion channel, and the expected reply types.
+public class KitchenServiceProxy {
+public final CommandEndpoint<CreateTicket> create =
+CommandEndpointBuilder
+.forCommand(CreateTicket.class)
+.withChannel(
+KitchenServiceChannels.kitchenServiceChannel)
+.withReply(CreateTicketReply.class)
+.build();
+public final CommandEndpoint<ConfirmCreateTicket> confirmCreate =
+CommandEndpointBuilder
+.forCommand(ConfirmCreateTicket.class)
+.withChannel(
+KitchenServiceChannels.kitchenServiceChannel)
+.withReply(Success.class)
+.build();
+public final CommandEndpoint<CancelCreateTicket> cancel =
+CommandEndpointBuilder
+.forCommand(CancelCreateTicket.class)
+.withChannel(
+KitchenServiceChannels.kitchenServiceChannel)
+.withReply(Success.class)
+.build();
+}
+Proxy classes, such as KitchenServiceProxy, aren’t strictly necessary. A saga could sim-
+ply send command messages directly to participants. But proxy classes have two import-
+ant benefits. First, a proxy class defines static typed endpoints, which reduces the chance
+of a saga sending the wrong message to a service. Second, a proxy class is a well-defined
+API for invoking a service that makes the code easier to understand and test. For exam-
+ple, chapter 10 describes how to write tests for KitchenServiceProxy that verify that
+Order Service correctly invokes Kitchen Service. Without KitchenServiceProxy, it
+would be impossible to write such a narrowly scoped test. 
+Listing 4.5
+KitchenServiceProxy defines the command message endpoints for 
+ Kitchen Service
+ 

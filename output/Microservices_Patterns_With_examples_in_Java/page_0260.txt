@@ -1,0 +1,51 @@
+230
+CHAPTER 7
+Implementing queries in a microservice architecture
+ There are two ways an API composer could solve this problem. One solution is for the
+API composer to do an in-memory join, as shown in figure 7.7. It retrieves all orders for
+the consumer from Delivery Service and Accounting Service and performs a join
+with the orders retrieved from Order Service and Kitchen Service.
+The drawback of this approach is that it potentially requires the API composer to retrieve
+and join large datasets, which is inefficient.
+ The other solution is for the API composer to retrieve matching orders from Order
+Service and Kitchen Service and then request orders from the other services by ID.
+But this is only practical if those services have a bulk fetch API. Requesting orders
+individually will likely be inefficient because of excessive network traffic.
+ Queries such as findOrderHistory() require the API composer to duplicate the
+functionality of an RDBMS’s query execution engine. On one hand, this potentially
+moves work from the less scalable database to the more scalable application. On the
+other hand, it’s less efficient. Also, developers should be writing business functionality,
+not a query execution engine.
+ Next I show you how to apply the CQRS pattern and use a separate datastore,
+which is designed to efficiently implement the findOrderHistory() query operation.
+Figure 7.7
+API composition can’t efficiently retrieve a consumer’s orders, because some providers, 
+such as Delivery Service, don’t store the attributes used for filtering.
+Find orders
+composer
+Order Service
+«aggregate»
+Order
+GET/orders?
+consumerId=
+&keyword=
+GET/charges?
+consumerId=
+GET/tickets?
+consumerId=
+&keyword=
+GET/deliveries?
+consumerId=
+Kitchen Service
+«aggregate»
+RestaurantOrder
+Delivery Service
+«aggregate»
+Delivery
+Accounting Service
+«aggregate»
+Charge
+GET/order?consumerId=&keyword=
+These services don’t store the data needed for a keyword
+search, so will return all of a consumer’s orders.
+ 

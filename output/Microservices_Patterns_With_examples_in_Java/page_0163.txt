@@ -1,0 +1,44 @@
+133
+The design of the Order Service and the Create Order Saga
+entity. There are also saga orchestrator classes, including the CreateOrderSaga class,
+which orchestrates Create Order Saga. Also, because Order Service participates in its
+own sagas, it has an OrderCommandHandlers adapter class that handles command mes-
+sages by invoking OrderService.
+ Some parts of Order Service should look familiar. As in a traditional application,
+the core of the business logic is implemented by the OrderService, Order, and Order-
+Repository classes. In this chapter, I’ll briefly describe these classes. I describe them
+in more detail in chapter 5.
+ What’s less familiar about Order Service are the saga-related classes. This service is
+both a saga orchestrator and a saga participant. Order Service has several saga orches-
+trators, such as CreateOrderSaga. The saga orchestrators send command messages to a
+saga participant using a saga participant proxy class, such as KitchenServiceProxy and
+OrderServiceProxy. A saga participant proxy defines a saga participant’s messaging
+API. Order Service also has an OrderCommandHandlers class, which handles the com-
+mand messages sent by sagas to Order Service.
+ Let’s look in more detail at the design, starting with the OrderService class.
+4.4.1
+The OrderService class
+The OrderService class is a domain service called by the service’s API layer. It’s
+responsible for creating and managing orders. Figure 4.10 shows OrderService and
+some of its collaborators. OrderService creates and updates Orders, invokes the
+OrderRepository to persist Orders, and creates sagas, such as the CreateOrderSaga,
+using the SagaManager. The SagaManager class is one of the classes provided by the
+Eventuate Tram Saga framework, which is a framework for writing saga orchestrators
+and participants, and is discussed a little later in this section.
+createOrder()
+...
+OrderService
+save()
+ﬁndOne()
+...
+OrderRepository
+create(..)
+SagaManager
+Order
+CreateOrder
+Saga
+Figure 4.10
+OrderService creates and updates Orders, invokes the 
+OrderRepository to persist Orders, and creates sagas, including the 
+CreateOrderSaga.
+ 

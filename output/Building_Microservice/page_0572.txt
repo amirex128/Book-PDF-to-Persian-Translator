@@ -1,0 +1,40 @@
+Many frameworks exist for different programming languages that attempt to give you
+the building blocks for your own microservice template. Spring Boot is probably the
+most successful example of such a framework for the JVM. The core Spring Boot
+framework is fairly light, but you can then decide to pull together a set of libraries to
+provide features like checking health, serving HTTP, or exposing metrics. So right
+out of the box, you have a simple “Hello World” microservice that can be launched
+from the command line.
+Many people then take these frameworks and standardize this setup for their com‐
+pany. For example, when spinning up a new microservice, they may script things so
+that they get a Spring Boot template with the core libraries their organization uses
+already wired in; it might already pull in the libraries to handle circuit breakers and
+be configured to handle JWT authentication for inbound calls. Normally, such an
+automated template creation would create a matching build pipeline as well.
+Caution warranted
+The selection and configuration of these tailored microservices templates is com‐
+monly a task for the platform team. They might, for example, provide a template for
+each supported language, ensuring that when using the template the resulting micro‐
+services work well with the platform itself. This can cause challenges, however.
+I have seen many a team’s morale and productivity destroyed by having a mandated
+framework thrust upon it. In a drive to improve code reuse, more and more work is
+placed into a centralized framework until it becomes an overwhelming monstrosity.
+If you decide to use a tailored microservice template, think very carefully about what
+its job is. Ideally, its use should be purely optional, but if you are going to be more
+forceful in its adoption, you need to understand that ease of use for the developers
+has to be a prime guiding force. Allowing the developers who use the template to rec‐
+ommend and even contribute changes to the framework, perhaps as part of an inter‐
+nal open source model, can help greatly here.
+As we discussed in “DRY and the Perils of Code Reuse in a Microservice World” on
+page 154, we have to be aware of the perils of shared code. In our desire to create
+reusable code, we can introduce sources of coupling between microservices. At least
+one organization I spoke to is so worried about this that it actually copies its micro‐
+service template code manually into each microservice. This means that an upgrade
+to the core microservice template takes longer to be applied across its system, but this
+is less concerning to the organization than the danger of coupling. Other teams I’ve
+spoken to have simply treated the microservice template as a shared binary depend‐
+ency, although they have to be very diligent in not letting the tendency for DRY
+(don’t repeat yourself) result in an overly coupled system!
+546 
+| 
+Chapter 16: The Evolutionary Architect

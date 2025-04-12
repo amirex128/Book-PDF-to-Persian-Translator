@@ -1,0 +1,63 @@
+315
+Writing unit tests for a service
+orderController = new OrderController(orderService, orderRepository);
+}
+@Test
+public void shouldFindOrder() {
+when(orderRepository.findById(1L))
+.thenReturn(Optional.of(CHICKEN_VINDALOO_ORDER_);    
+given().
+standaloneSetup(configureControllers(
+      
+new OrderController(orderService, orderRepository))).
+when().
+get("/orders/1").
+    
+then().
+statusCode(200).
+   
+body("orderId",
+            
+equalTo(new Long(OrderDetailsMother.ORDER_ID).intValue())).
+body("state",
+equalTo(OrderDetailsMother.CHICKEN_VINDALOO_ORDER_STATE.name())).
+body("orderTotal",
+equalTo(CHICKEN_VINDALOO_ORDER_TOTAL.asString()))
+;
+}
+@Test
+public void shouldFindNotOrder() { ... }
+private StandaloneMockMvcBuilder controllers(Object... controllers) { ... }
+}
+The shouldFindOrder() test method first configures the OrderRepository mock to
+return an Order. It then makes an HTTP request to retrieve the order. Finally, it
+checks that the request was successful and that the response body contains the
+expected data.
+ Controllers aren’t the only adapters that handle requests from external systems.
+There are also event/message handlers, so let’s talk about how to unit test those. 
+9.2.6
+Writing unit tests for event and message handlers
+Services often process messages sent by external systems. Order Service, for example,
+has OrderEventConsumer, which is a message adapter that handles domain events pub-
+lished by other services. Like controllers, message adapters tend to be simple classes
+that invoke domain services. Each of a message adapter’s methods typically invokes a
+service method with data from the message or event.
+ We can unit test message adapters using an approach similar to the one we used
+for unit testing controllers. Each test instances the message adapter, sends a message
+to a channel, and verifies that the service mock was invoked correctly. Behind the
+Configure the mock 
+OrderRepository to 
+return an Order.
+Configure 
+OrderController.
+Make an
+HTTP
+request.
+Verify the response 
+status code.
+Verify
+elements
+of the JSON
+response
+body.
+ 

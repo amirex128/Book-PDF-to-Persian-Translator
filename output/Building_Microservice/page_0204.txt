@@ -1,0 +1,20 @@
+Figure 6-2. Changes made by the Customer and Enrollments microservices are now
+done in the scope of two different transactions
+We could decide to sequence these two transactions, of course, removing a row from
+the PendingEnrollments table only if we could change the row in the Customer table.
+But we’d still have to reason about what to do if the deletion from the PendingEnroll
+ments table then failed—all logic that we’d need to implement ourselves. Being able
+to reorder steps to better handle these use cases can be a really useful idea, though
+(one we’ll come back to when we explore sagas). But fundamentally, we have to
+accept that by decomposing this operation into two separate database transactions,
+we’ve lost guaranteed atomicity of the operation as a whole.
+This lack of atomicity can start to cause significant problems, especially if we are
+migrating systems that previously relied on this property. Normally, the first option
+that people start considering is still using a single transaction, but one that now spans
+multiple processes—a distributed transaction. Unfortunately, as we’ll see, distributed
+transactions may not be the right way forward. Let’s look at one of the most common
+algorithms for implementing distributed transactions, the two-phase commit, as a
+way of exploring the challenges associated with distributed transactions as a whole.
+178 
+| 
+Chapter 6: Workflow

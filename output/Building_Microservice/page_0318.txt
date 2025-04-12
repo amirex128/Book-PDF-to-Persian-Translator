@@ -1,0 +1,37 @@
+8 Nicole Forsgren, Jez Humble, and Gene Kim, Accelerate: The Science of Building and Scaling High Performing
+Technology Organizations (Portland, OR: IT Revolution, 2018).
+The research summarized in Accelerate found that high-performing teams were more
+likely to “do most of their testing on demand, without requiring an integrated test
+environment.”8
+Should You Avoid End-to-End Tests?
+Despite the disadvantages just outlined, for many users end-to-end tests can still be
+manageable with a small number of microservices, and in these situations they still
+make a lot of sense. But what happens with 3, 4, 10, or 20 services? Very quickly these
+test suites become hugely bloated, and in the worst case they can result in a
+Cartesian-like explosion in the scenarios under test.
+In fact, even with a small number of microservices, these tests become difficult when
+you have multiple teams sharing end-to-end tests. With a shared end-to-end test
+suite, you undermine your goal of independent deployability. Your ability as a team
+to deploy a microservice now requires that a test suite shared by multiple teams
+passes.
+What is one of the key problems we are trying to address when we use the end-to-end
+tests outlined previously? We are trying to ensure that when we deploy a new service
+to production, our changes won’t break consumers. Now, as we covered in detail in
+“Structural Versus Semantic Contract Breakages” on page 142, having explicit sche‐
+mas for our microservice interfaces can help us catch structural breakages, and that
+can definitely reduce the need for more complex end-to-end tests.
+However, schemas can’t pick up semantic breakages, namely changes in behavior that
+cause breakages due to backward incompatibility. End-to-end tests absolutely can
+help catch these semantic breakagaes, but they do so at a great cost. Ideally, we’d
+want to have some type of test that can pick up semantic breaking changes and run in
+a reduced scope, improving test isolation (and therefore speed of feedback). This is
+where contract tests and consumer-driven contracts come in.
+Contract Tests and Consumer-Driven Contracts (CDCs)
+With contract tests, a team whose microservice consumes an external service writes
+tests that describe how it expects an external service will behave. This is less about
+testing your own microservice and more about specifying how you expect an external
+service to behave. One of the main reasons that these contract tests can be useful is
+that they can be run against any stubs or mocks you are using that represent external
+292 
+| 
+Chapter 9: Testing

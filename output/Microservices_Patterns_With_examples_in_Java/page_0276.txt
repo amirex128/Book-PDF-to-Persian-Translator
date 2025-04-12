@@ -1,0 +1,67 @@
+246
+CHAPTER 7
+Implementing queries in a microservice architecture
+composite primary key consisting of two scalar attributes. The first attribute is a parti-
+tion key. The partition key is so called because DynamoDB’s Z-axis scaling (described in
+chapter 1) uses it to select an item’s storage partition. The second attribute is the sort
+key. A query() operation returns those items that have the specified partition key,
+have a sort key in the specified range, and match the optional filter expression. It
+returns items in the order specified by the sort key.
+ The findOrderHistory() query operation returns a consumer’s orders sorted by
+increasing age. It therefore requires a primary key that has the consumerId as the par-
+tition key and the orderCreationDate as the sort key. But it doesn’t make sense for
+(consumerId, orderCreationDate) to be the primary key of the ftgo-order-history
+table, because it’s not unique.
+ The solution is for findOrderHistory() to query what DynamoDB calls a secondary
+index on the ftgo-order-history table. This index has (consumerId, orderCreation-
+Date) as its non-unique key. Like an RDBMS index, a DynamoDB index is automati-
+cally updated whenever its table is updated. But unlike a typical RDBMS index, a
+DynamoDB index can have non-key attributes. Non-key attributes improve performance
+because they’re returned by the query, so the application doesn’t have to fetch them
+from the table. Also, as you’ll soon see, they can be used for filtering. Figure 7.14
+shows the structure of the table and this index.
+ The index is part of the definition of the ftgo-order-history table and is called
+ftgo-order-history-by-consumer-id-and-creation-time. The index’s attributes
+orderId
+cde-fgh
+...
+Primary key
+ftgo-order-history table
+consumerId
+xyz-abc
+...
+orderCreationTime
+22939283232
+...
+status
+CREATED
+...
+lineItems
+[{...}.
+{...},
+....]
+....
+...
+...
+...
+Primary key
+ftgo-order-history-by-consumer-id-and-creation-time
+global secondary index
+consumerId
+xyz-abc
+...
+orderCreationTime
+22939283232
+...
+orderId
+cde-fgh
+...
+...
+...
+...
+status
+CREATED
+...
+Figure 7.14
+The design of the OrderHistory table and index
+ 

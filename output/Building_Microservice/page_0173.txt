@@ -1,0 +1,40 @@
+information hiding more explicit—what’s exposed in the schema is by definition not
+hidden.
+Having an explicit schema for RPC is long established and is in fact a requirement for
+many RPC implementations. REST, on the other hand, has typically viewed the con‐
+cept of a schema as optional, to the point that I find explicit schemas for REST end‐
+points to be vanishingly rare. This is changing, with things like the aforementioned
+OpenAPI specification gaining traction, and with the JSON Schema specification also
+gaining in maturity.
+Asynchronous messaging protocols have struggled more in this space. You can have
+a schema for the payload of a message easily enough, and in fact this is an area in
+which Avro is frequently used. However, having an explicit interface needs to go fur‐
+ther than this. If we consider a microservice that fires events, which events does it
+expose? A few attempts at making explicit schemas for event-based endpoints are
+now underway. One is AsyncAPI, which has picked up a number of big-name users,
+but the one gaining most traction seems to be CloudEvents, a specification which is
+backed by the Cloud Native Computing Foundation (CNCF). Azure’s event grid
+product supports the CloudEvents format, a sign of different vendors supporting this
+format, which should help with interoperability. This is still a fairly new space, so it
+will be interesting to see how things shake out over the next few years.
+Semantic Versioning
+Wouldn’t it be great if as a client you could look just at the version number of a ser‐
+vice and know whether you can integrate with it? Semantic versioning is a specifica‐
+tion that allows just that. With semantic versioning, each version number is in the
+form MAJOR.MINOR.PATCH. When the MAJOR number increments, it means that
+backward-incompatible changes have been made. When MINOR increments, new
+functionality has been added that should be backward compatible. Finally, a change
+to PATCH states that bug fixes have been made to existing functionality.
+To see how useful semantic versioning can be, let’s look at a simple use case. Our
+helpdesk application is built to work against version 1.2.0 of the Customer service. If a
+new feature is added, causing the Customer service to change to 1.3.0, our helpdesk
+application should see no change in behavior and shouldn’t be expected to make any
+changes. We couldn’t guarantee that we could work against version 1.1.0 of the Cus
+tomer service, though, as we may rely on functionality added in the 1.2.0 release. We
+could also expect to have to make changes to our application if a new 2.0.0 release of
+the Customer service comes out.
+You may decide to have a semantic version for the service, or even for an individual
+endpoint on a service if you are coexisting them, as detailed in the next section.
+Avoiding Breaking Changes 
+| 
+147

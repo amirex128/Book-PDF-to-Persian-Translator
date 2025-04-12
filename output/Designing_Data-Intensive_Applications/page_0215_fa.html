@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 215</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        nodes faulty، network interruptions و latency spikes—به قیمت سخت‌تر شدن برای استدلال در مورد آن و ارائه guarantees بسیار ضعیف consistency.
+    </p>
+    <p>
+        Replication می‌تواند synchronous یا asynchronous باشد، که یک تأثیر عمیق بر رفتار سیستم هنگام وجود یک fault دارد. اگرچه replication asynchronous می‌تواند سریع باشد، هنگامی که سیستم به خوبی در حال اجرا است، مهم است که بفهمیم چه اتفاقی می‌افتد when replication lag افزایش می‌یابد و servers fail می‌شوند. اگر یک leader fail شود و شما یک follower که به صورت asynchronous به‌روزرسانی شده است را به عنوان leader جدید ارتقا دهید، data که اخیراً committed شده است، ممکن است از دست برود.
+    </p>
+    <p>
+        ما به برخی از اثرات عجیبی نگاه کردیم که می‌تواند ناشی از replication lag باشد، و ما در مورد چند consistency models بحث کردیم که برای تصمیم‌گیری در مورد چگونگی رفتار یک application در زیر replication lag مفید هستند:
+    </p>
+    <ul>
+        <li>Read-after-write consistency</li>
+        <li>Users همیشه باید داده‌هایی را که خودشان submit کرده‌اند، ببینند.</li>
+        <li>Monotonic reads</li>
+        <li>After users have seen the data at one point in time, they shouldn’t later see the data from some earlier point in time.</li>
+        <li>Consistent prefix reads</li>
+        <li>Users باید داده‌ها را در یک state ببینند که causal sense ایجاد می‌کند: به عنوان مثال، دیدن یک question و پاسخ آن به ترتیب صحیح.</li>
+    </ul>
+    <p>
+        در نهایت، ما در مورد issues concurrency که در رویکردهای multi-leader و leaderless replication ذاتی هستند، بحث کردیم: زیرا آن‌ها به چندین writes اجازه می‌دهند تا به طور همزمان اتفاق بیفتند، conflicts ممکن است رخ دهد. ما یک الگوریتم را بررسی کردیم که یک database ممکن است برای تعیین اینکه آیا یک operation قبل از دیگری اتفاق افتاده است یا خیر، یا اینکه آیا به طور همزمان اتفاق افتاده‌اند، استفاده کند. ما همچنین به روش‌هایی برای حل conflicts با merging updates concurrent با هم اشاره کردیم.
+    </p>
+    <p>
+        در فصل بعد ما به ادامه نگاه به data که در سراسر multiple machines توزیع شده است، از طریق counterpart از replication: splitting یک dataset بزرگ به partitions، خواهیم پرداخت.
+    </p>
+    <h4>References</h4>
+    <p>
+        [1] Bruce G. Lindsay, Patricia Griffiths Selinger, C. Galtieri, et al.: “Notes on Distributed Databases,” IBM Research, Research Report RJ2571(33471), July 1979.
+    </p>
+    <p>
+        [2] “Oracle Active Data Guard Real-Time Data Protection and Availability,” Oracle White Paper, June 2013.
+    </p>
+    <p>
+        [3] “AlwaysOn Availability Groups,” in SQL Server Books Online, Microsoft, 2012.
+    </p>
+    <p>
+        Summary | 193
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

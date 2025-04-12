@@ -1,0 +1,67 @@
+117
+Coordinating sagas
+never fail, and how the last two steps are termed retriable transactions because they
+always succeed.
+ To see how compensating transactions are used, imagine a scenario where the
+authorization of the consumer’s credit card fails. In this scenario, the saga executes
+the following local transactions:
+1
+Order Service—Create an Order in an APPROVAL_PENDING state.
+2
+Consumer Service—Verify that the consumer can place an order.
+3
+Kitchen Service—Validate order details and create a Ticket in the CREATE
+_PENDING state.
+4
+Accounting Service—Authorize consumer’s credit card, which fails.
+5
+Kitchen Service—Change the state of the Ticket to CREATE_REJECTED.
+6
+Order Service—Change the state of the Order to REJECTED.
+The fifth and sixth steps are compensating transactions that undo the updates made
+by Kitchen Service and Order Service, respectively. A saga’s coordination logic is
+responsible for sequencing the execution of forward and compensating transactions.
+Let’s look at how that works. 
+4.2
+Coordinating sagas
+A saga’s implementation consists of logic that coordinates the steps of the saga.
+When a saga is initiated by system command, the coordination logic must select and
+tell the first saga participant to execute a local transaction. Once that transaction
+completes, the saga’s sequencing coordination selects and invokes the next saga
+participant. This process continues until the saga has executed all the steps. If any
+local transaction fails, the saga must execute the compensating transactions in
+reverse order. There are a couple of different ways to structure a saga’s coordina-
+tion logic:
+Choreography—Distribute the decision making and sequencing among the saga
+participants. They primarily communicate by exchanging events.
+Table 4.1
+The compensating transactions for the Create Order Saga
+Step
+Service
+Transaction
+Compensating transaction
+1
+Order Service
+createOrder()
+rejectOrder()
+2
+Consumer Service
+verifyConsumerDetails()
+—
+3
+Kitchen Service
+createTicket()
+rejectTicket()
+4
+Accounting Service
+authorizeCreditCard()
+—
+5
+Kitchen Service
+approveTicket()
+—
+6
+Order Service
+approveOrder()
+—
+ 

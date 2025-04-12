@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 301</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        فرستنده حتی نمی‌تواند بگوید که آیا <em>packet</em> تحویل داده شده است یا خیر: تنها گزینه این است که گیرنده یک پیام پاسخ ارسال کند، که ممکن است به نوبه خود از دست برود یا به تأخیر بیفتد. این مسائل در یک شبکه <em>asynchronous</em> غیرقابل تشخیص هستند: تنها اطلاعاتی که شما دارید این است که هنوز پاسخی دریافت نکرده‌اید. اگر شما یک درخواست به یک node دیگر ارسال کنید و پاسخی دریافت نکنید، غیرممکن است که بدانید چرا.
+    </p>
+    <p>
+        روش معمول برای رسیدگی به این مسئله، یک <em>timeout</em> است: پس از مدتی شما از انتظار دست می‌کشید و فرض می‌کنید که پاسخ قرار نیست برسد. با این حال، وقتی یک <em>timeout</em> رخ می‌دهد، شما هنوز هم نمی‌دانید که آیا node از راه دور درخواست شما را دریافت کرده است یا خیر (و اگر درخواست هنوز در جایی در صف است، ممکن است هنوز هم به گیرنده تحویل داده شود، حتی اگر فرستنده آن را رها کرده باشد).
+    </p>
+    <h4>Network Faults in Practice</h4>
+    <p>
+        ما دهه‌هاست که شبکه‌های کامپیوتری را می‌سازیم—ممکن است امیدوار باشیم که تا کنون فهمیده باشیم که چگونه آنها را قابل اعتماد کنیم. با این حال، به نظر می‌رسد که ما هنوز موفق نشده‌ایم.
+    </p>
+    <p>
+        برخی از مطالعات سیستمی و شواهد فراوان حکایتی وجود دارد که نشان می‌دهد مشکلات شبکه می‌توانند به طرز شگفت‌آوری رایج باشند، حتی در محیط‌های کنترل‌شده مانند یک <em>datacenter</em> که توسط یک شرکت اداره می‌شود [14]. یک مطالعه در یک <em>datacenter</em> متوسط ​​تعداد 12 <em>network faults</em> در ماه را نشان داد، که نیمی از آنها یک machine واحد را قطع کردند، و نیمی یک کل rack را قطع کردند [15]. مطالعه دیگری میزان خرابی اجزایی مانند <em>top-of-rack switches</em>، <em>aggregation switches</em> و <em>load bal‐ancers</em> را اندازه‌گیری کرد [16]. مشخص شد که افزودن تجهیزات شبکه redundant، <em>faults</em> را به همان اندازه که ممکن است امیدوار باشید کاهش نمی‌دهد، زیرا از خطای انسانی (به عنوان مثال، <em>misconfigured switches</em>) محافظت نمی‌کند، که دلیل اصلی <em>outages</em> است.
+    </p>
+    <p>
+        سرویس‌های <em>cloud public</em> مانند EC2 به دلیل داشتن <em>network glitches transient</em> مکرر بدنام هستند [14]، و شبکه‌های <em>private datacenter</em> خصوصی که به خوبی مدیریت می‌شوند، می‌توانند محیط‌های پایدارتری باشند. با این وجود، هیچ‌کس از مشکلات شبکه مصون نیست: به عنوان مثال، یک مشکل در طول یک <em>software upgrade</em> برای یک <em>switch</em> می‌تواند یک <em>network topology reconfiguration</em> را راه‌اندازی کند، که در طی آن <em>network packets</em> می‌توانند برای بیش از یک دقیقه به تأخیر بیفتند [17]. کوسه‌ها ممکن است کابل‌های زیر دریا را گاز بگیرند و به آنها آسیب برسانند [18]. سایر <em>faults</em> های تعجب‌آور شامل یک <em>network interface</em> است که گاهی اوقات تمام <em>inbound packets</em> را <em>drops</em> می‌کند اما <em>outbound packets</em> را با موفقیت ارسال می‌کند [19]: فقط به این دلیل که یک <em>network link</em> در یک جهت کار می‌کند، تضمین نمی‌کند که در جهت مخالف نیز کار می‌کند.
+    </p>
+    <h4>Network partitions</h4>
+    <p>
+        وقتی یک part از شبکه به دلیل یک <em>network fault</em> از بقیه جدا می‌شود، گاهی به آن <em>network partition</em> یا <em>netsplit</em> می‌گویند.
+        <br>
+        در این کتاب ما عموماً با اصطلاح کلی‌تر <em>network fault</em> می‌چسبیم، تا از سردرگمی با <em>partitions</em> (shards) یک <em>storage system</em>، همانطور که در فصل 6 مورد بحث قرار گرفت، جلوگیری کنیم.
+        <br>
+        Unreliable Networks
+        <br>
+        |
+        <br>
+        279
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0301/image_1.png" alt="Image from page 301" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

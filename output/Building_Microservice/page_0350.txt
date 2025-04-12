@@ -1,0 +1,38 @@
+distributed tracing (which we’ll explore more later), they are highly capable at stor‐
+ing, filtering, and querying high-cardinality data.
+Monitoring and Observability Systems Are Production Systems
+With a growing set of tools to help us manage our microservice architecture, we must
+remember that these tools are themselves production systems. Log aggregation plat‐
+forms, distributed tracing tools, alerting systems—they all are mission-critical appli‐
+cations that are just as vital as our own software, if not more so. The same degree of
+diligence needs to be applied in terms of maintaining our production monitoring
+tools as we apply to the software that we write and maintain.
+We should also recognize that these tools can become potential vectors of attack from
+outside parties. At the time of writing, the US government and other organizations
+around the world are dealing with the discovery of a breach in network management
+software from SolarWinds. Although the exact nature of the breach is still being
+explored, it is believed that this is what’s known as a supply chain attack. Once
+installed on customer sites (and SolarWinds is used by 425 of the US Fortune 500
+companies), this software allowed malicious parties to gain external access to custom‐
+ers’ networks, including the US Treasury’s network.
+Distributed Tracing
+So far, I’ve primarily been talking about collecting information in isolation. Yes,
+we’re aggregating that information, but understanding the wider context in which
+this information has been captured can be key. Fundamentally, a microservice archi‐
+tecture is a set of processes that work together to carry out some kind of task—we
+explored the various different ways we can coordinate these activities in Chapter 6.
+Thus it makes sense, when wanting to understand how our system is actually behav‐
+ing in a production environment, that we are able to see the relationships between
+our microservices. This can help us better understand how our system is behaving,
+assess the impact of an issue, or get better at figuring out what exactly is not working
+as we’d expect.
+As our systems become more complex, it therefore becomes important to have a way
+of seeing these traces through our systems. We need to be able to pull this disparate
+data to give us a joined-up view of a set of correlated calls. As we’ve already seen,
+doing something simple like putting correlation IDs into our logfiles is a good start,
+but it’s a fairly unsophisticated solution, especially as we’ll end up having to create
+our own custom tooling to help visualize, slice, and dice this data. This is where dis‐
+tributed tracing comes in.
+324 
+| 
+Chapter 10: From Monitoring to Observability

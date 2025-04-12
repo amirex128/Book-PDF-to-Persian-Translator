@@ -1,0 +1,23 @@
+Communication between in-page widgets
+Although our widgets can be built and deployed independently, we still want them to
+be able to interact with one another. As an example from MusicCorp, when a user
+selects one of the albums in the best seller chart, we want other parts of the UI to
+update based on the selection, as shown in Figure 14-7.
+Figure 14-7. The charts widget can emit events that other parts of the UI listen to
+The way we’d achieve this would be to have the charts widget emit a custom event.
+Browsers already support a number of standard events that we can use to trigger
+behavior. These events allow us to react to buttons being pressed, the mouse being
+scrolled, and the like, and you’ve probably already made heavy use of such event han‐
+dling if you’ve spent any time building JavaScript frontends. It’s a simple step to cre‐
+ate your own custom events.
+So in our case, when an item is selected in the chart, that widget raises a custom
+Album Selected event. The recommendation and album details widgets both sub‐
+scribe to the event and react accordingly, with the recommendations updating based
+on the selection, and the album details being loaded up. This interaction should of
+course already be familiar to us, as it mimics the event-driven interaction between
+microservices that we discussed in “Pattern: Event-Driven Communication” on page
+108. The only real difference is that these event interactions happen inside the
+browser.
+472 
+| 
+Chapter 14: User Interfaces

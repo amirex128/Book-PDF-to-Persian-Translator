@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 175</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Summary (خلاصه)</strong></h3>
+  <p>CreateOrderSaga (حماسه ایجاد سفارش) تنها یکی از sagas (حماسه‌ها) متعدد Order Service (سرویس سفارش) است. بسیاری از سایر operations (عملیات‌های) system (سیستم) آن نیز از sagas (حماسه‌ها) استفاده می‌کنند. به عنوان مثال، operation (عملیات) cancelOrder() (لغو سفارش) از یک Cancel Order Saga (حماسه لغو سفارش) استفاده می‌کند، و operation (عملیات) reviseOrder() (بازبینی سفارش) از یک Revise Order Saga (حماسه بازبینی سفارش) استفاده می‌کند. در نتیجه، حتی اگر بسیاری از services (سرویس‌ها) دارای یک API (رابط برنامه‌نویسی) خارجی هستند که از یک protocol (پروتکل) synchronous (همزمان) مانند REST یا gRPC استفاده می‌کنند، مقدار زیادی از interservice communication (ارتباط بین سرویس‌ها) از asynchronous messaging (پیام‌رسانی ناهمزمان) استفاده می‌کند.</p>
+  <p>همانطور که می‌بینید، transaction management (مدیریت تراکنش) و برخی از جنبه‌های طراحی business logic (منطق تجاری) در یک microservice (ریز سرویس) architecture (معماری) کاملاً متفاوت است. خوشبختانه، saga orchestrators (ارکستراتورهای حماسه) معمولاً state machines (ماشین‌های حالت) بسیار ساده‌ای هستند، و شما می‌توانید از یک فریم‌ورک saga (حماسه) برای ساده‌سازی کد خود استفاده کنید. با این وجود، transaction management (مدیریت تراکنش) مطمئناً پیچیده‌تر از یک monolithic architecture (معماری یکپارچه) است. اما این معمولاً بهای کمی برای پرداخت برای مزایای عظیم microservices (ریز سرویس‌ها) است.</p>
+  <p>Summary (خلاصه)</p>
+  <ul>
+   <li>برخی از operations (عملیات‌های) system (سیستم) نیاز به به‌روزرسانی داده‌های پراکنده در چندین service (سرویس) دارند. تراکنش‌های سنتی، مبتنی بر XA/2PC (دو فاز کامیت) توزیع شده، برای applications (برنامه‌های) مدرن مناسب نیستند. یک رویکرد بهتر استفاده از الگوی Saga (حماسه) است. یک saga (حماسه) sequence (توالی) local transactions (تراکنش‌های محلی) است که با استفاده از messaging (پیام‌رسانی) هماهنگ می‌شوند. هر local transaction (تراکنش محلی) داده‌ها را در یک service (سرویس) واحد به‌روزرسانی می‌کند. از آنجایی که هر local transaction (تراکنش محلی) تغییرات خود را commit (تعهد) می‌کند، اگر یک saga (حماسه) به دلیل violation (نقض) یک business rule (قاعده تجاری) باید بازگردانده شود، باید compensating transactions (تراکنش‌های جبرانی) را برای undo (واگردانی) صریح تغییرات اجرا کند.</li>
+   <li>شما می‌توانید از choreography (طراحی رقص) یا orchestration (ارکستراسیون) برای هماهنگ‌سازی مراحل یک saga (حماسه) استفاده کنید. در یک saga (حماسه) مبتنی بر choreography (طراحی رقص)، یک local transaction (تراکنش محلی) events (رویدادهایی) را منتشر می‌کند که سایر participants (شرکت‌کنندگان) را برای اجرای local transactions (تراکنش‌های محلی) trigger (راه‌اندازی) می‌کند. در یک saga (حماسه) مبتنی بر orchestration (ارکستراسیون)، یک saga orchestrator (ارکستراتور حماسه) متمرکز command messages (پیام‌های دستور) را به participants (شرکت‌کنندگان) ارسال می‌کند و به آنها می‌گوید که local transactions (تراکنش‌های محلی) را اجرا کنند. شما می‌توانید توسعه و تست (آزمایش) را با model (مدل‌سازی) saga orchestrators (ارکستراتورهای حماسه) به عنوان state machines (ماشین‌های حالت) ساده کنید. sagas (حماسه‌های) ساده می‌توانند از choreography (طراحی رقص) استفاده کنند، اما orchestration (ارکستراسیون) معمولاً یک رویکرد بهتر برای sagas (حماسه‌های) پیچیده است.</li>
+   <li>طراحی business logic (منطق تجاری) مبتنی بر saga (حماسه) می‌تواند چالش‌برانگیز باشد زیرا، بر خلاف ACID transactions (تراکنش‌های اتمی)، sagas (حماسه‌ها) از یکدیگر مجزا نیستند. شما اغلب باید از countermeasures (اقدامات متقابل) استفاده کنید، که استراتژی‌های طراحی هستند که از anomalies (ناهنجاری‌های) concurrency (همزمانی) ناشی از model (مدل) ACD transaction (تراکنش اتمی، سازگاری، پایداری) جلوگیری می‌کنند. یک application (برنامه) ممکن است حتی نیاز به استفاده از locking (قفل کردن) داشته باشد تا business logic (منطق تجاری) را ساده کند، حتی اگر این کار خطر deadlocks (بن‌بست‌ها) را داشته باشد.</li>
+  </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

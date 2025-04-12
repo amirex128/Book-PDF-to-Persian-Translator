@@ -1,0 +1,39 @@
+101
+Communicating using the Asynchronous messaging pattern
+for sending and receiving messages, Eventuate Tram also supports higher-level inter-
+action styles such as asynchronous request/response and domain event publishing.
+Eventuate Tram also implements two important mechanisms:
+Transactional messaging—It publishes messages as part of a database transaction.
+Duplicate message detection—The Eventuate Tram message consumer detects and
+discards duplicate messages, which is essential for ensuring that a consumer
+processes messages exactly once, as discussed in section 3.3.6.
+Let’s take a look at the Eventuate Tram APIs.
+BASIC MESSAGING
+The basic messaging API consists of two Java interfaces: MessageProducer and Message-
+Consumer. A producer service uses the MessageProducer interface to publish messages
+to message channels. Here’s an example of using this interface:
+MessageProducer messageProducer = ...;
+String channel = ...;
+String payload = ...;
+messageProducer.send(destination, MessageBuilder.withPayload(payload).build())
+A consumer service uses the MessageConsumer interface to subscribe to messages:
+MessageConsumer messageConsumer;
+messageConsumer.subscribe(subscriberId, Collections.singleton(destination), 
+message -> { ... })
+MessageProducer and MessageConsumer are the foundation of the higher-level APIs
+for asynchronous request/response and domain event publishing.
+ Let’s talk about how to publish and subscribe to events. 
+What!? Why the Eventuate frameworks?
+The code samples in this book use the open source Eventuate frameworks I’ve devel-
+oped for transactional messaging, event sourcing, and sagas. I chose to use my
+frameworks because, unlike with, say, dependency injection and the Spring frame-
+work, there are no widely adopted frameworks for many of the features the microser-
+vice architecture requires. Without the Eventuate Tram framework, many examples
+would have to use the low-level messaging APIs directly, making them much more
+complicated and obscuring important concepts. Or they would use a framework that
+isn’t widely adopted, which would also provoke criticism.
+Instead, the examples use the Eventuate Tram frameworks, which have a simple,
+easy-to-understand API that hides the implementation details. You can use these
+frameworks in your applications. Alternatively, you can study the Eventuate Tram
+frameworks and reimplement the concepts yourself.
+ 

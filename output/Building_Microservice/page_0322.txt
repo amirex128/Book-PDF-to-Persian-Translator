@@ -1,0 +1,41 @@
+end tests in favor of other mechanisms to validate the quality of their software—for
+example, the use of explicit schemas and CDCs, in-production testing, or perhaps
+some of the progressive delivery techniques we’ve discussed, such as canary releases.
+You can view the running of end-to-end tests prior to production deployment as
+training wheels. While you are learning how CDCs work and improving your pro‐
+duction monitoring and deployment techniques, these end-to-end tests may form a
+useful safety net, where you are trading off cycle time for decreased risk. But as you
+improve those other areas, and as the relative cost of creating the end-to-end tests
+increases, you can start to reduce your reliance on end-to-end tests to the point that
+they are no longer needed. Ditching end-to-end tests without fully understanding
+what you’ve lost is probably a bad idea.
+Obviously you’ll have a better understanding of your own organization’s risk profile
+than I, but I would challenge you to think long and hard about how much end-to-end
+testing you really need to do.
+Developer Experience
+One of the significant challenges that can emerge as developers find the need to work
+on more and more microservices is that the developer experience can start to suffer,
+for the simple reason that they are trying to run more and more microservices locally.
+This often arises in situations in which a developer needs to run a large-scoped test
+that bridges multiple nonstubbed microservices.
+How quickly this becomes an issue will depend on a number of factors. How many
+microservices a developer needs to run locally, which technology stack those micro‐
+services are written in, and the power of the local machine can all play a part. Some
+technology stacks are more resource intensive in terms of their initial footprint—
+JVM-based microservices come to mind. On the other hand, some tech stacks can
+result in microservices with a faster and more lightweight resource footprint, perhaps
+allowing you to run many more microservices locally.
+One approach to dealing with this challenge is to instead have developers do their
+development and test work in a cloud environment. The idea is that you can have
+many more resources available to you to run the microservices you need. Aside from
+the fact that this model requires that you always have connectivity to your cloud
+resources, the other main issue is that your feedback cycles can suffer. If you need to
+make a code change locally and upload the new version of this code (or a locally built
+artifact) to the cloud, it can add significant delay to your development and test cycles,
+especially if you are operating in a part of the world with more constrained internet
+connectivity.
+Full in-the-cloud development is one possibility for addressing the issue of feedback
+cycles; cloud-based IDEs like Cloud9, now owned by AWS, have shown that this is
+296 
+| 
+Chapter 9: Testing

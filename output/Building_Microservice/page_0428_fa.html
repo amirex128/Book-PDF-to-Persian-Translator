@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 428</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>5 اصطلاحات یک شکن "باز" (<em>open</em>)، به این معنی که <em>requests</em> (درخواست‌ها) نمی‌توانند جریان داشته باشند، می‌تواند گیج‌کننده باشد، اما این از مدارهای الکتریکی گرفته شده است. وقتی <em>breaker</em> (شکن) "باز" است، مدار شکسته می‌شود و جریان نمی‌تواند جریان داشته باشد. بستن <em>breaker</em> (شکن) به مدار اجازه می‌دهد تا تکمیل شود و جریان دوباره جریان یابد.</p>
+    <p><em>blown</em> (باز) است،5 همانطور که در شکل 12-5 مشاهده می‌کنید. پس از یک دوره زمانی مشخص، <em>client</em> (کلاینت) چند <em>request</em> (درخواست) را ارسال می‌کند تا ببیند آیا <em>service</em> (سرویس) پایین‌دستی بازیابی شده است، و اگر پاسخ‌های کافی سالم دریافت کند، <em>circuit breaker</em> (مدارشکن) را بازنشانی می‌کند.</p>
+    <p>شکل 12-5. مروری بر <em>circuit breakers</em> (مدارشکن‌ها)</p>
+    <p>نحوه پیاده‌سازی یک <em>circuit breaker</em> (مدارشکن) بستگی به این دارد که یک <em>request</em> (درخواست) "شکست‌خورده" به چه معناست، اما وقتی من آنها را برای اتصالات <em>HTTP</em> پیاده‌سازی کرده‌ام، معمولاً شکست را به معنای <em>time-out</em> (مهلت زمانی) یا زیرمجموعه‌ای از کدهای بازگشتی 5XX <em>HTTP</em> در نظر گرفته‌ام. به این ترتیب، وقتی یک منبع پایین‌دستی در حال <em>time out</em> (منقضی شدن زمان) یا بازگرداندن خطاها است، پس از رسیدن به یک آستانه مشخص، ما به طور خودکار ارسال ترافیک را متوقف می‌کنیم و شروع به شکست سریع می‌کنیم. و ما می‌توانیم به طور خودکار دوباره شروع کنیم وقتی که همه چیز سالم است.</p>
+    <p>درست تنظیم کردن تنظیمات می‌تواند کمی دشوار باشد. شما نمی‌خواهید <em>circuit breaker</em> (مدارشکن) را خیلی سریع منفجر کنید، و نه شما می‌خواهید خیلی طول بکشد تا آن را منفجر کنید. به همین ترتیب، شما واقعاً می‌خواهید مطمئن شوید که <em>service</em> (سرویس) پایین‌دستی دوباره سالم است قبل از ارسال ترافیک.
+    همانطور که در مورد <em>time-outs</em> (مهلت زمانی) ذکر شد، من چند پیش‌فرض معقول را انتخاب می‌کنم و در همه جا به آنها پایبند می‌شوم، و سپس آنها را برای موارد خاص تغییر می‌دهم.</p>
+    <p>در حالی که <em>circuit breaker</em> (مدارشکن) منفجر شده است، شما چند گزینه دارید. یکی این است که <em>requests</em> (درخواست‌ها) را در صف قرار دهید و بعداً دوباره آنها را امتحان کنید. برای برخی از موارد استفاده، این ممکن است مناسب باشد، به‌خصوص اگر شما در حال انجام مقداری کار به عنوان بخشی از یک <em>asynchronous job</em> (شغل ناهمزمان) هستید. اگر این تماس</p>
+    <p><em>402 | Chapter 12: Resiliency</em></p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0428/image_1.png" alt="Image from page 428" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

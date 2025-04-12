@@ -1,0 +1,39 @@
+Web Components
+At first glance, the Web Component Standard should be an obvious way to imple‐
+ment these widgets. The Web Component Standard describes how you can create a
+UI component that can sandbox its HTML, CSS, and JavaScript aspects. Unfortu‐
+nately, the web components standard seems to have taken a long time to settle down,
+and a longer time to be properly supported by browsers. Much of the initial work
+around them seems to have stalled, which has obviously impacted adoption. I have
+yet to meet an organization that uses web components served up from microservices,
+for example.
+Given that the Web Component Standard is now fairly well supported, its possible
+that we’ll see them emerge as a common way to implement sandboxed widgets or
+larger micro frontends in the future, but after years of waiting for this to come about,
+I’m not holding my breath.
+When to Use It
+This pattern makes it easy for multiple stream-aligned teams to contribute to the
+same UI. It allows for more flexibility than does page-based decomposition, as the
+widgets delivered by different teams can all coexist in the UI at the same time. It also
+creates the opportunity for enabling teams to provide reusable widgets that can be
+used by stream-aligned teams—an example of which I shared earlier when mention‐
+ing the role of the Financial Times Origami team.
+The widget decomposition pattern is incredibly useful if you are building a rich web-
+based user interface, and I would strongly suggest the use of widgets in any situation
+in which you are making use of a SPA framework and want to break up responsibili‐
+ties for the frontend, moving toward a micro frontend approach. The techniques and
+supporting technology around this concept have improved markedly over the last few
+years, to the extent that, when building an SPA-based web interface, breaking down
+my UI into micro frontends would be my default approach.
+My main concerns around widget decomposition in the context of SPAs have to do
+with the work required to set up the separate bundling of components and the issues
+around payload size. The former issue is likely a one-time cost and just involves
+working out what style of packaging best suits your existing toolchain. The latter
+issue is more problematic. A simple small change in the dependencies of one widget
+could result in a whole host of new dependencies being included in the application,
+drastically inflating the page size. If you are building a user interface where page
+weight is a concern, I’d suggest putting some automated checks in place to alert you if
+the page weight goes above a certain acceptable threshold.
+Pattern: Widget-Based Decomposition 
+| 
+473

@@ -1,0 +1,41 @@
+83
+Communicating using the synchronous Remote procedure invocation pattern
+then uses a load-balancing algorithm, such as a round-robin or random, to select a ser-
+vice instance. It then makes a request to a select service instance.
+Application-level service discovery has been popularized by Netflix and Pivotal. Netflix
+developed and open sourced several components: Eureka, a highly available service
+registry, the Eureka Java client, and Ribbon, a sophisticated HTTP client that supports
+the Eureka client. Pivotal developed Spring Cloud, a Spring-based framework that
+makes it remarkably easy to use the Netflix components. Spring Cloud-based services
+automatically register with Eureka, and Spring Cloud-based clients automatically use
+Eureka for service discovery.
+ One benefit of application-level service discovery is that it handles the scenario
+when services are deployed on multiple deployment platforms. Imagine, for example,
+you’ve deployed only some of services on Kubernetes, discussed in chapter 12, and the
+rest is running in a legacy environment. Application-level service discovery using
+Eureka, for example, works across both environments, whereas Kubernetes-based ser-
+vice discovery only works within Kubernetes.
+ One drawback of application-level service discovery is that you need a service dis-
+covery library for every language—and possibly framework—that you use. Spring
+Cloud only helps Spring developers. If you’re using some other Java framework or a
+non-JVM language such as NodeJS or GoLang, you must find some other service dis-
+covery framework. Another drawback of application-level service discovery is that
+you’re responsible for setting up and managing the service registry, which is a distrac-
+tion. As a result, it’s usually better to use a service discovery mechanism that’s pro-
+vided by the deployment infrastructure. 
+APPLYING THE PLATFORM-PROVIDED SERVICE DISCOVERY PATTERNS
+Later in chapter 12 you’ll learn that many modern deployment platforms such as
+Docker and Kubernetes have a built-in service registry and service discovery mecha-
+nism. The deployment platform gives each service a DNS name, a virtual IP (VIP)
+address, and a DNS name that resolves to the VIP address. A service client makes a
+request to the DNS name/VIP, and the deployment platform automatically routes the
+request to one of the available service instances. As a result, service registration, ser-
+vice discovery, and request routing are entirely handled by the deployment platform.
+Figure 3.6 shows how this works.
+ The deployment platform includes a service registry that tracks the IP addresses of
+the deployed services. In this example, a client accesses the Order Service using the
+Pattern: Client-side discovery
+A service client retrieves the list of available service instances from the service reg-
+istry and load balances across them. See http://microservices.io/patterns/client-
+side-discovery.html.
+ 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 106</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Advantages of LSM-trees</h4>
+    <p>
+        یک B-tree index باید هر قطعه از داده را حداقل دو بار بنویسد: یک بار به write-ahead log و یک بار به خود صفحه tree (و شاید دوباره در حالی که صفحات تقسیم می‌شوند). همچنین overhead از نوشتن یک صفحه کامل در یک زمان وجود دارد، حتی اگر فقط چند بایت در آن صفحه تغییر کند. برخی از storage engines حتی یک صفحه را دو بار overwrite می‌کنند تا از پایان یافتن با یک صفحه تا حدودی به‌روزرسانی شده در صورت خرابی power جلوگیری کنند [24, 25].
+    </p>
+    <p>
+        Indexes log-structured نیز داده‌ها را چندین بار به دلیل compaction و merging تکراری از SSTables دوباره می‌نویسند. این effect—یک write به database که منجر به multiple writes به دیسک در طول عمر database می‌شود—به عنوان write amplification شناخته می‌شود. این موضوع به خصوص در SSDs که فقط می‌توانند بلوک‌ها را به تعداد محدودی بار قبل از فرسودگی، overwrite کنند، نگران‌کننده است.
+    </p>
+    <p>
+        در applications با write-heavy، bottleneck performance ممکن است rate که database می‌تواند به دیسک بنویسد باشد. در این مورد، write amplification یک performance مستقیم دارد: هرچه یک storage engine بیشتر به دیسک می‌نویسد، writes کمتری در ثانیه می‌تواند در پهنای باند دیسک موجود، مدیریت کند.
+    </p>
+    <p>
+        علاوه بر این، LSM-trees معمولاً قادر به حفظ throughput write بالاتری نسبت به B-trees هستند، تا حدی به این دلیل که آن‌ها گاهی اوقات write amplification کمتری دارند (اگرچه این به configuration storage engine و workload بستگی دارد) و تا حدی به این دلیل که آن‌ها به صورت sequential فایل‌های SSTable فشرده را می‌نویسند تا اینکه مجبور به overwrite کردن چندین صفحه در tree باشند [26]. این تفاوت به ویژه در هارد دیسک‌های مغناطیسی مهم است، جایی که writes sequential بسیار سریع‌تر از random writes هستند.
+    </p>
+    <p>
+        LSM-trees را می‌توان بهتر compressed کرد و بنابراین اغلب فایل‌های کوچکتری را روی دیسک نسبت به B-trees تولید می‌کنند. storage engines B-tree مقداری فضای دیسک را به دلیل fragmentation استفاده نشده رها می‌کنند: وقتی یک صفحه تقسیم می‌شود یا وقتی یک ردیف نمی‌تواند در یک صفحه موجود قرار گیرد، مقداری فضا در یک صفحه بدون استفاده باقی می‌ماند. از آنجایی که LSM-trees page-oriented نیستند و دوره‌ای SSTables را دوباره می‌نویسند تا fragmentation را حذف کنند، آن‌ها overheads storage کمتری دارند، به خصوص هنگام استفاده از leveled compaction [27].
+    </p>
+    <p>
+        در بسیاری از SSDs، firmware به صورت داخلی از یک الگوریتم log-structured برای تبدیل random writes به sequential writes روی storage chips اساسی استفاده می‌کند، بنابراین تأثیر الگوی write storage engine کمتر مشخص است [19]. با این حال، write amplification کمتر و کاهش fragmentation هنوز هم در SSDs مفید است: نشان دادن داده‌ها به طور فشرده‌تر به درخواست‌های read و write بیشتر در پهنای باند I/O موجود اجازه می‌دهد.
+    </p>
+    <h4>Downsides of LSM-trees</h4>
+    <p>
+        یک downside از storage log-structured این است که process compaction گاهی اوقات می‌تواند با performance reads و writes در حال انجام تداخل داشته باشد. حتی اگر storage engines سعی می‌کنند compaction را به صورت افزایشی و بدون تأثیر بر concurrency انجام دهند
+    </p>
+    <p>
+        84 | Chapter 3: Storage and Retrieval
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

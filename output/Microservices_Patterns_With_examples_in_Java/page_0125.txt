@@ -1,0 +1,53 @@
+95
+Communicating using the Asynchronous messaging pattern
+In this example, each Order event message has the orderId as its shard key. Each event
+for a particular order is published to the same shard, which is read by a single consumer
+instance. As a result, these messages are guaranteed to be processed in order. 
+3.3.6
+Handling duplicate messages
+Another challenge you must tackle when using messaging is dealing with duplicate
+messages. A message broker should ideally deliver each message only once, but guar-
+anteeing exactly-once messaging is usually too costly. Instead, most message brokers
+promise to deliver a message at least once.
+ When the system is working normally, a message broker that guarantees at-least-
+once delivery will deliver each message only once. But a failure of a client, network, or
+message broker can result in a message being delivered multiple times. Say a client
+crashes after processing a message and updating its database—but before acknowledg-
+ing the message. The message broker will deliver the unacknowledged message again,
+either to that client when it restarts or to another replica of the client.
+ Ideally, you should use a message broker that preserves ordering when redeliver-
+ing messages. Imagine that the client processes an Order Created event followed by
+an Order Cancelled event for the same Order, and that somehow the Order Created
+event wasn’t acknowledged. The message broker should redeliver both the Order Cre-
+ated and Order Cancelled events. If it only redelivers the Order Created, the client
+may undo the cancelling of the Order.
+ There are a couple of different ways to handle duplicate messages:
+Write idempotent message handlers.
+Track messages and discard duplicates.
+Let’s look at each option.
+Routes based on a
+hash of the shard-key
+Receiver A
+instance 1
+Receiver A
+instance 2
+Receiver
+Shard
+assignment
+Receiver
+...
+Router
+Shard 0
+Channel
+Logical receiver A
+Shard 1
+Shard ...
+Create order
+request
+Shard-key:orderId
+Sender
+Figure 3.11
+Scaling consumers while preserving message ordering by using a sharded (partitioned) message 
+channel. The sender includes the shard key in the message. The message broker writes the message to a shard 
+determined by the shard key. The message broker assigns each partition to an instance of the replicated receiver.
+ 

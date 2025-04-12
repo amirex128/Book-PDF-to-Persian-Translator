@@ -1,0 +1,64 @@
+82
+CHAPTER 3
+Interprocess communication in a microservice architecture
+This approach to service discovery is a combination of two patterns. The first pat-
+tern is the Self registration pattern. A service instance invokes the service registry’s
+registration API to register its network location. It may also supply a health check
+URL, described in more detail in chapter 11. The health check URL is an API end-
+point that the service registry invokes periodically to verify that the service instance
+is healthy and available to handle requests. A service registry may require a service
+instance to periodically invoke a “heartbeat” API in order to prevent its registration
+from expiring.
+The second pattern is the Client-side discovery pattern. When a service client wants to
+invoke a service, it queries the service registry to obtain a list of the service’s instances.
+To improve performance, a client might cache the service instances. The service client
+Pattern: Self registration
+A service instance registers itself with the service registry. See http://microser-
+vices.io/patterns/self-registration.html.
+Service
+instance 1
+Order service
+10.232.23.1
+Load balance request
+10.232.23.1
+10.232.23.2
+10.232.23.3
+10.232.23.2
+Register("order-service", "10.232.23.1")
+Query("order-service")
+Query API
+Registration API
+10.232.23.3
+Service
+instance 2
+Service
+instance 3
+Service
+discovery library
+Service
+client
+Service
+order-service
+order-service
+order-service
+...
+Service registry
+IP address
+10.232.23.1
+10.232.23.2
+10.232.23.3
+...
+RPC/rest
+client
+Service
+discovery library
+Service
+discovery library
+Service
+discovery library
+Client-side discovery
+Self registration pattern
+Figure 3.5
+The service registry keeps track of the service instances. Clients query the service 
+registry to find network locations of available service instances.
+ 

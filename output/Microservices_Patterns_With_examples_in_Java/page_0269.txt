@@ -1,0 +1,45 @@
+239
+Designing CQRS views
+handler will update or delete a record in the view database using its primary key. For
+example, soon I’ll describe the design of a CQRS view for the findOrderHistory()
+query. It stores each Order as a database record using the orderId as the primary key.
+When this view receives an event from Order Service, it can straightforwardly update
+the corresponding record.
+ Sometimes, though, it will need to update or delete a record using the equiva-
+lent of a foreign key. Consider, for instance, the event handlers for Delivery*
+events. If there is a one-to-one correspondence between a Delivery and an Order,
+then Delivery.id might be the same as Order.id. If it is, then Delivery* event han-
+dlers can easily update the order’s database record.
+ But suppose a Delivery has its own primary key or there is a one-to-many relation-
+ship between an Order and a Delivery. Some Delivery* events, such as the Delivery-
+Created event, will contain the orderId. But other events, such as a DeliveryPickedUp
+event, might not. In this scenario, an event handler for DeliveryPickedUp will need
+to update the order’s record using the deliveryId as the equivalent of a foreign key.
+ Some types of database efficiently support foreign-key-based update operations.
+For example, if you’re using an RDBMS or MongoDB, you create an index on the nec-
+essary columns. However, non-primary key-based updates are not straightforward
+when using other NOSQL databases. The application will need to maintain some kind
+of database-specific mapping from a foreign key to a primary key in order to deter-
+mine which record to update. For example, an application that uses DynamoDB,
+which only supports primary key-based updates and deletes, must first query a Dyna-
+moDB secondary index (discussed shortly) to determine the primary keys of the items
+to update or delete. 
+7.3.2
+Data access module design
+The event handlers and the query API module don’t access the datastore directly.
+Instead they use the data access module, which consists of a data access object (DAO)
+and its helper classes. The DAO has several responsibilities. It implements the update
+operations invoked by the event handlers and the query operations invoked by the
+query module. The DAO maps between the data types used by the higher-level code
+and the database API. It also must handle concurrent updates and ensure that updates
+are idempotent.
+ Let’s look at these issues, starting with how to handle concurrent updates.
+HANDLING CONCURRENCY
+Sometimes a DAO must handle the possibility of multiple concurrent updates to the
+same database record. If a view subscribes to events published by a single aggregate
+type, there won’t be any concurrency issues. That’s because events published by a par-
+ticular aggregate instance are processed sequentially. As a result, a record correspond-
+ing to an aggregate instance won’t be updated concurrently. But if a view subscribes to
+events published by multiple aggregate types, then it’s possible that multiple events
+handlers update the same record simultaneously.
+ 

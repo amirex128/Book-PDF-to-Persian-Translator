@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 170</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>THE EVENTUATE TRAM SAGA FRAMEWORK (فریم‌ورک حماسه Eventuate Tram)</p>
+  <p>The Eventuate Tram Saga (حماسه Eventuate Tram)، که در شکل 4.12 نشان داده شده است، یک فریم‌ورک برای نوشتن هم saga orchestrators (ارکستراتورهای حماسه) و هم saga participants (شرکت‌کنندگان حماسه) است. این از قابلیت‌های transactional messaging (پیام‌رسانی تراکنشی) Eventuate Tram، که در فصل 3 مورد بحث قرار گرفت، استفاده می‌کند.</p>
+  <p>بسته saga orchestration (ارکستراسیون حماسه) پیچیده‌ترین بخش فریم‌ورک است. این SimpleSaga، یک base interface (رابط پایه) برای sagas (حماسه‌ها)، و یک کلاس SagaManager (مدیر حماسه) را ارائه می‌دهد، که نمونه‌های saga (حماسه) را ایجاد و مدیریت می‌کند. The SagaManager (مدیر حماسه) مدیریت ذخیره یک saga (حماسه)، ارسال command messages (پیام‌های دستور) که تولید می‌کند، subscribe (اشتراک) به reply messages (پیام‌های پاسخ)، و فراخوانی saga (حماسه) برای مدیریت پاسخ‌ها را بر عهده دارد. شکل 4.13 توالی events (رویدادها) را زمانی نشان می‌دهد که OrderService (سرویس سفارش) یک saga (حماسه) ایجاد می‌کند. توالی events (رویدادها) به شرح زیر است:</p>
+  <ol>
+   <li>OrderService (سرویس سفارش) CreateOrderSagaState (حالت حماسه ایجاد سفارش) را ایجاد می‌کند.</li>
+   <li>این یک نمونه از یک saga (حماسه) را با فراخوانی SagaManager (مدیر حماسه) ایجاد می‌کند.</li>
+   <li>The SagaManager (مدیر حماسه) اولین گام از تعریف saga (حماسه) را اجرا می‌کند.</li>
+   <li>The CreateOrderSagaState (حالت حماسه ایجاد سفارش) برای تولید یک command message (پیام دستور) فراخوانی می‌شود.</li>
+  </ol>
+  <br>
+  <p>Participant (شرکت‌کننده)</p>
+  <p>Orchestration (ارکستراسیون)</p>
+  <p>create(sagaState) (ایجاد(حالت حماسه))</p>
+  <p>... (و...)</p>
+  <p>SagaManager (مدیر حماسه)</p>
+  <p>SimpleSaga (حماسه ساده)</p>
+  <p>SagaDeﬁnition (تعریف حماسه)</p>
+  <p>CommandEndpoint (endpoint دستور)</p>
+  <p>SagaCommand (دستور حماسه)</p>
+  <p>Dispatcher (توزیع کننده)</p>
+  <p>SagaCommand (دستور حماسه)</p>
+  <p>HandlersBuilder (سازنده هندلرها)</p>
+  <p>SagaDeﬁnition (تعریف حماسه)</p>
+  <p>getSagaDeﬁnition() (دریافت تعریف حماسه)</p>
+  <p>«table (جدول)»</p>
+  <p>SAGA_INSTANCE (نمونه حماسه)</p>
+  <p>Eventuate tram (ترام Eventuate)</p>
+  <p>Eventuate tram saga framework (فریم‌ورک حماسه Eventuate Tram)</p>
+  <p>Uses (استفاده می‌کند)</p>
+  <p>Sends (ارسال می‌کند)</p>
+  <p>and receives (و دریافت می‌کند)</p>
+  <p>Order (سفارش) database (پایگاه داده)</p>
+  <p>Channels (کانال‌ها)</p>
+  <p>The SagaManager (مدیر حماسه) handles (مدیریت می‌کند) persisting (پایدار کردن) a (یک) saga (حماسه)، sending (ارسال) the command messages (پیام‌های دستور) that (که) it (آن) generates (ایجاد می‌کند)، subscribing (اشتراک) to reply messages (پیام‌های پاسخ)، (,) (,) (,) and (و) invoking (فراخوانی) the saga (حماسه) to handle (مدیریت) replies (پاسخ‌ها).</p>
+  <p>Abstract superclass (کلاس والد انتزاعی)</p>
+  <p>for saga orchestrators (برای ارکستراتورهای حماسه)</p>
+  <p>Describes a (توضیح می‌دهد) the (the)</p>
+  <p>message channel (کانال پیام‌رسانی)</p>
+  <p>Routes command (مسیرهای دستور)</p>
+  <p>messages (پیام‌ها) to (به)</p>
+  <p>message handlers (هندلرهای پیام)</p>
+  <p>Describes the (توضیح می‌دهد) the</p>
+  <p>steps (مراحل) of a saga (حماسه)</p>
+  <p>Stores (ذخیره می‌کند) the (the) state (حالت)</p>
+  <p>of saga instances (نمونه‌های حماسه)</p>
+  <br>
+  <img src="figure_4_12.png" alt="Figure 4.12">
+  <p>Eventuate Tram Saga (حماسه Eventuate Tram) یک فریم‌ورک برای نوشتن هم saga orchestrators (ارکستراتورهای حماسه) و هم saga participants (شرکت‌کنندگان حماسه) است.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

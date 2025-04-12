@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 111</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        tially distributed در سراسر چندین machine. این امر منجر به توسعه in-memory databases شده است.
+    </p>
+    <p>
+        برخی از key-value stores in-memory، مانند Memcached، فقط برای استفاده از caching در نظر گرفته شده‌اند، جایی که از دست رفتن data در صورت راه‌اندازی مجدد یک machine قابل قبول است. اما other in-memory databases برای durability هدف دارند، که می‌توان با سخت‌افزار ویژه (مانند RAM باتری‌دار)، با نوشتن یک log از تغییرات در دیسک، با نوشتن snapshots periodic به دیسک، یا با تکرار state in-memory به سایر machines به دست آورد.
+    </p>
+    <p>
+        هنگامی که یک in-memory database دوباره راه‌اندازی می‌شود، باید state خود را، یا از دیسک یا از طریق شبکه از یک replica (مگر اینکه از سخت‌افزار ویژه استفاده شود)، دوباره بارگیری کند. علیرغم نوشتن به دیسک، هنوز یک in-memory database است، زیرا دیسک صرفاً به عنوان یک log append-only برای durability استفاده می‌شود و reads به طور کامل از memory ارائه می‌شوند. نوشتن به دیسک نیز مزایای operational دارد: فایل‌ها روی دیسک را می‌توان به راحتی توسط ابزارهای خارجی، پشتیبان‌گیری، بازرسی و تجزیه و تحلیل کرد.
+    </p>
+    <p>
+        محصولاتی مانند VoltDB، MemSQL و Oracle TimesTen، in-memory databases با یک relational model هستند و vendors ادعا می‌کنند که می‌توانند با حذف تمام overheads مرتبط با مدیریت on-disk data structures، بهبودهای performance بزرگی را ارائه دهند [41, 42]. RAMCloud یک open source, in-memory key-value store با durability است (با استفاده از یک رویکرد log-structured برای data در memory و همچنین data روی دیسک) [43]. Redis و Couchbase با نوشتن به صورت asyn‐chronously، durability ضعیفی را ارائه می‌دهند.
+    </p>
+    <p>
+        به طور غیرمنتظره، مزیت performance از in-memory databases به این دلیل نیست که آن‌ها نیازی به خواندن از دیسک ندارند. حتی یک storage engine مبتنی بر دیسک ممکن است هرگز نیازی به خواندن از دیسک نداشته باشد اگر شما memory کافی داشته باشید، زیرا operating sys‐tem به هر حال بلوک‌های دیسک اخیراً استفاده شده را در memory cache می‌کند. بلکه، آن‌ها می‌توانند سریع‌تر باشند زیرا می‌توانند از overheads of encoding in-memory data structures در یک form که می‌تواند به دیسک نوشته شود، اجتناب کنند [44].
+    </p>
+    <p>
+        علاوه بر performance، یک حوزه جالب دیگر برای in-memory databases ارائه data models است که پیاده‌سازی آن‌ها با indexes disk-based دشوار است. به عنوان مثال، Redis یک interface شبیه به database را به data structures مختلف مانند priority queues و sets ارائه می‌دهد. از آنجایی که همه data را در memory نگه می‌دارد، پیاده‌سازی آن نسبتاً ساده است.
+    </p>
+    <p>
+        تحقیقات اخیر نشان می‌دهد که یک architecture in-memory database می‌تواند برای پشتیبانی از datasets بزرگتر از memory موجود، بدون بازگشت over‐heads of a disk-centric architecture گسترش یابد [45]. رویکرد به اصطلاح anti-caching با evicting داده‌های اخیراً استفاده‌شده از memory به دیسک، زمانی که memory کافی وجود ندارد، کار می‌کند و دوباره آن را در آینده، زمانی که دوباره به آن دسترسی پیدا شود، در memory بارگذاری می‌کند. این شبیه به کاری است که operating systems با virtual memory و swap files انجام می‌دهند، اما database می‌تواند memory را کارآمدتر از OS مدیریت کند، زیرا می‌تواند در granularity از records مجزا به جای کل صفحات memory کار کند. این
+    </p>
+    <p>
+        Data Structures That Power Your Database | 89
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

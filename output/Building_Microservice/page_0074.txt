@@ -1,0 +1,30 @@
+Figure 2-9. An overview of the allowable state transitions for an order in MusicCorp
+The problem in this specific example is that both Warehouse and Order Processor
+share responsibilities for managing this state machine. How do we ensure that they
+are in agreement as to what transitions are allowed? There are ways to manage pro‐
+cesses like this across microservice boundaries; we will return to this topic when we
+discuss sagas in Chapter 6.
+A potential solution here would be to ensure that a single microservice manages the
+order state. In Figure 2-10, either Warehouse or Order Processor can send status
+update requests to the Order service. Here, the Order microservice is the source of
+truth for any given order. In this situation, it is really important that we see the
+requests from Warehouse and Order Processor as just that—requests. In this sce‐
+nario, it is the job of the Order service to manage the acceptable state transitions asso‐
+ciated with an order aggregate. As such, if the Order service received a request from
+Order Processor to move a status straight from PLACED to COMPLETED, it is free to
+reject that request if that is an invalid change.
+Make sure you see a request that is sent to a microservice as some‐
+thing that the downstream microservice can reject if it is invalid.
+An alternative approach I see in such cases is to implement the Order service as little
+more than a wrapper around database CRUD operations, where requests just map
+directly to database updates. This is akin to an object having private fields but public
+getters and setters—the behavior has leaked from the microservice to upstream con‐
+sumers (reducing cohesion), and we’re back in the world of managing acceptable
+state transitions across multiple different services.
+If you see a microservice that just looks like a thin wrapper around
+database CRUD operations, that is a sign that you may have weak
+cohesion and tighter coupling, as logic that should be in that ser‐
+vice to manage the data is instead spread elsewhere in your system.
+48 
+| 
+Chapter 2: How to Model Microservices

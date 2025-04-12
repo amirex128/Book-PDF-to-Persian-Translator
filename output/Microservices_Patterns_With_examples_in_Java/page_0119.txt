@@ -1,0 +1,42 @@
+89
+Communicating using the Asynchronous messaging pattern
+IMPLEMENTING ONE-WAY NOTIFICATIONS
+Implementing one-way notifications is straightforward using asynchronous messaging.
+The client sends a message, typically a command message, to a point-to-point channel
+owned by the service. The service subscribes to the channel and processes the mes-
+sage. It doesn’t send back a reply. 
+IMPLEMENTING PUBLISH/SUBSCRIBE
+Messaging has built-in support for the publish/subscribe style of interaction. A client
+publishes a message to a publish-subscribe channel that is read by multiple consum-
+ers. As described in chapters 4 and 5, services use publish/subscribe to publish
+domain events, which represent changes to domain objects. The service that publishes
+the domain events owns a publish-subscribe channel, whose name is derived from the
+domain class. For example, the Order Service publishes Order events to an Order
+channel, and the Delivery Service publishes Delivery events to a Delivery chan-
+nel. A service that’s interested in a particular domain object’s events only has to sub-
+scribe to the appropriate channel. 
+IMPLEMENTING PUBLISH/ASYNC RESPONSES
+The publish/async responses interaction style is a higher-level style of interaction that’s
+implemented by combining elements of publish/subscribe and request/response. A cli-
+ent publishes a message that specifies a reply channel header to a publish-subscribe
+channel. A consumer writes a reply message containing a correlation id to the reply
+channel. The client gathers the responses by using the correlation id to match the reply
+messages with the request.
+ Each service in your application that has an asynchronous API will use one or
+more of these implementation techniques. A service that has an asynchronous API for
+invoking operations will have a message channel for requests. Similarly, a service that
+publishes events will publish them to an event message channel.
+ As described in section 3.1.2, it’s important to write an API specification for a ser-
+vice. Let’s look at how to do that for an asynchronous API. 
+3.3.3
+Creating an API specification for a messaging-based service API
+The specification for a service’s asynchronous API must, as figure 3.9 shows, specify
+the names of the message channels, the message types that are exchanged over each
+channel, and their formats. You must also describe the format of the messages using a
+standard such as JSON, XML, or Protobuf. But unlike with REST and Open API, there
+isn’t a widely adopted standard for documenting the channels and the message types.
+Instead, you need to write an informal document.
+ A service’s asynchronous API consists of operations, invoked by clients, and events,
+published by the services. They’re documented in different ways. Let’s take a look at
+each one, starting with operations.
+ 

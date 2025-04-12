@@ -1,0 +1,39 @@
+had been live for a while and was behaving very well, handling a not insignificant
+load. At that time we must have been handling around 6,000–7,000 requests per sec‐
+ond during peak, and although most of that was very heavily cached by reverse prox‐
+ies sitting in front of our application servers, the searches for products (the most
+important aspect of the site) were mostly uncached and required a full server round
+trip.
+One morning, just before we hit our daily lunchtime peak, the system started behav‐
+ing slowly, and then it started failing. We had some level of monitoring on our new
+core application, enough to tell us that each of our application nodes was hitting a
+100% CPU spike, well above the normal levels even at peak. In a short period of time,
+the entire site went down.
+We managed to track down the culprit and bring the site back up. It turned out to be
+one of the downstream ad systems, which for the sake of this anonymous case study
+we’ll say was responsible for turnip-related ads. The turnip ad service, one of the old‐
+est and least actively maintained services, had started responding very slowly.
+Responding very slowly is one of the worst failure modes you can experience. If a sys‐
+tem is just not there, you find out pretty quickly. When it’s just slow, you end up
+waiting around for a while before giving up—that process of waiting around can slow
+the entire system down, cause resource contention, and, as happened in our case,
+result in a cascading failure. But whatever the cause of the failure, we had created a
+system that was vulnerable to a downstream issue cascading to cause a system-wide
+failure. A downstream service, over which we had little control, was able to take
+down our whole system.
+While one team looked at the problems with the turnip system, the rest of us started
+looking at what had gone wrong in our application. We found a few problems, which
+are outlined in Figure 12-2. We were using an HTTP connection pool to handle our
+downstream connections. The threads in the pool itself had time-outs configured for
+how long they would wait when making the downstream HTTP call, which is good.
+The problem was that the workers were all taking a while to time out due to the slow
+downstream service. While they were waiting, more requests went to the pool asking
+for worker threads. With no workers available, these requests themselves hung. It
+turned out the connection pool library we were using did have a time-out for waiting
+for workers, but this was disabled by default! This led to a huge buildup of blocked
+threads. Our application normally had 40 concurrent connections at any given time.
+In the space of five minutes, this situation caused us to peak at around 800 connec‐
+tions, bringing the system down.
+396 
+| 
+Chapter 12: Resiliency

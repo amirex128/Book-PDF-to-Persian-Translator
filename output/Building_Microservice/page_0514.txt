@@ -1,0 +1,41 @@
+The moment that you need to provide specific functionality for a mobile UI or third
+party, though, I would strongly consider using BFFs for each client from the outset. I
+might reconsider if the cost of deploying additional services is high, but the separa‐
+tion of concerns that a BFF can bring make it a fairly compelling proposition in most
+cases. I’d be even more inclined to use a BFF if there is significant separation between
+the people building the UI and downstream services, for reasons I’ve outlined.
+We then come to the question of how to implement the BFF—let’s look at GraphQL
+and the role it can play.
+GraphQL
+GraphQL is a query language that allows clients to issue queries to access or mutate
+data. Like SQL, GraphQL allows these queries to be changed dynamically, allowing
+the client to define exactly what information it wants back. With a standard REST
+over HTTP call, for example, when issuing a GET request for an Order resource
+you’d get back all the fields for that order. But what if, in that particular situation, you
+only wanted the total amount of the order? You could just ignore the other fields, of
+course, or else provide an alternative resource (an Order Summary, perhaps) that con‐
+tains just the information you need. With GraphQL, you could issue a request asking
+for only the fields you need, as we see in Example 14-1.
+Example 14-1. A example GraphQL query being used to fetch order information
+{
+    order(id: 123) {
+        date
+        total
+        status
+        delivery {
+            company
+            driver
+            duedate
+        }
+    }
+}
+In this query, we’ve asked for order 123, and we’ve asked for the total price and the
+status of the order. We’ve gone further and asked for information about the delivery
+of this order, so we can get information on the name of the driver who will deliver
+our package, the company they work for, and when the package is expected to arrive.
+With a normal REST API, unless the delivery information was contained inside the
+Order resource, we may have to make an additional call to fetch this information. So
+not only is GraphQL helping us ask for exactly the fields we want, but it can also
+488 
+| 
+Chapter 14: User Interfaces

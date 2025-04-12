@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 205</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        فقط از read repair استفاده می‌کند (نه anti-entropy)، هیچ محدودیتی برای اینکه یک value چقدر می‌تواند قدیمی باشد، وجود ندارد—اگر value فقط به ندرت خوانده شود، value که توسط یک replica stale برگردانده می‌شود، ممکن است قدیمی باشد.
+    </p>
+    <p>
+        تحقیقاتی در مورد اندازه‌گیری staleness replica در databases با leaderless replication و پیش‌بینی درصد مورد انتظار از reads stale بسته به پارامترهای n, w و r وجود داشته است [48]. متأسفانه این هنوز یک practice رایج نیست، اما خوب است که اندازه‌گیری‌های staleness را در مجموعه استانداردی از metrics برای databases قرار دهیم. Eventual consistency یک guarantee از پیش تعیین شده است، اما برای operability، مهم است که بتوانیم "eventual" را کمی کنیم.
+    </p>
+    <h4>Sloppy Quorums and Hinted Handoff</h4>
+    <p>
+        Databases با quorums مناسب پیکربندی شده‌اند که می‌توانند failure از individual nodes را بدون نیاز به failover تحمل کنند. آن‌ها همچنین می‌توانند nodes slow مجزا را تحمل کنند، زیرا requests نیازی به انتظار برای پاسخ دادن همه n nodes ندارند—آن‌ها می‌توانند زمانی return شوند که w یا r nodes پاسخ داده‌اند. این ویژگی‌ها، databases با leaderless replication را برای use cases که نیاز به high availability و low latency دارند و می‌توانند reads stale گاه به گاه را تحمل کنند، جذاب می‌کند.
+    </p>
+    <p>
+        با این حال، quorums (همانطور که تاکنون توضیح داده شد) به اندازه کافی fault-tolerant نیستند. A network interruption می‌تواند به راحتی یک client را از تعداد زیادی از database nodes قطع کند. اگرچه آن nodes زنده هستند و سایر clients ممکن است بتوانند به آن‌ها متصل شوند، برای یک client که از database nodes قطع شده است، ممکن است آن‌ها نیز مرده باشند.
+    </p>
+    <p>
+        در این شرایط، احتمال دارد که تعداد کمتری از w یا r nodes قابل دسترس باقی بمانند، بنابراین client دیگر نمی‌تواند به یک quorum دسترسی پیدا کند.
+    </p>
+    <p>
+        در یک cluster بزرگ (با nodes بسیار بیشتر از n) احتمالاً client می‌تواند در طول network interruption به برخی از nodes database متصل شود، فقط نه به nodes که برای جمع‌آوری یک quorum برای یک value خاص نیاز دارد. در این صورت، طراحان database با یک trade-off روبرو هستند:
+    </p>
+    <ul>
+        <li>آیا بهتر است که errors را به همه requests که ما نمی‌توانیم به یک quorum از w یا r nodes دسترسی داشته باشیم، برگردانیم؟</li>
+        <li>Or should we accept writes anyway, and write them to some nodes that are reachable but aren’t among the n nodes on which the value usually lives?</li>
+    </ul>
+    <p>
+        دومی به عنوان a sloppy quorum شناخته می‌شود [37]: writes و reads همچنان به پاسخ‌های w و r موفقیت‌آمیز نیاز دارند، اما ممکن است شامل nodes باشند که در میان nodes n “home” برای یک value تعیین شده نیستند. با تشبیه، اگر شما خودتان را از خانه‌تان قفل کنید، ممکن است به در خانه همسایه بزنید و بپرسید که آیا می‌توانم موقتاً روی کاناپه آن‌ها بمانم.
+    </p>
+    <p>
+        هنگامی که network interruption برطرف شد، هر writes که یک node به طور موقت از طرف node دیگری پذیرفته است، به nodes “home” مناسب ارسال می‌شود. این
+    </p>
+    <p>
+        Leaderless Replication | 183
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

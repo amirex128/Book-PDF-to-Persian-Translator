@@ -1,0 +1,29 @@
+the Perils of Code Reuse in a Microservice World” on page 154 regarding reuse and
+microservices still apply—if you choose to reuse code via libraries, then you must be
+OK with the fact that these changes cannot be rolled out in an atomic fashion, or else
+we undermine our goal of independent deployability. You also have to be aware that
+it can be more challenging to know if some microservices are using a specific version
+of a library, which may be problematic if you’re trying to deprecate the use of an old
+version of the library.
+Working across multiple repositories
+So, aside from reusing code via libraries, how else can we make a change across more
+than one repository? Let’s look at another example. In Figure 7-8, I want to change
+the API exposed by the Inventory service, and I also need to update the Shipping
+service so it can make use of the new change. If the code for both Inventory and
+Shipping was in the same repository, I could commit the code once. Instead, I’ll have
+to break the changes into two commits—one for Inventory and another for
+Shipping.
+Figure 7-8. Changes across repository boundaries require multiple commits
+Having these changes split could cause problems if one commit fails but the other
+works—I may need to make two changes to roll back the change, for example, and
+that could be complicated if other people have checked in in the meantime. The real‐
+ity is that in this specific situation, I’d likely want to stage the commits somewhat, in
+any case. I’d want to make sure the commit to change the Inventory service worked
+before I change any client code in the Shipping service—if the new functionality in
+the API isn’t present, there is no point having client code that makes use of it.
+I’ve spoken to multiple people who find the lack of atomic deployment with this to be
+a significant problem. I can certainly appreciate the complexity this brings, but I
+think that in most cases it points to a bigger underlying issue. If you are continually
+Mapping Source Code and Builds to Microservices 
+| 
+209

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 201</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        vii. Sometimes this kind of quorum is called a strict quorum, to contrast with sloppy quorums (discussed in “Sloppy Quorums and Hinted Handoff” on page 183).
+    </p>
+    <p>
+        دو مکانیزم اغلب در Dynamo-style datastores استفاده می‌شوند:
+    </p>
+    <ul>
+        <li>Read repair</li>
+        <li>هنگامی که یک client یک read را از چندین node به طور موازی انجام می‌دهد، می‌تواند هر پاسخ stale را تشخیص دهد. به عنوان مثال، در شکل 5-10، user 2345 یک value نسخه 6 را از replica 3 و یک value نسخه 7 را از replicas 1 و 2 دریافت می‌کند. client می‌بیند که replica 3 یک value stale دارد و value جدیدتر را به آن replica می‌نویسد. این رویکرد برای values که اغلب خوانده می‌شوند، خوب عمل می‌کند.</li>
+        <li>Anti-entropy process</li>
+        <li>علاوه بر این، برخی از datastores یک فرآیند background دارند که به طور مداوم به دنبال تفاوت‌ها در data بین replicas می‌گردد و هر داده‌ای که از یک replica در دسترس نیست، را کپی می‌کند. برخلاف the replication log در leader-based replication، این anti-entropy process در هیچ order خاصی writes را کپی نمی‌کند و ممکن است یک delay قابل توجه قبل از کپی شدن data وجود داشته باشد.</li>
+    </ul>
+    <p>
+        Not all systems implement both of these. به عنوان مثال، Voldemort در حال حاضر یک فرآیند anti-entropy ندارد. توجه داشته باشید که بدون یک فرآیند anti-entropy، values که به ندرت خوانده می‌شوند، ممکن است از برخی از replicas از دست رفته باشند و بنابراین durability کاهش یافته است، زیرا read repair تنها زمانی انجام می‌شود که یک value توسط application خوانده می‌شود.
+    </p>
+    <h4>Quorums for reading and writing</h4>
+    <p>
+        در مثال شکل 5-10، ما این write را موفقیت‌آمیز در نظر گرفتیم، حتی اگر فقط در دو replica از سه replica پردازش شده باشد. اگر فقط یک replica از سه replica write را بپذیرد، چه می‌شود؟ چقدر می‌توانیم این را پیش ببریم؟
+    </p>
+    <p>
+        If we know that every successful write is guaranteed to be present on at least two out of three replicas, that means at most one replica can be stale. Thus, if we read from at least two replicas, we can be sure that at least one of the two is up to date. If the third replica is down or slow to respond, reads can nevertheless continue returning an up-to-date value.
+    </p>
+    <p>
+        به طور کلی، اگر n replicas وجود داشته باشد، هر write باید توسط w nodes تأیید شود تا موفقیت‌آمیز تلقی شود و ما باید حداقل r nodes را برای هر read query کنیم. (در مثال ما، n = 3, w = 2, r = 2.) تا زمانی که w + r &gt; n، ما انتظار داریم که یک value up-to-date را هنگام خواندن دریافت کنیم، زیرا حداقل یکی از r nodes که ما از آن‌ها می‌خوانیم، باید up to date باشد. Reads و writes که از این values r و w پیروی می‌کنند، quorum reads و writes [44] نامیده می‌شوند.vii شما می‌توانید به r و w به عنوان حداقل تعداد votes که برای valid بودن read یا write مورد نیاز است، فکر کنید.
+    </p>
+    <p>
+        Leaderless Replication | 179
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

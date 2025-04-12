@@ -1,0 +1,49 @@
+164
+CHAPTER 5
+Designing business logic in a microservice architecture
+5.3.5
+Generating and publishing domain events
+Communicating using domain events is a form of asynchronous messaging, discussed
+in chapter 3. But before the business logic can publish them to a message broker, it
+must first create them. Let’s look at how to do that.
+GENERATING DOMAIN EVENTS
+Conceptually, domain events are published by aggregates. An aggregate knows when
+its state changes and hence what event to publish. An aggregate could invoke a mes-
+saging API directly. The drawback of this approach is that because aggregates can’t
+use dependency injection, the messaging API would need to be passed around as a
+method argument. That would intertwine infrastructure concerns and business logic,
+which is extremely undesirable.
+ A better approach is to split responsibility between the aggregate and the service
+(or equivalent class) that invokes it. Services can use dependency injection to obtain a
+reference to the messaging API, easily publishing events. The aggregate generates the
+events whenever its state changes and returns them to the service. There are a couple
+of different ways an aggregate can return events back to the service. One option is for
+the return value of an aggregate method to include a list of events. For example, the
+following listing shows how a Ticket aggregate’s accept() method can return a Ticket-
+AcceptedEvent to its caller.
+public class Ticket {
+public List<DomainEvent> accept(ZonedDateTime readyBy) {
+...
+this.acceptTime = ZonedDateTime.now();
+  
+this.readyBy = readyBy;
+return singletonList(new TicketAcceptedEvent(readyBy));      
+}
+}
+The service invokes the aggregate root’s method, and then publishes the events. For
+example, the following listing shows how KitchenService invokes Ticket.accept() and
+publishes the events.
+public class KitchenService {
+@Autowired
+private TicketRepository ticketRepository;
+@Autowired
+private DomainEventPublisher domainEventPublisher;
+Listing 5.3
+The Ticket aggregate’s accept() method
+Listing 5.4
+KitchenService calls Ticket.accept() 
+Updates 
+the Ticket
+Returns 
+an event
+ 

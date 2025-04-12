@@ -1,0 +1,22 @@
+Partitioning at the database level often makes sense if the database technology you
+are using supports this concept natively, as you can then offload this problem to an
+existing implementation. We could, however, partition instead at the microservice
+instance level, as we see in Figure 13-5. Here, we need to be able to work out from the
+inbound request what partition the request should be mapped to—in our example,
+this is being done via some form of proxy. In the case of our customer-based parti‐
+tioning model, if the name of the customer is in the request headers, then that would
+be sufficient. This approach makes sense if you want dedicated microservice instan‐
+ces for partitioning, which could be useful if you are making use of in-memory cach‐
+ing. It also means you are able to scale each partition at both the database level and
+the microservice instance level.
+Figure 13-5. Requests are directed to the appropriate microservice instance
+As with the example of read replicas, we would want this scaling to be done in such a
+way that consumers of the microservice are unaware of this implementation detail.
+When a consumer makes a request to the Customer microservice in Figure 13-5, we
+would want their request to be dynamically routed to the right partition. The fact that
+we have implemented data partitioning should be treated as an internal implementa‐
+tion detail of the microservice in question—this gives us freedom to change the parti‐
+tioning scheme, or perhaps replace partitioning altogether.
+The Four Axes of Scaling 
+| 
+427

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 268</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   <mark>NoSQL databases</mark>. یک <mark>database NoSQL</mark> معمولاً دارای یک فرم محدود از <mark>transactions</mark> و قابلیت‌های <mark>querying</mark> کمتر عمومی است. با این حال، برای موارد استفاده خاص، این <mark>databases</mark> دارای مزایای خاصی نسبت به <mark>SQL databases</mark> هستند، از جمله یک مدل <mark>data</mark> انعطاف‌پذیرتر و عملکرد و مقیاس‌پذیری بهتر.
+  </p>
+  <p>
+   یک <mark>database NoSQL</mark> اغلب یک انتخاب خوب برای یک <mark>CQRS view</mark> است، که می‌تواند از نقاط قوت آن استفاده کند و نقاط ضعف آن را نادیده بگیرد. یک <mark>CQRS view</mark> از مدل <mark>data</mark> غنی‌تر و عملکرد یک <mark>database NoSQL</mark> بهره می‌برد. این تحت تأثیر محدودیت‌های یک <mark>database NoSQL</mark> قرار نمی‌گیرد، زیرا فقط از <mark>transactions</mark> ساده استفاده می‌کند و یک مجموعه ثابت از <mark>queries</mark> را اجرا می‌کند.
+  </p>
+  <p>
+   با این حال، گاهی اوقات منطقی است که یک <mark>CQRS view</mark> را با استفاده از یک <mark>SQL database</mark> پیاده‌سازی کنید. یک <mark>RDBMS</mark> مدرن که روی سخت‌افزار مدرن اجرا می‌شود، عملکرد بسیار خوبی دارد. توسعه‌دهندگان، مدیران <mark>database</mark> و عملیات <mark>IT</mark>، به‌طور کلی، با <mark>SQL databases</mark> بسیار بیشتر از <mark>databases NoSQL</mark> آشنا هستند. همانطور که قبلاً ذکر شد، <mark>SQL databases</mark> اغلب دارای افزونه‌هایی برای ویژگی‌های غیر رابطه‌ای، مانند انواع داده‌های فضایی و <mark>queries</mark> هستند. همچنین، یک <mark>CQRS view</mark> ممکن است برای پشتیبانی از یک موتور گزارش‌گیری، نیاز به استفاده از یک <mark>SQL database</mark> داشته باشد.
+  </p>
+  <p>
+   همانطور که در جدول 7.1 مشاهده می‌کنید، گزینه‌های زیادی برای انتخاب وجود دارد. و برای پیچیده‌تر کردن انتخاب، تفاوت بین انواع مختلف <mark>database</mark> شروع به محو شدن می‌کند. به عنوان مثال، <mark>MySQL</mark>، که یک <mark>RDBMS</mark> است، از <mark>JSON</mark> پشتیبانی عالی دارد، که یکی از نقاط قوت <mark>MongoDB</mark> است، یک <mark>database</mark> با قالب سند <mark>JSON</mark>.
+  </p>
+  <p>
+   اکنون که در مورد انواع مختلف <mark>databases</mark> که می‌توانید برای پیاده‌سازی یک <mark>CQRS view</mark> استفاده کنید، بحث کردم، بیایید به مشکل نحوه به‌روزرسانی کارآمد یک <mark>view</mark> نگاهی بیندازیم.
+  </p>
+  <h5><mark>SUPPORTING UPDATE OPERATIONS</mark></h5>
+  <p>
+   علاوه بر پیاده‌سازی کارآمد <mark>queries</mark>، مدل <mark>data</mark> <mark>view</mark> نیز باید عملیات به‌روزرسانی اجرا شده توسط <mark>event handlers</mark> را به طور کارآمد پیاده‌سازی کند. معمولاً، یک <mark>event</mark>
+  </p>
+  <p>
+   جدول 7.1
+   <br />
+   <mark>Query-side view stores</mark>
+  </p>
+  <p>
+   اگر شما نیاز دارید
+   <br />
+   استفاده کنید
+   <br />
+   مثال
+  </p>
+  <p>
+   <mark>PK-based lookup</mark> of <mark>JSON</mark>
+   <br />
+   <mark>objects</mark>
+  </p>
+  <p>
+   یک فروشگاه سند مانند <mark>MongoDB</mark>
+   <br />
+   یا <mark>DynamoDB</mark>، یا یک فروشگاه <mark>key value</mark>
+   <br />
+   مانند <mark>Redis</mark>
+  </p>
+  <p>
+   تاریخچه سفارش را با حفظ یک سند <mark>MongoDB</mark>
+   <br />
+   که شامل <mark>per-customer</mark> است، پیاده‌سازی کنید.
+  </p>
+  <p>
+   <mark>Query-based lookup</mark> of <mark>JSON</mark>
+   <br />
+   <mark>objects</mark>
+  </p>
+  <p>
+   یک فروشگاه سند مانند <mark>MongoDB</mark>
+   <br />
+   یا <mark>DynamoDB</mark>
+  </p>
+  <p>
+   نمای مشتری را با استفاده از <mark>MongoDB</mark> یا <mark>DynamoDB</mark> پیاده‌سازی کنید.
+  </p>
+  <p>
+   <mark>Text queries</mark>
+  </p>
+  <p>
+   یک موتور جستجوی متنی مانند <mark>Elasticsearch</mark>
+  </p>
+  <p>
+   جستجوی متن برای سفارش‌ها را با حفظ یک سند <mark>Elasticsearch</mark> در هر سفارش پیاده‌سازی کنید.
+  </p>
+  <p>
+   <mark>Graph queries</mark>
+  </p>
+  <p>
+   یک <mark>graph database</mark> مانند <mark>Neo4j</mark>
+  </p>
+  <p>
+   تشخیص تقلب را با حفظ یک نمودار از مشتریان، سفارش‌ها و سایر داده‌ها پیاده‌سازی کنید.
+  </p>
+  <p>
+   <mark>Traditional SQL reporting/BI</mark>
+  </p>
+  <p>
+   یک <mark>RDBMS</mark>
+  </p>
+  <p>
+   گزارش‌ها و تجزیه و تحلیل‌های کسب و کار استاندارد.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

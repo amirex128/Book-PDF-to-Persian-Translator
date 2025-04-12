@@ -1,0 +1,49 @@
+88
+CHAPTER 3
+Interprocess communication in a microservice architecture
+difference between the two interaction styles is that with request/response the client
+expects the service to respond immediately, whereas with asynchronous request/
+response there is no such expectation. Messaging is inherently asynchronous, so only
+provides asynchronous request/response. But a client could block until a reply is
+received.
+ The client and service implement the asynchronous request/response style inter-
+action by exchanging a pair of messages. As figure 3.8 shows, the client sends a com-
+mand message, which specifies the operation to perform, and parameters, to a point-
+to-point messaging channel owned by a service. The service processes the requests
+and sends a reply message, which contains the outcome, to a point-to-point channel
+owned by the client.
+The client must tell the service where to send a reply message and must match reply mes-
+sages to requests. Fortunately, solving these two problems isn’t that difficult. The client
+sends a command message that has a reply channel header. The server writes the reply mes-
+sage, which contains a correlation id that has the same value as message identifier, to the reply
+channel. The client uses the correlation id to match the reply message with the request.
+ Because the client and service communicate using messaging, the interaction is
+inherently asynchronous. In theory, a messaging client could block until it receives a
+reply, but in practice the client will process replies asynchronously. What’s more,
+replies are typically processed by any one of the client’s instances. 
+Request
+Sends
+Reads
+Reads
+Sends
+MessageId: msgId
+ReturnAddress: ReplyChannel
+Body
+CorrelationId:msgId
+Body
+Request channel
+Reply channel
+Reply
+Speciﬁes
+Client
+Service
+Client sends message containing
+msgId and a reply channel.
+Service sends reply to the speciﬁed reply
+channel. The reply contains a correlationId,
+which is the request’s msgId.
+Figure 3.8
+Implementing asynchronous request/response by including a reply channel and message 
+identifier in the request message. The receiver processes the message and sends the reply to the 
+specified reply channel.
+ 

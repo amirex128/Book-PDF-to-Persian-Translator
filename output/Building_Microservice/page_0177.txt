@@ -1,0 +1,26 @@
+This allows us to get the new microservice out as soon as possible, along with the new
+interface, while giving time for consumers to move over. Once all the consumers are
+no longer using the old endpoint, you can remove it along with any associated code,
+as shown in Figure 5-4.
+Figure 5-4. One microservice emulating the old endpoint and exposing the new
+backward-incompatible endpoint
+When I last used this approach, we had gotten ourselves into a bit of a mess with the
+number of consumers we had and the number of breaking changes we had made.
+This meant that we were actually coexisting three different versions of the endpoint.
+This is not something I’d recommend! Keeping all the code around and the associ‐
+ated testing required to ensure they all worked was absolutely an additional burden.
+To make this more manageable, we internally transformed all requests to the V1 end‐
+point to a V2 request, and then V2 requests to the V3 endpoint. This meant we could
+clearly delineate what code was going to be retired when the old endpoint(s) died.
+This is in effect an example of the expand and contract pattern, which allows us to
+phase in breaking changes. We expand the capabilities we offer, supporting both old
+and new ways of doing something. Once the old consumers do things in the new way,
+we contract our API, removing the old functionality.
+If you are going to coexist endpoints, you need a way for callers to route their
+requests accordingly. For systems making use of HTTP, I have seen this done with
+both version numbers in request headers and also in the URI itself—for example, /v1/
+customer/ or /v2/customer/. I’m torn as to which approach makes the most sense. On
+the one hand, I like URIs being opaque to discourage clients from hardcoding URI
+Managing Breaking Changes 
+| 
+151

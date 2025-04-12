@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 100</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Constructing and maintaining SSTables</h4>
+    <p>
+        خوب تا اینجا—اما چگونه data شما را به ترتیب key در وهله اول مرتب می‌کنید؟ writes ورودی ما می‌توانند به هر ترتیبی رخ دهند.
+    </p>
+    <p>
+        حفظ یک structure مرتب شده روی دیسک امکان‌پذیر است ("B-Trees" در صفحه 79 را ببینید)، اما حفظ آن در memory بسیار آسان‌تر است. ساختارهای data tree زیادی وجود دارند که شما می‌توانید از آن‌ها استفاده کنید، مانند red-black trees یا AVL trees [2]. با این data structures، شما می‌توانید keys را به هر ترتیبی درج کنید و آن‌ها را به ترتیب مرتب شده بخوانید.
+    </p>
+    <p>
+        اکنون می‌توانیم storage engine خود را به صورت زیر کار کنیم:
+    </p>
+    <ul>
+        <li>وقتی یک write وارد می‌شود، آن را به یک data structure tree متوازن in-memory (به عنوان مثال، یک red-black tree) اضافه کنید. این tree in-memory گاهی memtable نامیده می‌شود.</li>
+        <li>وقتی memtable بزرگتر از یک threshold می‌شود—معمولاً چند مگابایت—آن را به عنوان یک فایل SSTable به دیسک write کنید. این کار را می‌توان به طور کارآمد انجام داد زیرا tree در حال حاضر key-value pairs را بر اساس key مرتب نگه می‌دارد. فایل SSTable جدید به جدیدترین segment از database تبدیل می‌شود. در حالی که SSTable در حال write شدن به دیسک است، writes می‌توانند به یک نمونه memtable جدید ادامه دهند.</li>
+        <li>به منظور ارائه یک درخواست read، ابتدا سعی کنید key را در memtable پیدا کنید، سپس در جدیدترین segment on-disk، سپس در segment بعدی قدیمی‌تر و غیره.</li>
+        <li>هر از چند گاهی، یک فرآیند merging و compaction را در background اجرا کنید تا فایل‌های segment را ترکیب کنید و values overwritten یا deleted شده را دور بریزید.</li>
+    </ul>
+    <p>
+        این طرح بسیار خوب کار می‌کند. این فقط از یک مشکل رنج می‌برد: اگر database crash کند، جدیدترین writes (که در memtable هستند اما هنوز روی دیسک نوشته نشده‌اند) از بین می‌روند. به منظور جلوگیری از آن مشکل، ما می‌توانیم یک log جداگانه روی دیسک نگه داریم که هر write بلافاصله به آن اضافه می‌شود، درست مانند بخش قبل. آن log به ترتیب مرتب نشده است، اما این مهم نیست، زیرا تنها هدف آن بازیابی memtable پس از یک crash است. هر بار که memtable به یک SSTable نوشته می‌شود، log مربوطه را می‌توان دور انداخت.
+    </p>
+    <h4>Making an LSM-tree out of SSTables</h4>
+    <p>
+        الگوریتم توضیح داده شده در اینجا اساساً همان چیزی است که در LevelDB [6] و RocksDB [7] استفاده می‌شود، کتابخانه‌های storage engine key-value که برای embedded شدن در applications دیگر طراحی شده‌اند. از جمله موارد دیگر، LevelDB می‌تواند در Riak به عنوان جایگزینی برای Bitcask استفاده شود. storage engines مشابه در Cassandra و HBase [8] استفاده می‌شوند، که هر دو از مقاله Bigtable از Google [9] الهام گرفته‌اند (که اصطلاحات SSTable و memtable را معرفی کرد).
+    </p>
+    <p>
+        در اصل، این structure indexing توسط Patrick O’Neil و همکارانش تحت نام Log-Structured Merge-Tree (یا LSM-Tree) [10]، بر اساس کار قبلی در
+    </p>
+    <p>
+        78 | Chapter 3: Storage and Retrieval
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

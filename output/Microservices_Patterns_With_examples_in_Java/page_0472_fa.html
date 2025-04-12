@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 472</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   make that change in the monolith. If that code is subsequently extracted into a ser-
+   vice, then the service can access Delivery Service.
+  </p>
+  <h3><strong>WHAT SERVICES TO EXTRACT AND WHEN</strong></h3>
+  <p>
+   همانطور که گفتم، شکستن monolith زمان‌بر است. این باعث می‌شود که effort از
+   implementing featuresها منحرف شود. در نتیجه، شما باید با دقت ترتیب را تعیین کنید
+   که در آن servicesها را استخراج می‌کنید. شما نیاز دارید که بر استخراج servicesهایی تمرکز کنید که بزرگ-
+   ترین benefit را ارائه می‌دهند. علاوه بر این، شما می‌خواهید به طور مداوم به کسب‌وکار نشان دهید که
+   value در migrating به یک microservice architecture وجود دارد.
+  </p>
+  <p>
+   در هر سفری، دانستن اینکه به کجا می‌روید، ضروری است. یک راه خوب برای شروع
+   migration به microservicesها با یک effort تعریف architecture time-boxed است. شما
+   باید زمان کمی را صرف کنید، مانند چند هفته، برای brainstorming معماری ایده‌آل خود و
+   تعریف یک مجموعه از servicesها. این به شما یک destination می‌دهد که هدف قرار دهید.
+   با این حال، مهم است که به یاد داشته باشید که این architecture در سنگ حک نشده است. به عنوان
+   شما monolith را جدا می‌کنید و experience کسب می‌کنید، باید architecture را بازبینی کنید
+   تا آنچه را که آموخته‌اید در نظر بگیرید.
+  </p>
+  <p>
+   هنگامی که شما destination تقریبی را تعیین کردید، گام بعدی این است که شروع کنید
+   monolith را جدا کنید. چند استراتژی مختلف وجود دارد که می‌توانید برای
+   تعیین ترتیبی که در آن servicesها را استخراج می‌کنید.
+  </p>
+  <p>
+   یک استراتژی، به طور موثر freeze کردن development monolith و استخراج ser-
+   vicesها در صورت تقاضا است. به جای implementing featuresها یا fixing bugsها در monolith،
+   شما service یا services(ها) لازم را استخراج کرده و آنها را تغییر می‌دهید. یک مزیت این
+   رویکرد این است که شما را مجبور می‌کند که monolith را بشکنید. یک نقطه ضعف این است که
+   استخراج servicesها، توسط requirementsهای کوتاه‌مدت به جای بلندمدت، هدایت می‌شود
+   needsها. به عنوان مثال، شما را ملزم می‌کند که servicesها را استخراج کنید، حتی اگر شما در حال ایجاد یک تغییر کوچک به یک بخش نسبتاً پایدار از system هستید. در نتیجه، شما در معرض خطر انجام کارهای زیاد هستید
+   برای حداقل benefit.
+  </p>
+  <p>
+   یک استراتژی جایگزین یک رویکرد برنامه‌ریزی‌شده‌تر است، جایی که شما modulesها را رتبه‌بندی می‌کنید
+   از یک application بر اساس benefit که شما از استخراج آنها پیش‌بینی می‌کنید، دریافت می‌کنید. وجود دارد
+   چندین دلیل وجود دارد که چرا استخراج یک service مفید است:
+   <ul>
+    <li>
+     Accelerates development—اگر roadmap application شما نشان می‌دهد که یک خاص
+     بخش application شما در سال آینده، توسعه زیادی را متحمل خواهد شد،
+     سپس تبدیل آن به یک service، توسعه را سرعت می‌بخشد.
+    </li>
+    <li>
+     Solves a performance, scaling, or reliability problem—اگر یک بخش خاص از appli-
+     cation شما دارای یک performance یا مشکل scalability است یا غیرقابل اعتماد است، پس ارزشمند است
+     برای تبدیل آن به یک service.
+    </li>
+    <li>
+     Enables the extraction of some other services—گاهی استخراج یک service sim-
+     plifies استخراج service دیگری، به دلیل وابستگی‌ها بین modulesها.
+    </li>
+   </ul>
+  </p>
+  <p>
+   شما می‌توانید از این معیارها برای افزودن refactoring tasksها به backlog application خود استفاده کنید،
+   که بر اساس benefit مورد انتظار رتبه‌بندی شده‌اند. مزیت این رویکرد این است که استراتژیک‌تر است
+   و بسیار نزدیک‌تر با نیازهای کسب‌وکار هماهنگ شده است. در طول sprint plan-
+   ning، شما تصمیم می‌گیرید که آیا implement کردن featuresها یا استخراج servicesها ارزشمندتر است.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

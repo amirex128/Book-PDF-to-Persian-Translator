@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 460</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   microservices یک کار مهم است. این کار منابع را از توسعه features جدید منحرف می‌کند.
+   در نتیجه، احتمالاً کسب‌وکار تنها از پذیرش microservices در صورتی حمایت می‌کند که یک
+   مشکل مهم تجاری را حل کند.
+  </p>
+  <p>
+   اگر شما در جهنم monolithic هستید، احتمالاً از قبل حداقل یک مشکل تجاری دارید. در اینجا نمونه‌هایی از مشکلات تجاری ناشی از جهنم monolithic آورده شده است:
+   <ul>
+    <li>
+     Slow delivery—Application درک، نگهداری و تست آن دشوار است، بنابراین
+     developer productivity پایین است. در نتیجه، سازمان قادر به رقابت موثر نیست و در معرض خطر است که توسط رقبا از بین برود.
+    </li>
+    <li>
+     Buggy software releases—عدم testability به این معنی است که software releasesها اغلب buggy هستند. این باعث نارضایتی مشتریان می‌شود که منجر به از دست دادن مشتریان و کاهش درآمد می‌شود.
+    </li>
+    <li>
+     Poor scalability—Scaling یک application monolithic دشوار است زیرا modulesها را با requirementsهای resource بسیار متفاوت در یک executable compo-
+     nent ترکیب می‌کند. عدم scalability به این معنی است که scale کردن application فراتر از یک نقطه معین غیرممکن یا گران است. در نتیجه، appli-
+     cation نمی‌تواند از نیازهای فعلی یا پیش‌بینی شده کسب‌وکار پشتیبانی کند.
+    </li>
+   </ul>
+  </p>
+  <p>
+   مهم است که مطمئن شوید این مشکلات وجود دارد، زیرا شما از معماری خود فراتر رفته‌اید. یک دلیل رایج برای slow delivery و buggy releases، یک software است
+   development process ضعیف است. به عنوان مثال، اگر هنوز به manual testing متکی هستید، سپس
+   تنها اتخاذ automated testing می‌تواند به طور قابل توجهی development velocity را افزایش دهد.
+   به طور مشابه، گاهی اوقات می‌توانید مشکلات scalability را بدون تغییر معماری خود حل کنید.
+   ابتدا باید راه‌حل‌های ساده‌تری را امتحان کنید. اگر، و فقط اگر، هنوز هم software دارید
+   delivery problemsها، سپس باید به microservice architecture مهاجرت کنید. بیایید
+   نگاهی به نحوه انجام این کار بیندازیم.
+  </p>
+  <h3><strong>13.1.2 Strangling the monolith</strong></h3>
+  <p>
+   فرآیند تبدیل یک application monolithic به microservices، نوعی از
+   application modernization (https://en.wikipedia.org/wiki/Software_modernization) است.
+   Application modernization، فرآیند تبدیل یک application legacy به یک application است که دارای
+   یک معماری مدرن و technology stack است. Developersها سال‌هاست که در حال modernizing appli-
+   cationsها هستند. در نتیجه، دانشی وجود دارد که از طریق تجربه انباشته شده است و ما
+   می‌توانیم هنگام refactoring یک application به یک microservice architecture از آن استفاده کنیم. مهم‌ترین
+   درسی که در طول سال‌ها آموخته شد این است که یک big bang rewrite انجام ندهید.
+  </p>
+  <p>
+   یک big bang rewrite زمانی است که شما یک application جدید—در این مورد، یک microservices-
+   based application—را از ابتدا توسعه می‌دهید. اگرچه شروع از ابتدا و رها کردن legacy
+   code base به نظر جذاب می‌رسد، اما بسیار خطرناک است و احتمالاً با شکست مواجه می‌شود.
+   شما ماه‌ها، احتمالاً سال‌ها، به تکرار عملکرد موجود خواهید پرداخت و تنها
+   سپس می‌توانید featuresهایی را که کسب‌وکار امروز به آنها نیاز دارد، پیاده‌سازی کنید! همچنین، شما
+   به هر حال باید application legacy را توسعه دهید، که تلاش را از
+   rewrite منحرف می‌کند و به این معنی است که شما یک target constantly moving دارید.
+   علاوه بر این، ممکن است
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

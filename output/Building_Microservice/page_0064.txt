@@ -1,0 +1,37 @@
+4 Annoyingly, I cannot find the original source of this definition.
+Cohesion
+One of the most succinct definitions I’ve heard for describing cohesion is this: “the
+code that changes together, stays together.”4 For our purposes, this is a pretty good
+definition. As we’ve already discussed, we’re optimizing our microservice architec‐
+ture around ease of making changes in business functionality—so we want the func‐
+tionality grouped in such a way that we can make changes in as few places as possible.
+We want related behavior to sit together, and unrelated behavior to sit elsewhere.
+Why? Well, if we want to change behavior, we want to be able to change it in one
+place, and to release that change as soon as possible. If we have to change that behav‐
+ior in lots of different places, we’ll have to release lots of different services (perhaps at
+the same time) to deliver that change. Making changes in lots of different places is
+slower, and deploying lots of services at once is risky—thus we want to avoid both.
+So we want to find boundaries within our problem domain that help ensure related
+behavior is in one place and that communicate with other boundaries as loosely as
+possible. If the related functionality is spread across the system, we say that cohesion
+is weak—whereas for our microservice architectures we’re aiming for strong
+cohesion.
+Coupling
+When services are loosely coupled, a change to one service should not require a
+change to another. The whole point of a microservice is being able to make a change
+to one service and deploy it without needing to change any other part of the system.
+This is really quite important.
+What sorts of things cause tight coupling? A classic mistake is to pick an integration
+style that tightly binds one service to another, causing changes inside the service to
+require a change to consumers.
+A loosely coupled service knows as little as it needs to about the services with which it
+collaborates. This also means we probably want to limit the number of different types
+of calls from one service to another, because beyond the potential performance prob‐
+lem, chatty communication can lead to tight coupling.
+Coupling, though, comes in many forms, and I’ve seen a number of misunderstand‐
+ings about the nature of coupling as it pertains to a service-based architecture. With
+that in mind, I think it’s important that we explore this topic in more detail, some‐
+thing we’ll do shortly.
+38 
+| 
+Chapter 2: How to Model Microservices

@@ -1,0 +1,26 @@
+Service meshes come in different shapes and sizes, but what unites them is that their
+architecture is based on trying to limit the impact caused by calls to and from the
+proxy. This is achieved primarily by distributing the proxy processes to run on the
+same physical machines as the microservice instances, to ensure that the number of
+remote network calls is limited. In Figure 5-7 we see this in action—the Order Pro
+cessor is sending a request to the Payment microservice. This call is first routed
+locally to a proxy instance running on the same machine as Order Processor, before
+continuing to the Payment microservice via its local proxy instance. The Order Pro
+cessor thinks it’s making a normal network call, unaware that the call is routed
+locally on the machine, which is significantly faster (and also less prone to partitions).
+Figure 5-7. A service mesh is deployed to handle all direct inter-microservice
+communication
+A control plane would sit on top of the local mesh proxies, acting as both a place in
+which the behavior of these proxies can be changed and a place in which you can col‐
+lect information about what the proxies are doing.
+When deploying on Kubernetes, you would deploy each microservice instance in a
+pod with its own local proxy. A single pod is always deployed as a single unit, so you
+always know that you have a proxy available. Moreover, a single proxy dying would
+impact only that one pod. This setup also allows you to configure each proxy differ‐
+ently for different purposes. We’ll look at these concepts in more detail in “Kuber‐
+netes and Container Orchestration” on page 259.
+Many service mesh implementations use the Envoy proxy for the basis of these
+locally running processes. Envoy is a lightweight C++ proxy often used as the
+Service Meshes and API Gateways 
+| 
+167

@@ -1,0 +1,45 @@
+111
+Transaction management in a microservice architecture
+For example, as described in chapter 2, the createOrder() operation spans numer-
+ous services, including Order Service, Kitchen Service, and Accounting Service.
+Operations such as these need a transaction management mechanism that works
+across services.
+ Mary discovered that, as mentioned in chapter 2, the traditional approach to dis-
+tributed transaction management isn’t a good choice for modern applications.
+Instead of an ACID transactions, an operation that spans services must use what’s
+known as a saga, a message-driven sequence of local transactions, to maintain data
+consistency. One challenge with sagas is that they are ACD (Atomicity, Consistency,
+Durability). They lack the isolation feature of traditional ACID transactions. As a
+result, an application must use what are known as countermeasures, design techniques
+that prevent or reduce the impact of concurrency anomalies caused by the lack of
+isolation.
+ In many ways, the biggest obstacle that Mary and the FTGO developers will face
+when adopting microservices is moving from a single database with ACID transactions
+to a multi-database architecture with ACD sagas. They’re used to the simplicity of the
+ACID transaction model. But in reality, even monolithic applications such as the FTGO
+application typically don’t use textbook ACID transactions. For example, many appli-
+cations use a lower transaction isolation level in order to improve performance. Also,
+many important business processes, such as transferring money between accounts at
+different banks, are eventually consistent. Not even Starbucks uses two-phase commit
+(www.enterpriseintegrationpatterns.com/ramblings/18_starbucks.html).
+ I begin this chapter by looking at the challenges of transaction management in the
+microservice architecture and explain why the traditional approach to distributed
+transaction management isn’t an option. Next I explain how to maintain data consis-
+tency using sagas. After that I look at the two different ways of coordinating sagas:
+choreography, where participants exchange events without a centralized point of con-
+trol, and orchestration, where a centralized controller tells the saga participants what
+operation to perform. I discuss how to use countermeasures to prevent or reduce the
+impact of concurrency anomalies caused by the lack of isolation between sagas. Finally, I
+describe the implementation of an example saga.
+ Let’s start by taking a look at the challenge of managing transactions in a micro-
+service architecture.
+4.1
+Transaction management in a microservice 
+architecture
+Almost every request handled by an enterprise application is executed within a data-
+base transaction. Enterprise application developers use frameworks and libraries that
+simplify transaction management. Some frameworks and libraries provide a program-
+matic API for explicitly beginning, committing, and rolling back transactions. Other
+frameworks, such as the Spring framework, provide a declarative mechanism. Spring
+provides an @Transactional annotation that arranges for method invocations to be
+ 

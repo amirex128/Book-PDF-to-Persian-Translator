@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 154</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>CHAPTER 4 (فصل 4)</strong></h3>
+  <h4><strong>Managing transactions (مدیریت تراکنش) با sagas (حماسه‌ها)</strong></h4>
+  <p>The state machine (ماشین حالت) همچنین transitions (تغییرات) state (حالت) متعددی را تعریف می‌کند. به عنوان مثال، state machine (ماشین حالت) از حالت Creating Ticket (ایجاد بلیت) به حالت Authorizing Card (مجوز کارت) یا حالت Rejected Order (رد سفارش) transition (تغییر) می‌کند. این به حالت Authorizing Card (مجوز کارت) transition (تغییر) می‌کند وقتی یک reply (پاسخ) موفقیت‌آمیز به command (دستور) Create Ticket (ایجاد بلیت) دریافت می‌کند. از طرف دیگر، اگر Kitchen Service (سرویس آشپزخانه) نتوانست Ticket (بلیت) را ایجاد کند، state machine (ماشین حالت) به state (حالت) Rejected Order (رد سفارش) transition (تغییر) می‌کند.</p>
+  <p>اقدام اولیه state machine (ماشین حالت)، ارسال command (دستور) VerifyConsumer (تایید مصرف‌کننده) به Consumer Service (سرویس مصرف‌کننده) است. response (پاسخ) از Consumer Service (سرویس مصرف‌کننده) باعث ایجاد transition (تغییر) state (حالت) بعدی می‌شود. اگر مصرف‌کننده با موفقیت تأیید شد، saga (حماسه) Ticket (بلیت) را ایجاد می‌کند و به state (حالت) Creating Ticket (ایجاد بلیت) transition (تغییر) می‌کند. اما اگر تأیید مصرف‌کننده ناموفق بود، saga (حماسه) Order (سفارش) را رد می‌کند و به حالت Rejecting Order (رد سفارش) transition (تغییر) می‌کند. state machine (ماشین حالت) transition (تغییرات) state (حالت) متعددی دیگری را طی می‌کند که توسط responses (پاسخ‌ها) از participants (شرکت‌کنندگان) saga (حماسه) هدایت می‌شود، تا زمانی که به یک final state (حالت نهایی) Order Approved (سفارش تایید شده) یا Order Rejected (سفارش رد شده) برسد.</p>
+  <br>
+  <p>Veriﬁng (تایید)</p>
+  <p>consumer (مصرف‌کننده)</p>
+  <p>Rejecting (رد)</p>
+  <p>order (سفارش)</p>
+  <p>Creating (ایجاد)</p>
+  <p>ticket (بلیت)</p>
+  <p>Authorizing (مجوز)</p>
+  <p>card (کارت)</p>
+  <p>Rejecting (رد)</p>
+  <p>ticket (بلیت)</p>
+  <p>Approving (تایید)</p>
+  <p>ticket (بلیت)</p>
+  <p>Approving (تایید)</p>
+  <p>order (سفارش)</p>
+  <p>Order (سفارش)</p>
+  <p>approved (تایید شده)</p>
+  <p>Order (سفارش)</p>
+  <p>rejected (رد شده)</p>
+  <p>/Send (ارسال) VerifyConsumer (تایید مصرف‌کننده)</p>
+  <p>ConsumerVeriﬁcationFailed/ (تأیید مصرف‌کننده ناموفق)/</p>
+  <p>send RejectOrder (ارسال رد سفارش)</p>
+  <p>Ticket creation failed/ (ایجاد بلیت ناموفق)/</p>
+  <p>send RejectOrder (ارسال رد سفارش)</p>
+  <p>ConsumerVeriﬁed/ (مصرف‌کننده تأیید شده)/</p>
+  <p>send CreateRestaurantOrder (ارسال ایجاد سفارش رستوران)</p>
+  <p>Ticket created/ (بلیت ایجاد شد)/</p>
+  <p>send AuthorizeCard (ارسال مجوز کارت)</p>
+  <p>Card authorized/ (کارت تایید شد)/</p>
+  <p>send ApproveTicket (ارسال تایید بلیت)</p>
+  <p>Ticket approved/ (بلیت تایید شد)/</p>
+  <p>send ApproveOrder (ارسال تایید سفارش)</p>
+  <p>Order approved (سفارش تایید شده)</p>
+  <p>Card authorization failed/ (مجوز کارت ناموفق)/</p>
+  <p>send RejectTicket (ارسال رد بلیت)</p>
+  <br>
+  <img src="figure_4_7.png" alt="Figure 4.7">
+  <p>The state machine model (مدل ماشین حالت) برای Create Order Saga (حماسه ایجاد سفارش)</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

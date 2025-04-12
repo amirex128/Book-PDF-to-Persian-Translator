@@ -1,0 +1,50 @@
+367
+Designing observable services
+library implements a GET /hc endpoint (https://docs.microsoft.com/en-us/dotnet/
+standard/microservices-architecture/implement-resilient-applications/monitor-app-
+health). The deployment infrastructure periodically invokes this endpoint to determine
+the health of the service instance and takes the appropriate action if it’s unhealthy.
+A Health Check Request Handler typically tests the service instance’s connections to
+external services. It might, for example, execute a test query against a database. If all
+the tests succeed, Health Check Request Handler returns a healthy response, such as
+an HTTP 200 status code. If any of them fails, it returns an unhealthy response, such
+as an HTTP 500 status code.
+ Health Check Request Handler might simply return an empty HTTP response with
+the appropriate status code. Or it might return a detailed description of the health of
+each of the adapters. The detailed information is useful for troubleshooting. But
+because it may contain sensitive information, some frameworks, such as Spring Boot
+Actuator, let you configure the level of detail in the health endpoint response.
+ There are two issues you need to consider when using health checks. The first is
+the implementation of the endpoint, which must report back on the health of the ser-
+vice instance. The second issue is how to configure the deployment infrastructure to
+invoke the health check endpoint. Let’s first look at how to implement the endpoint.
+IMPLEMENTING THE HEALTH CHECK ENDPOINT
+The code that implements the health check endpoint must somehow determine the
+health of the service instance. One simple approach is to verify that the service
+instance can access its external infrastructure services. How to do this depends on the
+Service
+Checks
+Checks
+Health check
+invoker
+Invokes
+Health check
+endpoint
+Health check
+request
+handler
+Messaging
+adapter
+Message
+broker
+Database
+adapter
+MySQL
+Tests the service’s connections
+to infrastructure services
+For example: monitoring
+system, Service registry, and others
+Figure 11.10
+A service implements a health check endpoint, which is periodically invoked by the 
+deployment infrastructure to determine the health of the service instance.
+ 

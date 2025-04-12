@@ -1,0 +1,55 @@
+275
+Implementing an API gateway
+The OrderConfiguration class defines the Spring beans responsible for routing
+Order-related requests. A routing rule can match against some combination of the
+HTTP method, the headers, and the path. The orderProxyRoutes @Bean defines rules
+that map API operations to backend service URLs. For example, it routes paths begin-
+ning with /orders to the Order Service.
+ The orderHandlers @Bean defines rules that override those defined by order-
+ProxyRoutes. These rules map API operations to handler methods, which are the
+Spring WebFlux equivalent of Spring MVC controller methods. For example, order-
+Handlers maps the operation GET /orders/{orderId} to the OrderHandlers::get-
+OrderDetails() method.
+ The OrderHandlers class implements various request handler methods, such as
+OrderHandlers::getOrderDetails(). This method uses API composition to fetch the
+order details (described earlier). The handle methods invoke backend services using
+remote proxy classes, such as OrderService. This class defines methods for invoking
+the OrderService.
+ Let’s take a look at the code, starting with the OrderConfiguration class. 
+THE ORDERCONFIGURATION CLASS
+The OrderConfiguration class, shown in listing 8.2, is a Spring @Configuration class.
+It defines the Spring @Beans that implement the /orders endpoints. The order-
+ProxyRouting and orderHandlerRouting @Beans use the Spring WebFlux routing
+DSL to define the request routing. The orderHandlers @Bean implements the request
+handlers that perform API composition.
+@Configuration
+@EnableConfigurationProperties(OrderDestinations.class)
+public class OrderConfiguration {
+@Bean
+public RouteLocator orderProxyRouting(OrderDestinations orderDestinations) {
+return Routes.locator()
+.route("orders")
+.uri(orderDestinations.orderServiceUrl)
+.predicate(path("/orders").or(path("/orders/*")))
+  
+.and()
+...
+.build();
+}
+@Bean
+public RouterFunction<ServerResponse>
+orderHandlerRouting(OrderHandlers orderHandlers) {
+return RouterFunctions.route(GET("/orders/{orderId}"),
+  
+orderHandlers::getOrderDetails);
+}
+Listing 8.2
+The Spring @Beans that implement the /orders endpoints
+By default, route all requests whose
+path begins with /orders to the URL
+orderDestinations.orderServiceUrl.
+Route a GET 
+/orders/{orderId} 
+to orderHandlers::
+getOrderDetails.
+ 

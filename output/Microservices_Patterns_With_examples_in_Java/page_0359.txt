@@ -1,0 +1,50 @@
+329
+Writing integration tests
+@Configuration
+@EnableAutoConfiguration
+@Import({EventuateContractVerifierConfiguration.class,
+TramEventsPublisherConfiguration.class,
+TramInMemoryConfiguration.class})
+public static class TestConfiguration {
+@Bean
+public OrderDomainEventPublisher
+OrderDomainEventPublisher(DomainEventPublisher eventPublisher) {
+return new OrderDomainEventPublisher(eventPublisher);
+}
+}
+@Autowired
+private OrderDomainEventPublisher OrderDomainEventPublisher;
+protected void orderCreated() {
+    
+OrderDomainEventPublisher.publish(CHICKEN_VINDALOO_ORDER,
+singletonList(new OrderCreatedEvent(CHICKEN_VINDALOO_ORDER_DETAILS)
+));
+}
+}
+This test class configures OrderDomainEventPublisher with in-memory messaging
+stubs. orderCreated() is invoked by the test method generated from the contract
+shown earlier in listing 10.5. It invokes OrderDomainEventPublisher to publish an
+OrderCreated event. The test method attempts to receive this event and then verifies
+that it matches the event specified in the contract. Let’s now look at the correspond-
+ing consumer-side tests. 
+CONSUMER-SIDE CONTRACT TEST FOR THE ORDER HISTORY SERVICE
+Order History Service consumes events published by Order Service. As I described
+in chapter 7, the adapter class that handles these events is the OrderHistoryEvent-
+Handlers class. Its event handlers invoke OrderHistoryDao to update the CQRS view.
+Listing 10.7 shows the consumer-side integration test. It creates an OrderHistoryEvent-
+Handlers injected with a mock OrderHistoryDao. Each test method first invokes Spring
+Cloud to publish the event defined in the contract and then verifies that OrderHistory-
+EventHandlers invokes OrderHistoryDao correctly.
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes= OrderHistoryEventHandlersTest.TestConfiguration.class,
+webEnvironment= SpringBootTest.WebEnvironment.NONE)
+@AutoConfigureStubRunner(ids =
+{"net.chrisrichardson.ftgo.contracts:ftgo-order-service-contracts"},
+workOffline = false)
+Listing 10.7
+The consumer-side integration test for the OrderHistoryEventHandlers 
+class
+orderCreated() is invoked by a
+code-generated test subclass
+to publish the event.
+ 

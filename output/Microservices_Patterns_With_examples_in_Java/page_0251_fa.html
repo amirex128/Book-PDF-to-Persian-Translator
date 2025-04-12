@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 251</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Querying using the API composition pattern</mark></h3>
+  <p>
+   در میان <mark>databases</mark> متعلق به چندین <mark>services</mark>. با این حال، شما نمی‌توانید از یک مکانیسم <mark>query</mark> توزیع شده سنتی استفاده کنید، زیرا حتی اگر از نظر فنی امکان‌پذیر باشد، <mark>encapsulation</mark> را نقض می‌کند.
+  </p>
+  <p>
+   به عنوان مثال، عملیات <mark>query</mark> برای application <mark>FTGO</mark> را که در فصل 2 توضیح داده شد، در نظر بگیرید. برخی از <mark>queries</mark> داده‌هایی را بازیابی می‌کنند که فقط متعلق به یک <mark>service</mark> هستند. به عنوان مثال، <mark>query</mark> <mark>find-ConsumerProfile()</mark>، داده‌ها را از <mark>Consumer Service</mark> برمی‌گرداند. اما سایر عملیات <mark>query</mark> <mark>FTGO</mark>، مانند <mark>findOrder()</mark> و <mark>findOrderHistory()</mark>، داده‌های متعلق به چندین <mark>services</mark> را برمی‌گردانند. پیاده‌سازی این عملیات <mark>query</mark> به این آسانی نیست.
+  </p>
+  <p>
+   دو الگو مختلف برای پیاده‌سازی عملیات <mark>query</mark> در یک معماری <mark>microservice</mark> وجود دارد:
+  </p>
+  <ul>
+   <li>
+    الگوی ترکیب <mark>API</mark>— این ساده‌ترین رویکرد است و باید در صورت امکان استفاده شود. این کار با مسئول قرار دادن <mark>clients</mark> از <mark>services</mark>ی که مالک <mark>data</mark> هستند برای فراخوانی <mark>services</mark> و ترکیب نتایج، کار می‌کند.
+   </li>
+   <li>
+    الگوی <mark>Command query responsibility segregation</mark> (<mark>CQRS</mark>)— این الگو قدرتمندتر از الگوی ترکیب <mark>API</mark> است، اما پیچیده‌تر نیز هست. این الگو یک یا چند <mark>view databases</mark> را حفظ می‌کند که تنها هدف آن‌ها پشتیبانی از <mark>queries</mark> است.
+   </li>
+  </ul>
+  <p>
+   پس از بحث در مورد این دو الگو، در مورد نحوه طراحی <mark>CQRS views</mark> صحبت خواهم کرد، و به دنبال آن پیاده‌سازی یک <mark>view</mark> نمونه انجام می‌شود. بیایید با نگاهی به الگوی ترکیب <mark>API</mark> شروع کنیم.
+  </p>
+  <h4><mark>7.1 Querying using the API composition pattern</mark></h4>
+  <p>
+   Application <mark>FTGO</mark> عملیات <mark>query</mark> متعددی را پیاده‌سازی می‌کند. همانطور که قبلاً ذکر شد، برخی از <mark>queries</mark> داده‌ها را از یک <mark>service</mark> واحد بازیابی می‌کنند. پیاده‌سازی این <mark>queries</mark> معمولاً ساده است - اگرچه در اواخر این فصل، زمانی که الگوی <mark>CQRS</mark> را پوشش می‌دهم، نمونه‌هایی از <mark>queries</mark> تک <mark>service</mark> را خواهید دید که پیاده‌سازی آن‌ها چالش‌برانگیز است.
+  </p>
+  <p>
+   همچنین <mark>queries</mark>ای وجود دارد که داده‌ها را از چندین <mark>service</mark> بازیابی می‌کنند. در این بخش، من عملیات <mark>query</mark> <mark>findOrder()</mark> را توضیح می‌دهم، که نمونه‌ای از یک <mark>query</mark> است که داده‌ها را از چندین <mark>service</mark> بازیابی می‌کند. من چالش‌هایی را که اغلب هنگام پیاده‌سازی این نوع <mark>query</mark> در یک معماری <mark>microservice</mark> ایجاد می‌شود، توضیح می‌دهم. سپس الگوی ترکیب <mark>API</mark> را توضیح می‌دهم و نشان می‌دهم که چگونه می‌توانید از آن برای پیاده‌سازی <mark>queries</mark> مانند <mark>findOrder()</mark> استفاده کنید.
+  </p>
+  <h5><mark>7.1.1 The findOrder() query operation</mark></h5>
+  <p>
+   عملیات <mark>findOrder()</mark> یک سفارش را بر اساس <mark>primary key</mark> آن بازیابی می‌کند. این یک <mark>orderId</mark> را به عنوان یک پارامتر دریافت می‌کند و یک شی <mark>OrderDetails</mark> را برمی‌گرداند، که شامل اطلاعاتی در مورد سفارش است. همانطور که در شکل 7.1 نشان داده شده است، این عملیات توسط یک ماژول <mark>frontend</mark>، مانند یک دستگاه تلفن همراه یا یک application وب، که نمای وضعیت سفارش را پیاده‌سازی می‌کند، فراخوانی می‌شود.
+  </p>
+  <p>
+   اطلاعاتی که توسط نمای وضعیت سفارش نمایش داده می‌شود شامل اطلاعات اولیه در مورد سفارش، از جمله وضعیت آن، وضعیت پرداخت، وضعیت سفارش از
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 399</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Designing observable services</span></h3>
+  <p>
+   The solution استفاده از log aggregation است. As figure 11.11 نشان می‌دهد، log aggregation pipe-
+   line logs از تمام service instances را به یک centralized logging server ارسال می‌کند. Once
+   the logs توسط logging server ذخیره می‌شوند، شما می‌توانید آنها را view، search و analyze کنید. You
+   همچنین می‌توانید alerts را پیکربندی کنید که وقتی messages خاصی در logs ظاهر می‌شوند، فعال می‌شوند.
+  </p>
+  <p>
+   The logging pipeline و server معمولاً responsibility از operations هستند. But ser-
+   vice developers مسئول نوشتن services هستند که logs مفید تولید می‌کنند. Let’s first
+   look at how a service generates a log.
+  </p>
+  <h4><span style="font-weight: bold;">HOW A SERVICE GENERATES A LOG</span></h4>
+  <p>
+   As a service developer, there are a couple از issues که شما نیاز دارید در نظر بگیرید. First شما
+   نیاز دارید که تصمیم بگیرید که از کدام logging library استفاده کنید. The second issue این است که کجا
+   log entries را بنویسید. Let’s first look at the logging library.
+  </p>
+  <p>
+   Most programming languages یک یا چند logging libraries دارند که این کار را آسان می‌کنند
+   برای generate correctly structured log entries. For example, سه Java logging محبوب
+   libraries عبارتند از Logback, log4j, و JUL (java.util.logging). There’s also SLF4J, which is a
+   logging facade API برای logging frameworks مختلف. Similarly, Log4JS یک محبوب است
+   logging framework برای NodeJS. One reasonable way برای استفاده از logging این است که
+   calls را به یکی از این logging libraries در code از service خود پاشید. But if you have strict logging
+   requirements که نمی‌توانند توسط logging library اعمال شوند، شما ممکن است نیاز داشته باشید
+   logging API خود را تعریف کنید که یک logging library را در بر می‌گیرد.
+  </p>
+  <p>
+   You also نیاز دارید که تصمیم بگیرید که کجا log کنید. Traditionally، شما would configure the log-
+   ging framework برای نوشتن به یک log file در یک location در filesystem. But
+   با technologies deployment مدرن‌تر، مانند containers و serverless،
+   Service A
+   instance 1
+   Logging
+   library
+   Service B
+   instance 1
+   Logging
+   library
+   Service A
+   instance 2
+   Logging
+   library
+   Log
+   View
+   Notify
+   Log
+   Log
+   Log
+   pipeline
+   Logging
+   server
+   User
+  </p>
+  <p>
+   Figure 11.11
+   The log aggregation infrastructure logs از هر service instance را به یک
+   centralized logging server ارسال می‌کند. Users می‌توانند logs را view و search کنند. They can also set up alerts, which are
+   triggered زمانی که log entries با search criteria مطابقت دارند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+437
+Strategies for refactoring a monolith to microservices
+One application contains the presentation layer, and the other contains the business
+and data access logic. After the split, the presentation logic application makes remote
+calls to the business logic application.
+ Splitting the monolith in this way has two main benefits. It enables you to develop,
+deploy, and scale the two applications independently of one another. In particular, it
+allows the presentation layer developers to rapidly iterate on the user interface and
+easily perform A/B testing, for example, without having to deploy the backend.
+Another benefit of this approach is that it exposes a remote API that can be called by
+the microservices you develop later.
+ But this strategy is only a partial solution. It’s very likely that at least one or both of
+the resulting applications will still be an unmanageable monolith. You need to use the
+third strategy to replace the monolith with services. 
+13.2.3 Extract business capabilities into services
+Implementing new features as services and splitting the frontend web application
+from the backend will only get you so far. You’ll still end up doing a lot of develop-
+ment in the monolithic code base. If you want to significantly improve your applica-
+tion’s architecture and increase your development velocity, you need to break apart
+the monolith by incrementally migrating business capabilities from the monolith to
+services. For example, section 13.5 describes how to extract delivery management
+from the FTGO monolith into a new Delivery Service. When you use this strategy,
+over time the number of business capabilities implemented by the services grows, and
+the monolith gradually shrinks.
+ The functionality you want extract into a service is a vertical slice through the
+monolith. The slice consists of the following:
+Inbound adapters that implement API endpoints
+Domain logic
+Outbound adapters such as database access logic
+The monolith’s database schema
+As figure 13.4 shows, this code is extracted from the monolith and moved into a stand-
+alone service. An API gateway routes requests that invoke the extracted business capa-
+bility to the service and routes the other requests to the monolith. The monolith and
+the service collaborate via the integration glue code. As described in section 13.3.1,
+the integration glue consists of adapters in the service and monolith that use one or
+more interprocess communication (IPC) mechanisms.
+ Extracting services is challenging. You need to determine how to split the mono-
+lith’s domain model into two separate domain models, one of which becomes the ser-
+vice’s domain model. You need to break dependencies such as object references. You
+might even need to split classes in order to move functionality into the service. You
+also need to refactor the database.
+ Extracting a service is often time consuming, especially because the monolith’s
+code base is likely to be messy. Consequently, you need to carefully think about which
+ 

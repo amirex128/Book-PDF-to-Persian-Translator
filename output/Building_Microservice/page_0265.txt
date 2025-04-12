@@ -1,0 +1,40 @@
+higher utilization of your infrastructure, which has some obvious benefits in terms of
+cost effectiveness.
+If you have direct access to physical hardware without the option for virtualization,
+the temptation is to then pack multiple microservices on the same machine—of
+course, this violates the principle we talked about regarding having an isolated execu‐
+tion environment for your services. You could use tools like Puppet or Chef to config‐
+ure the machine—helping implement infrastructure as code. The problem is that if
+you are working only at the level of a single physical machine, implementing con‐
+cepts like desired state management, zero-downtime deployment, and so on requires
+us to work at a higher level of abstraction, using some sort of management layer on
+top. These types of systems are more commonly used in conjunction with virtual
+machines, something we’ll explore further in a moment.
+In general, directly deploying microservices onto physical machines is something I
+almost never see nowadays, and you’ll likely need to have some very specific require‐
+ments (or constraints) in your situation to justify this approach over the increased
+flexibility that either virtualization or containerization may bring.
+Virtual Machines
+Virtualization has transformed data centers, by allowing us to chunk up existing
+physical machines into smaller, virtual machines. Traditional virtualization like
+VMware or that used by the main cloud providers, managed virtual machine infra‐
+structure (such as AWS’s EC2 service) has yielded huge benefits in increasing the uti‐
+lization of computing infrastructure, while at the same time reducing the overhead of
+host management.
+Fundamentally, virtualization allows you to split up an underlying machine into mul‐
+tiple smaller “virtual” machines that act just like normal servers to the software run‐
+ning inside the virtual machines. You can assign portions of the underlying CPU,
+memory, I/O, and storage capability to each virtual machine, which in our context
+allows you to cram many more isolated execution environments for your microser‐
+vice instances onto a single physical machine.
+Each virtual machine contains a full operating system and set of resources that can be
+used by the software running inside the VM. This ensures that you have a very good
+degree of isolation between instances when each instance is deployed onto a separate
+VM. Each microservice instance can fully configure the operating system in the VM
+to its own local needs. We still have the issue, though, that if the underlying hardware
+running these virtual machines fails, we can lose multiple microservice instances.
+There are ways to help solve that particular problem, including things like desired
+state management, which we discussed earlier.
+Deployment Options 
+| 
+239

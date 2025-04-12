@@ -1,0 +1,43 @@
+340
+CHAPTER 10
+Testing microservices: Part 2
+stubs for component tests. One thing to consider, though, is that it’s likely that these
+contracts, unlike those used for integration, would only be used by the component tests.
+ Another drawback of using Spring Cloud Contract for component testing is that
+because its focus is consumer contract testing, it takes a somewhat heavyweight
+approach. The JAR files containing the contracts must be deployed in a Maven
+repository rather than merely being on the classpath. Handling interactions involving
+dynamically generated values is also challenging. Consequently, a simpler option is to
+configure stubs from within the test itself.
+ A test can, for example, configure an HTTP stub using the WireMock stubbing
+DSL. Similarly, a test for a service that uses Eventuate Tram messaging can configure
+messaging stubs. Later in this section I show an easy-to-use Java library that does this.
+ Now that we’ve looked at how to design component tests, let’s consider how to
+write component tests for the FTGO Order Service. 
+10.2.4 Writing component tests for the FTGO Order Service
+As you saw earlier in this section, there are a few different ways to implement compo-
+nent tests. This section describes the component tests for Order Service that use the
+out-of-process strategy to test the service running as a Docker container. You’ll see
+how the tests use a Gradle plugin to start and stop the Docker container. I discuss how
+to use Cucumber to execute the Gherkin-based scenarios that define the desired
+behavior for Order Service.
+ Figure 10.7 shows the design of the component tests for Order Service. Order-
+ServiceComponentTest is the test class that runs Cucumber:
+@RunWith(Cucumber.class)
+@CucumberOptions(features = "src/component-test/resources/features")
+public class OrderServiceComponentTest {
+}
+It has an @CucumberOptions annotation that specifies where to find the Gherkin
+feature files. It’s also annotated with @RunWith(Cucumber.class), which tells JUNIT
+to use the Cucumber test runner. But unlike a typical JUNIT-based test class, it
+doesn’t have any test methods. Instead, it defines the tests by reading the Gherkin
+features and uses the OrderServiceComponentTestStepDefinitions class to make
+them executable.
+ Using Cucumber with the Spring Boot testing framework requires a slightly unusual
+structure. Despite not being a test class, OrderServiceComponentTestStepDefinitions
+is still annotated with @ContextConfiguration, which is part of the Spring Testing
+framework. It creates Spring ApplicationContext, which defines the various Spring
+components, including messaging stubs. Let’s look at the details of the step definitions.
+ 
+ 
+ 

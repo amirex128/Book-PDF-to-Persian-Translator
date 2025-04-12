@@ -1,0 +1,32 @@
+delivery organization, this is where the product owner should come in—but it might
+be your job as the operator to make sure the discussion with the product owner
+actually happens.
+Once you’ve decided on what your model is, then it comes down to working out if
+the current system behavior meets this model. Broadly speaking, we have two key
+ways to do this—real user monitoring and synthetic transactions. We’ll look at syn‐
+thetic transactions in a moment, as they fall under the umbrella of testing in produc‐
+tion, but let’s look at real user monitoring first.
+Real user monitoring
+With real user monitoring, we look at what is actually happening in our production
+system and compare that with our semantic model. In MusicCorp, we’d look at how
+many customers signed up, how many orders we sent, and so on
+The challenge with real user monitoring is that often the information we need isn’t
+available to us in a timely manner. Consider the expectation that MusicCorp should
+be selling at least $20,000 in products per hour. If this information is locked away in a
+database somewhere, we may not be able to collect this information and act on it
+accordingly. This is why you may need to get better at exposing access to information
+that you would previously consider to be “business” metrics to your production tool‐
+ing. If you can emit a CPU rate to your metrics store, and this metric store could be
+used to alert on this condition, then why can’t you also record a sale and a dollar
+value into this same store?
+One of the main drawbacks of real user monitoring is that it is fundamentally noisy.
+You are getting a lot of information—sifting through it to find out if there is a prob‐
+lem can be difficult. It’s also worth realizing that real user monitoring tells you what
+already happened, and as a result you may not catch an issue til after it occurred. If a
+customer failed to get registered, that is an unhappy customer. With synthetic trans‐
+actions, another form of testing in production that we’ll look at in a moment, we have
+the opportunity to not just cut down on the noise but also catch issues before our
+users are aware of them.
+334 
+| 
+Chapter 10: From Monitoring to Observability

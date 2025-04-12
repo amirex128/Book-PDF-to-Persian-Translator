@@ -1,0 +1,37 @@
+91
+Communicating using the Asynchronous messaging pattern
+This book focuses on broker-based architecture, but it’s worthwhile to take a quick look
+at the brokerless architecture, because there may be scenarios where you find it useful.
+BROKERLESS MESSAGING
+In a brokerless architecture, services can exchange messages directly. ZeroMQ (http://
+zeromq.org) is a popular brokerless messaging technology. It’s both a specification
+and a set of libraries for different languages. It supports a variety of transports, includ-
+ing TCP, UNIX-style domain sockets, and multicast.
+ The brokerless architecture has some benefits:
+Allows lighter network traffic and better latency, because messages go directly
+from the sender to the receiver, instead of having to go from the sender to the
+message broker and from there to the receiver
+Eliminates the possibility of the message broker being a performance bottle-
+neck or a single point of failure
+Features less operational complexity, because there is no message broker to set
+up and maintain
+As appealing as these benefits may seem, brokerless messaging has significant drawbacks:
+Services need to know about each other’s locations and must therefore use one
+of the discovery mechanisms describer earlier in section 3.2.4.
+It offers reduced availability, because both the sender and receiver of a message
+must be available while the message is being exchanged.
+Implementing mechanisms, such as guaranteed delivery, is more challenging.
+Service
+Service
+Service
+Service
+Service
+Service
+Message broker
+Vs.
+Brokerless architecture
+Broker-based architecture
+Figure 3.10
+The services in brokerless architecture communicate directly, whereas the services 
+in a broker-based architecture communicate via a message broker.
+ 

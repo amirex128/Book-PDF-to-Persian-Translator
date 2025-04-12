@@ -1,0 +1,50 @@
+240
+CHAPTER 7
+Implementing queries in a microservice architecture
+ For example, an event handler for an Order* event might be invoked at the same
+time as an event handler for a Delivery* event for the same order. Both event han-
+dlers then simultaneously invoke the DAO to update the database record for that
+Order. A DAO must be written in a way that ensures that this situation is handled cor-
+rectly. It must not allow one update to overwrite another. If a DAO implements updates
+by reading a record and then writing the updated record, it must use either pessimistic
+or optimistic locking. In the next section you’ll see an example of a DAO that handles
+concurrent updates by updating database records without reading them first.
+IDEMPOTENT EVENT HANDLERS
+As mentioned in chapter 3, an event handler may be invoked with the same event
+more than once. This is generally not a problem if a query-side event handler is idem-
+potent. An event handler is idempotent if handling duplicate events results in the cor-
+rect outcome. In the worst case, the view datastore will temporarily be out-of-date. For
+example, an event handler that maintains the Order History view might be invoked
+with the (admittedly improbable) sequence of events shown in figure 7.11: Delivery-
+PickedUp, DeliveryDelivered, DeliveryPickedUp, and DeliveryDelivered. After
+delivering the DeliveryPickedUp and DeliveryDelivered events the first time, the
+message broker, perhaps because of a network error, starts delivering the events from
+an earlier point in time, and so redelivers DeliveryPickedUp and DeliveryDelivered.
+After the event handler processes the second DeliveryPickedUp event, the Order
+History view temporarily contains the out-of-date state of the Order until the Delivery-
+Delivered is processed. If this behavior is undesirable, then the event handler should
+detect and discard duplicate events, like a non-idempotent event handler.
+ An event handler isn’t idempotent if duplicate events result in an incorrect out-
+come. For example, an event handler that increments the balance of a bank account
+isn’t idempotent. A non-idempotent event handler must, as explained in chapter 3,
+detect and discard duplicate events by recording the IDs of events that it has pro-
+cessed in the view datastore.
+Delivery picked up
+Order History View
+OrderId: 123
+State: PICKED_UP
+Temporarily out of date
+Delivery delivered
+OrderId: 123
+State: DELIVERED
+Delivery picked up
+OrderId: 123
+State: PICKED_UP
+Delivery delivered
+OrderId: 123
+State: DELIVERED
+Time
+Figure 7.11
+The DeliveryPickedUp and DeliveryDelivered events are delivered 
+twice, which causes the order state in view to be temporarily out-of-date.
+ 

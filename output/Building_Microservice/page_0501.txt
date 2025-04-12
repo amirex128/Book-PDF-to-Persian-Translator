@@ -1,0 +1,27 @@
+side. Data that isn’t required can be stripped and doesn’t need to be sent to the
+device, and multiple calls can be combined into a single call.
+Next, we’ll look at two patterns that can be useful in this space—the central aggregat‐
+ing gateway and the backend for frontend pattern. We’ll also look at how GraphQL is
+being used to help tailor responses for different types of interfaces.
+Pattern: Central Aggregating Gateway
+A central-purpose aggregating gateway sits between external user interfaces and
+downstream microservices and performs call filtering and aggregation for all user
+interfaces. Without aggregation, a user interface may have to make multiple calls to
+fetch required information, often throwing away data that was retrieved but not
+needed.
+In Figure 14-8, we see such a situation. We want to display a screen with information
+about a customer’s recent orders. The screen needs to display some general informa‐
+tion about a customer and then list a number of their orders in date order, along with
+summary information, showing the date and status of each order as well as the price.
+Figure 14-8. Making multiple calls to fetch information for a single screen
+We make a direct call to the Customer microservice, pulling back the full information
+about the customer, even though we need only a few fields. We then fetch the order
+details from the Order microservice. We could improve the situation somewhat, per‐
+haps by changing the Customer or Order microservice to return data that better fits
+our requirements in this specific case, but that would still require two calls to be
+made.
+With an aggregating gateway, we can instead issue a single call from the user inter‐
+face to the gateway. The aggregating gateway then carries out all the required calls,
+Pattern: Central Aggregating Gateway 
+| 
+475

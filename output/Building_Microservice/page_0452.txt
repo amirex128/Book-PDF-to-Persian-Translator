@@ -1,0 +1,26 @@
+load balancer that requires sticky session load balancing, but that might in turn limit
+what load distribution mechanisms you could consider. It’s worth noting that sys‐
+tems that require sticky load balancing like this are prone to other problems, and in
+general I’d avoid building systems that have this requirement.
+Data Partitioning
+Having begun with the simpler forms of scaling, we’re now entering into more diffi‐
+cult territory. Data partitioning requires that we distribute load based on some aspect
+of data—perhaps distributing load based on the user, for example.
+Implementation
+The way data partitioning works is that we take a key associated with the workload
+and apply a function to it, and the result is the partition (sometimes called a shard)
+we will distribute the work to. In Figure 13-4, we have two partitions, and our func‐
+tion is quite simple—we send the request to one database if the family name starts
+with A to M, or to a different database if the family name starts with N to Z. Now,
+this is actually a bad example of a partitioning algorithm (we’ll get to why that is
+shortly), but hopefully this is straightforward enough to illustrate the idea.
+Figure 13-4. Customer data is partitioned across two different databases
+In this example, we’re partitioning at the database level. A request to the Customer
+microservice can hit any microservice instance. But when we perform an operation
+that requires the database (reads or writes), that request is directed to the appropriate
+database node based on the name of the customer. In the case of a relational database,
+the schema of both database nodes would be identical, but the contents of each would
+apply only to a subset of the customers.
+426 
+| 
+Chapter 13: Scaling

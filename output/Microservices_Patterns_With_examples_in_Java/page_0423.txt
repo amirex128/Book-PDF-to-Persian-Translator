@@ -1,0 +1,41 @@
+393
+Deploying services using the Service as a container pattern
+LESS-EFFICIENT RESOURCE UTILIZATION
+Each service instance has the overhead of an entire virtual machine, including its
+operating system. Moreover, a typical public IaaS virtual machine offers a limited set
+of VM sizes, so the VM will probably be underutilized. This is less likely to be a prob-
+lem for Java-based services because they’re relatively heavyweight. But this pattern
+might be an inefficient way of deploying lightweight NodeJS and GoLang services. 
+RELATIVELY SLOW DEPLOYMENTS
+Building a VM image typically takes some number of minutes because of the size of
+the VM. There are lots of bits to be moved over the network. Also, instantiating a VM
+from a VM image is time consuming because of, once again, the amount of data that
+must be moved over the network. The operating system running inside the VM also
+takes some time to boot, though slow is a relative term. This process, which perhaps
+takes minutes, is much faster than the traditional deployment process. But it’s much
+slower than the more lightweight deployment patterns you’ll read about soon. 
+SYSTEM ADMINISTRATION OVERHEAD
+You’re responsible for patching the operation system and runtime. System administra-
+tion may seem inevitable when deploying software, but later in section 12.5, I describe
+serverless deployment, which eliminates this kind of system administration.
+ Let’s now look at an alternative way to deploy microservices that’s more light-
+weight, yet still has many of the benefits of virtual machines. 
+12.3
+Deploying services using the Service as 
+a container pattern
+Containers are a more modern and lightweight deployment mechanism. They’re an
+operating-system-level virtualization mechanism. A container, as figure 12.7 shows,
+consists of usually one but sometimes multiple processes running in a sandbox, which
+isolates it from other containers. A container running a Java service, for example,
+would typically consist of the JVM process.
+ From the perspective of a process running in a container, it’s as if it’s running on
+its own machine. It typically has its own IP address, which eliminates port conflicts. All
+Java processes can, for example, listen on port 8080. Each container also has its own
+root filesystem. The container runtime uses operating system mechanisms to isolate
+the containers from each other. The most popular example of a container runtime is
+Docker, although there are others, such as Solaris Zones.
+Pattern: Deploy a service as a container
+Deploy services packaged as container images into production. Each service instance
+is a container. See http://microservices.io/patterns/deployment/service-per-container
+.html.
+ 

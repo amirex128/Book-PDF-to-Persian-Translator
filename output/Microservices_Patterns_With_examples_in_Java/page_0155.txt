@@ -1,0 +1,43 @@
+125
+Coordinating sagas
+SAGA ORCHESTRATION AND TRANSACTIONAL MESSAGING
+Each step of an orchestration-based saga consists of a service updating a database
+and publishing a message. For example, Order Service persists an Order and a
+Create Order Saga orchestrator and sends a message to the first saga participant. A
+saga participant, such as Kitchen Service, handles a command message by updat-
+ing its database and sending a reply message. Order Service processes the partici-
+pant’s reply message by updating the state of the saga orchestrator and sending a
+command message to the next saga participant. As described in chapter 3, a service
+must use transactional messaging in order to atomically update the database and
+publish messages. Later on in section 4.4, I’ll describe the implementation of the
+Create Order Saga orchestrator in more detail, including how it uses transaction
+messaging.
+ Let’s take a look at the benefits and drawbacks of using saga orchestration. 
+BENEFITS AND DRAWBACKS OF ORCHESTRATION-BASED SAGAS
+Orchestration-based sagas have several benefits:
+Simpler dependencies—One benefit of orchestration is that it doesn’t introduce
+cyclic dependencies. The saga orchestrator invokes the saga participants, but
+the participants don’t invoke the orchestrator. As a result, the orchestrator
+depends on the participants but not vice versa, and so there are no cyclic
+dependencies.
+Less coupling—Each service implements an API that is invoked by the orches-
+trator, so it does not need to know about the events published by the saga
+participants.
+Improves separation of concerns and simplifies the business logic—The saga coordina-
+tion logic is localized in the saga orchestrator. The domain objects are simpler
+and have no knowledge of the sagas that they participate in. For example, when
+using orchestration, the Order class has no knowledge of any of the sagas, so it
+has a simpler state machine model. During the execution of the Create Order
+Saga, it transitions directly from the APPROVAL_PENDING state to the APPROVED
+state. The Order class doesn’t have any intermediate states corresponding to the
+steps of the saga. As a result, the business is much simpler.
+Orchestration also has a drawback: the risk of centralizing too much business logic in
+the orchestrator. This results in a design where the smart orchestrator tells the dumb
+services what operations to do. Fortunately, you can avoid this problem by designing
+orchestrators that are solely responsible for sequencing and don’t contain any other
+business logic.
+ I recommend using orchestration for all but the simplest sagas. Implementing the
+coordination logic for your sagas is just one of the design problems you need to solve.
+Another, which is perhaps the biggest challenge that you’ll face when using sagas, is
+handling the lack of isolation. Let’s take a look at that problem and how to solve it. 
+ 

@@ -1,0 +1,64 @@
+311
+Writing unit tests for a service
+expected sequence of messages to the saga participants. One test you need to write is
+for the happy path. You must also write tests for the various scenarios where the saga
+rolls back because a saga participant sent back a failure message.
+ One approach would be to write tests that use a real database and message broker
+along with stubs to simulate the various saga participants. For example, a stub for
+Consumer Service would subscribe to the consumerService command channel and
+send back the desired reply message. But tests written using this approach would be
+quite slow. A much more effective approach is to write tests that mock those classes
+that interact with the database and message broker. That way, we can focus on testing
+the saga’s core responsibility.
+ Listing 9.4 shows a test for CreateOrderSaga. It’s a sociable unit test that tests the
+saga class and its dependencies. It’s written using the Eventuate Tram Saga testing
+framework (https://github.com/eventuate-tram/eventuate-tram-sagas). This frame-
+work provides an easy-to-use DSL that abstracts away the details of interacting with
+sagas. With this DSL, you can create a saga and verify that it sends the correct com-
+mand messages. Under the covers, the Saga testing framework configures the Saga
+framework with mocks for the database and messaging infrastructure.
+public class CreateOrderSagaTest {
+@Test
+public void shouldCreateOrder() {
+given()
+.saga(new CreateOrderSaga(kitchenServiceProxy),     
+new CreateOrderSagaState(ORDER_ID,
+CHICKEN_VINDALOO_ORDER_DETAILS)).
+expect().
+              
+command(new ValidateOrderByConsumer(CONSUMER_ID, ORDER_ID,
+CHICKEN_VINDALOO_ORDER_TOTAL)).
+to(ConsumerServiceChannels.consumerServiceChannel).
+andGiven().
+successReply().
+               
+expect().
+command(new CreateTicket(AJANTA_ID, ORDER_ID, null)).   
+to(KitchenServiceChannels.kitchenServiceChannel);
+}
+@Test
+public void shouldRejectOrderDueToConsumerVerificationFailed() {
+given()
+.saga(new CreateOrderSaga(kitchenServiceProxy),
+new CreateOrderSagaState(ORDER_ID,
+CHICKEN_VINDALOO_ORDER_DETAILS)).
+expect().
+command(new ValidateOrderByConsumer(CONSUMER_ID, ORDER_ID,
+CHICKEN_VINDALOO_ORDER_TOTAL)).
+to(ConsumerServiceChannels.consumerServiceChannel).
+andGiven().
+Listing 9.4
+A simple, fast-running unit test for CreateOrderSaga
+Create
+the saga.
+Verify that it sends 
+a ValidateOrderBy-
+Consumer message 
+to Consumer Service.
+Send a Success reply 
+to that message.
+Verify that it sends 
+a CreateTicket 
+message to 
+Kitchen Service.
+ 

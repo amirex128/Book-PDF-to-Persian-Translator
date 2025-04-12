@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 259</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        vi. در زمان نگارش، تنها databases های اصلی که از <em>locks</em> برای <em>read committed isolation</em> استفاده می‌کنند، IBM DB2 و Microsoft SQL Server در پیکربندی <em>read_committed_snapshot=off</em> هستند [23, 36].
+    </p>
+    <p>
+        به همین دلیل، اکثر databases vii از <em>dirty reads</em> با استفاده از رویکرد نشان داده شده در شکل 7-4 جلوگیری می‌کنند: برای هر object که نوشته می‌شود، database هم مقدار قدیمی <em>committed</em> و هم مقدار جدید تنظیم شده توسط transaction که در حال حاضر <em>write lock</em> را نگه داشته است را به خاطر می‌آورد. در حالی که <em>transaction</em> در حال انجام است، هر <em>transaction</em> دیگری که object را می‌خواند، به سادگی مقدار قدیمی را دریافت می‌کند. فقط زمانی که مقدار جدید <em>committed</em> می‌شود، transactions به خواندن مقدار جدید تغییر می‌یابند.
+    </p>
+    <h4>Snapshot Isolation and Repeatable Read</h4>
+    <p>
+        اگر شما به <em>read committed isolation</em> سطحی نگاه کنید، ممکن است بخشیده شوید اگر فکر کنید که این کار همه کارهایی را که یک <em>transaction</em> باید انجام دهد، انجام می‌دهد: به <em>aborts</em> اجازه می‌دهد (برای atomicity مورد نیاز است)، از خواندن نتایج ناقص <em>transactions</em> جلوگیری می‌کند، و از <em>concurrent writes</em> جلوگیری می‌کند. در واقع، اینها ویژگی‌های مفیدی هستند، و <em>guarantees</em> بسیار قوی‌تر از آنچه می‌توانید از یک سیستم که هیچ <em>transactions</em> ندارد، دریافت کنید.
+    </p>
+    <p>
+        با این حال، هنوز راه‌های زیادی وجود دارد که می‌توانید هنگام استفاده از این <em>isolation level</em> باگ‌های <em>concurrency</em> داشته باشید. به عنوان مثال، شکل 7-6 مشکلی را نشان می‌دهد که می‌تواند با <em>read committed</em> رخ دهد.
+    </p>
+    <figure>
+        <img src="figure7-6.png" alt="Figure 7-6. Read skew: Alice observes the database in an inconsistent state.">
+        <figcaption>Figure 7-6. Read skew: Alice observes the database in an inconsistent state.</figcaption>
+    </figure>
+    <p>
+        فرض کنید آلیس 1000 دلار پس‌انداز در یک بانک دارد که در دو حساب با 500 دلار تقسیم شده است.
+        <br>
+        حالا یک <em>transaction</em> 100 دلار از یکی از حساب‌های او به حساب دیگرش منتقل می‌کند. اگر او به اندازه کافی بدشانس باشد که در همان لحظه به لیست موجودی حساب‌هایش نگاه کند که آن <em>transaction</em> در حال پردازش است، ممکن است موجودی یک حساب را در یک زمان قبل از
+        <br>
+        Weak Isolation Levels
+        <br>
+        |
+        <br>
+        237
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0259/image_1.png" alt="Image from page 259" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 462</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4><strong>Caching</strong> (ادامه)</h4>
+
+  <p>جنبه‌هایی برای بحث در مورد <strong>caching</strong> در معماری <strong>microservice</strong> وجود دارد. بیایید با صحبت در مورد انواع مشکلاتی که <strong>caches</strong> می‌توانند به آنها کمک کنند، شروع کنیم.</p>
+
+  <h4>برای عملکرد</h4>
+
+  <p>با <strong>microservices</strong>، ما اغلب نگران تأثیر نامطلوب <strong>latency</strong> شبکه و هزینه نیاز به تعامل با چندین <strong>microservices</strong> برای دریافت برخی داده‌ها هستیم. دریافت داده‌ها از یک <strong>cache</strong> می‌تواند در اینجا بسیار کمک کند، زیرا از نیاز به برقراری تماس‌های شبکه اجتناب می‌کنیم، که همچنین تأثیر کاهش بار بر روی <strong>microservices</strong> پایین‌دستی را دارد. جدا از اجتناب از <strong>network hops</strong>، نیاز به ایجاد داده‌ها را در هر درخواست کاهش می‌دهد. موقعیتی را در نظر بگیرید که ما در حال درخواست لیستی از محبوب‌ترین اقلام بر اساس ژانر هستیم. این ممکن است شامل یک <strong>join query</strong> پرهزینه در سطح پایگاه داده باشد. ما می‌توانیم نتایج این <strong>query</strong> را <strong>cache</strong> کنیم، به این معنی که فقط زمانی باید نتایج را بازسازی کنیم که داده‌های <strong>cached</strong> بی‌اعتبار شوند.</p>
+
+  <h4>برای مقیاس</h4>
+
+  <p>اگر بتوانید خواندن‌ها را به <strong>caches</strong> منتقل کنید، می‌توانید از اختلاف نظر در بخش‌هایی از سیستم خود جلوگیری کنید تا به آن اجازه دهید بهتر مقیاس‌بندی شود. نمونه‌ای از این که ما قبلاً در این فصل پوشش داده‌ایم، استفاده از <strong>database read replicas</strong> است. ترافیک خواندن توسط <strong>read replicas</strong> ارائه می‌شود، که بار را در <strong>node</strong> پایگاه داده اصلی کاهش می‌دهد و به خواندن‌ها اجازه می‌دهد تا به طور مؤثر مقیاس‌بندی شوند. خواندن‌ها در یک <strong>replica</strong> در برابر داده‌هایی انجام می‌شود که ممکن است قدیمی باشند. <strong>read replica</strong> در نهایت توسط تکثیر از <strong>primary</strong> به <strong>replica node</strong> به‌روزرسانی می‌شود—این شکل از <strong>cache invalidation</strong> به طور خودکار توسط فناوری پایگاه داده مدیریت می‌شود.</p>
+
+  <p>به طور کلی، <strong>caching</strong> برای مقیاس در هر موقعیتی که مبدأ یک نقطه اختلاف است، مفید است. قرار دادن <strong>caches</strong> بین <strong>clients</strong> و مبدأ می‌تواند بار را بر روی مبدأ کاهش دهد و به آن اجازه می‌دهد بهتر مقیاس‌بندی شود.</p>
+
+  <h4>برای <strong>Robustness</strong></h4>
+
+  <p>اگر یک مجموعه کامل از داده‌ها را در یک <strong>cache</strong> محلی در دسترس دارید، این پتانسیل را دارید که حتی در صورت عدم دسترسی به مبدأ عمل کنید—این به نوبه خود می‌تواند <strong>robustness</strong> سیستم شما را بهبود بخشد. چند نکته در مورد <strong>caching</strong> برای <strong>robustness</strong> وجود دارد. نکته اصلی این است که شما احتمالاً باید مکانیسم <strong>cache invalidation</strong> خود را طوری پیکربندی کنید که داده‌های قدیمی را به طور خودکار حذف نکند و داده‌ها را در <strong>cache</strong> نگه دارد تا زمانی که بتواند به‌روزرسانی شود. در غیر این صورت، با بی‌اعتبار شدن داده‌ها، از <strong>cache</strong> حذف می‌شود و در نتیجه یک <strong>cache miss</strong> و عدم دریافت هیچ داده‌ای ایجاد می‌شود، زیرا مبدأ در دسترس نیست. این بدان معنی است که شما باید آماده خواندن داده‌هایی باشید که در صورت آفلاین بودن مبدأ، می‌تواند کاملاً قدیمی باشد. در برخی شرایط این ممکن است خوب باشد، در حالی که در موارد دیگر ممکن است بسیار مشکل‌ساز باشد.</p>
+
+  <p>436 | فصل 13: مقیاس‌پذیری</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

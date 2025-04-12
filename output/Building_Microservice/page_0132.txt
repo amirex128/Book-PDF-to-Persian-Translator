@@ -1,0 +1,37 @@
+Commands Versus Requests
+I’ve heard some people talk about sending commands, rather than requests, specifi‐
+cally in the context of asynchronous request-response communication. The intent
+behind the term command is arguably the same as that of request—namely, an
+upstream microservice is asking a downstream microservice to do something.
+Personally speaking, though, I much prefer the term request. A command implies a
+directive that must be obeyed, and it can lead to a situation in which people feel that
+the command has to be acted on. A request implies something that can be rejected. It
+is right that a microservice examines each request on its merits and, based on its own
+internal logic, decides whether the request should be acted on. If the request it has
+been sent violates internal logic, the microservice should reject it. Although it’s a sub‐
+tle difference, I don’t feel that the term command conveys the same meaning.
+I’ll stick to using request over command, but whatever term you decide to use, just
+remember that a microservice gets to reject the request/command if appropriate.
+Implementation: Synchronous Versus Asynchronous
+Request-response calls like this can be implemented in either a blocking synchronous
+or a nonblocking asynchronous style. With a synchronous call, what you’d typically
+see is a network connection being opened with the downstream microservice, with
+the request being sent along this connection. The connection is kept open while the
+upstream microservice waits for the downstream microservice to respond. In this
+case, the microservice sending the response doesn’t really need to know anything
+about the microservice that sent the request—it’s just sending stuff back over an
+inbound connection. If that connection dies, perhaps because either the upstream or
+the downstream microservice instance dies, then we might have a problem.
+With an asynchronous request-response, things are less straightforward. Let’s revisit
+the process associated with reserving stock. In Figure 4-10, the request to reserve
+stock is sent as a message over some sort of message broker (we’ll explore message
+brokers later in this chapter). Rather than the message going directly to the Inven
+tory microservice from Order Processor, it instead sits in a queue. The Inventory
+consumes messages from this queue when it is able. It reads the request, carries out
+the associated work of reserving the stock, and then needs to send the response back
+to a queue that Order Processor is reading from. The Inventory microservice needs
+to know where to route the response. In our example, it sends this response back over
+another queue that is in turn consumed by Order Processor.
+106 
+| 
+Chapter 4: Microservice Communication Styles

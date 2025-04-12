@@ -1,0 +1,39 @@
+have to make use of schemas. SOAP works through the use of a WSDL, while gRPC
+requires the use of a protocol buffer specification. Other technology choices we’ve
+explored make the use of schemas optional, and this is where things get more
+interesting.
+As I’ve already discussed, I am in favor of having explicit schemas for microservice
+endpoints, for two key reasons. Firstly, they go a long way toward being an explicit
+representation of what a microservice endpoint exposes and what it can accept. This
+makes life easier both for developers working on the microservice and for their con‐
+sumers. Schemas may not replace the need for good documentation, but they cer‐
+tainly can help reduce the amount of documentation required.
+The other reason I like explicit schemas, though, is how they help in terms of catch‐
+ing accidental breakages of microservice endpoints. We’ll explore how to handle
+changes between microservices in a moment, but it’s first worth exploring the differ‐
+ent types of breakages and the role schemas can play.
+Structural Versus Semantic Contract Breakages
+Broadly speaking, we can break contract breakages down into two categories—struc‐
+tural breakages and semantic breakages. A structural breakage is a situation in which
+the structure of the endpoint changes in such a way that a consumer is now incom‐
+patible—this could represent fields or methods being removed, or new required fields
+being added. A semantic breakage refers to a situation in which the structure of the
+microservices endpoint remains the same but the behavior changes in such a way as
+to break consumers’ expectations.
+Let’s take a simple example. You have a highly complex Hard Calculations micro‐
+service that exposes a calculate method on its endpoint. This calculate method
+takes two integers, both of which are required fields. If you changed Hard Calcula
+tions such that the calculate method now takes only one integer, then consumers
+would break—they’d be sending requests with two integers that the Hard Calcula
+tions microservice would reject. This is an example of a structural change, and in
+general such changes can be easier to spot.
+A semantic changes is more problematic. This is where the structure of the endpoint
+doesn’t change but the behavior of the endpoint does. Coming back to our calculate
+method, imagine that in the first version, the two provided integers are added
+together and the results returned. So far, so good. Now we change Hard Calcula
+tions so that the calculate method multiplies the integers together and returns the
+result. The semantics of the calculate method have changed in a way that could
+break expectations of the consumers.
+142 
+| 
+Chapter 5: Implementing Microservice Communication

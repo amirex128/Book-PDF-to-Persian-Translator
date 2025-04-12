@@ -1,0 +1,56 @@
+306
+CHAPTER 9
+Testing microservices: Part 1
+of a series of stages that execute test suites, followed by a stage that releases or deploys
+the service. Ideally, it’s fully automated, but it might contain manual steps. A deploy-
+ment pipeline is often implemented using a Continuous Integration (CI) server, such
+as Jenkins.
+As code flows through the pipeline, the test suites subject it to increasingly more thor-
+ough testing in environments that are more production like. At the same time, the
+execution time of each test suite typically grows. The idea is to provide feedback about
+test failures as rapidly as possible.
+ The example deployment pipeline shown in figure 9.9 consists of the following
+stages:
+Pre-commit tests stage—Runs the unit tests. This is executed by the developer
+before committing their changes.
+Commit tests stage—Compiles the service, runs the unit tests, and performs static
+code analysis.
+Integration tests stage—Runs the integration tests.
+Component tests stage—Runs the component tests for the service.
+Deploy stage—Deploys the service into production.
+The CI server runs the commit stage when a developer commits a change. It executes
+extremely quickly, so it provides rapid feedback about the commit. The later stages
+take longer to run, providing less immediate feedback. If all the tests pass, the final
+stage is when this pipeline deploys it into production.
+ In this example, the deployment pipeline is fully automated all the way from com-
+mit to deployment. There are, however, situations that require manual steps. For
+example, you might need a manual testing stage, such as a staging environment. In
+such a scenario, the code progresses to the next stage when a tester clicks a button to
+indicate that it was successful. Alternatively, a deployment pipeline for an on-premise
+Pre-commit
+tests
+Slow feedback
+Fast feedback
+Production
+ready
+Not production
+ready
+Commit
+tests
+stage
+Deployment pipeline
+Integration
+tests
+stage
+Component
+tests
+stage
+Production
+environment
+Deploy
+stage
+Figure 9.9
+An example deployment pipeline for Order Service. It consists of a series of stages. 
+The pre-commit tests are run by the developer prior to committing their code. The remaining stages 
+are executed by an automated tool, such as the Jenkins CI server.
+ 

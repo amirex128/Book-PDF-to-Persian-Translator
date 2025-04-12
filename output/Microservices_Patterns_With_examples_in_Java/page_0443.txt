@@ -1,0 +1,59 @@
+413
+Deploying the FTGO application with Kubernetes
+Figure 12.12 shows the routing rule for Consumer Service that routes all traffic to v1.
+It consists of two Istio objects: a VirtualService and a DestinationRule.
+ A VirtualService defines how to route requests for one or more hostnames. In this
+example, VirtualService defines the routes for a single hostname: ftgo-consumer-
+service. Here’s the definition of VirtualService for Consumer Service:
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+name: ftgo-consumer-service
+spec:
+hosts:
+- ftgo-consumer-service
+  
+http:
+- route:
+- destination:
+host: ftgo-consumer-service
+  
+subset: v1
+It routes all requests for the v1 subset of the pods of Consumer Service. Later, I show
+more complex examples that route based on HTTP requests and load balance across
+multiple weighted destinations.
+ In addition to VirtualService, you must also define a DestinationRule, which
+defines one or more subsets of pods for a service. A subset of pods is typically a service
+version. A DestinationRule can also define traffic policies, such as the load-balancing
+algorithm. Here’s the DestinationRule for Consumer Service:
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+name: ftgo-consumer-service
+spec:
+host: ftgo-consumer-service
+subsets:
+- name: v1
+  
+labels:
+version: v1
+  
+- name: v2
+labels:
+version: v2
+This DestinationRule defines two subsets of pods: v1 and v2. The v1 subset selects
+pods with the label version: v1. The v2 subset selects pods with the label version: v2.
+ Once you’ve defined these rules, Istio will only route traffic pods labeled version:
+v1. It’s now safe to deploy v2. 
+ 
+ 
+Applies to the 
+Consumer Service
+Routes to 
+Consumer Service
+The v1 subset
+The name of 
+the subset
+The pod selector 
+for the subset
+ 

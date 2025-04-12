@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 151</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Coordinating sagas (هماهنگ‌سازی حماسه‌ها)</strong></h3>
+  <p>به عنوان مثال، participants (شرکت‌کنندگان) Create Order Saga (حماسه ایجاد سفارش) می‌توانند از orderId (شناسه سفارش) به عنوان یک correlation ID (شناسه همبستگی) استفاده کنند که از یک participant (شرکت‌کننده) به participant (شرکت‌کننده) بعدی منتقل می‌شود. Accounting Service (سرویس حسابداری) یک event (رویداد) Credit Card Authorized (کارت اعتباری تایید شده) را منتشر می‌کند که شامل orderId (شناسه سفارش) از event (رویداد) TicketCreated (بلیت ایجاد شده) است. هنگامی که Order Service (سرویس سفارش) یک event (رویداد) Credit Card Authorized (کارت اعتباری تایید شده) را دریافت می‌کند، از orderId (شناسه سفارش) برای بازیابی Order (سفارش) مربوطه استفاده می‌کند. به طور مشابه، Kitchen Service (سرویس آشپزخانه) از orderId (شناسه سفارش) از آن event (رویداد) برای بازیابی Ticket (بلیت) مربوطه استفاده می‌کند.</p>
+  <p>BENEFITS AND DRAWBACKS OF CHOREOGRAPHY-BASED SAGAS (مزایا و معایب حماسه‌های مبتنی بر طراحی رقص)</p>
+  <p>حماسه‌های مبتنی بر Choreography (طراحی رقص) چندین مزیت دارند:</p>
+  <ul>
+   <li>Simplicity (سادگی) - Services (سرویس‌ها) هنگام ایجاد، به‌روزرسانی یا حذف business (تجاری) objects (اشیاء) ، events (رویدادها) را منتشر می‌کنند.</li>
+   <li>Loose coupling (اتصال شل) - The participants (شرکت‌کنندگان) به events (رویدادها) subscribe (اشتراک) می‌کنند و دانش مستقیمی از یکدیگر ندارند.</li>
+  </ul>
+  <p>و برخی از معایب وجود دارد:</p>
+  <ul>
+   <li>More difficult to understand (درک دشوارتر) - برخلاف orchestration (ارکستراسیون)، یک مکان واحد در کد وجود ندارد که saga (حماسه) را تعریف کند. در عوض، choreography (طراحی رقص) پیاده‌سازی saga (حماسه) را در میان services (سرویس‌ها) توزیع می‌کند. در نتیجه، درک نحوه عملکرد یک saga (حماسه) معین برای یک developer (توسعه‌دهنده) دشوار است.</li>
+   <li>Cyclic dependencies (وابستگی‌های چرخه‌ای) بین services (سرویس‌ها) - The saga participants (شرکت‌کنندگان حماسه) به events (رویدادهای) یکدیگر subscribe (اشتراک) می‌کنند، که اغلب وابستگی‌های چرخه‌ای ایجاد می‌کند. به عنوان مثال، اگر شکل 4.4 را با دقت بررسی کنید، وابستگی‌های چرخه‌ای را خواهید دید، مانند Order Service (سرویس سفارش)  Accounting Service (سرویس حسابداری)  Order Service (سرویس سفارش). اگرچه این لزوماً یک مشکل نیست، اما وابستگی‌های چرخه‌ای به عنوان یک design smell (بوی طراحی) در نظر گرفته می‌شوند.</li>
+   <li>Risk of tight coupling (خطر اتصال محکم) - هر participant (شرکت‌کننده) saga (حماسه) باید به همه events (رویدادهایی) که بر آنها تأثیر می‌گذارند، subscribe (اشتراک) کند. به عنوان مثال، Accounting Service (سرویس حسابداری) باید به تمام events (رویدادهایی) که باعث می‌شود credit card (کارت اعتباری) مصرف‌کننده شارژ یا بازپرداخت شود، subscribe (اشتراک) کند. در نتیجه، خطر این وجود دارد که باید در lockstep (همگام) با چرخه عمر order (سفارش) که توسط Order Service (سرویس سفارش) پیاده‌سازی شده است، به‌روزرسانی شود.</li>
+  </ul>
+  <p>Choreography (طراحی رقص) می‌تواند برای sagas (حماسه‌های) ساده به خوبی کار کند، اما به دلیل این معایب، اغلب بهتر است برای sagas (حماسه‌های) پیچیده‌تر از orchestration (ارکستراسیون) استفاده شود. بیایید نگاهی به نحوه عملکرد orchestration (ارکستراسیون) بیندازیم.</p>
+  <h4><strong>4.2.2 Orchestration-based sagas (حماسه‌های مبتنی بر ارکستراسیون)</strong></h4>
+  <p>Orchestration (ارکستراسیون) راه دیگری برای پیاده‌سازی sagas (حماسه‌ها) است. هنگام استفاده از orchestration (ارکستراسیون)، شما یک کلاس orchestrator (ارکستراتور) را تعریف می‌کنید که تنها مسئولیت آن این است که به participants (شرکت‌کنندگان) saga (حماسه) بگوید چه کاری انجام دهند. The saga orchestrator (ارکستراتور حماسه) با participants (شرکت‌کنندگان) با استفاده از تعامل command/async reply-style (دستور/پاسخ ناهمزمان) ارتباط برقرار می‌کند. برای اجرای یک مرحله saga (حماسه)، یک message (پیام) command (دستور) به یک participant (شرکت‌کننده) ارسال می‌کند که به آن می‌گوید چه operation (عملیاتی) را انجام دهد. پس از اینکه participant (شرکت‌کننده) saga (حماسه) operation (عملیات) را انجام داد، یک message (پیام) reply (پاسخ) را به orchestrator (ارکستراتور) ارسال می‌کند. سپس orchestrator (ارکستراتور) message (پیام) را پردازش می‌کند و تعیین می‌کند که کدام گام saga (حماسه) را باید انجام دهد.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+244
+CHAPTER 7
+Implementing queries in a microservice architecture
+public class OrderHistoryEventHandlers {
+private OrderHistoryDao orderHistoryDao;
+public OrderHistoryEventHandlers(OrderHistoryDao orderHistoryDao) {
+this.orderHistoryDao = orderHistoryDao;
+}
+public void handleOrderCreated(DomainEventEnvelope<OrderCreated> dee) {
+orderHistoryDao.addOrder(makeOrder(dee.getAggregateId(), dee.getEvent()),
+makeSourceEvent(dee));
+}
+private Order makeOrder(String orderId, OrderCreatedEvent event) {
+...
+}
+public void handleDeliveryPickedUp(DomainEventEnvelope<DeliveryPickedUp>
+dee) {
+orderHistoryDao.notePickedUp(dee.getEvent().getOrderId(),
+makeSourceEvent(dee));
+}
+...
+Each event handler has a single parameter of type DomainEventEnvelope, which
+contains the event and some metadata describing the event. For example, the
+handleOrderCreated() method is invoked to handle an OrderCreated event. It calls
+orderHistoryDao.addOrder() to create an Order in the database. Similarly, the
+handleDeliveryPickedUp() method is invoked to handle a DeliveryPickedUp event.
+It calls orderHistoryDao.notePickedUp() to update the status of the Order in the
+database.
+ Both methods call the helper method makeSourceEvent(), which constructs a
+SourceEvent containing the type and ID of the aggregate that emitted the event and
+the event ID. In the next section you’ll see that OrderHistoryDao uses SourceEvent to
+ensure that update operations are idempotent.
+ Let’s now look at the design of the DynamoDB table and after that examine
+OrderHistoryDao. 
+7.4.2
+Data modeling and query design with DynamoDB
+Like many NoSQL databases, DynamoDB has data access operations that are much
+less powerful than those that are provided by an RDBMS. Consequently, you must
+carefully design how the data is stored. In particular, the queries often dictate the
+design of the schema. We need to address several design issues:
+Designing the ftgo-order-history table
+Defining an index for the findOrderHistory query
+Listing 7.1
+Event handlers that call the OrderHistoryDao
+ 

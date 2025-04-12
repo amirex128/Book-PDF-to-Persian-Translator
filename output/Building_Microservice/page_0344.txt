@@ -1,0 +1,41 @@
+4 Leslie Lamport, “Time, Clocks, and the Ordering of Events in a Distributed System,” Communications of the
+ACM 21, no. 7 (July 1978): 558–65, https://oreil.ly/qzYmh.
+Timing
+When looking at a list of log lines, we can be fooled into thinking we are seeing an
+accurate chronology that will help us understand what happened and in what order.
+After all, each line of our logs includes a date and time—so why can’t we use this as a
+way to determine the order in which things occurred? In the sequence of calls in
+Example 10-2, we see a log line from Gateway, followed by logs from Streaming,
+Customer, Email, and then the Payment microservice. We might conclude that this is
+the order in which calls actually happened. Unfortunately, we can’t always count on
+that to be true.
+The log lines are generated on the machines where these microservice instances are
+running. After being written locally, at some point these logs are forwarded. This
+means that the date stamps in the log lines are generated on the machines where the
+microservices are running. Unfortunately, we cannot guarantee that the clocks on
+these different machines are in sync. This means that the clock on the machine where
+the Email microservice is running might be a few seconds ahead of the clock on the
+machine where Payment is running—this could result in it looking like something
+happened in the Email microservice before it happened in the Payment microservice,
+but that could just be because of this clock skew.
+The problem of clock skew causes all sorts of issues in distributed systems. Protocols
+do exist to try and reduce clock skew in systems—the Network Time Protocol (NTP)
+being the most widely used example. NTP, however, isn’t guaranteed to work, and
+even when it does work, all it can do is reduce skew, not eliminate it. If you have a
+sequence of calls that happen quite close together, you may find that even a second of
+skew across machines is enough for your understanding of the sequence of calls to be
+totally changed.
+Fundamentally, this means we have two limitations when it comes to time in logs.
+We can’t get fully accurate timing information for the overall flow of calls, nor can we
+understand causality.
+In terms of helping to solve this problem so we can understand the true order of
+things, Leslie Lamport4 has proposed a logical clock system, where a counter is used
+to keep track of the order of calls. You could implement a similar scheme if you
+wanted to, and a number of variations to this scheme exist. Personally, though, if I
+wanted more accurate information regarding the order of calls, and I also wanted
+more accurate timing, I’d be more inclined to make use of a distributed tracing tool,
+which will address both issues for me. We’ll look at distributed tracing in more depth
+later in this chapter.
+318 
+| 
+Chapter 10: From Monitoring to Observability

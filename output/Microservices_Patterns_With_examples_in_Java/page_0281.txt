@@ -1,0 +1,58 @@
+251
+Implementing a CQRS view with AWS DynamoDB
+If the sourceEvent is supplied, idempotentUpdate() invokes SourceEvent.add-
+DuplicateDetection() to add to UpdateItemSpec the condition expression that was
+described earlier. The idempotentUpdate() method catches and ignores the
+ConditionalCheckFailedException, which is thrown by updateItem() if the event
+was a duplicate.
+ Now that we’ve seen the code that updates the table, let’s look at the query method. 
+THE FINDORDERHISTORY() METHOD
+The findOrderHistory() method, shown in listing 7.5, retrieves the consumer’s orders by
+querying the ftgo-order-history table using the ftgo-order-history-by-consumer-
+id-and-creation-time secondary index. It has two parameters: consumerId specifies
+the consumer, and filter specifies the search criteria. This method creates Query-
+Spec—which, like UpdateSpec, is part of the AWS SDK—from its parameters, queries
+the index, and transforms the returned items into an OrderHistory object.
+public class OrderHistoryDaoDynamoDb ...
+@Override
+public OrderHistory findOrderHistory(String consumerId, OrderHistoryFilter
+filter) {
+QuerySpec spec = new QuerySpec()
+.withScanIndexForward(false)
+   
+.withHashKey("consumerId", consumerId)
+.withRangeKeyCondition(new RangeKeyCondition("creationDate")  
+.gt(filter.getSince().getMillis()));
+filter.getStartKeyToken().ifPresent(token ->
+spec.withExclusiveStartKey(toStartingPrimaryKey(token)));
+Map<String, Object> valuesMap = new HashMap<>();
+String filterExpression = Expressions.and(
+      
+keywordFilterExpression(valuesMap, filter.getKeywords()),
+statusFilterExpression(valuesMap, filter.getStatus()));
+if (!valuesMap.isEmpty())
+spec.withValueMap(valuesMap);
+if (StringUtils.isNotBlank(filterExpression)) {
+spec.withFilterExpression(filterExpression);
+}
+filter.getPageSize().ifPresent(spec::withMaxResultSize);  
+ItemCollection<QueryOutcome> result = index.query(spec);
+return new OrderHistory(
+StreamSupport.stream(result.spliterator(), false)
+Listing 7.5
+The findOrderHistory() method retrieves a consumer’s matching orders
+Specifies that query must 
+return the orders in order 
+of increasing age
+The maximum
+age of the
+orders to
+return
+Construct a filter expression
+and placeholder value map
+from the OrderHistoryFilter.
+Limit the number 
+of results if the 
+caller has specified 
+a page size.
+ 

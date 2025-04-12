@@ -1,0 +1,44 @@
+294
+CHAPTER 9
+Testing microservices: Part 1
+9.1
+Testing strategies for microservice architectures
+Let’s say you’ve made a change to FTGO application’s Order Service. Naturally, the
+next step is for you to run your code and verify that the change works correctly. One
+option is to test the change manually. First, you run Order Service and all its depen-
+dencies, which include infrastructure services such as a database and other applica-
+tion services. Then you “test” the service by either invoking its API or using the FTGO
+application’s UI. The downside of this approach is that it’s a slow, manual way to test
+your code.
+ A much better option is to have automated tests that you can run during develop-
+ment. Your development workflow should be: edit code, run tests (ideally with a single
+keystroke), repeat. The fast-running tests quickly tell you whether your changes work
+within a few seconds. But how do you write fast-running tests? And are they sufficient
+or do you need more comprehensive tests? These are the kind of questions I answer in
+this and other sections in this chapter.
+ I start this section with an overview of important automated testing concepts. We’ll
+look at the purpose of testing and the structure of a typical test. I cover the different
+types of tests that you’ll need to write. I also describe the test pyramid, which provides
+valuable guidance about where you should focus your testing efforts. After covering
+testing concepts, I discuss strategies for testing microservices. We’ll look at the distinct
+challenges of testing applications that have a microservice architecture. I describe
+techniques you can use to write simpler and faster, yet still-effective, tests for your
+microservices.
+ Let’s take a look at testing concepts.
+9.1.1
+Overview of testing
+In this chapter, my focus is on automated testing, and I use the term test as shorthand
+for automated test. Wikipedia defines a test case, or test, as follows:
+A test case is a set of test inputs, execution conditions, and expected results developed for
+a particular objective, such as to exercise a particular program path or to verify compliance
+with a specific requirement.
+https://en.wikipedia.org/wiki/Test_case
+In other words, the purpose of a test is, as figure 9.1 shows, to verify the behavior of
+the System Under Test (SUT). In this definition, system is a fancy term that means the
+software element being tested. It might be something as small as a class, as large as the
+entire application, or something in between, such as a cluster of classes or an individ-
+ual service. A collection of related tests form a test suite.
+ Let’s first look at the concept of an automated test. Then I discuss the different
+kinds of tests that you’ll need to write. After that, I discuss the test pyramid, which
+describes the relative proportions of the different types of tests that you should write.
+ 

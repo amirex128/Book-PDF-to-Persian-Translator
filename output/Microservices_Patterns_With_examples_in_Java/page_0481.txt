@@ -1,0 +1,47 @@
+451
+Designing how the service and the monolith collaborate
+2
+In the Kitchen Service
+– Validate order details.
+– Create a Ticket in the CREATE_PENDING state.
+3
+In the monolith
+– Authorize consumer’s credit card.
+– Change state of Order to APPROVED.
+4
+In Kitchen Service
+– Change the state of the Ticket to AWAITING_ACCEPTANCE.
+This saga is similar to CreateOrderSaga described in chapter 4. It consists of four local
+transactions, two in the monolith and two in Kitchen Service. The first transaction
+creates an Order in the APPROVAL_PENDING state. The second transaction creates a
+Ticket in the CREATE_PENDING state. The third transaction authorizes the Consumer
+credit card and changes the state of the order to APPROVED. The fourth and final trans-
+action changes the state of the Ticket to AWAITING_ACCEPTANCE.
+ The challenge with implementing this saga is that the first step, which creates the
+Order, must be compensatable. That’s because the second local transaction, which
+occurs in Kitchen Service, might fail and require the monolith to undo the updates
+performed by the first local transaction. As a result, the Order entity needs to have an
+APPROVAL_PENDING, a semantic lock countermeasure, described in chapter 4, that
+indicates an Order is in the process of being created.
+ The problem with introducing a new Order entity state is that it potentially requires
+widespread changes to the monolith. You might need to change every place in the
+code that touches an Order entity. Making these kinds of widespread changes to the
+monolith is time consuming and not the best investment of development resources.
+It’s also potentially risky, because the monolith is often difficult to test. 
+SAGAS DON’T ALWAYS REQUIRE THE MONOLITH TO SUPPORT COMPENSATABLE TRANSACTIONS
+Sagas are highly domain-specific. Some, such as the one we just looked at, require the
+monolith to support compensating transactions. But it’s quite possible that when you
+extract a service, you may be able to design sagas that don’t require the monolith to
+implement compensating transactions. That’s because a monolith only needs to sup-
+port compensating transactions if the transactions that follow the monolith’s transac-
+tion can fail. If each of the monolith’s transactions is either a pivot transaction or a
+retriable transaction, then the monolith never needs to execute a compensating trans-
+action. As a result, you only need to make minimal changes to the monolith to sup-
+port sagas.
+ For example, imagine that instead of extracting Kitchen Service, you extract Order
+Service. This refactoring involves splitting the Order entity and creating a slimmed-
+down Order entity in Order Service. It also impacts numerous commands, including
+createOrder(), which is moved from the monolith to Order Service. In order to
+extract Order Service, you need to change the createOrder() command to use a
+saga, using the following steps:
+ 

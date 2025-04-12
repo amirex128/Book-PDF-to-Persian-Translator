@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 295</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        i. با یک استثنا: ما فرض خواهیم کرد که <em>faults</em> ها غیر-<em>Byzantine</em> هستند (به "Byzantine Faults" در صفحه 304 مراجعه کنید).
+    </p>
+    <h3>CHAPTER 8</h3>
+    <h4>The Trouble with Distributed Systems</h4>
+    <p>
+        Hey I just met you
+        <br>
+        The network’s laggy
+        <br>
+        But here’s my data
+        <br>
+        So store it maybe
+        <br>
+        —Kyle Kingsbury, Carly Rae Jepsen and the Perils of Network Partitions (2013)
+    </p>
+    <p>
+        یک موضوع تکرارشونده در چند فصل گذشته این بوده است که چگونه سیستم‌ها مواردی را که اشتباه پیش می‌روند، مدیریت می‌کنند. به عنوان مثال، ما در مورد <em>replica failover</em> ("Handling Node Outages" در صفحه 156)، <em>replication lag</em> ("Problems with Replication Lag" در صفحه 161)، و <em>concurrency control</em> برای <strong>Transactions</strong> ("Weak Isolation Levels" در صفحه 233) بحث کردیم. همانطور که ما موارد <em>edge cases</em> مختلف را که می‌تواند در سیستم‌های واقعی رخ دهد، درک می‌کنیم، در مدیریت آنها بهتر می‌شویم.
+    </p>
+    <p>
+        با این حال، حتی اگر ما در مورد <em>faults</em> زیاد صحبت کرده باشیم، چند فصل گذشته هنوز هم بیش از حد خوش‌بینانه بوده‌اند. واقعیت حتی تاریک‌تر است. ما اکنون بدبینی خود را به حداکثر خواهیم رساند و فرض می‌کنیم که هر چیزی که می‌تواند اشتباه شود، اشتباه خواهد شد.i (<em>Experienced systems operators</em> به شما خواهند گفت که این یک فرض منطقی است. اگر مودبانه بپرسید، ممکن است در حالی که زخم‌های نبردهای گذشته خود را التیام می‌دهند، برخی از داستان‌های ترسناک را برای شما تعریف کنند.)
+    </p>
+    <p>
+        کار با <em>distributed systems</em> اساساً با نوشتن نرم‌افزار روی یک کامپیوتر واحد متفاوت است—و تفاوت اصلی این است که راه‌های جدید و هیجان‌انگیز زیادی برای اشتباه پیش رفتن چیزها وجود دارد [1, 2]. در این فصل، ما طعم مشکلات را که در عمل ایجاد می‌شوند، خواهیم چشید، و درکی از چیزهایی که می‌توانیم و نمی‌توانیم به آنها تکیه کنیم، خواهیم داشت.
+    </p>
+    <p>
+        273
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

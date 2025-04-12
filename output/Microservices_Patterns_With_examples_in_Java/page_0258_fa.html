@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 258</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   ناموجود. یک <mark>API composer</mark> گاهی اوقات داده‌های بازگشتی توسط یک <mark>Provider service</mark> را برای بهبود عملکرد در حافظه پنهان ذخیره می‌کند. همچنین می‌تواند از این <mark>cache</mark> برای بهبود دسترسی‌پذیری استفاده کند. اگر یک <mark>provider</mark> در دسترس نباشد، <mark>API composer</mark> می‌تواند داده‌ها را از <mark>cache</mark> برگرداند، اگرچه ممکن است بالقوه قدیمی باشد.
+  </p>
+  <p>
+   یک استراتژی دیگر برای بهبود دسترسی‌پذیری این است که <mark>API composer</mark> داده‌های ناقص را برگرداند. به عنوان مثال، تصور کنید که <mark>Kitchen Service</mark> به طور موقت در دسترس نیست.
+   <br />
+   <mark>API Composer</mark> برای عملیات <mark>query</mark> <mark>findOrder()</mark> می‌تواند داده‌های آن <mark>service</mark> را از پاسخ حذف کند، زیرا <mark>UI</mark> همچنان می‌تواند اطلاعات مفیدی را نمایش دهد. جزئیات بیشتری در مورد طراحی <mark>API</mark>، <mark>caching</mark>، و قابلیت اطمینان را در فصل 8 مشاهده خواهید کرد.
+  </p>
+  <h5><mark>LACK OF TRANSACTIONAL DATA CONSISTENCY</mark></h5>
+  <p>
+   یکی دیگر از معایب الگوی ترکیب <mark>API</mark>، عدم سازگاری <mark>data</mark> است. یک application <mark>monolithic</mark> معمولاً یک عملیات <mark>query</mark> را با استفاده از یک <mark>transaction database</mark> واحد اجرا می‌کند. تراکنش‌های <mark>ACID</mark>— منوط به چاپ ریز در مورد سطوح <mark>isolation</mark>— تضمین می‌کنند که یک application دارای یک نمای سازگار از <mark>data</mark> است، حتی اگر چندین <mark>database queries</mark> را اجرا کند. در مقابل، الگوی ترکیب <mark>API</mark> چندین <mark>database queries</mark> را در برابر چندین <mark>databases</mark> اجرا می‌کند. بنابراین، این خطر وجود دارد که یک عملیات <mark>query</mark> داده‌های ناسازگار را برمی‌گرداند.
+  </p>
+  <p>
+   به عنوان مثال، یک <mark>Order</mark> بازیابی شده از <mark>Order Service</mark> ممکن است در وضعیت <mark>CANCELLED</mark> باشد، در حالی که <mark>Ticket</mark> مربوطه بازیابی شده از <mark>Kitchen Service</mark> ممکن است هنوز لغو نشده باشد. <mark>API composer</mark> باید این اختلاف را حل کند، که پیچیدگی کد را افزایش می‌دهد. بدتر از آن، یک <mark>API composer</mark> ممکن است همیشه نتواند داده‌های ناسازگار را شناسایی کند و آن را به <mark>client</mark> برمی‌گرداند.
+  </p>
+  <p>
+   با وجود این معایب، الگوی ترکیب <mark>API</mark> بسیار مفید است. شما می‌توانید از آن برای پیاده‌سازی بسیاری از عملیات <mark>query</mark> استفاده کنید. اما برخی از عملیات <mark>query</mark> وجود دارد که نمی‌توان آن‌ها را با استفاده از این الگو به طور کارآمد پیاده‌سازی کرد. به عنوان مثال، یک عملیات <mark>query</mark> ممکن است نیاز داشته باشد که <mark>API composer</mark> یک <mark>join</mark> درون حافظه‌ای از <mark>datasets</mark> بزرگ را انجام دهد.
+  </p>
+  <p>
+   معمولاً بهتر است این نوع عملیات <mark>query</mark> را با استفاده از الگوی <mark>CQRS</mark> پیاده‌سازی کنید. بیایید نگاهی به نحوه عملکرد این الگو بیندازیم.
+  </p>
+  <h4><mark>7.2 Using the CQRS pattern</mark></h4>
+  <p>
+   بسیاری از application های سازمانی از یک <mark>RDBMS</mark> به عنوان سیستم سوابق <mark>transactional</mark> و یک <mark>database</mark> جستجوی متنی، مانند <mark>Elasticsearch</mark> یا <mark>Solr</mark>، برای <mark>text search queries</mark> استفاده می‌کنند. برخی از application ها با نوشتن همزمان در هر دو، <mark>databases</mark> را همگام نگه می‌دارند. سایرین به صورت دوره‌ای داده‌ها را از <mark>RDBMS</mark> به موتور جستجوی متنی کپی می‌کنند. application هایی با این معماری، از نقاط قوت چندین <mark>database</mark> بهره می‌برند: ویژگی‌های <mark>transactional</mark> <mark>RDBMS</mark> و قابلیت‌های <mark>querying</mark> <mark>database</mark> متنی.
+  </p>
+  <p>
+   الگو: جداسازی مسئولیت <mark>command query</mark>
+   <br />
+   یک <mark>query</mark> را پیاده‌سازی کنید که برای <mark>data</mark> از چندین <mark>services</mark> با استفاده از <mark>events</mark> برای حفظ یک <mark>view</mark> فقط خواندنی که داده‌ها را از <mark>services</mark> تکرار می‌کند، نیاز دارد. به <mark>http://microservices</mark> مراجعه کنید.
+   <br />
+   .io/patterns/data/cqrs.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

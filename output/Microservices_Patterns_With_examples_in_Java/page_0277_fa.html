@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 277</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>Implementing a CQRS view with AWS DynamoDB</mark></h3>
+  <p>
+   شامل ویژگی‌های <mark>primary key</mark>، <mark>consumerId</mark> و <mark>orderCreationTime</mark> و ویژگی‌های غیر کلیدی، از جمله <mark>orderId</mark> و <mark>status</mark>.
+  </p>
+  <p>
+   <mark>index ftgo-order-history-by-consumer-id-and-creation-time</mark>، <mark>OrderHistoryDaoDynamoDb</mark> را قادر می‌سازد تا سفارش‌های یک مصرف‌کننده را به‌طور کارآمد بر اساس افزایش سن بازیابی کند.
+  </p>
+  <p>
+   بیایید اکنون نگاهی بیندازیم به چگونگی بازیابی فقط آن سفارش‌هایی که با معیارهای فیلتر مطابقت دارند.
+  </p>
+  <h5><mark>IMPLEMENTING THE FINDORDERHISTORY QUERY</mark></h5>
+  <p>
+   عملیات <mark>query</mark> <mark>findOrderHistory()</mark> دارای یک پارامتر فیلتر است که معیارهای جستجو را مشخص می‌کند. یک معیار فیلتر، حداکثر سن سفارش‌ها برای بازگشت است. این کار آسانی است زیرا عبارت شرط کلید عملیات <mark>Query</mark> <mark>DynamoDB</mark> از یک محدودیت بازه بر روی <mark>sort key</mark> پشتیبانی می‌کند. سایر معیارهای فیلتر با ویژگی‌های غیر کلیدی مطابقت دارند و می‌توانند با استفاده از یک عبارت فیلتر، که یک عبارت بولی است، پیاده‌سازی شوند. یک عملیات <mark>Query</mark> <mark>DynamoDB</mark>، فقط آن آیتم‌هایی را برمی‌گرداند که عبارت فیلتر را برآورده می‌کنند. به عنوان مثال، برای یافتن <mark>Orders</mark> که <mark>CANCELLED</mark> هستند، <mark>OrderHistoryDao-DynamoDb</mark> از یک عبارت <mark>query</mark> استفاده می‌کند <mark>orderStatus = :orderStatus</mark>، که در آن <mark>:orderStatus</mark> یک پارامتر نگهدارنده است.
+  </p>
+  <p>
+   معیار فیلتر کلمه کلیدی، پیاده‌سازی آن دشوارتر است. این سفارش‌هایی را انتخاب می‌کند که نام رستوران یا موارد منوی آن‌ها با یکی از کلمات کلیدی مشخص شده مطابقت داشته باشد. <mark>OrderHistoryDaoDynamoDb</mark> با نشانه‌گذاری نام رستوران و موارد منو و ذخیره مجموعه کلمات کلیدی در یک ویژگی با مقدار مجموعه به نام <mark>keywords</mark>، جستجوی کلمه کلیدی را فعال می‌کند. این سفارش‌هایی را که با کلمات کلیدی مطابقت دارند، با استفاده از یک عبارت فیلتر که از تابع <mark>contains()</mark> استفاده می‌کند، پیدا می‌کند، به عنوان مثال <mark>contains(keywords, :keyword1)</mark>
+   <br />
+   یا <mark>contains(keywords, :keyword2)</mark>، که در آن <mark>:keyword1</mark> و <mark>:keyword2</mark> مکان‌نماهایی برای کلمات کلیدی مشخص شده هستند.
+  </p>
+  <h5><mark>PAGINATING THE QUERY RESULTS</mark></h5>
+  <p>
+   برخی از مصرف‌کنندگان تعداد زیادی سفارش خواهند داشت. بنابراین منطقی است که عملیات <mark>query</mark> <mark>findOrderHistory()</mark> از صفحه‌بندی استفاده کند. عملیات <mark>Query</mark> <mark>DynamoDB</mark> دارای یک پارامتر <mark>pageSize</mark> است، که حداکثر تعداد آیتم‌هایی را که باید برگردانده شوند، مشخص می‌کند. اگر آیتم‌های بیشتری وجود داشته باشد، نتیجه <mark>query</mark> دارای یک ویژگی <mark>Last-EvaluatedKey</mark> غیر تهی است. یک <mark>DAO</mark> می‌تواند صفحه بعدی آیتم‌ها را با فراخوانی <mark>query</mark> با پارامتر <mark>exclusiveStartKey</mark> تنظیم شده روی <mark>LastEvaluatedKey</mark>، بازیابی کند.
+  </p>
+  <p>
+   همانطور که می‌بینید، <mark>DynamoDB</mark> از صفحه‌بندی مبتنی بر موقعیت پشتیبانی نمی‌کند. در نتیجه، <mark>Order History Service</mark> یک <mark>pagination token</mark> نامرئی را به <mark>client</mark> خود برمی‌گرداند. <mark>Client</mark> از این <mark>pagination token</mark> برای درخواست صفحه بعدی نتایج استفاده می‌کند.
+  </p>
+  <p>
+   اکنون که نحوه <mark>query</mark> کردن <mark>DynamoDB</mark> برای سفارش‌ها را شرح دادم، بیایید به نحوه درج و به‌روزرسانی آن‌ها نگاهی بیندازیم.
+  </p>
+  <h5><mark>UPDATING ORDERS</mark></h5>
+  <p>
+   <mark>DynamoDB</mark> از دو عملیات برای افزودن و به‌روزرسانی آیتم‌ها پشتیبانی می‌کند: <mark>PutItem()</mark> و <mark>UpdateItem()</mark>. عملیات <mark>PutItem()</mark> یک آیتم کامل را با <mark>primary key</mark> آن ایجاد یا جایگزین می‌کند. در تئوری، <mark>OrderHistoryDaoDynamoDb</mark> می‌تواند از این عملیات برای درج
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 278</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 7</mark></h3>
+  <p>
+   <mark>Implementing queries in a microservice architecture</mark>
+  </p>
+  <p>
+   و به‌روزرسانی سفارشات. با این حال، یک چالش در استفاده از <mark>PutItem()</mark> وجود دارد، اطمینان از اینکه به‌روزرسانی‌های همزمان به یک آیتم یکسان، به درستی مدیریت می‌شوند.
+  </p>
+  <p>
+   به عنوان مثال، سناریویی را در نظر بگیرید که در آن دو <mark>event handlers</mark> به‌طور همزمان تلاش می‌کنند تا یک آیتم یکسان را به‌روزرسانی کنند. هر <mark>event handler</mark>، <mark>OrderHistoryDaoDynamoDb</mark> را فراخوانی می‌کند تا آیتم را از <mark>DynamoDB</mark> بارگیری کند، آن را در حافظه تغییر دهد و با استفاده از <mark>PutItem()</mark> آن را در <mark>DynamoDB</mark> به‌روزرسانی کند. یک <mark>event handler</mark> به‌طور بالقوه می‌تواند تغییرات ایجاد شده توسط <mark>event handler</mark> دیگر را بازنویسی کند. <mark>OrderHistoryDaoDynamoDb</mark> می‌تواند با استفاده از مکانیسم قفل خوش‌بینانه <mark>DynamoDB</mark>، از از دست رفتن به‌روزرسانی‌ها جلوگیری کند. اما یک رویکرد حتی ساده‌تر و کارآمدتر استفاده از عملیات <mark>UpdateItem()</mark> است.
+  </p>
+  <p>
+   عملیات <mark>UpdateItem()</mark>، ویژگی‌های فردی آیتم را به‌روزرسانی می‌کند، و در صورت لزوم، آیتم را ایجاد می‌کند. از آنجایی که <mark>event handlers</mark> مختلف، ویژگی‌های مختلف آیتم <mark>Order</mark> را به‌روزرسانی می‌کنند، استفاده از <mark>UpdateItem</mark> منطقی است. این عملیات نیز کارآمدتر است زیرا نیازی به بازیابی ابتدا سفارش از جدول نیست.
+  </p>
+  <p>
+   یک چالش در به‌روزرسانی <mark>database</mark> در پاسخ به <mark>events</mark>، همانطور که قبلاً ذکر شد، شناسایی و دور انداختن <mark>events</mark> تکراری است. بیایید ببینیم چگونه می‌توان این کار را هنگام استفاده از <mark>DynamoDB</mark> انجام داد.
+  </p>
+  <h5><mark>DETECTING DUPLICATE EVENTS</mark></h5>
+  <p>
+   همه <mark>event handlers</mark> <mark>Order History Service</mark>، <mark>idempotent</mark> هستند. هر کدام یک یا چند ویژگی از آیتم <mark>Order</mark> را تنظیم می‌کنند. بنابراین، <mark>Order History Service</mark> می‌تواند به سادگی مسئله <mark>events</mark> تکراری را نادیده بگیرد. با این حال، جنبه منفی نادیده گرفتن این مسئله این است که آیتم <mark>Order</mark> گاهی اوقات به‌طور موقت منسوخ می‌شود. این به این دلیل است که یک <mark>event handler</mark> که یک <mark>event</mark> تکراری دریافت می‌کند، ویژگی‌های یک آیتم <mark>Order</mark> را روی مقادیر قبلی تنظیم می‌کند. آیتم <mark>Order</mark> تا زمانی که <mark>events</mark> بعدی دوباره تحویل داده نشوند، مقادیر صحیح را نخواهد داشت.
+  </p>
+  <p>
+   همانطور که قبلاً توضیح داده شد، یک راه برای جلوگیری از منسوخ شدن <mark>data</mark>، شناسایی و دور انداختن <mark>events</mark> تکراری است. <mark>OrderHistoryDaoDynamoDb</mark> می‌تواند <mark>events</mark> تکراری را با ثبت <mark>events</mark>ی که باعث به‌روزرسانی آن شده‌اند، در هر آیتم شناسایی کند. سپس می‌تواند از مکانیسم به‌روزرسانی مشروط عملیات <mark>UpdateItem()</mark> برای به‌روزرسانی یک آیتم فقط در صورتی استفاده کند که یک <mark>event</mark> تکراری نباشد.
+  </p>
+  <p>
+   یک به‌روزرسانی مشروط، فقط در صورتی انجام می‌شود که یک عبارت شرط درست باشد. یک عبارت شرط، وجود یک ویژگی یا داشتن یک مقدار خاص را آزمایش می‌کند. <mark>OrderHistoryDaoDynamoDb DAO</mark> می‌تواند <mark>events</mark> دریافت شده از هر نمونه <mark>aggregate</mark> را با استفاده از ویژگی به نام «<mark>aggregateType»«aggregateId</mark>» که مقدار آن، بالاترین <mark>event ID</mark> دریافت شده است، ردیابی کند. یک <mark>event</mark> در صورتی تکراری است که ویژگی وجود داشته باشد و مقدار آن کمتر یا مساوی <mark>event ID</mark> باشد. <mark>OrderHistoryDaoDynamoDb DAO</mark> از این عبارت شرط استفاده می‌کند:
+  </p>
+  <p>
+   <mark>attribute_not_exists(«aggregateType»«aggregateId»)
+   <br />
+   OR «aggregateType»«aggregateId» &lt; :eventId</mark>
+  </p>
+  <p>
+   عبارت شرط، فقط در صورتی امکان به‌روزرسانی را می‌دهد که ویژگی وجود نداشته باشد یا <mark>eventId</mark> بزرگتر از <mark>event ID</mark> پردازش شده قبلی باشد.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

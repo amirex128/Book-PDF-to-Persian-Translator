@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 194</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Synchronous versus asynchronous conflict detection</h4>
+    <p>
+        در یک database single-leader، the second writer یا بلاک می‌شود و منتظر می‌ماند تا first write کامل شود یا transaction write دوم را abort می‌کند و user را مجبور می‌کند که write را دوباره امتحان کند. از سوی دیگر، در یک setup multi-leader، هر دو writes موفقیت‌آمیز هستند و conflict تنها به طور asynchronous در یک نقطه زمانی بعدی شناسایی می‌شود. در آن زمان، ممکن است برای درخواست از user برای حل conflict خیلی دیر شده باشد.
+    </p>
+    <p>
+        In principle، شما می‌توانید conflict detection را synchronous کنید—یعنی، صبر کنید تا write به همه replicas replicate شود، قبل از اینکه به user بگویید که write موفقیت‌آمیز بود. با این حال، با انجام این کار، شما مزیت اصلی multi-leader repli‐cation را از دست می‌دهید: اجازه دادن به هر replica برای پذیرش writes به طور مستقل. اگر شما می‌خواهید synchronous conflict detection، شما ممکن است به سادگی از single-leader replication استفاده کنید.
+    </p>
+    <h4>Conflict avoidance</h4>
+    <p>
+        ساده‌ترین strategy برای مقابله با conflicts این است که از آن‌ها اجتناب کنید: اگر application می‌تواند اطمینان حاصل کند که همه writes برای یک record خاص از طریق همان leader انجام می‌شوند، پس con‐flicts نمی‌توانند رخ دهند. از آنجایی که بسیاری از پیاده‌سازی‌های multi-leader replication، conflicts را بسیار ضعیف handle می‌کنند، اجتناب از conflicts یک رویکردی است که اغلب توصیه می‌شود [34].
+    </p>
+    <p>
+        به عنوان مثال، در یک application که در آن یک user می‌تواند داده‌های خود را ویرایش کند، شما می‌توانید اطمینان حاصل کنید که requests از یک user خاص همیشه به یک datacenter یکسان هدایت می‌شوند و از leader در آن datacenter برای خواندن و نوشتن استفاده می‌کنند. Users مختلف ممکن است datacenters “home” متفاوتی داشته باشند (شاید بر اساس geographic proximity to the user انتخاب شده باشد)، اما از دیدگاه هر user، the configuration اساساً single-leader است.
+    </p>
+    <p>
+        با این حال، گاهی اوقات شما ممکن است بخواهید leader تعیین شده را برای یک record تغییر دهید—شاید به این دلیل که یک datacenter fail شده است و شما نیاز دارید که traffic را به یک datacenter دیگر reroute کنید، یا شاید به این دلیل که یک user به یک location متفاوت منتقل شده است و اکنون به یک datacenter متفاوت نزدیکتر است. در این شرایط، conflict avoidance فرو می‌پاشد و شما باید با احتمال concurrent writes در leaders مختلف برخورد کنید.
+    </p>
+    <h4>Converging toward a consistent state</h4>
+    <p>
+        یک database single-leader writes را به یک ترتیب sequential اعمال می‌کند: اگر چندین update به یک فیلد یکسان وجود داشته باشد، آخرین write، value نهایی فیلد را تعیین می‌کند.
+    </p>
+    <p>
+        در یک configuration multi-leader، هیچ ordering تعریف شده از writes وجود ندارد، بنابراین مشخص نیست که value نهایی باید چه باشد. در شکل 5-7، در leader 1 title ابتدا به B و سپس به C به‌روزرسانی می‌شود. در leader 2 ابتدا به C و سپس به B به‌روزرسانی می‌شود. هیچ‌کدام از این ordering "صحیح‌تر" از دیگری نیستند.
+    </p>
+    <p>
+        If each replica به سادگی writes را به ترتیبی که آن‌ها را می‌بیند، اعمال می‌کند، database در یک state inconsistent به پایان می‌رسد: the final value در leader 1 C و در leader 2 B خواهد بود. این قابل قبول نیست—هر replication scheme باید اطمینان حاصل کند که داده‌ها در نهایت در همه replicas یکسان هستند. بنابراین، database باید conflict را به یک
+    </p>
+    <p>
+        172 | Chapter 5: Replication
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

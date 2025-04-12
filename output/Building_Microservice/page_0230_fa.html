@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 230</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>شما سریع‌ترین بازخورد را در لپ‌تاپ توسعه خود دریافت می‌کنید—اما این بسیار دور از <em>production-like</em> است. شما می‌توانید هر <em>commit</em> را در محیطی مستقر کنید که یک بازتولید وفادارانه از محیط <em>production</em> واقعی شماست، اما احتمالاً زمان بیشتری می‌برد و هزینه‌بر خواهد بود. بنابراین یافتن تعادل کلیدی است، و ادامه بررسی <em>trade-off</em> بین بازخورد سریع و نیاز به محیط‌های <em>production-like</em> می‌تواند یک فعالیت مداوم فوق‌العاده مهم باشد.</p>
+  <p>چالش‌های ایجاد یک محیط <em>production-like</em> نیز بخشی از این است که چرا افراد بیشتری در حال انجام انواع <em>testing</em> در <em>production</em> هستند، از جمله تکنیک‌هایی مانند <em>smoke testing</em> و <em>parallel runs</em>. ما در فصل 8 به این موضوع باز خواهیم گشت.</p>
+  <h4>Artifact Creation</h4>
+  <p>همانطور که ما <em>microservice</em> خود را به محیط‌های مختلف منتقل می‌کنیم، در واقع باید چیزی برای <em>deploy</em> کردن داشته باشیم. مشخص می‌شود که گزینه‌های مختلفی برای نوع <em>deployment artifact</em> که می‌توانید استفاده کنید، وجود دارد. به طور کلی، این که چه <em>artifact</em> را ایجاد می‌کنید، به شدت به فناوری که برای <em>deployment</em> انتخاب کرده‌اید، بستگی دارد. ما در فصل بعد به این موضوع با جزئیات نگاه خواهیم کرد، اما من می‌خواستم چند نکته بسیار مهم در مورد چگونگی قرار گرفتن ایجاد <em>artifact</em> در فرآیند <em>CI/CD build</em> شما ارائه دهم.
+  <p>برای ساده نگه داشتن همه چیز، ما دقیقاً از نوع <em>artifact</em> که ایجاد می‌کنیم صرف نظر خواهیم کرد—فقط آن را در حال حاضر یک <em>deployable blob</em> واحد در نظر بگیرید. اکنون، دو قانون مهم وجود دارد که باید در نظر بگیریم. اولاً، همانطور که قبلاً ذکر کردم، ما باید یک <em>artifact</em> را فقط یک بار بسازیم. ساختن یک چیز یکسان بارها و بارها اتلاف وقت و برای کره زمین بد است، و از نظر تئوری، می‌تواند مشکلاتی را ایجاد کند اگر پیکربندی <em>build</em> دقیقاً در هر بار یکسان نباشد. در برخی از زبان‌های برنامه‌نویسی، یک <em>build flag</em> متفاوت می‌تواند باعث شود که نرم‌افزار کاملاً متفاوت رفتار کند. ثانیاً، <em>artifact</em> که شما تأیید می‌کنید باید همان <em>artifact</em> باشد که شما <em>deploy</em> می‌کنید! اگر شما یک <em>microservice</em> را <em>build</em> می‌کنید، آن را آزمایش می‌کنید، می‌گویید "بله، در حال کار است"، و سپس دوباره آن را برای استقرار در <em>production</em> <em>build</em> می‌کنید، چگونه می‌دانید که نرم‌افزاری که اعتبارسنجی کرده‌اید، همان نرم‌افزاری است که مستقر کرده‌اید؟</p>
+  <p>با در نظر گرفتن این دو ایده، ما یک رویکرد کاملاً ساده داریم. <em>Build</em> <em>deployable artifact</em> خود را فقط یک بار بسازید، و در حالت ایده‌آل این کار را در اوایل <em>pipeline</em> انجام دهید. من معمولاً این کار را پس از <em>compiling</em> کد (در صورت نیاز) و اجرای <em>fast tests</em> خود انجام می‌دهم. پس از ایجاد، این <em>artifact</em> در یک <em>repository</em> مناسب ذخیره می‌شود—این می‌تواند چیزی مانند <em>Artifactory</em> یا <em>Nexus</em>، یا شاید یک <em>container registry</em> باشد. انتخاب شما از <em>deployment artifact</em> احتمالاً ماهیت <em>artifact store</em> را دیکته می‌کند. این <em>artifact</em> یکسان می‌تواند سپس برای همه مراحل در <em>pipeline</em> که دنبال می‌شود، تا و از جمله استقرار در <em>production</em>، استفاده شود. بنابراین با بازگشت به <em>pipeline</em> قبلی ما، ما می‌توانیم در شکل 7-4 ببینیم که ما یک <em>artifact</em> برای <em>Catalog service</em> خود در طول اولین مرحله از <em>pipeline</em> ایجاد می‌کنیم و سپس همان <em>build-123 artifact</em> را به عنوان بخشی از <em>slow tests</em>، <em>performance tests</em>، و مراحل <em>production</em> مستقر می‌کنیم.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

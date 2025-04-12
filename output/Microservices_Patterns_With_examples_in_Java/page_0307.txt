@@ -1,0 +1,61 @@
+277
+Implementing an API gateway
+public OrderHandlers(OrderService orderService,
+KitchenService kitchenService,
+DeliveryService deliveryService,
+AccountingService accountingService) {
+this.orderService = orderService;
+this.kitchenService = kitchenService;
+this.deliveryService = deliveryService;
+this.accountingService = accountingService;
+}
+public Mono<ServerResponse> getOrderDetails(ServerRequest serverRequest) {
+String orderId = serverRequest.pathVariable("orderId");
+Mono<OrderInfo> orderInfo = orderService.findOrderById(orderId);
+Mono<Optional<TicketInfo>> ticketInfo =
+kitchenService
+.findTicketByOrderId(orderId)
+.map(Optional::of)
+      
+.onErrorReturn(Optional.empty());
+  
+Mono<Optional<DeliveryInfo>> deliveryInfo =
+deliveryService
+.findDeliveryByOrderId(orderId)
+.map(Optional::of)
+.onErrorReturn(Optional.empty());
+Mono<Optional<BillInfo>> billInfo = accountingService
+.findBillByOrderId(orderId)
+.map(Optional::of)
+.onErrorReturn(Optional.empty());
+Mono<Tuple4<OrderInfo, Optional<TicketInfo>,
+  
+Optional<DeliveryInfo>, Optional<BillInfo>>> combined =
+Mono.when(orderInfo, ticketInfo, deliveryInfo, billInfo);
+Mono<OrderDetails> orderDetails =
+               
+combined.map(OrderDetails::makeOrderDetails);
+return orderDetails.flatMap(person -> ServerResponse.ok()   
+.contentType(MediaType.APPLICATION_JSON)
+.body(fromObject(person)));
+}
+}
+The getOrderDetails() method implements API composition to fetch the order
+details. It’s written in a scalable, reactive style using the Mono abstraction , which is pro-
+vided by Project Reactor. A Mono, which is a richer kind of Java 8 CompletableFuture,
+contains the outcome of an asynchronous operation that’s either a value or an
+exception. It has a rich API for transforming and combining the values returned by
+asynchronous operations. You can use Monos to write concurrent code in a style that’s
+Transform a TicketInfo into 
+an Optional<TicketInfo>.
+If the service invocation failed, 
+return Optional.empty().
+Combine the four 
+values into a single 
+value, a Tuple4.
+Transform the Tuple4 
+into an OrderDetails.
+Transform the
+OrderDetails into
+a ServerResponse.
+ 

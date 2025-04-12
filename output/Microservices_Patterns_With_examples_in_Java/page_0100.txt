@@ -1,0 +1,45 @@
+70
+CHAPTER 3
+Interprocess communication in a microservice architecture
+USE SEMANTIC VERSIONING
+The Semantic Versioning specification (http://semver.org) is a useful guide to ver-
+sioning APIs. It’s a set of rules that specify how version numbers are used and incre-
+mented. Semantic versioning was originally intended to be used for versioning of
+software packages, but you can use it for versioning APIs in a distributed system.
+ The Semantic Versioning specification (Semvers) requires a version number to
+consist of three parts: MAJOR.MINOR.PATCH. You must increment each part of a version
+number as follows:
+
+MAJOR—When you make an incompatible change to the API
+
+MINOR—When you make backward-compatible enhancements to the API
+
+PATCH—When you make a backward-compatible bug fix
+There are a couple of places you can use the version number in an API. If you’re
+implementing a REST API, you can, as mentioned below, use the major version as
+the first element of the URL path. Alternatively, if you’re implementing a service
+that uses messaging, you can include the version number in the messages that it
+publishes. The goal is to properly version APIs and to evolve them in a controlled
+fashion. Let’s look at how to handle minor and major changes. 
+MAKING MINOR, BACKWARD-COMPATIBLE CHANGES
+Ideally, you should strive to only make backward-compatible changes. Backward-
+compatible changes are additive changes to an API:
+Adding optional attributes to request
+Adding attributes to a response
+Adding new operations
+If you only ever make these kinds of changes, older clients will work with newer services,
+provided that they observe the Robustness principle (https://en.wikipedia.org/wiki/
+Robustness_principle), which states: “Be conservative in what you do, be liberal in
+what you accept from others.” Services should provide default values for missing
+request attributes. Similarly, clients should ignore any extra response attributes. In
+order for this to be painless, clients and services must use a request and response for-
+mat that supports the Robustness principle. Later in this section, I describe how text-
+based formats such as JSON and XML generally make it easier to evolve APIs. 
+MAKING MAJOR, BREAKING CHANGES
+Sometimes you must make major, incompatible changes to an API. Because you can’t
+force clients to upgrade immediately, a service must simultaneously support old and
+new versions of an API for some period of time. If you’re using an HTTP-based IPC
+mechanism, such as REST, one approach is to embed the major version number in the
+URL. For example, version 1 paths are prefixed with '/v1/…', and version 2 paths
+with '/v2/…'.
+ 

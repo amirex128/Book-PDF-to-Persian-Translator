@@ -1,0 +1,48 @@
+94
+CHAPTER 3
+Interprocess communication in a microservice architecture
+Messaging makes these differences very explicit, so developers aren’t lulled into
+a false sense of security.
+There are some downsides to using messaging:
+Potential performance bottleneck—There is a risk that the message broker could be
+a performance bottleneck. Fortunately, many modern message brokers are
+designed to be highly scalable.
+Potential single point of failure—It’s essential that the message broker is highly
+available—otherwise, system reliability will be impacted. Fortunately, most mod-
+ern brokers have been designed to be highly available.
+Additional operational complexity—The messaging system is yet another system
+component that must be installed, configured, and operated.
+Let’s look at some design issues you might face. 
+3.3.5
+Competing receivers and message ordering
+One challenge is how to scale out message receivers while preserving message order-
+ing. It’s a common requirement to have multiple instances of a service in order to pro-
+cess messages concurrently. Moreover, even a single service instance will probably use
+threads to concurrently process multiple messages. Using multiple threads and service
+instances to concurrently process messages increases the throughput of the applica-
+tion. But the challenge with processing messages concurrently is ensuring that each
+message is processed once and in order.
+ For example, imagine that there are three instances of a service reading from the
+same point-to-point channel and that a sender publishes Order Created, Order Updated,
+and Order Cancelled event messages sequentially. A simplistic messaging implementa-
+tion could concurrently deliver each message to a different receiver. Because of delays
+due to network issues or garbage collections, messages might be processed out of order,
+which would result in strange behavior. In theory, a service instance might process the
+Order Cancelled message before another service processes the Order Created message!
+ A common solution, used by modern message brokers like Apache Kafka and AWS
+Kinesis, is to use sharded (partitioned) channels. Figure 3.11 shows how this works.
+There are three parts to the solution:
+1
+A sharded channel consists of two or more shards, each of which behaves like
+a channel.
+2
+The sender specifies a shard key in the message’s header, which is typically an
+arbitrary string or sequence of bytes. The message broker uses a shard key to
+assign the message to a particular shard/partition. It might, for example, select
+the shard by computing the hash of the shard key modulo the number of shards.
+3
+The messaging broker groups together multiple instances of a receiver and
+treats them as the same logical receiver. Apache Kafka, for example, uses the
+term consumer group. The message broker assigns each shard to a single receiver.
+It reassigns shards when receivers start up and shut down.
+ 

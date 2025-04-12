@@ -1,0 +1,28 @@
+DNS has a host of advantages, the main one being it is such a well-understood and
+well-used standard that almost any technology stack will support it. Unfortunately,
+while a number of services exist for managing DNS inside an organization, few of
+them seem designed for an environment in which we are dealing with highly disposa‐
+ble hosts, making updating DNS entries somewhat painful. Amazon’s Route 53 ser‐
+vice does a pretty good job of this, but I haven’t seen a self-hosted option that is as
+good yet, although (as we’ll discuss shortly) some dedicated service discovery tools
+like Consul may help us here. Aside from the problems in updating DNS entries, the
+DNS specification itself can cause us some issues.
+DNS entries for domain names have a time to live (TTL). This is how long a client
+can consider the entry fresh. When we want to change the host to which the domain
+name refers, we update that entry, but we have to assume that clients will be holding
+on to the old IP for at least as long as the TTL states. DNS entries can get cached in
+multiple places (even the JVM will cache DNS entries unless you tell it not to), and
+the more places they are cached in, the more stale the entry can be.
+One way to work around this problem is to have the domain name entry for your
+service point to a load balancer, which in turn points to the instances of your service,
+as shown in Figure 5-5. When you deploy a new instance, you can take the old one
+out of the load-balancer entry and add the new one. Some people use DNS round-
+robining, where the DNS entries themselves refer to a group of machines. This tech‐
+nique is extremely problematic, as the client is hidden from the underlying host and
+therefore cannot easily stop routing traffic to one of the hosts should it become sick.
+Figure 5-5. Using DNS to resolve to a load balancer to avoid stale DNS entries
+As mentioned, DNS is well understood and widely supported. But it does have one or
+two downsides. I would suggest you investigate whether it is a good fit for you before
+158 
+| 
+Chapter 5: Implementing Microservice Communication

@@ -1,0 +1,47 @@
+338
+CHAPTER 10
+Testing microservices: Part 2
+In both scenarios, a consumer attempts to place an order. In the first scenario, they
+succeed. In the second scenario, the order is rejected because the consumer’s credit
+card has expired. For more information on Gherkin, see the book Writing Great Specifi-
+cations: Using Specification by Example and Gherkin by Kamil Nicieja (Manning, 2017).
+EXECUTING GHERKIN SPECIFICATIONS USING CUCUMBER
+Cucumber is an automated testing framework that executes tests written in Gherkin.
+It’s available in a variety of languages, including Java. When using Cucumber for Java,
+you write a step definition class, such as the one shown in listing 10.12. A step definition
+class consists of methods that define the meaning of each given-then-when step. Each
+step definition method is annotated with either @Given, @When, @Then, or @And. Each
+of these annotations has a value element that’s a regular expression, which Cucum-
+ber matches against the steps.
+public class StepDefinitions ...
+{
+...
+@Given("A valid consumer")
+public void useConsumer() { ... }
+@Given("using a(.?) (.*) credit card")
+public void useCreditCard(String ignore, String creditCard) { ... }
+@When("I place an order for Chicken Vindaloo at Ajanta")
+public void placeOrder() { ... }
+@Then("the order should be (.*)")
+public void theOrderShouldBe(String desiredOrderState) { ... }
+@And("an (.*) event should be published")
+public void verifyEventPublished(String expectedEventClass)
+{ ... }
+}
+Each type of method is part of a particular phase of the test:
+
+@Given—The setup phase
+
+@When—The execute phase
+
+@Then and @And—The verification phase
+Later in section 10.2.4, when I describe this class in more detail, you’ll see that many
+of these methods make REST calls to Order Service. For example, the placeOrder()
+method creates Order by invoking the POST /orders REST endpoint. The the-
+OrderShouldBe() method verifies the status of the order by invoking GET /orders/
+{orderId}.
+ But before getting into the details of how to write step classes, let’s explore some
+design issues with component tests. 
+Listing 10.12
+The Java step definitions class makes the Gherkin scenarios executable.
+ 

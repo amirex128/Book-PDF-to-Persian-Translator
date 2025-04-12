@@ -1,0 +1,38 @@
+2 As before, I have anonymized the company—FoodCo isn’t its real name!
+However, especially in a world of virtualized infrastructure, I’ve always felt that this
+model lacked a fourth axis of vertical scaling, though that would have the somewhat
+unfortunate property of making it no longer a cube. Nonetheless, I think it’s a useful
+set of mechanisms for us to determine how best to scale our microservice architec‐
+tures. Before we look at these types of scaling in detail, along with the relative pros
+and cons, a brief summary is in order:
+Vertical scaling
+In a nutshell, this means getting a bigger machine.
+Horizontal duplication
+Having multiple things capable of doing the same work.
+Data partitioning
+Dividing work based on some attribute of the data, e.g., customer group.
+Functional decomposition
+Separation of work based on the type, e.g., microservice decomposition.
+Understanding what combination of these scaling techniques is most appropriate will
+fundamentally come down to the nature of the scaling issue you are facing. To
+explore this in more detail, as well as look at examples of how these concepts could be
+implemented for MusicCorp, we’ll also examine their suitability for a real-world
+company, FoodCo.2 FoodCo provides food delivery direct to customers across a
+number of countries around the world.
+Vertical Scaling
+Some operations can just benefit from more grunt. Getting a bigger box with faster
+CPU and better I/O can often improve latency and throughput, allowing you to pro‐
+cess more work in less time. So if your application isn’t going fast enough for you or
+can’t handle enough requests, why not get a bigger machine?
+In the case of FoodCo, one of the challenges it is suffering from is increasing write
+contention on its primary database. Normally, vertical scaling is an absolute go-to
+option to quickly scale writes on a relational database, and indeed FoodCo has
+already upgraded the database infrastructure multiple times. The problem is that
+FoodCo has really already pushed this as far as it is comfortable with. Vertical scaling
+worked for many years, but given the company’s growth projections, even if FoodCo
+could get a bigger machine, that isn’t likely to solve the problem in the longer term.
+Historically, when vertical scaling required purchasing hardware, this technique
+was more problematic. The lead time to buying hardware meant that this wasn’t
+420 
+| 
+Chapter 13: Scaling

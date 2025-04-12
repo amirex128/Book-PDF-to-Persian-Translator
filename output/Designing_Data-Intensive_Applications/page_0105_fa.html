@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 105</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        iii. This variant is sometimes known as a B+ tree, although the optimization is so common that it often isn’t distinguished from other B-tree variants.
+    </p>
+    <ul>
+        <li>rency control، همانطور که در "Snapshot Isolation and Repeatable Read" در صفحه 237 خواهیم دید.</li>
+        <li>ما می‌توانیم با ذخیره نکردن کل key، فضای زیادی در صفحات ذخیره کنیم، اما آن را مختصر کنیم. به خصوص در صفحات داخلی tree، keys فقط باید اطلاعات کافی را برای عمل به عنوان مرز بین key ranges ارائه دهند. Packing keys بیشتر در یک صفحه به tree اجازه می‌دهد تا a branching factor بالاتری داشته باشد و بنابراین سطوح کمتری داشته باشد.iii</li>
+        <li>به طور کلی، صفحات را می‌توان در هر جایی از دیسک قرار داد. هیچ چیز نیازی به نزدیکی صفحات با key ranges مجاور در دیسک ندارد. اگر یک query نیاز به scan بر روی بخش بزرگی از key range به ترتیب مرتب شده داشته باشد، این page-by-page layout می‌تواند ineffi‐cient باشد، زیرا یک disk seek ممکن است برای هر صفحه ای که خوانده می‌شود، مورد نیاز باشد. بنابراین بسیاری از پیاده‌سازی‌های B-tree سعی می‌کنند tree را طوری lay out کنند که leaf pages به ترتیب sequential در دیسک ظاهر شوند. با این حال، حفظ این order با رشد tree دشوار است. در مقابل، از آنجایی که LSM-trees segments بزرگ storage را در یک go در حین merging، دوباره می‌نویسند، حفظ sequential keys نزدیک به یکدیگر روی دیسک برای آن‌ها آسان‌تر است.</li>
+        <li>Additional pointers به tree اضافه شده‌اند. به عنوان مثال، هر leaf page ممکن است references به صفحات sibling خود در سمت چپ و راست داشته باشد، که به scanning keys به ترتیب بدون پرش به عقب به parent pages اجازه می‌دهد.</li>
+        <li>B-tree variants مانند fractal trees [22] برخی از ایده‌های log-structured را برای کاهش disk seeks قرض می‌گیرند (و آن‌ها هیچ ارتباطی با fractals ندارند).</li>
+    </ul>
+    <h4>Comparing B-Trees and LSM-Trees</h4>
+    <p>
+        حتی اگر پیاده‌سازی‌های B-tree عموماً بالغ‌تر از پیاده‌سازی‌های LSM-tree هستند، LSM-trees نیز به دلیل ویژگی‌های performance خود جالب هستند. به عنوان یک rule of thumb، LSM-trees معمولاً برای writes سریع‌تر هستند، در حالی که B-trees برای reads سریع‌تر در نظر گرفته می‌شوند [23]. Reads معمولاً در LSM-trees کندتر هستند زیرا آن‌ها باید چندین data structures و SSTables مختلف را در مراحل مختلف compaction بررسی کنند.
+    </p>
+    <p>
+        با این حال، benchmarks اغلب بی‌نتیجه هستند و به جزئیات workload حساس هستند. شما نیاز دارید systems را با workload خاص خود تست کنید تا یک مقایسه معتبر انجام دهید. در این بخش ما به طور خلاصه در مورد چند چیزی که هنگام اندازه‌گیری performance از یک storage engine، ارزش در نظر گرفتن را دارند، بحث خواهیم کرد.
+    </p>
+    <p>
+        Data Structures That Power Your Database | 83
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

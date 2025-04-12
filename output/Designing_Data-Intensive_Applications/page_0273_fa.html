@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 273</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در مورد مثال پزشک <em>on call</em>، <em>row</em> که در مرحله 3 اصلاح می‌شود یکی از <em>rows</em> های برگشتی در مرحله 1 بود، بنابراین ما می‌توانستیم transaction را ایمن کنیم و با <em>locking</em> <em>rows</em> در مرحله 1 (SELECT FOR UPDATE) از <em>write skew</em> جلوگیری کنیم. با این حال، چهار مثال دیگر متفاوت هستند: آنها نبود <em>rows</em> های منطبق با برخی از <em>search condition</em> را بررسی می‌کنند، و <em>write</em> یک <em>row</em> منطبق با همان <em>condition</em> را اضافه می‌کند. اگر <em>query</em> در مرحله 1 هیچ <em>rows</em> ای را برنگرداند، SELECT FOR UPDATE نمی‌تواند هیچ <em>locks</em> ای را به چیزی متصل کند.
+    </p>
+    <p>
+        این اثر، که در آن یک <em>write</em> در یک <em>transaction</em> نتیجه یک query جستجو را در یک <em>transaction</em> دیگر تغییر می‌دهد، یک <em>phantom</em> نامیده می‌شود [3]. <em>Snapshot isolation</em> از phantoms در <em>read-only queries</em> اجتناب می‌کند، اما در <em>read-write transactions</em> مانند مثال‌هایی که ما بحث کردیم، <em>phantoms</em> می‌تواند منجر به موارد به‌ویژه دشواری از <em>write skew</em> شود.
+    </p>
+    <h4>Materializing conflicts</h4>
+    <p>
+        اگر مشکل phantoms این است که هیچ object ای وجود ندارد که بتوانیم <em>locks</em> را به آن متصل کنیم، شاید بتوانیم به طور مصنوعی یک object <em>lock</em> را وارد database کنیم؟
+    </p>
+    <p>
+        به عنوان مثال، در مورد booking اتاق جلسه می‌توانید جدول زمان‌بندی‌ها و اتاق‌ها را تصور کنید. هر <em>row</em> در این table با یک اتاق خاص برای یک دوره زمانی خاص (مثلاً 15 دقیقه) مطابقت دارد. شما <em>rows</em> را برای تمام ترکیبات ممکن اتاق‌ها و دوره‌های زمانی از قبل ایجاد می‌کنید، به عنوان مثال، برای شش ماه آینده.
+    </p>
+    <p>
+        حالا یک <em>transaction</em> که می‌خواهد یک رزرو ایجاد کند می‌تواند <em>rows</em> در table را که مربوط به اتاق و دوره زمانی مورد نظر است <em>lock</em> کند (SELECT FOR UPDATE). پس از اینکه <em>locks</em> را به دست آورد، می‌تواند رزروهای همپوشانی را بررسی کند و یک رزرو جدید را مانند قبل درج کند. توجه داشته باشید که از table اضافی برای ذخیره اطلاعات در مورد رزرو استفاده نمی‌شود—این فقط یک مجموعه از <em>locks</em> است که برای جلوگیری از اصلاح همزمان رزروها در همان اتاق و بازه زمانی استفاده می‌شود.
+    </p>
+    <p>
+        این رویکرد، <em>materializing conflicts</em> نامیده می‌شود، زیرا یک <em>phantom</em> را می‌گیرد و آن را به یک <em>lock conflict</em> در یک مجموعه مشخص از <em>rows</em> که در database وجود دارد، تبدیل می‌کند [11]. متاسفانه، فهمیدن چگونگی <em>materialize conflicts</em> می‌تواند دشوار و مستعد خطا باشد، و اجازه دادن به یک مکانیسم <em>concurrency control</em> برای نفوذ به <em>application data model</em> زشت است.
+    </p>
+    <p>
+        به همین دلیل، <em>materializing conflicts</em> باید به عنوان آخرین راه‌حل در نظر گرفته شود اگر هیچ جایگزینی امکان‌پذیر نباشد. یک سطح <em>serializable isolation</em> در اکثر موارد بسیار ترجیح داده می‌شود.
+    </p>
+    <h4>Serializability</h4>
+    <p>
+        در این فصل ما چندین مثال از <strong>Transactions</strong> را دیده‌ایم که مستعد <em>race conditions</em> هستند. برخی از <em>race conditions</em> با <em>read committed</em> و <em>snapshot isolation levels</em> جلوگیری می‌شوند، اما برخی دیگر نه. ما به برخی از مثال‌های به‌ویژه دشوار با <em>write skew</em> و <em>phantoms</em> برخورد کردیم. این یک موقعیت غم‌انگیز است:
+    </p>
+    <ul>
+        <li>
+            <em>Isolation levels</em> درک آنها دشوار است، و به طور ناهمگون در databases های مختلف پیاده‌سازی شده‌اند (به عنوان مثال، معنای "<em>repeatable read</em>" به طور قابل توجهی متفاوت است).
+        </li>
+        <br>
+        Serializability
+        <br>
+        |
+        <br>
+        251
+    </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

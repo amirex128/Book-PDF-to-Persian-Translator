@@ -1,0 +1,44 @@
+228
+CHAPTER 7
+Implementing queries in a microservice architecture
+unavailable. An API composer sometimes caches the data returned by a Provider service in
+order to improve performance. It can also use this cache to improve availability. If a
+provider is unavailable, the API composer can return data from the cache, though it
+may be potentially stale.
+ Another strategy for improving availability is for the API composer to return incom-
+plete data. For example, imagine that Kitchen Service is temporarily unavailable.
+The API Composer for the findOrder() query operation could omit that service’s data
+from the response, because the UI can still display useful information. You’ll see more
+details on API design, caching, and reliability in chapter 8. 
+LACK OF TRANSACTIONAL DATA CONSISTENCY
+Another drawback of the API composition pattern is the lack of data consistency. A
+monolithic application typically executes a query operation using a single database
+transaction. ACID transactions—subject to the fine print about isolation levels—ensure
+that an application has a consistent view of the data, even if it executes multiple data-
+base queries. In contrast, the API composition pattern executes multiple database que-
+ries against multiple databases. There’s a risk, therefore, that a query operation will
+return inconsistent data.
+ For example, an Order retrieved from Order Service might be in the CANCELLED
+state, whereas the corresponding Ticket retrieved from Kitchen Service might not
+yet have been cancelled. The API composer must resolve this discrepancy, which increases
+the code complexity. To make matters worse, an API composer might not always be able
+to detect inconsistent data, and will return it to the client.
+ Despite these drawbacks, the API composition pattern is extremely useful. You can
+use it to implement many query operations. But there are some query operations that
+can’t be efficiently implemented using this pattern. A query operation might, for
+example, require the API composer to perform an in-memory join of large datasets.
+ It’s usually better to implement these types of query operations using the CQRS
+pattern. Let’s take a look at how this pattern works. 
+7.2
+Using the CQRS pattern
+Many enterprise applications use an RDBMS as the transactional system of record and
+a text search database, such as Elasticsearch or Solr, for text search queries. Some
+applications keep the databases synchronized by writing to both simultaneously. Oth-
+ers periodically copy data from the RDBMS to the text search engine. Applications
+with this architecture leverage the strengths of multiple databases: the transactional
+properties of the RDBMS and the querying capabilities of the text database.
+Pattern: Command query responsibility segregation
+Implement a query that needs data from several services by using events to maintain
+a read-only view that replicates data from the services. See http://microservices
+.io/patterns/data/cqrs.html.
+ 

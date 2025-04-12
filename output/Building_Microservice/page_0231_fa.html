@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 231</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>شکل 7-4. همان <em>artifact</em> در هر محیط مستقر می‌شود</p>
+  <p>اگر قرار است از همان <em>artifact</em> در محیط‌های مختلف استفاده شود، هر جنبه‌ای از پیکربندی که از محیطی به محیط دیگر متفاوت است، باید خارج از خود <em>artifact</em> نگهداری شود. به عنوان یک مثال ساده، من ممکن است بخواهم <em>application logs</em> را طوری پیکربندی کنم که همه چیز در سطح <em>DEBUG</em> و بالاتر در هنگام اجرای مرحله <em>Slow Tests</em> ثبت شود، و اطلاعات بیشتری برای تشخیص دلیل شکست یک <em>test</em> به من بدهد. با این حال، ممکن است تصمیم بگیرم که این را به <em>INFO</em> تغییر دهم تا حجم <em>log</em> را برای <em>Performance Tests</em> و استقرار <em>Production</em> کاهش دهم.</p>
+  <h4>Artifact Creation Tips</h4>
+  <p>یک <em>deployment artifact</em> را برای <em>microservice</em> خود، فقط یک بار بسازید. از این <em>artifact</em> در هر جایی که می‌خواهید آن نسخه از <em>microservice</em> خود را مستقر کنید، مجدداً استفاده کنید. <em>deployment artifact</em> خود را <em>environment-agnostic</em> نگه دارید—پیکربندی خاص محیط را در جای دیگری ذخیره کنید.</p>
+  <h4>Mapping Source Code and Builds to Microservices</h4>
+  <p>ما قبلاً به یک موضوع نگاه کردیم که می‌تواند جناح‌های متخاصم را هیجان‌زده کند—توسعه مبتنی بر <em>feature branching</em> در مقابل <em>trunk-based</em>—اما مشخص می‌شود که این بحث برای این فصل تمام نشده است. موضوع دیگری که احتمالاً نظرات بسیار متنوعی را برمی‌انگیزد، سازماندهی کد برای <em>microservices</em> ما است. من ترجیحات خاص خودم را دارم، اما قبل از اینکه به آن‌ها بپردازیم، بیایید گزینه‌های اصلی را برای نحوه سازماندهی کد برای <em>microservices</em> خود بررسی کنیم.</p>
+  <h4>One Giant Repo, One Giant Build</h4>
+  <p>اگر ما با ساده‌ترین گزینه شروع کنیم، می‌توانیم همه چیز را با هم جمع کنیم. ما یک مخزن واحد و عظیم داریم که تمام کد ما را ذخیره می‌کند، و ما یک <em>build</em> واحد داریم، همانطور که در شکل 7-5 می‌بینیم. هر <em>check-in</em> به این مخزن کد منبع باعث می‌شود که <em>build</em> ما فعال شود،</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0231/image_1.png" alt="Image from page 231" /></div>
+<div class="page-image"><img src="page_0231/image_2.png" alt="Image from page 231" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+207
+Implementing an event store
+...
+}
+The two type parameters passed to ReflectiveMutableCommandProcessingAggregate
+are Order and OrderCommand, which is the base interface for Order’s commands. 
+DEFINING AGGREGATE COMMANDS
+An aggregate’s command classes must extend an aggregate-specific base interface,
+which itself must extend the Command interface. For example, the Order aggregate’s
+commands extend OrderCommand:
+public interface OrderCommand extends Command {
+}
+public class CreateOrderCommand implements OrderCommand { ... }
+The OrderCommand interface extends Command, and the CreateOrderCommand com-
+mand class extends OrderCommand. 
+DEFINING DOMAIN EVENTS
+An aggregate’s event classes must extend the Event interface, which is a marker inter-
+face with no methods. It’s also useful to define a common base interface, which
+extends Event for all of an aggregate’s event classes. For example, here’s the defini-
+tion of the OrderCreated event:
+interface OrderEvent extends Event {
+}
+public class OrderCreated extends OrderEvent { ... }
+The OrderCreated event class extends OrderEvent, which is the base interface for the
+Order aggregate’s event classes. The OrderEvent interface extends Event. 
+CREATING, FINDING, AND UPDATING AGGREGATES WITH THE AGGREGATEREPOSITORY CLASS
+The framework provides several ways to create, find, and update aggregates. The sim-
+plest approach, which I describe here, is to use an AggregateRepository. Aggregate-
+Repository is a generic class that’s parameterized by the aggregate class and the
+aggregate’s base command class. It provides three overloaded methods:
+
+save()—Creates an aggregate
+
+find()—Finds an aggregate
+
+update()—Updates an aggregate
+The save () and update() methods are particularly convenient because they encapsu-
+late the boilerplate code required for creating and updating aggregates. For instance,
+save() takes a command object as a parameter and performs the following steps:
+1
+Instantiates the aggregate using its default constructor
+2
+Invokes process() to process the command
+ 

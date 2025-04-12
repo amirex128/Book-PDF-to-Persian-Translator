@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 232</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 6: Developing business logic with event sourcing</strong></h3>
+  <h4><strong style="color:darkblue">QUERYING THE EVENT STORE IS CHALLENGING</strong></h4>
+  <p>
+   تصور کنید که شما نیاز دارید تا customerهایی را پیدا کنید که credit limit آنها تمام شده است. از آنجایی که یک column حاوی credit وجود ندارد، شما نمی‌توانید بنویسید SELECT * FROM CUSTOMER WHERE CREDIT_LIMIT = 0. در عوض، شما باید از یک query پیچیده‌تر و بالقوه ناکارآمد استفاده کنید که دارای یک SELECT تودرتو برای محاسبه credit limit با folding eventsها که credit اولیه را تنظیم می‌کنند و آن را تنظیم می‌کنند، باشد. برای بدتر کردن اوضاع، یک event store مبتنی بر NoSQL معمولاً فقط از primary key-based lookup پشتیبانی می‌کند. در نتیجه، شما باید queriesها را با استفاده از رویکرد CQRS که در فصل 7 توضیح داده شد، پیاده‌سازی کنید.
+  </p>
+  <h4><strong style="color:darkblue">6.2: Implementing an event store</strong></h4>
+  <p>
+   یک application که از event sourcing استفاده می‌کند، eventsهای خود را در یک event store ذخیره می‌کند. یک event store یک hybrid از یک database و یک message broker است. این به عنوان یک database رفتار می‌کند زیرا یک API برای درج و بازیابی events از یک aggregate با primary key دارد. و به عنوان یک message broker رفتار می‌کند زیرا یک API برای subscribing به events دارد.
+  </p>
+  <p>
+   چندین راه مختلف برای پیاده‌سازی یک event store وجود دارد. یک گزینه این است که event store و event sourcing framework خودتان را پیاده‌سازی کنید. شما می‌توانید، به عنوان مثال، events را در یک RDBMS persist کنید. یک روش ساده، اگرچه با عملکرد پایین است، برای publish کردن events این است که subscribers table به نام EVENTS را برای events poll کنند. اما، همانطور که در بخش 6.1.4 ذکر شد، یک چالش این است که اطمینان حاصل شود که یک subscriber همه eventsها را به ترتیب پردازش می‌کند.
+  </p>
+  <p>
+   یک گزینه دیگر استفاده از یک event store با هدف خاص است، که معمولاً یک مجموعه غنی از ویژگی‌ها و عملکرد و مقیاس‌پذیری بهتری را ارائه می‌دهد. چندین مورد از این موارد وجود دارد که می‌توانید انتخاب کنید:
+  </p>
+  <ul>
+   <li>Event Store—یک event store منبع باز مبتنی بر .NET که توسط Greg Young، یک پیشگام event sourcing توسعه داده شده است (https://eventstore.org).</li>
+   <li>Lagom—یک microservices framework که توسط Lightbend، شرکتی که قبلاً با نام Typesafe شناخته می‌شد، توسعه داده شده است (www.lightbend.com/lagom-framework).</li>
+   <li>Axon—یک فریم‌ورک منبع باز Java برای developing event-driven applications که از event sourcing و CQRS استفاده می‌کند (www.axonframework.org).</li>
+   <li>Eventuate—توسعه یافته توسط startup من، Eventuate (http://eventuate.io). دو نسخه از Eventuate وجود دارد: Eventuate SaaS، یک cloud service و Eventuate Local، یک پروژه منبع باز مبتنی بر Apache Kafka/RDBMS.</li>
+  </ul>
+  <p>
+   اگرچه این frameworks در جزئیات متفاوت هستند، اما مفاهیم اصلی یکسان باقی می‌مانند. از آنجایی که Eventuate، فریم‌ورکی است که من بیشتر با آن آشنا هستم، این موردی است که من در اینجا پوشش می‌دهم. این دارای یک معماری ساده و آسان برای درک است که مفاهیم event sourcing را نشان می‌دهد. شما می‌توانید از آن در applicationsهای خود استفاده کنید، مفاهیم را خودتان دوباره پیاده‌سازی کنید، یا آنچه را که در اینجا یاد می‌گیرید برای ساخت applications با یکی از دیگر event sourcing frameworks اعمال کنید.
+  </p>
+  <p>
+   من بخش‌های زیر را با توصیف نحوه عملکرد event store به نام Eventuate Local شروع می‌کنم. سپس فریم‌ورک Eventuate Client را برای Java، یک فریم‌ورک آسان برای استفاده برای نوشتن business logic مبتنی بر event sourcing که از event store به نام Eventuate Local استفاده می‌کند، شرح می‌دهم.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

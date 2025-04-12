@@ -1,0 +1,43 @@
+114
+CHAPTER 4
+Managing transactions with sagas
+consistency, availability, and partition tolerance (https://en.wikipedia.org/wiki/CAP
+_theorem). Today, architects prefer to have a system that’s available rather than one
+that’s consistent.
+ On the surface, distributed transactions are appealing. From a developer’s per-
+spective, they have the same programming model as local transactions. But because of
+the problems mentioned so far, distributed transactions aren’t a viable technology for
+modern applications. Chapter 3 described how to send messages as part of a database
+transaction without using distributed transactions. To solve the more complex prob-
+lem of maintaining data consistency in a microservice architecture, an application
+must use a different mechanism that builds on the concept of loosely coupled, asyn-
+chronous services. This is where sagas come in. 
+4.1.3
+Using the Saga pattern to maintain data consistency
+Sagas are mechanisms to maintain data consistency in a microservice architecture
+without having to use distributed transactions. You define a saga for each system com-
+mand that needs to update data in multiple services. A saga is a sequence of local
+transactions. Each local transaction updates data within a single service using the
+familiar ACID transaction frameworks and libraries mentioned earlier.
+The system operation initiates the first step of the saga. The completion of a local
+transaction triggers the execution of the next local transaction. Later, in section 4.2,
+you’ll see how coordination of the steps is implemented using asynchronous messag-
+ing. An important benefit of asynchronous messaging is that it ensures that all the
+steps of a saga are executed, even if one or more of the saga’s participants is temporar-
+ily unavailable.
+ Sagas differ from ACID transactions in a couple of important ways. As I describe in
+detail in section 4.3, they lack the isolation property of ACID transactions. Also, because
+each local transaction commits its changes, a saga must be rolled back using compensat-
+ing transactions. I talk more about compensating transactions later in this section. Let’s
+take a look at an example saga.
+AN EXAMPLE SAGA: THE CREATE ORDER SAGA
+The example saga used throughout this chapter is the Create Order Saga, which is
+shown in figure 4.2. The Order Service implements the createOrder() operation
+using this saga. The saga’s first local transaction is initiated by the external request to
+create an order. The other five local transactions are each triggered by completion of
+the previous one.
+Pattern: Saga
+Maintain data consistency across services using a sequence of local transactions
+that are coordinated using asynchronous messaging. See http://microservices.io/
+patterns/data/saga.html.
+ 

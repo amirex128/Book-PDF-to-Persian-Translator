@@ -1,0 +1,20 @@
+can trade off against each other: consistency, availability, and partition tolerance.
+Specifically, the theorem tells us that we get to keep two in a failure mode.
+Consistency is the system characteristic by which we will get the same answer if we go
+to multiple nodes. Availability means that every request receives a response. Partition
+tolerance is the system’s ability to handle the fact that communication between its
+parts is sometimes impossible.
+Since Eric Brewer published his original conjecture, the idea has gained a mathemati‐
+cal proof. I’m not going to dive into the math of the proof itself, as not only is this not
+that sort of book, but I can also guarantee that I would get it wrong. Instead, let’s use
+some worked examples that will help us understand that under it all, the CAP theo‐
+rem is a distillation of a very logical set of reasoning.
+Let’s imagine that our Inventory microservice is deployed across two separate data
+centers, as shown in Figure 12-7. Backing our service instance in each data center is a
+database, and these two databases talk to each other to try to synchronize data
+between them. Reads and writes are done via the local database node, and replication
+is used to synchronize the data between the nodes.
+Figure 12-7. Using multiprimary replication to share data between two database nodes
+CAP Theorem 
+| 
+409

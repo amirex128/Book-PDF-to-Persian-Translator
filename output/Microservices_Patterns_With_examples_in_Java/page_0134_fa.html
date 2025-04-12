@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 134</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h3><strong>فصل 3</strong></h3>
+    <h4><strong>ارتباط بین فرآیندی در معماری <abbr title="ریز سرویس">microservice</abbr></strong></h4>
+    <p>
+        ترتیب مراحل برای ایجاد یک سفارش به شرح زیر است:
+    </p>
+    <ol>
+        <li>
+            کلاینت یک درخواست HTTP POST /orders را به Order Service (سرویس سفارش) ارسال می‌کند.
+        </li>
+        <li>
+            Order Service (سرویس سفارش)، اطلاعات مصرف‌کننده را با ارسال یک درخواست HTTP GET /consumers/id به Consumer Service (سرویس مصرف‌کننده) بازیابی می‌کند.
+        </li>
+        <li>
+            Order Service (سرویس سفارش)، اطلاعات رستوران را با ارسال یک درخواست HTTP GET /restaurant/id به Restaurant Service (سرویس رستوران) بازیابی می‌کند.
+        </li>
+        <li>
+            Order Taking (دریافت سفارش) درخواست را با استفاده از اطلاعات مصرف‌کننده و رستوران اعتبارسنجی می‌کند.
+        </li>
+        <li>
+            Order Taking (دریافت سفارش) یک Order (سفارش) ایجاد می‌کند.
+        </li>
+        <li>
+            Order Taking (دریافت سفارش) یک پاسخ HTTP را به کلاینت ارسال می‌کند.
+        </li>
+    </ol>
+    <p>
+        از آنجا که این سرویس‌ها از HTTP استفاده می‌کنند، همه آنها باید به طور همزمان در دسترس باشند تا برنامه FTGO بتواند درخواست CreateOrder (ایجاد سفارش) را پردازش کند. برنامه FTGO نمی‌تواند سفارش‌ها را ایجاد کند اگر هر یک از این سه سرویس از کار افتاده باشد. از نظر ریاضی، در دسترس بودن یک عملیات سیستم، حاصل‌ضرب در دسترس بودن سرویس‌هایی است که توسط آن عملیات فراخوانی می‌شوند. اگر Order Service (سرویس سفارش) و دو سرویسی که فراخوانی می‌کند 99.5٪ در دسترس باشند، در دسترس بودن کلی 99.5٪<sup>3</sup> = 98.5٪ است که به طور قابل توجهی کمتر است. هر سرویس اضافی که در رسیدگی به یک درخواست شرکت می‌کند، در دسترس بودن را بیشتر کاهش می‌دهد.
+    </p>
+    <p>
+        این مشکل مختص ارتباط مبتنی بر <abbr title="انتقال حالت بازنمودی">REST</abbr> نیست. در دسترس بودن زمانی کاهش می‌یابد که یک سرویس فقط پس از دریافت پاسخ از سرویس دیگر بتواند به کلاینت خود پاسخ دهد. این مشکل حتی اگر سرویس‌ها با استفاده از تعامل سبک درخواست/پاسخ از طریق پیام‌رسانی ناهمگام ارتباط برقرار کنند، وجود دارد. به عنوان مثال، در دسترس بودن Order Service (سرویس سفارش) کاهش می‌یابد اگر یک پیام را به Consumer Service (سرویس مصرف‌کننده) از طریق یک message broker (کارگزار پیام) ارسال کند و سپس منتظر پاسخ بماند.
+    </p>
+    <p>
+        اگر می‌خواهید در دسترس بودن را به حداکثر برسانید، باید میزان ارتباط همزمان را به حداقل برسانید. بیایید نگاهی بیندازیم که چگونه این کار را انجام دهیم.
+    </p>
+    <h5><strong>3.4.2 حذف تعامل همزمان</strong></h5>
+    <p>
+        چند راه مختلف برای کاهش میزان ارتباط همزمان با سرویس‌های دیگر در هنگام رسیدگی به درخواست‌های همزمان وجود دارد. یک راه‌حل این است که با تعریف سرویس‌هایی که فقط <abbr title="رابط برنامه‌نویسی نرم‌افزار">APIs</abbr> ناهمگام دارند، از این مشکل به طور کامل اجتناب کنید. با این حال، این همیشه امکان‌پذیر نیست. به عنوان مثال، <abbr title="رابط برنامه‌نویسی نرم‌افزار">APIs</abbr> عمومی معمولاً <abbr title="انتقال حالت بازنمودی">RESTful</abbr> هستند. بنابراین، سرویس‌ها گاهی اوقات ملزم به داشتن <abbr title="رابط برنامه‌نویسی نرم‌افزار">APIs</abbr> همزمان هستند.
+    </p>
+    <p>
+        خوشبختانه، راه‌هایی برای رسیدگی به درخواست‌های همزمان بدون ایجاد درخواست‌های همزمان وجود دارد. بیایید در مورد گزینه‌ها صحبت کنیم.
+    </p>
+    <p>
+        <strong>استفاده از سبک‌های تعامل ناهمگام</strong>
+    </p>
+    <p>
+        در حالت ایده‌آل، تمام تعاملات باید با استفاده از سبک‌های تعامل ناهمگام که در اوایل این فصل توضیح داده شد، انجام شوند. به عنوان مثال، فرض کنید یک کلاینت برنامه FTGO از سبک تعامل درخواست/پاسخ ناهمگام برای ایجاد سفارش‌ها استفاده می‌کند. یک کلاینت با ارسال یک پیام درخواست به Order Service (سرویس سفارش)، یک سفارش ایجاد می‌کند.
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+421
+Deploying a RESTful service using AWS Lambda and AWS Gateway
+tier. The business tier consists of RestaurantService, the Restaurant JPA entity, and
+RestaurantRepository, which encapsulates the database.
+ Let’s take a look at the FindRestaurantRequestHandler class.
+THE FINDRESTAURANTREQUESTHANDLER CLASS
+The FindRestaurantRequestHandler class implements the GET /restaurant/
+{restaurantId} endpoint. This class along with the other request handler classes are
+the leaves of the class hierarchy shown in figure 12.15. The root of the hierarchy is
+RequestHandler, which is part of the AWS SDK. Its abstract subclasses handle errors
+and inject dependencies.
+The AbstractHttpHandler class is the abstract base class for HTTP request handlers.
+It catches unhandled exceptions thrown during request handling and returns a 500 -
+internal server error response. The AbstractAutowiringHttpRequestHandler class
+implements dependency injection for request handlers. I’ll describe these abstract
+superclasses shortly, but first let’s look at the code for FindRestaurantRequestHandler.
+ Listing 12.9 shows the code for the FindRestaurantRequestHandler class. The
+FindRestaurantRequestHandler class has a handleHttpRequest() method, which
+takes an APIGatewayProxyRequestEvent representing an HTTP request as a parame-
+ter. It invokes RestaurantService to find the restaurant and returns an APIGateway-
+ProxyResponseEvent describing the HTTP response.
+Request
+Handler
+Abstract
+HttpHandler
+Abstract
+Autowiring
+HttpRequest
+Handler
+Create
+Restaurant
+Request
+Handler
+Find
+Restaurant
+Request
+Handler
+...
+Request
+Handler
+Figure 12.15
+The design of the request handler 
+classes. The abstract superclasses implement 
+dependency injection and error handling.
+ 

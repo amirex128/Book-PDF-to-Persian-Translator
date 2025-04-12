@@ -1,0 +1,41 @@
+concerns, but be wary about also trying to use these products to do your call aggrega‐
+tion and filtering, even if they claim they can.
+When customizing a product built by someone else, you often have to work in their
+world. Your toolchain is restricted because you may not be able to use your program‐
+ming language and your development practices. Rather than writing Java code,
+you’re configuring routing rules in some odd product-specific DSL (probably using
+JSON). It can be a frustrating experience, and you are baking some of the smarts of
+your system into a third-party product. This can reduce your ability to move this
+behavior later. It’s common to realize that a pattern of call aggregation actually relates
+to some domain functionality that could justify a microservice in its own right
+(something we’ll explore more shortly when we talk about BFFs). If this behavior is in
+a vendor-specific configuration, moving this functionality can be more problematic,
+as you’d likely have to reinvent it.
+The situation can become even worse if the aggregating gateway becomes complex
+enough to require a dedicated team to own and manage it. At worst, adopting more
+horizontal team ownership can lead to a situation in which to roll out some new
+functionality you have to get a frontend team to make changes, the aggregating gate‐
+way team to make changes, and the team(s) that owns the microservice to also make
+its changes. Suddenly everything starts going much more slowly.
+So if you want to make use of a dedicated API gateway, go ahead—but strongly con‐
+sider having your filtering and aggregation logic elsewhere.
+When to Use It
+For a solution owned by a single team, where one team develops the user interface
+and the backend microservices, I would be OK with having a single central aggregat‐
+ing gateway. That said, this team sounds like it is doing a LOT of work—in such sit‐
+uations, I tend to see a large degree of conformity across the user interfaces, which
+often removes the need for these aggregation points in the first place.
+If you do decide to adopt a single central aggregating gateway, please be careful to
+limit what functionality you put inside it. I’d be extremely wary of pushing this func‐
+tionality into a more generic API gateway product, for example, for reasons outlined
+previously.
+The concept of doing some form of call filtering and aggregation on the backend can
+be really important, though, in terms of optimizing the user’s experience of our user
+interfaces. The issue is that in a delivery organization with multiple teams, a central
+gateway can lead to requirements for lots of coordination among those teams.
+So if we still want do to aggregation and filtering on the backend but want to remove
+the problems associated with the ownership model of a central gateway, what can we
+do? That’s where the backend for frontend pattern comes in.
+Pattern: Central Aggregating Gateway 
+| 
+479

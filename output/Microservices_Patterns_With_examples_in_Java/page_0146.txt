@@ -1,0 +1,47 @@
+116
+CHAPTER 4
+Managing transactions with sagas
+undo the changes made by the first three steps. You must write what are known as com-
+pensating transactions.
+ Suppose that the (n + 1)th transaction of a saga fails. The effects of the previous n
+transactions must be undone. Conceptually, each of those steps, Ti, has a correspond-
+ing compensating transaction, Ci, which undoes the effects of the Ti. To undo the
+effects of those first n steps, the saga must execute each Ci in reverse order. The
+sequence of steps is T1 … Tn, Cn … C1, as shown in figure 4.3. In this example, Tn+1
+fails, which requires steps T1 … Tn to be undone.
+The saga executes the compensation transactions in reverse order of the forward
+transactions: Cn … C1. The mechanics of sequencing the Cis aren’t any different than
+sequencing the Tis. The completion of Ci must trigger the execution of Ci-1.
+ Consider, for example, the Create Order Saga. This saga can fail for a variety of
+reasons:
+The consumer information is invalid or the consumer isn’t allowed to create
+orders.
+The restaurant information is invalid or the restaurant is unable to accept orders.
+The authorization of the consumer’s credit card fails.
+If a local transaction fails, the saga’s coordination mechanism must execute compen-
+sating transactions that reject the Order and possibly the Ticket. Table 4.1 shows the
+compensating transactions for each step of the Create Order Saga. It’s important to
+note that not all steps need compensating transactions. Read-only steps, such as verify-
+ConsumerDetails(), don’t need compensating transactions. Nor do steps such as
+authorizeCreditCard() that are followed by steps that always succeed.
+ Section 4.3 discusses how the first three steps of the Create Order Saga are termed
+compensatable transactions because they’re followed by steps that can fail, how the
+fourth step is termed the saga’s pivot transaction because it’s followed by steps that
+Saga
+T1
+...
+Tn
+Tn+1
+FAILS
+Cn
+...
+C
+The changes made by T1...Tn
+have been committed.
+The compensating transactions undo
+the changes made by T1...Tn.
+1
+Figure 4.3
+When a step of a saga fails because of a business rule violation, the saga must explicitly 
+undo the updates made by previous steps by executing compensating transactions.
+ 

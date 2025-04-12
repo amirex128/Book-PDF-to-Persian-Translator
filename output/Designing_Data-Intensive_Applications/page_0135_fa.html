@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 135</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        i. With the exception of some special cases, such as certain memory-mapped files or when operating directly on compressed data (as described in “Column Compression” on page 97).
+    </p>
+    <p>
+        ii. Note that encoding has nothing to do with encryption. We don’t discuss encryption in this book.
+    </p>
+    <p>
+        sequence-of-bytes representation کاملاً متفاوت از data structures است که معمولاً در memory استفاده می‌شوند.i
+    </p>
+    <p>
+        بنابراین، ما به نوعی translation بین دو representation نیاز داریم. The trans‐lation از representation in-memory به یک byte sequence encoding نامیده می‌شود (که همچنین به عنوان serialization یا marshalling شناخته می‌شود) و معکوس آن decoding نامیده می‌شود (parsing, deserialization, unmarshalling).ii
+    </p>
+    <h4>Terminology clash</h4>
+    <p>
+        Serialization متأسفانه در context از transactions (فصل 7 را ببینید) نیز استفاده می‌شود، با یک معنای کاملاً متفاوت. برای اجتناب از overloading word ما در این کتاب با encoding همراه خواهیم بود، حتی اگر serialization شاید یک اصطلاح رایج‌تر باشد.
+    </p>
+    <p>
+        از آنجایی که این یک مشکل بسیار رایج است، تعداد بی‌شماری library و encoding formats مختلف برای انتخاب وجود دارد. بیایید یک overview مختصر انجام دهیم.
+    </p>
+    <h4>Language-Specific Formats</h4>
+    <p>
+        بسیاری از زبان‌های برنامه‌نویسی با پشتیبانی داخلی برای encoding in-memory objects به byte sequences ارائه می‌شوند. به عنوان مثال، Java دارای java.io.Serializable [1]، Ruby دارای Marshal [2]، Python دارای pickle [3] و غیره است. بسیاری از libraries third-party نیز وجود دارند، مانند Kryo برای Java [4].
+    </p>
+    <p>
+        این encoding libraries بسیار راحت هستند، زیرا به objects in-memory اجازه می‌دهند تا با حداقل کد اضافی ذخیره و بازیابی شوند. با این حال، آن‌ها همچنین تعدادی از مشکلات عمیق را دارند:
+    </p>
+    <ul>
+        <li>The encoding اغلب به یک زبان برنامه‌نویسی خاص مرتبط است و خواندن data در یک زبان دیگر بسیار دشوار است. اگر شما داده‌ها را در چنین encoding ذخیره یا منتقل می‌کنید، خود را متعهد به زبان برنامه‌نویسی فعلی خود برای مدت زمان بسیار طولانی می‌کنید و ادغام systems خود را با سازمان‌های دیگر (که ممکن است از زبان‌های مختلفی استفاده کنند) نامشخص می‌کنید.</li>
+        <li>به منظور بازیابی داده‌ها در همان object types، فرآیند decoding باید قادر به ایجاد نمونه از classes دلخواه باشد. این اغلب منبع مشکلات security است [5]: اگر یک attacker می‌تواند application شما را وادار به decoding یک byte sequence دلخواه کند، آن‌ها می‌توانند classes دلخواه را ایجاد کنند، که به نوبه خود اغلب به آن‌ها اجازه می‌دهد کارهای وحشتناکی مانند اجرای از راه دور کد دلخواه را انجام دهند [6, 7].</li>
+    </ul>
+    <p>
+        Formats for Encoding Data | 113
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0135/image_1.png" alt="Image from page 135" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

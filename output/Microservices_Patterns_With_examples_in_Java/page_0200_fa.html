@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 200</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong style="color:darkblue">فصل 5: طراحی منطق کسب‌وکار در معماری microservice</strong></h3>
+  <h4><strong style="color:darkblue">STRUCTURE OF THE TICKET CLASS</strong></h4>
+  <p>
+   listing زیر، بخشی از کد را برای این class نشان می‌دهد. The Ticket class شبیه به یک domain class سنتی است. تفاوت اصلی این است که references به other aggregates بر اساس primary key است.
+  </p>
+  <pre><code class="language-java">@Entity(table="tickets")
+public class Ticket {
+@Id
+private Long id;
+private TicketState state;
+private Long restaurantId;
+@ElementCollection
+@CollectionTable(name="ticket_line_items")
+private List&lt;TicketLineItem&gt; lineItems;
+private ZonedDateTime readyBy;
+private ZonedDateTime acceptTime;
+private ZonedDateTime preparingTime;
+private ZonedDateTime pickedUpTime;
+private ZonedDateTime readyForPickupTime;
+...
+</code></pre>
+  <p>
+   این class با JPA persist می‌شود و به جدول TICKETS mapped می‌شود. field به نام restaurantId، یک Long است، نه یک object reference به Restaurant. field به نام readyBy، تخمینی از زمان آماده شدن order برای pickup را ذخیره می‌کند. The Ticket class دارای چندین field است که تاریخچه order را ردیابی می‌کند، از جمله acceptTime، preparingTime و pickupTime. بیایید به methods از این class نگاهی بیندازیم.
+  </p>
+  <h4><strong style="color:darkblue">BEHAVIOR OF THE TICKET AGGREGATE</strong></h4>
+  <p>
+   The Ticket aggregate چندین methods را تعریف می‌کند. همانطور که قبلاً دیدید، دارای یک method static به نام create() است، که یک factory method است که یک Ticket را ایجاد می‌کند. همچنین برخی methods وجود دارد که زمانی که رستوران، state از order را update می‌کند، فراخوانی می‌شوند:
+  </p>
+  <ul>
+   <li>
+    accept()—رستوران order را پذیرفته است.
+   </li>
+   <li>
+    preparing()—رستوران آماده‌سازی order را شروع کرده است، به این معنی که order دیگر نمی‌تواند تغییر یا لغو شود.
+   </li>
+   <li>
+    readyForPickup()—اکنون می‌توان order را pickup کرد.
+   </li>
+  </ul>
+  <p>
+   listing زیر، برخی از methods آن را نشان می‌دهد.
+  </p>
+  <p>
+   Listing 5.10
+   <br>
+   Part of the Ticket class, which is a JPA entity
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

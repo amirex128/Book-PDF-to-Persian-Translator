@@ -1,0 +1,46 @@
+171
+Kitchen Service business logic
+public class Ticket {
+public static ResultWithAggregateEvents<Ticket, TicketDomainEvent> 
+create(Long id, TicketDetails details) {
+return new ResultWithAggregateEvents<>(new Ticket(id, details), new 
+TicketCreatedEvent(id, details));
+}
+public List<TicketPreparationStartedEvent> preparing() {
+switch (state) {
+case ACCEPTED:
+this.state = TicketState.PREPARING;
+this.preparingTime = ZonedDateTime.now();
+return singletonList(new TicketPreparationStartedEvent());
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+public List<TicketDomainEvent> cancel() {
+switch (state) {
+case CREATED:
+case ACCEPTED:
+this.state = TicketState.CANCELLED;
+return singletonList(new TicketCancelled());
+case READY_FOR_PICKUP:
+throw new TicketCannotBeCancelledException();
+default:
+throw new UnsupportedStateTransitionException(state);
+}
+}
+The create() method creates a Ticket. The preparing() method is called when the
+restaurant starts preparing the order. It changes the state of the order to PREPARING,
+records the time, and publishes an event. The cancel() method is called when a user
+attempts to cancel an order. If the cancellation is allowed, this method changes the
+state of the order and returns an event. Otherwise, it throws an exception. These
+methods are invoked in response to REST API requests as well as events and com-
+mand messages. Let’s look at the classes that invoke the aggregate’s method. 
+THE KITCHENSERVICE DOMAIN SERVICE
+KitchenService is invoked by the service’s inbound adapters. It defines various meth-
+ods for changing the state of an order, including accept(), reject(), preparing(), and
+others. Each method loads the specifies aggregate, calls the corresponding method on
+the aggregate root, and publishes any domain events. The following listing shows its
+accept() method.
+Listing 5.11
+Some of the Ticket's methods
+ 

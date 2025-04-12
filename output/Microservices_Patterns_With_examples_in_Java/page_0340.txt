@@ -1,0 +1,52 @@
+310
+CHAPTER 9
+Testing microservices: Part 1
+sociable unit tests for the Order class and its dependencies. You can use them as
+compile-time tests because they execute extremely quickly. The Order class relies on
+the Money value object, so it’s important to test that class as well. Let’s see how to do that. 
+9.2.2
+Writing unit tests for value objects
+Value objects are immutable, so they tend to be easy to test. You don’t have to worry
+about side effects. A test for a value object typically creates a value object in a particu-
+lar state, invokes one of its methods, and makes assertions about the return value. List-
+ing 9.3 shows the tests for the Money value object, which is a simple class that
+represents a money value. These tests verify the behavior of the Money class’s methods,
+including add(), which adds two Money objects, and multiply(), which multiplies a
+Money object by an integer. They are solitary tests because the Money class doesn’t
+depend on any other application classes.
+public class MoneyTest {
+private final int M1_AMOUNT = 10;
+private final int M2_AMOUNT = 15;
+private Money m1 = new Money(M1_AMOUNT);
+private Money m2 = new Money(M2_AMOUNT);
+@Test
+public void shouldAdd() {
+         
+assertEquals(new Money(M1_AMOUNT + M2_AMOUNT), m1.add(m2));
+}
+@Test
+public void shouldMultiply() {     
+int multiplier = 12;
+assertEquals(new Money(M2_AMOUNT * multiplier), m2.multiply(multiplier));
+}
+...
+}
+Entities and value objects are the building blocks of a service’s business logic. But
+some business logic also resides in the service’s sagas and services. Let’s look at how to
+test those. 
+9.2.3
+Developing unit tests for sagas
+A saga, such as the CreateOrderSaga class, implements important business logic, so
+needs to be tested. It’s a persistent object that sends command messages to saga partic-
+ipants and processes their replies. As described in chapter 4, CreateOrderSaga
+exchanges command/reply messages with several services, such as Consumer Service
+and Kitchen Service. A test for this class creates a saga and verifies that it sends the
+Listing 9.3
+A simple, fast-running test for the Money value object
+Verify that two 
+Money objects can 
+be added together.
+Verify that a Money 
+object can be multiplied 
+by an integer.
+ 

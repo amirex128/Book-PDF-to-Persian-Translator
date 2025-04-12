@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 462</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h2><strong>CHAPTER 13</strong></h2>
+  <h3><strong>Refactoring to microservices</strong></h3>
+  <p>
+   برای رسیدن به نور خورشید بالای canopy جنگل،
+   به دور یک درخت دیگر رشد می‌کند. اغلب درخت می‌میرد، زیرا
+   یا توسط vine کشته می‌شود یا بر اثر پیری می‌میرد، و یک vine به شکل درخت باقی می‌ماند.
+  </p>
+  <p>
+   فرآیند refactoring معمولاً ماه‌ها یا سال‌ها طول می‌کشد. به عنوان مثال، طبق گفته
+   Steve Yegge (https://plus.google.com/+RipRowan/posts/eVeouesvaVX)
+   Amazon.com، refactor کردن monolith خود چند سال طول کشید. در مورد یک system بسیار بزرگ،
+   ممکن است هرگز این فرآیند را کامل نکنید. به عنوان مثال، ممکن است به نقطه‌ای برسید که شما
+   tasksهایی دارید که از شکستن monolith مهم‌تر هستند، مانند imple-
+   menting featuresها که درآمدزا هستند. اگر monolith مانعی برای
+   development مداوم نیست، ممکن است آن را رها کنید.
+  </p>
+  <h3><strong>DEMONSTRATE VALUE EARLY AND OFTEN</strong></h3>
+  <p>
+   یک مزیت مهم از refactoring افزایشی به یک microservice architecture این است که
+   شما بازگشت فوری سرمایه‌گذاری خود را دریافت می‌کنید. این با یک big
+   bang rewrite، که هیچ فایده‌ای را تا زمانی که کامل نشود، ارائه نمی‌دهد، بسیار متفاوت است. هنگامی که incremen-
+   tally refactoring monolith را انجام می‌دهید، می‌توانید هر service جدید را با استفاده از یک technology
+   stack جدید و یک process توسعه و تحویل مدرن، با سرعت بالا و سبک DevOps توسعه دهید. در نتیجه، سرعت تحویل تیم شما به طور پیوسته در طول زمان افزایش می‌یابد.
+  </p>
+  <p>
+   علاوه بر این، می‌توانید مناطق با ارزش بالای application خود را ابتدا به microser-
+   vicesها مهاجرت دهید. به عنوان مثال، تصور کنید که شما روی application FTGO کار می‌کنید. کسب‌وکار
+   ممکن است، به عنوان مثال، تصمیم بگیرد که الگوریتم زمان‌بندی تحویل یک
+   competitive advantage کلیدی است. احتمالاً مدیریت تحویل، یک منطقه از constant, ongoing
+   development خواهد بود. با استخراج مدیریت تحویل به یک service مستقل، تحویل
+   management team قادر خواهد بود به طور مستقل از بقیه developersهای FTGO کار کند
+   و به طور قابل توجهی velocity توسعه خود را افزایش دهد. آنها می‌توانند به طور مکرر
+   نسخه‌های جدید الگوریتم را deploy کرده و اثربخشی آنها را ارزیابی کنند.
+  </p>
+  <p>
+   یکی دیگر از مزایای توانایی ارائه value در اوایل این است که به حفظ
+   پشتیبانی کسب‌وکار از تلاش‌های migration کمک می‌کند. پشتیبانی مداوم آنها ضروری است، زیرا
+   تلاش refactoring به این معنی است که زمان کمتری صرف توسعه features می‌شود. بعضی
+   سازمان‌ها در حذف technical debt مشکل دارند، زیرا تلاش‌های گذشته
+   بیش از حد جاه‌طلبانه بودند و سود زیادی نداشتند. در نتیجه، کسب‌وکار می‌شود
+   از سرمایه‌گذاری در تلاش‌های بیشتر cleanup خودداری می‌کند. ماهیت افزایشی refactoring به
+   microservices به این معنی است که team development قادر به نشان دادن value در اوایل است
+   و اغلب.
+  </p>
+  <h3><strong>MINIMIZE CHANGES TO THE MONOLITH</strong></h3>
+  <p>
+   یک موضوع تکراری در این فصل این است که شما باید از ایجاد
+   تغییرات گسترده در monolith هنگام migrating به یک microservice architecture اجتناب کنید. این اجتناب ناپذیر است
+  </p>
+  <p>
+   Pattern: Strangler application
+   <br/>
+   Modernize an application by incrementally developing a new (strangler) application
+   around the legacy application. See http://microservices.io/patterns/refactoring/
+   strangler-application.html.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

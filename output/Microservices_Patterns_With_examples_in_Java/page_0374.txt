@@ -1,0 +1,43 @@
+344
+CHAPTER 10
+Testing microservices: Part 2
+(Class<DomainEvent>)Class.forName("net.chrisrichardson.ftgo.order
+service.domain." + expectedEventClass));
+}
+....
+}
+The verifyEventPublished() method uses the MessageTracker class, a test helper
+class that records the events that have been published during the test. This class
+and SagaParticipantStubManager are instantiated by the TestConfiguration
+@Configuration class.
+ Now that we’ve looked at the step definitions, let’s look at how to run the compo-
+nent tests. 
+RUNNING THE COMPONENT TESTS
+Because these tests are relatively slow, we don’t want to run them as part of ./gradlew
+test. Instead, we’ll put the test code in a separate src/component-test/java directory
+and run them using ./gradlew componentTest. Take a look at the ftgo-order-service/
+build.gradle file to see the Gradle configuration.
+ The tests use Docker to run Order Service and its dependencies. As described in
+chapter 12, a Docker container is a lightweight operating system virtualization
+mechanism that lets you deploy a service instance in an isolated sandbox. Docker
+Compose is an extremely useful tool with which you can define a set of containers
+and start and stop them as a unit. The FTGO application has a docker-compose file
+in the root directory that defines containers for all the services, and the infrastruc-
+ture service.
+ We can use the Gradle Docker Compose plugin to run the containers before exe-
+cuting the tests and stop the containers once the tests complete:
+apply plugin: 'docker-compose'
+dockerCompose.isRequiredBy(componentTest)
+componentTest.dependsOn(assemble)
+dockerCompose {
+startedServices = [ 'ftgo-order-service']
+}
+The preceding snippet of Gradle configuration does two things. First, it configures
+the Gradle Docker Compose plugin to run before the component tests and start
+Order Service along with the infrastructure services that it’s configured to depend
+on. Second, it configures componentTest to depend on assemble so that the JAR file
+required by the Docker image is built first. With that in place, we can run these com-
+ponent tests with the following commands:
+./gradlew
+:ftgo-order-service:componentTest
+ 

@@ -1,0 +1,78 @@
+403
+Deploying the FTGO application with Kubernetes
+The container definition specifies the Docker image running along with other attri-
+butes, such as the values of environment variables. The container’s environment vari-
+ables are the service’s externalized configuration. They are read by Spring Boot and
+made available as properties in the application context.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: ftgo-restaurant-service
+spec:
+replicas: 2
+template:
+metadata:
+labels:
+app: ftgo-restaurant-service
+   
+spec:
+  
+   containers:
+- name: ftgo-restaurant-service
+  image: msapatterns/ftgo-restaurant-service:latest
+  imagePullPolicy: Always
+  ports:
+  - containerPort: 8080          
+    name: httpport
+  env:                              
+    - name: JAVA_OPTS
+      value: "-Dsun.net.inetaddr.ttl=30"
+    - name: SPRING_DATASOURCE_URL
+      value: jdbc:mysql://ftgo-mysql/eventuate
+    - name: SPRING_DATASOURCE_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: ftgo-db-secret
+          key: username
+    - name: SPRING_DATASOURCE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: ftgo-db-secret            
+          key: password
+    - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+      value: com.mysql.jdbc.Driver
+    - name: EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS
+      value: ftgo-kafka:9092
+    - name: EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING
+      value: ftgo-zookeeper:2181
+  livenessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 20
+  readinessProbe:
+Listing 12.4
+Kubernetes Deployment for ftgo-restaurant-service
+Specifies that this is an 
+object of type Deployment
+The name of the deployment
+Number of pod replicas
+Gives each pod a label 
+called app whose value is 
+ftgo-restaurant-service
+The specification of 
+the pod, which defines 
+just one container
+ The container’s port
+The container’s environment 
+variables, which are read by 
+Spring Boot
+Sensitive values that 
+are retrieved from the 
+Kubernetes Secret 
+called ftgo-db-secret
+Configure Kubernetes 
+to invoke the health 
+check endpoint.
+ 

@@ -1,0 +1,16 @@
+increase the throughput of the system, we can increase the number of Song Trans
+coder instances.
+Figure 13-2. Transcoding for streaming being scaled up using the competing consumer
+pattern
+In the case of FoodCo, a form of horizontal duplication has been used to reduce the
+read load on the primary database through the use of read replicas, as we see in
+Figure 13-3. This has reduced read load on the primary database node, freeing up
+resources to handle writes, and has worked very effectively, as a lot of the load on the
+main system was read-heavy. These reads could easily be redirected to these read rep‐
+licas, and it’s common to use a load balancer over multiple read replicas.
+The routing to either the primary database or a read replica is handled internally in
+the microservice. It’s transparent to consumers of this microservice as to whether or
+not a request they send ends up hitting the primary or read replica database.
+424 
+| 
+Chapter 13: Scaling

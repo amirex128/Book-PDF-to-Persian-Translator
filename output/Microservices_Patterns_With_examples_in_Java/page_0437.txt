@@ -1,0 +1,43 @@
+407
+Deploying the FTGO application with Kubernetes
+1.0.0.RELEASE. What’s great about how Kubernetes does this is that it doesn’t ter-
+minate old pods until their replacements are ready to handle requests. It uses the
+readinessProbe mechanism, a health check mechanism described earlier in this
+section, to determine whether a pod is ready. As a result, there will always be pods
+available to handle requests. Eventually, assuming the new pods start successfully, all
+the deployment’s pods will be running the new version.
+ But what if there’s a problem and the version 1.1.0.RELEASE pods don’t start?
+Perhaps there’s a bug, such as a misspelled container image name or a missing envi-
+ronment variable for a new configuration property. If the pods fail to start, the deploy-
+ment will become stuck. At that point, you have two options. One option is to fix the
+YAML file and rerun kubectl apply -f to update the deployment. The other option is
+to roll back the deployment.
+ A deployment maintains the history of what are termed rollouts. Each time you
+update the deployment, it creates a new rollout. As a result, you can easily roll back a
+deployment to a previous version by executing the following command:
+kubectl rollout undo deployment ftgo-restaurant-service
+Kubernetes will then replace the pods running version 1.1.0.RELEASE with pods run-
+ning the older version, 1.0.0.RELEASE.
+ A Kubernetes deployment is a good way to deploy a service without downtime. But
+what if a bug only appears after the pod is ready and receiving production traffic? In
+that situation, Kubernetes will continue to roll out new versions, so a growing number
+of users will be impacted. Though your monitoring system will hopefully detect the issue
+and quickly roll back the deployment, you won’t avoid impacting at least some users. To
+address this issue and make rolling out a new version of a service more reliable, we need
+to separate deploying, which means getting the service running in production, from
+releasing the service, which means making it available to handle production traffic.
+Let’s look at how to accomplish that using a service mesh. 
+12.4.5 Using a service mesh to separate deployment from release
+The traditional way to roll out a new version of a service is to first test it in a staging
+environment. Then, once it’s passed the test in staging, you deploy in production by
+doing a rolling upgrade that replaces old instances of the service with new service
+instances. On one hand, as you just saw, Kubernetes deployments make doing a roll-
+ing upgrade very straightforward. On the other hand, this approach assumes that
+once a service version has passed the tests in the staging environment, it will work in
+production. Sadly, this is not always the case.
+ One reason is because staging is unlikely to be an exact clone, if for no other reason
+than the production environment is likely to be much larger and handle much more
+traffic. It’s also time consuming to keep the two environments synchronized. As a result
+of discrepancies, it’s likely that some bugs will only show up in production. And even it
+were an exact clone, you can’t guarantee that testing will catch all bugs.
+ 

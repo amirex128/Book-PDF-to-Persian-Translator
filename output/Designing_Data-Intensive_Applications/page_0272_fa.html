@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 272</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <h4>Claiming a username</h4>
+    <p>
+        در یک وب‌سایت که هر user دارای یک username <em>unique</em> است، دو user ممکن است همزمان سعی کنند اکانت‌هایی را با همان username ایجاد کنند. شما می‌توانید از یک <em>transaction</em> برای بررسی اینکه آیا نامی گرفته شده است یا خیر استفاده کنید و، اگر نه، یک اکانت با آن نام ایجاد کنید.
+    </p>
+    <p>
+        با این حال، مانند مثال‌های قبلی، این کار تحت <em>snapshot isolation</em> ایمن نیست. خوشبختانه، یک <em>unique constraint</em> یک راه‌حل ساده در اینجا است (<em>transaction</em> دوم که سعی می‌کند username را ثبت کند، به دلیل نقض <em>constraint</em>، <em>aborted</em> می‌شود).
+    </p>
+    <h4>Preventing double-spending</h4>
+    <p>
+        یک <em>service</em> که به users اجازه می‌دهد تا پول یا امتیاز خرج کنند، باید بررسی کند که user بیش از آنچه دارند، خرج نکند. شما ممکن است این را با وارد کردن یک <em>spending item tentative</em> در حساب user، فهرست کردن تمام آیتم‌ها در حساب، و بررسی اینکه مجموع مثبت است [44] پیاده‌سازی کنید. با <em>write skew</em>، می‌تواند اتفاق بیفتد که دو <em>spending items</em> به طور همزمان وارد می‌شوند که با هم باعث می‌شوند balance منفی شود، اما هیچ‌کدام از <em>transactions</em> متوجه دیگری نمی‌شوند.
+    </p>
+    <h4>Phantoms causing write skew</h4>
+    <p>
+        همه این مثال‌ها از یک الگوی مشابه پیروی می‌کنند:
+    </p>
+    <ol>
+        <li>
+            یک query SELECT بررسی می‌کند که آیا الزامی با جستجوی <em>rows</em> هایی که با یک <em>search condition</em> مطابقت دارند، برآورده می‌شود (حداقل دو پزشک در <em>on call</em> هستند، هیچ رزروی برای آن اتاق در آن زمان وجود ندارد، موقعیت روی تخته قبلاً شکل دیگری روی آن ندارد، username قبلاً گرفته نشده است، هنوز پول در حساب وجود دارد).
+        </li>
+        <li>
+            بسته به نتیجه <em>query</em> اول، کد application تصمیم می‌گیرد که چگونه ادامه دهد (شاید برای ادامه عملیات، یا شاید برای گزارش یک <em>error</em> به user و <em>abort</em>).
+        </li>
+        <li>
+            اگر application تصمیم به ادامه کار بگیرد، یک <em>write</em> (INSERT, UPDATE, or DELETE) به database انجام می‌دهد و <em>transaction</em> را commit می‌کند.
+        </li>
+    </ol>
+    <p>
+        اثر این <em>write</em> پیش‌شرط تصمیم مرحله 2 را تغییر می‌دهد. به عبارت دیگر، اگر قرار بود <em>SELECT query</em> را از مرحله 1 پس از <em>committing</em> <em>write</em> تکرار کنید، نتیجه متفاوتی خواهید گرفت، زیرا <em>write</em>، مجموعه <em>rows</em> هایی را که با <em>search condition</em> مطابقت دارند، تغییر داد (اکنون یک پزشک کمتر در <em>on call</em> است، اتاق جلسه اکنون برای آن زمان رزرو شده است، موقعیت روی تخته اکنون توسط شکل جابجا شده گرفته شده است، username اکنون گرفته شده است، اکنون پول کمتری در حساب وجود دارد).
+    </p>
+    <p>
+        مراحل ممکن است به ترتیب متفاوتی رخ دهند. به عنوان مثال، شما می‌توانید ابتدا <em>write</em> را انجام دهید، سپس <em>SELECT query</em> را انجام دهید، و در نهایت بر اساس نتیجه <em>query</em> تصمیم بگیرید که آیا <em>abort</em> کنید یا <em>commit</em>.
+        <br>
+        250
+        <br>
+        |
+        <br>
+        Chapter 7: Transactions
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

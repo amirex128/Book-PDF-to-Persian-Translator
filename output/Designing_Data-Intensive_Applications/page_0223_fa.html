@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 223</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        شکل 6-1. Combining replication و partitioning: هر node به عنوان leader برای برخی از partitions و follower برای other partitions عمل می‌کند.
+    </p>
+    <h4>Partitioning of Key-Value Data</h4>
+    <p>
+        فرض کنید شما مقدار زیادی داده دارید و می‌خواهید آن را partition کنید. چگونه تصمیم می‌گیرید که کدام records را در کدام nodes ذخیره کنید؟
+    </p>
+    <p>
+        هدف ما از partitioning این است که data و query load را به طور مساوی در سراسر nodes پخش کنیم. اگر هر node یک سهم منصفانه بگیرد، سپس—در تئوری—10 nodes باید بتوانند 10 برابر data و 10 برابر throughput read و write از یک node واحد را مدیریت کنند (در حال حاضر replication را نادیده می‌گیریم).
+    </p>
+    <p>
+        اگر partitioning ناعادلانه باشد، به طوری که برخی از partitions داده‌ها یا queries بیشتری نسبت به دیگران داشته باشند، ما آن را skewed می‌نامیم. وجود skew باعث می‌شود که partitioning بسیار کم اثر داشته باشد.
+    </p>
+    <p>
+        در یک مورد شدید، تمام load می‌تواند در یک partition به پایان برسد، بنابراین 9 node از 10 node بیکار هستند و bottleneck شما، node busy واحد است. یک partition با load disproportion‐ately بالا، a hot spot نامیده می‌شود.
+    </p>
+    <p>
+        The simplest approach برای اجتناب از hot spots این است که records را به طور تصادفی به nodes اختصاص دهید. این data را به طور مساوی در سراسر nodes توزیع می‌کند، اما یک disadvantage بزرگ دارد: هنگامی که شما در حال تلاش برای خواندن یک item خاص هستید، شما هیچ راهی برای دانستن اینکه آن در کدام node قرار دارد، ندارید، بنابراین شما باید همه nodes را به طور موازی query کنید.
+    </p>
+    <p>
+        ما می‌توانیم بهتر عمل کنیم. بیایید در حال حاضر فرض کنیم که شما یک key-value data model ساده دارید، که در آن شما همیشه به یک record با primary key آن دسترسی دارید. به عنوان مثال، در یک دایره‌المعارف کاغذی قدیمی، شما یک ورودی را با title آن جستجو می‌کنید. از آنجایی که تمام ورودی‌ها به ترتیب حروف الفبا بر اساس title مرتب شده‌اند، شما می‌توانید به سرعت موردی را که به دنبال آن هستید، پیدا کنید.
+    </p>
+    <p>
+        Partitioning of Key-Value Data | 201
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0223/image_1.png" alt="Image from page 223" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

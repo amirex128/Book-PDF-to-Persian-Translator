@@ -1,0 +1,64 @@
+140
+CHAPTER 4
+Managing transactions with sagas
+THE EVENTUATE TRAM SAGA FRAMEWORK
+The Eventuate Tram Saga, shown in figure 4.12, is a framework for writing both saga
+orchestrators and saga participants. It uses transactional messaging capabilities of Even-
+tuate Tram, discussed in chapter 3.
+The saga orchestration package is the most complex part of the framework. It pro-
+vides SimpleSaga, a base interface for sagas, and a SagaManager class, which creates
+and manages saga instances. The SagaManager handles persisting a saga, sending the
+command messages that it generates, subscribing to reply messages, and invoking
+the saga to handle replies. Figure 4.13 shows the sequence of events when OrderService
+creates a saga. The sequence of events is as follows:
+1
+OrderService creates the CreateOrderSagaState.
+2
+It creates an instance of a saga by invoking the SagaManager.
+3
+The SagaManager executes the first step of the saga definition.
+4
+The CreateOrderSagaState is invoked to generate a command message.
+Participant
+Orchestration
+create(sagaState)
+...
+SagaManager
+SimpleSaga
+SagaDeﬁnition
+CommandEndpoint
+SagaCommand
+Dispatcher
+SagaCommand
+HandlersBuilder
+SagaDeﬁnition
+getSagaDeﬁnition()
+«table»
+SAGA_INSTANCE
+Eventuate tram
+Eventuate tram saga framework
+Uses
+Sends
+and receives
+Order database
+Channels
+The SagaManager handles persisting a
+saga, sending the command messages
+that it generates, subscribing to reply
+messages, and invoking the saga to
+handle replies.
+Abstract superclass
+for saga orchestrators
+Describes a
+message channel
+Routes command
+messages to
+message handlers
+Describes the
+steps of a saga
+Stores the state of
+saga instances
+Figure 4.12
+Eventuate Tram Saga is a framework for writing both saga orchestrators and saga 
+participants.
+ 

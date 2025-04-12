@@ -1,0 +1,44 @@
+339
+Developing component tests
+10.2.3 Designing component tests
+Imagine you’re implementing the component tests for Order Service. Section 10.2.2
+shows how to specify the desired behavior using Gherkin and execute it using Cucum-
+ber. But before a component test can execute the Gherkin scenarios, it must first run
+Order Service and set up the service’s dependencies. You need to test Order Service
+in isolation, so the component test must configure stubs for several services, including
+Kitchen Service. It also needs to set up a database and the messaging infrastructure.
+There are a few different options that trade off realism with speed and simplicity.
+IN-PROCESS COMPONENT TESTS
+One option is to write in-process component tests. An in-process component test runs the
+service with in-memory stubs and mocks for its dependencies. For example, you can
+write a component test for a Spring Boot-based service using the Spring Boot testing
+framework. A test class, which is annotated with @SpringBootTest, runs the service in
+the same JVM as the test. It uses dependency injection to configure the service to use
+mocks and stubs. For instance, a test for Order Service would configure it to use an
+in-memory JDBC database, such as H2, HSQLDB, or Derby, and in-memory stubs for
+Eventuate Tram. In-process tests are simpler to write and faster, but have the downside
+of not testing the deployable service. 
+OUT-OF-PROCESS COMPONENT TESTING
+A more realistic approach is to package the service in a production-ready format and
+run it as a separate process. For example, chapter 12 explains that it’s increasingly
+common to package services as Docker container images. An out-of-process component
+test uses real infrastructure services, such as databases and message brokers, but uses
+stubs for any dependencies that are application services. For example, an out-of-process
+component test for FTGO Order Service would use MySQL and Apache Kafka, and
+stubs for services including Consumer Service and Accounting Service. Because Order
+Service interacts with those services using messaging, these stubs would consume
+messages from Apache Kafka and send back reply messages.
+ A key benefit of out-of-process component testing is that it improves test coverage,
+because what’s being tested is much closer to what’s being deployed. The drawback is
+that this type of test is more complex to write, slower to execute, and potentially more
+brittle than an in-process component test. You also have to figure out how to stub the
+application services. Let’s look at how to do that.
+HOW TO STUB SERVICES IN OUT-OF-PROCESS COMPONENT TESTS
+The service under test often invokes dependencies using interaction styles that involve
+sending back a response. Order Service, for example, uses asynchronous request/
+response and sends command messages to various services. API Gateway uses HTTP,
+which is a request/response interaction style. An out-of-process test must configure
+stubs for these kinds of dependencies, which handle requests and send back replies.
+ One option is to use Spring Cloud Contract, which we looked at earlier in sec-
+tion 10.1 when discussing integration tests. We could write contracts that configure
+ 

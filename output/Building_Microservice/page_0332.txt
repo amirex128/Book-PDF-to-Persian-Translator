@@ -1,0 +1,37 @@
+1 Honestly Black Lives Matter (@honest_update), October 7, 2015, 7:10 p.m., https://oreil.ly/Z28BA.
+2 Fire as a cause of system outage isn’t a totally far-fetched idea. I once helped in the aftermath of a production
+outage caused by a storage area network (SAN) catching fire. That it took several days for us to be told a fire
+had occurred is a story for another day.
+Few things sum up the problem up as well as the following tweet:
+We replaced our monolith with micro services so that every outage could be more like
+a murder mystery.1
+Tracking down what’s gone wrong, and what caused it, is our first port of call. But
+this gets difficult if we have a long list of suspects.
+In the world of the single-process monolithic application, we at least have a very
+obvious place to start our investigations. Website slow? It’s the monolith. Website
+giving odd errors? It’s the monolith. CPU at 100%? Monolith. A burning smell? Well,
+you get the idea.2 Having a single point of failure makes failure investigation some‐
+what simpler!
+Now let’s think about our own microservice-based system. The capabilities we offer
+our users are served from multiple microservices, some of which communicate with
+yet more microservices to accomplish their tasks. There are lots of advantages to such
+an approach (which is good, as otherwise this book would be a waste of time), but in
+the world of monitoring, we have a more complex problem on our hands.
+We now have multiple servers to monitor, multiple log files to sift through, and mul‐
+tiple places where network latency could cause problems. Our surface area of failure
+has increased, and so have the things that need to be investigated. So how do we
+approach this? We need to make sense of what otherwise might be a chaotic, tangled
+mess—the last thing any of us wants to deal with on a Friday afternoon (or at any
+time, come to that!).
+Firstly, we need to monitor the small things and provide aggregation to allow us to
+see the bigger picture. Then, we need to make sure we have tools available to us to
+slice and dice this data as part of our investigation. Finally, we need to get smarter
+about how we think about system health, by embracing concepts like testing in pro‐
+duction. We’ll discuss each of these necessities in this chapter. Let’s get started.
+Single Microservice, Single Server
+Figure 10-1 presents a very simple setup: one host that is running one instance of a
+microservice. Now we need to monitor it in order to know when something goes
+wrong, so we can fix it. So what should we look for?
+306 
+| 
+Chapter 10: From Monitoring to Observability

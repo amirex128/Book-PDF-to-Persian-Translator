@@ -1,0 +1,50 @@
+141
+The design of the Order Service and the Create Order Saga
+5
+The SagaManager sends the command message to the saga participant (the
+Consumer Service).
+6
+The SagaManager saves the saga instance in the database.
+Figure 4.14 shows the sequence of events when SagaManager receives a reply from
+Consumer Service.
+The sequence of events is as follows:
+1
+Eventuate Tram invokes SagaManager with the reply from Consumer Service.
+2
+SagaManager retrieves the saga instance from the database.
+3
+SagaManager executes the next step of the saga definition.
+OrderService
+CreateOrderSagaState
+SagaManager
+CreateOrderSaga
+SagaDeﬁnition
+EventuateTram
+Database
+new()
+create(sagaState)
+getSagaDeﬁnition()
+executeFirstStep(sagaState)
+makeValidateOrderByConsumerCommand()
+sendMessage(command)
+saveSagaInstance(sagaState)
+Figure 4.13
+The sequence of events when OrderService creates an instance of Create Order Saga
+CreateOrderSagaState
+SagaManager
+CreateOrderSaga
+SagaDeﬁnition
+EventuateTram
+Database
+handleMessage()
+loadSagaInstance()
+getSagaDeﬁnition()
+executeFirstStep(sagaState)
+makeValidateOrderByConsumerCommand()
+sendMessage
+(command)
+saveSagaInstance
+(sageState)
+Figure 4.14
+The sequence of events when the SagaManager receives a reply message from a saga participant
+ 

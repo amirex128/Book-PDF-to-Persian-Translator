@@ -1,0 +1,41 @@
+sider in terms of making use of data that might be out of date. Fundamentally,
+though, it comes down to deciding in which situations a piece of cached data should
+be removed from your cache. Sometimes this happens because we are told a new ver‐
+sion of a piece of data is available; at other times it might require us to assume our
+cached copy is stale and fetch a new copy from the origin.
+Given the options around invalidation, I think it’s a good idea to look at a few of the
+options you could make use of in a microservice architecture. Please don’t consider
+this to be an exhaustive overview of every option, though!
+Time to live (TTL)
+This is one of the simplest mechanisms to use for cache invalidation. Each entry in
+the cache is assumed to be valid for only a certain duration in time. After that time
+has passed, the data is invalidated, and we fetch a new copy. We can specify the dura‐
+tion of validity using a simple time to live (TTL) duration—so a TTL of five minutes
+means our cache would happily provide the cache data for up to five minutes, after
+which the cached entry is considered to be invalidated and a fresh copy is required.
+Variations on this theme can include using a timestamp for expiration, which in
+some situations can be more effective, especially if you are reading through multiple
+levels of cache.
+HTTP supports both a TTL (via the Cache-Control header) and the ability to set a
+timestamp for expiration through the Expires header on responses, which can be
+incredibly useful. This means that the origin itself is able to tell downstream clients
+how long they should assume data is fresh for. Coming back to our Inventory micro‐
+service, we could imagine a situation in which the Inventory microservice gives a
+shorter TTL for stock levels of fast-selling items, or for items for which we are almost
+out of stock. For items that we don’t sell much of, it could provide a longer TTL. This
+represents a somewhat advanced use of HTTP cache controls, and tuning cache con‐
+trols on a per-response basis like this is something I’d do only when tuning the effec‐
+tiveness of a cache. A simple one-size-fits-all TTL for any given resource type is a
+sensible starting point.
+Even if you’re not using HTTP, the idea of the origin giving hints to the client as to
+how (and if) data should be cached is a really powerful concept. This means you
+don’t have to guess about these things on the client side; you can actually make an
+informed choice about how to handle a piece of data.
+HTTP does have more advanced caching capabilities than this, and we’ll look at con‐
+ditional GETs as an example of that in a moment.
+One of the challenges of TTL-based invalidation is that although it is simple to imple‐
+ment, it is a pretty blunt instrument. If we request a fresh copy of the data that has a
+five-minute TTL, and a second later the data at the origin changes, then our cache
+Caching 
+| 
+443

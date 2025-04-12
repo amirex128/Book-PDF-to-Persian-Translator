@@ -1,0 +1,41 @@
+depth in Chapter 9). Ideally, we want to build these artifacts once and once only and
+use them for all deployments of that version of the code. This is so we can avoid
+doing the same thing over and over again, and so we can confirm that the artifacts we
+deploy are the ones we tested. To enable these artifacts to be reused, we place them in
+a repository of some sort, either provided by the CI tool itself or in a separate system.
+We’ll be looking at the role of artifacts in more depth shortly, and we’ll look in depth
+at testing in Chapter 9.
+CI has a number of benefits. We get fast feedback as to the quality of our code,
+through the use of static analysis and testing. CI also allows us to automate the cre‐
+ation of our binary artifacts. All the code required to build the artifact is itself version
+controlled, so we can re-create the artifact if needed. We can also trace from a
+deployed artifact back to the code, and, depending on the capabilities of the CI tool
+itself, we can see what tests were run on the code and artifact too. If embracing infra‐
+structure as code, we can also version control all the code needed to configure the
+infrastructure for our microservice alongside the code for the microservice itself,
+improving transparency around changes and making it even easier to reproduce
+builds. It’s for these reasons that CI has been so successful.
+Are You Really Doing CI?
+CI is a key practice that allows us to make changes quickly and easily, and without
+which the journey into microservices will be painful. I suspect you are probably using
+a CI tool in your own organization, but that might not be the same thing as actually
+doing CI. I’ve seen many people confuse adopting a CI tool with actually embracing
+CI. A CI tool, used well, will help you do CI—but using a tool like Jenkins, CircleCI,
+Travis, or one of the many other options out there doesn’t guarantee you’re actually
+doing CI right.
+So how do you know if you’re actually practicing CI? I really like Jez Humble’s three
+questions he asks people to test if they really understand what CI is about—it might
+be interesting to ask yourself these same questions:
+Do you check in to mainline once per day?
+You need to make sure your code integrates. If you don’t check your code
+together with everyone else’s changes frequently, you end up making future inte‐
+gration harder. Even if you are using short-lived branches to manage changes,
+integrate as frequently as you can into a single mainline branch—at least once a
+day.
+Do you have a suite of tests to validate your changes?
+Without tests, we just know that syntactically our integration has worked, but we
+don’t know if we have broken the behavior of the system. CI without some verifi‐
+cation that our code behaves as expected isn’t CI.
+198 
+| 
+Chapter 7: Build

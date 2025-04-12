@@ -1,0 +1,55 @@
+333
+Writing integration tests
+Kitchen Service that find the contract whose input message matches the command
+message and sends its output message as the reply. The tests use in-memory messaging
+for simplicity and speed.
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes= 
+KitchenServiceProxyIntegrationTest.TestConfiguration.class,
+webEnvironment= SpringBootTest.WebEnvironment.NONE)
+@AutoConfigureStubRunner(ids =
+      
+{"net.chrisrichardson.ftgo.contracts:ftgo-kitchen-service-contracts"},
+workOffline = false)
+@DirtiesContext
+public class KitchenServiceProxyIntegrationTest {
+@Configuration
+@EnableAutoConfiguration
+@Import({TramCommandProducerConfiguration.class,
+TramInMemoryConfiguration.class,
+EventuateContractVerifierConfiguration.class})
+public static class TestConfiguration { ... }
+@Autowired
+private SagaMessagingTestHelper sagaMessagingTestHelper;
+@Autowired
+private
+KitchenServiceProxy kitchenServiceProxy;
+@Test
+public void shouldSuccessfullyCreateTicket() {
+CreateTicket command = new CreateTicket(AJANTA_ID,
+OrderDetailsMother.ORDER_ID,
+new TicketDetails(Collections.singletonList(
+new TicketLineItem(CHICKEN_VINDALOO_MENU_ITEM_ID,
+CHICKEN_VINDALOO,
+CHICKEN_VINDALOO_QUANTITY))));
+String sagaType = CreateOrderSaga.class.getName();
+CreateTicketReply reply =
+sagaMessagingTestHelper
+      
+.sendAndReceiveCommand(kitchenServiceProxy.create,
+command,
+CreateTicketReply.class, sagaType);
+assertEquals(new CreateTicketReply(OrderDetailsMother.ORDER_ID), reply);  
+}
+}
+Listing 10.9
+The consumer-side contract integration test for Order Service
+Configure the stub
+Kitchen Service to
+respond to messages.
+Send the 
+command and 
+wait for a reply.
+Verify the
+reply.
+ 

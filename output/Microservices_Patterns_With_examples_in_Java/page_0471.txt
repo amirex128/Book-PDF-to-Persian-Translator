@@ -1,0 +1,86 @@
+441
+Strategies for refactoring a monolith to microservices
+ A great way to delay and possibly avoid making these kinds of expensive changes is
+to use an approach that’s similar to the one described in Refactoring Databases. A major
+obstacle to refactoring a database is changing all the clients of that database to use the
+new schema. The solution proposed in the book is to preserve the original schema for
+a transition period and use triggers to synchronize the original and new schemas. You
+then migrate clients from the old schema to the new schema over time.
+ We can use a similar approach when extracting services from the monolith. For
+example, when extracting the Delivery entity, we leave the Order entity mostly
+unchanged for a transition period. As figure 13.7 shows, we make the delivery-related
+fields read-only and keep them up-to-date by replicating data from Delivery Service
+back to the monolith. As a result, we only need to find the places in the monolith’s code
+that update those fields and change them to invoke the new Delivery Service.
+ Preserving the structure of the Order entity by replicating data from Delivery
+Service significantly reduces the amount of work we need to do immediately. Over
+time, we can migrate code that uses the delivery-related Order entity fields or ORDERS
+table columns to Delivery Service. What’s more, it’s possible that we never need to
+Read-only
+delivery-related
+ﬁelds
+ORDER_ID
+...
+ORDER table
+RESTAURANT_ID
+...
+SCHEDULED_PICKUP_TIME
+...
+SCHEDULED_DELIVERY_TIME
+...
+...
+...
+«Entity»
+Order
+FTGO monolith
+...
+consumerId
+scheduledPickupTime
+scheduledDeliveryTime
+...
+ORDER_ID
+...
+ORDER table
+RESTAURANT_ID
+...
+SCHEDULED_PICKUP_TIME
+...
+SCHEDULED_DELIVERY_TIME
+...
+...
+...
+«Entity»
+Order
+FTGO monolith
+...
+consumerId
+scheduledPickupTime
+scheduledDeliveryTime
+...
+ORDER_ID
+...
+DELIVERY table
+SCHEDULED_PICKUP_TIME
+...
+SCHEDULED_DELIVERY_TIME
+...
+...
+...
+«Entity»
+Delivery
+Delivery Service
+Extract Order Service and move columns from
+ORDER
+DELIVERY
+table to a new
+table.
+Replicate data from Delivery Service to FTGO monolith.
+...
+orderId
+scheduledPickupTime
+scheduledDeliveryTime
+...
+Figure 13.7
+Minimize the scope of the changes to the FTGO monolith by replicating delivery-related data from the 
+newly extracted Delivery Service back to the monolith’s database.
+ 

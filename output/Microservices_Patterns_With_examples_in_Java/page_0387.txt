@@ -1,0 +1,44 @@
+357
+Developing secure services
+ One issue with JWT is that because a token is self-contained, it’s irrevocable. By
+design, a service will perform the request operation after verifying the JWT’s signature
+and expiration date. As a result, there’s no practical way to revoke an individual JWT
+that has fallen into the hands of a malicious third party. The solution is to issue JWTs
+with short expiration times, because that limits what a malicious party could do. One
+drawback of short-lived JWTs, though, is that the application must somehow continually
+reissue JWTs to keep the session active. Fortunately, this is one of the many protocols
+that are solved by a security standard calling OAuth 2.0. Let’s look at how that works. 
+USING OAUTH 2.0 IN A MICROSERVICE ARCHITECTURE
+Let’s say you want to implement a User Service for the FTGO application that man-
+ages a user database containing user information, such as credentials and roles. The
+API gateway calls the User Service to authenticate a client request and obtain a JWT.
+You could design a User Service API and implement it using your favorite web frame-
+work. But that’s generic functionality that isn’t specific to the FTGO application—
+developing such a service wouldn’t be an efficient use of development resources.
+ Fortunately, you don’t need to develop this kind of security infrastructure. You can
+use an off-the-shelf service or framework that implements a standard called OAuth 2.0.
+OAuth 2.0 is an authorization protocol that was originally designed to enable a user of
+a public cloud service, such as GitHub or Google, to grant a third-party application
+access to its information without revealing its password. For example, OAuth 2.0 is the
+mechanism that enables you to securely grant a third party cloud-based Continuous
+Integration (CI) service access to your GitHub repository.
+ Although the original focus of OAuth 2.0 was authorizing access to public cloud
+services, you can also use it for authentication and authorization in your application.
+Let’s take a quick look at how a microservice architecture might use OAuth 2.0.
+The key concepts in OAuth 2.0 are the following:
+
+Authorization Server—Provides an API for authenticating users and obtain-
+ing an access token and a refresh token. Spring OAuth is a great example of a
+framework for building an OAuth 2.0 authorization server.
+
+Access Token—A token that grants access to a Resource Server. The format of
+the access token is implementation dependent. But some implementations,
+such as Spring OAuth, use JWTs.
+About OAuth 2.0
+OAuth 2.0 is a complex topic. In this chapter, I can only provide a brief overview and
+describe how it can be used in a microservice architecture. For more information
+on OAuth 2.0, check out the online book OAuth 2.0 Servers by Aaron Parecki
+(www.oauth.com). Chapter 7 of Spring Microservices in Action (Manning, 2017) also
+covers this topic (https://livebook.manning.com/#!/book/spring-microservices-in-
+action/chapter-7/).
+ 

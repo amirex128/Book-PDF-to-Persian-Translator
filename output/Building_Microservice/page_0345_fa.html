@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 345</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        5 See the analysis Kyle Kingsbury did on Elasticsearch 1.1.0 in “Jepsen: Elasticsearch,” https://oreil.ly/uO9wU
+        and on Elasticsearch 1.5.0 in “Jepsen: Elasticsearch 1.5.0,” https://oreil.ly/8fBCt.
+        6 Renato Losio, “Elastic Changes Licences for Elasticsearch and Kibana: AWS Forks Both,” InfoQ, January 25, 2021, https://oreil.ly/VdWzD.
+    </p>
+    <h4>Implementations</h4>
+    <p>
+        تعدادی کمی از فضاها در صنعت ما به اندازه <strong>log aggregation</strong> مورد بحث قرار گرفته‌اند، و انواع مختلفی از راه‌حل‌ها در این فضا وجود دارد.
+    </p>
+    <p>
+        یک <strong>toolchain open source</strong> محبوب برای <strong>log aggregation</strong> این است که از یک <strong>log forwarding agent</strong> مانند <strong>Fluentd</strong> برای ارسال <strong>logs</strong> به <strong>Elasticsearch</strong> استفاده کنید، با استفاده از <strong>Kibana</strong> به عنوان راهی برای برش و تقسیم جریان <strong>logs</strong> حاصل. بزرگترین چالش با این <strong>stack</strong> تمایل به سربار مدیریت خود <strong>Elasticsearch</strong> است، اما این ممکن است اگر شما نیاز به اجرای <strong>Elasticsearch</strong> برای اهداف دیگر دارید، یا اگر از یک ارائه دهنده مدیریت شده استفاده می‌کنید، مشکل کمتری باشد. من دو نکته احتیاطی اضافی در مورد استفاده از این <strong>toolchain</strong> خواهم داشت.
+    </p>
+    <p>
+        اولاً، تلاش زیادی برای بازاریابی <strong>Elasticsearch</strong> به عنوان یک پایگاه داده انجام شده است. شخصاً، این موضوع همیشه برای من ناخوشایند بوده است. گرفتن چیزی که همیشه به عنوان یک شاخص جستجو معرفی می‌شد و تغییر نام آن به عنوان یک پایگاه داده می‌تواند بسیار مشکل‌ساز باشد. ما به‌طور ضمنی فرضیاتی را در مورد نحوه عملکرد و رفتار پایگاه‌های داده در نظر می‌گیریم، و طبق آن با آنها رفتار می‌کنیم، و آنها را به عنوان منبع حقیقت برای داده‌های حیاتی در نظر می‌گیریم. اما از نظر طراحی، یک شاخص جستجو منبع حقیقت نیست. این یک پیش‌بینی از منبع حقیقت است. <strong>Elasticsearch</strong> در گذشته از مشکلاتی رنج برده است که باعث می‌شود من به فکر فرو بروم.<sup>5</sup> در حالی که من مطمئن هستم که بسیاری از این مسائل حل شده‌اند، اما خواندن من از این مشکلات باعث شده است که در مورد استفاده از <strong>Elasticseach</strong> در شرایط خاص، و قطعاً هنگام در نظر گرفتن آن به عنوان یک پایگاه داده، محتاط باشم. داشتن یک شاخص جستجو که ممکن است گاهی داده‌ها را از دست بدهد، اگر شما قبلاً بتوانید دوباره ایندکس کنید، یک مسئله نیست. اما برخورد با آن مانند یک پایگاه داده چیز دیگری است. اگر من از این <strong>stack</strong> استفاده می‌کردم و نمی‌توانستم اطلاعات <strong>log</strong> را از دست بدهم، می‌خواستم اطمینان حاصل کنم که اگر مشکلی پیش آمد، می‌توانم <strong>logs</strong> اصلی را دوباره <strong>index</strong> کنم.
+    </p>
+    <p>
+        مجموعه دوم از نگرانی‌ها کمتر در مورد جنبه‌های فنی <strong>Elasticsearch</strong> و <strong>Kibana</strong> است و بیشتر در مورد رفتارهای <strong>Elastic</strong>، شرکتی که پشت این پروژه‌ها قرار دارد. اخیراً، <strong>Elastic</strong> تصمیم گرفت که مجوز کد منبع را برای هر دو پایگاه داده اصلی <strong>Elasticsearch</strong> و <strong>Kibana</strong> از یک مجوز <strong>open source</strong> که به طور گسترده مورد استفاده و پذیرفته شده است (<strong>Apache 2.0</strong>) به یک مجوز <strong>Server Side Public License (SSPL)</strong> غیر <strong>open source</strong> تغییر دهد.<sup>6</sup> به نظر می‌رسد که محرک این تغییر در مجوز این بوده است که <strong>Elastic</strong> از این واقعیت ناامید شده است که سازمان‌هایی مانند <strong>AWS</strong> از این فناوری، که خود محصولات تجاری <strong>Elastic</strong> را تضعیف کرده‌اند، ارائه‌های تجاری موفقی ساخته‌اند. جدا از نگرانی‌هایی که <strong>SSPL</strong> می‌تواند ذاتاً "ویروسی" باشد (به روشی مشابه با <strong>GNU General Public License</strong>)، این تصمیم بسیاری را خشمگین کرده است. بیش از هزار نفر کد را به <strong>Elasticsearch</strong> تحت این انتظار مشارکت کردند که آنها به یک محصول <strong>open source</strong> اهدا می‌کنند. طعنه دیگری وجود دارد که خود <strong>Elasticsearch</strong>، و بنابراین بخش زیادی از شرکت <strong>Elastic</strong> به عنوان یک کل، بر اساس فناوری...
+    </p>
+    <p>
+        Building Blocks for Observability | 319
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+Fundamentally, using a local cache to enable robustness in a situation in which the
+origin is unavailable means you are favoring availability over consistency.
+A technique I saw used at the Guardian, and subsequently elsewhere, was to crawl the
+existing “live” site periodically to generate a static version of the website that could be
+served in the event of an outage. Although this crawled version wasn’t as fresh as the
+cached content served from the live system, in a pinch it could ensure that a version
+of the site would get displayed.
+Where to Cache
+As we have covered multiple times, microservices give you options. And this is abso‐
+lutely the case with caching. We have lots of different places where we could cache.
+The different cache locations I’ll outline here have different trade-offs, and what sort
+of optimization you’re trying to make will likely point you toward the cache location
+that makes the most sense for you.
+To explore our caching options, let’s revisit a situation that we looked at back in
+“Data Decomposition Concerns” on page 81, where we were extracting information
+about sales in MusicCorp. In Figure 13-9, the Sales microservice maintains a record
+of items that have been sold. It tracks only the ID of the item sold and the timestamp
+of the sale. Occasionally, we want to ask the Sales microservice for a list of the top
+ten best sellers over the previous seven days.
+The problem is that the Sales microservice doesn’t know the names of the records,
+just the IDs. It’s not much use to say, “The best seller this week had the ID 366548,
+and we sold 35,345 copies!” We want to know the name of the CD with the ID
+366548 as well. The Catalog microservice stores that information. This means, as
+Figure 13-9 shows, that when responding to the request for the top ten best sellers,
+the Sales microservice needs to request the names of the top ten IDs. Let’s look at
+how caching might help us and at what types of caches we could use.
+Caching 
+| 
+437

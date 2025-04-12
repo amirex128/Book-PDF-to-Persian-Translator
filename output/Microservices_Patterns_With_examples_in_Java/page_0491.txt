@@ -1,0 +1,48 @@
+461
+Breaking apart the monolith: extracting delivery management
+consider the Courier-related commands and queries to be part of delivery manage-
+ment. After all, delivery management creates the courier plans and is the primary con-
+sumer of the Courier location and availability information. But in order to minimize
+the development effort, we’ll leave those operations in the monolith and just extract
+the core of the algorithm. Consequently, the first iteration of Delivery Service won’t
+expose a publicly accessible API. Instead, it will only be invoked by the monolith.
+Next, let’s explore the design of Delivery Service. 
+API
+FTGO monolith
+«Service»
+OrderService
+«Service»
+CourierService
+...
+«delivery management»
+scheduleDelivery()
+rescheduleDelivery()
+cancelDelivery()
+reviseSchedule()
+...
+acceptOrder()
+cancelOrder()
+getOrderStatus()
+getOrderHistory()
+updateCourierLocation()
+updateCourierAvailability()
+getCourierPlan()
+Order operations:
+Courier operations:
+«entity»
+Courier
+«value object»
+Plan
+«entity»
+Order
+«entity»
+Restaurant
+«value object»
+Action
+«value object»
+Dropoff
+«value object»
+Pickup
+Figure 13.16
+Delivery management is entangled with order management within the FTGO monolith.
+ 

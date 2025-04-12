@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 403</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">Designing observable services</span></h3>
+  <p>
+   tracing information، مانند the current trace ID و the parent span ID، به outbound
+   requests. For example, one common standard برای propagating trace information،
+   the B3 standard است (https://github.com/openzipkin/b3-propagation)، که از head-
+   ers مانند X-B3-TraceId و X-B3-ParentSpanId استفاده می‌کند. The instrumentation library نیز
+   traces را به distributed tracing server گزارش می‌دهد. The distributed tracing server ذخیره می‌کند
+   the traces و یک UI برای visualizing آنها فراهم می‌کند.
+  </p>
+  <p>
+   Let’s take a look at the instrumentation library و the distribution tracing server،
+   شروع با the library.
+  </p>
+  <h4><span style="font-weight: bold;">USING AN INSTRUMENTATION LIBRARY</span></h4>
+  <p>
+   The instrumentation library، the tree از spans را می‌سازد و آنها را به distributed
+   tracing server ارسال می‌کند. The service code می‌تواند instrumentation library را مستقیماً فراخوانی کند، اما این کار
+   منطق instrumentation را با business و other logic در هم می‌آمیزد. A cleaner
+   approach استفاده از interceptors یا aspect-oriented programming (AOP) است.
+  </p>
+  <p>
+   A great example از یک AOP-based framework Spring Cloud Sleuth است. It uses the
+   Spring Framework’s AOP mechanism to automagically distributed tracing را
+   در service ادغام کنید. As a result, شما باید Spring Cloud Sleuth را به عنوان یک project depen-
+   dency اضافه کنید. Your service نیازی به فراخوانی a distributed tracing API ندارد، به جز در مواردی که
+   توسط Spring Cloud Sleuth مدیریت نمی‌شوند.
+  </p>
+  <h4><span style="font-weight: bold;">ABOUT THE DISTRIBUTED TRACING SERVER</span></h4>
+  <p>
+   The instrumentation library spans را به یک distributed tracing server ارسال می‌کند. The dis-
+   tributed tracing server spans را با هم ترکیب می‌کند تا traces کامل را تشکیل دهد و
+   آنها را در یک database ذخیره می‌کند. One popular distributed tracing server Open Zipkin است. Zipkin بود
+   originally developed توسط Twitter. Services می‌تواند spans را به Zipkin با استفاده از یا
+   HTTP یا یک message broker. Zipkin traces را در یک storage backend ذخیره می‌کند، که
+   یا یک database SQL یا NoSQL است. It has یک UI که traces را نمایش می‌دهد، همانطور که قبلاً در
+   شکل 11.12 نشان داده شد. AWS X-ray مثال دیگری از یک distributed tracing server است.
+  </p>
+  <h4><span style="font-weight: bold;">11.3.4 Applying the Application metrics pattern</span></h4>
+  <p>
+   A key part از production environment، monitoring و alerting است. As figure 11.14
+   نشان می‌دهد، the monitoring system metrics را جمع‌آوری می‌کند، که اطلاعات حیاتی را ارائه می‌دهند
+   در مورد health از یک application، از هر قسمت از technology stack. Metrics
+   range from infrastructure-level metrics، مانند CPU، memory و disk utilization، to
+   application-level metrics، مانند service request latency و number از requests exe-
+   cuted. Order Service, for example, metrics را در مورد تعداد placed جمع‌آوری می‌کند،
+   approved و rejected orders. The metrics توسط یک metrics service جمع‌آوری می‌شوند، که
+   visualization و alerting را فراهم می‌کند.
+  </p>
+  <p>
+   Pattern: Application metrics
+   Services report metrics به یک central server که aggregation، visualization را فراهم می‌کند،
+   و alerting.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

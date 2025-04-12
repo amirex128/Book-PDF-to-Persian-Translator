@@ -1,0 +1,20 @@
+Figure 10-5. A series of calls across multiple microservices related to registering a
+customer
+One approach that can be useful here is to use correlation IDs—something we first
+mentioned in Chapter 6 when discussing sagas. When the first call is made, you gen‐
+erate a unique ID that will be used to correlate all subsequent calls related to the
+request. In Figure 10-6, we generate this ID in the Gateway, and it is then passed
+along as a parameter to all subsequent calls.
+Logging of any activity by a microservice caused by this incoming call will be recor‐
+ded along with the same correlation ID, which we place in a consistent location in
+each log line, as shown in Example 10-2. This makes it easy to extract all logs associ‐
+ated with a given correlation ID at a later date.
+Example 10-2. Using a correlation ID in a fixed location in a log line
+15-02-2020 16:01:01 Gateway INFO [abc-123] Signup for streaming
+15-02-2020 16:01:02 Streaming INFO [abc-123] Cust 773 signs up ...
+15-02-2020 16:01:03 Customer INFO [abc-123] Streaming package added ...
+15-02-2020 16:01:03 Email INFO [abc-123] Send streaming welcome ...
+15-02-2020 16:01:03 Payment ERROR [abc-123] ValidatePayment ...
+316 
+| 
+Chapter 10: From Monitoring to Observability

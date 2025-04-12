@@ -1,0 +1,68 @@
+384
+CHAPTER 12
+Deploying microservices
+ Deployment is a combination of two interrelated concepts: process and architecture.
+The deployment process consists of the steps that must be performed by people—
+developers and operations—in order to get software into production. The deploy-
+ment architecture defines the structure of the environment in which that software
+runs. Both aspects of deployment have changed radically since I first started develop-
+ing Enterprise Java applications in the late 1990s. The manual process of developers
+throwing code over the wall to production has become highly automated. As figure 12.1
+shows, physical production environments have been replaced by increasingly light-
+weight and ephemeral computing infrastructure.
+Back in the 1990s, if you wanted to deploy an application into production, the first
+step was to throw your application along with a set of operating instructions over the
+wall to operations. You might, for example, file a trouble ticket asking operations to
+deploy the application. Whatever happened next was entirely the responsibility of
+operations, unless they encountered a problem they needed your help to fix. Typi-
+cally, operations bought and installed expensive and heavyweight application servers
+such as WebLogic or WebSphere. Then they would log in to the application server
+console and deploy your applications. They would lovingly care for those machines, as
+if they were pets, installing patches and updating the software.
+ In the mid 2000s, the expensive application servers were replaced with open
+source, lightweight web containers such as Apache Tomcat and Jetty. You could still
+run multiple applications on each web container, but having one application per web
+container became feasible. Also, virtual machines started to replace physical machines.
+Physical
+machine
+Application
+Physical
+machine
+Virtual
+machine
+Application
+Physical
+machine
+Virtual
+machine
+Container
+runtime
+Application
+Physical
+machine
+1990s
+2006
+2013
+2014
+AWS EC2
+released
+Initial Docker
+release
+AWS Lambda
+introduced
+Hidden
+infrastructure
+Serverless
+runtime
+Application
+Lightweight,
+ephemeral,
+automated
+Heavyweight,
+permanent,
+manual
+Time
+Figure 12.1
+Heavyweight and long-lived physical machines have been abstracted away 
+by increasingly lightweight and ephemeral technologies.
+ 

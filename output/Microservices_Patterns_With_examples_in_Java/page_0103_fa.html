@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 103</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Communicating using the synchronous Remote procedure invocation pattern</h3>
+  <p>
+   <strong>gRPC</strong>. من نحوه بهبود <strong>availability</strong> سرویس‌های شما با رسیدگی صحیح به
+   <strong>partial failure</strong> را پوشش می‌دهم و توضیح می‌دهم که چرا یک اپلیکیشن مبتنی بر <strong>microservices</strong> که از <strong>RPI</strong> استفاده می‌کند، باید از یک مکانیسم <strong>service discovery</strong> استفاده کند.
+  </p>
+  <p>
+   بیایید ابتدا به <strong>REST</strong> نگاهی بیندازیم.
+  </p>
+  <h4>3.2.1 Using REST</h4>
+  <p>
+   امروزه، توسعه <strong>APIs</strong> به سبک <strong>RESTful</strong> مرسوم است (https://en.wikipedia
+   .org/wiki/Representational_state_transfer). <strong>REST</strong> یک مکانیسم <strong>IPC</strong> است که (تقریباً
+   همیشه) از <strong>HTTP</strong> استفاده می‌کند. Roy Fielding، سازنده <strong>REST</strong>، <strong>REST</strong> را به این صورت تعریف می‌کند:
+  </p>
+  <p>
+   <strong>REST</strong> مجموعه‌ای از محدودیت‌های معماری را ارائه می‌دهد که، هنگامی که به طور کلی اعمال شوند،
+   بر مقیاس‌پذیری تعاملات اجزا، کلیت رابط‌ها، استقرار مستقل
+   اجزا، و اجزای واسطه برای کاهش تأخیر تعامل، اعمال امنیت و
+   سیستم‌های قدیمی را محصور می‌کنند.
+   www.ics.uci.edu/~fielding/pubs/dissertation/top.htm
+  </p>
+  <p>
+   یک مفهوم کلیدی در <strong>REST</strong>، یک <strong>resource</strong> است که معمولاً یک <strong>business</strong>
+   <strong>object</strong> واحد را نشان می‌دهد، مانند یک <strong>Customer</strong> یا <strong>Product</strong>، یا مجموعه‌ای از <strong>business objects</strong>. <strong>REST</strong>
+   از <strong>HTTP verbs</strong> برای دستکاری <strong>resources</strong> استفاده می‌کند، که با استفاده از یک
+   <strong>URL</strong> به آنها ارجاع داده می‌شود. به عنوان مثال، یک درخواست <strong>GET</strong>، نمایش یک <strong>resource</strong> را برمی‌گرداند، که
+   اغلب در قالب یک سند <strong>XML</strong> یا <strong>JSON object</strong> است، اگرچه فرمت‌های دیگر
+   مانند باینری می‌توانند استفاده شوند. یک <strong>POST request</strong> یک <strong>resource</strong> جدید ایجاد می‌کند و یک <strong>PUT</strong>
+   <strong>request</strong> یک <strong>resource</strong> را به‌روزرسانی می‌کند. به عنوان مثال، <strong>Order Service</strong> دارای یک <strong>POST /orders</strong>
+   <strong>endpoint</strong> برای ایجاد یک <strong>Order</strong> و یک <strong>GET /orders/{orderId} endpoint</strong> برای بازیابی
+   یک <strong>Order</strong> است.
+  </p>
+  <p>
+   منطق کسب‌وکار
+   فراخوانی می‌کند
+   منطق کسب‌وکار
+   <strong>Proxy interface</strong>
+   <strong>Service interface</strong>
+   کلاینت
+   سرویس
+   <strong>RPI</strong>
+   <strong>proxy</strong>
+   <strong>Request</strong>
+   <strong>Reply</strong>
+   <strong>RPI</strong>
+   <strong>server</strong>
+  </p>
+  <p>
+   شکل 3.1
+  </p>
+  <p>
+   منطق کسب‌وکار کلاینت یک <strong>interface</strong> را فراخوانی می‌کند که توسط یک کلاس <strong>RPI proxy</strong>
+   پیاده‌سازی شده است. کلاس <strong>RPI proxy</strong> یک <strong>request</strong> را به سرویس ارسال می‌کند. کلاس <strong>RPI server adapter</strong>
+   <strong>request</strong> را با فراخوانی منطق کسب‌وکار سرویس مدیریت می‌کند.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

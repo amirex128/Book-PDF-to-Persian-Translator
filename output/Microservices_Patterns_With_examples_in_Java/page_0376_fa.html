@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 376</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><span style="font-weight: bold;">فصل 10</span></h3>
+  <h3><span style="font-weight: bold;">Testing microservices: Part 2</span></h3>
+  <h4><span style="font-weight: bold;">10.3.2 Writing end-to-end tests</span></h4>
+  <p>
+   End-to-end tests هستند، مانند acceptance tests که در بخش 10.2 پوشش داده شدند، business-facing
+   tests. منطقی است که آنها را در یک DSL سطح بالا بنویسیم که توسط افراد business درک می‌شود. شما می‌توانید، به عنوان مثال،
+   end-to-end tests را با استفاده از Gherkin بنویسید و آنها را با استفاده از Cucumber اجرا کنید. فهرست زیر نمونه‌ای از این
+   test را نشان می‌دهد. این test مشابه acceptance tests است که قبلاً به آنها نگاه کردیم. تفاوت اصلی این است که به جای
+   یک Then واحد، این test چندین action دارد.
+  </p>
+  <p>
+   Feature: Place Revise and Cancel
+   As a consumer of the Order Service
+   I should be able to place, revise, and cancel an order
+   Scenario: Order created, revised, and cancelled
+   Given a valid consumer
+   Given using a valid credit card
+   Given the restaurant is accepting orders
+   When I place an order for Chicken Vindaloo at Ajanta
+   Then the order should be APPROVED
+   Then the order total should be 16.33
+   And when I revise the order by adding 2 vegetable samosas
+   Then the order total should be 20.97
+   And when I cancel the order
+   Then the order should be CANCELLED
+  </p>
+  <p>
+   This scenario یک order را place می‌کند، آن را revise می‌کند و سپس آن را cancel می‌کند. بیایید ببینیم چگونه آن را اجرا کنیم.
+  </p>
+  <h4><span style="font-weight: bold;">10.3.3 Running end-to-end tests</span></h4>
+  <p>
+   End-to-end tests باید کل application، از جمله هرگونه infrastructure service مورد نیاز را اجرا کنند. همانطور که در
+   بخش 10.2 قبلاً دیدید، Gradle Docker Compose plugin یک راه مناسب برای انجام این کار ارائه می‌دهد. به جای اجرای یک application service واحد،
+   Docker Compose file تمام services از application را اجرا می‌کند.
+  </p>
+  <p>
+   اکنون که به جنبه‌های مختلف طراحی و نوشتن end-to-end tests پرداختیم، بیایید یک نمونه end-to-end test را ببینیم.
+  </p>
+  <p>
+   ماژول ftgo-end-to-end-test end-to-end tests را برای application FTGO پیاده‌سازی می‌کند. پیاده‌سازی end-to-end test کاملاً مشابه
+   implementation از component tests است که قبلاً در بخش 10.2 مورد بحث قرار گرفت. این tests
+   با استفاده از Gherkin نوشته شده و با استفاده از Cucumber اجرا می‌شوند. Gradle Docker Compose
+   plugin containers را قبل از اجرای tests اجرا می‌کند. شروع containers و اجرای tests حدود چهار تا پنج دقیقه طول می‌کشد.
+  </p>
+  <p>
+   ممکن است این زمان زیادی به نظر نرسد، اما این یک application نسبتاً ساده با
+   فقط تعداد انگشت شماری از containers و tests است. تصور کنید اگر صدها containers وجود داشت
+   و تعداد زیادی tests دیگر. تست‌ها می‌توانند زمان زیادی ببرند. در نتیجه، بهتر است روی
+   نوشتن tests که در پایین هرم قرار دارند تمرکز کنید.
+  </p>
+  <p>
+   Listing 10.17
+   A Gherkin-based specification of a user journey
+   Create
+   Order.
+   Revise
+   Order.
+   Cancel
+   Order.
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

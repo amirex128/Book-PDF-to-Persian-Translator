@@ -1,0 +1,44 @@
+68
+CHAPTER 3
+Interprocess communication in a microservice architecture
+One-way notifications—A service client sends a request to a service, but no reply
+is expected or sent.
+It’s important to remember that the synchronous request/response interaction style is
+mostly orthogonal to IPC technologies. A service can, for example, interact with
+another service using request/response style interaction with either REST or messag-
+ing. Even if two services are communicating using a message broker, the client service
+might be blocked waiting for a response. It doesn’t necessarily mean they’re loosely
+coupled. That’s something I revisit later in this chapter when discussing the impact of
+inter-service communication on availability.
+ The following are the different types of one-to-many interactions:
+Publish/subscribe—A client publishes a notification message, which is consumed
+by zero or more interested services.
+Publish/async responses—A client publishes a request message and then waits for
+a certain amount of time for responses from interested services.
+Each service will typically use a combination of these interaction styles. Many of the
+services in the FTGO application have both synchronous and asynchronous APIs for
+operations, and many also publish events.
+ Let’s look at how to define a service’s API. 
+3.1.2
+Defining APIs in a microservice architecture
+APIs or interfaces are central to software development. An application is comprised of
+modules. Each module has an interface that defines the set of operations that mod-
+ule’s clients can invoke. A well-designed interface exposes useful functionality while
+hiding the implementation. It enables the implementation to change without impact-
+ing clients.
+ In a monolithic application, an interface is typically specified using a program-
+ming language construct such as a Java interface. A Java interface specifies a set of
+methods that a client can invoke. The implementation class is hidden from the client.
+Moreover, because Java is a statically typed language, if the interface changes to be
+incompatible with the client, the application won’t compile.
+ APIs and interfaces are equally important in a microservice architecture. A ser-
+vice’s API is a contract between the service and its clients. As described in chapter 2, a
+service’s API consists of operations, which clients can invoke, and events, which are
+published by the service. An operation has a name, parameters, and a return type. An
+event has a type and a set of fields and is, as described in section 3.3, published to a
+message channel.
+ The challenge is that a service API isn’t defined using a simple programming lan-
+guage construct. By definition, a service and its clients aren’t compiled together. If a
+new version of a service is deployed with an incompatible API, there’s no compilation
+error. Instead, there will be runtime failures.
+ 

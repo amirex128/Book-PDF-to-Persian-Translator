@@ -1,0 +1,37 @@
+matches any two vertices that are related by an edge labeled BORN_IN. The tail vertex
+of that edge is bound to the variable person, and the head vertex is left unnamed.
+Example 2-4. Cypher query to find people who emigrated from the US to Europe
+MATCH
+  (person) -[:BORN_IN]->  () -[:WITHIN*0..]-> (us:Location {name:'United States'}),
+  (person) -[:LIVES_IN]-> () -[:WITHIN*0..]-> (eu:Location {name:'Europe'})
+RETURN person.name
+The query can be read as follows:
+Find any vertex (call it person) that meets both of the following conditions:
+1. person has an outgoing BORN_IN edge to some vertex. From that vertex, you can
+follow a chain of outgoing WITHIN edges until eventually you reach a vertex of
+type Location, whose name property is equal to "United States".
+2. That same person vertex also has an outgoing LIVES_IN edge. Following that
+edge, and then a chain of outgoing WITHIN edges, you eventually reach a vertex of
+type Location, whose name property is equal to "Europe".
+For each such person vertex, return the name property.
+There are several possible ways of executing the query. The description given here
+suggests that you start by scanning all the people in the database, examine each per‐
+son’s birthplace and residence, and return only those people who meet the criteria.
+But equivalently, you could start with the two Location vertices and work backward.
+If there is an index on the name property, you can probably efficiently find the two
+vertices representing the US and Europe. Then you can proceed to find all locations
+(states, regions, cities, etc.) in the US and Europe respectively by following all incom‐
+ing WITHIN edges. Finally, you can look for people who can be found through an
+incoming BORN_IN or LIVES_IN edge at one of the location vertices.
+As is typical for a declarative query language, you don’t need to specify such execu‐
+tion details when writing the query: the query optimizer automatically chooses the
+strategy that is predicted to be the most efficient, so you can get on with writing the
+rest of your application.
+Graph Queries in SQL
+Example 2-2 suggested that graph data can be represented in a relational database.
+But if we put graph data in a relational structure, can we also query it using SQL?
+The answer is yes, but with some difficulty. In a relational database, you usually know
+in advance which joins you need in your query. In a graph query, you may need to
+Graph-Like Data Models 
+| 
+53

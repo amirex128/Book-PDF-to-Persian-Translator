@@ -1,0 +1,62 @@
+198
+CHAPTER 6
+Developing business logic with event sourcing
+6.1.7
+Evolving domain events
+Event sourcing, at least conceptually, stores events forever—which is a double-edged
+sword. On one hand, it provides the application with an audit log of changes that’s
+guaranteed to be accurate. It also enables an application to reconstruct the historical
+state of an aggregate. On the other hand, it creates a challenge, because the structure
+of events often changes over time.
+ An application must potentially deal with multiple versions of events. For example,
+a service that loads an Order aggregate could potentially need to fold multiple ver-
+sions of events. Similarly, an event subscriber might potentially see multiple versions.
+ Let’s first look at the different ways that events can change, and then I’ll describe a
+commonly used approach for handling changes.
+EVENT SCHEMA EVOLUTION
+Conceptually, an event sourcing application has a schema that’s organized into
+three levels:
+Consists of one or more aggregates
+Defines the events that each aggregate emits
+Defines the structure of the events
+Table 6.1 shows the different types of changes that can occur at each level.
+These changes occur naturally as a service’s domain model evolves over time—for
+example, when a service’s requirements change or as its developers gain deeper insight
+into a domain and improve the domain model. At the schema level, developers add,
+remove, and rename aggregate classes. At the aggregate level, the types of events
+Table 6.1
+The different ways that an application’s events can evolve
+Level
+Change
+Backward compatible
+Schema
+Define a new aggregate type
+Yes
+Remove aggregate
+Remove an existing aggregate
+No
+Rename aggregate
+Change the name of an aggregate type
+No
+Aggregate
+Add a new event type
+Yes
+Remove event
+Remove an event type
+No
+Rename event
+Change the name of an event type
+No
+Event
+Add a new field
+Yes
+Delete field
+Delete a field
+No
+Rename field
+Rename a field
+No
+Change type of field
+Change the type of a field
+No
+ 

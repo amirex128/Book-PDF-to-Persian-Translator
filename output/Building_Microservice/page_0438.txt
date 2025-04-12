@@ -1,0 +1,40 @@
+know the right thing to do. Knowing about the CAP theorem helps you understand
+that this trade-off exists and what questions to ask.
+It’s Not All or Nothing
+Our system as a whole doesn’t need to be either AP or CP. Our catalog for Musi‐
+cCorp could be AP, as we don’t worry too much about a stale record. But we might
+decide that our inventory service needs to be CP, as we don’t want to sell a customer
+something we don’t have and then have to apologize later.
+But individual services don’t even need to be CP or AP.
+Let’s think about our Points Balance microservice, where we store records of how
+many loyalty points our customers have built up. We could decide that we don’t care
+if the balance we show for a customer is stale, but that when it comes to updating a
+balance we need it to be consistent to ensure that customers don’t use more points
+than they have available. Is this microservice CP, or AP, or both? Really, what we
+have done is push the trade-offs around the CAP theorem down to individual micro‐
+service capabilities.
+Another complexity is that neither consistency nor availability is all or nothing.
+Many systems allow us a far more nuanced trade-off. For example, with Cassandra I
+can make different trade-offs for individual calls. So if I need strict consistency, I can
+perform a read that blocks until all replicas have responded, confirming the value is
+consistent, or until a specific quorum of replicas have responded, or even just a single
+node. Obviously, if I block waiting for all replicas to report back and one of them is
+unavailable, I’ll be blocking for a long time. On the other hand, if I wanted my read to
+respond as quickly as possible, I might wait to hear back from only a single node—in
+which case there is a possibility that this might be an inconsistent view of my data.
+You’ll often see posts about people “beating” the CAP theorem. They haven’t. What
+they have done is create a system in which some capabilities are CP, and some are
+AP. The mathematical proof behind the CAP theorem holds.
+And the Real World
+Much of what we’ve talked about is the electronic world—bits and bytes stored in
+memory. We talk about consistency in an almost childlike fashion; we imagine that
+within the scope of the system we have created, we can stop the world and have it all
+make sense. And yet so much of what we build is just a reflection of the real world,
+and we don’t get to control that, do we?
+Let’s revisit our inventory system. This maps to real-world, physical items. We keep a
+count in our system of how many albums we have in MusicCorp’s warehouses. At the
+start of the day we had 100 copies of Give Blood by the Brakes. We sold one. Now we
+have 99 copies. Easy, right? But what happens if when the order is being sent out,
+412 
+| 
+Chapter 12: Resiliency

@@ -1,0 +1,39 @@
+113
+Transaction management in a microservice architecture
+As simple as this sounds, there are a variety of problems with distributed transac-
+tions. One problem is that many modern technologies, including NoSQL databases
+such as MongoDB and Cassandra, don’t support them. Also, distributed transactions
+aren’t supported by modern message brokers such as RabbitMQ and Apache Kafka.
+As a result, if you insist on using distributed transactions, you can’t use many mod-
+ern technologies.
+ Another problem with distributed transactions is that they are a form of synchro-
+nous IPC, which reduces availability. In order for a distributed transaction to commit,
+all the participating services must be available. As described in chapter 3, the availabil-
+ity is the product of the availability of all of the participants in the transaction. If a dis-
+tributed transaction involves two services that are 99.5% available, then the overall
+availability is 99%, which is significantly less. Each additional service involved in a dis-
+tributed transaction further reduces availability. There is even Eric Brewer’s CAP theo-
+rem, which states that a system can only have two of the following three properties:
+Account
+Ticket
+Consumer
+Data consistency required
+Writes
+Writes
+createOrder()
+Reads
+Accounting Service
+Kitchen Service
+Order
+Order Service
+Consumer Service
+The createOrder() operation reads from
+Consumer Service and updates data
+in Order Service, Kitchen Service,
+and Accounting Service.
+Order
+controller
+Figure 4.1
+The createOrder() operation updates data in several services. It must use a 
+mechanism to maintain data consistency across those services.
+ 

@@ -1,0 +1,47 @@
+158
+CHAPTER 5
+Designing business logic in a microservice architecture
+5.2.4
+Aggregate granularity
+When developing a domain model, a key decision you must make is how large to
+make each aggregate. On one hand, aggregates should ideally be small. Because
+updates to each aggregate are serialized, more fine-grained aggregates will increase
+the number of simultaneous requests that the application can handle, improving scal-
+ability. It will also improve the user experience because it reduces the chance of two
+users attempting conflicting updates of the same aggregate. On the other hand, because
+an aggregate is the scope of transaction, you may need to define a larger aggregate in
+order to make a particular update atomic.
+ For example, earlier I mentioned how in the FTGO application’s domain model
+Order and Consumer are separate aggregates. An alternative design is to make Order
+part of the Consumer aggregate. Figure 5.8 shows this alternative design.
+A benefit of this larger Consumer aggregate is that the application can atomically
+update a Consumer and one or more of its Orders. A drawback of this approach is that
+it reduces scalability. Transactions that update different orders for the same customer
+would be serialized. Similarly, two users would conflict if they attempted to edit differ-
+ent orders for the same customer.
+ Another drawback of this approach in a microservice architecture is that it is an
+obstacle to decomposition. The business logic for Orders and Consumers, for exam-
+ple, must be collocated in the same service, which makes the service larger. Because of
+these issues, making aggregates as fine-grained as possible is best. 
+restaurantId
+...
+Order
+quantity
+OrderLineItem
+DeliveryInfo
+...
+<<aggregate root>>
+Consumer
+Consumer aggregate
+...
+<<aggregate root>>
+Restaurant
+Restaurant aggregate
+PaymentInfo
+DeliveryInfo
+PaymentInfo
+Figure 5.8
+An alternative design defines a Customer aggregate that contains the Customer and 
+Order classes. This design enables an application to atomically update a Consumer and one or more 
+of its Orders.
+ 

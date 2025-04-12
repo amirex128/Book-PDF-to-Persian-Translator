@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 244</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><mark>CHAPTER 6</mark></h3>
+  <p>
+   <mark>Developing business logic with event sourcing</mark>
+  </p>
+  <h5><mark>EXAMPLE EVENT SOURCING-BASED SAGA PARTICIPANT</mark></h5>
+  <p>
+   این مثال به <mark>Accounting Service</mark>، یکی از <mark>participants</mark>های <mark>Create Order Saga</mark>، نگاهی می‌اندازد. شکل 6.12 نشان می‌دهد که چگونه <mark>Accounting Service</mark>، <mark>Authorize Command</mark> ارسال شده توسط <mark>saga</mark> را مدیریت می‌کند. <mark>Accounting Service</mark> با استفاده از فریم‌ورک <mark>Eventuate Saga</mark> پیاده‌سازی شده است. فریم‌ورک <mark>Eventuate Saga</mark> یک فریم‌ورک متن‌باز برای نوشتن <mark>sagas</mark> است که از <mark>event sourcing</mark> استفاده می‌کند. این بر روی فریم‌ورک <mark>Eventuate Client</mark> ساخته شده است.
+  </p>
+  <p>
+   این شکل نشان می‌دهد که چگونه <mark>Create Order Saga</mark> و <mark>AccountingService</mark> با هم تعامل دارند. توالی <mark>events</mark> به شرح زیر است:
+  </p>
+  <p>
+   <mark>AccountCreated</mark>
+   <br />
+   ....
+   <br />
+   <mark>AccountAuthorized</mark>
+   <br />
+   <mark>AccountAuthorized</mark>
+   <br />
+   <mark>SagaReplyRequested</mark>
+  </p>
+  <p>
+   <mark>Event store</mark>
+  </p>
+  <p>
+   <mark>Event dispatcher</mark>
+  </p>
+  <p>
+   <mark>Eventuate API</mark>
+  </p>
+  <p>
+   <mark>Accounting Service</mark>
+  </p>
+  <p>
+   <mark>SagaReplyRequested</mark>
+  </p>
+  <p>
+   <mark>Order Service</mark>
+  </p>
+  <p>
+   <mark>Aggregate</mark>
+  </p>
+  <p>
+   <mark>repository</mark>
+  </p>
+  <p>
+   <mark>SagaReply</mark>
+   <br />
+   <mark>requested</mark>
+  </p>
+  <p>
+   <mark>EventHandler</mark>
+  </p>
+  <p>
+   <mark>Eventuate saga framework</mark>
+  </p>
+  <p>
+   <mark>Saga command</mark>
+   <br />
+   <mark>dispatcher</mark>
+  </p>
+  <p>
+   <mark>Authorize</mark>
+   <br />
+   <mark>command</mark>
+  </p>
+  <p>
+   <mark>Authorize</mark>
+   <br />
+   <mark>reply</mark>
+  </p>
+  <p>
+   <mark>Account</mark>
+   <br />
+   <mark>command channel</mark>
+  </p>
+  <p>
+   <mark>Create order saga</mark>
+   <br />
+   <mark>reply channel</mark>
+  </p>
+  <p>
+   <mark>Create</mark>
+   <br />
+   <mark>order</mark>
+   <br />
+   <mark>saga</mark>
+  </p>
+  <p>
+   <mark>Account</mark>
+   <br />
+   <mark>authorize()</mark>
+  </p>
+  <p>
+   <mark>Authorize account</mark>
+   <br />
+   <mark>command handler</mark>
+  </p>
+  <p>
+   <mark>Authorize</mark>
+   <br />
+   <mark>the account.</mark>
+   <br />
+   <mark>Send command to</mark>
+   <br />
+   <mark>accounting service.</mark>
+   <br />
+   <mark>Handle SagaReply</mark>
+   <br />
+   <mark>requested event</mark>
+   <br />
+   <mark>and send reply.</mark>
+   <br />
+   <mark>Emit</mark>
+   <br />
+   <mark>SagaReply</mark>
+   <br />
+   <mark>requested</mark>
+   <br />
+   <mark>event.</mark>
+  </p>
+  <p>
+   شکل 6.12
+   <br />
+   چگونگی مشارکت <mark>Accounting Service</mark> مبتنی بر <mark>event sourcing</mark> در <mark>Create</mark>
+   <br />
+   <mark>Order Saga</mark>
+  </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

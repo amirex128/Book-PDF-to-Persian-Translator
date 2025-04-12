@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 115</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        در بقیه این فصل ما به storage engines نگاه خواهیم کرد که برای ana‐lytics بهینه شده‌اند.
+    </p>
+    <h4>The divergence بین databases OLTP و data warehouses</h4>
+    <p>
+        The data model از یک data warehouse معمولاً relational است، زیرا SQL به طور کلی برای queries analytic مناسب است. ابزارهای تجزیه و تحلیل داده‌های گرافیکی زیادی وجود دارد که queries SQL را تولید می‌کنند، نتایج را تجسم می‌کنند و به analysts اجازه می‌دهند تا داده‌ها را (از طریق عملیاتی مانند drill-down و slicing and dicing) بررسی کنند.
+    </p>
+    <p>
+        در ظاهر، یک data warehouse و یک database relational OLTP شبیه به هم هستند، زیرا هر دو دارای یک interface SQL query هستند. با این حال، internals از systems می‌تواند کاملاً متفاوت به نظر برسد، زیرا آن‌ها برای الگوهای query بسیار متفاوت بهینه شده‌اند.
+    </p>
+    <p>
+        بسیاری از database vendors اکنون بر پشتیبانی از transaction processing یا workloads analytics متمرکز هستند، اما نه هر دو.
+    </p>
+    <p>
+        برخی از databases، مانند Microsoft SQL Server و SAP HANA، از transaction processing و data warehousing در همان product پشتیبانی می‌کنند. با این حال، آن‌ها به طور فزاینده‌ای به دو storage و query engines جداگانه تبدیل می‌شوند، که از طریق یک interface SQL common قابل دسترسی هستند [49, 50, 51].
+    </p>
+    <p>
+        Data warehouse vendors مانند Teradata، Vertica، SAP HANA و ParAccel معمولاً systems خود را تحت مجوزهای تجاری گران قیمت می‌فروشند. Amazon RedShift یک نسخه hosted از ParAccel است. اخیراً، تعداد زیادی از پروژه‌های open source SQL-on-Hadoop پدیدار شده‌اند. آن‌ها جوان هستند اما قصد دارند با systems commercial data warehouse رقابت کنند. این‌ها شامل Apache Hive، Spark SQL، Cloudera Impala، Facebook Presto، Apache Tajo و Apache Drill [52, 53] می‌شوند. برخی از آن‌ها بر اساس ایده‌های Dremel از Google [54] هستند.
+    </p>
+    <h4>Stars and Snowflakes: Schemas for Analytics</h4>
+    <p>
+        همانطور که در فصل 2 بررسی شد، طیف گسترده‌ای از data models مختلف در حوزه transaction processing استفاده می‌شود، بسته به نیازهای application. از سوی دیگر، در analytics، تنوع data models بسیار کمتر است. بسیاری از data warehouses در یک style نسبتاً formulaic استفاده می‌شوند، که به عنوان star schema (همچنین به عنوان dimen‐sional modeling [55] شناخته می‌شود) شناخته می‌شود.
+    </p>
+    <p>
+        The example schema در شکل 3-9 یک data warehouse را نشان می‌دهد که ممکن است در یک خرده‌فروش مواد غذایی یافت شود. در مرکز schema یک fact table به اصطلاح (در این مثال، fact_sales نامیده می‌شود) است. هر ردیف از fact table نشان‌دهنده یک event است که در یک زمان خاص رخ داده است (در اینجا، هر ردیف نشان‌دهنده خرید یک محصول توسط یک مشتری است). اگر ما در حال تجزیه و تحلیل traffic وب‌سایت به جای retail sales بودیم، هر ردیف ممکن است نمای یک صفحه یا کلیک توسط یک user را نشان دهد.
+    </p>
+    <p>
+        Transaction Processing or Analytics? | 93
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

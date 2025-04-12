@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 231</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        partitions از index (هر term در document ممکن است در یک partition متفاوت، در یک node متفاوت، باشد).
+    </p>
+    <p>
+        In an ideal world، index همیشه up to date خواهد بود و هر document که به database نوشته می‌شود، بلافاصله در index منعکس می‌شود. با این حال، در یک term-partitioned index، این امر نیاز به یک transaction distributed در سراسر همه partitions که تحت تأثیر یک write قرار دارند، دارد که در همه databases پشتیبانی نمی‌شود (فصل 7 و Chap‐ter 9 را ببینید).
+    </p>
+    <p>
+        در عمل، updates به global secondary indexes اغلب asynchronous هستند (یعنی، اگر شما index را اندکی پس از یک write بخوانید، تغییراتی که شما تازه ایجاد کرده‌اید، ممکن است هنوز در index منعکس نشده باشد). به عنوان مثال، Amazon DynamoDB بیان می‌کند که global secon‐dary indexes آن در شرایط normal در عرض کسری از ثانیه به‌روزرسانی می‌شوند، اما ممکن است تاخیرهای انتشار طولانی‌تری را در موارد faults in the infrastructure تجربه کنند [20].
+    </p>
+    <p>
+        Other uses of global term-partitioned indexes شامل feature search از Riak [21] و data warehouse از Oracle می‌شود، که به شما اجازه می‌دهد بین indexing local و global انتخاب کنید [22]. ما در فصل 12 به موضوع پیاده‌سازی term-partitioned secondary indexes باز خواهیم گشت.
+    </p>
+    <h4>Rebalancing Partitions</h4>
+    <p>
+        Over time، things در یک database تغییر می‌کنند:
+    </p>
+    <ul>
+        <li>The query throughput increases، بنابراین شما می‌خواهید CPUs بیشتری را برای handling load اضافه کنید.</li>
+        <li>The dataset size increases، بنابراین شما می‌خواهید دیسک‌ها و RAM بیشتری را برای ذخیره آن اضافه کنید.</li>
+        <li>A machine fails، و سایر machines نیاز دارند که مسئولیت‌های machine fail شده را بر عهده بگیرند.</li>
+    </ul>
+    <p>
+        همه این تغییرات نیاز به انتقال داده‌ها و requests از یک node به node دیگر دارند.
+        فرآیند انتقال load از یک node در cluster به node دیگر، reba‐lancing نامیده می‌شود.
+    </p>
+    <p>
+        مهم نیست که کدام partitioning scheme استفاده می‌شود، rebalancing معمولاً انتظار می‌رود که حداقل الزامات را برآورده کند:
+    </p>
+    <ul>
+        <li>After rebalancing، the load (data storage، read و write requests) باید به طور منصفانه بین nodes در cluster به اشتراک گذاشته شود.</li>
+        <li>While rebalancing در حال انجام است، database باید به پذیرش reads و writes ادامه دهد.</li>
+        <li>No more data than necessary باید بین nodes منتقل شود، تا rebalanc‐ing سریع شود و network و disk I/O load به حداقل برسد.</li>
+    </ul>
+    <p>
+        Rebalancing Partitions | 209
+    </p>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

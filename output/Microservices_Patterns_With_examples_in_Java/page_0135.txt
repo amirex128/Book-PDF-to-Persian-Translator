@@ -1,0 +1,54 @@
+105
+Using asynchronous messaging to improve availability
+This service then asynchronously exchanges messages with other services and eventu-
+ally sends a reply message to the client. Figure 3.16 shows the design.
+The client and the services communicate asynchronously by sending messages via
+messaging channels. No participant in this interaction is ever blocked waiting for a
+response.
+ Such an architecture would be extremely resilient, because the message broker
+buffers messages until they can be consumed. The problem, however, is that services
+often have an external API that uses a synchronous protocol such as REST, so it must
+respond to requests immediately.
+ If a service has a synchronous API, one way to improve availability is to replicate
+data. Let’s see how that works. 
+REPLICATE DATA
+One way to minimize synchronous requests during request processing is to replicate
+data. A service maintains a replica of the data that it needs when processing requests.
+It keeps the replica up-to-date by subscribing to events published by the services that
+own the data. For example, Order Service could maintain a replica of data owned by
+Consumer Service and Restaurant Service. This would enable Order Service to
+handle a request to create an order without having to interact with those services.
+Figure 3.17 shows the design.
+ Consumer Service and Restaurant Service publish events whenever their data
+changes. Order Service subscribes to those events and updates its replica.
+ In some situations, replicating data is a useful approach. For example, chapter 5
+describes how Order Service replicates data from Restaurant Service so that it can
+validate and price menu items. One drawback of replication is that it can sometimes
+require the replication of large amounts of data, which is inefficient. For example, it
+may not be practical for Order Service to maintain a replica of the data owned by
+Consumer Service, due to the large number of consumers. Another drawback of
+Client
+Consumer
+Service
+Restaurant
+Service
+Order request
+channel
+Consumer request
+channel
+Order Service
+reply channel
+Restaurant request
+channel
+Create order
+request
+Create order
+response
+Order
+Service
+Client reply
+channel
+Figure 3.16
+The FTGO application has higher availability if its services communicate using asynchronous 
+messaging instead of synchronous calls.
+ 

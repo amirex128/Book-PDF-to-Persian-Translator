@@ -1,0 +1,43 @@
+378
+CHAPTER 11
+Developing production-ready services
+There are a few different ways to implement audit logging:
+Add audit logging code to the business logic.
+Use aspect-oriented programming (AOP).
+Use event sourcing.
+Let’s look at each option.
+ADD AUDIT LOGGING CODE TO THE BUSINESS LOGIC
+The first and most straightforward option is to sprinkle audit logging code through-
+out your service’s business logic. Each service method, for example, can create an
+audit log entry and save it in the database. The drawback with this approach is that it
+intertwines auditing logging code and business logic, which reduces maintainability.
+The other drawback is that it’s potentially error prone, because it relies on the devel-
+oper writing audit logging code. 
+USE ASPECT-ORIENTED PROGRAMMING
+The second option is to use AOP. You can use an AOP framework, such as Spring
+AOP, to define advice that automatically intercepts each service method call and per-
+sists an audit log entry. This is a much more reliable approach, because it automati-
+cally records every service method invocation. The main drawback of using AOP is
+that the advice only has access to the method name and its arguments, so it might be
+challenging to determine the business object being acted upon and generate a business-
+oriented audit log entry. 
+USE EVENT SOURCING
+The third and final option is to implement your business logic using event sourcing.
+As mentioned in chapter 6, event sourcing automatically provides an audit log for cre-
+ate and update operations. You need to record the identity of the user in each event.
+One limitation with using event sourcing, though, is that it doesn’t record queries. If
+your service must create log entries for queries, then you’ll have to use one of the
+other options as well. 
+11.4
+Developing services using the Microservice chassis 
+pattern
+This chapter has described numerous concerns that a service must implement, includ-
+ing metrics, reporting exceptions to an exception tracker, logging and health checks,
+externalized configuration, and security. Moreover, as described in chapter 3, a ser-
+vice may also need to handle service discovery and implement circuit breakers. That’s
+not something you’d want to set up from scratch each time you implement a new ser-
+vice. If you did, it would potentially be days, if not weeks, before you wrote your first
+line of business logic.
+ 
+ 
+ 

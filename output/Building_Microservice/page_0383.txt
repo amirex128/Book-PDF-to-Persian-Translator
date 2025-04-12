@@ -1,0 +1,42 @@
+platforms. Vault has the added benefit that the supporting consul-template tool is
+able to dynamically update secrets in a normal configuration file. This means parts of
+your system that want to read secrets from a local filesystem don’t need to change to
+support the secrets management tool. When a secret is changed in Vault, consul-
+template can update this entry in the configuration file, allowing your microservices
+to dynamically change the secrets they are using. This is fantastic for managing cre‐
+dentials at scale.
+Some public cloud providers also offer solutions in this space; for example, AWS
+Secrets Manager or Azure’s Key Vault come to mind. Some people dislike the idea of
+storing critical secret information in a public cloud service like this, however. Again,
+this comes down to your threat model. If it is a serious concern, there is nothing to
+stop you from running Vault on your public cloud provider of choice and handling
+that system yourself. Even if data at rest is stored on the cloud provider, with the
+appropriate storage backend you can ensure that the data is encrypted in such a way
+that even if an outside party got hold of the data they couldn’t do anything with it.
+Rotation
+Ideally, we want to rotate credentials frequently to limit the damage someone can do
+if they gain access to the credentials. If a malicious party gains access to your AWS
+API public/private keypair but that credential is changed once a week, they have only
+one week in which to make use of the credentials. They can still do a lot of damage in
+a week of course, but you get the idea. Some types of attackers like to gain access to
+systems and then stay undetected, allowing them to collect more valuable data over
+time and find ways into other parts of your system. If they used stolen credentials to
+gain access, you may be able to stop them in their tracks if the credentials they use
+expire before they can make much use of them.
+A great example of rotation for operator credentials would be the generation of time-
+limited API keys for using AWS. Many organizations now generate API keys on the
+fly for their staff, with the public and private keypair being valid only for a short
+period of time—typically less than an hour. This allows you to generate the API keys
+you need to carry out whatever operation is needed, safe in the knowledge that even
+if a malicious party subsequently gains access to these keys, they will be unable to
+make use of them. Even if you did accidentally check that keypair into public GitHub,
+it would be no use to anyone once it’s expired.
+The use of time-limited credentials can be useful for systems too. Hashicorp’s Vault
+can generate time-limited credentials for databases. Rather than your microservice
+instance reading database connection details from a configuration store or a text file,
+they can instead be generated on the fly for a specific instance of your microservice.
+Moving to a process of frequent rotation of credentials like keys can be painful. I’ve
+spoken to companies that have experienced incidents as a result of key rotation,
+Foundations of Application Security 
+| 
+357

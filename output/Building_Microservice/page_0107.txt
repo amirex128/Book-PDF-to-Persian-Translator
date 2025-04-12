@@ -1,0 +1,31 @@
+3 Obviously, this is a simplification of what a real-world system would look like. It seems reasonable, for exam‐
+ple, that we would record how much we sold an item for in a financial ledger!
+Data Decomposition Concerns
+When we start breaking databases apart, we can cause a number of issues. Here are a
+few of the challenges you might face, and some tips to help.
+Performance
+Databases, especially relational databases, are good at joining data across different
+tables. Very good. So good, in fact, that we take this for granted. Often, though, when
+we split databases apart in the name of microservices, we end up having to move join
+operations from the data tier up into the microservices themselves. And try as we
+might, it’s unlikely to be as fast.
+Consider Figure 3-6, which illustrates a situation we find ourselves in regarding
+MusicCorp. We’ve decided to extract our catalog functionality—something that can
+manage and expose information about artists, tracks, and albums. Currently, our
+catalog-related code inside the monolith uses an Albums table to store information
+about the CDs that we might have available for sale. These albums end up getting ref‐
+erenced in our Ledger table, which is where we track all sales. The rows in the Ledger
+table record the date on which something is sold, along with an identifier that refers
+to the item sold; the identifier in our example is called a SKU (stock keeping unit), a
+common practice in retail systems.3
+At the end of each month, we need to generate a report outlining our best-selling
+CDs. The Ledger table helps us understand which SKU sold the most copies, but the
+information about that SKU is over in the Albums table. We want to make the reports
+nice and easy to read, so rather than saying, “We sold 400 copies of SKU 123 and
+made $1,596,” we’d add more information about what was sold, saying instead, “We
+sold 400 copies of Now That’s What I Call Death Polka and made $1,596.” To do this,
+the database query triggered by our finance code needs to join information from the
+Ledger table to the Albums table, as Figure 3-6 shows.
+Data Decomposition Concerns 
+| 
+81

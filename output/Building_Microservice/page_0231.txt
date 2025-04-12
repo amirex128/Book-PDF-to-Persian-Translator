@@ -1,0 +1,27 @@
+Figure 7-4. The same artifact is deployed into each environment
+If the same artifact is going to be used across multiple environments, any aspects of
+configuration that vary from environment to environment need to be kept outside
+the artifact itself. As a simple example, I might want to configure application logs so
+that everything at DEBUG level and above is logged when running the Slow Tests stage,
+giving me more information to diagnose why a test fails. I might decide, though, to
+change this to INFO to reduce the log volume for the Performance Tests and Produc‐
+tion deployment.
+Artifact Creation Tips
+Build a deployment artifact for your microservice once. Reuse this
+artifact everywhere you want to deploy that version of your micro‐
+service. Keep your deployment artifact environment-agnostic—
+store environment-specific configuration elsewhere.
+Mapping Source Code and Builds to Microservices
+We’ve already looked at one topic that can excite warring factions—feature branch‐
+ing versus trunk-based development—but it turns out that the controversy isn’t over
+for this chapter. Another topic that is likely to elicit some pretty diverse opinions is
+the organization of code for our microservices. I have my own preferences, but before
+we get to those, let’s explore the main options for how we organize code for our
+microservices.
+One Giant Repo, One Giant Build
+If we start with the simplest option, we could lump everything in together. We have a
+single, giant repository storing all our code, and we have a single build, as we see in
+Figure 7-5. Any check-in to this source code repository will cause our build to trigger,
+Mapping Source Code and Builds to Microservices 
+| 
+205

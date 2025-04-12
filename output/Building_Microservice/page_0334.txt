@@ -1,0 +1,25 @@
+Figure 10-2. A single service distributed across multiple hosts
+Then we have our logs. With our service running on more than one server, we’ll
+probably get tired of logging into each box to look at it. With just a few hosts, though,
+we can use tools like SSH multiplexers, which allow us to run the same commands on
+multiple hosts. With the help of a big monitor, and running grep "Error" on our
+microservice log, we can find our culprit. I mean, this isn’t great, but it can be good
+enough for a while. It will get old pretty fast though.
+For tasks like response time tracking, we can capture response times at the load bal‐
+ancer for downstream calls to microservices. However, we also have to consider what
+happens if the load balancer is turning out to be the bottleneck in our system—cap‐
+turing response times both at the load balancer and at the microservices themselves
+could be needed. At this point, we probably also care a lot more about what a healthy
+service looks like, as we’ll configure our load balancer to remove unhealthy nodes
+from our application. Hopefully by the time we get here, we have at least some idea of
+what healthy looks like.
+Multiple Services, Multiple Servers
+In Figure 10-3, things get much more interesting. Multiple services are collaborating
+to provide capabilities to our users, and those services are running on multiple hosts,
+be they physical or virtual. How do you find the error you’re looking for in thousands
+of lines of logs on multiple hosts? How do you determine if a server is misbehaving,
+or if it is a systemic issue? And how do you track back an error found deep down in a
+call chain between multiple hosts and work out what caused it?
+308 
+| 
+Chapter 10: From Monitoring to Observability

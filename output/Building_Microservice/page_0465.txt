@@ -1,0 +1,26 @@
+Figure 13-10. Sales holds a local copy of Catalog data
+In general, client-side caches tend to be pretty effective, as they avoid the network call
+to the downstream microservice. This makes them suitable not only for caching for
+improved latency but also for caching for robustness.
+Client-side caching has a few downsides, though. Firstly, you tend to be more restric‐
+ted in your options around invalidation mechanisms—something we’ll explore more
+shortly. Secondly, when there’s a lot of client-side caching going on, you can see a
+degree of inconsistency between clients. Consider a situation in which Sales, Recom
+mendation, and Promotions microservices all have a client-side cache of data from
+Catalog. When the data in Catalog changes, whatever invalidation mechanism we
+are likely to use will be unable to guarantee that the data is refreshed at the exact
+same moment of time in each of those three clients. This means that you could see a
+different view of the cached data in each of those clients at the same time. The more
+clients you have, the more problematic this is likely to be. Techniques such as
+notification-based invalidation, which we’ll look at shortly, can help reduce this prob‐
+lem, but they won’t eliminate it.
+Another mitigation for this is to have a shared client-side cache, perhaps making use
+of a dedicated caching tool like Redis or memcached, as we see in Figure 13-11. Here,
+we avoid the problem of inconsistency between the different clients. This can also be
+more efficient in terms of resource use, as we are reducing the number of copies of
+this data we need to manage (caches often end up being in memory, and memory is
+often one of the biggest infrastructural constraints). The flip side is that our clients
+now need to make a round trip to the shared cache.
+Caching 
+| 
+439

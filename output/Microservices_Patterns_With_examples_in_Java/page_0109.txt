@@ -1,0 +1,44 @@
+79
+Communicating using the synchronous Remote procedure invocation pattern
+DEVELOPING ROBUST RPI PROXIES
+Whenever one service synchronously invokes another service, it should protect itself
+using the approach described by Netflix (http://techblog.netflix.com/2012/02/fault-
+tolerance-in-high-volume.html). This approach consists of a combination of the fol-
+lowing mechanisms:
+Network timeouts—Never block indefinitely and always use timeouts when wait-
+ing for a response. Using timeouts ensures that resources are never tied up
+indefinitely.
+Limiting the number of outstanding requests from a client to a service—Impose an upper
+bound on the number of outstanding requests that a client can make to a par-
+ticular service. If the limit has been reached, it’s probably pointless to make
+additional requests, and those attempts should fail immediately.
+Circuit breaker pattern—Track the number of successful and failed requests,
+and if the error rate exceeds some threshold, trip the circuit breaker so that
+further attempts fail immediately. A large number of requests failing suggests
+that the service is unavailable and that sending more requests is pointless.
+After a timeout period, the client should try again, and, if successful, close the
+circuit breaker.
+Netflix Hystrix (https://github.com/Netflix/Hystrix) is an open source library that
+implements these and other patterns. If you’re using the JVM, you should definitely
+consider using Hystrix when implementing RPI proxies. And if you’re running in a
+non-JVM environment, you should use an equivalent library. For example, the Polly
+library is popular in the .NET community (https://github.com/App-vNext/Polly). 
+RECOVERING FROM AN UNAVAILABLE SERVICE
+Using a library such as Hystrix is only part of the solution. You must also decide on a
+case-by-case basis how your services should recover from an unresponsive remote ser-
+vice. One option is for a service to simply return an error to its client. For example,
+this approach makes sense for the scenario shown in figure 3.2, where the request to
+create an Order fails. The only option is for the API gateway to return an error to the
+mobile client.
+ In other scenarios, returning a fallback value, such as either a default value or a
+cached response, may make sense. For example, chapter 7 describes how the API gate-
+way could implement the findOrder() query operation by using the API composition
+pattern. As figure 3.3 shows, its implementation of the GET /orders/{orderId} end-
+point invokes several services, including the Order Service, Kitchen Service, and
+Delivery Service, and combines the results.
+ It’s likely that each service’s data isn’t equally important to the client. The data
+from the Order Service is essential. If this service is unavailable, the API gateway
+should return either a cached version of its data or an error. The data from the other
+services is less critical. A client can, for example, display useful information to the user
+even if the delivery status was unavailable. If the Delivery Service is unavailable,
+ 

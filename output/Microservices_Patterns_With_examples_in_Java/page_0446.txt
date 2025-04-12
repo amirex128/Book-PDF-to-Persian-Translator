@@ -1,0 +1,41 @@
+416
+CHAPTER 12
+Deploying microservices
+administration has been one of those things you need to do. As it turns out, though,
+there’s a solution: serverless.
+12.5.1 Overview of serverless deployment with AWS Lambda
+At AWS Re:Invent 2014, Werner Vogels, the CTO of Amazon, introduced AWS
+Lambda with the amazing phrase “magic happens at the intersection of functions,
+events, and data.” As this phrase suggests, AWS Lambda was initially for deploying
+event-driven services. It’s “magic” because, as you’ll see, AWS Lambda is an example of
+serverless deployment technology.
+AWS Lambda supports Java, NodeJS, C#, GoLang, and Python. A lambda function is a
+stateless service. It typically handles requests by invoking AWS services. For example, a
+lambda function that’s invoked when an image is uploaded to an S3 bucket could
+insert an item into a DynamoDB IMAGES table and publish a message to Kinesis to
+trigger image processing. A lambda function can also invoke third-party web services.
+ To deploy a service, you package your application as a ZIP file or JAR file, upload it
+to AWS Lambda, and specify the name of the function to invoke to handle a request
+(also called an event). AWS Lambda automatically runs enough instances of your
+microservice to handle incoming requests. You’re billed for each request based on the
+time taken and the memory consumed. Of course, the devil is in the details, and later
+you’ll see that AWS Lambda has limitations. But the notion that neither you as a devel-
+oper nor anyone in your organization need worry about any aspect of servers, virtual
+machines, or containers is incredibly powerful.
+Serverless deployment technologies
+The main public clouds all provide a serverless deployment option, although AWS
+Lambda is the most advanced. Google Cloud has Google Cloud functions, which as
+of the time writing is in beta (https://cloud.google.com/functions/). Microsoft Azure
+has Azure functions (https://azure.microsoft.com/en-us/services/functions).
+There are also open source serverless frameworks, such as Apache Openwhisk
+(https://openwhisk.apache.org) and Fission for Kubernetes (https://fission.io), that
+you can run on your own infrastructure. But I’m not entirely convinced of their value.
+You need to manage the infrastructure that runs the serverless framework—which
+doesn’t exactly sound like serverless. Moreover, as you’ll see later in this section,
+serverless provides a constrained programming model in exchange for minimal sys-
+tem administration. If you need to manage infrastructure, then you have the con-
+straints without the benefit.
+Pattern: Serverless deployment
+Deploy services using a serverless deployment mechanism provided by a public cloud.
+See http://microservices.io/patterns/deployment/serverless-deployment.html. 
+ 

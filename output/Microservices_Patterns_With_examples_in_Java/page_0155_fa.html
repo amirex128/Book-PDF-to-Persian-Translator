@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 155</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3><strong>Coordinating sagas (هماهنگ‌سازی حماسه‌ها)</strong></h3>
+  <p>SAGA ORCHESTRATION AND TRANSACTIONAL MESSAGING (ارکستراسیون حماسه و پیام‌رسانی تراکنشی)</p>
+  <p>هر مرحله از یک saga (حماسه) مبتنی بر orchestration (ارکستراسیون) شامل یک service (سرویس) است که یک database (پایگاه داده) را به‌روزرسانی می‌کند و یک message (پیام) را منتشر می‌کند. به عنوان مثال، Order Service (سرویس سفارش) یک Order (سفارش) و یک Create Order Saga orchestrator (ارکستراتور حماسه ایجاد سفارش) را ذخیره می‌کند و یک message (پیام) را به اولین participant (شرکت‌کننده) saga (حماسه) ارسال می‌کند. یک participant (شرکت‌کننده) saga (حماسه)، مانند Kitchen Service (سرویس آشپزخانه)، یک command message (پیام دستور) را با به‌روزرسانی database (پایگاه داده) خود و ارسال یک message (پیام) reply (پاسخ) مدیریت می‌کند. Order Service (سرویس سفارش) پیام reply (پاسخ) participant (شرکت‌کننده) را با به‌روزرسانی state (وضعیت) of the saga orchestrator (ارکستراتور حماسه) و ارسال یک command message (پیام دستور) به participant (شرکت‌کننده) saga (حماسه) بعدی پردازش می‌کند. همانطور که در فصل 3 توضیح داده شد، یک service (سرویس) باید از transactional messaging (پیام‌رسانی تراکنشی) استفاده کند تا database (پایگاه داده) را به صورت atomically (اتمی) به‌روزرسانی کند و messages (پیام‌ها) را منتشر کند. بعداً در بخش 4.4، من پیاده‌سازی saga (حماسه) Create Order Saga orchestrator (ارکستراتور ایجاد سفارش حماسه) را با جزئیات بیشتری شرح می‌دهم، از جمله نحوه استفاده از transactional messaging (پیام‌رسانی تراکنشی) در آن.</p>
+  <p>بیایید نگاهی به مزایا و معایب استفاده از saga orchestration (ارکستراسیون حماسه) بیندازیم.</p>
+  <p>BENEFITS AND DRAWBACKS OF ORCHESTRATION-BASED SAGAS (مزایا و معایب حماسه‌های مبتنی بر ارکستراسیون)</p>
+  <p>حماسه‌های مبتنی بر Orchestration (ارکستراسیون) چندین مزیت دارند:</p>
+  <ul>
+   <li>Simpler dependencies (وابستگی‌های ساده‌تر) - یک مزیت orchestration (ارکستراسیون) این است که وابستگی‌های چرخه‌ای را معرفی نمی‌کند. the saga orchestrator (ارکستراتور حماسه) participants (شرکت‌کنندگان) saga (حماسه) را فراخوانی می‌کند، اما participants (شرکت‌کنندگان) orchestrator (ارکستراتور) را فراخوانی نمی‌کنند. در نتیجه، orchestrator (ارکستراتور) به participants (شرکت‌کنندگان) وابسته است، اما برعکس نه، بنابراین هیچ وابستگی چرخه‌ای وجود ندارد.</li>
+   <li>Less coupling (کاهش اتصال) - هر service (سرویس) یک API (رابط برنامه‌نویسی) را پیاده‌سازی می‌کند که توسط orchestrator (ارکستراتور) فراخوانی می‌شود، بنابراین نیازی به دانستن events (رویدادهای) منتشر شده توسط participants (شرکت‌کنندگان) saga (حماسه) ندارد.</li>
+   <li>Improves separation of concerns (بهبود جداسازی نگرانی‌ها) و simplifies (ساده‌سازی) business logic (منطق تجاری) - منطق coordination (هماهنگی) saga (حماسه) در saga orchestrator (ارکستراتور حماسه) محلی‌سازی شده است. domain objects (اشیاء دامنه) ساده‌تر هستند و هیچ اطلاعی از sagas (حماسه‌هایی) که در آنها شرکت می‌کنند، ندارند. به عنوان مثال، هنگام استفاده از orchestration (ارکستراسیون)، کلاس Order (سفارش) هیچ اطلاعی از هیچ یک از sagas (حماسه‌ها) ندارد، بنابراین یک model (مدل) state machine (ماشین حالت) ساده‌تری دارد. در طول اجرای Create Order Saga (حماسه ایجاد سفارش)، مستقیماً از state (وضعیت) APPROVAL_PENDING (در انتظار تایید) به state (وضعیت) APPROVED (تایید شده) transition (تغییر) می‌کند. کلاس Order (سفارش) هیچ state (حالت) intermediate (واسطه‌ای) مربوط به مراحل saga (حماسه) ندارد. در نتیجه، business (تجارت) بسیار ساده‌تر است.</li>
+  </ul>
+  <p>Orchestration (ارکستراسیون) همچنین یک drawback (نقص) دارد: خطر متمرکز کردن بیش از حد business logic (منطق تجاری) در orchestrator (ارکستراتور). این منجر به طراحی می‌شود که در آن orchestrator (ارکستراتور) هوشمند به services (سرویس‌های) احمق می‌گوید چه operations (عملیاتی) را انجام دهند. خوشبختانه، می‌توانید با طراحی orchestrators (ارکستراتورهایی) که منحصراً مسئول sequence (توالی) هستند و حاوی هیچ business logic (منطق تجاری) دیگری نیستند، از این مشکل جلوگیری کنید.</p>
+  <p>من استفاده از orchestration (ارکستراسیون) را برای همه sagas (حماسه‌ها) به جز ساده‌ترین sagas (حماسه‌ها) توصیه می‌کنم. پیاده‌سازی logic (منطق) coordination (هماهنگی) برای sagas (حماسه‌های) شما تنها یکی از مشکلات طراحی است که باید حل کنید. مشکل دیگری، که شاید بزرگترین چالشی باشد که هنگام استفاده از sagas (حماسه‌ها) با آن روبرو خواهید شد، handling (مدیریت) کمبود isolation (انزوا) است. بیایید نگاهی به آن مشکل و نحوه حل آن بیندازیم.</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

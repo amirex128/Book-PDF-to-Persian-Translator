@@ -1,0 +1,82 @@
+438
+CHAPTER 13
+Refactoring to microservices
+services to extract. It’s important to focus on refactoring those parts of the application
+that provide a lot of value. Before extracting a service, ask yourself what the benefit is
+of doing that.
+ For example, it’s worthwhile to extract a service that implements functionality
+that’s critical to the business and constantly evolving. It’s not valuable to invest effort
+in extracting services when there’s not much benefit from doing so. Later in this sec-
+tion I describe some strategies for determining what to extract and when. But first,
+let’s look in more detail at some of the challenges you’ll face when extracting a service
+and how to address them.
+ You’ll encounter a couple of challenges when extracting a service:
+Splitting the domain model
+Refactoring the database
+Let’s look at each one, starting with splitting the domain model.
+Outbound
+adapter
+API gateway
+Service containing
+extracted code
+Integration
+glue
+Inbound
+adapter
+Inbound
+adapter
+Database
+adapter
+Database
+adapter
+Inbound
+adapter
+Outbound
+adapter
+Inbound
+adapter
+Service
+database
+Monolith
+database
+Inbound
+adapter
+Database
+adapter
+Monolith
+database
+«
+»
+service
+Order Service
+«aggregate»
+Courier
+«aggregate»
+Plan
+«service»
+Order Service
+«aggregate»
+Courier
+«aggregate»
+Plan
+Code to
+extract into
+a service
+Monolith
+«
+»
+service
+Order Service
+«aggregate»
+Order
+«
+»
+aggregate
+Order
+Glue code integrating
+service with monolith
+Figure 13.4
+Break apart the monolith by extracting services. You identify a slice of functionality, which consists 
+of business logic and adapters, to extract into a service. You move that code into the service. The newly extracted 
+service and the monolith collaborate via the APIs provided by the integration glue.
+ 

@@ -1,0 +1,42 @@
+390
+CHAPTER 12
+Deploying microservices
+LACK OF ISOLATION WHEN RUNNING MULTIPLE SERVICE INSTANCES ON THE SAME MACHINE
+The problem is even worse when running multiple instances on the same machine.
+The lack of isolation means that a misbehaving service instance can impact other ser-
+vice instances. As a result, the application risks being unreliable, especially when run-
+ning multiple service instances on the same machine. 
+AUTOMATICALLY DETERMINING WHERE TO PLACE SERVICE INSTANCES IS CHALLENGING
+Another challenge with running multiple service instances on the same machine is
+determining the placement of service instances. Each machine has a fixed set of
+resources, CPU, memory, and so on, and each service instance needs some amount of
+resources. It’s important to assign service instances to machines in a way that uses the
+machines efficiently without overloading them. As I explain shortly, VM-based clouds
+and container orchestration frameworks handle this automatically. When deploying
+services natively, it’s likely that you’ll need to manually decide the placement.
+ As you can see, despite its familiarity, the Service as a language-specific package
+pattern has some significant drawbacks. You should rarely use this approach, except
+perhaps when efficiency outweighs all other concerns.
+ Let’s now look at modern ways of deploying services that avoid these problems. 
+12.2
+Deploying services using the Service as a virtual 
+machine pattern
+Once again, imagine you want to deploy the FTGO Restaurant Service, except this
+time it’s on AWS EC2. One option would be to create and configure an EC2 instance
+and copy onto it the executable or WAR file. Although you would get some benefit
+from using the cloud, this approach suffers from the drawbacks described in the pre-
+ceding section. A better, more modern approach is to package the service as an Ama-
+zon Machine Image (AMI), as shown in figure 12.6. Each service instance is an EC2
+instance created from that AMI. The EC2 instances would typically be managed by an
+AWS Auto Scaling group, which attempts to ensure that the desired number of
+healthy instances is always running.
+The virtual machine image is built by the service’s deployment pipeline. The deploy-
+ment pipeline, as figure 12.6 shows, runs a VM image builder to create a VM image
+that contains the service’s code and whatever software is required to run it. For
+example, the VM builder for a FTGO service installs the JDK and the service’s exe-
+cutable JAR. The VM image builder configures the VM image machine to run the
+application when the VM boots, using Linux’s init system, such as upstart.
+Pattern: Deploy a service as a VM
+Deploy services packaged as VM images into production. Each service instance is a
+VM. See http://microservices.io/patterns/deployment/service-per-vm.html.
+ 

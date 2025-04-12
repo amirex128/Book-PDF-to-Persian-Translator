@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 149</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>پنهان کردن جزئیات پیاده‌سازی داخلی</h3>
+  <p>ما نمی‌خواهیم مصرف‌کنندگانمان به پیاده‌سازی داخلی ما وابسته باشند، زیرا این امر منجر به افزایش <em>coupling</em> می‌شود؛ این به نوبه خود به این معنی است که اگر بخواهیم چیزی را در داخل <em>microservice</em> خود تغییر دهیم، می‌توانیم با مجبور کردن آن‌ها به تغییر، مصرف‌کنندگان خود را خراب کنیم.</p>
+  <p>این امر هزینه تغییر را افزایش می‌دهد—دقیقا همان چیزی که ما در تلاشیم از آن اجتناب کنیم. همچنین به این معنی است که ما کمتر تمایل داریم تغییراتی ایجاد کنیم، زیرا می‌ترسیم مجبور شویم مصرف‌کنندگان خود را ارتقا دهیم، که می‌تواند منجر به افزایش <strong>technical debt</strong> در داخل <em>service</em> شود. بنابراین باید از هر فناوری که ما را به افشای جزئیات <strong>internal representation</strong> سوق می‌دهد، اجتناب کرد.</p>
+
+  <h3>انتخاب‌های فناوری</h3>
+  <p>تعداد زیادی فناوری وجود دارد که می‌توانیم به آن‌ها نگاه کنیم، اما به جای نگاه گسترده به لیست بلندبالایی از گزینه‌ها، برخی از محبوب‌ترین و جالب‌ترین انتخاب‌ها را برجسته خواهم کرد. در اینجا گزینه‌هایی که به آن‌ها نگاه خواهیم کرد، آمده است:</p>
+  <ul>
+   <li><strong>Remote procedure calls</strong></li>
+   <p>فریم‌ورک‌هایی که به شما امکان می‌دهند <em>local method calls</em> را روی یک <em>remote process</em> فراخوانی کنید. گزینه‌های رایج شامل <em>SOAP</em> و <em>gRPC</em> می‌شوند.</p>
+   <li><strong>REST</strong></li>
+   <p>یک سبک معماری که در آن شما <em>resources</em> (مانند <em>Customer</em>, <em>Order</em> و غیره) را در معرض نمایش قرار می‌دهید که می‌توان با استفاده از مجموعه‌ای از <em>verbs</em> (مانند <em>GET</em>, <em>POST</em>) به آن‌ها دسترسی پیدا کرد. کمی بیشتر از این وجود دارد، اما به زودی به آن خواهیم رسید.</p>
+   <li><strong>GraphQL</strong></li>
+   <p>یک <em>protocol</em> نسبتاً جدید که به مصرف‌کنندگان اجازه می‌دهد <em>custom queries</em> را تعریف کنند که می‌تواند اطلاعات را از چندین <em>downstream microservices</em> واکشی کند و نتایج را فیلتر کند تا فقط آنچه مورد نیاز است را برگرداند.</p>
+   <li><strong>Message brokers</strong></li>
+   <p><em>Middleware</em> که امکان برقراری ارتباط <em>asynchronous</em> را از طریق <em>queues</em> یا <em>topics</em> فراهم می‌کند.</p>
+  </ul>
+
+  <h4>Remote Procedure Calls</h4>
+  <p><em>Remote procedure call (RPC)</em> به تکنیک برقراری یک تماس <em>local</em> و اجرای آن در یک <em>remote service</em> در جایی اشاره دارد. تعدادی پیاده‌سازی مختلف <em>RPC</em> در حال استفاده است. اکثر فناوری‌های موجود در این فضا به یک <em>explicit schema</em> مانند <em>SOAP</em> یا <em>gRPC</em> نیاز دارند. در زمینه <em>RPC</em>، <em>schema</em> اغلب به عنوان یک <em>interface definition language (IDL)</em> شناخته می‌شود، با این حال <em>SOAP</em> به <em>schema</em> خود برای <em>format</em> به عنوان یک <em>web service definition language (WSDL)</em> اشاره می‌کند. استفاده از یک <em>separate schema</em>، تولید <em>client</em> و <em>server stubs</em> را برای <em>different technology stacks</em> آسان‌تر می‌کند—بنابراین، به عنوان مثال، من می‌توانم یک <em>Java server</em> داشته باشم که یک رابط <em>SOAP</em> را در معرض نمایش قرار می‌دهد، و یک <em>.NET client</em> که از همان تعریف <em>WSDL</em> از <em>interface</em> تولید شده است. فناوری‌های دیگر، مانند <em>Java RMI</em>، خواستار یک <em>coupling</em> محکم‌تر بین <em>client</em> و <em>server</em> است، که نیازمند آن است:</p>
+  
+  <h4>Technology Choices</h4>
+  <p>این عنوان تکراری است.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

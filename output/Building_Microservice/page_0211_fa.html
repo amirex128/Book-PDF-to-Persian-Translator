@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 211</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>بسته به ماهیت فرآیند تجاری که مدل‌سازی می‌شود، شما ممکن است انتظار داشته باشید که هر <em>failure mode</em> یک <em>backward recovery</em>، یک <em>forward recovery</em>، یا شاید ترکیبی از این دو را فعال کند.</p>
+  <p>واقعاً مهم است که توجه داشته باشید که یک <em>saga</em> به ما اجازه می‌دهد از <em>business failures</em> بازیابی کنیم، نه از <em>technical failures</em>. به عنوان مثال، اگر ما سعی کنیم از مشتری پرداخت دریافت کنیم اما مشتری موجودی کافی ندارد، در این صورت این یک <em>business failure</em> است که انتظار می‌رود <em>saga</em> آن را مدیریت کند. از سوی دیگر، اگر <em>Payment Gateway</em> <em>time out</em> شود یا یک خطای 500 <em>Internal Service Error</em> را پرتاب کند، در این صورت این یک <em>technical failure</em> است که ما باید جداگانه آن را مدیریت کنیم. <em>saga</em> فرض می‌کند که مؤلفه‌های اساسی به درستی کار می‌کنند—که سیستم اساسی قابل اعتماد است، و این است که ما در حال هماهنگی کار مؤلفه‌های قابل اعتماد هستیم. ما برخی از راه‌هایی را که می‌توانیم مؤلفه‌های فنی خود را قابل اطمینان‌تر کنیم، در فصل 12 بررسی خواهیم کرد، اما برای اطلاعات بیشتر در مورد این محدودیت <em>sagas</em>، من "<em>The Limits of the Saga Pattern</em>" نوشته <em>Uwe Friedrichsen</em> را توصیه می‌کنم.</p>
+  <h4>Saga rollbacks</h4>
+  <p>با یک <em>ACID transaction</em>، اگر به مشکلی برخوردیم، یک <em>rollback</em> را قبل از وقوع یک <em>commit</em> فعال می‌کنیم. پس از <em>rollback</em>، انگار هیچ اتفاقی نیفتاده است: تغییری که ما در تلاش برای ایجاد آن بودیم، رخ نداد. با <em>saga</em> ما، با این حال، چندین <em>transactions</em> درگیر داریم، و برخی از آن‌ها ممکن است قبل از اینکه ما تصمیم به <em>roll back</em> کل عملیات بگیریم، قبلاً <em>committed</em> شده باشند. بنابراین چگونه می‌توانیم <em>transactions</em> را پس از اینکه قبلاً <em>committed</em> شده‌اند، <em>roll back</em> کنیم؟</p>
+  <p>بیایید به مثال خود در مورد پردازش یک سفارش، همانطور که در شکل 6-5 نشان داده شده است، بازگردیم. یک <em>potential failure mode</em> را در نظر بگیرید. ما تا حد تلاش برای بسته‌بندی کالا پیش رفته‌ایم، فقط برای اینکه متوجه شویم کالا در انبار یافت نمی‌شود، همانطور که در شکل 6-6 نشان داده شده است. سیستم ما فکر می‌کند که این کالا وجود دارد، اما فقط روی قفسه نیست!</p>
+  <p>اکنون، بیایید فرض کنیم که ما تصمیم می‌گیریم که فقط کل سفارش را <em>roll back</em> کنیم، به جای اینکه به مشتری این گزینه را بدهیم که کالا را در <em>back order</em> قرار دهد. مشکل این است که ما قبلاً پرداخت را دریافت کرده‌ایم و امتیاز وفاداری را برای سفارش اعطا کرده‌ایم.
+  <p>اگر این مراحل همگی در یک <em>single database transaction</em> انجام شده بودند، یک <em>simple rollback</em> همه چیز را پاک می‌کرد. با این حال، هر مرحله در فرآیند تکمیل سفارش توسط یک <em>service call</em> متفاوت مدیریت می‌شد، که هر کدام در یک <em>transactional scope</em> متفاوت عمل می‌کردند. هیچ "<em>rollback</em>" ساده‌ای برای کل عملیات وجود ندارد.</p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

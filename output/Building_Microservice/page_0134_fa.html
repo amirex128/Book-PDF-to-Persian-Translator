@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 134</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h4>فراخوانی‌های موازی در مقابل متوالی</h4>
+  <p>
+   هنگام کار با تعاملات <strong>request-response</strong>، شما اغلب با موقعیتی مواجه می‌شوید که در آن قبل از اینکه بتوانید به پردازش ادامه دهید، باید چندین <strong>call</strong> انجام دهید.
+  </p>
+  <p>
+   وضعیتی را در نظر بگیرید که در آن <strong>MusicCorp</strong> نیاز دارد که قیمت یک کالای خاص را از سه انباردار مختلف بررسی کند، که ما این کار را با صدور فراخوانی‌های <strong>API</strong> انجام می‌دهیم. ما می‌خواهیم قیمت‌ها را از هر سه انباردار دریافت کنیم قبل از اینکه تصمیم بگیریم از کدام یک باید سهام جدید سفارش دهیم. ما می‌توانیم تصمیم بگیریم که سه <strong>call</strong> را به صورت متوالی انجام دهیم—منتظر بمانیم تا هر کدام تمام شود قبل از ادامه دادن به بعدی. در چنین موقعیتی، ما منتظر مجموع <strong>latencies</strong> هر یک از <strong>calls</strong> خواهیم بود. اگر فراخوانی <strong>API</strong> به هر ارائه دهنده یک ثانیه طول بکشد تا بازگردد، ما سه ثانیه منتظر خواهیم بود قبل از اینکه بتوانیم تصمیم بگیریم که از چه کسی باید سفارش دهیم.
+  </p>
+  <p>
+   یک گزینه بهتر این است که این سه درخواست را به موازات هم اجرا کنیم. سپس <strong>latency</strong> کلی عملیات بر اساس کندترین فراخوانی <strong>API</strong> خواهد بود، نه بر اساس مجموع <strong>latencies</strong> هر فراخوانی <strong>API</strong>.
+  </p>
+  <p>
+   <strong>Reactive extensions</strong> و مکانیسم‌هایی مانند <strong>async/await</strong> می‌توانند در کمک به اجرای <strong>calls</strong> به صورت موازی بسیار مفید باشند، و این می‌تواند منجر به بهبودهای قابل توجهی در <strong>latency</strong> برخی از عملیات شود.
+  </p>
+  <h4>کجا از آن استفاده کنیم</h4>
+  <p>
+   فراخوانی‌های <strong>request-response</strong> برای هر موقعیتی که در آن نتیجه یک درخواست قبل از اینکه پردازش بیشتر انجام شود، مورد نیاز است، کاملاً منطقی است. آنها همچنین در موقعیت‌هایی که یک microservice می‌خواهد بداند که آیا یک <strong>call</strong> کار نکرد تا بتواند نوعی اقدام جبرانی را انجام دهد، مانند یک <strong>retry</strong>، واقعاً مناسب هستند. اگر هر کدام با شرایط شما مطابقت داشته باشند، در این صورت <strong>request-response</strong> یک رویکرد منطقی است. تنها سوال باقی‌مانده این است که در مورد یک پیاده‌سازی <strong>synchronous</strong> در مقابل <strong>asynchronous</strong>، با همان مبادله‌هایی که قبلاً مورد بحث قرار دادیم، تصمیم بگیریم.
+  </p>
+  <h4>الگو: ارتباط Event-Driven</h4>
+  <p>
+   ارتباط <strong>event-driven</strong> در مقایسه با فراخوانی‌های <strong>request-response</strong> کاملاً عجیب به نظر می‌رسد.
+   به جای اینکه یک microservice از microservice دیگری بخواهد کاری را انجام دهد، یک microservice <strong>events</strong> را منتشر می‌کند که ممکن است توسط microservicesهای دیگر دریافت شود یا نشود. این یک تعامل ذاتاً ناهمزمان است، زیرا <strong>event listeners</strong> در <strong>thread</strong> اجرایی خودشان اجرا خواهند شد.
+  </p>
+  <p>
+   یک <strong>event</strong>، بیانیه‌ای در مورد چیزی است که اتفاق افتاده است، که تقریباً همیشه چیزی است که در دنیای microservice که در حال انتشار <strong>event</strong> است، اتفاق افتاده است.
+  </p>
+  <p>
+   microservice که <strong>event</strong> را منتشر می‌کند، هیچ اطلاعی از قصد microservicesهای دیگر ندارد.
+  </p>
+  <p>108 | Chapter 4: Microservice Communication Styles</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+Expansion Changes
+Probably the easiest place to start is by adding only new things to a microservice con‐
+tract and not removing anything else. Consider the example of adding a new field to a
+payload—assuming the client is in some way tolerant of such changes, this shouldn’t
+have a material impact. Adding a new dateOfBirth field to a customer record should
+be fine, for example.
+Tolerant Reader
+How the consumer of a microservice is implemented can bring a lot to bear on mak‐
+ing backward-compatible changes easy. Specifically, we want to avoid client code
+binding too tightly to the interface of a microservice. Let’s consider an Email micro‐
+service whose job it is to send out emails to our customers from time to time. It gets
+asked to send an “order shipped” email to a customer with the ID 1234; it goes off
+and retrieves the customer with that ID and gets back something like the response
+shown in Example 5-3.
+Example 5-3. Sample response from the Customer service
+<customer>
+  <firstname>Sam</firstname>
+  <lastname>Newman</lastname>
+  <email>sam@magpiebrain.com</email>
+  <telephoneNumber>555-1234-5678</telephoneNumber>
+</customer>
+Now, to send the email, the Email microservice needs only the firstname, lastname,
+and email fields. We don’t need to know the telephoneNumber. We want to simply
+pull out those fields we care about and ignore the rest. Some binding technology,
+especially that used by strongly typed languages, can attempt to bind all fields
+whether the consumer wants them or not. What happens if we realize that no one is
+using the telephoneNumber and we decide to remove it? This could cause consumers
+to break needlessly.
+Likewise, what if we wanted to restructure our Customer object to support more
+details, perhaps adding some further structure, as in Example 5-4? The data our
+Email service wants is still there, with the same name, but if our code makes very
+explicit assumptions as to where the firstname and lastname fields will be stored,
+then it could break again. In this instance, we could instead use XPath to pull out the
+fields we care about, allowing us to be ambivalent about where the fields are as long
+as we can find them. This pattern—of implementing a reader able to ignore changes
+we don’t care about—is what Martin Fowler calls a tolerant reader.
+Avoiding Breaking Changes 
+| 
+145

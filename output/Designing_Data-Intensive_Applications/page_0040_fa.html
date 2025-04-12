@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 40</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>در حالی که توزیع <strong>stateless services</strong> در ماشین‌های متعدد نسبتاً ساده است، انتقال سیستم‌های <strong>data</strong> <strong>stateful</strong> از یک گره واحد به یک راه‌اندازی توزیع‌شده می‌تواند پیچیدگی‌های زیادی را به همراه داشته باشد. به همین دلیل، خرد متعارف تا همین اواخر این بود که <strong>database</strong> خود را روی یک گره واحد نگه دارید (<strong>scale up</strong>) تا زمانی که هزینه مقیاس‌بندی یا الزامات <strong>high-availability</strong> شما را مجبور به توزیع آن کند.</p>
+  <p>با بهتر شدن ابزارها و انتزاع‌ها برای سیستم‌های توزیع‌شده، این خرد متعارف ممکن است تغییر کند، حداقل برای برخی از انواع <strong>applications</strong>. قابل تصور است که سیستم‌های <strong>data</strong> توزیع‌شده در آینده، حتی برای مواردی که حجم زیادی از <strong>data</strong> یا ترافیک را مدیریت نمی‌کنند، به حالت پیش‌فرض تبدیل می‌شوند. در طول بقیه این کتاب، ما انواع مختلفی از سیستم‌های <strong>data</strong> توزیع‌شده را پوشش خواهیم داد و بحث خواهیم کرد که چگونه آن‌ها نه تنها از نظر مقیاس‌پذیری، بلکه از نظر سهولت استفاده و قابلیت نگهداری نیز عمل می‌کنند.</p>
+  <p><strong>architecture</strong> سیستم‌هایی که در مقیاس بزرگ کار می‌کنند، معمولاً بسیار خاص <strong>application</strong> هستند—چیزی به‌عنوان یک <strong>architecture</strong> مقیاس‌پذیر عمومی و همه‌کاره وجود ندارد (که به‌طور غیررسمی به‌عنوان سس مقیاس‌بندی جادویی شناخته می‌شود). ممکن است مشکل حجم خواندن، حجم نوشتن، حجم <strong>data</strong> برای ذخیره، پیچیدگی <strong>data</strong>، الزامات زمان پاسخ، الگوهای دسترسی، یا (معمولاً) ترکیبی از همه این‌ها به‌علاوه بسیاری از مسائل دیگر باشد.</p>
+  <p>به‌عنوان‌مثال، سیستمی که برای مدیریت 100000 درخواست در ثانیه، هرکدام به اندازه 1 کیلوبایت طراحی شده است، با سیستمی که برای 3 درخواست در دقیقه، هرکدام به اندازه 2 گیگابایت طراحی شده است، بسیار متفاوت است—حتی اگر دو سیستم دارای <strong>throughput</strong> یکسان باشند.</p>
+  <p>یک <strong>architecture</strong> که برای یک <strong>application</strong> خاص به‌خوبی مقیاس می‌شود، بر اساس فرضیات عملیاتی که رایج خواهند بود و کدام یک نادر خواهد بود—<strong>load parameters</strong>—ساخته شده است. اگر آن فرضیات اشتباه از آب درآیند، تلاش مهندسی برای مقیاس‌بندی در بهترین حالت هدر می‌رود و در بدترین حالت نتیجه معکوس دارد. در یک راه‌اندازی اولیه یا یک محصول اثبات نشده، معمولاً مهم‌تر است که بتوانید به‌سرعت روی ویژگی‌های محصول تکرار کنید تا این‌که مقیاس‌پذیری را به یک <strong>load</strong> فرضی در آینده برسانید.</p>
+  <p>اگرچه آن‌ها خاص یک <strong>application</strong> خاص هستند، با این وجود <strong>architectures</strong> مقیاس‌پذیر معمولاً از <strong>building blocks</strong> با هدف عمومی ساخته شده‌اند که در الگوهای آشنا مرتب شده‌اند. در این کتاب ما در مورد آن <strong>building blocks</strong> و الگوها بحث می‌کنیم.</p>
+  <h4>Maintainability</h4>
+  <p>به خوبی شناخته شده است که اکثر هزینه <strong>software</strong>، نه در توسعه اولیه آن، بلکه در نگهداری مداوم آن است—رفع باگ‌ها، عملیاتی نگه داشتن سیستم‌های آن، بررسی <strong>failures</strong>، انطباق آن با پلتفرم‌های جدید، اصلاح آن برای موارد استفاده جدید، بازپرداخت بدهی فنی و افزودن ویژگی‌های جدید.</p>
+  <p>با این حال، متأسفانه، بسیاری از افرادی که روی سیستم‌های <strong>software</strong> کار می‌کنند از نگهداری از سیستم‌های به اصطلاح قدیمی خوششان نمی‌آید—شاید شامل رفع اشتباهات دیگران باشد، یا کار</p>
+  <p>18 | Chapter 1: Reliable, Scalable, and Maintainable Applications</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

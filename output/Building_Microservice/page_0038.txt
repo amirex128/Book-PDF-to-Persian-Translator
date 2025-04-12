@@ -1,0 +1,37 @@
+database admins were in a team with other database admins; Java developers were in
+a team with other Java developers; and frontend developers (who nowadays know
+exotic things like JavaScript and native mobile application development) were in yet
+another team. We group people based on their core competency, so we create IT
+assets that can be aligned to those teams.
+That explains why this architecture is so common. It’s not bad; it’s just optimized
+around one set of forces—how we traditionally grouped people, around familiarity.
+But the forces have changed. Our aspirations around our software have changed. We
+now group people in poly-skilled teams to reduce handoffs and silos. We want to ship
+software much more quickly than ever before. That is driving us to make different
+choices about the way we organize our teams, so that we organize them in terms of
+the way we break our systems apart.
+Most changes that we are asked to make to our system relate to changes in business
+functionality. But in Figure 1-3, our business functionality is in effect spread across
+all three tiers, increasing the chance that a change in functionality will cross layers.
+This is an architecture that has high cohesion of related technology but low cohesion
+of business functionality. If we want to make it easier to make changes, instead we
+need to change how we group code, choosing cohesion of business functionality
+rather than technology. Each service may or may not end up containing a mix of
+these three layers, but that is a local service implementation concern.
+Let’s compare this with a potential alternative architecture, illustrated in Figure 1-4.
+Rather than a horizontally layered architecture and organization, we instead break
+down our organization and architecture along vertical business lines. Here we see a
+dedicated team that has full-end-to-end responsibility for making changes to aspects
+of the customer profile, which ensures that the scope of change in this example is
+limited to one team.
+As an implementation, this could be achieved through a single microservice owned
+by the profile team that exposes a UI to allow customers to update their information,
+with state of the customer also stored within this microservice. The choice of a favor‐
+ite genre is associated with a given customer, so this change is much more localized.
+In Figure 1-5, we also show the list of available genres being fetched from a Catalog
+microservice, something that would likely already be in place. We also see a new Rec
+ommendation microservice accessing our favorite genre information, something that
+could easily follow in a subsequent release.
+12 
+| 
+Chapter 1: What Are Microservices?

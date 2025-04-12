@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 304</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+            <div>
+    <p>
+        تصور کنید یک system فرضی با یک شبکه که حداکثر تأخیر را برای <em>packets</em> تضمین می‌کند—هر <em>packet</em> یا در زمان d تحویل داده می‌شود، یا از دست می‌رود، اما تحویل هرگز بیشتر از d طول نمی‌کشد. علاوه بر این، فرض کنید که شما می‌توانید تضمین کنید که یک node غیر <em>failed</em> همیشه یک درخواست را در زمان r مدیریت می‌کند. در این حالت، شما می‌توانید تضمین کنید که هر درخواست موفقیت‌آمیز در زمان 2d + r پاسخی دریافت می‌کند—و اگر شما در این مدت پاسخی دریافت نکردید، می‌دانید که یا شبکه یا node از راه دور کار نمی‌کند. اگر این درست بود، 2d + r یک <em>timeout</em> مناسب برای استفاده خواهد بود.
+    </p>
+    <p>
+        متاسفانه، اکثر systems هایی که ما با آنها کار می‌کنیم، هیچ یک از آن تضمین‌ها را ندارند: شبکه‌های <em>asynchronous</em>، تأخیرهای نامحدود دارند (یعنی، آنها سعی می‌کنند <em>packets</em> را در اسرع وقت تحویل دهند، اما هیچ محدودیتی برای مدت زمانی که ممکن است طول بکشد تا یک <em>packet</em> برسد، وجود ندارد)، و اکثر پیاده‌سازی‌های server نمی‌توانند تضمین کنند که می‌توانند درخواست‌ها را در یک زمان حداکثر مدیریت کنند (به "Response time guarantees" در صفحه 298 مراجعه کنید).
+    </p>
+    <p>
+        برای تشخیص <em>failure</em>، کافی نیست که system در اکثر مواقع سریع باشد: اگر <em>timeout</em> شما کم باشد، فقط یک <em>transient spike</em> در <em>round-trip times</em> لازم است تا system از تعادل خارج شود.
+    </p>
+    <h4>Network congestion and queueing</h4>
+    <p>
+        هنگام رانندگی با ماشین، زمان سفر در شبکه‌های جاده‌ای اغلب بیشتر به دلیل <em>traffic congestion</em> متفاوت است. به طور مشابه، تغییرپذیری تأخیر <em>packet</em> در شبکه‌های کامپیوتری اغلب به دلیل <em>queueing</em> است [25]:
+    </p>
+    <ul>
+        <li>
+            اگر چندین node مختلف به طور همزمان سعی کنند <em>packets</em> را به یک مقصد یکسان ارسال کنند، <em>network switch</em> باید آنها را در صف قرار دهد و آنها را یکی یکی به <em>destination network link</em> تغذیه کند (همانطور که در شکل 8-2 نشان داده شده است). در یک <em>busy network link</em>، یک <em>packet</em> ممکن است مجبور شود مدتی صبر کند تا بتواند یک slot دریافت کند (این <em>network congestion</em> نامیده می‌شود). اگر داده‌های ورودی آنقدر زیاد باشد که صف <em>switch</em> پر شود، <em>packet</em> <em>dropped</em> می‌شود، بنابراین باید دوباره ارسال شود—حتی اگر شبکه به خوبی کار کند.
+        </li>
+        <li>
+            وقتی یک <em>packet</em> به machine مقصد می‌رسد، اگر تمام <em>CPU cores</em> در حال حاضر مشغول باشند، درخواست ورودی از شبکه توسط <em>operating system</em> در صف قرار می‌گیرد تا زمانی که application آماده handling آن شود. بسته به load روی machine، این ممکن است زمان دلخواه را بگیرد.
+        </li>
+        <li>
+            در محیط‌های <em>virtualized</em>، یک operating system در حال اجرا اغلب برای ده‌ها میلی‌ثانیه متوقف می‌شود در حالی که یک <em>virtual machine</em> دیگر از یک <em>CPU core</em> استفاده می‌کند. در این مدت، VM نمی‌تواند هیچ داده‌ای را از شبکه مصرف کند، بنابراین داده‌های ورودی توسط <em>virtual machine monitor</em> در صف قرار می‌گیرند (<em>buffered</em>)، که بیشتر باعث افزایش تغییرپذیری تأخیر شبکه می‌شود.
+        </li>
+        <li>
+            TCP <em>flow control</em> را انجام می‌دهد (همچنین به عنوان <em>congestion avoidance</em> یا <em>backpressure</em> شناخته می‌شود)، که در آن یک node، نرخ ارسال خود را محدود می‌کند تا از <em>overloading</em> یک
+            <br>
+            282
+            <br>
+            |
+            <br>
+            Chapter 8: The Trouble with Distributed Systems
+        </li>
+    </ul>
+</div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

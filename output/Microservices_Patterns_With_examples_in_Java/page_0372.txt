@@ -1,0 +1,49 @@
+342
+CHAPTER 10
+Testing microservices: Part 2
+.forChannel("accountingService")
+.when(AuthorizeCommand.class).replyWithFailure();
+else
+fail("Don't know what to do with this credit card");
+}
+This method uses the SagaParticipantStubManager class, a test helper class that con-
+figures stubs for saga participants. The useCreditCard() method uses it to configure
+the Accounting Service stub to reply with either a success or a failure message,
+depending on the specified credit card.
+ The following listing shows the placeOrder() method, which defines the When I
+place an order for Chicken Vindaloo at Ajanta step. It invokes the Order Service
+REST API to create Order and saves the response for validation in a later step.
+@ContextConfiguration(classes = 
+OrderServiceComponentTestStepDefinitions.TestConfiguration.class)
+public class OrderServiceComponentTestStepDefinitions {
+private int port = 8082;
+private String host = System.getenv("DOCKER_HOST_IP");
+protected String baseUrl(String path) {
+return String.format("http://%s:%s%s", host, port, path);
+}
+private Response response;
+@When("I place an order for Chicken Vindaloo at Ajanta")
+public void placeOrder() {
+    response = given().                                               
+            body(new CreateOrderRequest(consumerId,
+                    RestaurantMother.AJANTA_ID, Collections.singletonList(
+                        new CreateOrderRequest.LineItem(
+                           RestaurantMother.CHICKEN_VINDALOO_MENU_ITEM_ID,
+                          OrderDetailsMother.CHICKEN_VINDALOO_QUANTITY)))).
+            contentType("application/json").
+            when().
+            post(baseUrl("/orders"));
+}
+The baseUrl() help method returns the URL of the order service.
+ Listing 10.15 shows the theOrderShouldBe() method, which defines the meaning
+of the Then the order should be … step. It verifies that Order was successfully created
+and that it’s in the expected state.
+ 
+ 
+Listing 10.14
+The placeOrder() method defines the When I place an order for 
+Chicken Vindaloo at Ajanta step.
+Invokes the Order 
+Service REST API 
+to create Order
+ 
