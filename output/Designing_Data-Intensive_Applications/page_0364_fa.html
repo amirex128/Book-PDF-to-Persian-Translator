@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 364</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        اگر شما با distributed version control systems مانند Git آشنا هستید، تاریخچه‌های version آن‌ها بسیار شبیه به graph of causal dependencies است. اغلب یک commit پس از دیگری، در یک خط مستقیم اتفاق می‌افتد، اما گاهی اوقات شما branchها را دریافت می‌کنید (زمانی که چندین نفر به طور concurrent روی یک project کار می‌کنند)، و merges زمانی ایجاد می‌شوند که آن commits که به طور concurrent ایجاد شده‌اند، ترکیب می‌شوند.
+    </p>
+
+    <h4>Linearizability is stronger than causal consistency</h4>
+    <p>
+        بنابراین ارتباط بین causal order و linearizability چیست؟ پاسخ این است که linearizability، causality را implies می‌کند: هر سیستمی که linearizable باشد، causality را به درستی حفظ می‌کند [7]. به طور خاص، اگر چندین communication channel در یک سیستم وجود داشته باشد (مانند message queue و file storage service در شکل 9-5)، linearizability تضمین می‌کند که causality به طور خودکار حفظ می‌شود بدون اینکه سیستم مجبور باشد کار خاصی انجام دهد (مانند انتقال timestamps بین componentsهای مختلف).
+    </p>
+
+    <p>
+        این واقعیت که linearizability، causality را تضمین می‌کند، چیزی است که باعث می‌شود systems linearizable simple to understand و appealing شوند. با این حال، همانطور که در "The Cost of Linearizability" در صفحه 335 بحث شد، linearizable کردن یک سیستم می‌تواند به performance و availability آن آسیب برساند، به خصوص اگر سیستم network delays قابل توجهی داشته باشد (به عنوان مثال، اگر geographically distributed باشد). به همین دلیل، برخی از distributed data systems، linearizability را کنار گذاشته‌اند، که به آن‌ها اجازه می‌دهد performance بهتری داشته باشند اما می‌تواند کار کردن با آن‌ها را دشوار کند.
+    </p>
+
+    <p>
+        خبر خوب این است که یک middle ground امکان‌پذیر است. Linearizability تنها راه حفظ causality نیست - راه‌های دیگری نیز وجود دارد. یک سیستم می‌تواند causally consistent باشد بدون اینکه performance hit ناشی از linearizable کردن آن (به طور خاص، the CAP theorem اعمال نمی‌شود) را متحمل شود. در واقع، causal consistency قوی‌ترین consistency model ممکن است که به دلیل network delays کند نمی‌شود، و در مواجهه با network failures در دسترس باقی می‌ماند [2, 42].
+    </p>
+
+    <p>
+        در بسیاری از موارد، systems که به نظر می‌رسد به linearizability نیاز دارند، در واقع فقط به causal consistency نیاز دارند، که می‌تواند کارآمدتر پیاده‌سازی شود. بر اساس این observation، محققان در حال بررسی انواع جدیدی از databases هستند که causality را حفظ می‌کنند، با ویژگی‌های performance و availability که شبیه به systems eventually consistent هستند [49, 50, 51].
+    </p>
+
+    <p>
+        از آنجایی که این research بسیار recent است، هنوز بخش زیادی از آن وارد production systems نشده است، و هنوز چالش‌هایی برای غلبه بر آن‌ها وجود دارد [52, 53]. با این حال، یک direction امیدوارکننده برای future systems است.
+    </p>
+
+    <h4>Capturing causal dependencies</h4>
+    <p>
+        ما به تمام جزئیات nitty-gritty از چگونگی حفظ causal consistency توسط systems nonlinearizable در اینجا نمی‌پردازیم، اما فقط به طور خلاصه برخی از ideas اصلی را بررسی می‌کنیم.
+    </p>
+    <p>
+        342 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

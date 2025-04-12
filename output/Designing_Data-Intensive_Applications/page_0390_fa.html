@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 390</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Epoch numbering and quorums</h4>
+    <p>
+        همه consensus protocols که تاکنون مورد بحث قرار گرفتند، به طور داخلی از یک leader به شکلی استفاده می‌کنند، اما آن‌ها تضمین نمی‌کنند که leader منحصر به فرد است. در عوض، آن‌ها می‌توانند یک guarantee ضعیف‌تر را ایجاد کنند: the protocols یک epoch number را تعریف می‌کنند (که در Paxos، view number در Viewstamped Replication، و term number در Raft نامیده می‌شود) و تضمین می‌کنند که در هر epoch، leader منحصر به فرد است.
+    </p>
+
+    <p>
+        هر بار که تصور می‌شود leader فعلی مرده است، یک vote بین nodes برای انتخاب یک leader جدید شروع می‌شود. به این election یک epoch number افزایش یافته داده می‌شود، و بنابراین epoch numbers به طور total ordered و monotonically increasing هستند. اگر یک conflict بین دو leader مختلف در دو epoch مختلف وجود داشته باشد (شاید به این دلیل که leader قبلی در واقع پس از همه مرده نبوده است)، سپس leader با epoch number بالاتر غالب می‌شود.
+    </p>
+
+    <p>
+        قبل از اینکه به یک leader اجازه داده شود که در مورد چیزی تصمیم بگیرد، ابتدا باید بررسی کند که آیا leader دیگری با یک epoch number بالاتر وجود ندارد که ممکن است یک decision متناقض بگیرد.
+    </p>
+
+    <p>
+        یک leader چگونه می‌داند که توسط یک node دیگر برکنار نشده است؟ "The Truth Is Defined by the Majority" در صفحه 300 را به یاد بیاورید: یک node لزوماً نمی‌تواند به قضاوت خود اعتماد کند - فقط به این دلیل که یک node فکر می‌کند که leader است، لزوماً به این معنی نیست که other nodes آن را به عنوان leader خود می‌پذیرند.
+    </p>
+
+    <p>
+        در عوض، باید از یک quorum از nodes votes جمع‌آوری کند (به "Quorums for reading and writing" در صفحه 179 مراجعه کنید). برای هر decision که یک leader می‌خواهد انجام دهد، باید مقدار پیشنهادی را به other nodes ارسال کند و منتظر بماند تا یک quorum از nodes به نفع proposal پاسخ دهند. The quorum معمولاً، اما نه همیشه، از اکثریت nodes تشکیل شده است [105]. A node به نفع یک proposal، فقط در صورتی رأی می‌دهد که از هر leader دیگری با epoch بالاتری آگاه نباشد.
+    </p>
+
+    <p>
+        بنابراین، ما دو round از voting داریم: یک بار برای انتخاب یک leader، و بار دوم برای vote بر روی یک leader’s proposal. The key insight این است که quorums برای آن دو votes باید overlapping باشند: اگر یک vote بر روی یک proposal موفق شود، حداقل یکی از nodes که به آن رأی داده‌اند، باید در آخرین leader election نیز شرکت کرده باشند [105]. بنابراین، اگر vote بر روی یک proposal، هیچ epoch با شماره بالاتری را آشکار نکند، leader فعلی می‌تواند نتیجه بگیرد که هیچ leader election با یک epoch number بالاتر رخ نداده است، و بنابراین مطمئن شود که همچنان رهبری را در دست دارد. سپس می‌تواند با خیال راحت value پیشنهادی را تصمیم بگیرد.
+    </p>
+
+    <p>
+        این process voting، سطحی شبیه به two-phase commit به نظر می‌رسد. بزرگترین تفاوت‌ها این است که در 2PC، the coordinator انتخاب نمی‌شود، و اینکه fault-tolerant consensus algorithms فقط به votes از اکثریت nodes نیاز دارند، در حالی که 2PC به یک "yes" vote از هر participant نیاز دارد. علاوه بر این، consensus algorithms یک recovery process را تعریف می‌کنند که توسط آن nodes می‌توانند پس از انتخاب یک leader جدید، به یک state consistent برسند، و اطمینان حاصل شود که safety properties همیشه برآورده می‌شوند. این تفاوت‌ها، کلید correctness و fault tolerance از یک consensus algorithm هستند.
+    </p>
+    <p>
+        368 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 380</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        mitted در هنگام بازیابی - از آنجایی که participant به "yes" رأی داده است، نمی‌تواند از commit کردن در هنگام بازیابی خودداری کند.
+    </p>
+
+    <p>
+        بنابراین، protocol شامل دو "points of no return" حیاتی است: هنگامی که یک participant به "yes" رأی می‌دهد، promise می‌دهد که قطعا ًبعداً قادر به commit کردن خواهد بود (اگرچه the coordinator همچنان ممکن است انتخاب کند که abort کند)؛ و هنگامی که the coordinator تصمیم می‌گیرد، آن تصمیم غیرقابل برگشت است. آن promises، atomicity از 2PC را تضمین می‌کنند. (Single-node atomic commit، این دو رویداد را در یک مورد تجمیع می‌کند: نوشتن commit record به transaction log.)
+    </p>
+
+    <p>
+        بازگشت به تشبیه ازدواج، قبل از گفتن "I do"، شما و bride/groom شما آزادی دارید که transaction را با گفتن "No way!" (یا چیزی از این قبیل) abort کنید. با این حال، پس از گفتن "I do"، شما نمی‌توانید آن statement را پس بگیرید. اگر شما پس از گفتن "I do" غش کردید و شما نشنیدید که minister کلمات "You are now husband and wife" را می‌گوید، این واقعیت را تغییر نمی‌دهد که transaction committed شده است.
+        هنگامی که شما بعداً consciousness را بازیابی می‌کنید، شما می‌توانید متوجه شوید که آیا شما ازدواج کرده‌اید یا نه با query کردن minister برای status از global transaction ID خود، یا شما می‌توانید منتظر the minister’s next retry از commit request (از آنجایی که retries در طول دوره unconsciousness شما ادامه خواهد داشت) شوید.
+    </p>
+
+    <h4>Coordinator failure</h4>
+    <p>
+        ما در مورد این بحث کردیم که اگر یکی از participants یا شبکه در طول 2PC شکست بخورد چه اتفاقی می‌افتد: اگر هر یک از prepare requests شکست بخورند یا timeout شوند، the coordinator transaction را abort می‌کند؛ اگر هر یک از commit یا abort requests شکست بخورند، the coordinator آن‌ها را برای همیشه retry می‌کند. با این حال، مشخص نیست که اگر the coordinator crash کند چه اتفاقی می‌افتد.
+    </p>
+
+    <p>
+        اگر the coordinator قبل از ارسال prepare requests شکست بخورد، یک participant می‌تواند با خیال راحت transaction را abort کند. اما هنگامی که the participant یک prepare request را دریافت کرده و به "yes" رأی داده است، دیگر نمی‌تواند به طور unilateral abort کند - باید منتظر بماند تا از the coordinator بشنود که آیا transaction commit شده است یا abort شده است. اگر the coordinator crash کند یا شبکه در این مرحله شکست بخورد، the participant نمی‌تواند کاری جز انتظار انجام دهد. A participant’s transaction در این state، in doubt یا uncertain نامیده می‌شود.
+    </p>
+
+    <p>
+        این وضعیت در شکل 9-10 نشان داده شده است. در این مثال خاص، the coordinator در واقع تصمیم به commit کردن گرفت، و database 2 commit request را دریافت کرد. با این حال، the coordinator crash کرد قبل از اینکه بتواند commit request را به database 1 ارسال کند، و بنابراین database 1 نمی‌داند که آیا commit کند یا abort. حتی یک timeout در اینجا کمکی نمی‌کند: اگر database 1 به طور unilateral پس از یک timeout abort کند، در نهایت با database 2 که commit کرده است، ناسازگار خواهد شد. به طور مشابه، commit کردن unilateral نیز ایمن نیست، زیرا یک participant دیگر ممکن است abort کرده باشد.
+    </p>
+    <p>
+        358 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

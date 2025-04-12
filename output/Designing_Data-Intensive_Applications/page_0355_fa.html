@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 355</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h3>iv. Partitioning (sharding) a single-leader database</h3>
+    <p>
+        تقسیم بندی (sharding) یک پایگاه داده تک رهبر، به طوری که یک رهبر جداگانه برای هر partition وجود داشته باشد، بر linearizability تأثیری نمی گذارد، زیرا این فقط یک تضمین تک شی است. تراکنش‌های Cross-partition یک موضوع متفاوت است (به "Distributed Transactions and Consensus" در صفحه 352 مراجعه کنید).
+    </p>
+
+    <p>
+        متداول‌ترین رویکرد برای fault-tolerant کردن یک سیستم، استفاده از replication است.
+    </p>
+    <p>
+        بیایید روش‌های replication را از فصل 5 بازبینی کنیم و مقایسه کنیم که آیا می‌توان آن‌ها را linearizable کرد:
+    </p>
+
+    <h4>Single-leader replication (potentially linearizable)</h4>
+    <p>
+        در یک سیستم با single-leader replication (به "Leaders and Followers" در صفحه 152 مراجعه کنید)، رهبر دارای کپی اولیه داده است که برای نوشتن استفاده می‌شود، و فالوئرها کپی‌های پشتیبان داده‌ها را در nodeهای دیگر نگهداری می‌کنند. اگر از رهبر یا از فالوئرهای به‌روزرسانی‌شده به صورت synchronous، خواندن انجام دهید، پتانسیل linearizable بودن را دارند.iv با این حال، هر پایگاه داده single-leader در واقع linearizable نیست، چه از نظر طراحی (به عنوان مثال، به این دلیل که از snapshot isolation استفاده می‌کند) یا به دلیل باگ‌های concurrency [10].
+    </p>
+
+    <p>
+        استفاده از رهبر برای خواندن، به این فرض متکی است که شما مطمئناً می‌دانید رهبر کیست. همانطور که در "The Truth Is Defined by the Majority" در صفحه 300 بحث شد، کاملاً ممکن است یک node فکر کند که رهبر است، در حالی که در واقع اینطور نیست - و اگر رهبر دچار توهم به سرویس دهی به درخواست‌ها ادامه دهد، احتمالاً linearizability را نقض می‌کند [20]. با asynchronous replication، failover ممکن است حتی نوشته‌های committed را از دست بدهد (به "Handling Node Outages" در صفحه 156 مراجعه کنید)، که هم durability و هم linearizability را نقض می‌کند.
+    </p>
+
+    <h4>Consensus algorithms (linearizable)</h4>
+    <p>
+        برخی از consensus algorithms، که بعداً در این فصل در مورد آنها بحث خواهیم کرد، شباهتی به single-leader replication دارند. با این حال، consensus protocols شامل اقداماتی برای جلوگیری از split brain و stale replicas هستند. با تشکر از این جزئیات، consensus algorithms می‌توانند linearizable storage را با خیال راحت پیاده‌سازی کنند. به عنوان مثال، این نحوه عملکرد ZooKeeper [21] و etcd [22] است.
+    </p>
+
+    <h4>Multi-leader replication (not linearizable)</h4>
+    <p>
+        سیستم‌های با multi-leader replication عموماً linearizable نیستند، زیرا همزمان نوشته‌ها را در چندین node پردازش می‌کنند و به صورت asynchronous آن‌ها را به سایر nodeها replicate می‌کنند. به همین دلیل، آن‌ها می‌توانند نوشته‌های conflicting تولید کنند که نیاز به resolution دارند (به "Handling Write Conflicts" در صفحه 171 مراجعه کنید). چنین conflictsهایی یک artifact از فقدان یک کپی واحد از داده‌ها هستند.
+    </p>
+
+    <h4>Leaderless replication (probably not linearizable)</h4>
+    <p>
+        برای سیستم‌هایی با leaderless replication (سبک Dynamo؛ به "Leaderless Replication" در صفحه 177 مراجعه کنید)، مردم گاهی ادعا می‌کنند که می‌توانید "strong consistency" را با الزامات quorum reads و writes (w + r > n) به دست آورید. بسته به دقیق
+    </p>
+
+    <p>
+        Linearizability
+        |
+        333
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

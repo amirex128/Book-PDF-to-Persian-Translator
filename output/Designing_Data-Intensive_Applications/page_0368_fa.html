@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 368</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        nodes ممکن است گاهی اوقات مقدار counter یکسانی داشته باشند، اما با inclusion از node ID در timestamp، هر timestamp منحصر به فرد می‌شود.
+    </p>
+    <figure>
+        <img src="figure9-8.png" alt="شکل 9-8" style="max-width: 100%;">
+        <figcaption>
+            شکل 9-8. Lamport timestamps یک total ordering را که با causality سازگار است، فراهم می‌کنند.
+        </figcaption>
+    </figure>
+    <p>
+        یک Lamport timestamp هیچ ارتباطی با یک physical time-of-day clock ندارد، اما total ordering را فراهم می‌کند: اگر شما دو timestamps دارید، آن که دارای counter value بزرگتری است، timestamp بزرگتر است؛ اگر counter values یکسان باشند، آن که دارای node ID بزرگتری است، timestamp بزرگتر است.
+    </p>
+
+    <p>
+        تا کنون این description اساساً همانند counterهای even/odd که در بخش قبل توضیح داده شد، است. ایده کلیدی در مورد Lamport timestamps، که آن‌ها را با causality سازگار می‌کند، به شرح زیر است: هر node و هر client، maximum counter value که تا کنون دیده است را پیگیری می‌کند، و آن maximum را در هر request لحاظ می‌کند. هنگامی که یک node یک request یا response با یک maximum counter value بزرگتر از counter value خود دریافت می‌کند، فوراً counter خود را به آن maximum افزایش می‌دهد.
+    </p>
+
+    <p>
+        این در شکل 9-8 نشان داده شده است، جایی که client A یک counter value از 5 را از node 2 دریافت می‌کند، و سپس آن maximum از 5 را به node 1 ارسال می‌کند. در آن زمان، counter node 1 فقط 1 بود، اما بلافاصله به 5 منتقل شد، بنابراین operation بعدی یک counter value افزایشی از 6 داشت.
+    </p>
+
+    <p>
+        تا زمانی که maximum counter value همراه با هر operation منتقل شود، این scheme تضمین می‌کند که ordering از Lamport timestamps با causality سازگار است، زیرا هر causal dependency منجر به یک timestamp افزایش یافته می‌شود.
+    </p>
+
+    <p>
+        Lamport timestamps گاهی با version vectors اشتباه گرفته می‌شوند، که ما در "Detecting Concurrent Writes" در صفحه 184 دیدیم. اگرچه برخی شباهت‌ها وجود دارد، اما آن‌ها هدف متفاوتی دارند: version vectors می‌توانند تشخیص دهند که آیا دو operations concurrent هستند یا اینکه آیا یکی به صورت causal به دیگری وابسته است، در حالی که Lamport timestamps همیشه یک total ordering را اعمال می‌کنند. از total ordering از Lamport time-
+    </p>
+    <p>
+        346 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0368/image_1.png" alt="Image from page 368" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,3 +1,40 @@
+## کتاب‌های ترجمه شده
+
+در حال حاضر کتاب‌های زیر به فارسی ترجمه شده‌اند و از طریق GitHub Pages قابل دسترسی هستند:
+
+### طراحی برنامه‌های داده‌محور
+- عنوان انگلیسی: Designing Data-Intensive Applications
+- نویسنده: Martin Kleppmann
+- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Designing_Data-Intensive_Applications/)
+- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Designing_Data-Intensive_Applications.pdf)
+
+### ساخت میکروسرویس‌ها
+- عنوان انگلیسی: Building Microservices
+- نویسنده: Sam Newman
+- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Building_Microservice/)
+- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Building_Microservice.pdf)
+
+### الگوهای میکروسرویس با مثال‌های جاوا
+- عنوان انگلیسی: Microservices Patterns With examples in Java
+- نویسنده: Chris Richardson
+- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Microservices_Patterns_With_examples_in_Java/)
+- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Microservices_Patterns_With_examples_in_Java.pdf)
+
+### معماری برنامه‌های وب
+- عنوان انگلیسی: Web Application Architecture
+- نویسنده: Leon Shklar, Rich Rosen
+- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/web-application-architecture/)
+- [نسخه PDF](https://[username].github.io/[repo-name]/translated/web-application-architecture.pdf)
+
+### طراحی سیستم‌های توزیع‌شده
+- عنوان انگلیسی: Designing Distributed Systems
+- نویسنده: Brendan Burns
+- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Designing_distributed_systems_patterns/)
+- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Designing_distributed_systems_patterns.pdf)
+
+
+
+
 # مترجم PDF به فارسی
 
 این برنامه یک ابزار قدرتمند برای ترجمه خودکار فایل‌های PDF به زبان فارسی است. این برنامه از API ترجمه استفاده می‌کند و قابلیت‌های پیشرفته‌ای مانند مدیریت محدودیت نرخ درخواست و چرخش کلیدهای API را ارائه می‌دهد.
@@ -92,6 +129,7 @@ python src/main.py --output_format dual_page
 2. فایل HTML کامل برای کل کتاب به زبان فارسی
 3. فایل HTML با نمایش دو صفحه‌ای (متن اصلی و ترجمه)
 4. تصاویر استخراج شده از PDF
+
 
 ## نکات مهم
 

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 395</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        یک membership service تعیین می‌کند که کدام nodes در حال حاضر فعال هستند و members زنده از یک cluster هستند. همانطور که در طول فصل 8 دیدیم، به دلیل unbounded network delays، تشخیص قابل اطمینان اینکه آیا یک node دیگر شکست خورده است یا خیر، امکان‌پذیر نیست. با این حال، اگر شما failure detection را با consensus جفت کنید، nodes می‌توانند در مورد اینکه کدام nodes باید زنده یا نه در نظر گرفته شوند، به توافق برسند.
+    </p>
+
+    <p>
+        هنوز هم ممکن است که یک node به اشتباه توسط consensus dead اعلام شود، حتی اگر در واقع زنده باشد. اما با این وجود برای یک سیستم بسیار مفید است که در مورد اینکه کدام nodes، membership فعلی را تشکیل می‌دهند، توافق داشته باشد. به عنوان مثال، انتخاب یک leader می‌تواند به سادگی به معنای انتخاب کمترین شماره‌دار در میان current members باشد، اما این رویکرد اگر nodesهای مختلف نظرات متفاوتی در مورد اینکه members فعلی چه کسانی هستند، داشته باشند، کارساز نخواهد بود.
+    </p>
+
+    <h4>Summary</h4>
+    <p>
+        در این فصل ما موضوعات consistency و consensus را از زوایای مختلف بررسی کردیم. ما به طور عمیق به linearizability، یک consistency model محبوب، نگاه کردیم: هدف آن این است که داده‌های replicated طوری به نظر برسند که گویی فقط یک کپی وجود دارد، و همه operations بر روی آن به صورت اتمی عمل می‌کنند. اگرچه linearizability جذاب است زیرا درک آن آسان است - باعث می‌شود یک database مانند یک variable در یک برنامه single-threaded رفتار کند - اما این ضعف را دارد که کند است، به ویژه در محیط‌هایی با network delays بزرگ.
+    </p>
+
+    <p>
+        ما همچنین causality را بررسی کردیم، که یک ordering را بر رویدادها در یک سیستم تحمیل می‌کند (چه چیزی قبل از چه چیزی اتفاق افتاده است، بر اساس cause and effect). برخلاف linearizability، که تمام operations را در یک timeline واحد و totally ordered قرار می‌دهد، causality یک consistency model ضعیف‌تر را به ما ارائه می‌دهد: برخی از چیزها می‌توانند concurrent باشند، بنابراین version history مانند یک timeline با branching و merging است. Causal consistency، overhead هماهنگی از linearizability را ندارد و به مشکلات شبکه حساسیت کمتری دارد.
+    </p>
+
+    <p>
+        با این حال، حتی اگر ما causal ordering را capture کنیم (به عنوان مثال با استفاده از Lamport timestamps)، ما دیدیم که برخی از چیزها را نمی‌توان به این روش پیاده‌سازی کرد: در "Timestamp ordering is not sufficient" در صفحه 347 ما به مثال اطمینان از اینکه یک username منحصر به فرد است و رد کردن registrations concurrent برای همان username، پرداختیم. اگر یک node قرار است یک registration را بپذیرد، به نحوی نیاز دارد که بداند که یک node دیگر به طور concurrent در process از ثبت همان نام نیست. این مشکل ما را به سمت consensus سوق داد.
+    </p>
+
+    <p>
+        ما دیدیم که دستیابی به consensus به معنای تصمیم‌گیری در مورد چیزی به گونه‌ای است که همه nodes در مورد آنچه تصمیم گرفته شده است، توافق داشته باشند، و به گونه‌ای که decision غیرقابل برگشت باشد. با مقداری کاوش، مشخص می‌شود که طیف وسیعی از مشکلات در واقع به consensus قابل تقلیل هستند و معادل یکدیگر هستند (به این معنا که اگر شما یک راه‌حل برای یکی از آن‌ها دارید، می‌توانید به راحتی آن را به یک راه‌حل برای یکی دیگر از آن‌ها تبدیل کنید).
+        مشکلات معادل شامل موارد زیر است:
+    </p>
+    <p>
+        Summary | 373
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

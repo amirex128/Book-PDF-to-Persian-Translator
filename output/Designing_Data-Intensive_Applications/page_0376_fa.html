@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 376</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Atomic Commit and Two-Phase Commit (2PC)</h4>
+    <p>
+        در فصل 7 ما آموختیم که هدف از atomicity transaction، ارائه semantics ساده در مواردی است که در میانه انجام several writes مشکلی پیش می‌آید. نتیجه یک transaction، یا یک commit موفق است، که در این صورت تمام writesهای transaction پایدار می‌شوند، یا یک abort، که در این صورت تمام writesهای transaction roll back می‌شوند (یعنی لغو یا دور انداخته می‌شوند).
+    </p>
+
+    <p>
+        Atomicity، از transactions شکست خورده جلوگیری می‌کند تا database را با نتایج نیمه‌کاره و حالت نیمه‌به‌روزرسانی‌شده پر کنند. این امر به ویژه برای multi-object transactions (به "Single-Object and Multi-Object Operations" در صفحه 228 مراجعه کنید) و databases که secondary indexes را نگهداری می‌کنند، مهم است. هر secondary index یک data structure جداگانه از داده‌های اولیه است - بنابراین، اگر شما مقداری از داده‌ها را modify می‌کنید، تغییر مربوطه باید در secondary index نیز انجام شود. Atomicity تضمین می‌کند که secondary index با داده‌های اولیه سازگار می‌ماند (اگر index با داده‌های اولیه ناسازگار شود، خیلی مفید نخواهد بود).
+    </p>
+
+    <h4>From single-node to distributed atomic commit</h4>
+    <p>
+        برای transactions که در یک database node واحد اجرا می‌شوند، atomicity معمولاً توسط storage engine پیاده‌سازی می‌شود. هنگامی که client از database node می‌خواهد تا transaction را commit کند، database، writesهای transaction را پایدار می‌کند (معمولاً در یک write-ahead log؛ به "Making B-trees reliable" در صفحه 82 مراجعه کنید) و سپس یک commit record را به log بر روی disk اضافه می‌کند. اگر database در میانه این process crash کند، transaction از log بازیابی می‌شود زمانی که node راه‌اندازی مجدد می‌شود: اگر commit record با موفقیت قبل از crash به disk نوشته شده باشد، transaction committed در نظر گرفته می‌شود؛ اگر نه، هر گونه writes از آن transaction roll back می‌شود.
+    </p>
+
+    <p>
+        بنابراین، در یک node واحد، commitment transaction به طور حیاتی به ترتیبی که داده‌ها به طور durable به disk نوشته می‌شوند، بستگی دارد: ابتدا داده‌ها، سپس commit record [72]. لحظه تصمیم‌گیری کلیدی برای اینکه آیا transaction commit می‌شود یا abort، لحظه‌ای است که disk نوشتن commit record را به پایان می‌رساند: قبل از آن لحظه، هنوز هم امکان abort وجود دارد (به دلیل crash)، اما بعد از آن لحظه، transaction committed می‌شود (حتی اگر database crash کند). بنابراین، این یک device واحد است (controller از یک disk drive خاص، متصل به یک node خاص) که commit را atomic می‌کند.
+    </p>
+
+    <p>
+        با این حال، اگر چندین node در یک transaction درگیر باشند چه می‌شود؟ به عنوان مثال، شاید شما یک multi-object transaction در یک partitioned database، یا یک term-partitioned secondary index (که در آن index entry ممکن است در یک node متفاوت از primary data باشد؛ به "Partitioning and Secondary Indexes" در صفحه 206 مراجعه کنید) داشته باشید. بیشتر datastores distributed "NoSQL" از چنین distributed transactions پشتیبانی نمی‌کنند، اما سیستم‌های relational clustered مختلف انجام می‌دهند (به "Distributed Transactions in Practice" در صفحه 360 مراجعه کنید).
+    </p>
+
+    <p>
+        در این موارد، کافی نیست که به سادگی یک commit request را به تمام nodes ارسال کنید و به طور independent transaction را در هر یک commit کنید. با انجام این کار، به راحتی می‌تواند
+    </p>
+    <p>
+        354 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

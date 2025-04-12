@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 385</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Recovering from coordinator failure</h4>
+    <p>
+        از نظر تئوری، اگر the coordinator crash کند و راه‌اندازی مجدد شود، باید به طور clean state خود را از log بازیابی کند و هر گونه in-doubt transactions را حل کند. با این حال، در عمل، orphaned in-doubt transactions رخ می‌دهد [89, 90] - یعنی، transactions که the coordinator به هر دلیلی نمی‌تواند در مورد نتیجه آن تصمیم بگیرد (به عنوان مثال، به دلیل اینکه transaction log به دلیل یک software bug از دست رفته یا خراب شده است). این transactions را نمی‌توان به طور خودکار حل کرد، بنابراین آن‌ها برای همیشه در database قرار می‌گیرند، locks را نگه می‌دارند و دیگر transactions را مسدود می‌کنند.
+    </p>
+
+    <p>
+        حتی rebooting database servers شما این مشکل را برطرف نمی‌کند، زیرا یک پیاده‌سازی صحیح از 2PC باید locks از یک in-doubt transaction را حتی در سراسر restarts حفظ کند (در غیر این صورت، atomicity guarantee را نقض می‌کند). این یک وضعیت چسبنده است.
+    </p>
+
+    <p>
+        تنها راه خروج این است که یک administrator به صورت دستی تصمیم بگیرد که آیا transactions را commit کند یا roll back. The administrator باید participants از هر in-doubt transaction را بررسی کند، تعیین کند که آیا هر participant قبلاً commit کرده است یا abort کرده است، و سپس همان نتیجه را برای other participants اعمال کند. حل مشکل به طور بالقوه به تلاش دستی زیادی نیاز دارد، و به احتمال زیاد باید تحت فشار بالا و فشار زمان در طول یک production outage جدی انجام شود (در غیر این صورت، چرا the coordinator باید در چنین state بدی باشد؟).
+    </p>
+
+    <p>
+        بسیاری از XA implementations یک emergency escape hatch به نام heuristic decisions دارند: اجازه دادن به یک participant برای تصمیم unilateral به abort یا commit کردن یک in-doubt transaction بدون یک decision قطعی از the coordinator [76, 77, 91]. برای روشن شدن، heuristic در اینجا یک euphemism برای احتمالاً breaking atomicity است، زیرا این سیستم از promises در two-phase commit را نقض می‌کند. بنابراین، heuristic decisions فقط برای خروج از catastrophic situations در نظر گرفته شده‌اند، و نه برای استفاده منظم.
+    </p>
+
+    <h4>Limitations of distributed transactions</h4>
+    <p>
+        XA transactions مشکل واقعی و مهمی از keeping several participant data systems consistent with each other را حل می‌کنند، اما همانطور که دیده‌ایم، آن‌ها همچنین مشکلات عملیاتی عمده‌ای را معرفی می‌کنند. به طور خاص، درک کلیدی این است که the transaction coordinator، خود یک نوع از database است (که در آن transaction outcomes ذخیره می‌شوند)، و بنابراین نیاز دارد که با همان مراقبتی که با هر database مهم دیگری رفتار می‌شود، با آن برخورد شود:
+    </p>
+    <ul>
+        <li>
+            اگر the coordinator replicated نباشد اما فقط بر روی یک machine واحد اجرا شود، این یک single point of failure برای کل سیستم است (از آنجایی که failure آن باعث می‌شود other application servers در locks که توسط in-doubt transactions نگهداری می‌شوند، مسدود شوند). به طرز تعجب‌آوری، بسیاری از coordinator implementations به طور پیش‌فرض high available نیستند، یا فقط از rudimentary replication support برخوردار هستند.
+        </li>
+        <li>
+            بسیاری از server-side applications در یک stateless model توسعه داده می‌شوند (همانطور که توسط HTTP ترجیح داده می‌شود)، با تمام stateهای persistent که در یک database ذخیره می‌شوند، که مزیت دارد
+        </li>
+    </ul>
+    <p>
+        Distributed Transactions and Consensus | 363
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

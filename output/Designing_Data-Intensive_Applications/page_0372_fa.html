@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 372</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>x. In a formal sense, a linearizable read-write register</h4>
+    <p>
+        از نظر رسمی، یک linearizable read-write register یک مسئله "آسان‌تر" است. Total order broadcast معادل consensus [67] است، که هیچ راه‌حل deterministic در asynchronous crash-stop model ندارد [68]، در حالی که یک linearizable read-write register را می‌توان در همان model سیستم پیاده‌سازی کرد [23, 24, 25]. با این حال، پشتیبانی از atomic operations مانند compare-and-set یا increment-and-get در یک register، آن را معادل consensus [28] می‌کند. بنابراین، مشکلات consensus و یک linearizable register ارتباط نزدیکی با هم دارند.
+    </p>
+
+    <h4>xi. If you don’t wait</h4>
+    <p>
+        اگر شما منتظر نمانید، اما write را بلافاصله پس از اینکه enqueued شد، acknowledge کنید، شما چیزی شبیه به memory consistency model از پردازنده‌های multi-core x86 [43] را دریافت می‌کنید. آن model نه linearizable است و نه sequentially consistent.
+    </p>
+
+    <h4>Implementing linearizable storage using total order broadcast</h4>
+    <p>
+        همانطور که در شکل 9-4 نشان داده شده است، در یک سیستم linearizable یک total order از operations وجود دارد. آیا این بدان معناست که linearizability همان total order broadcast است؟ کاملاً نه، اما ارتباط نزدیکی بین این دو وجود دارد.x
+    </p>
+
+    <p>
+        Total order broadcast asynchronous است: تضمین می‌شود که messages به طور reliable به ترتیب ثابت تحویل داده می‌شوند، اما هیچ تضمینی در مورد زمان تحویل یک message وجود ندارد (بنابراین یک دریافت‌کننده ممکن است از دیگران عقب بماند). در مقابل، linearizability یک recency guarantee است: تضمین می‌شود که یک read آخرین مقدار نوشته شده را می‌بیند.
+    </p>
+
+    <p>
+        با این حال، اگر شما total order broadcast دارید، می‌توانید linearizable storage را بر روی آن بسازید. به عنوان مثال، شما می‌توانید اطمینان حاصل کنید که usernames به طور منحصر به فرد user accounts را شناسایی می‌کنند.
+        تصور کنید که برای هر username ممکن، شما می‌توانید یک linearizable register با یک atomic compare-and-set operation داشته باشید. هر register در ابتدا مقدار null (نشان‌دهنده این که username گرفته نشده است) را دارد. هنگامی که یک user می‌خواهد یک username ایجاد کند، شما یک compare-and-set operation را در register برای آن username اجرا می‌کنید، و آن را بر روی user account ID تنظیم می‌کنید، با این شرط که مقدار قبلی register null باشد. اگر چندین user سعی کنند به طور concurrent همان username را بگیرند، تنها یکی از compare-and-set operations موفق خواهد شد، زیرا دیگران مقداری غیر از null (به دلیل linearizability) را خواهند دید.
+    </p>
+
+    <p>
+        شما می‌توانید چنین یک linearizable compare-and-set operation را به شرح زیر با استفاده از total order broadcast به عنوان یک append-only log پیاده‌سازی کنید [62, 63]:
+    </p>
+    <ol>
+        <li>Append یک message به log، که به طور موقت نشان می‌دهد usernameی را که می‌خواهید claim کنید.</li>
+        <li>Read the log، و منتظر بمانید تا message ای که شما اضافه کردید به شما بازگردانده شود.xi</li>
+        <li>Check for any messages claiming the username that you want. If the first message for your desired username is your own message, then you are successful: you can commit the username claim (perhaps by appending another message to the log) and acknowledge it to the client. If the first message for your desired username is from another user, you abort the operation.</li>
+    </ol>
+    <p>
+        350 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

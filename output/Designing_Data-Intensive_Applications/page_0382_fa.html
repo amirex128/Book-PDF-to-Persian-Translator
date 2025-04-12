@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 382</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Distributed Transactions in Practice</h4>
+    <p>
+        Distributed transactions، به ویژه آن‌هایی که با two-phase commit پیاده‌سازی شده‌اند، شهرت mixedی دارند. از یک طرف، آن‌ها به عنوان یک safety guarantee مهم دیده می‌شوند که در غیر این صورت دستیابی به آن دشوار خواهد بود؛ از طرف دیگر، آن‌ها به دلیل ایجاد مشکلات عملیاتی، از بین بردن performance، و promise کردن بیش از آنچه می‌توانند ارائه دهند، مورد انتقاد قرار می‌گیرند [81, 82, 83, 84]. بسیاری از cloud services، به دلیل مشکلات عملیاتی که ایجاد می‌کنند، انتخاب می‌کنند که distributed transactions را پیاده‌سازی نکنند [85, 86].
+    </p>
+
+    <p>
+        برخی از پیاده‌سازی‌های distributed transactions، یک performance penalty سنگین را به همراه دارند - به عنوان مثال، گزارش شده است که distributed transactions در MySQL بیش از 10 برابر کندتر از single-node transactions هستند [87]، بنابراین جای تعجب نیست که مردم توصیه می‌کنند از آن‌ها استفاده نکنید. بخش زیادی از هزینه performance که در two-phase commit وجود دارد، به دلیل disk forcing (fsync) اضافی است که برای crash recovery [88] مورد نیاز است، و network round-trips اضافی.
+    </p>
+
+    <p>
+        با این حال، به جای رد کردن کامل distributed transactions، ما باید آن‌ها را با جزئیات بیشتری بررسی کنیم، زیرا درس‌های مهمی از آن‌ها وجود دارد. برای شروع، ما باید در مورد آنچه که از "distributed transactions" منظورمان است، دقیق باشیم. دو نوع کاملاً متفاوت از distributed transactions اغلب با هم ترکیب می‌شوند:
+    </p>
+    <ul>
+        <li>
+            Database-internal distributed transactions
+            <p>
+                برخی از distributed databases (یعنی، databases که از replication و partitioning در پیکربندی استاندارد خود استفاده می‌کنند) از internal transactions در میان nodes از آن database پشتیبانی می‌کنند. به عنوان مثال، VoltDB و MySQL Cluster’s NDB storage engine از این internal transaction support برخوردار هستند. در این حالت، همه nodes که در transaction شرکت می‌کنند، در حال اجرای همان database software هستند.
+            </p>
+        </li>
+        <li>
+            Heterogeneous distributed transactions
+            <p>
+                در یک heterogeneous transaction، participants، دو یا چند فناوری مختلف هستند: به عنوان مثال، دو databases از vendorهای مختلف، یا حتی سیستم‌های non-database مانند message brokers. یک distributed transaction در سراسر این سیستم‌ها باید atomic commit را تضمین کند، حتی اگر سیستم‌ها ممکن است کاملاً در زیرساخت متفاوت باشند.
+            </p>
+        </li>
+    </ul>
+
+    <p>
+        Database-internal transactions نیازی به سازگاری با هیچ سیستم دیگری ندارند، بنابراین آن‌ها می‌توانند از هر protocol استفاده کنند و optimizations مختص آن technology خاص را اعمال کنند. به همین دلیل، database-internal distributed transactions اغلب می‌توانند به خوبی کار کنند. از سوی دیگر، transactions که technologies heterogeneous را پوشش می‌دهند، بسیار چالش برانگیزتر هستند.
+    </p>
+
+    <h4>Exactly-once message processing</h4>
+    <p>
+        Heterogeneous distributed transactions به سیستم‌های مختلف اجازه می‌دهند تا به روش‌های قدرتمندی یکپارچه شوند. به عنوان مثال، یک message از یک message queue می‌تواند به عنوان processed acknowledgment شود اگر و فقط اگر database transaction برای پردازش message بود
+    </p>
+    <p>
+        360 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

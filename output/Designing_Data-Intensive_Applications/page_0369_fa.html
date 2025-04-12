@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 369</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        estamps، شما نمی‌توانید بگویید که آیا دو operations concurrent هستند یا اینکه آیا آن‌ها به صورت causal وابسته هستند. مزیت Lamport timestamps نسبت به version vectors این است که فشرده‌تر هستند.
+    </p>
+
+    <h4>Timestamp ordering is not sufficient</h4>
+    <p>
+        اگرچه Lamport timestamps یک total order از operations را تعریف می‌کنند که با causality سازگار است، اما آن‌ها برای حل بسیاری از مشکلات رایج در سیستم‌های distributed کاملاً کافی نیستند.
+    </p>
+
+    <p>
+        به عنوان مثال، یک سیستمی را در نظر بگیرید که نیاز دارد اطمینان حاصل کند که یک username به طور منحصر به فرد یک user account را شناسایی می‌کند. اگر دو user به طور concurrent سعی کنند یک account را با همان username ایجاد کنند، یکی از این دو باید موفق شود و دیگری باید شکست بخورد. (ما قبلاً در "The leader and the lock" در صفحه 301 به این مشکل اشاره کردیم.)
+    </p>
+
+    <p>
+        در نگاه اول، به نظر می‌رسد که یک total ordering از operations (به عنوان مثال، با استفاده از Lamport timestamps) باید برای حل این مشکل کافی باشد: اگر دو account با همان username ایجاد شوند، یکی را با timestamp کمتری به عنوان برنده انتخاب کنید (کسی که username را first گرفت)، و اجازه دهید آن که timestamp بزرگتری دارد، شکست بخورد.
+        از آنجایی که timestamps به طور total ordered هستند، این مقایسه همیشه معتبر است.
+    </p>
+
+    <p>
+        این رویکرد برای تعیین برنده پس از fact کار می‌کند: هنگامی که شما تمام operations ایجاد username را در سیستم جمع‌آوری کردید، می‌توانید timestamps آن‌ها را مقایسه کنید. با این حال، هنگامی که یک node، requestی را از یک user برای ایجاد یک username دریافت کرده است، و نیاز دارد که همین الان تصمیم بگیرد که آیا request باید موفق شود یا شکست بخورد، کافی نیست. در آن لحظه، node نمی‌داند که آیا node دیگری به طور concurrent در حال ایجاد یک account با همان username است، و چه timestampی ممکن است آن node دیگر به operation اختصاص دهد.
+    </p>
+
+    <p>
+        به منظور اطمینان از اینکه هیچ node دیگری در حال ایجاد یک account با همان username و یک timestamp کمتر نیست، شما باید با هر node دیگری بررسی کنید تا ببینید چه کاری انجام می‌دهد [56]. اگر یکی از nodesهای دیگر به دلیل یک network problem شکست خورده یا قابل دسترسی نباشد، این سیستم متوقف خواهد شد.
+        این نوع سیستم fault-tolerant که ما نیاز داریم، نیست.
+    </p>
+
+    <p>
+        مشکل در اینجا این است که total order از operations فقط پس از جمع‌آوری تمام operations ظاهر می‌شود. اگر یک node دیگر، برخی از operations را تولید کرده باشد، اما شما هنوز نمی‌دانید آن‌ها چه هستند، شما نمی‌توانید ordering نهایی از operations را ایجاد کنید: operations ناشناخته از node دیگر ممکن است نیاز داشته باشند که در موقعیت‌های مختلف در total order درج شوند.
+    </p>
+
+    <p>
+        در نتیجه: به منظور پیاده‌سازی چیزی مانند یک uniqueness constraint برای usernames، داشتن یک total ordering از operations کافی نیست - شما همچنین باید بدانید که آن order چه زمانی نهایی می‌شود. اگر شما یک operation برای ایجاد یک username دارید، و شما مطمئن هستید که هیچ node دیگری نمی‌تواند یک claim برای همان username را قبل از operation شما در total order درج کند، پس شما می‌توانید با خیال راحت declare کنید که operation موفقیت‌آمیز است.
+    </p>
+    <p>
+        Ordering Guarantees | 347
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

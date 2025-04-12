@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 371</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        البته، messages در طول network interruption تحویل داده نمی‌شوند، اما یک algorithm می‌تواند دوباره تلاش کند تا messages در نهایت هنگامی که شبکه تعمیر شد، به مقصد برسند (و سپس آن‌ها همچنان باید به ترتیب صحیح تحویل داده شوند).
+    </p>
+
+    <h4>Using total order broadcast</h4>
+    <p>
+        Consensus services مانند ZooKeeper و etcd در واقع total order broadcast را پیاده‌سازی می‌کنند. این واقعیت یک اشاره است که یک ارتباط قوی بین total order broadcast و consensus وجود دارد، که ما بعداً در این فصل به آن خواهیم پرداخت.
+    </p>
+
+    <p>
+        Total order broadcast دقیقاً همان چیزی است که شما برای database replication نیاز دارید: اگر هر message نشان‌دهنده یک write به database باشد، و هر replica، همان writes را به همان ترتیب پردازش کند، پس replicas با یکدیگر consistent باقی می‌مانند (جدا از هر گونه temporary replication lag). این اصل به عنوان state machine replication [60] شناخته می‌شود، و ما در فصل 11 به آن باز خواهیم گشت.
+    </p>
+
+    <p>
+        به طور مشابه، total order broadcast می‌تواند برای پیاده‌سازی serializable transactions استفاده شود: همانطور که در "Actual Serial Execution" در صفحه 252 بحث شد، اگر هر message نشان‌دهنده یک deterministic transaction باشد که باید به عنوان یک stored procedure اجرا شود، و اگر هر node آن messages را به همان ترتیب پردازش کند، سپس partitions و replicas از database با یکدیگر consistent نگه داشته می‌شوند [61].
+    </p>
+
+    <p>
+        یک جنبه مهم از total order broadcast این است که order در زمان تحویل messages ثابت می‌شود: به یک node اجازه داده نمی‌شود که به صورت retroactively یک message را در یک موقعیت قبلی در order وارد کند، اگر messages بعدی قبلاً تحویل داده شده باشند. این واقعیت، total order broadcast را قوی‌تر از timestamp ordering می‌کند.
+    </p>
+
+    <p>
+        یک راه دیگر برای نگاه کردن به total order broadcast این است که آن را به عنوان یک راه برای ایجاد یک log (همانطور که در یک replication log، transaction log، یا write-ahead log) می‌دانیم: تحویل یک message مانند اضافه کردن به log است. از آنجایی که همه nodes باید همان messages را به همان ترتیب تحویل دهند، همه nodes می‌توانند log را بخوانند و همان sequence از messages را ببینند.
+    </p>
+
+    <p>
+        Total order broadcast همچنین برای پیاده‌سازی یک lock service که fencing tokens را فراهم می‌کند، مفید است ("Fencing tokens" در صفحه 303 را ببینید). هر درخواست برای به دست آوردن lock به عنوان یک message به log اضافه می‌شود، و همه messages به ترتیب متوالی در ترتیبی که در log ظاهر می‌شوند، شماره‌گذاری می‌شوند. سپس sequence number می‌تواند به عنوان یک fencing token عمل کند، زیرا به صورت monotonically increasing است. در ZooKeeper، این sequence number، zxid [15] نامیده می‌شود.
+    </p>
+    <p>
+        Ordering Guarantees | 349
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

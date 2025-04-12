@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 379</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        acknowledgments، minister زوج را زن و شوهر اعلام می‌کند: transaction committed می‌شود، و واقعیت خوشایند برای همه شرکت‌کنندگان پخش می‌شود. اگر bride یا groom  "yes" نگویند، مراسم abort می‌شود [73].
+    </p>
+
+    <h4>A system of promises</h4>
+    <p>
+        از این description کوتاه ممکن است مشخص نباشد که چرا two-phase commit، atomicity را تضمین می‌کند، در حالی که one-phase commit در سراسر several nodes این کار را نمی‌کند. مطمئناً prepare و commit requests می‌توانند به همان آسانی در مورد two-phase از دست بروند. چه چیزی 2PC را متفاوت می‌کند؟
+    </p>
+
+    <p>
+        برای درک اینکه چرا کار می‌کند، ما باید process را کمی با جزئیات بیشتری بررسی کنیم:
+    </p>
+    <ol>
+        <li>هنگامی که application می‌خواهد یک distributed transaction را آغاز کند، یک transaction ID را از the coordinator درخواست می‌کند. این transaction ID، globally unique است.</li>
+        <li>application، یک single-node transaction را در هر یک از participants آغاز می‌کند، و globally unique transaction ID را به single-node transaction متصل می‌کند. همه reads و writes در یکی از این single-node transactions انجام می‌شوند. اگر در این مرحله مشکلی پیش بیاید (به عنوان مثال، یک node crash می‌کند یا یک request timeout می‌شود)، the coordinator یا هر یک از participants می‌توانند abort کنند.</li>
+        <li>هنگامی که application آماده commit کردن است، the coordinator یک prepare request را به تمام participants، که با global transaction ID برچسب‌گذاری شده است، ارسال می‌کند. اگر هر یک از این requests شکست بخورد یا timeout شود، the coordinator یک abort request را برای آن transaction ID به تمام participants ارسال می‌کند.</li>
+        <li>هنگامی که یک participant، prepare request را دریافت می‌کند، اطمینان حاصل می‌کند که می‌تواند transaction را تحت هر شرایطی به طور قطعی commit کند. این شامل نوشتن تمام transaction data بر روی disk (یک crash، یک power failure، یا تمام شدن فضای disk، یک بهانه قابل قبول برای امتناع از commit کردن در آینده نیست)، و بررسی هر گونه conflicts یا constraint violations. با پاسخ "yes" به the coordinator، node promise می‌دهد که transaction را بدون error commit کند، اگر درخواست شود. به عبارت دیگر، the participant از حق abort کردن transaction دست می‌کشد، اما بدون اینکه واقعاً آن را commit کند.</li>
+        <li>هنگامی که the coordinator responses را به تمام prepare requests دریافت کرد، یک تصمیم قطعی در مورد commit کردن یا abort کردن transaction (commit کردن فقط در صورتی که همه participants به "yes" رأی داده باشند) می‌گیرد. The coordinator باید آن تصمیم را به transaction log خود بر روی disk بنویسد تا بداند در چه جهتی تصمیم گرفته است در صورتی که متعاقباً crash شود. این، commit point نامیده می‌شود.</li>
+        <li>هنگامی که تصمیم the coordinator به disk نوشته شد، commit یا abort request به تمام participants ارسال می‌شود. اگر این request شکست بخورد یا timeout شود، the coordinator باید برای همیشه retry کند تا موفق شود. دیگر بازگشتی وجود ندارد: اگر تصمیم این بود که commit کند، آن تصمیم باید اعمال شود، مهم نیست که چه تعداد retry طول می‌کشد. اگر یک participant در این بین crash کرده باشد، transaction خواهد شد
+    </li>
+    <p>
+        Distributed Transactions and Consensus | 357
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

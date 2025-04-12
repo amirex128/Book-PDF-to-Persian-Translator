@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 391</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Limitations of consensus</h4>
+    <p>
+        Consensus algorithms یک پیشرفت بزرگ برای distributed systems هستند: آن‌ها safety properties (agreement, integrity, و validity) مشخصی را به systems که در آن همه چیز نامشخص است، می‌آورند، و با این وجود fault-tolerant باقی می‌مانند (تا زمانی که اکثریت nodes در حال کار و قابل دسترس باشند، قادر به پیشرفت هستند). آن‌ها total order broadcast را فراهم می‌کنند، و بنابراین آن‌ها همچنین می‌توانند linearizable atomic operations را به روشی fault-tolerant پیاده‌سازی کنند ("Implementing linearizable storage using total order broadcast" در صفحه 350 را ببینید).
+    </p>
+
+    <p>
+        با این وجود، آن‌ها در همه جا استفاده نمی‌شوند، زیرا مزایا با هزینه‌ای همراه است.
+        process که توسط آن nodes در مورد proposals قبل از تصمیم‌گیری، vote می‌کنند، یک نوع synchronous replication است. همانطور که در "Synchronous Versus Asynchronous Replication" در صفحه 153 بحث شد، databases اغلب برای استفاده از asynchronous replication پیکربندی می‌شوند.
+        در این configuration، مقداری از داده‌های committed می‌توانند به طور بالقوه در failover از دست بروند - اما بسیاری از مردم انتخاب می‌کنند که این ریسک را به خاطر performance بهتر بپذیرند.
+    </p>
+
+    <p>
+        Consensus systems همیشه به یک majority strict برای کارکردن نیاز دارند. این بدان معنی است که شما برای تحمل یک failure به حداقل سه node نیاز دارید (دو node باقیمانده از سه، یک majority را تشکیل می‌دهند)، یا حداقل پنج node برای تحمل دو failures (سه node باقیمانده از پنج، یک majority را تشکیل می‌دهند). اگر یک network failure، برخی از nodes را از بقیه جدا کند، تنها portion majority از شبکه می‌تواند progress کند، و بقیه مسدود می‌شوند (همچنین به "The Cost of Linearizability" در صفحه 335 مراجعه کنید).
+    </p>
+
+    <p>
+        اکثر consensus algorithms یک set fixed از nodes را فرض می‌کنند که در voting شرکت می‌کنند، که به این معنی است که شما نمی‌توانید به سادگی nodes را در cluster اضافه یا حذف کنید. Dynamic membership extensions برای consensus algorithms، به set از nodes در cluster اجازه می‌دهد که با گذشت زمان تغییر کند، اما آن‌ها بسیار کمتر از static membership algorithms درک شده‌اند.
+    </p>
+
+    <p>
+        Consensus systems عموماً به timeouts برای شناسایی failed nodes متکی هستند. در محیط‌هایی با network delays بسیار متغیر، به ویژه سیستم‌های geographically distributed، اغلب اتفاق می‌افتد که یک node به اشتباه باور می‌کند که leader به دلیل یک issue network گذرا، شکست خورده است. اگرچه این error به safety properties آسیب نمی‌رساند، اما frequent leader elections منجر به performance وحشتناک می‌شود زیرا سیستم می‌تواند زمان بیشتری را صرف انتخاب یک leader کند تا انجام هر کار مفیدی.
+    </p>
+
+    <p>
+        گاهی اوقات، consensus algorithms به مشکلات network، به ویژه حساس هستند. به عنوان مثال، Raft نشان داده شده است که دارای edge cases ناخوشایندی است [106]: اگر کل شبکه به درستی کار می‌کند به جز یک network link خاص که به طور مداوم unreliable است، Raft می‌تواند به موقعیت‌هایی برسد که leadership به طور مداوم بین دو nodes bounce می‌شود، یا leader فعلی به طور مداوم مجبور به استعفا می‌شود، بنابراین سیستم عملاً هرگز پیشرفت نمی‌کند. Other consensus algorithms مشکلات مشابهی دارند، و طراحی algorithms که نسبت به unreliable networks مقاوم‌تر هستند، هنوز هم یک research problem باز است.
+    </p>
+    <p>
+        Distributed Transactions and Consensus | 369
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

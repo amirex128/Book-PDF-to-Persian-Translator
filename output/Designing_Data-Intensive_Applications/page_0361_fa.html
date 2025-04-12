@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 361</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h3>Ordering Guarantees</h3>
+    <p>
+        ما قبلاً گفتیم که یک linearizable register طوری رفتار می‌کند که گویی فقط یک کپی از داده وجود دارد، و هر عملیات به نظر می‌رسد در یک نقطه از زمان به صورت اتمی اعمال می‌شود. این تعریف مستلزم آن است که عملیات‌ها به ترتیب مشخصی اجرا شوند.
+    </p>
+
+    <p>
+        ما ترتیب را در شکل 9-4 با پیوستن به عملیات‌ها به ترتیبی که به نظر می‌رسد اجرا شده‌اند، نشان دادیم.
+    </p>
+
+    <p>
+        Ordering یک موضوع تکراری در این کتاب بوده است، که نشان می‌دهد ممکن است یک ایده اساسی مهم باشد. بیایید به طور خلاصه برخی از زمینه‌های دیگری را که در آن‌ها در مورد ordering بحث کرده‌ایم، مرور کنیم:
+    </p>
+    <ul>
+        <li>
+            در فصل 5 دیدیم که هدف اصلی leader در single-leader replication، تعیین ترتیب writes در replication log است - یعنی ترتیبی که فالوئرها آن writes را اعمال می‌کنند. اگر هیچ single leader وجود نداشته باشد، conflicts می‌تواند به دلیل عملیات concurrent رخ دهد (به "Handling Write Conflicts" در صفحه 171 مراجعه کنید).
+        </li>
+        <li>
+            Serializability، که در فصل 7 مورد بحث قرار دادیم، در مورد اطمینان از این است که transactions طوری رفتار می‌کنند که گویی به ترتیب متوالی اجرا شده‌اند. این می‌تواند با اجرای لفظی transactions به ترتیب سریال، یا با اجازه دادن به اجرای concurrent در حالی که از conflicts serialization جلوگیری می‌شود (با قفل کردن یا aborting) به دست آید.
+        </li>
+        <li>
+            استفاده از timestamps و clocks در سیستم‌های distributed که در فصل 8 مورد بحث قرار دادیم (به "Relying on Synchronized Clocks" در صفحه 291 مراجعه کنید) یک تلاش دیگر برای معرفی order به یک دنیای بی‌نظم است، به عنوان مثال برای تعیین اینکه کدام یک از دو write بعداً اتفاق افتاده است.
+        </li>
+    </ul>
+    <p>
+        مشخص می‌شود که ارتباطات عمیقی بین ordering، linearizability و consensus وجود دارد. اگرچه این مفهوم کمی بیشتر از بقیه این کتاب، نظری و انتزاعی است، اما برای روشن کردن درک ما از آنچه سیستم‌ها می‌توانند و نمی‌توانند انجام دهند، بسیار مفید است. ما این موضوع را در چند بخش بعدی بررسی خواهیم کرد.
+    </p>
+
+    <h4>Ordering and Causality</h4>
+    <p>
+        دلایل متعددی وجود دارد که چرا ordering همچنان مطرح می‌شود، و یکی از دلایل این است که به حفظ causality کمک می‌کند. ما قبلاً چندین مثال را در طول این کتاب دیده‌ایم که causality در آن‌ها مهم بوده است:
+    </p>
+    <ul>
+        <li>
+            در "Consistent Prefix Reads" در صفحه 165 (شکل 5-5) ما مثالی را دیدیم که در آن ناظر یک مکالمه ابتدا پاسخ به یک سوال و سپس سوالی که به آن پاسخ داده می‌شود را مشاهده کرد. این گیج کننده است زیرا intuition ما از cause and effect را نقض می‌کند: اگر به سؤالی پاسخ داده شود، پس مشخص است که سؤال باید ابتدا وجود داشته باشد، زیرا شخصی که پاسخ را می‌دهد باید سؤال را دیده باشد (با فرض اینکه آن‌ها روانی نیستند و نمی‌توانند آینده را ببینند). ما می‌گوییم که یک causal dependency بین سوال و پاسخ وجود دارد.
+        </li>
+    </ul>
+    <p>
+        Ordering Guarantees | 339
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

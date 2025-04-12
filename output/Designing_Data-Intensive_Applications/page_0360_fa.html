@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 360</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        thing در مورد network delays، dead nodes، یا other trade-offs. بنابراین، اگرچه CAP از نظر تاریخی تأثیرگذار بوده است، اما ارزش عملی کمی برای طراحی سیستم‌ها دارد [9, 40].
+    </p>
+
+    <p>
+        نتایج غیرممکن جالب‌تری در سیستم‌های distributed وجود دارد [41]، و CAP اکنون با نتایج دقیق‌تری جایگزین شده است [2, 42]، بنابراین امروزه بیشتر مورد توجه تاریخی است.
+    </p>
+
+    <h4>Linearizability and network delays</h4>
+    <p>
+        اگرچه linearizability یک تضمین مفید است، اما در عمل سیستم‌های کمی واقعاً linearizable هستند. به عنوان مثال، حتی RAM در یک CPU multi-core مدرن linearizable نیست [43]: اگر یک thread که روی یک CPU core اجرا می‌شود به یک آدرس حافظه write کند، و یک thread روی CPU core دیگری اندکی پس از آن همان آدرس را بخواند، تضمین نمی‌شود که مقدار نوشته شده توسط اولین thread را بخواند (مگر اینکه از یک memory barrier یا fence [44] استفاده شود).
+    </p>
+
+    <p>
+        دلیل این رفتار این است که هر CPU core cache و store buffer حافظه خود را دارد. دسترسی به حافظه به طور پیش‌فرض ابتدا به cache می‌رود و هر گونه تغییری به صورت asynchronous به main memory نوشته می‌شود. از آنجایی که دسترسی به داده‌ها در cache بسیار سریعتر از رفتن به main memory است [45]، این ویژگی برای performance خوب در CPUهای مدرن ضروری است. با این حال، اکنون چندین کپی از داده‌ها وجود دارد (یکی در main memory، و شاید چندین مورد دیگر در cacheهای مختلف)، و این کپی‌ها به صورت asynchronous به‌روزرسانی می‌شوند، بنابراین linearizability از دست می‌رود.
+    </p>
+
+    <p>
+        چرا این trade-off را انجام دهیم؟ استفاده از the CAP theorem برای توجیه مدل consistency حافظه multi-core منطقی نیست: در یک کامپیوتر ما معمولاً ارتباط قابل اطمینان را فرض می‌کنیم، و ما انتظار نداریم که یک CPU core بتواند به طور معمول به کار خود ادامه دهد اگر از بقیه کامپیوتر قطع شده باشد. دلیل dropping linearizability performance است، نه fault tolerance.
+    </p>
+
+    <p>
+        همین امر در مورد بسیاری از distributed databases که انتخاب می‌کنند تا guarantees linearizable را ارائه ندهند، صدق می‌کند: آن‌ها این کار را در درجه اول برای افزایش performance انجام می‌دهند، نه چندان برای fault tolerance [46]. Linearizability کند است - و این همیشه صادق است، نه فقط در طول یک network fault.
+    </p>
+
+    <p>
+        آیا نمی‌توانیم یک پیاده‌سازی کارآمدتر از linearizable storage پیدا کنیم؟ به نظر می‌رسد پاسخ منفی است: Attiya و Welch [47] ثابت می‌کنند که اگر می‌خواهید linearizability، زمان پاسخگویی درخواست‌های read و write حداقل متناسب با عدم اطمینان از تاخیرها در شبکه است. در یک شبکه با تاخیرهای بسیار متغیر، مانند اکثر computer networks (به "Timeouts and Unbounded Delays" در صفحه 281 مراجعه کنید)، زمان پاسخگویی linearizable reads و writes به ناچار بالا خواهد بود. یک algorithm سریعتر برای linearizability وجود ندارد، اما weaker consistency models می‌توانند بسیار سریعتر باشند، بنابراین این trade-off برای سیستم‌های حساس به latency مهم است. در فصل 12 ما در مورد برخی از رویکردها برای اجتناب از linearizability بدون قربانی کردن correctness بحث خواهیم کرد.
+    </p>
+    <p>
+        338 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

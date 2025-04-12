@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 362</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <ul>
+        <li>
+            یک الگوی مشابه در شکل 5-9 ظاهر شد، جایی که ما به replication بین سه leader نگاه کردیم و متوجه شدیم که برخی از writes می‌توانند به دلیل network delays، دیگران را "overtake" کنند. از دیدگاه یکی از replicas به نظر می‌رسید که یک update برای یک row وجود دارد که وجود نداشته است. Causality در اینجا به این معنی است که یک row ابتدا باید ایجاد شود تا بتواند update شود.
+        </li>
+        <li>
+            در "Detecting Concurrent Writes" در صفحه 184 مشاهده کردیم که اگر شما دو عملیات A و B دارید، سه امکان وجود دارد: یا A قبل از B اتفاق افتاده است، یا B قبل از A اتفاق افتاده است، یا A و B concurrent هستند. این رابطه happened before، بیان دیگری از causality است: اگر A قبل از B اتفاق افتاده باشد، این بدان معناست که B ممکن است در مورد A بداند، یا بر اساس A ساخته شده باشد، یا به A وابسته باشد. اگر A و B concurrent باشند، هیچ پیوند causal بین آن‌ها وجود ندارد؛ به عبارت دیگر، ما مطمئن هستیم که هیچ یک از دیگری خبر نداشتند.
+        </li>
+        <li>
+            در context از snapshot isolation برای transactions ("Snapshot Isolation and Repeatable Read" در صفحه 237)، ما گفتیم که یک transaction از یک consistent snapshot می‌خواند. اما "consistent" در این context به چه معناست؟ این به معنای سازگاری با causality است: اگر snapshot شامل یک answer باشد، باید شامل question نیز باشد [48]. مشاهده کل database در یک نقطه زمانی واحد آن را با causality سازگار می‌کند: اثرات تمام عملیات‌هایی که به صورت causal قبل از آن نقطه زمانی اتفاق افتاده‌اند، قابل مشاهده هستند، اما هیچ عملیاتی که به صورت causal بعد از آن اتفاق افتاده است، قابل مشاهده نیست. Read skew (non-repeatable reads، همانطور که در شکل 7-6 نشان داده شده است) به معنای خواندن داده‌ها در حالتی است که causality را نقض می‌کند.
+        </li>
+        <li>
+            مثال‌های ما از write skew بین transactions (به "Write Skew and Phantoms" در صفحه 246 مراجعه کنید) نیز causal dependencies را نشان داد: در شکل 7-8، به آلیس اجازه داده شد که از call خارج شود زیرا transaction فکر می‌کرد که باب هنوز در call است، و بالعکس. در این مورد، عمل خارج شدن از call به observation از اینکه چه کسی در حال حاضر در call است، به صورت causal وابسته است. Serializable snapshot isolation (به "Serializable Snapshot Isolation (SSI)" در صفحه 261 مراجعه کنید) write skew را با ردیابی causal dependencies بین transactions شناسایی می‌کند.
+        </li>
+        <li>
+            در مثال آلیس و باب که فوتبال تماشا می‌کردند (شکل 9-1)، این واقعیت که باب پس از شنیدن exclamation آلیس، نتیجه‌ای stale از server دریافت کرد، یک causality violation است: exclamation آلیس به announcement از score به صورت causal وابسته است، بنابراین باب نیز باید بتواند score را پس از شنیدن آلیس ببیند. همان الگو دوباره در "Cross-channel timing dependencies" در صفحه 331 در guise از یک image resizing service ظاهر شد.
+        </li>
+    </ul>
+
+    <p>
+        Causality یک ordering را بر روی رویدادها تحمیل می‌کند: cause قبل از effect می‌آید؛ یک message قبل از دریافت آن message ارسال می‌شود؛ question قبل از answer می‌آید. و، مانند زندگی واقعی، یک چیز به چیز دیگر منجر می‌شود: یک node برخی از داده‌ها را می‌خواند و سپس در نتیجه چیزی می‌نویسد، node دیگری چیزی را که نوشته شده است می‌خواند و به نوبه خود چیز دیگری می‌نویسد و غیره. این زنجیره‌های causally dependent operations، causal order را در سیستم تعریف می‌کنند - یعنی چه چیزی قبل از چه چیزی اتفاق افتاده است.
+    </p>
+    <p>
+        340 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

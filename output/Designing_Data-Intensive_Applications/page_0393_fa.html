@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 393</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Failure detection</h4>
+    <p>
+        Clients یک session طولانی‌مدت را در ZooKeeper servers حفظ می‌کنند، و client و server به طور دوره‌ای heartbeats را تبادل می‌کنند تا بررسی کنند که node دیگر هنوز زنده است یا خیر.
+        حتی اگر connection به طور موقت قطع شود، یا یک ZooKeeper node شکست بخورد، session فعال باقی می‌ماند. با این حال، اگر heartbeats برای مدتی که طولانی‌تر از session timeout است متوقف شود، ZooKeeper اعلام می‌کند که session مرده است. هر locks که توسط یک session نگهداری می‌شود، می‌تواند پیکربندی شود تا به طور خودکار هنگامی که session timeout می‌شود، آزاد شود (ZooKeeper این‌ها را ephemeral nodes می‌نامد).
+    </p>
+
+    <h4>Change notifications</h4>
+    <p>
+        نه تنها یک client می‌تواند locks و values را که توسط یک client دیگر ایجاد شده‌اند، بخواند، بلکه می‌تواند آن‌ها را برای changes نیز مشاهده کند. بنابراین، یک client می‌تواند متوجه شود که چه زمانی یک client دیگر به cluster می‌پیوندد (بر اساس value که به ZooKeeper می‌نویسد)، یا اگر یک client دیگر شکست بخورد (زیرا session آن timeout می‌شود و ephemeral nodes آن ناپدید می‌شوند). با subscribing به notifications، یک client از poll کردن مکرر برای اطلاع از changes اجتناب می‌کند.
+    </p>
+
+    <p>
+        Of these features, only the linearizable atomic operations واقعاً به consensus نیاز دارند. با این حال، این ترکیب از این features است که systems مانند ZooKeeper را برای coordination distributed بسیار مفید می‌کند.
+    </p>
+
+    <h4>Allocating work to nodes</h4>
+    <p>
+        یک مثال که در آن the ZooKeeper/Chubby model به خوبی کار می‌کند، این است که اگر شما چندین instance از یک process یا service دارید، و یکی از آن‌ها نیاز دارد به عنوان leader یا primary انتخاب شود. اگر leader شکست بخورد، یکی از other nodes باید بر عهده بگیرد. این البته برای single-leader databases مفید است، اما برای job schedulers و similar stateful systems نیز مفید است.
+    </p>
+
+    <p>
+        مثال دیگری زمانی پیش می‌آید که شما مقداری از resource partitioned (database، message streams، file storage، distributed actor system، و غیره) را دارید و نیاز دارید که تصمیم بگیرید که کدام partition را به کدام node اختصاص دهید. با پیوستن nodesهای جدید به cluster، برخی از partitions نیاز دارند که از nodes موجود به nodesهای جدید منتقل شوند تا load را rebalance کنند (به "Rebalancing Partitions" در صفحه 209 مراجعه کنید). با حذف یا failure nodes، other nodes نیاز دارند که کار nodesهای شکست خورده را بر عهده بگیرند.
+    </p>
+
+    <p>
+        این نوع از tasks را می‌توان با استفاده صحیح از atomic operations, ephemeral nodes، و notifications در ZooKeeper به دست آورد. اگر به درستی انجام شود، این رویکرد به application اجازه می‌دهد تا به طور خودکار از faults بدون human intervention بازیابی شود. این آسان نیست، با وجود ظاهر libraries مانند Apache Curator [17] که برای ارائه ابزارهای سطح بالاتر بر روی ZooKeeper client API ظاهر شده‌اند - اما هنوز هم بسیار بهتر از تلاش برای پیاده‌سازی الگوریتم‌های consensus لازم از ابتدا است، که یک record موفقیت‌آمیز ضعیف دارد [107].
+    </p>
+    <p>
+        Distributed Transactions and Consensus | 371
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

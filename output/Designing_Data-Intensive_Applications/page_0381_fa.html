@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 381</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <figure>
+        <img src="figure9-10.png" alt="شکل 9-10">
+        <figcaption>
+            شکل 9-10. The coordinator crashes بعد از اینکه participants به "yes" رأی دادند. Database 1 نمی‌داند که آیا commit کند یا abort.
+        </figcaption>
+    </figure>
+
+    <p>
+        بدون شنیدن از the coordinator، the participant هیچ راهی برای دانستن اینکه آیا commit کند یا abort ندارد. در اصل، participants می‌توانند با یکدیگر ارتباط برقرار کنند تا متوجه شوند که هر participant چگونه رأی داده است و به نوعی توافق برسند، اما این بخشی از 2PC protocol نیست.
+    </p>
+
+    <p>
+        تنها راهی که 2PC می‌تواند تکمیل شود، انتظار برای بازیابی the coordinator است. به همین دلیل است که the coordinator باید تصمیم commit یا abort خود را به یک transaction log بر روی disk قبل از ارسال commit یا abort requests به participants بنویسد: هنگامی که the coordinator بازیابی می‌شود، status از همه in-doubt transactions را با خواندن the transaction log خود تعیین می‌کند. هر transactions که یک commit record در the coordinator’s log نداشته باشد، aborted می‌شوند. بنابراین، commit point از 2PC به یک single-node atomic commit منظم در the coordinator می‌رسد.
+    </p>
+
+    <h4>Three-phase commit</h4>
+    <p>
+        Two-phase commit به دلیل این واقعیت که 2PC می‌تواند در انتظار بازیابی the coordinator گیر کند، یک blocking atomic commit protocol نامیده می‌شود. از نظر تئوری، ممکن است یک atomic commit protocol را nonblocking کنیم، به طوری که اگر یک node شکست بخورد، گیر نکند. با این حال، عملی کردن این کار در عمل چندان ساده نیست.
+    </p>
+
+    <p>
+        به عنوان یک جایگزین برای 2PC، یک algorithm به نام three-phase commit (3PC) پیشنهاد شده است [13, 80]. با این حال، 3PC یک شبکه با bounded delay و nodes با bounded response times را فرض می‌کند؛ در اکثر سیستم‌های عملی با unbounded network delay و process pauses (به فصل 8 مراجعه کنید)، نمی‌تواند atomicity را تضمین کند.
+    </p>
+
+    <p>
+        به طور کلی، nonblocking atomic commit به یک perfect failure detector نیاز دارد [67, 71] - یعنی، یک mechanism قابل اعتماد برای گفتن اینکه آیا یک node crash کرده است یا نه. در یک شبکه با unbounded delay، یک timeout یک failure detector قابل اعتماد نیست، زیرا یک request ممکن است به دلیل یک network problem timeout شود، حتی اگر هیچ node crash نکرده باشد. به همین دلیل، 2PC همچنان مورد استفاده قرار می‌گیرد، با وجود مشکل شناخته شده با the coordinator failure.
+    </p>
+    <p>
+        Distributed Transactions and Consensus | 359
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0381/image_1.png" alt="Image from page 381" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

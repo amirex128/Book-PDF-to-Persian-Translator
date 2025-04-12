@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 374</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        with Lamport timestamps—در واقع، این تفاوت اصلی بین total order broadcast و timestamp ordering است.
+    </p>
+
+    <p>
+        چقدر سخت می‌تواند باشد که یک integer linearizable را با یک atomic increment-and-get operation بسازیم؟ طبق معمول، اگر همه چیز هرگز شکست نمی‌خورد، این کار آسان خواهد بود: شما می‌توانید آن را فقط در یک variable در یک node نگه دارید. مشکل در handling این وضعیت است که network connections به آن node قطع می‌شوند، و بازیابی مقدار زمانی که آن node دچار failure می‌شود [59]. به طور کلی، اگر شما به اندازه کافی در مورد linearizable sequence number generators فکر کنید، شما ناگزیر به یک consensus algorithm می‌رسید.
+    </p>
+
+    <p>
+        این تصادفی نیست: می‌توان ثابت کرد که یک linearizable compare-and-set (یا increment-and-get) register و total order broadcast هر دو معادل consensus [28, 67] هستند. یعنی اگر شما می‌توانید یکی از این مشکلات را حل کنید، شما می‌توانید آن را به یک راه‌حل برای دیگران تبدیل کنید. این یک insight بسیار عمیق و شگفت‌انگیز است!
+    </p>
+
+    <p>
+        وقت آن است که در نهایت مشکل consensus را مستقیماً حل کنیم، که این کار را در بقیه این فصل انجام خواهیم داد.
+    </p>
+
+    <h4>Distributed Transactions and Consensus</h4>
+    <p>
+        Consensus یکی از مهم‌ترین و اساسی‌ترین مشکلات در distributed computing است. در ظاهر، ساده به نظر می‌رسد: به طور غیررسمی، هدف این است که چندین node در مورد چیزی توافق کنند. شما ممکن است فکر کنید که این نباید خیلی سخت باشد.
+    </p>
+
+    <p>
+        متأسفانه، بسیاری از سیستم‌های خراب در این باور اشتباه ساخته شده‌اند که این مشکل حل آن آسان است.
+    </p>
+
+    <p>
+        اگرچه consensus بسیار مهم است، اما بخش مربوط به آن در این کتاب دیر ظاهر می‌شود زیرا این موضوع کاملاً ظریف است، و قدردانی از ظرافت‌ها به برخی دانش قبلی نیاز دارد. حتی در جامعه تحقیقاتی آکادمیک، درک consensus تنها به تدریج در طول دهه‌ها متبلور شد، با سوء تفاهم‌های بسیاری در طول مسیر. اکنون که ما در مورد replication (فصل 5)، transactions (فصل 7)، system models (فصل 8)، linearizability، و total order broadcast (این فصل) بحث کرده‌ایم، ما در نهایت آماده هستیم تا مشکل consensus را حل کنیم.
+    </p>
+
+    <p>
+        تعدادی از موقعیت‌ها وجود دارد که در آن‌ها برای nodes مهم است که توافق کنند. به عنوان مثال:
+    </p>
+    <ul>
+        <li>Leader election
+            <p>
+                در یک database با single-leader replication، همه nodes نیاز دارند که در مورد اینکه کدام node leader است، توافق کنند. اگر برخی از nodes به دلیل یک network fault نمی‌توانند با دیگران ارتباط برقرار کنند، موقعیت leadership ممکن است مورد مناقشه قرار گیرد. در این حالت، consensus برای جلوگیری از یک failover بد، که منجر به یک split brain situation می‌شود که در آن دو nodes هر دو معتقدند که خودشان leader هستند (به "Handling Node Outages" در صفحه 156 مراجعه کنید)، مهم است. اگر دو leader وجود داشت، آن‌ها هر دو writes را قبول می‌کردند و داده‌های آن‌ها واگرا می‌شد، که منجر به inconsistency و data loss می‌شود.
+            </p>
+        </li>
+    </ul>
+    <p>
+        352 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

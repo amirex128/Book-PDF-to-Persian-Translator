@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 392</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>Membership and Coordination Services</h4>
+    <p>
+        پروژه‌هایی مانند ZooKeeper یا etcd اغلب به عنوان "distributed key-value stores" یا "coordination and configuration services" توصیف می‌شوند. The API از چنین serviceای تقریباً شبیه به database است: شما می‌توانید مقدار یک کلید داده شده را بخوانید و بنویسید، و در keys تکرار کنید. بنابراین اگر آن‌ها اساساً databases هستند، چرا همه تلاش‌ها را برای پیاده‌سازی یک consensus algorithm انجام می‌دهند؟ چه چیزی آن‌ها را از هر نوع دیگری از database متمایز می‌کند؟
+    </p>
+
+    <p>
+        برای درک این موضوع، مفید است که به طور خلاصه بررسی کنیم که چگونه یک service مانند ZooKeeper استفاده می‌شود. به عنوان یک application developer، شما به ندرت نیاز دارید که مستقیماً از ZooKeeper استفاده کنید، زیرا در واقع برای یک database با هدف عمومی مناسب نیست. این احتمال وجود دارد که شما به طور غیرمستقیم از آن از طریق برخی از پروژه‌های دیگر استفاده کنید: به عنوان مثال، HBase، Hadoop YARN، OpenStack Nova، و Kafka همگی به ZooKeeper که در background در حال اجرا است، متکی هستند. این پروژه‌ها از آن چه چیزی به دست می‌آورند؟
+    </p>
+
+    <p>
+        ZooKeeper و etcd برای نگهداری مقادیر کمی از داده‌ها طراحی شده‌اند که می‌توانند کاملاً در حافظه قرار گیرند (اگرچه آن‌ها هنوز هم برای durability به disk می‌نویسند) - بنابراین شما نمی‌خواهید تمام داده‌های application خود را در اینجا ذخیره کنید. آن مقدار کمی از داده‌ها با استفاده از یک fault-tolerant total order broadcast algorithm در سراسر تمام nodes replicated می‌شوند. همانطور که قبلاً بحث شد، total order broadcast دقیقاً همان چیزی است که شما برای database replication نیاز دارید: اگر هر message نشان‌دهنده یک write به database باشد، اعمال همان writes به همان ترتیب، replicas را با یکدیگر consistent نگه می‌دارد.
+    </p>
+
+    <p>
+        ZooKeeper بر اساس سرویس قفل Google’s Chubby [14, 98] مدل‌سازی شده است، که نه تنها total order broadcast (و از این رو consensus)، بلکه یک set جالب از other features را پیاده‌سازی می‌کند که در ساختن distributed systems بسیار مفید هستند:
+    </p>
+    <ul>
+        <li>Linearizable atomic operations
+            <p>
+                با استفاده از یک atomic compare-and-set operation، شما می‌توانید یک lock را پیاده‌سازی کنید: اگر چندین node به طور concurrent سعی کنند همان operation را انجام دهند، فقط یکی از آن‌ها موفق خواهد شد. The consensus protocol تضمین می‌کند که operation atomic و linearizable خواهد بود، حتی اگر یک node شکست بخورد یا شبکه در هر نقطه قطع شود. A distributed lock معمولاً به عنوان یک lease پیاده‌سازی می‌شود، که یک زمان انقضا دارد تا در صورت شکست client (به "Process Pauses" در صفحه 295 مراجعه کنید) در نهایت آزاد شود.
+            </p>
+        </li>
+        <li>Total ordering of operations
+            <p>
+                همانطور که در "The leader and the lock" در صفحه 301 بحث شد، هنگامی که برخی از منابع توسط یک lock یا lease محافظت می‌شوند، شما به یک fencing token نیاز دارید تا از conflicting با یکدیگر در صورت یک process pause جلوگیری کنید. The fencing token، یک number است که هر بار lock acquired می‌شود، به طور monotonically افزایش می‌یابد. ZooKeeper این را با total ordering کردن تمام operations و دادن به هر operation یک transaction ID (zxid) و version number (cversion) که monotonically increasing است، فراهم می‌کند [15].
+            </p>
+        </li>
+    </ul>
+    <p>
+        370 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

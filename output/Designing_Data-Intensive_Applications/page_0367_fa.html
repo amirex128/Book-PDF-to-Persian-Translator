@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 367</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>viii. It is possible to make physical clock timestamps consistent with causality</h4>
+    <p>
+        ممکن است که physical clock timestamps را با causality سازگار کرد: در "Synchronized clocks for global snapshots" در صفحه 294 ما در مورد Spanner گوگل بحث کردیم، که clock skew مورد انتظار را تخمین می‌زند و قبل از commit کردن یک write، interval عدم اطمینان را انتظار می‌کشد. این روش تضمین می‌کند که به یک transaction که به صورت causal later شده است، یک timestamp بزرگتر داده می‌شود. با این حال، بیشتر clocks نمی‌توانند metric عدم اطمینان مورد نیاز را ارائه دهند.
+    </p>
+
+    <p>
+        the block از 1001 تا 2000. سپس هر node می‌تواند به طور مستقل sequence numbers را از block خود اختصاص دهد، و زمانی که supply از sequence numbers شروع به کم شدن می‌کند، یک block جدید اختصاص دهد.
+    </p>
+
+    <p>
+        این سه گزینه همگی عملکرد بهتری دارند و مقیاس‌پذیرتر از push کردن تمام operations از طریق یک leader واحد که یک counter را افزایش می‌دهد، هستند. آن‌ها یک sequence number منحصر به فرد و تقریباً افزایشی را برای هر operation تولید می‌کنند. با این حال، همه آن‌ها یک مشکل دارند: sequence numbers که تولید می‌کنند با causality سازگار نیستند.
+    </p>
+
+    <p>
+        مشکلات causality رخ می‌دهد زیرا این sequence number generators به درستی ordering از operations در سراسر nodesهای مختلف را capture نمی‌کنند:
+    </p>
+    <ul>
+        <li>
+            هر node ممکن است تعداد متفاوتی از operations را در هر ثانیه پردازش کند. بنابراین، اگر یک node اعداد زوج و دیگری اعداد فرد را تولید کند، counter برای اعداد زوج ممکن است از counter برای اعداد فرد عقب بماند، یا بالعکس. اگر شما یک operation با شماره فرد و یک operation با شماره زوج دارید، شما نمی‌توانید با دقت بگویید کدام یک به صورت causal اول اتفاق افتاده است.
+        </li>
+        <li>
+            Timestamps از physical clocks، subject to clock skew هستند، که می‌تواند آن‌ها را با causality ناسازگار کند. به عنوان مثال، به شکل 8-3 مراجعه کنید، که سناریویی را نشان می‌دهد که در آن به یک operation که به صورت causal later اتفاق افتاده است، در واقع یک timestamp کمتری اختصاص داده شد.viii
+        </li>
+        <li>
+            در مورد block allocator، ممکن است به یک operation یک sequence number در محدوده 1001 تا 2000 داده شود، و به یک operation که به صورت causal later شده است، ممکن است یک عدد در محدوده 1 تا 1000 داده شود. در اینجا، دوباره، sequence number با causality ناسازگار است.
+        </li>
+    </ul>
+
+    <h4>Lamport timestamps</h4>
+    <p>
+        اگرچه سه sequence number generators که تازه توضیح داده شدند، با causality ناسازگار هستند، اما در واقع یک روش ساده برای تولید sequence numbers وجود دارد که با causality سازگار است. این روش، Lamport timestamp نامیده می‌شود، که در سال 1978 توسط Leslie Lamport [56] پیشنهاد شد، که اکنون یکی از مقالات پر استناد در زمینه سیستم‌های distributed است.
+    </p>
+
+    <p>
+        استفاده از Lamport timestamps در شکل 9-8 نشان داده شده است. هر node یک unique identifier دارد، و هر node یک counter از تعداد operations که پردازش کرده است، نگهداری می‌کند. سپس Lamport timestamp به سادگی یک جفت (counter, node ID) است. Two
+    </p>
+    <p>
+        Ordering Guarantees | 345
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

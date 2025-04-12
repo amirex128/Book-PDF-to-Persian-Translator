@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 366</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>vii. A total order that is inconsistent with causality</h4>
+    <p>
+        یک total order که با causality ناسازگار است، به راحتی ایجاد می‌شود، اما خیلی مفید نیست. به عنوان مثال، شما می‌توانید یک UUID تصادفی برای هر operation تولید کنید، و UUIDها را lexicographically مقایسه کنید تا total ordering از operations را تعریف کنید. این یک total order معتبر است، اما UUIDهای تصادفی به شما چیزی در مورد اینکه کدام operation واقعاً اول اتفاق افتاده است، یا اینکه آیا operations concurrent بوده‌اند یا نه، نمی‌گویند.
+    </p>
+
+    <p>
+        چنین sequence numbers یا timestamps فشرده هستند (فقط چند بایت اندازه دارند)، و آن‌ها یک total order ارائه می‌دهند: یعنی هر operation یک sequence number منحصر به فرد دارد، و شما همیشه می‌توانید دو sequence numbers را مقایسه کنید تا تعیین کنید کدام یک بزرگتر است (یعنی کدام operation بعداً اتفاق افتاده است).
+    </p>
+
+    <p>
+        به طور خاص، ما می‌توانیم sequence numbers را در یک total order ایجاد کنیم که با causality سازگار است:vii ما قول می‌دهیم که اگر operation A به صورت causal قبل از B اتفاق افتاده باشد، پس A قبل از B در total order رخ می‌دهد (A یک sequence number کمتر از B دارد). Operations concurrent ممکن است به طور دلخواه order شوند. چنین total order تمام اطلاعات causality را capture می‌کند، اما همچنین ordering بیشتری را نسبت به آنچه دقیقاً توسط causality مورد نیاز است، تحمیل می‌کند.
+    </p>
+
+    <p>
+        در یک database با single-leader replication (به "Leaders and Followers" در صفحه 152 مراجعه کنید)، replication log یک total order از write operations را تعریف می‌کند که با causality سازگار است. leader می‌تواند به سادگی یک counter را برای هر operation افزایش دهد، و در نتیجه یک sequence number monotonically increasing را به هر operation در replication log اختصاص دهد. اگر یک follower، writes را به ترتیبی که در replication log ظاهر می‌شوند اعمال کند، حالت follower همیشه causally consistent است (حتی اگر از leader عقب باشد).
+    </p>
+
+    <h4>Noncausal sequence number generators</h4>
+    <p>
+        اگر یک single leader وجود نداشته باشد (شاید به این دلیل که شما از یک multi-leader یا leaderless database استفاده می‌کنید، یا به این دلیل که database partitioned است)، مشخص نیست که چگونه sequence numbers را برای operations تولید کنید. روش‌های مختلفی در عمل استفاده می‌شود:
+    </p>
+    <ul>
+        <li>
+            هر node می‌تواند مجموعه sequence numbers خود را به طور independent تولید کند. به عنوان مثال، اگر شما دو node دارید، یک node می‌تواند فقط اعداد فرد و دیگری فقط اعداد زوج را تولید کند. به طور کلی، شما می‌توانید برخی از بیت‌ها را در نمایش باینری sequence number ذخیره کنید تا یک unique node identifier را شامل شود، و این تضمین می‌کند که دو node مختلف هرگز نمی‌توانند یک sequence number یکسان را تولید کنند.
+        </li>
+        <li>
+            شما می‌توانید یک timestamp از یک time-of-day clock (physical clock) را به هر operation متصل کنید [55]. چنین timestamps sequential نیستند، اما اگر آن‌ها resolution به اندازه کافی بالایی داشته باشند، ممکن است برای total order operations کافی باشند. این واقعیت در روش last write wins conflict resolution استفاده می‌شود (به "Timestamps for ordering events" در صفحه 291 مراجعه کنید).
+        </li>
+        <li>
+            شما می‌توانید بلوک‌هایی از sequence numbers را preallocate کنید. به عنوان مثال، node A ممکن است بلوک sequence numbers از 1 تا 1000 را ادعا کند، و node B ممکن است ادعا کند
+    </li>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

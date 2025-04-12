@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 378</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <figure>
+        <img src="figure9-9.png" alt="شکل 9-9" style="max-width: 100%;">
+        <figcaption>
+            شکل 9-9. A successful execution of two-phase commit (2PC).
+        </figcaption>
+    </figure>
+
+    <p>
+        Don’t confuse 2PC and 2PL
+        Two-phase commit (2PC) و two-phase locking (به "Two-Phase Locking (2PL)" در صفحه 257 مراجعه کنید) دو چیز بسیار متفاوت هستند. 2PC، atomic commit را در یک distributed database فراهم می‌کند، در حالی که 2PL، serializable isolation را فراهم می‌کند. برای جلوگیری از سردرگمی، بهتر است آن‌ها را به عنوان مفاهیم کاملاً جداگانه در نظر بگیریم و از شباهت نامناسب در نام‌ها صرف نظر کنیم.
+    </p>
+
+    <p>
+        2PC از یک component جدید استفاده می‌کند که معمولاً در single-node transactions ظاهر نمی‌شود: یک coordinator (همچنین به عنوان transaction manager شناخته می‌شود). The coordinator اغلب به عنوان یک library در داخل همان application process که درخواست transaction را دارد، پیاده‌سازی می‌شود (به عنوان مثال، در یک Java EE container تعبیه شده است)، اما می‌تواند یک process یا service جداگانه نیز باشد. نمونه‌هایی از این coordinators شامل Narayana, JOTM, BTM, یا MSDTC است.
+    </p>
+
+    <p>
+        یک 2PC transaction با خواندن و نوشتن داده‌ها توسط application در چندین database nodes، به طور معمول، آغاز می‌شود. ما به این database nodes، participants در transaction می‌گوییم. هنگامی که application آماده commit کردن است، the coordinator فاز 1 را شروع می‌کند: آن یک prepare request را به هر یک از nodes ارسال می‌کند، و از آن‌ها می‌پرسد که آیا آن‌ها قادر به commit کردن هستند یا خیر. سپس the coordinator، responses از participants را ردیابی می‌کند:
+    </p>
+    <ul>
+        <li>
+            اگر همه participants پاسخ "yes" دهند، که نشان می‌دهد آن‌ها آماده commit کردن هستند، سپس the coordinator یک commit request را در فاز 2 ارسال می‌کند، و commit در واقع اتفاق می‌افتد.
+        </li>
+        <li>
+            اگر هر یک از participants پاسخ "no" دهند، the coordinator یک abort request را در فاز 2 به همه nodes ارسال می‌کند.
+        </li>
+    </ul>
+    <p>
+        این process تا حدودی شبیه مراسم ازدواج سنتی در فرهنگ‌های غربی است: minister از عروس و داماد جداگانه می‌پرسد که آیا هر یک می‌خواهد با دیگری ازدواج کند، و معمولاً پاسخ "I do" را از هر دو دریافت می‌کند. After receiving both
+    </p>
+    <p>
+        356 | Chapter 9: Consistency and Consensus
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0378/image_1.png" alt="Image from page 378" /></div>
+<div class="page-image"><img src="page_0378/image_2.png" alt="Image from page 378" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
