@@ -38,7 +38,7 @@
 - [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Designing_distributed_systems_patterns.pdf)
 
 
-
+و به زودی کتاب های بیشتر
 
 # مترجم PDF به فارسی
 
