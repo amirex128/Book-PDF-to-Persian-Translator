@@ -24,11 +24,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build static site  # Add your build step here
+      - name: Build static site
         run: |
-          # Add your build commands here, for example:
           npm install
           npm run build
+
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      - name: Compress images and reorganize folders
+        run: |
+          # Create compressed output directory
+          mkdir -p output_compressed
+          
+          # Copy all files from output to output_compressed
+          cp -r output/* output_compressed/
+          
+          # Find and compress all images (jpg, jpeg, png)
+          find output_compressed -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -exec mogrify -strip -quality 80 {} \;
+          
+          # Remove original output folder
+          rm -rf output
+          
+          # Rename compressed folder to output
+          mv output_compressed output
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -36,8 +55,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload only the built directory
-          path: 'dist/'  # Replace with your build output directory (e.g., 'build/', 'out/', 'public/')
+          path: 'output/'  # Changed from 'dist/' to 'output/'
 
       - name: Deploy to GitHub Pages
         id: deployment
