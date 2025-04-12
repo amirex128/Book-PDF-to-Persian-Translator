@@ -1,0 +1,41 @@
+The parsing of each record (i.e., a line of input) is more vague. Unix tools commonly
+split a line into fields by whitespace or tab characters, but CSV (comma-separated),
+pipe-separated, and other encodings are also used. Even a fairly simple tool like
+xargs has half a dozen command-line options for specifying how its input should be
+parsed.
+The uniform interface of ASCII text mostly works, but it’s not exactly beautiful: our
+log analysis example used {print $7} to extract the URL, which is not very readable.
+In an ideal world this could have perhaps been {print $request_url} or something
+of that sort. We will return to this idea later.
+Although it’s not perfect, even decades later, the uniform interface of Unix is still
+something remarkable. Not many pieces of software interoperate and compose as
+well as Unix tools do: you can’t easily pipe the contents of your email account and
+your online shopping history through a custom analysis tool into a spreadsheet and
+post the results to a social network or a wiki. Today it’s an exception, not the norm,
+to have programs that work together as smoothly as Unix tools do.
+Even databases with the same data model often don’t make it easy to get data out of
+one and into the other. This lack of integration leads to Balkanization of data.
+Separation of logic and wiring
+Another characteristic feature of Unix tools is their use of standard input (stdin) and
+standard output (stdout). If you run a program and don’t specify anything else,
+stdin comes from the keyboard and stdout goes to the screen. However, you can
+also take input from a file and/or redirect output to a file. Pipes let you attach the
+stdout of one process to the stdin of another process (with a small in-memory
+buffer, and without writing the entire intermediate data stream to disk).
+A program can still read and write files directly if it needs to, but the Unix approach
+works best if a program doesn’t worry about particular file paths and simply uses
+stdin and stdout. This allows a shell user to wire up the input and output in what‐
+ever way they want; the program doesn’t know or care where the input is coming
+from and where the output is going to. (One could say this is a form of loose coupling,
+late binding [15], or inversion of control [16].) Separating the input/output wiring
+from the program logic makes it easier to compose small tools into bigger systems.
+You can even write your own programs and combine them with the tools provided
+by the operating system. Your program just needs to read input from stdin and write
+output to stdout, and it can participate in data processing pipelines. In the log analy‐
+sis example, you could write a tool that translates user-agent strings into more sensi‐
+ble browser identifiers, or a tool that translates IP addresses into country codes, and
+simply plug it into the pipeline. The sort program doesn’t care whether it’s commu‐
+nicating with another part of the operating system or with a program written by you.
+396 
+| 
+Chapter 10: Batch Processing

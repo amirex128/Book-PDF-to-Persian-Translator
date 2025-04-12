@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 517</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        خروجی‌های مناسب. پردازنده‌های <strong>batch</strong> و <strong>stream</strong>
+        ابزارهایی برای دستیابی به این هدف هستند.
+    </p>
+    <p>
+        خروجی‌های فرآیندهای <strong>batch</strong> و <strong>stream</strong>
+        مجموعه‌داده‌های مشتق شده مانند <strong>search indexes</strong>،
+        <strong>materialized views</strong>، توصیه‌هایی برای نشان دادن به
+        کاربران، معیارهای تجمعی و غیره هستند (نگاه کنید به "خروجی جریان‌های
+        کاری <strong>Batch</strong>" در صفحه 411 و "موارد استفاده از پردازش
+        <strong>Stream</strong>" در صفحه 465).
+    </p>
+    <p>
+        همان‌طور که در فصل 10 و فصل 11 دیدیم، پردازش <strong>batch</strong> و
+        <strong>stream</strong>، اصول مشترک زیادی دارند، و تفاوت اساسی اصلی
+        این است که پردازنده‌های <strong>stream</strong> بر روی مجموعه‌داده‌های
+        <em>unbounded</em> عمل می‌کنند در حالی که ورودی‌های فرآیند <strong>batch</strong>
+        دارای اندازه‌ی مشخص و متناهی هستند. همچنین تفاوت‌های
+        جزئی زیادی در روش‌های پیاده‌سازی موتورهای پردازش وجود دارد، اما این
+        تمایزها در حال محو شدن هستند.
+    </p>
+    <p>
+        <strong>Spark</strong>، پردازش <strong>stream</strong> را بر روی یک موتور پردازش
+        <strong>batch</strong> با تقسیم <strong>stream</strong> به <strong>microbatches</strong>
+        انجام می‌دهد، در حالی که <strong>Apache Flink</strong>، پردازش <strong>batch</strong>
+        را بر روی یک موتور پردازش <strong>stream</strong> انجام می‌دهد [5]. در
+        اصل، یک نوع از پردازش را می‌توان بر روی دیگری شبیه‌سازی کرد، اگرچه
+        ویژگی‌های عملکردی متفاوت است: به عنوان مثال، <strong>microbatching</strong>
+        ممکن است در <strong>hopping</strong> یا <strong>sliding windows</strong> عملکرد
+        ضعیفی داشته باشد [6].
+    </p>
+
+    <h4>حفظ <strong>state</strong> مشتق شده</h4>
+    <p>
+        پردازش <strong>batch</strong> دارای یک طعم عملکردی بسیار قوی است (حتی اگر
+        کد به زبان برنامه‌نویسی <em>functional</em> نوشته نشده باشد): توابع
+        <em>deterministic</em> و خالص را تشویق می‌کند که خروجی آن‌ها فقط به
+        ورودی بستگی دارد و هیچ اثر جانبی دیگری به‌جز خروجی‌های صریح
+        ندارند، ورودی‌ها را به‌عنوان <em>immutable</em> و خروجی‌ها را
+        <em>append-only</em> در نظر می‌گیرند.
+    </p>
+    <p>
+        پردازش <strong>stream</strong> مشابه است، اما <strong>operators</strong> را
+        برای اجازه دادن به <strong>state</strong> مدیریت شده و تحمل خطا
+        (نگاه کنید به "بازسازی <strong>state</strong> پس از یک <strong>failure</strong>" در
+        صفحه 478) گسترش می‌دهد.
+    </p>
+    <p>
+        اصل توابع <em>deterministic</em> با ورودی‌ها و خروجی‌های مشخص
+        نه‌تنها برای تحمل خطا خوب است (نگاه کنید به "<strong>Idempotence</strong>"
+        در صفحه 478)، بلکه استدلال در مورد <strong>dataflows</strong> در یک
+        سازمان را نیز ساده می‌کند [7]. مهم نیست که داده‌های مشتق شده یک
+        index جستجو، یک مدل آماری، یا یک <strong>cache</strong> باشد، این مفید
+        است که به <strong>data pipelines</strong> فکر کنیم که یک چیز را از دیگری
+        مشتق می‌کنند، تغییرات <strong>state</strong> را در یک سیستم از طریق کد
+        برنامه عملکردی <em>push</em> می‌کنند و اثرات را در سیستم‌های
+        مشتق شده اعمال می‌کنند.
+    </p>
+    <p>
+        در اصل، سیستم‌های داده‌ی مشتق شده می‌توانند به‌صورت
+        <em>synchronously</em> نگه‌داری شوند، درست مانند این‌که یک پایگاه داده
+        رابطه‌ای <strong>indexes</strong> ثانویه را به‌صورت <em>synchronously</em>
+        در داخل همان تراکنش به‌عنوان <strong>writes</strong> در جدولی که
+        <strong>indexed</strong> می‌شود، به‌روزرسانی می‌کند. با این حال،
+        <em>asynchrony</em> همان چیزی است که سیستم‌های مبتنی بر
+        <strong>event logs</strong> را <strong>robust</strong> می‌سازد: به یک خطا در یک
+        بخش از سیستم اجازه می‌دهد که به‌صورت محلی مهار شود، در حالی
+        که تراکنش‌های توزیع شده در صورت شکست هر یک از شرکت‌کنندگان
+        متوقف می‌شوند، بنابراین آن‌ها تمایل به تقویت <strong>failures</strong> با
+        گسترش آن‌ها به بقیه‌ی سیستم دارند (نگاه کنید به "محدودیت‌های
+        تراکنش‌های توزیع شده" در صفحه 363).
+    </p>
+    <p>
+        ما در "<strong>Partitioning</strong> و <strong>Secondary Indexes</strong>" در صفحه
+        206 دیدیم که <strong>indexes</strong> ثانویه اغلب از مرزهای <strong>partition</strong>
+        عبور می‌کنند. یک سیستم تقسیم‌بندی شده با <strong>indexes</strong> ثانویه یا
+        پایگاه داده‌های
+        495
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

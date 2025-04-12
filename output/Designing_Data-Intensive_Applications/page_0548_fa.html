@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 548</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        عملکرد و استحکام عملیاتی. ما این <strong>integrity</strong> را از طریق ترکیبی
+        از مکانیسم‌ها به‌دست آوردیم:
+    </p>
+    <ul>
+        <li>
+            نشان دادن محتوای عملیات <strong>write</strong> به عنوان یک پیام واحد،
+            که به‌راحتی می‌تواند به‌صورت <em>atomically</em> نوشته شود—رویکردی
+            که با <strong>event sourcing</strong> بسیار خوب مطابقت دارد
+            (نگاه کنید به "<strong>Event Sourcing</strong>" در صفحه 457)
+        </li>
+        <li>
+            استخراج تمام به‌روزرسانی‌های <strong>state</strong> دیگر از آن پیام
+            واحد با استفاده از توابع استخراج <em>deterministic</em>، مشابه
+            <strong>stored procedures</strong> (نگاه کنید به "اجرای سریال
+            واقعی" در صفحه 252 و "کد برنامه به عنوان یک تابع مشتق شده"
+            در صفحه 505)
+        </li>
+        <li>
+            ارسال یک <strong>request ID</strong> تولید شده توسط <strong>client</strong> از
+            طریق تمام این سطوح پردازش، که امکان سرکوب تکراری و
+            <strong>idempotence</strong> <em>end-to-end</em> را فراهم
+            می‌کند
+        </li>
+        <li>
+            ساختن پیام‌ها <em>immutable</em> و اجازه دادن به <strong>data</strong> مشتق
+            شده تا هر از چند گاهی دوباره پردازش شود، که بازیابی از
+            <strong>bugs</strong> را آسان‌تر می‌کند (نگاه کنید به "مزایای رویدادهای
+            <em>immutable</em>" در صفحه 460)
+        </li>
+    </ul>
+    <p>
+        به نظر من این ترکیب از مکانیسم‌ها، یک جهت بسیار امیدوارکننده
+        برای ساخت برنامه‌های تحمل‌کننده‌ی خطا در آینده است.
+    </p>
+
+    <h4>محدودیت‌های تفسیر شده‌ی آزاد</h4>
+    <p>
+        همان‌طور که قبلاً بحث شد، اعمال یک <strong>uniqueness constraint</strong>
+        نیازمند <strong>consensus</strong> است، که معمولاً با انتقال تمام
+        رویدادها در یک <strong>partition</strong> خاص از طریق یک <strong>node</strong>
+        واحد پیاده‌سازی می‌شود. این محدودیت اجتناب‌ناپذیر است اگر ما
+        شکل سنتی <strong>uniqueness constraint</strong> را بخواهیم، و پردازش
+        <strong>stream</strong> نمی‌تواند از آن اجتناب کند.
+    </p>
+    <p>
+        با این حال، نکته‌ی دیگری که باید متوجه شد این است که بسیاری از
+        برنامه‌های واقعی می‌توانند در واقع از مفاهیم ضعیف‌تری از
+        <strong>uniqueness</strong> استفاده کنند:
+    </p>
+    <ul>
+        <li>
+            اگر دو نفر به‌طور همزمان همان نام کاربری را ثبت کنند یا همان
+            صندلی را رزرو کنند، شما می‌توانید به یکی از آن‌ها پیامی برای
+            عذرخواهی ارسال کنید، و از آن‌ها بخواهید که یکی دیگر را انتخاب
+            کنند. این نوع تغییر برای اصلاح یک اشتباه، یک تراکنش
+            <em>compensating</em> نامیده می‌شود [59، 60].
+        </li>
+        <li>
+            اگر مشتریان بیش از آن‌چه در انبار دارید، کالا سفارش دهند،
+            شما می‌توانید موجودی بیشتری را سفارش دهید، از مشتریان به‌دلیل
+            تأخیر عذرخواهی کنید، و به آن‌ها تخفیف ارائه دهید. این در واقع
+            مشابه کاری است که شما باید انجام دهید اگر، به عنوان مثال، یک
+            لیفتراک از روی برخی از اقلام موجود در انبار شما عبور کرد، و
+            باعث شد که شما اقلام کمتری را نسبت به آن‌چه فکر می‌کردید
+            داشته باشید [61]. بنابراین، گردش کار عذرخواهی در هر صورت
+            باید بخشی از فرآیندهای تجاری شما باشد، و بنابراین ممکن است
+            نیازی به یک <strong>constraint</strong> <em>linearizable</em> در
+            تعداد اقلام موجود در انبار نباشد.
+        </li>
+        <li>
+            به‌طور مشابه، بسیاری از خطوط هوایی، هواپیماها را بیش از حد
+            رزرو می‌کنند با این انتظار که برخی از مسافران پرواز خود را از
+            دست بدهند، و بسیاری از هتل‌ها، اتاق‌ها را بیش از حد رزرو
+            می‌کنند، با این انتظار که برخی از مهمانان لغو کنند. در این
+            موارد، <strong>constraint</strong> از "یک نفر در هر صندلی"
+            عمدتاً
+            526
+            |
+            فصل 12: آینده‌ی سیستم‌های داده
+        </li>
+    </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

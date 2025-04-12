@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 422</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <ul>
+        <li>Reducer
+            <p>
+                The MapReduce framework key-value pairs produced by the mappers را می‌گیرد، تمام values مربوط به همان key را جمع‌آوری می‌کند، و the reducer را با یک iterator بر روی آن collection از values فراخوانی می‌کند. The reducer می‌تواند output records را تولید کند (مانند تعداد occurrences از همان URL).
+            </p>
+        </li>
+    </ul>
+
+    <p>
+        In the web server log example, ما یک sort command دوم را در مرحله 5 داشتیم، که URLs را بر اساس تعداد requests رتبه‌بندی می‌کرد. در MapReduce، اگر شما به یک stage sorting دوم نیاز دارید، شما می‌توانید آن را با نوشتن یک MapReduce job دوم و استفاده از output از the first job به عنوان input به the second job، پیاده‌سازی کنید. Viewed like this، نقش از the mapper آماده‌سازی داده‌ها با قرار دادن آن در یک form که برای sorting مناسب است، و نقش از the reducer، پردازش داده‌هایی است که مرتب شده‌اند.
+    </p>
+
+    <h4>Distributed execution of MapReduce</h4>
+    <p>
+        The main difference from pipelines of Unix commands این است که MapReduce می‌تواند a computation را در سراسر many machines parallelize کند، بدون اینکه شما مجبور باشید کد بنویسید تا به طور صریح the parallelism را handle کنید. The mapper و reducer فقط بر روی یک record در یک زمان عمل می‌کنند؛ آن‌ها نیازی ندارند که بدانند ورودی آن‌ها از کجا می‌آید یا output آن‌ها به کجا می‌رود، بنابراین framework می‌تواند پیچیدگی‌های انتقال داده‌ها بین machines را handle کند.
+    </p>
+
+    <p>
+        امکان استفاده از standard Unix tools به عنوان mappers و reducers در یک computation distributed [25] وجود دارد، اما بیشتر آن‌ها به طور معمول به عنوان functions در یک programming language conventional پیاده‌سازی می‌شوند. در Hadoop MapReduce، the mapper و reducer هر کدام یک class Java هستند که یک interface خاص را پیاده‌سازی می‌کنند. در MongoDB و CouchDB، mappers و reducers، JavaScript functions هستند ("MapReduce Query‐ing" در صفحه 46 را ببینید).
+    </p>
+
+    <figure>
+        <img src="figure10-1.png" alt="شکل 10-1" style="max-width: 100%;">
+        <figcaption>
+            شکل 10-1 dataflow را در یک Hadoop MapReduce job نشان می‌دهد. Parallelization آن بر اساس partitioning است (فصل 6 را ببینید): ورودی به یک job معمولاً یک directory در HDFS است، و هر فایل یا file block در داخل input directory به عنوان یک separate partition در نظر گرفته می‌شود که می‌تواند توسط یک map task جداگانه پردازش شود (که توسط m 1, m 2، و m 3 در شکل 10-1 مشخص شده است).
+        </figcaption>
+    </figure>
+
+    <p>
+        Each input file معمولاً صدها مگابایت حجم دارد. The MapReduce scheduler (در نمودار نشان داده نشده است) تلاش می‌کند تا هر mapper را بر روی یکی از machines که یک replica از input file را ذخیره می‌کند، اجرا کند، به شرطی که machine به اندازه کافی RAM و CPU resources برای اجرای the map task داشته باشد [26]. این اصل به عنوان putting the com‐putation near the data شناخته می‌شود [27]: این از کپی کردن input file از طریق شبکه جلوگیری می‌کند، network load را کاهش می‌دهد و locality را افزایش می‌دهد.
+    </p>
+    <p>
+        400 | Chapter 10: Batch Processing
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

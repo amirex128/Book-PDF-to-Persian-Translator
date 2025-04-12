@@ -5,32 +5,37 @@
 ### طراحی برنامه‌های داده‌محور
 - عنوان انگلیسی: Designing Data-Intensive Applications
 - نویسنده: Martin Kleppmann
-- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Designing_Data-Intensive_Applications/)
-- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Designing_Data-Intensive_Applications.pdf)
+- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Designing_Data-Intensive_Applications/Designing_Data-Intensive_Applications_Dual_View.html/)
+- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Designing_Data-Intensive_Applications/Designing_Data-Intensive_Applications_Farsi.html/)
+- [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Designing_Data-Intensive_Applications.pdf)
 
 ### ساخت میکروسرویس‌ها
 - عنوان انگلیسی: Building Microservices
 - نویسنده: Sam Newman
-- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Building_Microservice/)
-- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Building_Microservice.pdf)
+- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Building_Microservice/Building_Microservice_Dual_View.html/)
+- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Building_Microservice/Building_Microservice_Farsi.html/)
+- [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Building_Microservice.pdf)
 
 ### الگوهای میکروسرویس با مثال‌های جاوا
 - عنوان انگلیسی: Microservices Patterns With examples in Java
 - نویسنده: Chris Richardson
-- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Microservices_Patterns_With_examples_in_Java/)
-- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Microservices_Patterns_With_examples_in_Java.pdf)
+- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Microservices_Patterns_With_examples_in_Java/Microservices_Patterns_With_examples_in_Java_Dual_View.html/)
+- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Microservices_Patterns_With_examples_in_Java/Microservices_Patterns_With_examples_in_Java_Farsi.html/)
+- [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Microservices_Patterns_With_examples_in_Java.pdf)
 
 ### معماری برنامه‌های وب
 - عنوان انگلیسی: Web Application Architecture
 - نویسنده: Leon Shklar, Rich Rosen
-- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/web-application-architecture/)
-- [نسخه PDF](https://[username].github.io/[repo-name]/translated/web-application-architecture.pdf)
+- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/web-application-architecture/web-application-architecture_Dual_View.html/)
+- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/web-application-architecture/web-application-architecture_Farsi.html/)
+- [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/web-application-architecture.pdf)
 
 ### طراحی سیستم‌های توزیع‌شده
 - عنوان انگلیسی: Designing Distributed Systems
 - نویسنده: Brendan Burns
-- [نسخه آنلاین](https://[username].github.io/[repo-name]/output/Designing_distributed_systems_patterns/)
-- [نسخه PDF](https://[username].github.io/[repo-name]/translated/Designing_distributed_systems_patterns.pdf)
+- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translatoroutput/Designing_distributed_systems_patterns/Designing_distributed_systems_patterns_Dual_View.html/)
+- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translatoroutput/Designing_distributed_systems_patterns/Designing_distributed_systems_patterns_Farsi.html/)
+- [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Designing_distributed_systems_patterns.pdf)
 
 
 

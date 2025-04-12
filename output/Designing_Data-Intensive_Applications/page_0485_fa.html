@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 485</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        عملی که مستلزم تغییر داده‌ها در چندین مکان مختلف است. با <strong>event sourcing</strong>،
+        شما می‌توانید یک رویداد را به گونه‌ای طراحی کنید که یک توصیف خود
+        محصور از یک عمل کاربر باشد.
+    </p>
+    <p>
+        سپس عمل کاربر فقط به یک <strong>write</strong> در یک مکان نیاز دارد—یعنی
+        پیوست کردن رویدادها به <strong>log</strong>—که ساختن آن به صورت <em>atomic</em>
+        آسان است.
+    </p>
+    <p>
+        اگر <strong>event log</strong> و وضعیت برنامه به یک روش یکسان
+        تقسیم‌بندی شوند (به عنوان مثال، پردازش یک رویداد برای یک مشتری
+        در <strong>partition</strong> 3 فقط نیاز به به‌روزرسانی <strong>partition</strong> 3 از
+        وضعیت برنامه دارد)، سپس یک <strong>log consumer</strong> تک <strong>threaded</strong>
+        ساده نیازی به کنترل <strong>concurrency</strong> برای <strong>writes</strong>
+        ندارد—با ساخت، فقط یک رویداد را در یک زمان پردازش می‌کند (همچنین
+        به "اجرای سریال واقعی" در صفحه 252 مراجعه کنید). <strong>Log</strong>
+        عدم <em>determinism</em> از <strong>concurrency</strong> را با تعریف یک ترتیب سریال
+        از رویدادها در یک <strong>partition</strong> حذف می‌کند [24]. اگر یک رویداد به
+        <strong>partitions</strong> حالت متعدد برخورد کند، کار بیشتری لازم است، که ما
+        در فصل 12 در مورد آن بحث خواهیم کرد.
+    </p>
+
+    <h4>محدودیت‌های <em>immutability</em></h4>
+    <p>
+        بسیاری از سیستم‌هایی که از یک مدل <strong>event-sourced</strong> استفاده
+        نمی‌کنند، با این وجود به <em>immutability</em> متکی هستند: پایگاه‌های
+        داده‌ی مختلف به‌طور داخلی از ساختارهای داده‌ی <em>immutable</em> یا داده‌های
+        چند نسخه‌ای برای پشتیبانی از <strong>point-in-time snapshots</strong>
+        استفاده می‌کنند (نگاه کنید به "<strong>Indexes</strong> و <strong>snapshot
+        isolation</strong>" در صفحه 241). سیستم‌های کنترل نسخه مانند <strong>Git</strong>،
+        <strong>Mercurial</strong> و <strong>Fossil</strong> نیز به داده‌های <em>immutable</em> برای حفظ
+        تاریخچه نسخه فایل‌ها متکی هستند.
+    </p>
+    <p>
+        تا چه حد نگه‌داشتن یک تاریخچه <em>immutable</em> از تمام تغییرات برای
+        همیشه امکان‌پذیر است؟ پاسخ به مقدار <em>churn</em> در مجموعه‌داده بستگی
+        دارد. برخی از <strong>workloads</strong> عمدتاً داده‌ها را اضافه می‌کنند و به‌ندرت
+        به‌روزرسانی یا حذف می‌کنند؛ آن‌ها به‌راحتی <em>immutable</em> می‌شوند.
+        سایر <strong>workloads</strong> دارای نرخ بالایی از به‌روزرسانی‌ها و حذف‌ها در
+        یک مجموعه‌داده نسبتاً کوچک هستند؛ در این موارد، تاریخچه
+        <em>immutable</em> ممکن است به‌طور چشمگیری بزرگ شود، <em>fragmentation</em>
+        ممکن است به یک مسئله تبدیل شود، و عملکرد <strong>compaction</strong> و
+        <strong>garbage collection</strong> برای <em>operational robustness</em> بسیار مهم
+        می‌شود [60، 61].
+    </p>
+    <p>
+        علاوه بر دلایل عملکرد، ممکن است شرایطی وجود داشته باشد که شما نیاز
+        داشته باشید داده‌ها را به دلایل اداری حذف کنید، با وجود تمام
+        <em>immutability</em>. به عنوان مثال، مقررات حریم خصوصی ممکن است
+        حذف اطلاعات شخصی یک کاربر را پس از بستن حساب خود، الزامی
+        کند، قوانین حفاظت از داده‌ها ممکن است حذف اطلاعات نادرست را
+        الزامی کند، یا یک نشت تصادفی اطلاعات حساس ممکن است نیاز به
+        مهار داشته باشد.
+    </p>
+    <p>
+        در این شرایط، فقط پیوست کردن رویداد دیگری به <strong>log</strong> برای
+        نشان دادن این‌که داده‌های قبلی باید حذف شده در نظر گرفته شوند، کافی
+        نیست—شما در واقع می‌خواهید تاریخچه را دوباره بنویسید و وانمود کنید
+        که داده‌ها اصلاً نوشته نشده‌اند. به عنوان مثال، <strong>Datomic</strong> این
+        ویژگی را <em>excision</em> می‌نامد [62]، و سیستم کنترل نسخه <strong>Fossil</strong>
+        یک مفهوم مشابه به نام <em>shunning</em> دارد [63].
+    </p>
+    <p>
+        حذف واقعی داده‌ها به‌طور شگفت‌انگیزی دشوار است [64]، زیرا کپی‌ها
+        می‌توانند در مکان‌های زیادی وجود داشته باشند: به عنوان مثال،
+        <strong>storage engines</strong>، <strong>filesystems</strong>، و <strong>SSDs</strong> اغلب
+        به یک مکان جدید می‌نویسند تا این‌که مکان قبلی را بازنویسی کنند [52]،
+        و <strong>backups</strong> اغلب عمداً <em>immutable</em> هستند تا از حذف یا
+        فساد تصادفی جلوگیری شود. حذف بیشتر یک مسئله‌ی "سخت‌تر کردن
+        پایگاه‌های داده و جریان‌ها
+        |
+        463
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 452</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        ما چندین الگوریتم <strong>join</strong> را برای <strong>MapReduce</strong> مورد بحث قرار دادیم، که
+        بیشتر آن‌ها به‌طور داخلی در پایگاه‌های داده‌ی <strong>MPP</strong> و موتورهای
+        <strong>dataflow</strong> نیز استفاده می‌شوند. آن‌ها همچنین یک مثال خوب از نحوه
+        عملکرد الگوریتم‌های <em>partitioned</em> ارائه می‌دهند:
+    </p>
+    <ul>
+        <li>
+            <strong>Sort-merge joins</strong>
+        </li>
+        <p>
+            هر یک از ورودی‌های در حال <strong>join</strong>، از طریق یک <strong>mapper</strong> می‌گذرد که
+            <strong>join key</strong> را استخراج می‌کند. با تقسیم‌بندی، مرتب‌سازی و
+            ادغام، تمام رکوردهایی که دارای <strong>key</strong> یکسان هستند، در نهایت به
+            فراخوانی یکسان <strong>reducer</strong> می‌رسند. سپس این تابع می‌تواند رکوردهای
+            <strong>joined</strong> را خروجی دهد.
+        </p>
+        <li>
+            <strong>Broadcast hash joins</strong>
+        </li>
+        <p>
+            یکی از دو ورودی <strong>join</strong> کوچک است، بنابراین تقسیم‌بندی نمی‌شود و
+            می‌تواند به‌طور کامل در یک جدول <strong>hash</strong> بارگذاری شود. بنابراین، شما
+            می‌توانید یک <strong>mapper</strong> را برای هر <strong>partition</strong> از ورودی <strong>join</strong>
+            بزرگ شروع کنید، جدول <strong>hash</strong> را برای ورودی کوچک در هر <strong>mapper</strong>
+            بارگذاری کنید، و سپس ورودی بزرگ را یک رکورد در یک زمان اسکن
+            کنید، و جدول <strong>hash</strong> را برای هر رکورد query کنید.
+        </p>
+        <li>
+            <strong>Partitioned hash joins</strong>
+        </li>
+        <p>
+            اگر دو ورودی <strong>join</strong> به همان روش تقسیم‌بندی شوند (با استفاده از
+            همان <strong>key</strong>، همان تابع <strong>hash</strong> و همان تعداد <strong>partitions</strong>)،
+            آنگاه رویکرد جدول <strong>hash</strong> می‌تواند به‌طور مستقل برای هر <strong>partition</strong>
+            استفاده شود.
+        </p>
+    </ul>
+    <p>
+        موتورهای پردازش <strong>batch</strong> توزیع شده دارای یک مدل برنامه‌نویسی محدود
+        عمدی هستند: فرض بر این است که توابع <strong>callback</strong> (مانند <strong>mappers</strong>
+        و <strong>reducers</strong>) <em>stateless</em> هستند و هیچ اثر جانبی خارجی قابل مشاهده
+        به جز خروجی تعیین شده خود ندارند. این محدودیت به فریم‌ورک اجازه می‌دهد
+        تا برخی از مشکلات سخت سیستم‌های توزیع شده را پشت انتزاع خود پنهان
+        کند: در مواجهه با خرابی‌ها و مشکلات شبکه، <strong>tasks</strong> را می‌توان با
+        اطمینان دوباره امتحان کرد، و خروجی از هر <strong>tasks</strong> شکست‌خورده دور
+        ریخته می‌شود. اگر چندین <strong>task</strong> برای یک <strong>partition</strong> موفق شوند، فقط یکی
+        از آن‌ها در واقع خروجی خود را قابل مشاهده می‌کند.
+    </p>
+    <p>
+        به لطف فریم‌ورک، کد شما در یک job پردازش <strong>batch</strong> نیازی به نگرانی در
+        مورد پیاده‌سازی مکانیسم‌های تحمل خطا ندارد: فریم‌ورک می‌تواند تضمین
+        کند که خروجی نهایی یک job همانند این است که هیچ خطایی رخ نداده
+        است، حتی اگر در واقعیت <strong>tasks</strong> مختلفی مجبور به تکرار مجدد شده
+        باشند. این <strong>semantics</strong> های قابل اعتماد بسیار قوی‌تر از آن چیزی است
+        که معمولاً در سرویس‌های <em>online</em> دارید که درخواست‌های کاربر را مدیریت
+        می‌کنند و به‌عنوان یک اثر جانبی پردازش یک درخواست، در پایگاه‌های
+        داده می‌نویسند.
+    </p>
+    <p>
+        ویژگی متمایز یک job پردازش <strong>batch</strong> این است که برخی از داده‌های ورودی
+        را می‌خواند و برخی داده‌های خروجی را تولید می‌کند، بدون تغییر ورودی—به
+        عبارت دیگر، خروجی از ورودی گرفته می‌شود. به‌طور اساسی، داده‌های ورودی
+        <em>bounded</em> هستند: دارای اندازه مشخص و ثابت هستند (به عنوان مثال، از
+        مجموعه‌ای از فایل‌های <strong>log</strong> در یک نقطه زمانی خاص، یا یک <strong>snapshot</strong>
+        از محتویات یک پایگاه داده تشکیل شده است). از آن‌جایی که <em>bounded</em>
+        است، یک job می‌داند چه زمانی خواندن کل ورودی را به پایان رسانده است، و
+        بنابراین یک job در نهایت زمانی که کارش تمام شد، تکمیل می‌شود.
+    </p>
+    <p>
+        در فصل بعد، ما به پردازش <strong>stream</strong> می‌پردازیم، که در آن ورودی
+        <em>unbounded</em> است—یعنی، شما هنوز یک job دارید، اما ورودی‌های آن
+        جریان‌های بی‌پایان داده‌ها هستند. در
+        430
+        |
+        فصل 10: پردازش <strong>Batch</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

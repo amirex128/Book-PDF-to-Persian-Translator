@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 446</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>گراف‌ها و پردازش تکراری</h4>
+    <p>
+        در "مدل‌های داده‌ی شبیه گراف" در صفحه 49 ما در مورد استفاده از گراف‌ها برای
+        مدل‌سازی داده‌ها، و استفاده از زبان‌های query گراف برای پیمایش <strong>edges</strong> و
+        <strong>vertices</strong> در یک گراف بحث کردیم. بحث در فصل 2 حول استفاده به سبک
+        <strong>OLTP</strong> متمرکز بود: اجرای سریع queries ها برای یافتن تعداد کمی از
+        <strong>vertices</strong> که با معیارهای خاصی مطابقت دارند.
+    </p>
+    <p>
+        همچنین بررسی گراف‌ها در یک <strong>context</strong> پردازش <strong>batch</strong> جالب است، که
+        هدف انجام نوعی پردازش یا تجزیه و تحلیل <em>offline</em> بر روی کل گراف است.
+        این نیاز اغلب در برنامه‌های <strong>machine learning</strong> مانند موتورهای پیشنهاد
+        یا در سیستم‌های رتبه‌بندی ایجاد می‌شود. به عنوان مثال، یکی از مشهورترین
+        الگوریتم‌های تجزیه و تحلیل گراف، <strong>PageRank</strong> [69] است، که سعی می‌کند
+        محبوبیت یک صفحه وب را بر اساس این‌که کدام صفحات وب دیگر به آن پیوند
+        می‌دهند، تخمین بزند. این بخش از فرمولی است که تعیین می‌کند موتورهای
+        جستجوی وب نتایج خود را با چه ترتیبی ارائه می‌دهند.
+    </p>
+    <p>
+        موتورهای <strong>Dataflow</strong> مانند <strong>Spark</strong>، <strong>Flink</strong> و <strong>Tez</strong> (نگاه کنید به
+        "<strong>Materialization</strong> از حالت <strong>Intermediate</strong>" در صفحه 419) معمولاً
+        <strong>operators</strong> را در یک job به صورت یک گراف جهت‌دار غیرمدور (<strong>DAG</strong>)
+        مرتب می‌کنند. این با پردازش گراف یکسان نیست: در موتورهای <strong>dataflow</strong>،
+        جریان داده‌ها از یک <strong>operator</strong> به <strong>operator</strong> دیگر به عنوان یک گراف
+        ساختار یافته است، در حالی که خود داده‌ها معمولاً از <strong>tuples</strong> به سبک
+        رابطه‌ای تشکیل شده‌اند. در پردازش گراف، خود داده‌ها به شکل یک گراف
+        هستند. یک سردرگمی نام‌گذاری ناخوشایند دیگر!
+    </p>
+    <p>
+        بسیاری از الگوریتم‌های گراف با پیمایش یک <strong>edge</strong> در یک زمان، پیوستن به یک
+        <strong>vertex</strong> با یک <strong>vertex</strong> مجاور به منظور انتشار اطلاعات، و تکرار تا
+        زمانی‌که یک شرط برآورده شود—به عنوان مثال، تا زمانی‌که دیگر <strong>edges</strong>
+        برای دنبال کردن وجود نداشته باشد، یا تا زمانی‌که برخی از معیارها همگرا
+        شوند—بیان می‌شوند. ما یک مثال را در شکل 2-6 دیدیم، که لیستی از تمام
+        مکان‌ها در آمریکای شمالی موجود در یک پایگاه داده را با دنبال کردن مکرر
+        <strong>edges</strong> نشان می‌دهد که کدام مکان در کدام مکان دیگر قرار دارد (این نوع
+        الگوریتم <strong>transitive closure</strong> نامیده می‌شود).
+    </p>
+    <p>
+        ذخیره یک گراف در یک سیستم فایل توزیع شده (در فایل‌های حاوی لیست‌های
+        <strong>vertices</strong> و <strong>edges</strong>) امکان‌پذیر است، اما این ایده "تکرار تا انجام" را
+        نمی‌توان در <strong>MapReduce</strong> ساده بیان کرد، زیرا فقط یک بار از داده‌ها
+        عبور می‌کند. بنابراین، این نوع الگوریتم اغلب به سبک تکراری پیاده‌سازی
+        می‌شود:
+    </p>
+    <ol>
+        <li>
+            یک زمان‌بند خارجی یک فرآیند <strong>batch</strong> را برای محاسبه یک مرحله از
+            الگوریتم اجرا می‌کند.
+        </li>
+        <li>
+            هنگامی که فرآیند <strong>batch</strong> تکمیل شد، زمان‌بند بررسی می‌کند که آیا
+            تکمیل شده است (بر اساس شرط تکمیل—به عنوان مثال، دیگر <strong>edges</strong>
+            برای دنبال کردن وجود ندارد، یا تغییر در مقایسه با تکرار آخر زیر یک
+            آستانه است).
+        </li>
+        <li>
+            اگر هنوز تمام نشده است، زمان‌بند به مرحله 1 برمی‌گردد و یک دور دیگر
+            از فرآیند <strong>batch</strong> را اجرا می‌کند.
+        </li>
+    </ol>
+    <p>
+        424
+        |
+        فصل 10: پردازش <strong>Batch</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0446/image_1.png" alt="Image from page 446" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

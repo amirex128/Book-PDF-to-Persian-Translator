@@ -1,0 +1,38 @@
+i. Some people love to point out that cat is unnecessary here, as the input file could be given directly as an
+argument to awk. However, the linear pipeline is more apparent when written like this.
+while because the ideas and lessons from Unix carry over to large-scale, heterogene‐
+ous distributed data systems.
+Batch Processing with Unix Tools
+Let’s start with a simple example. Say you have a web server that appends a line to a
+log file every time it serves a request. For example, using the nginx default access log
+format, one line of the log might look like this:
+216.58.210.78 - - [27/Feb/2015:17:55:11 +0000] "GET /css/typography.css HTTP/1.1"
+200 3377 "http://martin.kleppmann.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X
+10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115
+Safari/537.36"
+(That is actually one line; it’s only broken onto multiple lines here for readability.)
+There’s a lot of information in that line. In order to interpret it, you need to look at
+the definition of the log format, which is as follows:
+$remote_addr - $remote_user [$time_local] "$request"
+$status $body_bytes_sent "$http_referer" "$http_user_agent"
+So, this one line of the log indicates that on February 27, 2015, at 17:55:11 UTC, the
+server received a request for the file /css/typography.css from the client IP address
+216.58.210.78. The user was not authenticated, so $remote_user is set to a hyphen
+(-). The response status was 200 (i.e., the request was successful), and the response
+was 3,377 bytes in size. The web browser was Chrome 40, and it loaded the file
+because it was referenced in the page at the URL http://martin.kleppmann.com/.
+Simple Log Analysis
+Various tools can take these log files and produce pretty reports about your website
+traffic, but for the sake of exercise, let’s build our own, using basic Unix tools. For
+example, say you want to find the five most popular pages on your website. You can
+do this in a Unix shell as follows:i 
+cat /var/log/nginx/access.log | 
+  awk '{print $7}' | 
+  sort             | 
+  uniq -c          | 
+  sort -r -n       | 
+  head -n 5          
+Read the log file.
+Batch Processing with Unix Tools 
+| 
+391

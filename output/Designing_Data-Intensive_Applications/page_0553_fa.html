@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 553</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>اما سپس چشم‌انداز 
+   <strong>database</strong>
+   تغییر کرد: تضمین‌های 
+   <strong>consistency</strong>
+   ضعیف‌تر تحت عنوان 
+   <strong>NoSQL</strong>
+   به یک هنجار تبدیل شدند و تکنولوژی‌های ذخیره‌سازی کم‌تجربه‌تر به طور گسترده مورد استفاده قرار گرفتند. با این حال، از آنجایی که مکانیزم‌های 
+   <strong>audit</strong>
+   توسعه نیافته بودند، ما به ساختن برنامه‌ها بر اساس اعتماد کورکورانه ادامه دادیم، حتی اگر این رویکرد اکنون خطرناک‌تر شده باشد. بیایید لحظه‌ای در مورد طراحی برای 
+   <strong>auditability</strong>
+   فکر کنیم.</p>
+  <h4>طراحی برای <strong>auditability</strong></h4>
+  <p>اگر یک 
+   <strong>transaction</strong>
+   چندین 
+   <strong>object</strong>
+   را در یک 
+   <strong>database</strong>
+   تغییر دهد، پس از آن دشوار است که بگوییم آن 
+   <strong>transaction</strong>
+   چه معنایی دارد. حتی اگر لاگ‌های 
+   <strong>transaction</strong>
+   را ثبت کنید (به "
+   <strong>Change Data Capture</strong>
+   " در صفحه 454 مراجعه کنید)، درج‌ها، به‌روزرسانی‌ها و حذف‌ها در جداول مختلف لزوماً تصویر روشنی از دلیل انجام این تغییرات ارائه نمی‌دهند. فراخوانی منطق برنامه که در مورد این تغییرات تصمیم گرفته است، گذرا است و نمی‌توان آن را بازتولید کرد.</p>
+  <p>در مقابل، سیستم‌های مبتنی بر 
+   <strong>event</strong>
+   می‌توانند 
+   <strong>auditability</strong>
+   بهتری ارائه دهند. در رویکرد 
+   <strong>event sourcing</strong>
+   ، ورودی کاربر به سیستم به عنوان یک 
+   <strong>event</strong>
+   تغییرناپذیر واحد نمایش داده می‌شود و هر به‌روزرسانی حالت حاصل از آن 
+   <strong>event</strong>
+   مشتق می‌شود. این اشتقاق می‌تواند قطعی و تکرارپذیر باشد، به طوری که اجرای همان لاگ 
+   <strong>event</strong>
+   ها از طریق همان نسخه از کد اشتقاق منجر به به‌روزرسانی‌های حالت یکسان می‌شود.</p>
+  <p>صریح بودن در مورد 
+   <strong>dataflow</strong>
+   (به "فلسفه خروجی‌های فرآیند 
+   <strong>batch</strong>
+   " در صفحه 413 مراجعه کنید) منشأ 
+   <strong>data</strong>
+   را بسیار واضح‌تر می‌کند، که بررسی یکپارچگی را بسیار راحت‌تر می‌کند. برای لاگ 
+   <strong>event</strong>
+   ، می‌توانیم از 
+   <strong>hash</strong>
+   ها برای بررسی اینکه آیا ذخیره‌سازی 
+   <strong>event</strong>
+   خراب نشده است، استفاده کنیم. برای هر حالت مشتق‌شده، می‌توانیم فرآیندهای 
+   <strong>batch</strong>
+   و 
+   <strong>stream</strong>
+   را که آن را از لاگ 
+   <strong>event</strong>
+   مشتق کرده‌اند، دوباره اجرا کنیم تا بررسی کنیم آیا به نتیجه یکسانی می‌رسیم یا حتی یک اشتقاق افزونه را به موازات اجرا کنیم.</p>
+  <p>یک 
+   <strong>dataflow</strong>
+   قطعی و خوش‌تعریف همچنین اشکال‌زدایی و ردیابی اجرای یک سیستم را آسان‌تر می‌کند تا تعیین کنیم چرا کاری انجام داده است [4، 69]. اگر اتفاق غیرمنتظره‌ای رخ داد، داشتن قابلیت تشخیصی برای بازتولید شرایط دقیقی که منجر به 
+   <strong>event</strong>
+   غیرمنتظره شد - نوعی قابلیت اشکال‌زدایی سفر در زمان - ارزشمند است.</p>
+  <h4>استدلال <strong>end-to-end</strong> دوباره</h4>
+  <p>اگر نتوانیم به طور کامل اعتماد کنیم که هر جزء جداگانه سیستم از خراب شدن مصون خواهد بود - اینکه هر قطعه از 
+   <strong>hardware</strong>
+   بدون نقص است و هر قطعه از 
+   <strong>software</strong>
+   بدون 
+   <strong>bug</strong>
+   است - پس باید حداقل به‌طور دوره‌ای یکپارچگی 
+   <strong>data</strong>
+   خود را بررسی کنیم. اگر بررسی نکنیم، در مورد خراب شدن چیزی متوجه نخواهیم شد تا زمانی که خیلی دیر شده باشد و باعث آسیب‌های بعدی شده باشد، که در این صورت ردیابی مشکل بسیار دشوارتر و پرهزینه‌تر خواهد بود.</p>
+  <p>بررسی یکپارچگی سیستم‌های 
+   <strong>data</strong>
+   بهترین شکل در روش 
+   <strong>end-to-end</strong>
+   انجام می‌شود (به "استدلال 
+   <strong>End-to-End</strong>
+   برای 
+   <strong>Database</strong>
+   " در صفحه 516 مراجعه کنید): هر چه سیستم‌های بیشتری بتوانیم ...</p>
+  <p><strong>Aiming for Correctness</strong> | 531</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

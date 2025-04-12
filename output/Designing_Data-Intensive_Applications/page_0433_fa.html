@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 433</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h3>خروجی جریان‌های کاری Batch</h3>
+    <p>
+        ما در مورد الگوریتم‌های مختلف برای پیاده‌سازی جریان‌های کاری jobs های <strong>MapReduce</strong>
+        صحبت کرده‌ایم، اما یک سوال مهم را نادیده گرفتیم: نتیجه‌ی تمام این پردازش‌ها پس از
+        اتمام چیست؟ چرا ما در وهله‌ی اول تمام این jobs ها را اجرا می‌کنیم؟
+    </p>
+    <p>
+        در مورد پرس و جوهای پایگاه داده، ما اهداف پردازش تراکنش (<strong>OLTP</strong>) را از اهداف تحلیلی
+        (نگاه کنید به "پردازش تراکنش یا Analytics؟" در صفحه 90) متمایز کردیم. ما دیدیم که
+        queries های <strong>OLTP</strong> عموماً تعداد کمی از رکوردها را با استفاده از <strong>key</strong> ها و
+        <strong>indexes</strong> ها جستجو می‌کنند تا آن‌ها را به کاربر ارائه دهند (به عنوان مثال، در یک صفحه
+        وب). از سوی دیگر، queries های تحلیلی اغلب تعداد زیادی از رکوردها را اسکن می‌کنند،
+        گروه‌بندی‌ها و تجمیع‌ها را انجام می‌دهند، و خروجی اغلب به شکل یک گزارش است: یک
+        نمودار که تغییر در یک معیار را در طول زمان نشان می‌دهد، یا 10 آیتم برتر را طبق
+        یک رتبه‌بندی، یا یک تفکیک از یک مقدار به زیرمجموعه‌ها. مصرف‌کننده چنین گزارشی
+        اغلب یک تحلیلگر یا یک مدیر است که نیاز به تصمیم‌گیری‌های تجاری دارد.
+    </p>
+    <p>
+        پردازش <strong>batch</strong> در کجا قرار می‌گیرد؟ نه پردازش تراکنش است و نه analytics. به analytics
+        نزدیک‌تر است، زیرا یک فرآیند batch معمولاً بخش‌های بزرگی از یک مجموعه داده ورودی
+        را اسکن می‌کند. با این حال، یک جریان کاری از jobs های <strong>MapReduce</strong> با یک query
+        <strong>SQL</strong> که برای اهداف تحلیلی استفاده می‌شود یکسان نیست (نگاه کنید به "مقایسه Hadoop با
+        پایگاه‌های داده توزیع شده" در صفحه 414). خروجی یک فرآیند batch اغلب یک گزارش
+        نیست، بلکه نوعی ساختار دیگر است.
+    </p>
+
+    <h4>ساخت <strong>indexes</strong> جستجو</h4>
+    <p>
+        استفاده‌ی اصلی <strong>Google</strong> از <strong>MapReduce</strong>، ساخت <strong>indexes</strong> برای موتور جستجوی خود بود،
+        که به عنوان یک جریان کاری از 5 تا 10 job <strong>MapReduce</strong> پیاده‌سازی شد [1]. اگرچه
+        <strong>Google</strong> بعداً از استفاده از <strong>MapReduce</strong> برای این منظور فاصله گرفت [43]، اما اگر آن را از
+        منظر ساخت یک index جستجو بررسی کنید، به درک <strong>MapReduce</strong> کمک می‌کند. (حتی
+        امروزه، <strong>Hadoop MapReduce</strong> همچنان یک روش خوب برای ساخت <strong>indexes</strong> برای
+        <strong>Lucene/Solr</strong> [44] است.)
+    </p>
+    <p>
+        ما به طور مختصر در "جستجوی متن کامل و <strong>indexes</strong> فازی" در صفحه 88 دیدیم که چگونه یک
+        index جستجوی متن کامل مانند <strong>Lucene</strong> کار می‌کند: این یک فایل (فرهنگ لغت
+        اصطلاحات) است که در آن می‌توانید به طور کارآمد یک کلمه کلیدی خاص را جستجو
+        کنید و لیست تمام <strong>IDs</strong> اسناد حاوی آن کلمه کلیدی (لیست پست‌ها) را پیدا کنید. این
+        یک دیدگاه بسیار ساده از یک index جستجو است—در واقعیت، نیاز به داده‌های
+        اضافی مختلفی دارد تا نتایج جستجو را بر اساس ارتباط، تصحیح غلط‌های املایی،
+        حل مترادف‌ها و غیره رتبه‌بندی کند—اما این اصل همچنان پابرجاست.
+    </p>
+    <p>
+        اگر نیاز به انجام یک جستجوی متن کامل بر روی یک مجموعه اسناد ثابت دارید،
+        آن‌گاه یک فرآیند batch یک راه بسیار موثر برای ساخت <strong>indexes</strong> است:
+        <strong>mappers</strong>، مجموعه اسناد را در صورت نیاز تقسیم می‌کنند، هر <strong>reducer</strong> index را
+        برای بخش خود می‌سازد و فایل‌های index به سیستم فایل توزیع شده نوشته می‌شوند.
+        ساختن چنین <strong>indexes</strong> های تقسیم‌بندی شده (نگاه کنید به "تقسیم‌بندی و <strong>Indexes</strong>
+        ثانویه" در صفحه 206) بسیار موازی می‌شود.
+    </p>
+
+    <p>
+        <strong>MapReduce</strong> و سیستم‌های فایل توزیع شده
+        |
+        411
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

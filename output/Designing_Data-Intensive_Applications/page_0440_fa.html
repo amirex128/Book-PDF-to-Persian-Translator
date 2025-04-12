@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 440</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        از این‌رو یک شکست ماشین است. آیا واقعاً ارزش دارد که به‌خاطر
+        تحمل خطا، <strong>overhead</strong> قابل توجهی را متحمل شویم؟
+    </p>
+    <p>
+        برای درک دلایل استفاده‌ی محدود <strong>MapReduce</strong> از حافظه و بازیابی در سطح <strong>task</strong>،
+        کمک‌کننده است که به محیطی که <strong>MapReduce</strong> در ابتدا برای آن طراحی شده
+        نگاه کنیم. <strong>Google</strong> دارای <strong>datacenters</strong> با استفاده ترکیبی است، که در آن
+        سرویس‌های <em>online</em> و jobs های <strong>batch</strong> <em>offline</em> بر روی ماشین‌های یکسان اجرا
+        می‌شوند. هر <strong>task</strong> دارای یک تخصیص منبع (هسته‌های <strong>CPU</strong>، <strong>RAM</strong>، فضای
+        دیسک و غیره) است که با استفاده از <strong>containers</strong> اعمال می‌شود. هر <strong>task</strong> همچنین
+        دارای یک <strong>priority</strong> است، و اگر یک <strong>task</strong> با <strong>priority</strong> بالاتر به منابع بیشتری
+        نیاز داشته باشد، <strong>tasks</strong> با <strong>priority</strong> پایین‌تر در همان ماشین می‌توانند متوقف
+        (<strong>preempted</strong>) شوند تا منابع آزاد شوند.
+        <strong>Priority</strong> همچنین قیمت‌گذاری منابع محاسباتی را تعیین می‌کند: تیم‌ها باید
+        برای منابعی که استفاده می‌کنند، پرداخت کنند و فرآیندهای با <strong>priority</strong> بالاتر
+        هزینه‌ی بیشتری دارند [59].
+    </p>
+    <p>
+        این معماری به منابع محاسباتی غیرتولیدی (<strong>low-priority</strong>) اجازه می‌دهد که
+        <em>overcommitted</em> شوند، زیرا سیستم می‌داند که در صورت لزوم می‌تواند
+        منابع را پس بگیرد. <em>Overcommitting</em> منابع به نوبه خود امکان استفاده بهتر از
+        ماشین‌ها و کارایی بیشتر را در مقایسه با سیستم‌هایی که وظایف تولیدی و غیر
+        تولیدی را جدا می‌کنند، فراهم می‌کند. با این حال، از آن‌جایی که jobs های
+        <strong>MapReduce</strong> با <strong>low priority</strong> اجرا می‌شوند، این خطر وجود دارد که در هر
+        زمانی <strong>preempted</strong> شوند، زیرا یک فرآیند با <strong>priority</strong> بالاتر به منابع آن‌ها نیاز
+        دارد. jobs های <strong>Batch</strong> به طور موثر "تکه‌های زیر میز را جمع می‌کنند"، با
+        استفاده از هر گونه منابع محاسباتی که پس از این‌که فرآیندهای با <strong>high-priority</strong>
+        آن‌چه را که نیاز داشتند، برداشتند، باقی می‌مانند.
+    </p>
+    <p>
+        در <strong>Google</strong>، یک <strong>MapReduce task</strong> که به مدت یک ساعت اجرا می‌شود، تقریباً 5٪
+        خطر خاتمه یافتن دارد تا فضایی برای یک فرآیند با <strong>high-priority</strong> فراهم شود.
+        این نرخ، بیش از یک مرتبه بزرگی بیشتر از نرخ شکست‌ها به دلیل مشکلات
+        سخت‌افزاری، راه‌اندازی مجدد ماشین یا دلایل دیگر است [59]. با این نرخ
+        <strong>preemptions</strong>، اگر یک job دارای 100 <strong>task</strong> باشد که هر کدام به مدت 10
+        دقیقه اجرا می‌شوند، خطر بیش از 50٪ وجود دارد که حداقل یک <strong>task</strong> قبل از
+        اتمام متوقف شود.
+    </p>
+    <p>
+        و به همین دلیل است که <strong>MapReduce</strong> برای تحمل خاتمه‌ی مکرر <strong>task</strong>
+        غیرمنتظره طراحی شده است: این به این دلیل نیست که سخت‌افزار به‌طور خاص
+        غیرقابل اعتماد است، بلکه به این دلیل است که آزادی برای خاتمه‌ی دلخواه
+        فرآیندها، امکان استفاده بهتر از منابع را در یک <strong>cluster</strong> محاسباتی فراهم
+        می‌کند.
+    </p>
+    <p>
+        در میان زمان‌بندهای <strong>cluster</strong> منبع باز، <strong>preemption</strong> کمتر مورد استفاده قرار
+        می‌گیرد. <strong>CapacityScheduler</strong> از <strong>YARN</strong> از <strong>preemption</strong> برای متعادل کردن
+        تخصیص منابع صف‌های مختلف پشتیبانی می‌کند [58]، اما <strong>preemption priority</strong>
+        عمومی در <strong>YARN</strong>، <strong>Mesos</strong> یا <strong>Kubernetes</strong> در زمان نوشتن پشتیبانی نمی‌شود
+        [60]. در محیطی که <strong>tasks</strong> خیلی کم متوقف می‌شوند، تصمیمات طراحی
+        <strong>MapReduce</strong> منطقی‌تر هستند. در بخش بعدی، به برخی از جایگزین‌های
+        <strong>MapReduce</strong> نگاه خواهیم کرد که تصمیمات طراحی متفاوتی را اتخاذ می‌کنند.
+    </p>
+    <p>
+        418
+        |
+        فصل 10: پردازش <strong>Batch</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

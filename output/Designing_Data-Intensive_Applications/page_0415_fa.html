@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 415</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        counts = Hash.new(0)
+        File.open('/var/log/nginx/access.log') do |file|
+        file.each do |line|
+        url = line.split[6]
+        counts[url] += 1
+        end
+        end
+        top5 = counts.map{|url, count| [count, url] }.sort.reverse[0...5]
+        top5.each{|count, url| puts "#{count} #{url}" }
+        counts یک hash table است که یک counter برای تعداد دفعاتی که ما هر URL را دیده‌ایم، نگهداری می‌کند. A counter به طور پیش‌فرض zero است.
+    </p>
+
+    <p>
+        از هر خط از log، ما URL را به عنوان هفتمین field جدا شده با whitespace در نظر می‌گیریم (شاخص array در اینجا 6 است زیرا arrays از Ruby zero-indexed هستند).
+    </p>
+
+    <p>
+        counter را برای URL در خط فعلی از log افزایش دهید.
+    </p>
+
+    <p>
+        محتوای hash table را بر اساس مقدار counter (به ترتیب descending) مرتب کنید، و پنج entry برتر را بگیرید.
+    </p>
+
+    <p>
+        آن پنج entry برتر را چاپ کنید.
+        این برنامه به اندازه chain of Unix pipes، concise نیست، اما نسبتاً readable است، و اینکه کدام یک از این دو را ترجیح می‌دهید تا حدودی به سلیقه بستگی دارد. با این حال، علاوه بر differences syntactic سطحی بین این دو، یک تفاوت بزرگ در execution flow وجود دارد، که اگر شما این analysis را بر روی یک فایل بزرگ اجرا کنید، مشهود می‌شود.
+    </p>
+
+    <h4>Sorting versus in-memory aggregation</h4>
+    <p>
+        اسکریپت Ruby یک in-memory hash table از URLs را نگه می‌دارد، که در آن هر URL به تعداد دفعاتی که دیده شده است، نگاشت می‌شود. The Unix pipeline example، چنین یک hash table ندارد، اما در عوض به sorting یک لیست از URLs متکی است که در آن چندین occurrence از همان URL به سادگی تکرار می‌شوند.
+    </p>
+
+    <p>
+        کدام approach بهتر است؟ این بستگی به این دارد که شما چند URL مختلف دارید. برای اکثر وب‌سایت‌های کوچک تا متوسط، شما احتمالاً می‌توانید تمام URLsهای distinct، و یک counter برای هر URL، را در (مثلاً) 1 گیگابایت حافظه جای دهید. در این مثال، working set از job (مقدار حافظه‌ای که job نیاز به دسترسی تصادفی به آن دارد) فقط به number از distinct URLs بستگی دارد: اگر یک میلیون log entries برای یک URL واحد وجود داشته باشد، فضای مورد نیاز در hash table همچنان فقط یک URL به اضافه اندازه counter است. اگر این working set به اندازه کافی کوچک باشد، یک in-memory hash table خوب کار می‌کند - حتی بر روی یک laptop.
+    </p>
+
+    <p>
+        از سوی دیگر، اگر working set از job بزرگتر از حافظه موجود باشد، approach sorting این مزیت را دارد که می‌تواند از دیسک‌ها به طور efficient استفاده کند. این the
+        Batch Processing with Unix Tools | 393
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

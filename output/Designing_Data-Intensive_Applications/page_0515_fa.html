@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 515</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>محدودیت‌های <strong>total ordering</strong></h4>
+    <p>
+        با سیستم‌هایی که به‌اندازه‌ی کافی کوچک هستند، ساخت یک <strong>event log</strong>
+        کاملاً مرتب شده کاملاً امکان‌پذیر است (همان‌طور که محبوبیت
+        پایگاه‌های داده با <strong>single-leader replication</strong>، که دقیقاً چنین
+        <strong>log</strong> ای را می‌سازند، نشان می‌دهد). با این حال، با
+        مقیاس‌بندی سیستم‌ها به سمت <strong>workloads</strong> بزرگتر و
+        پیچیده‌تر، محدودیت‌ها شروع به ظهور می‌کنند:
+    </p>
+    <ul>
+        <li>
+            در بیشتر موارد، ساخت یک <strong>log</strong> کاملاً مرتب شده، مستلزم
+            این است که تمام رویدادها از یک <strong>leader node</strong> واحد عبور
+            کنند که در مورد <strong>ordering</strong> تصمیم می‌گیرد. اگر توان
+            عملیاتی رویدادها بیشتر از آن چیزی باشد که یک ماشین واحد
+            می‌تواند مدیریت کند، شما نیاز دارید که آن را در بین چندین
+            ماشین تقسیم‌بندی کنید (نگاه کنید به "<strong>Partitioned Logs</strong>"
+            در صفحه 446). ترتیب رویدادها در دو <strong>partitions</strong> مختلف
+            بعداً مبهم خواهد بود.
+        </li>
+        <li>
+            اگر سرورها در چندین <strong>datacenters</strong> که از نظر جغرافیایی توزیع
+            شده‌اند، پخش شوند، به عنوان مثال به منظور تحمل آفلاین شدن
+            یک <strong>datacenter</strong> کامل، شما معمولاً یک <strong>leader</strong>
+            جداگانه در هر <strong>datacenter</strong> دارید، زیرا تأخیرهای شبکه
+            هماهنگی <em>synchronous cross-datacenter</em> را ناکارآمد می‌کند
+            (نگاه کنید به "<strong>Multi-Leader Replication</strong>" در صفحه 168).
+            این امر یک <strong>ordering</strong> تعریف نشده از رویدادهایی را که در دو
+            <strong>datacenters</strong> مختلف منشأ می‌گیرند، نشان می‌دهد.
+        </li>
+        <li>
+            هنگامی که برنامه‌ها به عنوان <strong>microservices</strong> مستقر
+            می‌شوند (نگاه کنید به "<strong>Dataflow</strong> از طریق <strong>Services</strong>:
+            <strong>REST</strong> و <strong>RPC</strong>" در صفحه 131)، یک انتخاب طراحی
+            رایج این است که هر <strong>service</strong> و <strong>state</strong> <em>durable</em>
+            آن را به‌عنوان یک واحد مستقل مستقر کنید، بدون این‌که هیچ
+            <strong>state</strong> <em>durable</em> بین <strong>services</strong> به اشتراک
+            گذاشته شود. هنگامی که دو رویداد در <strong>services</strong> مختلف منشأ
+            می‌گیرند، هیچ ترتیب تعریف شده‌ای برای آن رویدادها وجود
+            ندارد.
+        </li>
+        <li>
+            برخی از برنامه‌ها، <strong>state</strong> سمت <strong>client</strong> را حفظ
+            می‌کنند که بلافاصله بر اساس ورودی کاربر به‌روزرسانی می‌شود
+            (بدون انتظار تأیید از یک سرور)، و حتی به کار <em>offline</em> ادامه
+            می‌دهند (نگاه کنید به "<strong>Clients</strong> با عملیات <em>offline</em>" در
+            صفحه 170). با چنین برنامه‌هایی، <strong>clients</strong> و سرورها بسیار
+            احتمال دارد که رویدادها را به ترتیب‌های مختلف ببینند.
+        </li>
+    </ul>
+    <p>
+        از نظر رسمی، تصمیم‌گیری در مورد یک <strong>total order</strong> از رویدادها،
+        به‌عنوان <strong>total order broadcast</strong> شناخته می‌شود، که معادل
+        <strong>consensus</strong> است (نگاه کنید به "الگوریتم‌های اجماع و
+        <strong>total order broadcast</strong>" در صفحه 366). اکثر الگوریتم‌های
+        اجماع برای موقعیت‌هایی طراحی شده‌اند که در آن‌ها توان عملیاتی
+        یک <strong>node</strong> واحد برای پردازش کل <strong>stream</strong> از
+        رویدادها کافی است، و این الگوریتم‌ها یک مکانیسم برای این‌که
+        چندین <strong>nodes</strong> کار <strong>ordering</strong> رویدادها را به
+        اشتراک بگذارند، ارائه نمی‌دهند. همچنان یک مشکل تحقیقاتی
+        باز است که الگوریتم‌های اجماعی را طراحی کنیم که بتوانند فراتر از
+        توان عملیاتی یک <strong>node</strong> واحد مقیاس‌پذیر باشند و در یک محیط
+        توزیع شده جغرافیایی به‌خوبی کار کنند.
+    </p>
+
+    <h4>ترتیب دادن رویدادها برای ضبط <strong>causality</strong></h4>
+    <p>
+        در مواردی که هیچ پیوند علّی بین رویدادها وجود ندارد، فقدان یک
+        <strong>total order</strong> مشکل بزرگی نیست، زیرا رویدادهای
+        همزمان را می‌توان به‌طور دلخواه مرتب کرد. برخی از موارد دیگر
+        آسان هستند: به عنوان مثال، وقتی به‌روزرسانی‌های متعددی از
+        یک شیء یکسان وجود دارد، می‌توان آن‌ها را با مسیریابی تمام
+        به‌روزرسانی‌ها برای یک <strong>ID</strong> شیء خاص به یک <strong>log</strong>
+        یکسان، کاملاً مرتب کرد.
+        ادغام داده‌ها
+        |
+        493
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

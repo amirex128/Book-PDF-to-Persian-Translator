@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 479</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        مدل را به عنوان یک جدول در نظر بگیرید که تراکنش‌ها می‌توانند <strong>tuples</strong> را در
+        آن وارد کنند، اما نمی‌تواند <strong>queried</strong> شود. سپس <strong>stream</strong> از
+        <strong>log</strong> <strong>tuples</strong> تشکیل شده است که تراکنش‌های <strong>committed</strong>
+        شده در این جدول خاص، به ترتیبی که <strong>committed</strong> شده‌اند،
+        نوشته‌اند. <strong>Consumers</strong> خارجی می‌توانند این <strong>log</strong> را به‌صورت
+        <em>asynchronously</em> مصرف کنند و از آن برای به‌روزرسانی سیستم‌های داده‌ی
+        مشتق شده استفاده کنند.
+    </p>
+    <p>
+        <strong>Kafka Connect</strong> [41] تلاشی برای ادغام ابزارهای <strong>change data
+        capture</strong> برای طیف گسترده‌ای از سیستم‌های پایگاه داده با <strong>Kafka</strong>
+        است. هنگامی‌که <strong>stream</strong> رویدادهای تغییر در <strong>Kafka</strong> قرار دارد،
+        می‌تواند برای به‌روزرسانی سیستم‌های داده‌ی مشتق شده مانند <strong>indexes</strong>
+        جستجو، و همچنین تغذیه در سیستم‌های پردازش <strong>stream</strong>، همان‌طور که در
+        ادامه این فصل بحث خواهد شد، استفاده شود.
+    </p>
+
+    <h4><strong>Event Sourcing</strong></h4>
+    <p>
+        برخی از شباهت‌ها بین ایده‌هایی که در اینجا بحث کردیم و <strong>event
+        sourcing</strong> وجود دارد، یک تکنیک که در جامعه‌ی <strong>domain-driven
+        design (DDD)</strong> توسعه یافته است [42، 43، 44]. ما <strong>event sourcing</strong>
+        را به‌طور خلاصه بحث خواهیم کرد، زیرا برخی از ایده‌های مفید و مرتبط را
+        برای سیستم‌های <strong>streaming</strong> در بر می‌گیرد.
+    </p>
+    <p>
+        مشابه <strong>change data capture</strong>، <strong>event sourcing</strong> شامل ذخیره
+        کردن تمام تغییرات در وضعیت برنامه به عنوان یک <strong>log</strong> از رویدادهای
+        تغییر است. بزرگترین تفاوت این است که <strong>event sourcing</strong> ایده را در
+        یک سطح انتزاعی متفاوت اعمال می‌کند:
+    </p>
+    <ul>
+        <li>
+            در <strong>change data capture</strong>، برنامه از پایگاه داده به روشی
+            <em>mutable</em> استفاده می‌کند، که به‌دلخواه رکوردها را به‌روزرسانی و
+            حذف می‌کند. <strong>Log</strong> تغییرات از پایگاه داده در سطح پایین
+            استخراج می‌شود (به عنوان مثال، با <strong>parsing</strong> <strong>replication log</strong>)،
+            که اطمینان می‌دهد که ترتیب نوشتن‌ها که از پایگاه داده استخراج شده
+            است، با ترتیبی که در واقع نوشته شده‌اند مطابقت دارد، و از
+            <strong>race condition</strong> در شکل 11-4 اجتناب می‌شود. برنامه‌ای که در
+            پایگاه داده می‌نویسد، نیازی ندارد بداند که <strong>CDC</strong> در حال
+            رخ دادن است.
+        </li>
+        <li>
+            در <strong>event sourcing</strong>، منطق برنامه به‌طور صریح بر اساس
+            رویدادهای <em>immutable</em> ساخته شده است که در یک <strong>event log</strong>
+            نوشته شده‌اند. در این حالت، <strong>event store</strong> <em>append-only</em> است،
+            و به‌روزرسانی‌ها یا حذف‌ها دلسرد یا ممنوع هستند. رویدادها برای
+            منعکس کردن چیزهایی که در سطح برنامه رخ داده‌اند، طراحی
+            شده‌اند، نه تغییرات حالت سطح پایین.
+        </li>
+    </ul>
+    <p>
+        <strong>Event sourcing</strong> یک تکنیک قدرتمند برای مدل‌سازی داده‌ها است: از
+        دیدگاه یک برنامه، ثبت اقدامات کاربر به عنوان رویدادهای <em>immutable</em>،
+        بیشتر منطقی است، تا ثبت تأثیر آن اقدامات بر یک پایگاه داده‌ی
+        <em>mutable</em>. <strong>Event sourcing</strong>، تکامل برنامه‌ها را در طول زمان
+        آسان‌تر می‌کند، با آسان‌تر کردن درک این‌که چرا چیزی اتفاق
+        افتاده است، به <strong>debugging</strong> کمک می‌کند، و در برابر <strong>bugs</strong>
+        برنامه محافظت می‌کند (نگاه کنید به "مزایای رویدادهای <em>immutable</em>" در
+        صفحه 460).
+    </p>
+    <p>
+        به عنوان مثال، ذخیره رویداد "دانش‌آموز، ثبت نام در دوره‌ی خود را لغو
+        کرد" به‌وضوح قصد یک عمل واحد را به روشی خنثی بیان می‌کند، در حالی
+        که اثرات جانبی "یک ورودی از جدول ثبت‌نام‌ها حذف شد، و یک دلیل
+        لغو به جدول بازخورد دانشجو اضافه شد" شامل فرضیات زیادی در مورد
+        نحوه
+        پایگاه‌های داده و جریان‌ها
+        |
+        457
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

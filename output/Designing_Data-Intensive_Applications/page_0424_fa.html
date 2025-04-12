@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 424</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        هر زمان که یک mapper خواندن فایل input خود و نوشتن فایل‌های output مرتب‌شده خود را به پایان می‌رساند، the MapReduce scheduler به reducers اطلاع می‌دهد که آن‌ها می‌توانند شروع به واکشی فایل‌های output از آن mapper کنند. The reducers به هر یک از mappers متصل می‌شوند و فایل‌های key-value pairs مرتب‌شده را برای partition خود دانلود می‌کنند. این process از partitioning by reducer, sorting, و کپی کردن data partitions از mappers به reducers به عنوان shuffle شناخته می‌شود [26] (یک اصطلاح گیج‌کننده - برخلاف shuffling a deck of cards، هیچ randomness در MapReduce وجود ندارد).
+    </p>
+
+    <p>
+        The reduce task فایل‌ها را از mappers می‌گیرد و آن‌ها را با هم merge می‌کند، و ترتیب مرتب‌سازی را حفظ می‌کند. بنابراین، اگر mappersهای مختلف رکوردهایی را با همان key تولید کردند، آن‌ها در input از reducer merged شده، مجاور هم خواهند بود.
+    </p>
+
+    <p>
+        The reducer با یک key و یک iterator فراخوانی می‌شود که به طور افزایشی تمام records با همان key را اسکن می‌کند (که ممکن است در برخی موارد، همه در حافظه جا نشوند). The reducer می‌تواند از logic دلخواه برای پردازش این records استفاده کند، و می‌تواند هر تعداد از output records را تولید کند. این output records به یک فایل در distributed filesystem نوشته می‌شوند (معمولاً، یک کپی بر روی disk local از machine در حال اجرای the reducer، با replicas بر روی machinesهای دیگر).
+    </p>
+
+    <h4>MapReduce workflows</h4>
+    <p>
+        محدوده مشکلاتی که شما می‌توانید با یک MapReduce job واحد حل کنید، محدود است. با ارجاع به مثال log analysis، یک MapReduce job واحد می‌تواند تعداد page views per URL را تعیین کند، اما نه محبوب‌ترین URLs را، زیرا این امر به یک round sorting دوم نیاز دارد.
+    </p>
+
+    <p>
+        بنابراین، بسیار رایج است که MapReduce jobs با هم به workflows، زنجیر شوند، به طوری که output از یک job به input به job بعدی تبدیل می‌شود. The Hadoop MapReduce framework هیچ پشتیبانی خاصی برای workflows ندارد، بنابراین این chaining به طور ضمنی توسط directory name انجام می‌شود: the first job باید پیکربندی شود تا output خود را به یک directory تعیین شده در HDFS بنویسد، و the second job باید پیکربندی شود تا همان directory name را به عنوان input خود بخواند. از نقطه نظر MapReduce framework، آن‌ها دو job مستقل هستند.
+    </p>
+
+    <p>
+        Chained MapReduce jobs، بنابراین کمتر شبیه pipelines از Unix commands هستند (که output از یک process را به عنوان input به یک process دیگر به طور مستقیم، با استفاده از فقط یک in-memory buffer کوچک، منتقل می‌کنند) و بیشتر شبیه به یک sequence از commands هستند که در آن output از هر command به یک فایل temporary نوشته می‌شود، و the next command از فایل temporary می‌خواند. این design مزایا و معایبی دارد، که ما در "Materialization of Intermediate State" در صفحه 419 در مورد آن بحث خواهیم کرد.
+    </p>
+
+    <p>
+        The output از یک batch job، فقط زمانی معتبر در نظر گرفته می‌شود که job با موفقیت تکمیل شده باشد (MapReduce، the partial output از یک job شکست‌خورده را discard می‌کند). بنابراین، یک job در یک workflow می‌تواند فقط زمانی شروع شود که jobs قبلی - یعنی، the jobs که input directories آن را تولید می‌کنند - با موفقیت تکمیل شده باشند. برای handle کردن این dependencies بین job
+    </p>
+    <p>
+        402 | Chapter 10: Batch Processing
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

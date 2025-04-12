@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 473</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        حتی اگر یک <strong>consumer</strong> بیش از حد عقب بیفتد و شروع به از دست دادن
+        پیام‌ها کند، فقط آن <strong>consumer</strong> تحت تأثیر قرار می‌گیرد؛ این
+        سرویس را برای <strong>consumers</strong> های دیگر مختل نمی‌کند. این واقعیت یک
+        مزیت عملیاتی بزرگ است: شما می‌توانید به‌طور آزمایشی یک <strong>log</strong>
+        تولیدی را برای اهداف توسعه، آزمایش یا <strong>debugging</strong> مصرف کنید، بدون
+        این‌که نگران اختلال در سرویس‌های تولید باشید. هنگامی که یک <strong>consumer</strong>
+        خاموش می‌شود یا از کار می‌افتد، مصرف منابع را متوقف می‌کند—تنها
+        چیزی که باقی می‌ماند <strong>consumer offset</strong> آن است.
+    </p>
+    <p>
+        این رفتار همچنین با <strong>message brokers</strong> سنتی در تضاد است، که در آن
+        شما باید مراقب باشید تا هر صفی را که <strong>consumers</strong> آن خاموش
+        شده‌اند، حذف کنید—در غیر این صورت آن‌ها به‌طور غیرضروری به انباشت
+        پیام‌ها ادامه می‌دهند و حافظه را از <strong>consumers</strong> که هنوز فعال
+        هستند، می‌گیرند.
+    </p>
+
+    <h4>پخش مجدد پیام‌های قدیمی</h4>
+    <p>
+        ما قبلاً اشاره کردیم که با <strong>message brokers</strong> به سبک <strong>AMQP</strong> و
+        <strong>JMS</strong>، پردازش و تأیید پیام‌ها یک عملیات <em>destructive</em> است، زیرا
+        باعث می‌شود پیام‌ها روی <strong>broker</strong> حذف شوند. از سوی دیگر، در یک
+        <strong>message broker</strong> مبتنی بر <strong>log</strong>، مصرف پیام‌ها بیشتر شبیه
+        خواندن از یک فایل است: این یک عملیات <em>read-only</em> است که <strong>log</strong>
+        را تغییر نمی‌دهد.
+    </p>
+    <p>
+        تنها اثر جانبی پردازش، علاوه بر هر خروجی از <strong>consumer</strong>، این است
+        که <strong>consumer offset</strong> به جلو می‌رود. اما <strong>offset</strong> تحت
+        کنترل <strong>consumer</strong> است، بنابراین در صورت لزوم می‌تواند به راحتی
+        دستکاری شود: به عنوان مثال، شما می‌توانید یک کپی از یک <strong>consumer</strong>
+        را با <strong>offsets</strong> دیروز شروع کنید و خروجی را در یک مکان
+        متفاوت بنویسید، تا ارزش پیام‌های روز گذشته را دوباره پردازش کنید. شما
+        می‌توانید این کار را هر تعداد دفعاتی که می‌خواهید تکرار کنید، با تغییر
+        کد پردازش.
+    </p>
+    <p>
+        این جنبه، پیام‌رسانی مبتنی بر <strong>log</strong> را بیشتر شبیه فرآیندهای <strong>batch</strong>
+        فصل قبل می‌سازد، که در آن داده‌های مشتق شده به‌وضوح از داده‌های ورودی
+        از طریق یک فرآیند تبدیل تکرارپذیر جدا می‌شوند. این امکان آزمایش بیشتر
+        و بازیابی آسان‌تر از خطاها و <strong>bugs</strong> را فراهم می‌کند، که آن را به
+        یک ابزار خوب برای ادغام <strong>dataflows</strong> در یک سازمان تبدیل می‌کند
+        [24].
+    </p>
+
+    <h4>پایگاه‌های داده و جریان‌ها</h4>
+    <p>
+        ما برخی مقایسه‌ها را بین <strong>message brokers</strong> و پایگاه‌های داده انجام
+        داده‌ایم. اگرچه آن‌ها به‌طور سنتی به‌عنوان دسته‌های جداگانه از ابزارها
+        در نظر گرفته شده‌اند، ما دیدیم که <strong>message brokers</strong> مبتنی بر <strong>log</strong>
+        در گرفتن ایده‌هایی از پایگاه‌های داده و اعمال آن‌ها در پیام‌رسانی
+        موفق بوده‌اند. ما همچنین می‌توانیم برعکس عمل کنیم: ایده‌هایی را از
+        پیام‌رسانی و جریان‌ها بگیریم و آن‌ها را در پایگاه‌های داده اعمال کنیم.
+    </p>
+    <p>
+        ما قبلاً گفتیم که یک رویداد، رکوردی از چیزی است که در یک نقطه زمانی
+        خاص رخ داده است. چیزی که رخ داده ممکن است یک عمل کاربر باشد (به
+        عنوان مثال، تایپ یک <strong>query</strong> جستجو)، یا یک خواندن سنسور،
+        اما ممکن است یک نوشته در پایگاه داده نیز باشد. این واقعیت که چیزی
+        در یک پایگاه داده نوشته شده است، یک رویداد است که می‌تواند ضبط،
+        ذخیره و
+        پایگاه‌های داده و جریان‌ها
+        |
+        451
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

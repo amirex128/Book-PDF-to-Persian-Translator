@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 432</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        این approach فقط در صورتی کار می‌کند که هر دو ورودی join دارای number یکسانی از partitions باشند، با records که به partitions بر اساس همان key و همان hash function اختصاص داده شده‌اند. اگر inputs توسط jobsهای MapReduce قبلی تولید شده باشند که قبلاً این grouping را انجام می‌دهند، سپس این می‌تواند یک فرض منطقی برای انجام دادن باشد.
+        Partitioned hash joins در Hive به عنوان bucketed map joins شناخته می‌شوند [37].
+    </p>
+
+    <h4>Map-side merge joins</h4>
+    <p>
+        یک variant دیگر از یک map-side join اعمال می‌شود اگر input datasets، نه تنها به همان روش partitioned شده‌اند، بلکه همچنین بر اساس همان key مرتب شده‌اند. در این حالت، مهم نیست که آیا inputs به اندازه کافی کوچک هستند تا در حافظه جا شوند، زیرا یک mapper می‌تواند همان operation merging را انجام دهد که معمولاً توسط یک reducer انجام می‌شود:
+        خواندن هر دو input files به طور افزایشی، به ترتیب از key صعودی، و matching records با همان key.
+    </p>
+
+    <p>
+        اگر یک map-side merge join امکان‌پذیر است، احتمالاً به این معنی است که jobsهای MapReduce قبلی، input datasets را در این form partitioned و مرتب شده قرار داده‌اند. در اصل، این join می‌توانست در مرحله reduce از job قبلی انجام شود. با این حال، ممکن است هنوز هم مناسب باشد که the merge join را در یک map-only job جداگانه انجام دهید، به عنوان مثال اگر the partitioned و sorted datasets برای other purposes علاوه بر این join خاص نیز مورد نیاز باشند.
+    </p>
+
+    <h4>MapReduce workflows with map-side joins</h4>
+    <p>
+        هنگامی که output از یک MapReduce join توسط jobsهای downstream مصرف می‌شود، انتخاب map-side یا reduce-side join، بر ساختار از output تأثیر می‌گذارد. The output از یک reduce-side join، توسط the join key partitioned و مرتب می‌شود، در حالی که output از یک map-side join، به همان روش the large input partitioned و مرتب می‌شود (از آنجایی که یک map task برای هر file block از the join’s large input، صرف نظر از اینکه آیا a partitioned یا broadcast join استفاده می‌شود، شروع می‌شود).
+    </p>
+
+    <p>
+        همانطور که بحث شد، map-side joins نیز فرضیات بیشتری را در مورد اندازه، sorting، و partitioning از input datasets خود ایجاد می‌کنند. دانستن در مورد physical layout از datasets در distributed filesystem، هنگامی که بهینه سازی join strategies: مهم می‌شود، کافی نیست که فقط the encoding format و نام از directory که داده‌ها در آن ذخیره می‌شوند را بدانید؛ شما همچنین باید number از partitions و the keys که داده‌ها توسط آن‌ها partitioned و sorted شده‌اند را نیز بدانید.
+    </p>
+
+    <p>
+        در the Hadoop ecosystem، این نوع از metadata در مورد the partitioning از datasets، اغلب در HCatalog و the Hive metastore [37] نگهداری می‌شود.
+    </p>
+    <p>
+        410 | Chapter 10: Batch Processing
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

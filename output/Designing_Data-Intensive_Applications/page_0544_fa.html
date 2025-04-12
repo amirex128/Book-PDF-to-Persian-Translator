@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 544</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>Uniqueness</strong> در پیام‌رسانی مبتنی بر <strong>log</strong>
+    </p>
+    <p>
+        <strong>Log</strong> تضمین می‌کند که تمام <strong>consumers</strong> پیام‌ها را
+        به همان ترتیب می‌بینند—تضمینی که به‌طور رسمی به‌عنوان <strong>total
+        order broadcast</strong> شناخته می‌شود و معادل <strong>consensus</strong>
+        است (نگاه کنید به "<strong>Total Order Broadcast</strong>" در صفحه 348). در
+        رویکرد پایگاه داده‌ی <strong>unbundled</strong> با پیام‌رسانی مبتنی بر <strong>log</strong>،
+        ما می‌توانیم از یک رویکرد بسیار مشابه برای اعمال
+        <strong>uniqueness constraints</strong> استفاده کنیم.
+    </p>
+    <p>
+        یک پردازنده <strong>stream</strong> تمام پیام‌ها را در یک <strong>log
+        partition</strong> به‌صورت متوالی در یک <strong>thread</strong> واحد مصرف
+        می‌کند (نگاه کنید به "<strong>Logs</strong> در مقایسه با پیام‌رسانی سنتی"
+        در صفحه 448). بنابراین، اگر <strong>log</strong> بر اساس مقداری که
+        نیاز به <strong>unique</strong> بودن دارد، <strong>partitioned</strong> شده
+        باشد، یک پردازنده <strong>stream</strong> می‌تواند به‌طور صریح و
+        <em>deterministic</em> تصمیم بگیرد که کدام‌یک از چندین عملیات
+        متناقض، اول آمده است. به عنوان مثال، در مورد چندین کاربر که
+        سعی می‌کنند همان نام کاربری را ادعا کنند [57]:
+    </p>
+    <ol>
+        <li>
+            هر درخواست برای یک نام کاربری به عنوان یک پیام رمزگذاری
+            شده است، و به یک <strong>partition</strong> اضافه می‌شود که توسط
+            <strong>hash</strong> از نام کاربری تعیین می‌شود.
+        </li>
+        <li>
+            یک پردازنده <strong>stream</strong> به‌طور متوالی درخواست‌ها را در
+            <strong>log</strong> می‌خواند، و از یک پایگاه داده‌ی محلی برای
+            پیگیری این‌که کدام نام‌های کاربری گرفته شده‌اند، استفاده
+            می‌کند. برای هر درخواست برای یک نام کاربری که در دسترس
+            است، نام را به‌عنوان گرفته شده ثبت می‌کند و یک پیام
+            موفقیت را به یک <strong>stream</strong> خروجی منتشر می‌کند. برای
+            هر درخواست برای یک نام کاربری که قبلاً گرفته شده است،
+            یک پیام رد را به یک <strong>stream</strong> خروجی منتشر می‌کند.
+        </li>
+        <li>
+            <strong>Client</strong> که نام کاربری را درخواست کرده است، <strong>stream</strong>
+            خروجی را تماشا می‌کند و منتظر یک پیام موفقیت یا رد
+            متناظر با درخواست خود می‌ماند.
+        </li>
+    </ol>
+    <p>
+        این الگوریتم اساساً با الگوریتم موجود در "پیاده‌سازی
+        ذخیره‌سازی <em>linearizable</em> با استفاده از <strong>total order broadcast</strong>"
+        در صفحه 350 یکسان است. این کار با افزایش تعداد
+        <strong>partitions</strong> به‌راحتی به یک توان عملیاتی زیاد درخواست
+        می‌رسد، زیرا هر <strong>partition</strong> می‌تواند به‌طور مستقل پردازش
+        شود.
+    </p>
+    <p>
+        این رویکرد، نه‌تنها برای <strong>uniqueness constraints</strong>، بلکه
+        برای بسیاری از انواع دیگر محدودیت‌ها نیز کار می‌کند. اصل
+        اساسی آن این است که هر <strong>writes</strong> که ممکن است متناقض
+        باشند، به همان <strong>partition</strong> هدایت می‌شوند و به‌طور
+        متوالی پردازش می‌شوند. همان‌طور که در "<strong>What is a conflict</strong>"
+        در صفحه 174 و "<strong>Write Skew</strong> و <strong>Phantoms</strong>" در
+        صفحه 246 بحث شد، تعریف یک <em>conflict</em> ممکن است به برنامه
+        بستگی داشته باشد، اما پردازنده <strong>stream</strong> می‌تواند از
+        منطق دلخواه برای تأیید یک درخواست استفاده کند. این ایده
+        مشابه رویکردی است که توسط <strong>Bayou</strong> در دهه‌ی 1990 پیشگام
+        شد [58].
+    </p>
+
+    <h4>پردازش درخواست چند <strong>partition</strong></h4>
+    <p>
+        اطمینان از این‌که یک عملیات به‌صورت <em>atomically</em> اجرا می‌شود،
+        در حالی‌که محدودیت‌ها را برآورده می‌کند، زمانی جالب‌تر می‌شود
+        که چندین <strong>partitions</strong> درگیر باشند. در مثال 12-2،
+        به‌طور بالقوه سه <strong>partition</strong> وجود دارد: یکی حاوی
+        <strong>request ID</strong>، یکی حاوی حساب <strong>payee</strong>، و یکی
+        حاوی حساب <strong>payer</strong>. هیچ دلیلی وجود ندارد که
+        522
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

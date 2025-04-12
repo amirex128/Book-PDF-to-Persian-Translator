@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 435</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <ul>
+        <li>
+            عملکرد <strong>queries</strong> احتمالاً آسیب خواهد دید. این امر می‌تواند به نوبه خود باعث بروز
+            مشکلات عملیاتی در سایر بخش‌های سیستم شود [35].
+        </li>
+        <li>
+            به‌طور معمول، <strong>MapReduce</strong> یک تضمین کامل یا هیچ برای خروجی job ارائه می‌دهد: اگر یک
+            job با موفقیت انجام شود، نتیجه، خروجی اجرای هر task دقیقاً یک بار است،
+            حتی اگر برخی از <strong>tasks</strong> با شکست مواجه شوند و مجبور به تکرار مجدد در طول
+            مسیر شوند؛ اگر کل job با شکست مواجه شود، هیچ خروجی تولید نمی‌شود.
+            با این حال، نوشتن به یک سیستم خارجی از داخل یک job، اثرات جانبی
+            خارجی قابل مشاهده را تولید می‌کند که نمی‌توان آن‌ها را به این روش پنهان
+            کرد. بنابراین، شما باید نگران نتایج حاصل از jobs های نیمه‌تمام باشید که برای
+            سیستم‌های دیگر قابل مشاهده هستند، و پیچیدگی‌های تلاش‌های <strong>Hadoop</strong>
+            <strong>task</strong> و اجرای speculative.
+        </li>
+    </ul>
+    <p>
+        یک راه‌حل بسیار بهتر این است که یک پایگاه داده کاملاً جدید را در داخل job
+        <strong>batch</strong> بسازید و آن را به عنوان فایل به دایرکتوری خروجی job در سیستم فایل
+        توزیع شده بنویسید، درست مانند index های جستجو در بخش آخر. آن فایل‌های
+        داده پس از نوشتن، <em>immutable</em> هستند و می‌توانند به‌صورت عمده در سرورهایی
+        بارگذاری شوند که query های read-only را مدیریت می‌کنند.
+        ذخیره‌سازی‌های <strong>key-value</strong> مختلف از ساخت فایل‌های پایگاه داده در jobs های
+        <strong>MapReduce</strong> پشتیبانی می‌کنند، از جمله <strong>Voldemort</strong> [46]، <strong>Terrapin</strong> [47]، <strong>ElephantDB</strong>
+        [48]، و بارگذاری <strong>bulk</strong> <strong>HBase</strong> [49].
+    </p>
+    <p>
+        ساخت این فایل‌های پایگاه داده یک استفاده خوب از <strong>MapReduce</strong> است: استفاده از یک
+        <strong>mapper</strong> برای استخراج یک <strong>key</strong> و سپس مرتب‌سازی بر اساس آن <strong>key</strong>، در حال حاضر
+        بخش زیادی از کار مورد نیاز برای ساخت یک index است. از آن‌جایی که بیشتر
+        این ذخیره‌سازی‌های <strong>key-value</strong> read-only هستند (فایل‌ها فقط می‌توانند یک بار توسط
+        یک job <strong>batch</strong> نوشته شوند و سپس <em>immutable</em> می‌شوند)، ساختارهای داده بسیار ساده
+        هستند. به‌عنوان مثال، آن‌ها نیازی به <strong>WAL</strong> ندارند (نگاه کنید به "ایمن کردن
+        B-trees" در صفحه 82).
+    </p>
+    <p>
+        هنگام بارگذاری داده‌ها در <strong>Voldemort</strong>، سرور به سرویس‌دهی درخواست‌ها به فایل‌های
+        داده قدیمی ادامه می‌دهد در حالی که فایل‌های داده جدید از سیستم فایل توزیع
+        شده به دیسک محلی سرور کپی می‌شوند. پس از اتمام کپی، سرور به‌صورت
+        اتمی به query کردن فایل‌های جدید می‌رود. اگر در این فرآیند مشکلی پیش بیاید،
+        می‌تواند به راحتی دوباره به فایل‌های قدیمی برگردد، زیرا هنوز آن‌جا هستند و
+        <em>immutable</em> [46].
+    </p>
+
+    <h4>فلسفه خروجی‌های فرآیند <strong>batch</strong></h4>
+    <p>
+        فلسفه <strong>Unix</strong> که ما قبلاً در این فصل در مورد آن بحث کردیم ("فلسفه <strong>Unix</strong>" در صفحه
+        394) با صراحت بسیار در مورد <strong>dataflow</strong>، آزمایش را تشویق می‌کند: یک برنامه ورودی
+        خود را می‌خواند و خروجی خود را می‌نویسد. در این فرآیند، ورودی بدون تغییر
+        باقی می‌ماند، هر خروجی قبلی به‌طور کامل با خروجی جدید جایگزین می‌شود، و
+        هیچ اثر جانبی دیگری وجود ندارد. این بدان معنی است که شما می‌توانید یک
+        دستور را هرچند که دوست دارید دوباره اجرا کنید، آن را اصلاح یا <strong>debug</strong> کنید،
+        بدون این‌که وضعیت سیستم خود را به هم بریزید.
+    </p>
+    <p>
+        مدیریت خروجی از jobs های <strong>MapReduce</strong> از همین فلسفه پیروی می‌کند. با برخورد با
+        ورودی‌ها به عنوان <em>immutable</em> و اجتناب از اثرات جانبی (مانند نوشتن به پایگاه‌های
+        داده خارجی)، jobs های <strong>batch</strong> نه تنها عملکرد خوبی را به دست می‌آورند، بلکه
+        نگهداری آن‌ها نیز بسیار آسان‌تر می‌شود:
+    </p>
+    <p>
+        <strong>MapReduce</strong> و سیستم‌های فایل توزیع شده
+        |
+        413
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

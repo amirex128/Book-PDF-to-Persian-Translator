@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 478</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4><strong>Log compaction</strong></h4>
+    <p>
+        اگر شما فقط می‌توانید مقدار محدودی از تاریخچه <strong>log</strong> را نگه
+        دارید، شما نیاز دارید که هر بار که می‌خواهید یک سیستم داده‌ی مشتق شده
+        جدید را اضافه کنید، فرآیند <strong>snapshot</strong> را طی کنید. با این حال،
+        <strong>log compaction</strong> یک جایگزین خوب ارائه می‌دهد.
+    </p>
+    <p>
+        ما قبلاً در "<strong>Hash Indexes</strong>" در صفحه 72، در زمینه موتورهای
+        ذخیره‌سازی ساختاریافته بر اساس <strong>log</strong> (به شکل 3-2 برای یک مثال
+        نگاه کنید) در مورد <strong>log compaction</strong> بحث کردیم. اصل ساده
+        است: موتور ذخیره‌سازی به‌طور دوره‌ای به‌دنبال رکوردهای <strong>log</strong> با
+        <strong>key</strong> یکسان می‌گردد، هر تکراری را دور می‌ریزد و فقط
+        آخرین به‌روزرسانی را برای هر <strong>key</strong> نگه می‌دارد. این فرآیند
+        <strong>compaction</strong> و ادغام در پس‌زمینه اجرا می‌شود.
+    </p>
+    <p>
+        در یک موتور ذخیره‌سازی ساختاریافته مبتنی بر <strong>log</strong>، یک به‌روزرسانی
+        با یک مقدار <em>null</em> خاص (یک <em>tombstone</em>) نشان می‌دهد که یک
+        <strong>key</strong> حذف شده است، و باعث می‌شود که در طول <strong>log
+        compaction</strong> حذف شود. اما تا زمانی‌که یک <strong>key</strong> بازنویسی یا
+        حذف نشود، برای همیشه در <strong>log</strong> باقی می‌ماند. فضای دیسک مورد
+        نیاز برای چنین <strong>compacted log</strong>، فقط به محتویات فعلی پایگاه
+        داده، و نه به تعداد نوشته‌هایی که تا به حال در پایگاه داده رخ داده
+        است، بستگی دارد. اگر <strong>key</strong> یکسان مکرراً بازنویسی شود، مقادیر
+        قبلی در نهایت <em>garbage-collected</em> خواهند شد، و فقط آخرین مقدار
+        حفظ خواهد شد.
+    </p>
+    <p>
+        همان ایده در زمینه <strong>log-based message brokers</strong> و <strong>change data
+        capture</strong> کار می‌کند. اگر سیستم <strong>CDC</strong> طوری تنظیم شده باشد
+        که هر تغییری دارای یک <strong>primary key</strong> باشد، و هر به‌روزرسانی برای
+        یک <strong>key</strong>، مقدار قبلی را برای آن <strong>key</strong> جایگزین می‌کند، آن‌گاه
+        کافی است که فقط آخرین نوشته را برای یک <strong>key</strong> خاص نگه دارید.
+    </p>
+    <p>
+        اکنون، هر زمان که شما بخواهید یک سیستم داده مشتق شده مانند یک
+        index جستجو را بازسازی کنید، شما می‌توانید یک <strong>consumer</strong> جدید را
+        از <strong>offset</strong> 0 از <strong>topic</strong> <strong>log-compacted</strong> شروع کنید، و
+        به‌طور متوالی تمام پیام‌ها را در <strong>log</strong> اسکن کنید. تضمین شده
+        است که <strong>log</strong> حاوی آخرین مقدار برای هر <strong>key</strong> در پایگاه داده
+        (و شاید برخی از مقادیر قدیمی‌تر) است—به عبارت دیگر، شما می‌توانید
+        از آن برای به‌دست آوردن یک کپی کامل از محتویات پایگاه داده بدون
+        نیاز به گرفتن یک <strong>snapshot</strong> دیگر از پایگاه داده منبع <strong>CDC</strong>
+        استفاده کنید.
+    </p>
+    <p>
+        این <strong>feature</strong> <strong>log compaction</strong> توسط <strong>Apache Kafka</strong>
+        پشتیبانی می‌شود. همان‌طور که بعداً در این فصل خواهیم دید، این به
+        <strong>message broker</strong> اجازه می‌دهد که فقط برای پیام‌رسانی
+        <em>transient</em> استفاده نشود، بلکه برای ذخیره‌سازی <em>durable</em> نیز
+        استفاده شود.
+    </p>
+
+    <h4>پشتیبانی <strong>API</strong> برای جریان‌های تغییر</h4>
+    <p>
+        به‌طور فزاینده، پایگاه‌های داده شروع به پشتیبانی از جریان‌های تغییر
+        به‌عنوان یک رابط <em>first-class</em>، به‌جای تلاش‌های <strong>CDC</strong>
+        <em>retrofitted</em> و <em>reverse-engineered</em> معمولی می‌کنند. به عنوان
+        مثال، <strong>RethinkDB</strong> به queries اجازه می‌دهد که در مورد تغییرات
+        نتایج یک query اعلان دریافت کنند [36]، <strong>Firebase</strong> [37] و
+        <strong>CouchDB</strong> [38] همگام‌سازی داده‌ها را بر اساس یک <strong>change
+        feed</strong> ارائه می‌دهند که برای برنامه‌ها نیز در دسترس است، و <strong>Meteor</strong>
+        از <strong>oplog</strong> <strong>MongoDB</strong> برای <strong>subscribing</strong> به تغییرات
+        داده‌ها و به‌روزرسانی <strong>user interface</strong> استفاده می‌کند [39].
+    </p>
+    <p>
+        <strong>VoltDB</strong> به تراکنش‌ها اجازه می‌دهد که داده‌ها را به‌طور مداوم از
+        یک پایگاه داده به‌صورت یک <strong>stream</strong> صادر کنند [40]. پایگاه داده یک
+        جریان خروجی را در داده‌های رابطه‌ای نشان می‌دهد
+        456
+        |
+        فصل 11: پردازش <strong>Stream</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

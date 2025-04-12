@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 514</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        به‌روزرسانی یک سیستم داده‌ی مشتق شده بر اساس یک <strong>event log</strong>
+        اغلب می‌تواند <em>deterministic</em> و <em>idempotent</em> شود (نگاه کنید به
+        "<strong>Idempotence</strong>" در صفحه 478)، و بازیابی از <strong>faults</strong> را
+        بسیار آسان می‌کند.
+    </p>
+
+    <h4>داده‌های مشتق شده در مقابل تراکنش‌های توزیع شده</h4>
+    <p>
+        رویکرد کلاسیک برای همگام نگه داشتن سیستم‌های داده‌ی مختلف با یکدیگر،
+        شامل تراکنش‌های توزیع شده است، همان‌طور که در "<strong>Atomic Commit</strong>
+        و <strong>Two-Phase Commit (2PC)</strong>" در صفحه 354 بحث شد. رویکرد
+        استفاده از سیستم‌های داده‌ی مشتق شده در مقایسه با تراکنش‌های
+        توزیع شده چگونه است؟
+    </p>
+    <p>
+        در یک سطح انتزاعی، آن‌ها با ابزارهای مختلف به یک هدف مشابه دست
+        می‌یابند. تراکنش‌های توزیع شده با استفاده از <strong>locks</strong> برای
+        <strong>mutual exclusion</strong> (نگاه کنید به "<strong>Two-Phase Locking (2PL)</strong>"
+        در صفحه 257) در مورد یک <strong>ordering</strong> از نوشتن‌ها تصمیم می‌گیرند،
+        در حالی که <strong>CDC</strong> و <strong>event sourcing</strong> از یک <strong>log</strong> برای
+        <strong>ordering</strong> استفاده می‌کنند. تراکنش‌های توزیع شده از
+        <strong>atomic commit</strong> برای اطمینان از این‌که تغییرات دقیقاً یک بار
+        اعمال می‌شوند، استفاده می‌کنند، در حالی که سیستم‌های مبتنی بر <strong>log</strong>
+        اغلب بر اساس <strong>deterministic retry</strong> و <strong>idempotence</strong>
+        هستند.
+    </p>
+    <p>
+        بزرگترین تفاوت این است که سیستم‌های تراکنش معمولاً
+        <strong>linearizability</strong> را ارائه می‌دهند (نگاه کنید به "<strong>Linearizability</strong>"
+        در صفحه 324)، که تضمین‌های مفیدی را از جمله خواندن
+        نوشتن‌های خودتان را به‌همراه دارد (نگاه کنید به "خواندن
+        نوشتن‌های خودتان" در صفحه 162). از سوی دیگر، سیستم‌های
+        داده‌ی مشتق شده اغلب به‌طور <em>asynchronously</em> به‌روزرسانی
+        می‌شوند، و بنابراین به‌طور پیش‌فرض همان تضمین‌های زمان‌بندی
+        را ارائه نمی‌دهند.
+    </p>
+    <p>
+        در محیط‌های محدودی که مایل به پرداخت هزینه‌ی تراکنش‌های
+        توزیع شده هستند، آن‌ها با موفقیت استفاده شده‌اند. با این حال، من
+        فکر می‌کنم که <strong>XA</strong> دارای ویژگی‌های تحمل خطای و عملکرد ضعیفی
+        است (نگاه کنید به "تراکنش‌های توزیع شده در عمل" در صفحه 360)،
+        که به‌شدت قابلیت استفاده از آن را محدود می‌کند. من معتقدم که
+        ممکن است بتوان یک پروتکل بهتر برای تراکنش‌های توزیع شده ایجاد
+        کرد، اما دریافت این‌که چنین پروتکلی به‌طور گسترده‌ای پذیرفته
+        شود و با ابزارهای موجود ادغام شود، چالش‌برانگیز خواهد بود، و
+        به‌زودی اتفاق نخواهد افتاد.
+    </p>
+    <p>
+        به‌طوریکه در غیاب پشتیبانی گسترده برای یک پروتکل تراکنش توزیع
+        شده‌ی خوب، من معتقدم که داده‌های مشتق شده‌ی مبتنی بر <strong>log</strong>
+        امیدوارکننده‌ترین رویکرد برای ادغام سیستم‌های داده‌ی مختلف است. با
+        این حال، تضمین‌هایی مانند خواندن نوشتن‌های خودتان مفید هستند، و
+        من فکر نمی‌کنم که گفتن به همه "<em>eventual consistency</em> اجتناب‌ناپذیر
+        است—آن را بپذیرید و یاد بگیرید که چگونه با آن برخورد کنید" (حداقل
+        بدون راهنمایی خوب در مورد چگونگی برخورد با آن)، نتیجه‌بخش
+        باشد.
+    </p>
+    <p>
+        در "هدف قرار دادن درستی" در صفحه 515 ما در مورد برخی رویکردها
+        برای پیاده‌سازی تضمین‌های قوی‌تر بر روی سیستم‌های <em>asynchronously</em>
+        مشتق شده، و کار به سمت یک راه‌حل میانی بین تراکنش‌های توزیع شده
+        و سیستم‌های مبتنی بر <strong>log asynchronous</strong> بحث خواهیم کرد.
+        492
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 445</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        هنگام محاسبه مجدد داده‌ها، مهم است که بدانیم آیا محاسبه <em>deterministic</em> است:
+        یعنی، با در نظر گرفتن داده‌های ورودی یکسان، آیا <strong>operators</strong> همیشه
+        خروجی یکسانی تولید می‌کنند؟ این سوال در صورتی اهمیت دارد که برخی از
+        داده‌های از دست رفته قبلاً به <strong>operators</strong>های <em>downstream</em> ارسال شده
+        باشند. اگر <strong>operator</strong> راه‌اندازی مجدد شود و داده‌های محاسبه شده مجدد
+        با داده‌های اصلی از دست رفته یکسان نباشد، حل تناقض‌ها بین داده‌های
+        قدیمی و جدید برای <strong>operators</strong> های <em>downstream</em> بسیار دشوار می‌شود.
+        راه‌حل در مورد <strong>operators</strong> های <em>nondeterministic</em> معمولاً این است که
+        <strong>operators</strong> های <em>downstream</em> را نیز متوقف کنید و آن‌ها را دوباره روی
+        داده‌های جدید اجرا کنید.
+    </p>
+    <p>
+        به منظور اجتناب از چنین خطاهای آبشاری، بهتر است <strong>operators</strong> <em>deterministic</em>
+        باشند. با این حال توجه داشته باشید که رفتار <em>nondeterministic</em> به طور
+        تصادفی وارد می‌شود: به عنوان مثال، بسیاری از زبان‌های برنامه‌نویسی هیچ
+        ترتیب خاصی را هنگام تکرار عناصر یک جدول <strong>hash</strong> تضمین نمی‌کنند،
+        بسیاری از الگوریتم‌های احتمالی و آماری صریحاً به استفاده از اعداد
+        تصادفی متکی هستند، و هرگونه استفاده از ساعت سیستم یا منابع داده
+        خارجی <em>nondeterministic</em> است. چنین عللی از <em>nondeterminism</em> باید به
+        منظور بازیابی قابل اطمینان از خطاها حذف شوند، به عنوان مثال با تولید
+        اعداد شبه تصادفی با استفاده از یک <strong>seed</strong> ثابت.
+    </p>
+    <p>
+        بازیابی از خطاها با محاسبه مجدد داده‌ها همیشه پاسخ صحیح نیست: اگر داده‌های
+        <em>intermediate</em> بسیار کوچک‌تر از داده‌های منبع باشند، یا اگر محاسبه
+        بسیار <strong>CPU</strong>-<em>intensive</em> باشد، احتمالاً <strong>materialize</strong> کردن داده‌های
+        <em>intermediate</em> به فایل‌ها ارزان‌تر از محاسبه مجدد آن است.
+    </p>
+
+    <h4>بحث در مورد <strong>materialization</strong></h4>
+    <p>
+        با بازگشت به قیاس <strong>Unix</strong>، ما دیدیم که <strong>MapReduce</strong> مانند نوشتن
+        خروجی هر دستور به یک فایل موقت است، در حالی که موتورهای <strong>dataflow</strong>
+        بسیار شبیه به <strong>Unix pipes</strong> هستند. <strong>Flink</strong> به‌ویژه حول ایده‌ی اجرای
+        <em>pipelined</em> ساخته شده است: یعنی، به‌طور افزایشی انتقال خروجی یک
+        <strong>operator</strong> به <strong>operators</strong> دیگر، و منتظر نماندن تا ورودی قبل از
+        شروع پردازش کامل شود.
+    </p>
+    <p>
+        یک عملیات مرتب‌سازی ناگزیر باید کل ورودی خود را مصرف کند تا بتواند
+        هر خروجی تولید کند، زیرا این امکان وجود دارد که آخرین رکورد ورودی
+        همان رکوردی باشد که کمترین <strong>key</strong> را دارد و بنابراین باید اولین رکورد
+        خروجی باشد. هر <strong>operator</strong> که نیاز به مرتب‌سازی دارد، بنابراین باید
+        حالت را جمع‌آوری کند، حداقل موقتاً. اما بسیاری از بخش‌های دیگر یک
+        <strong>workflow</strong> را می‌توان به روش <em>pipelined</em> اجرا کرد.
+    </p>
+    <p>
+        هنگامی که job تکمیل شد، خروجی آن باید به مکانی <em>durable</em> برود تا
+        کاربران بتوانند آن را پیدا کرده و از آن استفاده کنند—به احتمال زیاد، دوباره
+        به سیستم فایل توزیع شده نوشته می‌شود. بنابراین، هنگام استفاده از یک
+        موتور <strong>dataflow</strong>، مجموعه‌داده‌های <strong>materialized</strong> روی <strong>HDFS</strong> هنوز
+        معمولاً ورودی‌ها و خروجی‌های نهایی یک job هستند. مانند <strong>MapReduce</strong>،
+        ورودی‌ها <em>immutable</em> هستند و خروجی کاملاً جایگزین می‌شود.
+        بهبود نسبت به <strong>MapReduce</strong> این است که شما خود را از نوشتن تمام
+        حالت <strong>intermediate</strong> به سیستم فایل نجات می‌دهید.
+        <strong>Beyond MapReduce</strong>
+        |
+        423
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 427</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        به منظور دستیابی به throughput خوب در یک batch process، computation باید (تا حد امکان) local به یک machine باشد. Making random-access requests بر روی شبکه برای هر recordی که شما می‌خواهید پردازش کنید، بسیار کند است. علاوه بر این، querying a remote database به این معنی است که the batch job، nondeterministic می‌شود، زیرا داده‌ها در the remote database ممکن است تغییر کنند.
+    </p>
+
+    <p>
+        بنابراین، یک approach بهتر این است که یک کپی از user database (به عنوان مثال، استخراج شده از یک database backup با استفاده از یک ETL process - به "Data Warehousing" در صفحه 91 مراجعه کنید) را بگیرید و آن را در همان distributed filesystem به عنوان log از user activity events قرار دهید. سپس شما database user را در یک set از فایل‌ها در HDFS و the user activity records را در یک set دیگر از فایل‌ها خواهید داشت، و می‌توانید از MapReduce برای گرد هم آوردن تمام recordsهای مرتبط در همان مکان و پردازش آن‌ها به طور efficient استفاده کنید.
+    </p>
+
+    <h4>Sort-merge joins</h4>
+    <p>
+        به یاد بیاورید که هدف از the mapper extract کردن یک key و value از هر input record است. در مورد شکل 10-2، این key، user ID خواهد بود: یک set از mappers، بر روی activity events (extract کردن user ID به عنوان key و the activity event به عنوان value) می‌رود، در حالی که یک set دیگر از mappers، بر روی user database (extract کردن user ID به عنوان key و date of birth از user به عنوان value) می‌رود. این process در شکل 10-3 نشان داده شده است.
+    </p>
+    <figure>
+        <img src="figure10-3.png" alt="شکل 10-3">
+        <figcaption>
+            شکل 10-3. A reduce-side sort-merge join بر روی user ID. اگر input datasets به multiple files partitioned شوند، هر کدام می‌توانند با multiple mappers به صورت parallel پردازش شوند.
+        </figcaption>
+    </figure>
+
+    <p>
+        هنگامی که the MapReduce framework، the mapper output را by key partition می‌کند و سپس key-value pairs را sort می‌کند، این اثر را دارد که همه activity events و the user record با همان user ID، در input از the reducer در مجاورت یکدیگر قرار می‌گیرند. The MapReduce job، حتی می‌تواند records را طوری مرتب کند که the reducer همیشه
+    </p>
+    <p>
+        MapReduce and Distributed Filesystems | 405
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0427/image_1.png" alt="Image from page 427" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

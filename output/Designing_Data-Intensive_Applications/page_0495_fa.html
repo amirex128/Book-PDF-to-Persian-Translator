@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 495</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>data pipelines</strong> به پردازش افزایشی مجموعه‌داده‌های <em>unbounded</em>،
+        دقیقاً همان نیاز به <strong>joins</strong> در <strong>streams</strong> وجود دارد.
+    </p>
+    <p>
+        با این حال، این واقعیت که رویدادهای جدید می‌توانند در هر زمانی در یک
+        <strong>stream</strong> ظاهر شوند، <strong>joins</strong> را در <strong>streams</strong>
+        چالش‌برانگیزتر از jobs های <strong>batch</strong> می‌کند. برای درک بهتر
+        شرایط، اجازه دهید سه نوع مختلف از <strong>joins</strong> را متمایز کنیم:
+        <strong>stream-stream joins</strong>، <strong>stream-table joins</strong>، و <strong>table-table
+        joins</strong> [84]. در بخش‌های زیر ما هر کدام را با مثال نشان خواهیم
+        داد.
+    </p>
+    <ul>
+        <li>
+            <strong>Stream-stream join (window join)</strong>
+        </li>
+        <p>
+            فرض کنید شما یک <strong>feature</strong> جستجو در وب‌سایت خود دارید، و شما
+            می‌خواهید روندهای اخیر در <strong>URLs</strong> جستجو شده را تشخیص
+            دهید. هر بار که کسی یک <strong>query</strong> جستجو را تایپ می‌کند، شما یک
+            رویداد حاوی <strong>query</strong> و نتایج بازگشتی را ثبت می‌کنید. هر بار که
+            کسی روی یکی از نتایج جستجو کلیک می‌کند، شما یک رویداد دیگر را
+            که کلیک را ثبت می‌کند، <strong>log</strong> می‌کنید. برای محاسبه‌ی
+            نرخ <strong>click-through</strong> برای هر <strong>URL</strong> در نتایج جستجو، شما
+            باید رویدادهای مربوط به اقدام جستجو و عمل کلیک را کنار هم
+            بیاورید، که با داشتن <strong>session ID</strong> یکسان، به هم مرتبط
+            هستند. تجزیه و تحلیل‌های مشابه در سیستم‌های تبلیغاتی مورد
+            نیاز است [85].
+        </p>
+        <p>
+            اگر کاربر جستجوی خود را رها کند، ممکن است هرگز کلیک وجود
+            نداشته باشد، و حتی اگر هم وجود داشته باشد، زمان بین جستجو و
+            کلیک ممکن است بسیار متغیر باشد: در بسیاری از موارد ممکن است
+            چند ثانیه باشد، اما می‌تواند به اندازه‌ی روزها یا هفته‌ها باشد
+            (اگر یک کاربر جستجو را اجرا کند، زبانه مرورگر خود را فراموش
+            کند، و سپس مدتی بعد به زبانه برگردد و روی یک نتیجه کلیک
+            کند). با توجه به تأخیرهای متغیر شبکه، رویداد کلیک ممکن است
+            حتی قبل از رویداد جستجو برسد. شما می‌توانید یک <strong>window</strong>
+            مناسب برای <strong>join</strong> را انتخاب کنید—به عنوان مثال، شما
+            می‌توانید انتخاب کنید که یک کلیک را با یک جستجو <strong>join</strong>
+            کنید اگر آن‌ها حداکثر یک ساعت از هم فاصله داشته باشند.
+        </p>
+        <p>
+            توجه داشته باشید که جاسازی جزئیات جستجو در رویداد کلیک
+            معادل <strong>joining</strong> رویدادها نیست: انجام این کار فقط در
+            مورد مواردی به شما می‌گوید که کاربر روی یک نتیجه جستجو کلیک
+            کرده است، نه در مورد جستجوهایی که کاربر روی هیچ‌یک از
+            نتایج کلیک نکرده است. به منظور اندازه‌گیری کیفیت جستجو، شما
+            به نرخ‌های <strong>click-through</strong> دقیق نیاز دارید، که برای آن‌ها به
+            هر دو رویداد جستجو و رویداد کلیک نیاز دارید.
+        </p>
+        <p>
+            برای پیاده‌سازی این نوع <strong>join</strong>، یک پردازنده <strong>stream</strong>
+            باید <strong>state</strong> را حفظ کند: به عنوان مثال، تمام رویدادهایی که
+            در یک ساعت گذشته رخ داده‌اند، <strong>indexed</strong> توسط
+            <strong>session ID</strong>. هر زمان که یک رویداد جستجو یا رویداد کلیک
+            رخ می‌دهد، به <strong>index</strong> مناسب اضافه می‌شود، و
+            پردازنده <strong>stream</strong> نیز <strong>index</strong> دیگر را بررسی می‌کند تا
+            ببیند آیا رویداد دیگری برای همان <strong>session ID</strong> قبلاً
+            رسیده است یا خیر. اگر یک رویداد <strong>matching</strong> وجود داشته
+            باشد، شما یک رویداد را منتشر می‌کنید که می‌گوید روی کدام
+            نتیجه جستجو کلیک شده است. اگر رویداد جستجو بدون این‌که شما
+            یک رویداد کلیک <strong>matching</strong> را ببینید، منقضی شود، شما
+            یک رویداد را منتشر می‌کنید که می‌گوید کدام نتایج جستجو
+            کلیک نشده‌اند.
+        </p>
+        <li>
+            <strong>Stream-table join (stream enrichment)</strong>
+        </li>
+        <p>
+            در "مثال: تجزیه و تحلیل رویدادهای فعالیت کاربر" در صفحه 404 (شکل
+            10-2) ما یک مثال از یک job <strong>batch</strong> را دیدیم که دو
+            مجموعه‌داده را <strong>joining</strong> می‌کند: مجموعه‌ای از رویدادهای
+            فعالیت کاربر و یک پایگاه داده از پروفایل‌های کاربر. طبیعی است که
+            رویدادهای فعالیت کاربر را به‌عنوان یک <strong>stream</strong> در نظر
+            بگیرید، و همان <strong>join</strong> را به‌طور مداوم در یک پردازنده
+            <strong>stream</strong> انجام دهید: ورودی یک
+            473
+        </li>
+    </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

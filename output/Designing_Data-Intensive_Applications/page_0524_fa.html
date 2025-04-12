@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 524</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>querying</strong>، نیاز به <strong>mapping</strong> یک مدل داده به دیگری
+        دارد، که نیاز به مقداری تفکر دارد اما در نهایت یک مشکل کاملاً قابل
+        مدیریت است. من فکر می‌کنم که همگام نگه داشتن <strong>writes</strong> در
+        سیستم‌های ذخیره‌سازی مختلف، مشکل مهندسی سخت‌تری است، و بنابراین
+        من روی آن تمرکز خواهم کرد.
+    </p>
+    <p>
+        رویکرد سنتی برای همگام‌سازی <strong>writes</strong>، به تراکنش‌های توزیع شده
+        در سراسر سیستم‌های ذخیره‌سازی ناهمگن نیاز دارد [18]، که من فکر
+        می‌کنم راه‌حل اشتباهی است (نگاه کنید به "داده‌های مشتق شده در
+        مقابل تراکنش‌های توزیع شده" در صفحه 492). تراکنش‌ها در یک
+        سیستم ذخیره‌سازی یا پردازش <strong>stream</strong> واحد امکان‌پذیر هستند،
+        اما وقتی داده‌ها از مرز بین فناوری‌های مختلف عبور می‌کنند، من
+        معتقدم که یک <strong>event log</strong> <em>asynchronous</em> با <strong>writes</strong>
+        <em>idempotent</em> یک رویکرد بسیار قوی‌تر و عملی‌تر است.
+    </p>
+    <p>
+        به عنوان مثال، تراکنش‌های توزیع شده در برخی از پردازنده‌های
+        <strong>stream</strong> برای دستیابی به <strong>exactly-once semantics</strong>
+        استفاده می‌شوند (نگاه کنید به "<strong>Atomic commit</strong> بازبینی شده"
+        در صفحه 477)، و این می‌تواند کاملاً خوب کار کند. با این حال،
+        وقتی یک تراکنش نیاز به درگیر کردن سیستم‌هایی دارد که توسط
+        گروه‌های مختلفی از افراد نوشته شده‌اند (به عنوان مثال، زمانی که
+        داده‌ها از یک پردازنده <strong>stream</strong> به یک ذخیره‌سازی <strong>key-value</strong>
+        توزیع شده یا index جستجو نوشته می‌شود)، فقدان یک پروتکل تراکنش
+        استاندارد، ادغام را بسیار سخت‌تر می‌کند. یک <strong>log</strong> مرتب شده
+        از رویدادها با <strong>consumers</strong> <em>idempotent</em> (نگاه کنید به
+        "<strong>Idempotence</strong>" در صفحه 478) یک انتزاع بسیار ساده‌تر است، و
+        بنابراین پیاده‌سازی آن در سراسر سیستم‌های ناهمگن بسیار
+        امکان‌پذیرتر است [7].
+    </p>
+    <p>
+        مزیت بزرگ ادغام مبتنی بر <strong>log</strong>، <strong>loose coupling</strong> بین
+        اجزای مختلف است، که خود را به دو روش نشان می‌دهد:
+    </p>
+    <ul>
+        <li>
+            در سطح سیستم، <strong>event streams</strong> <em>asynchronous</em>
+            سیستم را به‌عنوان یک کل، در برابر قطعی‌ها یا کاهش عملکرد
+            اجزای جداگانه، <strong>robust</strong> تر می‌کند. اگر یک
+            <strong>consumer</strong> کند اجرا شود یا شکست بخورد، <strong>event log</strong>
+            می‌تواند پیام‌ها را <strong>buffer</strong> کند (نگاه کنید به "استفاده از
+            فضای دیسک" در صفحه 450)، که به <strong>producer</strong> و هر
+            <strong>consumers</strong> دیگر اجازه می‌دهد که بدون تأثیر به اجرا
+            ادامه دهند. <strong>Consumer</strong> معیوب می‌تواند در زمانی که
+            تعمیر شد، خود را بازیابی کند، بنابراین هیچ داده‌ای را از دست
+            نمی‌دهد، و <strong>fault</strong> در آن محدود می‌شود. در مقابل،
+            تعامل <em>synchronous</em> از تراکنش‌های توزیع شده تمایل دارد که
+            <strong>faults</strong> محلی را به شکست‌های در مقیاس بزرگ تبدیل
+            کند (نگاه کنید به "محدودیت‌های تراکنش‌های توزیع شده" در
+            صفحه 363).
+        </li>
+        <li>
+            در سطح انسانی، <strong>unbundling</strong> سیستم‌های داده به اجزای
+            نرم‌افزاری و <strong>services</strong> مختلف اجازه می‌دهد که به‌طور
+            مستقل از یکدیگر توسط تیم‌های مختلف توسعه، بهبود و
+            نگهداری شوند. <strong>Specialization</strong> به هر تیم اجازه می‌دهد که
+            روی انجام یک کار به‌خوبی تمرکز کند، با <strong>interfaces</strong>
+            خوب تعریف شده برای سیستم‌های تیم‌های دیگر. <strong>Event logs</strong>
+            یک <strong>interface</strong> ارائه می‌دهند که به اندازه‌ی کافی قدرتمند
+            است تا ویژگی‌های <em>consistency</em> نسبتاً قوی را ثبت کند (به
+            دلیل <em>durability</em> و <strong>ordering</strong> رویدادها)، اما همچنین
+            به اندازه‌ی کافی کلی است تا برای تقریباً هر نوع داده قابل
+            اجرا باشد.
+        </li>
+    </ul>
+    <h4>سیستم‌های <strong>Unbundled</strong> در مقابل سیستم‌های یکپارچه</h4>
+    <p>
+        اگر <strong>unbundling</strong> در واقع به راه آینده تبدیل شود، پایگاه‌های
+        داده را در شکل فعلی خود جایگزین نخواهد کرد—آن‌ها همچنان بیش از
+        همیشه مورد نیاز خواهند بود. پایگاه‌های داده هنوز هم
+        502
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

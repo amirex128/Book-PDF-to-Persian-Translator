@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 541</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        مثال 12-2 به یک <strong>uniqueness constraint</strong> در ستون
+        <strong>request_id</strong> متکی است. اگر یک تراکنش تلاش کند <strong>ID</strong>
+        ای را درج کند که از قبل وجود دارد، <strong>INSERT</strong> شکست می‌خورد و
+        تراکنش <strong>aborted</strong> می‌شود، و از این‌که دو بار تأثیر بگذارد،
+        جلوگیری می‌کند. پایگاه‌های داده‌ی رابطه‌ای به‌طور کلی می‌توانند یک
+        <strong>uniqueness constraint</strong> را به‌درستی حفظ کنند، حتی در سطوح
+        <em>weak isolation</em> (در حالی‌که یک <strong>check-then-insert</strong> در
+        سطح برنامه ممکن است تحت <em>nonserializable isolation</em> شکست
+        بخورد، همان‌طور که در "<strong>Write Skew</strong> و <strong>Phantoms</strong>"
+        در صفحه 246 بحث شد).
+    </p>
+    <p>
+        علاوه بر سرکوب درخواست‌های تکراری، جدول درخواست‌ها در مثال 12-2
+        به عنوان نوعی <strong>event log</strong> عمل می‌کند، که در جهت
+        <strong>event sourcing</strong> اشاره دارد (نگاه کنید به "<strong>Event
+        Sourcing</strong>" در صفحه 457). به‌روزرسانی‌های ترازهای حساب
+        واقعاً نیازی به رخ دادن در همان تراکنش به‌عنوان درج رویداد ندارند،
+        زیرا آن‌ها <em>redundant</em> هستند و می‌توانند از رویداد درخواست در
+        یک <strong>consumer</strong> <em>downstream</em> استخراج شوند—تا
+        زمانی‌که رویداد دقیقاً یک بار پردازش شود، که می‌تواند دوباره با
+        استفاده از <strong>request ID</strong> اعمال شود.
+    </p>
+
+    <h4>استدلال <strong>End-to-End</strong></h4>
+    <p>
+        این سناریو از سرکوب تراکنش‌های تکراری، تنها یک نمونه از یک اصل
+        کلی‌تر به نام استدلال <strong>end-to-end</strong> است، که توسط
+        <strong>Saltzer</strong>، <strong>Reed</strong>، و <strong>Clark</strong> در سال 1984
+        بیان شد [55]:
+    </p>
+    <p>
+        عملکرد مورد نظر می‌تواند به‌طور کامل و صحیح فقط با دانش و
+        کمک برنامه که در <strong>endpoints</strong> از سیستم ارتباطی قرار دارد،
+        پیاده‌سازی شود. بنابراین، ارائه آن <strong>function</strong> مورد نظر
+        به عنوان یک <strong>feature</strong> از خود سیستم ارتباطی،
+        امکان‌پذیر نیست. (گاهی اوقات یک نسخه ناقص از <strong>function</strong>
+        ارائه شده توسط سیستم ارتباطی ممکن است به‌عنوان یک بهبود
+        عملکرد مفید باشد.)
+    </p>
+    <p>
+        در مثال ما، <strong>function</strong> مورد نظر سرکوب تکراری بود. ما دیدیم
+        که <strong>TCP</strong> بسته‌های تکراری را در سطح اتصال <strong>TCP</strong>
+        سرکوب می‌کند، و برخی از پردازنده‌های <strong>stream</strong>
+        <em>exactly-once semantics</em> را در سطح پردازش پیام ارائه
+        می‌دهند، اما این برای جلوگیری از این‌که یک کاربر یک درخواست
+        تکراری را ارسال کند، کافی نیست اگر اولی <em>timeout</em> شود.
+        به‌خودی خود، <strong>TCP</strong>، تراکنش‌های پایگاه داده، و پردازنده‌های
+        <strong>stream</strong> نمی‌توانند به‌طور کامل این موارد تکراری را
+        حذف کنند. حل این مشکل نیازمند یک راه‌حل <strong>end-to-end</strong>
+        است: یک شناسه تراکنش که از <strong>client</strong> کاربر نهایی تا پایگاه
+        داده منتقل می‌شود.
+    </p>
+    <p>
+        استدلال <strong>end-to-end</strong> همچنین برای بررسی یکپارچگی داده‌ها
+        اعمال می‌شود: <strong>checksums</strong> ساخته شده در <strong>Ethernet</strong>،
+        <strong>TCP</strong>، و <strong>TLS</strong> می‌توانند خراب شدن بسته‌ها در
+        شبکه را تشخیص دهند، اما آن‌ها نمی‌توانند خراب شدن را به‌دلیل
+        <strong>bugs</strong> در نرم‌افزار در پایان‌های ارسال و دریافت اتصال
+        شبکه، یا خراب شدن روی دیسک‌ها که داده‌ها در آن‌ها ذخیره شده‌اند،
+        تشخیص دهند. اگر شما می‌خواهید همه‌ی منابع ممکن فساد داده‌ها را
+        شناسایی کنید، شما همچنین به <strong>checksums</strong> های <em>end-to-end</em>
+        نیاز دارید.
+    </p>
+    <p>
+        یک استدلال مشابه در مورد رمزگذاری اعمال می‌شود [55]: رمز عبور در
+        شبکه‌ی <strong>WiFi</strong> خانگی شما در برابر افرادی که در ترافیک
+        <strong>WiFi</strong> شما <em>snooping</em> می‌کنند، محافظت می‌کند، اما
+        در برابر مهاجمان در جای دیگری در اینترنت محافظت
+        نمی‌کند؛ <strong>TLS/SSL</strong> بین <strong>client</strong> شما و سرور از
+        نگاه‌کردن به
+        هدف قرار دادن درستی
+        |
+        519
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 530</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        ii. در رویکرد <strong>microservices</strong>، شما می‌توانید از درخواست شبکه‌ی
+        <em>synchronous</em> با <strong>caching</strong> کردن نرخ ارز به‌صورت محلی در
+        <strong>service</strong> که خرید را پردازش می‌کند، اجتناب کنید. با این حال، به
+        منظور تازه نگه داشتن آن <strong>cache</strong>، شما نیاز دارید که به‌طور دوره‌ای
+        برای نرخ‌های ارز به‌روز شده <strong>poll</strong> کنید، یا به یک جریان از
+        تغییرات <strong>subscribe</strong> کنید—که دقیقاً همان چیزی است که در
+        رویکرد <strong>dataflow</strong> رخ می‌دهد.
+    </p>
+    <p>
+        این کد برنامه می‌تواند پردازش دلخواه را انجام دهد که توابع مشتق شده
+        در پایگاه‌های داده به‌طور کلی ارائه نمی‌دهند. مانند ابزارهای <strong>Unix</strong>
+        که توسط <strong>pipes</strong> زنجیر شده‌اند، <strong>stream operators</strong> می‌توانند
+        برای ساخت سیستم‌های بزرگ حول <strong>dataflow</strong>، ترکیب شوند. هر
+        <strong>operator</strong>، <strong>streams</strong> از تغییرات <strong>state</strong> را به
+        عنوان ورودی می‌گیرد، و <strong>streams</strong> دیگری از تغییرات
+        <strong>state</strong> را به‌عنوان خروجی تولید می‌کند.
+    </p>
+
+    <h4>پردازنده‌های <strong>Stream</strong> و <strong>services</strong></h4>
+    <p>
+        سبک فعلی توسعه برنامه شامل تجزیه‌ی عملکرد به مجموعه‌ای از
+        <strong>services</strong> است که از طریق درخواست‌های شبکه <em>synchronous</em>
+        مانند <strong>REST APIs</strong> ارتباط برقرار می‌کنند (نگاه کنید به "<strong>Dataflow</strong>
+        از طریق <strong>Services</strong>: <strong>REST</strong> و <strong>RPC</strong>" در صفحه 131).
+    </p>
+    <p>
+        مزیت این <strong>service-oriented architecture</strong> نسبت به یک
+        برنامه <em>monolithic</em> واحد، در درجه‌ی اول مقیاس‌پذیری سازمانی
+        از طریق <strong>loose coupling</strong> است: تیم‌های مختلف می‌توانند روی
+        <strong>services</strong> مختلف کار کنند، که تلاش هماهنگی بین تیم‌ها را
+        کاهش می‌دهد (تا زمانی‌که <strong>services</strong> بتوانند به‌طور مستقل
+        مستقر و به‌روز شوند).
+    </p>
+    <p>
+        ترکیب <strong>stream operators</strong> در سیستم‌های <strong>dataflow</strong>،
+        ویژگی‌های مشابه زیادی با رویکرد <strong>microservices</strong> دارد [40]. با
+        این حال، مکانیسم ارتباطی اساسی بسیار متفاوت است: جریان‌های پیام
+        <em>one-directional</em>، <em>asynchronous</em> به‌جای تعاملات
+        <em>request/response synchronous</em>.
+    </p>
+    <p>
+        علاوه بر مزایای ذکر شده در "<strong>Message-Passing Dataflow</strong>" در
+        صفحه 136، مانند تحمل خطای بهتر، سیستم‌های <strong>dataflow</strong>
+        همچنین می‌توانند عملکرد بهتری داشته باشند. به عنوان مثال، فرض
+        کنید یک مشتری در حال خرید یک مورد است که با یک ارز قیمت‌گذاری
+        شده است اما با ارز دیگری پرداخت می‌شود. به منظور انجام تبدیل
+        ارز، شما نیاز دارید که نرخ ارز فعلی را بدانید. این عملیات را می‌توان
+        به دو روش پیاده‌سازی کرد [40، 41]:
+    </p>
+    <ol>
+        <li>
+            در رویکرد <strong>microservices</strong>، کدی که خرید را پردازش
+            می‌کند، احتمالاً یک <strong>service</strong> یا پایگاه داده نرخ ارز را
+            <strong>query</strong> می‌کند تا نرخ فعلی را برای یک ارز خاص به‌دست
+            آورد.
+        </li>
+        <li>
+            در رویکرد <strong>dataflow</strong>، کدی که خریدها را پردازش
+            می‌کند، از قبل به یک جریان از به‌روزرسانی‌های نرخ ارز
+            <strong>subscribe</strong> می‌شود، و نرخ فعلی را در یک پایگاه
+            داده‌ی محلی ثبت می‌کند، هر زمان که تغییر کند. هنگامی که
+            نوبت به پردازش خرید می‌رسد، فقط نیاز دارد که پایگاه داده
+            محلی را <strong>query</strong> کند.
+        </li>
+    </ol>
+    <p>
+        رویکرد دوم جایگزین یک درخواست شبکه <em>synchronous</em> به یک
+        <strong>service</strong> دیگر با یک <strong>query</strong> به یک پایگاه داده‌ی
+        محلی (که ممکن است روی همان ماشین، حتی در همان فرآیند باشد)
+        شده است.ii نه‌تنها رویکرد <strong>dataflow</strong> سریع‌تر است، بلکه
+        برای
+        508
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

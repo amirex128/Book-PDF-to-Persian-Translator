@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 447</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        این رویکرد کار می‌کند، اما پیاده‌سازی آن با <strong>MapReduce</strong> اغلب بسیار
+        غیرکارآمد است، زیرا <strong>MapReduce</strong> ماهیت تکراری الگوریتم را در نظر
+        نمی‌گیرد: همیشه کل مجموعه داده‌های ورودی را می‌خواند و یک مجموعه
+        داده‌ی خروجی کاملاً جدید تولید می‌کند، حتی اگر تنها بخش کوچکی از گراف
+        نسبت به تکرار آخر تغییر کرده باشد.
+    </p>
+
+    <h4>مدل پردازش <strong>Pregel</strong></h4>
+    <p>
+        به عنوان یک بهینه‌سازی برای گراف‌های پردازش <strong>batch</strong>، مدل <strong>bulk</strong>
+        <strong>synchronous parallel (BSP)</strong> از محاسبات [70] محبوب شده است. در میان
+        دیگران، توسط <strong>Apache Giraph</strong> [37]، <strong>API</strong> <strong>GraphX</strong> از <strong>Spark</strong> و <strong>API</strong>
+        <strong>Gelly</strong> از <strong>Flink</strong> [71] پیاده‌سازی شده است. همچنین به عنوان مدل <strong>Pregel</strong>
+        شناخته می‌شود، زیرا مقاله <strong>Pregel</strong> از <strong>Google</strong> این رویکرد را برای پردازش
+        گراف‌ها محبوب کرد [72].
+    </p>
+    <p>
+        به یاد بیاورید که در <strong>MapReduce</strong>، <strong>mappers</strong> به طور مفهومی "یک
+        پیام را" به یک فراخوانی خاص از <strong>reducer</strong> "ارسال می‌کنند" زیرا فریم‌ورک
+        تمام خروجی‌های <strong>mapper</strong> را با یک <strong>key</strong> یکسان جمع‌آوری می‌کند. یک
+        ایده مشابه پشت <strong>Pregel</strong> است: یک <strong>vertex</strong> می‌تواند "یک پیام را" به یک
+        <strong>vertex</strong> دیگر "ارسال کند"، و معمولاً این پیام‌ها در امتداد <strong>edges</strong> در یک
+        گراف ارسال می‌شوند.
+    </p>
+    <p>
+        در هر تکرار، یک تابع برای هر <strong>vertex</strong> فراخوانی می‌شود، و تمام پیام‌هایی
+        را که به آن ارسال شده‌اند به آن منتقل می‌کند—بسیار شبیه یک فراخوانی به
+        <strong>reducer</strong>. تفاوت با <strong>MapReduce</strong> این است که در مدل <strong>Pregel</strong>، یک
+        <strong>vertex</strong> حالت خود را در حافظه از یک تکرار به تکرار بعدی به یاد می‌آورد،
+        بنابراین تابع فقط نیاز به پردازش پیام‌های ورودی جدید دارد. اگر هیچ پیامی
+        در بخشی از گراف ارسال نشود، نیازی به انجام کار نیست.
+    </p>
+    <p>
+        این کمی شبیه مدل <strong>actor</strong> است (نگاه کنید به "فریم‌ورک‌های <strong>actor</strong>
+        توزیع شده" در صفحه 138)، اگر شما به هر <strong>vertex</strong> به عنوان یک <strong>actor</strong>
+        فکر کنید، با این تفاوت که حالت <strong>vertex</strong> و پیام‌های بین <strong>vertices</strong>،
+        تحمل خطا و <em>durable</em> هستند، و ارتباطات در دوره‌های ثابت انجام می‌شود:
+        در هر تکرار، فریم‌ورک تمام پیام‌های ارسال شده در تکرار قبلی را تحویل
+        می‌دهد. <strong>Actors</strong> معمولاً چنین تضمین زمانی ندارند.
+    </p>
+
+    <h4>تحمل خطا</h4>
+    <p>
+        این واقعیت که <strong>vertices</strong> فقط می‌توانند با ارسال پیام با یکدیگر ارتباط
+        برقرار کنند (نه با query کردن مستقیم یکدیگر) به بهبود عملکرد jobs های
+        <strong>Pregel</strong> کمک می‌کند، زیرا پیام‌ها را می‌توان <strong>batched</strong> کرد و انتظار کمتری
+        برای برقراری ارتباط وجود دارد. تنها انتظار بین تکرارها است: از آن‌جایی که
+        مدل <strong>Pregel</strong> تضمین می‌کند که تمام پیام‌های ارسال شده در یک تکرار در
+        تکرار بعدی تحویل داده می‌شوند، تکرار قبلی باید کاملاً تمام شود، و تمام
+        پیام‌های آن باید قبل از شروع تکرار بعدی، از طریق شبکه کپی شوند.
+    </p>
+    <p>
+        حتی اگر شبکه زیربنایی ممکن است پیام‌ها را حذف، تکراری یا به‌طور دلخواه
+        به تأخیر بیندازد (نگاه کنید به "شبکه‌های غیرقابل اعتماد" در صفحه 277)،
+        پیاده‌سازی‌های <strong>Pregel</strong> تضمین می‌کنند که پیام‌ها دقیقاً یک بار در
+        <strong>vertex</strong> مقصد خود در تکرار زیر پردازش می‌شوند. مانند <strong>MapReduce</strong>،
+        فریم‌ورک به‌طور شفاف از خطاها بازیابی می‌کند تا مدل برنامه‌نویسی را برای
+        الگوریتم‌ها بر روی <strong>Pregel</strong> ساده کند.
+        <strong>Beyond MapReduce</strong>
+        |
+        425
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

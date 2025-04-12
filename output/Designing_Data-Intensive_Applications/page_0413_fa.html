@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 413</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>i. Some people love to point out</h4>
+    <p>
+        که cat در اینجا غیرضروری است، زیرا input file می‌تواند مستقیماً به عنوان یک argument به awk داده شود. با این حال، linear pipeline هنگام نوشتن به این صورت، مشهودتر است.
+    </p>
+
+    <p>
+        زیرا ایده‌ها و درس‌ها از Unix به large-scale, heterogeneous distributed data systems منتقل می‌شوند.
+    </p>
+
+    <h4>Batch Processing with Unix Tools</h4>
+    <p>
+        بیایید با یک مثال ساده شروع کنیم. فرض کنید شما یک web server دارید که هر بار که یک request را سرویس می‌دهد، یک خط به یک log file اضافه می‌کند. به عنوان مثال، با استفاده از nginx default access log format، یک خط از log ممکن است به این صورت باشد:
+    </p>
+    <p>
+        216.58.210.78 - - [27/Feb/2015:17:55:11 +0000] "GET /css/typography.css HTTP/1.1"
+        200 3377 "http://martin.kleppmann.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X
+        10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115
+        Safari/537.36"
+    </p>
+
+    <p>
+        (این در واقع یک خط است؛ فقط برای خوانایی به چندین خط در اینجا شکسته شده است.)
+        اطلاعات زیادی در آن خط وجود دارد. برای تفسیر آن، شما باید به تعریف log format نگاه کنید، که به شرح زیر است:
+    </p>
+    <p>
+        $remote_addr - $remote_user [$time_local] "$request"
+        $status $body_bytes_sent "$http_referer" "$http_user_agent"
+    </p>
+
+    <p>
+        بنابراین، این یک خط از log نشان می‌دهد که در 27 فوریه 2015، در ساعت 17:55:11 UTC، سرور یک request را برای فایل /css/typography.css از client IP address 216.58.210.78 دریافت کرد. The user احراز هویت نشده بود، بنابراین $remote_user به یک خط تیره (-) تنظیم شده است. The response status برابر 200 بود (یعنی، request موفقیت‌آمیز بود)، و اندازه response برابر 3,377 bytes بود. The web browser، Chrome 40 بود، و فایل را بارگیری کرد زیرا در صفحه در URL http://martin.kleppmann.com/ به آن ارجاع شده بود.
+    </p>
+
+    <h4>Simple Log Analysis</h4>
+    <p>
+        ابزارهای مختلف می‌توانند این log files را بگیرند و گزارش‌های زیبا در مورد ترافیک وب‌سایت شما تولید کنند، اما به خاطر تمرین، بیایید خودمان را با استفاده از ابزارهای basic Unix بسازیم. به عنوان مثال، فرض کنید شما می‌خواهید پنج صفحه محبوب‌ترین در وب‌سایت خود را پیدا کنید. شما می‌توانید این کار را در یک Unix shell به صورت زیر انجام دهید: i
+    </p>
+
+    <p>
+        cat /var/log/nginx/access.log |
+        awk '{print $7}' |
+        sort |
+        uniq -c |
+        sort -r -n |
+        head -n 5
+    </p>
+    <ul>
+        <li>Read the log file.
+            <p>
+                Batch Processing with Unix Tools | 391
+            </p>
+        </li>
+    </ul>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

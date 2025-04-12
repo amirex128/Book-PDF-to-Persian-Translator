@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 437</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        (که اتفاقاً همیشه ابزار <strong>sort</strong> را بین فاز <strong>map</strong> و فاز <strong>reduce</strong> اجرا
+        می‌کند). ما دیدیم که چگونه می‌توانید عملیات <strong>join</strong> و <strong>grouping</strong> مختلف را
+        بر اساس این <strong>primitives</strong> پیاده‌سازی کنید.
+    </p>
+    <p>
+        هنگامی که مقاله <strong>MapReduce</strong> [1] منتشر شد، از یک نظر، اصلاً
+        جدید نبود. تمام الگوریتم‌های پردازش و <strong>parallel join</strong> که ما در چند بخش آخر
+        بحث کردیم، قبلاً در پایگاه‌های داده‌ی به اصطلاح <strong>massively parallel processing</strong>
+        (<strong>MPP</strong>) بیش از یک دهه قبل پیاده‌سازی شده بودند [3, 40]. به عنوان مثال،
+        ماشین پایگاه داده <strong>Gamma</strong>، <strong>Teradata</strong> و <strong>Tandem NonStop SQL</strong> پیشگامان در این
+        زمینه بودند [52].
+    </p>
+    <p>
+        بزرگترین تفاوت این است که پایگاه‌های داده <strong>MPP</strong> بر اجرای <strong>parallel</strong> queries
+        <strong>SQL</strong> تحلیلی بر روی یک cluster از ماشین‌ها تمرکز دارند، در حالی که
+        ترکیبی از <strong>MapReduce</strong> و یک سیستم فایل توزیع شده [19] چیزی بسیار
+        شبیه به یک سیستم عامل <strong>general-purpose</strong> ارائه می‌دهد که می‌تواند
+        برنامه‌های دلخواه را اجرا کند.
+    </p>
+
+    <h4>تنوع ذخیره‌سازی</h4>
+    <p>
+        پایگاه‌های داده از شما می‌خواهند که داده‌ها را مطابق با یک مدل خاص
+        ساختاردهی کنید (به عنوان مثال، رابطه‌ای یا اسناد)، در حالی که فایل‌ها در یک
+        سیستم فایل توزیع شده فقط دنباله‌ای از بایت‌ها هستند، که می‌توانند با
+        استفاده از هر مدل داده و <strong>encoding</strong> نوشته شوند. آن‌ها ممکن است مجموعه‌ای
+        از رکوردهای پایگاه داده باشند، اما می‌توانند به همان اندازه متن، تصاویر،
+        فیلم‌ها، خوانش‌های سنسور، ماتریس‌های <em>sparse</em>، بردار ویژگی‌ها، توالی‌های
+        ژنی یا هر نوع دیگری از داده‌ها باشند.
+    </p>
+    <p>
+        به‌طور خلاصه، <strong>Hadoop</strong> امکان تخلیه بی‌رویه داده‌ها را در <strong>HDFS</strong> فراهم کرد، و
+        تنها بعداً چگونگی پردازش بیشتر آن را مشخص کرد [53]. در مقابل، پایگاه‌های
+        داده <strong>MPP</strong> معمولاً نیاز به مدل‌سازی دقیق داده‌ها و الگوهای query قبل از
+        وارد کردن داده‌ها به فرمت ذخیره‌سازی اختصاصی پایگاه داده دارند.
+    </p>
+    <p>
+        از دیدگاه یک <em>purist</em>، ممکن است به نظر برسد که این مدل‌سازی و وارد کردن
+        دقیق مطلوب است، زیرا به این معنی است که کاربران پایگاه داده داده‌های با
+        کیفیت‌تری برای کار دارند. با این حال، در عمل، به نظر می‌رسد که به سادگی
+        در دسترس قرار دادن داده‌ها به سرعت—حتی اگر در یک فرمت <em>quirky</em>،
+        دشوار برای استفاده، خام باشد—اغلب ارزشمندتر از تلاش برای تصمیم‌گیری
+        در مورد مدل داده‌ی ایده‌آل در ابتدا است [54].
+    </p>
+    <p>
+        ایده شبیه به یک انبار داده (نگاه کنید به "<strong>Data Warehousing</strong>" در صفحه 91) است:
+        به سادگی جمع‌آوری داده‌ها از بخش‌های مختلف یک سازمان بزرگ در یک
+        مکان ارزشمند است، زیرا <strong>joins</strong> را در سراسر مجموعه‌داده‌هایی که قبلاً
+        متفاوت بودند، امکان‌پذیر می‌کند. طراحی دقیق <strong>schema</strong> مورد نیاز توسط یک
+        پایگاه داده <strong>MPP</strong>، جمع‌آوری متمرکز داده‌ها را کند می‌کند؛ جمع‌آوری
+        داده‌ها به شکل خام، و نگرانی در مورد طراحی <strong>schema</strong> در آینده،
+        اجازه می‌دهد جمع‌آوری داده‌ها سرعت یابد (مفهومی که گاهی اوقات به عنوان
+        "<strong>data lake</strong>" یا "<strong>enterprise data hub</strong>" شناخته می‌شود [55]).
+    </p>
+    <p>
+        تخلیه بی‌رویه داده‌ها، بار تفسیر داده‌ها را تغییر می‌دهد: به جای مجبور کردن
+        تولیدکننده یک مجموعه‌داده برای آوردن آن به یک فرمت استاندارد، تفسیر
+        داده‌ها به مشکل مصرف‌کننده تبدیل می‌شود (رویکرد <strong>schema-on-read</strong>
+        <strong>MapReduce</strong> و سیستم‌های فایل توزیع شده
+        |
+        415
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

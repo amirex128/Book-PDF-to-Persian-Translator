@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 533</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>view</strong>، زیرا باید زمانی که اسناد جدیدی ظاهر می‌شوند که
+        باید در نتایج یکی از <strong>queries</strong> های رایج گنجانده شوند،
+        به‌روزرسانی شود.
+    </p>
+    <p>
+        از این مثال ما می‌توانیم ببینیم که یک index تنها مرز ممکن بین
+        <em>write path</em> و <em>read path</em> نیست. <strong>Caching</strong> از
+        نتایج جستجوی رایج امکان‌پذیر است، و <strong>scanning</strong> شبیه به
+        <strong>grep</strong> بدون index نیز در تعداد کمی از اسناد امکان‌پذیر است.
+        به این ترتیب، نقش <strong>caches</strong>، <strong>indexes</strong>، و
+        <strong>materialized views</strong> ساده است: آن‌ها مرز بین
+        <em>read path</em> و <em>write path</em> را جابه‌جا می‌کنند. آن‌ها به ما
+        اجازه می‌دهند که با پیش‌محاسبه‌ی نتایج، کار بیشتری را در <em>write
+        path</em> انجام دهیم، تا در <em>read path</em> در تلاش صرفه‌جویی
+        کنیم.
+    </p>
+    <p>
+        جابه‌جایی مرز بین کارهای انجام شده در <em>write path</em> و <em>read path</em>
+        در واقع موضوع مثال <strong>Twitter</strong> در ابتدای این کتاب بود، در
+        "شرح <strong>Load</strong>" در صفحه 11. در آن مثال، ما همچنین دیدیم که
+        چگونه مرز بین <em>write path</em> و <em>read path</em> ممکن است برای
+        افراد مشهور در مقایسه با کاربران معمولی متفاوت ترسیم شود.
+        پس از 500 صفحه، ما یک دور کامل زده‌ایم!
+    </p>
+
+    <h4><strong>Clients</strong> <em>stateful</em> و با قابلیت <em>offline</em></h4>
+    <p>
+        من فکر می‌کنم ایده‌ی یک مرز بین <em>write path</em> و <em>read path</em> جالب
+        است زیرا ما می‌توانیم در مورد جابه‌جایی آن مرز بحث کنیم و بررسی
+        کنیم که این تغییر در اصطلاحات عملی به چه معناست.
+    </p>
+    <p>
+        اجازه دهید به این ایده در یک <strong>context</strong> متفاوت نگاه کنیم.
+    </p>
+    <p>
+        محبوبیت عظیم برنامه‌های وب در دو دهه‌ی گذشته، ما را به سمت
+        فرضیات خاصی در مورد توسعه برنامه هدایت کرده است که در
+        نظر گرفتن آن‌ها آسان است. به‌طور خاص، مدل <strong>client/server</strong>—
+        که در آن <strong>clients</strong> تا حد زیادی <em>stateless</em> هستند و
+        سرورها بر داده‌ها <strong>authority</strong> دارند—آن‌قدر رایج است که
+        تقریباً فراموش می‌کنیم که چیز دیگری وجود دارد. با این حال،
+        فناوری به حرکت خود ادامه می‌دهد، و من فکر می‌کنم مهم است که
+        وضعیت موجود را هر از چند گاهی زیر سوال ببریم.
+    </p>
+    <p>
+        به‌طور سنتی، مرورگرهای وب، <strong>clients</strong> <em>stateless</em> بوده‌اند
+        که تنها زمانی می‌توانند کارهای مفیدی انجام دهند که شما اتصال به
+        اینترنت داشته باشید (تقریباً تنها کاری که شما می‌توانید <em>offline</em>
+        انجام دهید، پیمایش در یک صفحه است که قبلاً در حالت <em>online</em>
+        بارگذاری کرده‌اید). با این حال، برنامه‌های وب <strong>JavaScript</strong>
+        "تک صفحه‌ای" اخیر، قابلیت‌های <em>stateful</em> زیادی را به‌دست
+        آورده‌اند، از جمله تعامل <strong>user interface</strong> سمت <strong>client</strong>
+        و ذخیره‌سازی محلی <em>persistent</em> در مرورگر وب. برنامه‌های
+        تلفن همراه به‌طور مشابه می‌توانند مقدار زیادی از <strong>state</strong> را روی
+        دستگاه ذخیره کنند و برای اکثر تعاملات کاربر، نیازی به <em>round-
+        trip</em> به سرور ندارند.
+    </p>
+    <p>
+        این قابلیت‌های در حال تغییر منجر به علاقه‌ی تجدید شده به
+        برنامه‌های <em>offline-first</em> شده است که تا حد امکان با استفاده
+        از یک پایگاه داده‌ی محلی روی همان دستگاه، بدون نیاز به اتصال
+        به اینترنت، انجام می‌شوند و در پس‌زمینه هنگام در دسترس بودن
+        اتصال شبکه، <strong>sync</strong> می‌شوند [42]. از آن‌جایی‌که
+        دستگاه‌های تلفن همراه اغلب دارای اتصالات اینترنتی <em>cellular</em>
+        کند و غیرقابل اعتماد هستند، اگر <strong>user interface</strong> آن‌ها نیازی به
+        انتظار برای درخواست‌های شبکه <em>synchronous</em> نداشته باشد، و
+        اگر برنامه‌ها بیشتر به‌صورت <em>offline</em> کار کنند، یک مزیت بزرگ
+        برای کاربران دارد (نگاه کنید به "<strong>Clients</strong> با عملیات
+        <em>offline</em>" در صفحه 170).
+        <strong>Unbundling Databases</strong>
+        |
+        511
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

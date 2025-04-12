@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 443</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>موتورهای <strong>Dataflow</strong></h4>
+    <p>
+        به منظور رفع این مشکلات با <strong>MapReduce</strong>، چندین موتور اجرا برای
+        محاسبات <strong>batch</strong> توزیع شده جدید توسعه یافتند، که شناخته شده‌ترین
+        آن‌ها عبارتند از <strong>Spark</strong> [61, 62]، <strong>Tez</strong> [63, 64] و <strong>Flink</strong> [65, 66].
+        تفاوت‌های مختلفی در نحوه طراحی آن‌ها وجود دارد، اما آن‌ها یک وجه مشترک
+        دارند: آن‌ها یک <strong>workflow</strong> کامل را به عنوان یک job مدیریت می‌کنند،
+        به جای این‌که آن را به زیر jobs های مستقل تقسیم کنند.
+    </p>
+    <p>
+        از آن‌جایی که آن‌ها به صراحت جریان داده‌ها را از طریق چندین مرحله پردازش
+        مدل‌سازی می‌کنند، این سیستم‌ها به عنوان موتورهای <strong>dataflow</strong> شناخته
+        می‌شوند. مانند <strong>MapReduce</strong>، آن‌ها با فراخوانی مکرر یک تابع تعریف شده
+        توسط کاربر برای پردازش یک رکورد در یک زمان بر روی یک <strong>thread</strong> واحد،
+        کار می‌کنند. آن‌ها کار را با تقسیم ورودی‌ها موازی می‌کنند، و خروجی یک
+        تابع را از طریق شبکه کپی می‌کنند تا به ورودی یک تابع دیگر تبدیل شود.
+    </p>
+    <p>
+        بر خلاف <strong>MapReduce</strong>، این توابع نیازی به ایفای نقش‌های سخت
+        متناوب <strong>map</strong> و <strong>reduce</strong> ندارند، بلکه می‌توانند به روش‌های انعطاف‌پذیرتری
+        سرهم شوند. ما این توابع را <strong>operators</strong> می‌نامیم، و موتور <strong>dataflow</strong>
+        چندین گزینه مختلف برای اتصال خروجی یک <strong>operator</strong> به ورودی <strong>operator</strong>
+        دیگر ارائه می‌دهد:
+    </p>
+    <ul>
+        <li>
+            یک گزینه این است که رکوردها را بر اساس <strong>key</strong> دوباره تقسیم‌بندی و
+            مرتب‌سازی کنید، مانند مرحله‌ی <strong>shuffle</strong> در <strong>MapReduce</strong> (نگاه کنید به
+            "اجرای توزیع شده <strong>MapReduce</strong>" در صفحه 400). این <strong>feature</strong>،
+            <strong>sort-merge joins</strong> و گروه‌بندی را به همان روش <strong>MapReduce</strong> امکان‌پذیر
+            می‌سازد.
+        </li>
+        <li>
+            یک امکان دیگر این است که چندین ورودی را بگیرید و آن‌ها را به همان
+            روش تقسیم‌بندی کنید، اما مرتب‌سازی را رد کنید. این کار در <strong>partitioned</strong>
+            <strong>hash joins</strong>، که تقسیم‌بندی رکوردها مهم است اما ترتیب بی‌اهمیت
+            است زیرا ساخت جدول <strong>hash</strong> به هر حال ترتیب را تصادفی می‌کند، باعث
+            صرفه‌جویی در تلاش می‌شود.
+        </li>
+        <li>
+            برای <strong>broadcast hash joins</strong>، همان خروجی از یک <strong>operator</strong> را می‌توان به
+            تمام <strong>partitions</strong> از <strong>join operator</strong> ارسال کرد.
+        </li>
+    </ul>
+    <p>
+        این سبک از موتور پردازش بر اساس سیستم‌های تحقیقاتی مانند <strong>Dryad</strong> [67] و
+        <strong>Nephele</strong> [68] استوار است، و چندین مزیت را در مقایسه با مدل
+        <strong>MapReduce</strong> ارائه می‌دهد:
+    </p>
+    <ul>
+        <li>
+            کار پرهزینه‌ای مانند مرتب‌سازی تنها باید در مکان‌هایی انجام شود که
+            واقعاً مورد نیاز است، نه این‌که همیشه به طور پیش‌فرض بین هر مرحله‌ی
+            <strong>map</strong> و <strong>reduce</strong> اتفاق بیفتد.
+        </li>
+        <li>
+            هیچ <strong>task</strong> <strong>map</strong> غیرضروری وجود ندارد، زیرا کاری که یک <strong>mapper</strong>
+            انجام می‌دهد اغلب می‌تواند در <strong>reducer operator</strong> قبلی گنجانده شود
+            (زیرا یک <strong>mapper</strong> تقسیم‌بندی یک مجموعه داده را تغییر نمی‌دهد).
+        </li>
+        <li>
+            از آن‌جایی که تمام <strong>joins</strong> و وابستگی‌های داده‌ها در یک <strong>workflow</strong> به
+            صراحت اعلام شده‌اند، زمان‌بند یک دید کلی از این‌که چه داده‌هایی در
+            کجا مورد نیاز است، دارد، بنابراین می‌تواند بهینه‌سازی‌های <strong>locality</strong> را
+            انجام دهد. به عنوان مثال، می‌تواند سعی کند <strong>task</strong> ای را که برخی داده‌ها
+            را مصرف می‌کند، در همان ماشینی قرار دهد که <strong>task</strong> آن را تولید می‌کند،
+            به طوری که داده‌ها بتوانند
+            <strong>Beyond MapReduce</strong>
+            |
+            421
+        </li>
+    </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

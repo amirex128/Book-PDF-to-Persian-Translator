@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 430</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        records مربوط به یک hot key را به یکی از several reducers، که به صورت random انتخاب شده‌اند، ارسال می‌کنند (برخلاف MapReduce conventional، که یک reducer را به طور deterministic بر اساس a hash از key انتخاب می‌کند). برای ورودی دیگر به join، records مربوط به hot key، نیاز به replicated شدن به همه reducers در حال handling آن key [40] دارند.
+    </p>
+
+    <p>
+        این تکنیک، کار handling the hot key را در سراسر several reducers توزیع می‌کند، که به آن اجازه می‌دهد تا بهتر parallelized شود، با هزینه اینکه the other join input باید به multiple reducers replicate شود. The sharded join method در Crunch مشابه است، اما requires hot keys را به طور صریح‌تر مشخص می‌کند تا با استفاده از یک sampling job. این تکنیک نیز بسیار شبیه به یکی از techniques است که ما در "Skewed Workloads and Relieving Hot Spots" در صفحه 205 بحث کردیم، با استفاده از randomization برای کاهش hot spots در یک partitioned data‐base.
+    </p>
+
+    <p>
+        The skewed join optimization از Hive، یک approach جایگزین را در پیش می‌گیرد. این requires hot keys را برای مشخص شدن به طور صریح‌تر در table metadata، و آن records مربوط به those keys را در فایل‌های جداگانه از بقیه ذخیره می‌کند. هنگامی که یک join بر روی آن table انجام می‌شود، آن از a map-side join استفاده می‌کند (به بخش بعدی مراجعه کنید) برای hot keys.
+    </p>
+
+    <p>
+        هنگام grouping records by a hot key و aggregation آن‌ها، شما می‌توانید grouping را در دو مرحله انجام دهید. The first MapReduce stage، records را به یک reducer random ارسال می‌کند، به طوری که هر reducer، grouping را بر روی یک subset از records برای the hot key انجام می‌دهد و یک aggregated value compactتر را per key خروجی می‌دهد. The second MapReduce job سپس، values از تمام the first-stage reducers را به یک value واحد per key، ترکیب می‌کند.
+    </p>
+
+    <h4>Map-Side Joins</h4>
+    <p>
+        The join algorithms که در بخش قبل توضیح داده شدند، the actual join logic را در reducers انجام می‌دهند، و از این رو به عنوان reduce-side joins شناخته می‌شوند. Mappers نقش آماده‌سازی data ورودی را به عهده دارند: extract کردن the key و value از هر input record، اختصاص دادن the key-value pairs به یک reducer partition، و sorting by key.
+    </p>
+
+    <p>
+        The reduce-side approach این مزیت را دارد که شما نیازی ندارید هیچ فرضی در مورد input data داشته باشید: هر ویژگی و ساختاری که داشته باشد، mappers می‌توانند داده‌ها را برای آماده شدن برای joining آماده کنند. با این حال، the downside این است که تمام آن sorting، کپی کردن به reducers، و merging از reducer inputs می‌تواند بسیار گران‌قیمت باشد.
+        بسته به memory buffers موجود، داده‌ها ممکن است چندین بار در هنگام عبور از stages از MapReduce به disk نوشته شوند [37].
+    </p>
+
+    <p>
+        از سوی دیگر، اگر شما می‌توانید فرضیاتی را در مورد input data خود داشته باشید، این امکان وجود دارد که با استفاده از یک so-called map-side join، joins را سریع‌تر کنید. این approach از یک MapReduce job cut-down استفاده می‌کند که در آن هیچ reducer و هیچ sorting وجود ندارد. در عوض، هر mapper به سادگی یک input file block را از distributed filesystem می‌خواند و یک output file را به filesystem می‌نویسد - این همه چیز است.
+    </p>
+    <p>
+        408 | Chapter 10: Batch Processing
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

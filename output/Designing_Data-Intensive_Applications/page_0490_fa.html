@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 490</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        پیام‌رسانی و <strong>RPC</strong>
+    </p>
+    <p>
+        در "<strong>Message-Passing Dataflow</strong>" در صفحه 136 ما در مورد سیستم‌های
+        پیام‌رسانی به‌عنوان جایگزینی برای <strong>RPC</strong> بحث کردیم—یعنی، به‌عنوان
+        یک مکانیسم برای ارتباط <strong>services</strong>، که به عنوان مثال در مدل
+        <strong>actor</strong> استفاده می‌شود. اگرچه این سیستم‌ها نیز بر اساس پیام‌ها و
+        رویدادها هستند، ما معمولاً آن‌ها را به عنوان پردازنده‌های <strong>stream</strong>
+        در نظر نمی‌گیریم:
+    </p>
+    <ul>
+        <li>
+            فریم‌ورک‌های <strong>Actor</strong> در درجه‌ی اول یک مکانیسم برای
+            مدیریت <strong>concurrency</strong> و اجرای توزیع شده ماژول‌های ارتباطی
+            هستند، در حالی که پردازش <strong>stream</strong> در درجه‌ی اول یک تکنیک
+            مدیریت داده‌ها است.
+        </li>
+        <li>
+            ارتباط بین <strong>actors</strong> اغلب <em>ephemeral</em> و <em>one-to-one</em> است، در
+            حالی که <strong>event logs</strong> <em>durable</em> و چند <strong>subscriber</strong>
+            هستند.
+        </li>
+        <li>
+            <strong>Actors</strong> می‌توانند به روش‌های دلخواه (از جمله الگوهای
+            درخواست/پاسخ چرخه‌ای) ارتباط برقرار کنند، اما پردازنده‌های
+            <strong>stream</strong> معمولاً در <strong>pipelines</strong> غیر چرخه‌ای تنظیم
+            می‌شوند که در آن هر <strong>stream</strong> خروجی یک job خاص است، و
+            از یک مجموعه تعریف شده از <strong>streams</strong> ورودی مشتق شده
+            است.
+        </li>
+    </ul>
+    <p>
+        گفته می‌شود، برخی از زمینه‌های مشترک بین سیستم‌های شبیه <strong>RPC</strong> و
+        پردازش <strong>stream</strong> وجود دارد. به عنوان مثال، <strong>Apache Storm</strong>
+        دارای یک <strong>feature</strong> است که به آن <strong>distributed RPC</strong>
+        می‌گویند، که به <strong>queries</strong> کاربر اجازه می‌دهد به مجموعه‌ای از
+        <strong>nodes</strong> منتقل شوند که <strong>streams</strong> رویداد را نیز پردازش
+        می‌کنند؛ سپس این <strong>queries</strong> با رویدادها از <strong>streams</strong> ورودی
+        تداخل دارند، و نتایج را می‌توان تجمیع کرد و به کاربر بازگرداند [78].
+        (همچنین به "پردازش داده‌های چند <strong>partition</strong>" در صفحه 514 مراجعه
+        کنید.)
+    </p>
+    <p>
+        همچنین می‌توان از فریم‌ورک‌های <strong>actor</strong> برای پردازش جریان‌ها
+        استفاده کرد. با این حال، بسیاری از این فریم‌ورک‌ها، تحویل پیام را در
+        صورت <strong>crashes</strong> تضمین نمی‌کنند، بنابراین پردازش تحمل خطا
+        نیست مگر این‌که شما منطق تکرار اضافی را پیاده‌سازی کنید.
+    </p>
+
+    <h4>استدلال در مورد زمان</h4>
+    <p>
+        پردازنده‌های <strong>stream</strong> اغلب نیاز به برخورد با زمان دارند، به
+        ویژه زمانی که برای اهداف <strong>analytics</strong> استفاده می‌شوند، که
+        اغلب از <strong>time windows</strong> مانند "میانگین در 5 دقیقه
+        گذشته" استفاده می‌کنند. ممکن است به نظر برسد که معنای "5 دقیقه
+        گذشته" باید صریح و روشن باشد، اما متأسفانه این مفهوم به‌طور
+        شگفت‌انگیزی پیچیده است.
+    </p>
+    <p>
+        در یک فرآیند <strong>batch</strong>، وظایف پردازش به‌سرعت از طریق مجموعه‌ی
+        بزرگی از رویدادهای تاریخی <strong>crunch</strong> می‌شوند. اگر نوعی تقسیم بر
+        اساس زمان باید رخ دهد، فرآیند <strong>batch</strong> باید به <strong>timestamp</strong>
+        تعبیه شده در هر رویداد نگاه کند. نگاه کردن به ساعت سیستم
+        ماشینی که فرآیند <strong>batch</strong> را اجرا می‌کند، بی‌فایده است، زیرا
+        زمانی که فرآیند اجرا می‌شود هیچ ارتباطی با زمانی که رویدادها واقعاً
+        رخ داده‌اند، ندارد.
+    </p>
+    <p>
+        یک فرآیند <strong>batch</strong> ممکن است ارزش رویدادهای تاریخی یک سال را در
+        عرض چند دقیقه بخواند؛ در بیشتر موارد، جدول زمانی مورد نظر سال
+        تاریخ است، نه چند دقیقه پردازش. علاوه بر این، استفاده از
+        <strong>timestamps</strong> در رویدادها به پردازش اجازه می‌دهد که
+        468
+        |
+        فصل 11: پردازش <strong>Stream</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

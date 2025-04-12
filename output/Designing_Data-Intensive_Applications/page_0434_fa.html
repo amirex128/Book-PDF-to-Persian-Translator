@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 434</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        از آن‌جایی که query کردن یک index جستجو بر اساس keyword یک عملیات read-only است، این فایل‌های
+        index پس از ایجاد، <em>immutable</em> هستند.
+    </p>
+    <p>
+        اگر مجموعه <em>indexed</em> اسناد تغییر کند، یک گزینه این است که دوره‌ای کل workflow <em>indexing</em> را
+        برای کل مجموعه اسناد دوباره اجرا کنید، و فایل‌های index قبلی را به طور کامل با
+        فایل‌های index جدید جایگزین کنید، زمانی که این کار انجام شد. این رویکرد
+        می‌تواند از نظر محاسباتی گران‌قیمت باشد اگر تنها تعداد کمی از اسناد تغییر کرده
+        باشند، اما این مزیت را دارد که فرآیند <em>indexing</em> بسیار آسان است: اسناد وارد می‌شوند،
+        indexes خارج می‌شوند.
+    </p>
+    <p>
+        به‌طور جایگزین، می‌توان <strong>indexes</strong> را به صورت افزایشی ساخت. همان‌طور که در فصل 3 بحث
+        شد، اگر می‌خواهید اسناد را در یک index اضافه، حذف یا به‌روزرسانی کنید، <strong>Lucene</strong> فایل‌های
+        segment جدیدی را می‌نویسد و به‌طور ناهمزمان فایل‌های segment را در پس‌زمینه
+        ادغام و فشرده می‌کند. ما در فصل 11 در مورد این نوع پردازش افزایشی بیشتر
+        خواهیم دید.
+    </p>
+
+    <h4>ذخیره‌سازی‌های <strong>key-value</strong> به عنوان خروجی فرآیند <strong>batch</strong></h4>
+    <p>
+        <strong>Indexes</strong> جستجو تنها یک نمونه از خروجی‌های ممکن یک workflow پردازش <strong>batch</strong> است.
+        یکی دیگر از کاربردهای رایج برای پردازش <strong>batch</strong>، ساخت سیستم‌های <strong>machine learning</strong>
+        مانند طبقه‌بندها (به عنوان مثال، فیلترهای هرزنامه، تشخیص ناهنجاری، تشخیص
+        تصویر) و سیستم‌های پیشنهاد (به عنوان مثال، افرادی که ممکن است بشناسید،
+        محصولاتی که ممکن است به آن‌ها علاقه‌مند باشید، یا جستجوهای مرتبط [29]) است.
+    </p>
+    <p>
+        خروجی آن jobs های <strong>batch</strong> اغلب نوعی پایگاه داده است: به عنوان مثال، یک پایگاه داده که
+        می‌تواند توسط <strong>user ID</strong> query شود تا دوستان پیشنهادی برای آن کاربر به دست آید، یا
+        یک پایگاه داده که می‌تواند توسط <strong>product ID</strong> query شود تا لیستی از محصولات مرتبط
+        به دست آید [45].
+    </p>
+    <p>
+        این پایگاه‌های داده باید از web application که درخواست‌های کاربر را مدیریت
+        می‌کند، query شوند، که معمولاً از زیرساخت <strong>Hadoop</strong> جدا است. بنابراین، خروجی از
+        فرآیند <strong>batch</strong> چگونه به یک پایگاه داده برمی‌گردد که در آن web application می‌تواند
+        آن را query کند؟
+    </p>
+    <p>
+        انتخاب واضح‌تر ممکن است استفاده از کتابخانه <strong>client</strong> برای پایگاه داده‌ی مورد علاقه‌تان
+        مستقیماً در داخل یک <strong>mapper</strong> یا <strong>reducer</strong> باشد، و مستقیماً از job <strong>batch</strong> به سرور
+        پایگاه داده، یک رکورد در یک زمان، بنویسید. این کار خواهد کرد (با فرض این‌که
+        قوانین فایروال شما دسترسی مستقیم از محیط <strong>Hadoop</strong> شما به پایگاه‌های داده
+        production شما را مجاز می‌کند)، اما به چند دلیل این یک ایده بد است:
+    </p>
+    <ul>
+        <li>
+            همان‌طور که قبلاً در زمینه <strong>joins</strong> بحث شد، ایجاد یک درخواست شبکه برای
+            تک تک رکوردها، چندین مرتبه کندتر از توان عملیاتی نرمال یک task <strong>batch</strong> است.
+            حتی اگر کتابخانه <strong>client</strong> از <strong>batching</strong> پشتیبانی کند، احتمالاً عملکرد ضعیف
+            خواهد بود.
+        </li>
+        <li>
+            jobs های <strong>MapReduce</strong> اغلب بسیاری از <strong>tasks</strong> را به صورت موازی اجرا می‌کنند. اگر تمام
+            <strong>mappers</strong> یا <strong>reducers</strong> هم‌زمان به یک پایگاه داده خروجی یکسان بنویسند، با
+            نرخ مورد انتظار یک فرآیند <strong>batch</strong>، آن پایگاه داده به راحتی می‌تواند تحت
+            فشار قرار گیرد، و عملکرد آن برای query
+            412
+        </li>
+    </ul>
+    <p>
+        فصل 10: پردازش <strong>Batch</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

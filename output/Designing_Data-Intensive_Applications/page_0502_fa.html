@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 502</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>Log-based message broker</strong>
+        <strong>Broker</strong> تمام پیام‌ها را در یک <strong>partition</strong> به یک
+        <strong>consumer node</strong> اختصاص می‌دهد، و همیشه پیام‌ها را به همان
+        ترتیب تحویل می‌دهد. <strong>Parallelism</strong> از طریق <strong>partitioning</strong> به‌دست
+        می‌آید، و <strong>consumers</strong> پیشرفت خود را با <strong>checkpointing</strong>
+        <strong>offset</strong> از آخرین پیام که پردازش کرده‌اند، پیگیری می‌کنند.
+        <strong>Broker</strong> پیام‌ها را روی دیسک نگه می‌دارد، بنابراین در صورت
+        نیاز، امکان بازگشت و خواندن مجدد پیام‌های قدیمی وجود دارد.
+    </p>
+    <p>
+        رویکرد مبتنی بر <strong>log</strong> شباهت‌هایی به <strong>replication logs</strong> دارد که
+        در پایگاه‌های داده یافت می‌شود (نگاه کنید به فصل 5) و موتورهای
+        ذخیره‌سازی ساختاریافته بر اساس <strong>log</strong> (نگاه کنید به فصل 3). ما
+        دیدیم که این رویکرد به‌ویژه برای سیستم‌های پردازش <strong>stream</strong>
+        مناسب است که <strong>streams</strong> ورودی را مصرف می‌کنند و <strong>state</strong>
+        مشتق شده یا <strong>streams</strong> خروجی مشتق شده را تولید می‌کنند.
+    </p>
+    <p>
+        از نظر این‌که جریان‌ها از کجا می‌آیند، ما چندین احتمال را مورد بحث
+        قرار دادیم: رویدادهای فعالیت کاربر، سنسورهایی که خوانش‌های
+        دوره‌ای را ارائه می‌دهند، و <strong>data feeds</strong> (به عنوان مثال، داده‌های
+        بازار در امور مالی) به‌طور طبیعی به عنوان <strong>streams</strong> نشان داده
+        می‌شوند. ما دیدیم که این می‌تواند مفید باشد که به نوشتن‌ها در یک
+        پایگاه داده به‌عنوان یک <strong>stream</strong> فکر کنیم: ما می‌توانیم
+        <strong>changelog</strong>—یعنی، تاریخچه تمام تغییرات ایجاد شده در یک
+        پایگاه داده—را به‌طور ضمنی از طریق <strong>change data capture</strong> یا به‌طور
+        صریح از طریق <strong>event sourcing</strong> ضبط کنیم. <strong>Log compaction</strong>
+        به <strong>stream</strong> اجازه می‌دهد که یک کپی کامل از محتویات یک
+        پایگاه داده را حفظ کند.
+    </p>
+    <p>
+        نشان دادن پایگاه‌های داده به‌عنوان <strong>streams</strong> فرصت‌های قدرتمندی
+        را برای ادغام سیستم‌ها باز می‌کند. شما می‌توانید سیستم‌های داده‌ی
+        مشتق شده مانند <strong>search indexes</strong>، <strong>caches</strong>، و سیستم‌های
+        <strong>analytics</strong> را با مصرف <strong>log</strong> تغییرات و اعمال آن‌ها در
+        سیستم مشتق شده، به‌طور مداوم به‌روز نگه دارید. شما حتی
+        می‌توانید با شروع از ابتدا و مصرف <strong>log</strong> تغییرات از ابتدا تا
+        انتها، <strong>views</strong> جدیدی را در داده‌های موجود بسازید.
+    </p>
+    <p>
+        امکانات حفظ <strong>state</strong> به‌صورت <strong>streams</strong> و پخش مجدد
+        پیام‌ها نیز مبنایی برای تکنیک‌هایی هستند که <strong>stream joins</strong> و تحمل
+        خطا را در فریم‌ورک‌های مختلف پردازش <strong>stream</strong> فعال می‌کنند. ما در
+        مورد چندین هدف از پردازش <strong>stream</strong>، از جمله جستجوی الگوهای
+        رویداد (پردازش رویداد پیچیده)، محاسبه‌ی تجمعات <strong>windowed</strong>
+        (تجزیه و تحلیل <strong>stream</strong>)، و به‌روز نگه داشتن سیستم‌های داده
+        مشتق شده (<strong>materialized views</strong>) بحث کردیم.
+    </p>
+    <p>
+        سپس ما در مورد مشکلات استدلال در مورد زمان در یک پردازنده <strong>stream</strong>
+        بحث کردیم، از جمله تمایز بین زمان پردازش و <strong>event
+        timestamps</strong>، و مشکل رسیدگی به رویدادهای <em>straggler</em> که
+        پس از این‌که فکر می‌کردید <strong>window</strong> شما کامل شده است،
+        می‌رسند.
+    </p>
+    <p>
+        ما سه نوع <strong>joins</strong> را که ممکن است در فرآیندهای <strong>stream</strong>
+        ظاهر شوند، متمایز کردیم:
+    </p>
+    <ul>
+        <li>
+            <strong>Stream-stream joins</strong>
+        </li>
+        <p>
+            هر دو <strong>streams</strong> ورودی از رویدادهای فعالیت تشکیل شده‌اند،
+            و <strong>join operator</strong> به‌دنبال رویدادهای مرتبطی می‌گردد که
+            در یک <strong>window</strong> از زمان رخ می‌دهند. به عنوان مثال،
+            ممکن است دو عمل انجام شده توسط یک کاربر یکسان را در عرض
+            30 دقیقه از یکدیگر مطابقت دهد.
+            480
+            |
+            فصل 11: پردازش <strong>Stream</strong>
+        </li>
+    </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 480</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        داده‌ها بعداً استفاده خواهند شد. اگر یک <strong>feature</strong> جدید
+        برنامه معرفی شود—به عنوان مثال، "مکان به نفر بعدی در لیست انتظار
+        پیشنهاد می‌شود"—رویکرد <strong>event sourcing</strong> به آن اثر جانبی
+        جدید اجازه می‌دهد که به‌راحتی از رویداد موجود زنجیر شود.
+    </p>
+    <p>
+        <strong>Event sourcing</strong> شبیه مدل داده‌ی <strong>chronicle</strong> [45] است، و
+        همچنین شباهت‌هایی بین یک <strong>event log</strong> و جدول واقعیت که در
+        یک <strong>star schema</strong> پیدا می‌کنید (نگاه کنید به "ستاره‌ها و
+        دانه‌های برف: <strong>Schemas</strong> برای <strong>Analytics</strong>" در صفحه 93)
+        وجود دارد.
+    </p>
+    <p>
+        پایگاه‌های داده‌ی تخصصی مانند <strong>Event Store</strong> [46] برای پشتیبانی
+        از برنامه‌هایی که از <strong>event sourcing</strong> استفاده می‌کنند، توسعه
+        یافته‌اند، اما به‌طور کلی این رویکرد مستقل از هر ابزار خاصی است. یک
+        پایگاه داده‌ی معمولی یا یک <strong>log-based message broker</strong> نیز
+        می‌تواند برای ساخت برنامه‌ها در این سبک استفاده شود.
+    </p>
+
+    <h4>استخراج وضعیت فعلی از <strong>event log</strong></h4>
+    <p>
+        یک <strong>event log</strong> به‌خودی خود چندان مفید نیست، زیرا کاربران
+        معمولاً انتظار دارند که وضعیت فعلی یک سیستم را ببینند، نه تاریخچه
+        اصلاحات را. به عنوان مثال، در یک وب‌سایت خرید، کاربران انتظار دارند
+        که بتوانند محتویات فعلی سبد خرید خود را ببینند، نه یک لیست
+        <em>append-only</em> از تمام تغییراتی که تا به حال در سبد خرید خود
+        ایجاد کرده‌اند.
+    </p>
+    <p>
+        بنابراین برنامه‌هایی که از <strong>event sourcing</strong> استفاده می‌کنند، باید
+        <strong>log</strong> رویدادها (نشان‌دهنده‌ی داده‌های نوشته شده در سیستم)
+        را بگیرند و آن را به وضعیت برنامه که برای نشان دادن به یک کاربر
+        مناسب است، تبدیل کنند (راهی که داده‌ها از سیستم خوانده می‌شوند
+        [47]). این تبدیل می‌تواند از منطق دلخواه استفاده کند، اما باید
+        <em>deterministic</em> باشد تا شما بتوانید دوباره آن را اجرا کنید و همان
+        وضعیت برنامه را از <strong>event log</strong> استخراج کنید.
+    </p>
+    <p>
+        همانند <strong>change data capture</strong>، پخش مجدد <strong>event log</strong> به شما
+        اجازه می‌دهد تا وضعیت فعلی سیستم را بازسازی کنید. با این حال، <strong>log
+        compaction</strong> باید متفاوت مدیریت شود:
+    </p>
+    <ul>
+        <li>
+            یک رویداد <strong>CDC</strong> برای به‌روزرسانی یک رکورد معمولاً شامل
+            نسخه کامل جدید از رکورد است، بنابراین مقدار فعلی برای یک
+            <strong>primary key</strong> کاملاً توسط جدیدترین رویداد برای آن
+            <strong>primary key</strong> تعیین می‌شود، و <strong>log compaction</strong> می‌تواند
+            رویدادهای قبلی را برای همان <strong>key</strong> دور بریزد.
+        </li>
+        <li>
+            از سوی دیگر، با <strong>event sourcing</strong>، رویدادها در سطح بالاتر
+            مدل‌سازی می‌شوند: یک رویداد به‌طور معمول قصد یک عمل کاربر را
+            بیان می‌کند، نه مکانیک‌های به‌روزرسانی <strong>state</strong> که در نتیجه
+            عمل رخ داده است. در این حالت، رویدادهای بعدی به‌طور معمول
+            رویدادهای قبلی را <em>override</em> نمی‌کنند، و بنابراین شما به
+            تاریخچه کامل رویدادها برای بازسازی وضعیت نهایی نیاز دارید. <strong>Log
+            compaction</strong> به همان روش امکان‌پذیر نیست.
+        </li>
+    </ul>
+    <p>
+        برنامه‌هایی که از <strong>event sourcing</strong> استفاده می‌کنند، معمولاً دارای
+        نوعی مکانیسم برای ذخیره <strong>snapshots</strong> از وضعیت فعلی هستند که
+        از <strong>log</strong> رویدادها گرفته شده است، بنابراین آن‌ها نیازی به
+        پردازش مکرر <strong>full log</strong> ندارند. با این حال، این فقط یک
+        بهینه‌سازی عملکرد برای سرعت بخشیدن به خواندن و بازیابی از
+        خرابی‌ها است؛ هدف این است که سیستم بتواند تمام رویدادهای خام را برای
+        همیشه ذخیره کند و هر زمان که لازم باشد، <strong>full event log</strong> را
+        دوباره پردازش کند.
+        ما در مورد این فرض در "محدودیت‌های <em>immutability</em>" در صفحه 463
+        بحث می‌کنیم.
+        پایگاه‌های داده و جریان‌ها
+        |
+        455
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

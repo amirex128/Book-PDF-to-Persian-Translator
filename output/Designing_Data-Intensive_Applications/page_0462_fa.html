@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 462</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        قطعات را کاملاً رها می‌کند و به سادگی هر رویداد را در لحظه پردازش می‌کند. این
+        ایده پشت پردازش <strong>stream</strong> است.
+    </p>
+    <p>
+        به‌طور کلی، یک "<strong>stream</strong>" به داده‌هایی اشاره دارد که به‌طور
+        تدریجی در طول زمان در دسترس قرار می‌گیرند. این مفهوم در بسیاری از مکان‌ها
+        ظاهر می‌شود: در <strong>stdin</strong> و <strong>stdout</strong> از <strong>Unix</strong>، زبان‌های
+        برنامه‌نویسی (لیست‌های <em>lazy</em>) [2]، <strong>APIs</strong> های سیستم فایل (مانند
+        <strong>FileInputStream</strong> از <strong>Java</strong>)، اتصالات <strong>TCP</strong>، تحویل صدا و تصویر
+        از طریق اینترنت و غیره.
+    </p>
+    <p>
+        در این فصل ما به جریان‌های رویداد به عنوان یک مکانیسم مدیریت داده‌ها
+        نگاه خواهیم کرد: معادل <em>unbounded</em> و پردازش افزایشی داده‌های <strong>batch</strong>
+        که در فصل قبل دیدیم. ما ابتدا بحث خواهیم کرد که چگونه جریان‌ها نشان داده
+        می‌شوند، ذخیره می‌شوند و از طریق یک شبکه منتقل می‌شوند. در "پایگاه
+        داده‌ها و جریان‌ها" در صفحه 451، ما رابطه‌ی بین جریان‌ها و پایگاه‌های داده
+        را بررسی خواهیم کرد. و در نهایت، در "پردازش جریان‌ها" در صفحه 464، ما
+        رویکردها و ابزارهایی را برای پردازش مداوم آن جریان‌ها، و راه‌هایی که
+        می‌توانند برای ساخت برنامه‌ها استفاده شوند، بررسی خواهیم کرد.
+    </p>
+
+    <h4>انتقال جریان‌های رویداد</h4>
+    <p>
+        در دنیای پردازش <strong>batch</strong>، ورودی‌ها و خروجی‌های یک job فایل‌ها هستند
+        (شاید در یک سیستم فایل توزیع شده). معادل <strong>streaming</strong> چه شکلی
+        است؟
+    </p>
+    <p>
+        هنگامی که ورودی یک فایل است (یک دنباله از بایت‌ها)، اولین مرحله
+        پردازش معمولاً <strong>parse</strong> کردن آن به یک دنباله از رکوردها است. در یک
+        <strong>context</strong> پردازش <strong>stream</strong>، یک رکورد معمولاً به عنوان یک رویداد
+        شناخته می‌شود، اما اساساً همان چیز است: یک شیء کوچک، خود محصور،
+        <em>immutable</em> که حاوی جزئیات چیزی است که در یک نقطه زمانی خاص
+        رخ داده است. یک رویداد معمولاً شامل یک <strong>timestamp</strong> است که نشان
+        می‌دهد چه زمانی بر اساس یک ساعت <em>time-of-day</em> (نگاه کنید به
+        "ساعت‌های <strong>Monotonic</strong> در مقابل <strong>Time-of-Day</strong>" در صفحه 288) رخ
+        داده است.
+    </p>
+    <p>
+        به عنوان مثال، چیزی که رخ داده است ممکن است یک عملیات باشد که یک
+        کاربر انجام داده است، مانند مشاهده یک صفحه یا خرید. همچنین ممکن
+        است از یک دستگاه سرچشمه بگیرد، مانند اندازه‌گیری دوره‌ای از یک
+        سنسور دما، یا یک معیار استفاده از <strong>CPU</strong>. در مثال "پردازش <strong>Batch</strong> با
+        ابزارهای <strong>Unix</strong>" در صفحه 391، هر خط از <strong>log</strong> سرور وب یک رویداد
+        است.
+    </p>
+    <p>
+        یک رویداد ممکن است به عنوان یک رشته متنی یا <strong>JSON</strong> یا شاید به
+        شکلی باینری رمزگذاری شود، همان‌طور که در فصل 4 مورد بحث قرار گرفت.
+        این <strong>encoding</strong> به شما امکان می‌دهد یک رویداد را ذخیره کنید، به عنوان
+        مثال با پیوست کردن آن به یک فایل، وارد کردن آن در یک جدول رابطه‌ای، یا
+        نوشتن آن در یک پایگاه داده <strong>document</strong>. همچنین به شما امکان می‌دهد
+        رویداد را از طریق شبکه به یک <strong>node</strong> دیگر ارسال کنید تا آن را پردازش
+        کند.
+    </p>
+    <p>
+        در پردازش <strong>batch</strong>، یک فایل یک بار نوشته می‌شود و سپس احتمالاً توسط
+        jobs های متعدد خوانده می‌شود. به‌طور مشابه، در اصطلاحات <strong>streaming</strong>،
+        یک رویداد یک بار توسط یک <strong>producer</strong> (که به عنوان <strong>publisher</strong> یا
+        <strong>sender</strong> نیز شناخته می‌شود) تولید می‌شود، و سپس احتمالاً توسط
+        مصرف‌کنندگان متعدد (<strong>subscribers</strong> یا <strong>recipients</strong>) [3] پردازش
+        می‌شود. در یک سیستم فایل، یک <strong>filename</strong> یک مجموعه از
+        440
+        |
+        فصل 11: پردازش <strong>Stream</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

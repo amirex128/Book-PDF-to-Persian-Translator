@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 538</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        رفتار در حضور مشکلات شبکه و <strong>crashes</strong>. حتی اگر
+        محصولات زیرساختی مانند پایگاه‌های داده از مشکلات عاری
+        باشند، کد برنامه همچنان باید از <strong>features</strong> که ارائه
+        می‌دهند به‌درستی استفاده کند، که اگر <strong>configuration</strong>
+        درکش سخت باشد (که این مورد در سطوح <em>weak isolation</em>،
+        پیکربندی <strong>quorum</strong> و غیره صدق می‌کند)، مستعد خطا
+        است.
+    </p>
+    <p>
+        اگر برنامه شما می‌تواند گاهی اوقات داده‌ها را به روش‌های
+        غیرقابل پیش‌بینی خراب یا از دست بدهد، زندگی بسیار ساده‌تر
+        می‌شود، و شما ممکن است بتوانید صرفاً با آرزوی بهترین‌ها از
+        این قضیه عبور کنید. از سوی دیگر، اگر شما به اطمینان‌های
+        بیشتری از درستی نیاز دارید، سپس <em>serializability</em> و <strong>atomic
+        commit</strong> رویکردهای تثبیت‌شده هستند، اما آن‌ها هزینه‌ای
+        دارند: آن‌ها معمولاً فقط در یک <strong>datacenter</strong> واحد کار
+        می‌کنند (منجر به رد معماری‌های توزیع شده‌ی جغرافیایی می‌شوند)،
+        و آن‌ها مقیاس و ویژگی‌های تحمل خطا را که می‌توانید به‌دست
+        آورید، محدود می‌کنند.
+    </p>
+    <p>
+        در حالی‌که رویکرد تراکنش سنتی از بین نمی‌رود، من همچنین
+        معتقدم که این آخرین کلمه در درست و مقاوم کردن برنامه‌ها در برابر
+        خطاها نیست. در این بخش من راه‌هایی را برای فکر کردن در مورد
+        درستی در <strong>context</strong> از معماری‌های <strong>dataflow</strong>
+        پیشنهاد خواهم کرد.
+    </p>
+
+    <h4>استدلال <strong>End-to-End</strong> برای پایگاه‌های داده</h4>
+    <p>
+        فقط به این دلیل که یک برنامه از یک سیستم داده استفاده می‌کند که
+        ویژگی‌های ایمنی نسبتاً قوی را ارائه می‌دهد، مانند تراکنش‌های
+        <em>serializable</em>، به این معنی نیست که تضمین می‌شود که
+        برنامه از از دست رفتن یا خراب شدن داده‌ها عاری است. به عنوان
+        مثال، اگر یک برنامه دارای یک <strong>bug</strong> باشد که باعث
+        می‌شود داده‌های نادرستی را بنویسد، یا داده‌ها را از یک پایگاه
+        داده حذف کند، تراکنش‌های <em>serializable</em> شما را نجات
+        نمی‌دهند.
+    </p>
+    <p>
+        این مثال ممکن است بی‌اهمیت به‌نظر برسد، اما ارزش دارد که آن را
+        جدی بگیریم: <strong>application bugs</strong> رخ می‌دهند، و افراد
+        مرتکب اشتباه می‌شوند. من از این مثال در "<strong>State</strong>،
+        <strong>Streams</strong>، و <strong>Immutability</strong>" در صفحه 459 برای
+        بحث در مورد <em>immutable</em> و داده‌های <em>append-only</em> استفاده
+        کردم، زیرا بازیابی از چنین اشتباهاتی آسان‌تر است اگر شما
+        توانایی کد معیوب را برای از بین بردن داده‌های خوب حذف کنید.
+    </p>
+    <p>
+        اگرچه <em>immutability</em> مفید است، اما به‌خودی خود یک راه‌حل
+        کامل نیست. بیایید به یک مثال ظریف‌تر از فساد داده‌ها که می‌تواند
+        رخ دهد، نگاهی بیندازیم.
+    </p>
+
+    <h4>اجرای <strong>exactly-once</strong> از یک عملیات</h4>
+    <p>
+        در "تحمل خطا" در صفحه 476، ما به یک ایده به نام <strong>exactly-once</strong>
+        (یا <em>effectively-once</em>) <strong>semantics</strong> برخورد کردیم. اگر
+        چیزی در حین پردازش یک پیام اشتباه پیش برود، شما می‌توانید
+        یا تسلیم شوید (پیام را <em>drop</em> کنید—یعنی، متحمل از دست
+        دادن داده‌ها شوید) یا دوباره امتحان کنید. اگر شما دوباره
+        امتحان کنید، خطر این وجود دارد که در واقع بار اول موفق شده
+        باشد، اما شما فقط از موفقیت آن مطلع نشدید، و بنابراین پیام
+        در نهایت دو بار پردازش می‌شود.
+    </p>
+    <p>
+        پردازش دوبار یک نوع از فساد داده‌ها است: شارژ کردن دو برابری
+        یک مشتری برای یک سرویس یکسان (صورت‌حساب بیش از حد برای
+        آن‌ها) یا افزایش یک <strong>counter</strong> دو بار ناخواسته است.
+        516
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

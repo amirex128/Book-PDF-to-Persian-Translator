@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 503</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <ul>
+        <li>
+            دو ورودی <strong>join</strong> در واقع ممکن است همان <strong>stream</strong>
+            باشد (یک <strong>self-join</strong>) اگر شما بخواهید رویدادهای مرتبط را
+            در آن <strong>stream</strong> واحد پیدا کنید.
+        </li>
+        <li>
+            <strong>Stream-table joins</strong>
+        </li>
+        <p>
+            یک <strong>stream</strong> ورودی شامل رویدادهای فعالیت است، در حالی‌که
+            دیگری یک <strong>changelog</strong> پایگاه داده است. <strong>Changelog</strong>
+            یک کپی محلی از پایگاه داده را به‌روز نگه می‌دارد. برای هر رویداد
+            فعالیت، <strong>join operator</strong>، پایگاه داده را query می‌کند و یک
+            رویداد فعالیت غنی شده را خروجی می‌دهد.
+        </p>
+        <li>
+            <strong>Table-table joins</strong>
+        </li>
+        <p>
+            هر دو <strong>streams</strong> ورودی <strong>changelogs</strong> پایگاه داده
+            هستند. در این حالت، هر تغییر در یک طرف با آخرین وضعیت طرف
+            دیگر <strong>joined</strong> می‌شود. نتیجه یک جریان از تغییرات در
+            <strong>materialized view</strong> از <strong>join</strong> بین دو جدول است.
+        </p>
+    </ul>
+    <p>
+        در نهایت، ما در مورد تکنیک‌هایی برای دستیابی به تحمل خطا و
+        <strong>exactly-once semantics</strong> در یک پردازنده <strong>stream</strong> بحث
+        کردیم. همانند پردازش <strong>batch</strong>، ما باید خروجی جزئی هر
+        <strong>task</strong> شکست‌خورده را دور بریزیم. با این حال، از آن‌جایی‌که یک
+        فرآیند <strong>stream</strong> طولانی‌مدت است و به‌طور مداوم خروجی تولید
+        می‌کند، ما نمی‌توانیم به‌سادگی تمام خروجی را دور بریزیم. در عوض،
+        می‌توان از یک مکانیسم بازیابی ظریف‌تر، مبتنی بر <strong>microbatching</strong>
+        ، <strong>checkpointing</strong>، تراکنش‌ها، یا نوشتن‌های <em>idempotent</em>
+        استفاده کرد.
+    </p>
+
+    <p>
+        مراجع
+    </p>
+    <p>
+        [1] <strong>Tyler Akidau</strong>، <strong>Robert Bradshaw</strong>، <strong>Craig
+        Chambers</strong> و همکاران: "مدل <strong>Dataflow</strong>: یک رویکرد
+        عملی برای متعادل کردن صحت، تأخیر، و هزینه در پردازش داده‌های
+        نامحدود و مقیاس بزرگ، نامرتب‌شده"، <strong>Proceedings of the VLDB
+        Endowment</strong>، جلد 8، شماره 12، صفحات 1792–1803، اوت 2015.
+        <strong>doi:10.14778/2824032.2824076</strong>
+    </p>
+
+    <p>
+        [2] <strong>Harold Abelson</strong>، <strong>Gerald Jay Sussman</strong>، و <strong>Julie
+        Sussman</strong>: ساختار و تفسیر برنامه‌های کامپیوتری، چاپ دوم.
+        <strong>MIT Press</strong>، 1996. <strong>ISBN: 978-0-262-51087-5</strong>، در
+        <strong>mitpress.mit.edu</strong> موجود است
+    </p>
+
+    <p>
+        [3] <strong>Patrick Th. Eugster</strong>، <strong>Pascal A. Felber</strong>، <strong>Rachid
+        Guerraoui</strong>، و <strong>Anne-Marie Kermarrec</strong>: "بسیاری از
+        وجه‌های انتشار/اشتراک"، بررسی‌های <strong>ACM Computing</strong>، جلد 35،
+        شماره 2، صفحات 114–131، ژوئن 2003.
+        <strong>doi:10.1145/857076.857078</strong>
+    </p>
+
+    <p>
+        [4] <strong>Joseph M. Hellerstein</strong> و <strong>Michael Stonebraker</strong>:
+        خواندن‌ها در سیستم‌های پایگاه داده، چاپ 4. <strong>MIT Press</strong>، 2005.
+        <strong>ISBN: 978-0-262-69314-1</strong>، در <strong>redbook.cs.berkeley.edu</strong>
+        موجود است
+    </p>
+
+    <p>
+        [5] <strong>Don Carney</strong>، <strong>Uğur Çetintemel</strong>، <strong>Mitch Cherniack</strong> و
+        همکاران: "جریان‌های <strong>Monitoring</strong> – یک کلاس جدید از
+        برنامه‌های مدیریت داده‌ها"، در بیست و هشتمین کنفرانس بین‌المللی
+        در مورد پایگاه‌های داده بسیار بزرگ (<strong>VLDB</strong>)، اوت 2002.
+    </p>
+
+    <p>
+        [6] <strong>Matthew Sackman</strong>: "<strong>Pushing Back</strong>"، <strong>lshift.net</strong>، 5
+        مه 2016.
+        خلاصه
+        |
+        481
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+• If you introduce a bug into the code and the output is wrong or corrupted, you
+can simply roll back to a previous version of the code and rerun the job, and the
+output will be correct again. Or, even simpler, you can keep the old output in a
+different directory and simply switch back to it. Databases with read-write trans‐
+actions do not have this property: if you deploy buggy code that writes bad data
+to the database, then rolling back the code will do nothing to fix the data in the
+database. (The idea of being able to recover from buggy code has been called
+human fault tolerance [50].)
+• As a consequence of this ease of rolling back, feature development can proceed
+more quickly than in an environment where mistakes could mean irreversible
+damage. This principle of minimizing irreversibility is beneficial for Agile soft‐
+ware development [51].
+• If a map or reduce task fails, the MapReduce framework automatically re-
+schedules it and runs it again on the same input. If the failure is due to a bug in
+the code, it will keep crashing and eventually cause the job to fail after a few
+attempts; but if the failure is due to a transient issue, the fault is tolerated. This
+automatic retry is only safe because inputs are immutable and outputs from
+failed tasks are discarded by the MapReduce framework.
+• The same set of files can be used as input for various different jobs, including
+monitoring jobs that calculate metrics and evaluate whether a job’s output has
+the expected characteristics (for example, by comparing it to the output from the
+previous run and measuring discrepancies).
+• Like Unix tools, MapReduce jobs separate logic from wiring (configuring the
+input and output directories), which provides a separation of concerns and ena‐
+bles potential reuse of code: one team can focus on implementing a job that does
+one thing well, while other teams can decide where and when to run that job.
+In these areas, the design principles that worked well for Unix also seem to be work‐
+ing well for Hadoop—but Unix and Hadoop also differ in some ways. For example,
+because most Unix tools assume untyped text files, they have to do a lot of input
+parsing (our log analysis example at the beginning of the chapter used {print $7} to
+extract the URL). On Hadoop, some of those low-value syntactic conversions are
+eliminated by using more structured file formats: Avro (see “Avro” on page 122) and
+Parquet (see “Column-Oriented Storage” on page 95) are often used, as they provide
+efficient schema-based encoding and allow evolution of their schemas over time (see
+Chapter 4). 
+Comparing Hadoop to Distributed Databases
+As we have seen, Hadoop is somewhat like a distributed version of Unix, where
+HDFS is the filesystem and MapReduce is a quirky implementation of a Unix process
+414 
+| 
+Chapter 10: Batch Processing

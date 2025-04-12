@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 529</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>Dataflow</strong>: تعامل بین تغییرات <strong>state</strong> و کد
+        برنامه
+    </p>
+    <p>
+        تفکر در مورد برنامه‌ها از نظر <strong>dataflow</strong>، مستلزم
+        بازنگری در رابطه‌ی بین کد برنامه و مدیریت <strong>state</strong>
+        است. به‌جای این‌که یک پایگاه داده را به‌عنوان یک متغیر
+        <em>passive</em> در نظر بگیریم که توسط برنامه دستکاری
+        می‌شود، ما بیشتر در مورد تعامل و همکاری بین <strong>state</strong>،
+        تغییرات <strong>state</strong>، و کدی که آن‌ها را پردازش می‌کند، فکر
+        می‌کنیم. کد برنامه به تغییرات <strong>state</strong> در یک مکان پاسخ
+        می‌دهد با راه‌اندازی تغییرات <strong>state</strong> در مکان دیگر.
+    </p>
+    <p>
+        ما این خط فکری را در "پایگاه‌های داده و جریان‌ها" در صفحه 451
+        دیدیم، که در آن ما در مورد برخورد با <strong>log</strong> از تغییرات در یک
+        پایگاه داده به‌عنوان یک <strong>stream</strong> از رویدادها که می‌توانیم
+        به آن‌ها <strong>subscribe</strong> کنیم، بحث کردیم. سیستم‌های
+        پیام‌رسانی مانند <strong>actors</strong> (نگاه کنید به "<strong>Message-Passing
+        Dataflow</strong>" در صفحه 136) نیز این مفهوم را از پاسخ به
+        رویدادها دارند. قبلاً در دهه 1980، مدل فضاهای <strong>tuple</strong> به
+        بررسی بیان محاسبات توزیع شده از نظر فرآیندهایی که تغییرات
+        <strong>state</strong> را مشاهده می‌کنند و به آن‌ها واکنش نشان می‌دهند،
+        پرداخت [38، 39].
+    </p>
+    <p>
+        همان‌طور که بحث شد، موارد مشابهی در داخل یک پایگاه داده هنگامی
+        که یک <strong>trigger</strong> به دلیل یک تغییر داده آتش می‌گیرد، یا
+        هنگامی‌که یک <strong>secondary index</strong> به‌روز می‌شود تا
+        تغییری را در جدول در حال <strong>indexing</strong> منعکس کند، رخ
+        می‌دهد. <strong>Unbundling</strong> پایگاه داده به این معنی است که این
+        ایده را بگیرید و آن را در ایجاد مجموعه‌داده‌های مشتق شده خارج از
+        پایگاه داده‌ی اولیه اعمال کنید: <strong>caches</strong>، <strong>indexes</strong>
+        جستجوی متن کامل، یادگیری ماشین، یا سیستم‌های تجزیه و تحلیل. ما
+        می‌توانیم از پردازش <strong>stream</strong> و سیستم‌های پیام‌رسانی
+        برای این منظور استفاده کنیم.
+    </p>
+    <p>
+        نکته‌ی مهمی که باید به خاطر داشت این است که نگه‌داری داده‌های
+        مشتق شده با اجرای <em>asynchronous</em> <strong>job</strong> یکسان
+        نیست، که سیستم‌های پیام‌رسانی به‌طور سنتی برای آن طراحی
+        شده‌اند (نگاه کنید به "<strong>Logs</strong> در مقایسه با پیام‌رسانی سنتی"
+        در صفحه 448):
+    </p>
+    <ul>
+        <li>
+            هنگام نگه‌داری داده‌های مشتق شده، ترتیب تغییرات <strong>state</strong> اغلب
+            مهم است (اگر چندین <strong>views</strong> از یک <strong>event log</strong> مشتق
+            شده باشند، آن‌ها باید رویدادها را به همان ترتیب پردازش کنند
+            تا با یکدیگر سازگار بمانند). همان‌طور که در "تأییدیه‌ها و
+            <strong>redelivery</strong>" در صفحه 445 بحث شد، بسیاری از
+            <strong>message brokers</strong> این ویژگی را هنگام <strong>redelivering</strong>
+            پیام‌های تأیید نشده ندارند. <strong>Dual writes</strong> نیز رد
+            می‌شوند (نگاه کنید به "همگام‌سازی سیستم‌ها" در صفحه 452).
+        </li>
+        <li>
+            تحمل خطا برای داده‌های مشتق شده کلیدی است: از دست دادن فقط
+            یک پیام باعث می‌شود که مجموعه‌داده‌ی مشتق شده به‌طور دائم
+            از منبع داده‌های خود خارج شود. تحویل پیام و به‌روزرسانی‌های
+            <strong>state</strong> مشتق شده باید قابل اعتماد باشند. به عنوان مثال،
+            بسیاری از سیستم‌های <strong>actor</strong> به‌طور پیش‌فرض <strong>state</strong>
+            و پیام‌ها را در حافظه حفظ می‌کنند، بنابراین اگر دستگاهی که
+            <strong>actor</strong> را اجرا می‌کند، از کار بیفتد، آن‌ها از بین
+            می‌روند.
+        </li>
+    </ul>
+    <p>
+        ترتیب <strong>ordering</strong> پیام‌های ثابت و پردازش پیام تحمل‌کننده‌ی
+        خطا، الزامات بسیار سختی هستند، اما به‌مراتب کمتر پرهزینه و از
+        نظر عملیاتی مستحکم‌تر از تراکنش‌های توزیع شده هستند. پردازنده‌های
+        <strong>stream</strong> مدرن می‌توانند این تضمین‌های <strong>ordering</strong> و
+        قابلیت اطمینان را در مقیاس ارائه دهند، و آن‌ها به کد برنامه اجازه
+        می‌دهند که به عنوان <strong>stream operators</strong> اجرا شود.
+        <strong>Unbundling Databases</strong>
+        |
+        507
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

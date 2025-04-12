@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 489</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>حفظ <strong>materialized views</strong></h4>
+    <p>
+        ما در "پایگاه‌های داده و جریان‌ها" در صفحه 451 دیدیم که یک جریان از
+        تغییرات در یک پایگاه داده می‌تواند برای به‌روز نگه داشتن سیستم‌های
+        داده مشتق شده، مانند <strong>caches</strong>، <strong>search indexes</strong> و انبارهای داده،
+        با یک پایگاه داده منبع، استفاده شود. ما می‌توانیم این مثال‌ها را به عنوان
+        موارد خاصی از حفظ <strong>materialized views</strong> در نظر بگیریم (نگاه کنید به
+        "تجمیع: <strong>Data Cubes</strong> و <strong>Materialized Views</strong>" در صفحه 101):
+        استخراج یک <strong>view</strong> جایگزین بر روی برخی مجموعه‌داده‌ها به طوری
+        که شما بتوانید آن را به‌طور کارآمد query کنید، و به‌روزرسانی آن
+        <strong>view</strong> هر زمان که داده‌های اساسی تغییر می‌کنند [50].
+    </p>
+    <p>
+        به‌طور مشابه، در <strong>event sourcing</strong>، وضعیت برنامه با اعمال یک <strong>log</strong>
+        از رویدادها حفظ می‌شود؛ در اینجا، وضعیت برنامه نیز نوعی
+        <strong>materialized view</strong> است. بر خلاف سناریوهای تجزیه و تحلیل <strong>stream</strong>،
+        معمولاً کافی نیست که فقط رویدادها را در یک بازه‌ی زمانی در نظر
+        بگیرید: ساختن <strong>materialized view</strong> به‌طور بالقوه به تمام رویدادها در
+        طول یک دوره‌ی زمانی دلخواه نیاز دارد، به‌جز هر رویدادی که
+        منسوخ شده باشد و ممکن است توسط <strong>log compaction</strong> دور
+        ریخته شود (نگاه کنید به "<strong>Log compaction</strong>" در صفحه 456). در
+        واقع، شما به یک <strong>window</strong> نیاز دارید که تا ابتدای زمان گسترش
+        یابد.
+    </p>
+    <p>
+        در اصل، هر پردازنده <strong>stream</strong> می‌تواند برای حفظ <strong>materialized
+        view</strong> استفاده شود، اگرچه نیاز به حفظ رویدادها برای همیشه با
+        فرضیات برخی از فریم‌ورک‌های <em>analytics-oriented</em> که عمدتاً بر روی
+        <strong>windows</strong> با مدت زمان محدود کار می‌کنند، مغایرت دارد.
+        <strong>Samza</strong> و <strong>Kafka Streams</strong> از این نوع استفاده، با تکیه بر
+        پشتیبانی <strong>log compaction</strong> از <strong>Kafka</strong> پشتیبانی
+        می‌کنند [75].
+    </p>
+
+    <h4>جستجو در <strong>streams</strong></h4>
+    <p>
+        علاوه بر <strong>CEP</strong>، که امکان جستجوی الگوهایی را که شامل رویدادهای
+        متعدد می‌شوند، فراهم می‌کند، گاهی اوقات نیاز به جستجوی رویدادهای
+        فردی بر اساس معیارهای پیچیده، مانند <strong>full-text search queries</strong>
+        وجود دارد.
+    </p>
+    <p>
+        به عنوان مثال، خدمات <strong>media monitoring</strong> به فیدهای مقالات خبری و
+        پخش از رسانه‌ها <strong>subscribe</strong> می‌کنند، و به‌دنبال هر خبری که
+        شرکت‌ها، محصولات یا موضوعات مورد علاقه را ذکر می‌کند،
+        می‌گردند. این کار با فرمول‌بندی یک <strong>search query</strong> از قبل، و سپس
+        به‌طور مداوم <strong>matching</strong> <strong>stream</strong> از آیتم‌های خبری در برابر
+        این <strong>query</strong> انجام می‌شود. ویژگی‌های مشابهی در برخی از وب‌سایت‌ها
+        وجود دارد: به عنوان مثال، کاربران وب‌سایت‌های املاک و مستغلات
+        می‌توانند درخواست کنند که هنگام ظاهر شدن یک ملک جدید که با
+        معیارهای جستجوی آن‌ها مطابقت دارد، در بازار، مطلع شوند. ویژگی
+        <strong>percolator</strong> از <strong>Elasticsearch</strong> [76] یک گزینه برای
+        پیاده‌سازی این نوع جستجوی <strong>stream</strong> است.
+    </p>
+    <p>
+        موتورهای جستجوی معمولی ابتدا اسناد را <strong>index</strong> می‌کنند و سپس
+        queries ها را روی <strong>index</strong> اجرا می‌کنند. در مقابل، جستجوی یک
+        <strong>stream</strong>، پردازش را برعکس می‌کند: <strong>queries</strong> ذخیره
+        می‌شوند، و اسناد از کنار <strong>queries</strong> عبور می‌کنند، مانند
+        <strong>CEP</strong>. در ساده‌ترین حالت، شما می‌توانید هر سند را در برابر هر
+        <strong>query</strong> آزمایش کنید، اگرچه این کار می‌تواند کند شود اگر شما
+        تعداد زیادی <strong>query</strong> داشته باشید. برای بهینه‌سازی فرآیند،
+        index کردن <strong>queries</strong> و همچنین اسناد، و در نتیجه محدود
+        کردن مجموعه <strong>queries</strong> که ممکن است <strong>match</strong> داشته
+        باشند، امکان‌پذیر است [77].
+        پایگاه‌های داده و جریان‌ها
+        |
+        467
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

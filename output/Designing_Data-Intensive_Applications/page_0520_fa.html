@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 520</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <ul>
+        <li>
+            از آن‌جایی‌که <strong>stream pipeline</strong> و <strong>batch pipeline</strong>
+            خروجی‌های جداگانه‌ای تولید می‌کنند، آن‌ها باید برای پاسخ به
+            درخواست‌های کاربر ادغام شوند. اگر محاسبه، یک تجمیع ساده در
+            یک <strong>tumbling window</strong> باشد، این ادغام کاملاً آسان است، اما
+            اگر <strong>view</strong> با استفاده از عملیات پیچیده‌تری مانند <strong>joins</strong> و
+            <strong>sessionization</strong> مشتق شده باشد، یا اگر خروجی یک سری زمانی
+            نباشد، به‌طور قابل توجهی سخت‌تر می‌شود.
+        </li>
+        <li>
+            اگرچه داشتن توانایی پردازش مجدد کل مجموعه‌داده تاریخی عالی
+            است، اما انجام این کار به‌طور مکرر در مجموعه‌داده‌های بزرگ،
+            پرهزینه است. بنابراین، <strong>batch pipeline</strong> اغلب نیاز دارد که برای
+            پردازش <strong>batches</strong> افزایشی تنظیم شود (به عنوان مثال، یک ساعت
+            ارزش داده‌ها در پایان هر ساعت) به‌جای پردازش مجدد همه‌چیز. این
+            امر مشکلات مطرح شده در "استدلال در مورد زمان" در صفحه 468 را
+            ایجاد می‌کند، مانند رسیدگی به <em>stragglers</em> و رسیدگی به
+            <strong>windows</strong> که از مرزها بین <strong>batches</strong> عبور
+            می‌کنند.
+        </li>
+        <p>
+            افزایش دادن یک محاسبه‌ی <strong>batch</strong>، پیچیدگی را اضافه
+            می‌کند، و آن را بیشتر شبیه لایه‌ی <strong>streaming</strong> می‌کند، که در
+            تضاد با هدف نگه داشتن لایه‌ی <strong>batch</strong> تا حد ممکن
+            ساده است.
+        </p>
+    </ul>
+
+    <h4>یکپارچه‌سازی پردازش <strong>batch</strong> و <strong>stream</strong></h4>
+    <p>
+        کار اخیرتر به این امکان رسیده است که از مزایای معماری <strong>lambda</strong>
+        بدون معایب آن بهره‌مند شوید، با اجازه دادن به محاسبات <strong>batch</strong>
+        (پردازش مجدد داده‌های تاریخی) و محاسبات <strong>stream</strong> (پردازش
+        رویدادها در حین رسیدن) تا در یک سیستم واحد پیاده‌سازی شوند [15].
+    </p>
+    <p>
+        یکپارچه‌سازی پردازش <strong>batch</strong> و <strong>stream</strong> در یک سیستم
+        واحد نیازمند <strong>features</strong> زیر است، که به‌طور فزاینده‌ای در
+        دسترس هستند:
+    </p>
+    <ul>
+        <li>
+            توانایی پخش مجدد رویدادهای تاریخی از طریق همان موتور پردازشی
+            که <strong>stream</strong> رویدادهای اخیر را مدیریت می‌کند. به عنوان
+            مثال، <strong>message brokers</strong> مبتنی بر <strong>log</strong>، توانایی پخش
+            مجدد پیام‌ها را دارند (نگاه کنید به "پخش مجدد پیام‌های قدیمی" در
+            صفحه 451)، و برخی از پردازنده‌های <strong>stream</strong> می‌توانند
+            ورودی را از یک سیستم فایل توزیع شده مانند <strong>HDFS</strong>
+            بخوانند.
+        </li>
+        <li>
+            <strong>Exactly-once semantics</strong> برای پردازنده‌های <strong>stream</strong>
+            —یعنی، اطمینان از این‌که خروجی یکسان است گویی هیچ <strong>faults</strong>
+            رخ نداده است، حتی اگر در واقع <strong>faults</strong> رخ داده
+            باشند (نگاه کنید به "تحمل خطا" در صفحه 476). مانند پردازش
+            <strong>batch</strong>، این امر مستلزم دور ریختن خروجی جزئی هر
+            <strong>tasks</strong> شکست‌خورده است.
+        </li>
+        <li>
+            ابزارهایی برای <strong>windowing</strong> بر اساس زمان رویداد، نه بر اساس
+            زمان پردازش، از آن‌جایی‌که زمان پردازش هنگام پردازش مجدد
+            رویدادهای تاریخی بی‌معنی است (نگاه کنید به "استدلال در مورد
+            زمان" در صفحه 468). به عنوان مثال، <strong>Apache Beam</strong> یک
+            <strong>API</strong> برای بیان چنین محاسباتی ارائه می‌دهد، که سپس
+            می‌تواند با استفاده از <strong>Apache Flink</strong> یا <strong>Google Cloud
+            Dataflow</strong> اجرا شود.
+            498
+            |
+            فصل 12: آینده‌ی سیستم‌های داده
+        </li>
+    </ul>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 512</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <h4>ادغام داده‌ها</h4>
+    <p>
+        یک موضوع تکراری در این کتاب این بوده است که برای هر مشکل داده شده،
+        راه حل‌های متعددی وجود دارد، که همه‌ی آن‌ها دارای جوانب مثبت، منفی
+        و <strong>trade-offs</strong> متفاوتی هستند. به عنوان مثال، هنگام بحث
+        در مورد <strong>storage engines</strong> در فصل 3، ما ذخیره‌سازی ساختاریافته
+        بر اساس <strong>log</strong>، <strong>B-trees</strong> و ذخیره‌سازی مبتنی بر
+        <strong>column</strong> را دیدیم. هنگام بحث در مورد <strong>replication</strong> در
+        فصل 5، ما رویکردهای <strong>single-leader</strong>، <strong>multi-leader</strong>، و
+        <strong>leaderless</strong> را دیدیم.
+    </p>
+    <p>
+        اگر شما یک مشکل مانند "من می‌خواهم مقداری داده را ذخیره کنم و بعداً
+        آن را دوباره جستجو کنم" دارید، هیچ راه‌حل درستی وجود ندارد، بلکه
+        رویکردهای مختلفی وجود دارد که هر کدام در شرایط مختلف مناسب
+        هستند. یک پیاده‌سازی نرم‌افزاری معمولاً باید یک رویکرد خاص را انتخاب
+        کند. این به‌اندازه‌ی کافی سخت است که یک مسیر کد را <strong>robust</strong> و
+        خوب اجرا کنید—تلاش برای انجام همه‌چیز در یک قطعه نرم‌افزار، تقریباً
+        تضمین می‌کند که پیاده‌سازی ضعیف خواهد بود.
+    </p>
+    <p>
+        بنابراین، مناسب‌ترین انتخاب از ابزار نرم‌افزاری نیز به شرایط بستگی
+        دارد. هر قطعه نرم‌افزار، حتی یک پایگاه داده به اصطلاح "<strong>general-
+        purpose</strong>"، برای یک الگوی استفاده خاص طراحی شده است.
+    </p>
+    <p>
+        با توجه به این تعدد جایگزین‌ها، اولین چالش این است که نمودار بین
+        محصولات نرم‌افزاری و شرایطی را که در آن‌ها مناسب هستند، مشخص
+        کنید. فروشندگان قابل درک هستند که از گفتن این‌که برای چه نوع
+        <strong>workloads</strong> نرم‌افزارشان مناسب نیست، امتناع می‌کنند، اما
+        امیدوارم که فصل‌های قبل شما را به سؤالاتی برای خواندن بین خطوط و
+        درک بهتر <strong>trade-offs</strong> مجهز کرده باشد.
+    </p>
+    <p>
+        با این حال، حتی اگر شما کاملاً نمودار بین ابزارها و شرایط را برای
+        استفاده از آن‌ها درک کنید، یک چالش دیگر وجود دارد: در برنامه‌های
+        پیچیده، داده‌ها اغلب به چندین روش مختلف استفاده می‌شوند. بعید است
+        یک قطعه نرم‌افزار وجود داشته باشد که برای تمام شرایط مختلفی که
+        داده‌ها در آن‌ها استفاده می‌شوند، مناسب باشد، بنابراین شما ناگزیر
+        می‌شوید که چندین قطعه نرم‌افزار مختلف را با هم جمع کنید تا
+        عملکرد برنامه خود را ارائه دهید.
+    </p>
+
+    <h4>ترکیب ابزارهای تخصصی با مشتق کردن داده‌ها</h4>
+    <p>
+        به عنوان مثال، نیاز به ادغام یک پایگاه داده‌ی <strong>OLTP</strong> با یک
+        index جستجوی متن کامل برای رسیدگی به <strong>queries</strong> برای
+        <strong>keywords</strong> دلخواه، رایج است. اگرچه برخی از پایگاه‌های داده
+        (مانند <strong>PostgreSQL</strong>) شامل یک ویژگی <strong>full-text indexing</strong>
+        هستند، که ممکن است برای برنامه‌های ساده کافی باشد [1]،
+        امکانات جستجوی پیچیده‌تر به ابزارهای تخصصی بازیابی اطلاعات
+        نیاز دارند. برعکس، index های جستجو به‌طور کلی برای یک سیستم
+        <em>durable</em> <strong>record</strong> بسیار مناسب نیستند، و بنابراین بسیاری
+        از برنامه‌ها نیاز دارند که دو ابزار مختلف را برای برآورده کردن
+        تمام الزامات، با هم ترکیب کنند.
+    </p>
+    <p>
+        ما به مسئله‌ی ادغام سیستم‌های داده در "همگام نگه داشتن سیستم‌ها"
+        در صفحه 452 اشاره کردیم. با افزایش تعداد نمایش‌های مختلف داده‌ها،
+        ادغام
+        490
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

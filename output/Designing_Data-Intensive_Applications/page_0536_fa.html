@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 536</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        <strong>Nodes</strong> که داده‌های <strong>queried</strong> شده را ذخیره می‌کنند.
+        این یک طراحی منطقی است، اما تنها طراحی ممکن نیست. همچنین
+        امکان‌پذیر است که درخواست‌های <strong>read</strong> را به‌عنوان جریان‌هایی از
+        رویدادها نشان دهیم، و هر دو رویداد <strong>read</strong> و رویدادهای <strong>write</strong> را
+        از طریق یک پردازنده <strong>stream</strong> ارسال کنیم؛ پردازنده به رویدادهای
+        <strong>read</strong> با انتشار نتیجه <strong>read</strong> به یک <strong>stream</strong> خروجی پاسخ
+        می‌دهد [46].
+    </p>
+    <p>
+        هنگامی که هر دو <strong>writes</strong> و <strong>reads</strong> به‌عنوان رویدادها نشان
+        داده می‌شوند، و برای مدیریت شدن به یک <strong>stream operator</strong> یکسان
+        هدایت می‌شوند، ما در واقع یک <strong>stream-table join</strong> را بین
+        جریان <strong>read queries</strong> و پایگاه داده انجام می‌دهیم. رویداد
+        <strong>read</strong> باید به <strong>partition</strong> پایگاه داده‌ای که داده‌ها
+        را در خود نگه می‌دارد، ارسال شود (نگاه کنید به "<strong>Request
+        Routing</strong>" در صفحه 214)، درست مانند پردازنده‌های <strong>batch</strong>
+        و <strong>stream</strong> نیاز به <strong>copartition</strong> ورودی‌ها بر روی
+        <strong>key</strong> یکسان هنگام <strong>joining</strong> دارند (نگاه کنید به "<strong>Reduce-
+        Side Joins and Grouping</strong>" در صفحه 403).
+    </p>
+    <p>
+        این مطابقت بین سرویس‌دهی به درخواست‌ها و انجام <strong>joins</strong> کاملاً
+        اساسی است [47]. یک درخواست <strong>read</strong> یک‌باره، فقط درخواست را
+        از طریق <strong>join operator</strong> منتقل می‌کند و سپس بلافاصله آن را
+        فراموش می‌کند؛ یک درخواست <strong>subscribe</strong> یک <strong>join</strong>
+        <em>persistent</em> با رویدادهای گذشته و آینده در طرف دیگر
+        <strong>join</strong> است.
+    </p>
+    <p>
+        ثبت یک <strong>log</strong> از رویدادهای <strong>read</strong> به‌طور بالقوه مزایایی
+        نیز در رابطه با پیگیری وابستگی‌های علّی و <strong>data provenance</strong>
+        در سراسر یک سیستم دارد: این به شما اجازه می‌دهد که آن‌چه را که
+        کاربر قبل از تصمیم‌گیری خاصی مشاهده کرد، بازسازی کنید. به عنوان
+        مثال، در یک فروشگاه آنلاین، احتمالاً تاریخ حمل و نقل پیش‌بینی شده
+        و وضعیت موجودی که به یک مشتری نشان داده می‌شود، بر این‌که آیا
+        آن‌ها تصمیم به خرید یک مورد می‌گیرند تأثیر می‌گذارد [4]. برای
+        تجزیه و تحلیل این ارتباط، شما نیاز دارید که نتیجه <strong>query</strong>
+        کاربر از وضعیت حمل و نقل و موجودی را ثبت کنید.
+    </p>
+    <p>
+        بنابراین، نوشتن رویدادهای <strong>read</strong> در ذخیره‌سازی <em>durable</em>،
+        بهتر کردن ردیابی وابستگی‌های علّی را ممکن می‌کند (نگاه کنید به
+        "ترتیب دادن رویدادها برای ثبت <strong>causality</strong>" در صفحه 493)،
+        اما هزینه‌ی ذخیره‌سازی و <strong>I/O</strong> اضافی را متحمل می‌شود.
+        بهینه‌سازی چنین سیستم‌هایی برای کاهش <strong>overhead</strong>، هنوز هم یک
+        مشکل تحقیقاتی باز است [2]. اما اگر شما در حال حاضر درخواست‌های
+        <strong>read</strong> را برای اهداف عملیاتی <strong>log</strong> می‌کنید، به‌عنوان
+        یک اثر جانبی از پردازش درخواست، تغییر زیادی را برای این‌که
+        <strong>log</strong> را به عنوان منبع درخواست‌ها در نظر بگیرید، ایجاد
+        نمی‌کند.
+    </p>
+
+    <h4>پردازش داده‌های چند <strong>partition</strong></h4>
+    <p>
+        برای <strong>queries</strong> که فقط یک <strong>partition</strong> واحد را لمس
+        می‌کنند، تلاش برای ارسال <strong>queries</strong> از طریق یک
+        <strong>stream</strong> و جمع‌آوری یک <strong>stream</strong> از پاسخ‌ها،
+        شاید زیاد باشد. با این حال، این ایده امکان اجرای توزیع شده
+        <strong>queries</strong> پیچیده‌ای را باز می‌کند که نیاز به ترکیب داده‌ها
+        از چندین <strong>partition</strong> دارند، که از زیرساخت برای مسیریابی
+        پیام‌ها، تقسیم‌بندی، و <strong>joining</strong> که قبلاً توسط پردازنده‌های
+        <strong>stream</strong> ارائه شده است، استفاده می‌کند.
+    </p>
+    <p>
+        <strong>feature</strong> <strong>distributed RPC</strong> از <strong>Storm</strong> از این
+        الگوی استفاده پشتیبانی می‌کند (نگاه کنید به "پیام‌رسانی و
+        <strong>RPC</strong>" در صفحه 468). به عنوان مثال، از آن برای محاسبه‌ی
+        تعداد افرادی که یک <strong>URL</strong> را در <strong>Twitter</strong> دیده‌اند—یعنی،
+        اجتماع مجموعه‌های دنبال‌کننده از همه‌ی کسانی که آن <strong>URL</strong>
+        را توییت کرده‌اند، استفاده شده است [48]. از آن‌جایی‌که مجموعه‌ی
+        کاربران <strong>Twitter</strong> تقسیم‌بندی شده است، این محاسبه نیاز
+        دارد که نتایج را از <strong>partitions</strong> زیادی ترکیب کند.
+        494
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

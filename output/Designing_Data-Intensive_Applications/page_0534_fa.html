@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 534</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        زمانی که ما از فرض <strong>clients</strong> <em>stateless</em> که با یک
+        پایگاه داده‌ی مرکزی صحبت می‌کنند دور می‌شویم و به سمت <strong>state</strong>
+        ای که روی دستگاه‌های کاربر نهایی نگه‌داری می‌شود، حرکت
+        می‌کنیم، دنیایی از فرصت‌های جدید باز می‌شود. به‌طور خاص، ما
+        می‌توانیم به <strong>state</strong> روی دستگاه به‌عنوان یک <strong>cache</strong> از
+        <strong>state</strong> در سرور فکر کنیم. پیکسل‌ها روی صفحه نمایش یک
+        <strong>materialized view</strong> بر روی اشیاء مدل در برنامه
+        <strong>client</strong> هستند؛ اشیاء مدل یک <strong>replica</strong> محلی از
+        <strong>state</strong> در یک <strong>datacenter</strong> راه دور هستند [27].
+    </p>
+
+    <h4>فشار دادن تغییرات <strong>state</strong> به <strong>clients</strong></h4>
+    <p>
+        در یک صفحه‌ی وب معمولی، اگر شما صفحه را در یک مرورگر وب بارگذاری
+        کنید و داده‌ها متعاقباً روی سرور تغییر کنند، مرورگر از تغییر
+        مطلع نمی‌شود تا زمانی که شما صفحه را دوباره بارگذاری کنید.
+        مرورگر فقط داده‌ها را در یک نقطه زمانی می‌خواند، با فرض این‌که
+        ایستا هستند—به <strong>updates</strong> از سرور <strong>subscribe</strong>
+        نمی‌شود. بنابراین، <strong>state</strong> روی دستگاه یک <strong>cache</strong> کهنه
+        است که به‌روزرسانی نمی‌شود مگر این‌که شما صریحاً برای تغییرات
+        <strong>poll</strong> کنید. (پروتکل‌های <strong>feed subscription</strong> مبتنی بر
+        <strong>HTTP</strong> مانند <strong>RSS</strong> واقعاً فقط یک فرم اساسی از
+        <strong>polling</strong> هستند.)
+    </p>
+    <p>
+        پروتکل‌های جدیدتر از الگوی <em>request/response</em> اساسی <strong>HTTP</strong>
+        فراتر رفته‌اند: رویدادهای ارسال شده توسط سرور (<strong>API</strong>
+        <strong>EventSource</strong>) و <strong>WebSockets</strong>، کانال‌های
+        ارتباطی را فراهم می‌کنند که از طریق آن‌ها یک مرورگر وب می‌تواند
+        یک اتصال <strong>TCP</strong> باز را به یک سرور حفظ کند، و سرور می‌تواند
+        به‌طور فعال پیام‌ها را به مرورگر <em>push</em> کند تا زمانی که متصل
+        باقی بماند. این، فرصتی را برای سرور فراهم می‌کند تا به‌طور فعال
+        به <strong>client</strong> کاربر نهایی در مورد هرگونه تغییر در <strong>state</strong> که
+        به‌صورت محلی ذخیره کرده است، اطلاع دهد، و از کهنگی
+        <strong>state</strong> <em>client-side</em> می‌کاهد.
+    </p>
+    <p>
+        از نظر مدل ما از <em>write path</em> و <em>read path</em>، به‌طور فعال
+        فشار دادن تغییرات <strong>state</strong> تا تمام راه‌های دستگاه‌های
+        <strong>client</strong> به‌معنای گسترش <em>write path</em> تا کاربر نهایی است.
+        هنگامی که یک <strong>client</strong> برای اولین بار <em>initialized</em> می‌شود،
+        هنوز هم نیاز دارد که از یک <em>read path</em> برای دریافت <strong>state</strong>
+        اولیه خود استفاده کند، اما پس از آن می‌تواند به یک <strong>stream</strong> از
+        تغییرات <strong>state</strong> که توسط سرور ارسال می‌شود، متکی
+        باشد. ایده‌هایی که ما در مورد پردازش <strong>stream</strong> و
+        پیام‌رسانی بحث کردیم، به اجرا فقط در یک <strong>datacenter</strong>
+        محدود نمی‌شوند: ما می‌توانیم ایده‌ها را بیشتر پیش ببریم، و آن‌ها
+        را تا تمام راه‌های دستگاه‌های کاربر نهایی گسترش دهیم [43].
+    </p>
+    <p>
+        دستگاه‌ها برخی از زمان‌ها <em>offline</em> خواهند بود، و در طول آن
+        مدت قادر به دریافت هیچ‌گونه اعلانی از تغییرات <strong>state</strong> از
+        سرور نخواهند بود. اما ما قبلاً این مشکل را حل کرده‌ایم: در
+        "<strong>Consumer offsets</strong>" در صفحه 449، ما بحث کردیم که چگونه
+        یک <strong>consumer</strong> از یک <strong>message broker</strong> مبتنی بر
+        <strong>log</strong> می‌تواند پس از شکست یا قطع اتصال، دوباره
+        متصل شود، و اطمینان حاصل کند که هیچ پیامی را که در
+        هنگام قطع اتصال، دریافت کرده است، از دست نمی‌دهد. همان
+        تکنیک برای کاربران مجزا کار می‌کند، که در آن هر دستگاه یک
+        <strong>subscriber</strong> کوچک به یک <strong>stream</strong> کوچک از رویدادها
+        است.
+    </p>
+
+    <h4><strong>End-to-end event streams</strong></h4>
+    <p>
+        ابزارهای اخیر برای توسعه‌ی <strong>clients</strong> <em>stateful</em> و
+        <strong>user interfaces</strong>، مانند زبان <strong>Elm</strong> [30] و زنجیره‌ی
+        ابزار <strong>Facebook</strong> از <strong>React</strong>، <strong>Flux</strong>، و
+        <strong>Redux</strong> [44]، در حال حاضر مدیریت
+        512
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

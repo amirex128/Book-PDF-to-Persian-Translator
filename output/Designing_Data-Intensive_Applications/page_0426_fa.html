@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 426</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        وقتی ما در مورد joins در context از batch processing صحبت می‌کنیم، منظور ما resolving تمام occurrences از یک association در داخل یک dataset است. به عنوان مثال، ما فرض می‌کنیم که یک job، داده‌ها را برای همه users به طور همزمان پردازش می‌کند، نه صرفاً جستجوی داده‌ها برای یک user خاص (که با یک index بسیار کارآمدتر انجام می‌شود).
+    </p>
+
+    <h4>Example: analysis of user activity events</h4>
+    <p>
+        یک مثال معمول از یک join در یک batch job در شکل 10-2 نشان داده شده است. در سمت چپ یک log از events که چیزهایی را که کاربران logged-in در یک وب‌سایت انجام داده‌اند (که به عنوان activity events یا clickstream data شناخته می‌شود) توصیف می‌کند، و در سمت راست یک database از users قرار دارد. شما می‌توانید در مورد این مثال به عنوان بخشی از یک star schema فکر کنید ("Stars and Snowflakes: Sche‐mas for Analytics" در صفحه 93 را ببینید): log از events، fact table است، و database از user، یکی از dimensions است.
+    </p>
+    <figure>
+        <img src="figure10-2.png" alt="شکل 10-2">
+        <figcaption>
+            شکل 10-2. A join بین یک log از user activity events و یک database از user profiles.
+        </figcaption>
+    </figure>
+
+    <p>
+        A analytics task ممکن است نیاز داشته باشد که user activity را با user profile information مرتبط کند: به عنوان مثال، اگر profile حاوی age یا date of birth از user باشد، سیستم می‌تواند تعیین کند که کدام صفحات با کدام age groups محبوب‌تر هستند. با این حال، activity events فقط شامل user ID، نه the full user profile information، هستند. Embedding آن profile information در هر activity event واحد، به احتمال زیاد بسیار waste‐ful خواهد بود. بنابراین، activity events باید با user profile database join شوند.
+    </p>
+
+    <p>
+        ساده‌ترین پیاده‌سازی از این join، یکی یکی بر روی activity events می‌رود و database user (بر روی یک remote server) را برای هر user ID که با آن مواجه می‌شود، query می‌کند.
+        این امکان‌پذیر است، اما احتمالاً از performance بسیار ضعیفی رنج می‌برد: the processing throughput توسط round-trip time به the database server محدود می‌شود، اثربخشی از یک cache local به شدت به توزیع داده‌ها بستگی دارد، و اجرای تعداد زیادی از queries به صورت parallel می‌تواند به راحتی database را تحت تأثیر قرار دهد [35].
+    </p>
+    <p>
+        404 | Chapter 10: Batch Processing
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0426/image_1.png" alt="Image from page 426" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

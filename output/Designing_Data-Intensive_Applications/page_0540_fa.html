@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 540</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        عملیات درگیر در کار <strong>fault</strong>، و به آن بگویید که آیا تراکنش در
+        شک را <strong>commit</strong> کند یا <strong>abort</strong> کند. آیا این برای اطمینان از
+        این‌که تراکنش فقط یک بار اجرا خواهد شد، کافی است؟ متأسفانه، نه.
+    </p>
+    <p>
+        حتی اگر ما بتوانیم تراکنش‌های تکراری بین <strong>database client</strong> و
+        سرور را سرکوب کنیم، ما هنوز نیاز داریم که نگران شبکه بین دستگاه
+        کاربر نهایی و <strong>application server</strong> باشیم. به عنوان مثال، اگر
+        <strong>client</strong> کاربر نهایی یک مرورگر وب باشد، احتمالاً از یک درخواست
+        <strong>HTTP POST</strong> برای ارسال یک دستور به سرور استفاده
+        می‌کند. شاید کاربر در یک اتصال داده‌ی تلفن همراه ضعیف باشد، و
+        آن‌ها در ارسال <strong>POST</strong> موفق می‌شوند، اما سیگنال قبل از
+        این‌که بتوانند پاسخ را از سرور دریافت کنند، خیلی ضعیف می‌شود.
+    </p>
+    <p>
+        در این حالت، احتمالاً به کاربر یک پیام خطا نشان داده می‌شود، و آن‌ها
+        ممکن است به‌صورت دستی دوباره امتحان کنند. مرورگرهای وب هشدار
+        می‌دهند، "آیا مطمئن هستید که می‌خواهید این فرم را دوباره ارسال
+        کنید؟"—و کاربر بله می‌گوید، زیرا آن‌ها می‌خواستند عملیات اتفاق
+        بیفتد. (الگوی <strong>Post/Redirect/Get</strong> [54] از این پیام هشدار
+        در عملیات عادی اجتناب می‌کند، اما اگر درخواست <strong>POST</strong> <em>timeout</em>
+        شود، کمکی نمی‌کند.) از نظر <strong>web server</strong>، تکرار یک
+        درخواست جداگانه است، و از نظر پایگاه داده یک تراکنش
+        جداگانه است.
+    </p>
+    <p>
+        مکانیسم‌های معمول <strong>deduplication</strong> کمکی نمی‌کنند.
+    </p>
+
+    <h4>شناسه‌های عملیات</h4>
+    <p>
+        برای <em>idempotent</em> کردن عملیات از طریق چندین <strong>hops</strong> از
+        ارتباط شبکه، متکی بودن فقط بر یک مکانیسم تراکنش که توسط یک
+        پایگاه داده ارائه شده است، کافی نیست—شما نیاز دارید که جریان
+        <em>end-to-end</em> از درخواست را در نظر بگیرید.
+    </p>
+    <p>
+        به عنوان مثال، شما می‌توانید یک شناسه منحصربه‌فرد برای یک
+        عملیات تولید کنید (مانند یک <strong>UUID</strong>) و آن را به‌عنوان یک
+        فیلد فرم مخفی در برنامه <strong>client</strong> قرار دهید، یا یک
+        <strong>hash</strong> از تمام <strong>fields</strong> فرم مرتبط برای
+        استخراج <strong>operation ID</strong> را محاسبه کنید [3]. اگر مرورگر
+        وب، درخواست <strong>POST</strong> را دو بار ارسال کند، دو درخواست
+        دارای <strong>operation ID</strong> یکسان خواهند بود.
+    </p>
+    <p>
+        سپس شما می‌توانید آن <strong>operation ID</strong> را تا پایگاه داده
+        منتقل کنید و بررسی کنید که شما فقط یک عملیات را با یک <strong>ID</strong>
+        داده شده اجرا می‌کنید، همان‌طور که در مثال 12-2 نشان داده شده
+        است.
+    </p>
+    <p>
+        مثال 12-2. سرکوب درخواست‌های تکراری با استفاده از یک <strong>ID</strong>
+        منحصربه‌فرد
+    </p>
+    <pre><code class="language-sql">ALTER TABLE requests ADD UNIQUE (request_id);
+BEGIN TRANSACTION;
+INSERT INTO requests
+  (request_id, from_account, to_account, amount)
+  VALUES('0286FDB8-D7E1-423F-B40B-792B3608036C', 4321, 1234, 11.00);
+UPDATE accounts SET balance = balance + 11.00 WHERE account_id = 1234;
+UPDATE accounts SET balance = balance - 11.00 WHERE account_id = 4321;
+COMMIT;
+</code></pre>
+    <p>
+        518
+        |
+        فصل 12: آینده‌ی سیستم‌های داده
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

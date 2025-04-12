@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 610</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   <strong>implementation in ZooKeeper and etcd</strong>
+   , 370</p>
+  <p>پیاده‌سازی با ذخیره‌سازی 
+   <strong>linearizable</strong>
+   , 351</p>
+  <p>استفاده، 349</p>
+  <p>
+   <strong>tracking behavioral data</strong>
+   , 536</p>
+  <p>(همچنین به حریم خصوصی مراجعه کنید)</p>
+  <p>مدیر تراکنش (به هماهنگ‌کننده مراجعه کنید)</p>
+  <p>پردازش تراکنش، 28، 90-95</p>
+  <p>مقایسه با 
+   <strong>analytics</strong>
+   ، 91</p>
+  <p>مقایسه با 
+   <strong>data warehousing</strong>
+   , 93</p>
+  <p>
+   <strong>transactions</strong>
+   , 221-267, 558</p>
+  <p>ویژگی‌های 
+   <strong>ACID</strong>
+   از، 223</p>
+  <p>اتمی بودن، 223</p>
+  <p>سازگاری، 224</p>
+  <p>ماندگاری، 226</p>
+  <p>
+   <strong>isolation</strong>
+   , 225</p>
+  <p>تراکنش‌های جبرانی (به تراکنش‌های جبرانی مراجعه کنید)</p>
+  <p>مفهوم، 222</p>
+  <p>تراکنش‌های توزیع‌شده، 352-364</p>
+  <p>اجتناب از، 492، 502، 521-528</p>
+  <p>افزایش خطا، 364، 495</p>
+  <p>در وضعیت نامعلوم/نامشخص، 358، 362</p>
+  <p>تعهد دو فازی، 354-359</p>
+  <p>استفاده از، 360-361</p>
+  <p>تراکنش‌های 
+   <strong>XA</strong>
+   , 361-364</p>
+  <p>
+   <strong>OLTP</strong>
+   در مقابل پرس و جوهای تجزیه و تحلیل، 411</p>
+  <p>هدف از، 222</p>
+  <p>
+   <strong>serializability</strong>
+   , 251-266</p>
+  <p>اجرای سریال واقعی، 252-256</p>
+  <p>کنترل همزمانی بدبینانه در مقابل خوش‌بینانه، 261</p>
+  <p>
+   <strong>serializable snapshot isolation (SSI)</strong>
+   ,
+   </p>
+  <p>261-266</p>
+  <p>تشخیص خواندن 
+   <strong>MVCC</strong>
+   منسوخ‌شده، 263</p>
+  <p>تشخیص نوشته‌هایی که بر خوانده‌های قبلی اثر می‌گذارند،</p>
+  <p>264</p>
+  <p>
+   <strong>two-phase locking (2PL)</strong>
+   , 257-261</p>
+  <p>
+   <strong>index-range locks</strong>
+   , 260</p>
+  <p>عملکرد، 258</p>
+  <p>
+   <strong>transaction isolation</strong>
+   ، 225</p>
+  <p>تراکنش‌های 
+   <strong>two-phase commit (2PC)</strong>
+  </p>
+  <p>تشخیص بن‌بست، 364</p>
+  <p>تراکنش‌های نامعلوم که 
+   <strong>locks</strong>
+   را نگه می‌دارند، 362</p>
+  <p>
+   <strong>materializing</strong>
+   درگیری‌ها با، 251</p>
+  <p>جلوگیری از به‌روزرسانی‌های از دست رفته توسط قفل‌گذاری صریح،</p>
+  <p>244</p>
+  <p>شماره توالی 
+   <strong>log</strong>
+   , 156, 449</p>
+  <p>زبان‌های برنامه‌نویسی منطقی، 504</p>
+  <p>
+   <strong>ترتیب و همزمانی، 343</strong>
+   348</p>
+  <p>
+   <strong>transaction manager (see coordinator)</strong>
+  </p>
+  <p>
+   <strong>(see  asynchronous replication)</strong>
+  </p>
+  <p>
+   <strong>Tungsten Replicator (multi-leader replica-</strong>
+  </p>
+  <p>
+   <strong>tion)</strong>
+   , 170</p>
+  <p>تشخیص درگیری، 177</p>
+  <p>
+   <strong>(see  and the,  in, a, a, an,  of, using)</strong>
+  </p>
+  <p>
+   <strong>(see  in a)</strong>
+  </p>
+  <p>
+   <strong>(see  for, or)</strong>
+  </p>
+  <p>
+   <strong>(see  for, also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of, and)</strong>
+  </p>
+  <p>
+   <strong>(see  for)</strong>
+  </p>
+  <p>
+   <strong>(see  for, to)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  for)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  of)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>(see  also  in)</strong>
+  </p>
+  <p>
+   <strong>(see  and)</strong>
+  </p>
+  <p>
+   <strong>
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

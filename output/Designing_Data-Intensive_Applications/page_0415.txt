@@ -1,0 +1,38 @@
+counts = Hash.new(0) 
+File.open('/var/log/nginx/access.log') do |file|
+  file.each do |line|
+    url = line.split[6] 
+    counts[url] += 1 
+  end
+end
+top5 = counts.map{|url, count| [count, url] }.sort.reverse[0...5] 
+top5.each{|count, url| puts "#{count} #{url}" } 
+counts is a hash table that keeps a counter for the number of times we’ve seen
+each URL. A counter is zero by default.
+From each line of the log, we take the URL to be the seventh whitespace-
+separated field (the array index here is 6 because Ruby’s arrays are zero-indexed).
+Increment the counter for the URL in the current line of the log.
+Sort the hash table contents by counter value (descending), and take the top five
+entries.
+Print out those top five entries.
+This program is not as concise as the chain of Unix pipes, but it’s fairly readable, and
+which of the two you prefer is partly a matter of taste. However, besides the superfi‐
+cial syntactic differences between the two, there is a big difference in the execution
+flow, which becomes apparent if you run this analysis on a large file.
+Sorting versus in-memory aggregation
+The Ruby script keeps an in-memory hash table of URLs, where each URL is mapped
+to the number of times it has been seen. The Unix pipeline example does not have
+such a hash table, but instead relies on sorting a list of URLs in which multiple occur‐
+rences of the same URL are simply repeated.
+Which approach is better? It depends how many different URLs you have. For most
+small to mid-sized websites, you can probably fit all distinct URLs, and a counter for
+each URL, in (say) 1 GB of memory. In this example, the working set of the job (the
+amount of memory to which the job needs random access) depends only on the
+number of distinct URLs: if there are a million log entries for a single URL, the space
+required in the hash table is still just one URL plus the size of the counter. If this
+working set is small enough, an in-memory hash table works fine—even on a laptop.
+On the other hand, if the job’s working set is larger than the available memory, the
+sorting approach has the advantage that it can make efficient use of disks. It’s the
+Batch Processing with Unix Tools 
+| 
+393

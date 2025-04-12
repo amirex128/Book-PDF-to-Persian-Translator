@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 500</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        که در <strong>Google Cloud Dataflow</strong> [81، 92] و <strong>VoltDB</strong> [94]
+        استفاده می‌شود، و برنامه‌هایی برای افزودن <strong>features</strong> مشابه به
+        <strong>Apache Kafka</strong> وجود دارد [95، 96]. بر خلاف <strong>XA</strong>، این
+        پیاده‌سازی‌ها تلاش نمی‌کنند تراکنش‌هایی را در سراسر فناوری‌های ناهمگن
+        ارائه دهند، بلکه آن‌ها را با مدیریت هر دو تغییر <strong>state</strong> و پیام‌رسانی در
+        فریم‌ورک پردازش <strong>stream</strong>، داخلی نگه می‌دارند. <strong>Overhead</strong> از
+        پروتکل تراکنش را می‌توان با پردازش چندین پیام ورودی در یک
+        تراکنش واحد <em>amortized</em> کرد.
+    </p>
+
+    <h4><strong>Idempotence</strong></h4>
+    <p>
+        هدف ما این است که خروجی جزئی هر <strong>tasks</strong> شکست‌خورده را دور
+        بریزیم تا بتوان آن‌ها را بدون این‌که دو بار تأثیر بگذارند، با خیال
+        راحت دوباره امتحان کرد. تراکنش‌های توزیع شده یک راه برای دستیابی
+        به این هدف هستند، اما یک راه دیگر این است که به <strong>idempotence</strong>
+        متکی باشیم [97].
+    </p>
+    <p>
+        یک عملیات <em>idempotent</em> عملیاتی است که شما می‌توانید چندین بار
+        انجام دهید، و همان اثر را دارد که گویی شما فقط یک بار آن را
+        انجام داده‌اید. به عنوان مثال، تنظیم یک <strong>key</strong> در یک ذخیره‌سازی
+        <strong>key-value</strong> روی یک مقدار ثابت، <em>idempotent</em> است (نوشتن
+        دوباره مقدار به‌سادگی مقدار را با یک مقدار یکسان بازنویسی
+        می‌کند)، در حالی که افزایش یک <strong>counter</strong>، <em>idempotent</em>
+        نیست (انجام دوباره‌ی <strong>increment</strong> به این معنی است که مقدار دو
+        برابر افزایش می‌یابد).
+    </p>
+    <p>
+        حتی اگر یک عملیات ذاتاً <em>idempotent</em> نباشد، اغلب می‌توان آن را با
+        مقدار کمی <strong>metadata</strong> اضافی، <em>idempotent</em> کرد. به عنوان
+        مثال، هنگام مصرف پیام‌ها از <strong>Kafka</strong>، هر پیام دارای یک
+        <strong>offset</strong> پایدار و به‌طور یکنواخت افزایشی است. هنگام نوشتن یک
+        مقدار در یک پایگاه داده خارجی، شما می‌توانید <strong>offset</strong> از
+        پیامی که باعث آخرین <strong>write</strong> با مقدار شد را شامل کنید. بنابراین،
+        شما می‌توانید بگویید که آیا یک <strong>update</strong> قبلاً اعمال شده است، و
+        از انجام دوباره همان <strong>update</strong> اجتناب کنید.
+    </p>
+    <p>
+        مدیریت <strong>state</strong> در <strong>Trident</strong> از <strong>Storm</strong> بر اساس
+        یک ایده‌ی مشابه است [78]. تکیه بر <strong>idempotence</strong>، چندین
+        فرض را در بر دارد: راه‌اندازی مجدد یک <strong>task</strong> شکست‌خورده باید
+        پیام‌های یکسان را به همان ترتیب <em>replay</em> کند (یک <strong>message
+        broker</strong> مبتنی بر <strong>log</strong> این کار را انجام می‌دهد)، پردازش
+        باید <em>deterministic</em> باشد، و هیچ <strong>node</strong> دیگری نمی‌تواند
+        همزمان مقدار یکسانی را به‌روزرسانی کند [98، 99].
+    </p>
+    <p>
+        هنگام <em>failing over</em> از یک <strong>node</strong> پردازش به دیگری،
+        <strong>fencing</strong> ممکن است مورد نیاز باشد (نگاه کنید به "رهبر و قفل" در
+        صفحه 301) برای جلوگیری از تداخل از یک <strong>node</strong> که تصور می‌شود
+        مرده است اما در واقع زنده است. با وجود تمام این <em>caveats</em>،
+        عملیات <em>idempotent</em> می‌تواند یک راه مؤثر برای دستیابی به
+        <strong>exactly-once semantics</strong> فقط با یک <strong>overhead</strong> کوچک
+        باشد.
+    </p>
+
+    <h4>بازسازی <strong>state</strong> پس از یک <strong>failure</strong></h4>
+    <p>
+        هر فرآیند <strong>stream</strong> که به <strong>state</strong> نیاز دارد—به عنوان مثال،
+        هر تجمیع <strong>windowed</strong> (مانند <strong>counters</strong>، میانگین‌ها، و
+        هیستوگرام‌ها) و هر جدول و <strong>indexes</strong> که برای <strong>joins</strong>
+        استفاده می‌شود—باید اطمینان حاصل کند که این <strong>state</strong> می‌تواند
+        پس از یک <strong>failure</strong> بازیابی شود.
+    </p>
+    <p>
+        یک گزینه این است که <strong>state</strong> را در یک <strong>datastore</strong> راه دور
+        نگه دارید و آن را <strong>replicate</strong> کنید، اگرچه <strong>query</strong> کردن
+        یک پایگاه داده‌ی راه دور برای هر پیام جداگانه، می‌تواند کند
+        باشد، همان‌طور که در
+        478
+        |
+        فصل 11: پردازش <strong>Stream</strong>
+    </p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

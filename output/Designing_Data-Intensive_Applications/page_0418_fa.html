@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 418</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+    <p>
+        Parsing از هر record (به عنوان مثال، یک خط از input) نامشخص‌تر است. ابزارهای Unix معمولاً یک خط را به fields بر اساس whitespace یا tab characters تقسیم می‌کنند، اما CSV (comma-separated)، pipe-separated، و encodingsهای دیگر نیز استفاده می‌شود. حتی یک ابزار نسبتاً ساده مانند xargs دارای نیم دوجین command-line options برای مشخص کردن نحوه parsing input آن است.
+    </p>
+
+    <p>
+        The uniform interface از ASCII text، عمدتاً کار می‌کند، اما دقیقاً زیبا نیست: مثال log analysis ما از {print $7} برای extract کردن URL استفاده می‌کرد، که خیلی خوانا نیست. در یک دنیای ایده‌آل، این شاید می‌توانست {print $request_url} یا چیزی از این قبیل باشد. ما بعداً به این ایده باز خواهیم گشت.
+    </p>
+
+    <p>
+        اگرچه کامل نیست، حتی دهه‌ها بعد، the uniform interface از Unix هنوز هم چیزی قابل توجه است. نرم‌افزارهای زیادی به خوبی ابزارهای Unix interoperate و compose نمی‌شوند: شما نمی‌توانید به راحتی محتوای حساب ایمیل خود و history خرید آنلاین خود را از طریق یک ابزار analysis سفارشی به یک spreadsheet و post نتایج به یک social network یا یک wiki، pipe کنید. امروزه داشتن برنامه‌هایی که به روانی ابزارهای Unix با هم کار می‌کنند، یک exception است، نه the norm.
+    </p>
+
+    <p>
+        حتی databases با همان data model، اغلب این کار را آسان نمی‌کنند که داده‌ها را از یک سیستم بیرون بکشید و به دیگری وارد کنید. این عدم integration منجر به Balkanization of data می‌شود.
+    </p>
+
+    <h4>Separation of logic and wiring</h4>
+    <p>
+        یک ویژگی دیگر از ابزارهای Unix، استفاده آن‌ها از standard input (stdin) و standard output (stdout) است. اگر شما یک برنامه را اجرا می‌کنید و هیچ چیز دیگری را مشخص نمی‌کنید، stdin از صفحه کلید می‌آید و stdout به صفحه نمایش می‌رود. با این حال، شما همچنین می‌توانید input را از یک فایل بگیرید و/یا output را به یک فایل redirect کنید. Pipes به شما اجازه می‌دهند که stdout از یک process را به stdin از یک process دیگر متصل کنید (با یک in-memory buffer کوچک، و بدون نوشتن کل داده‌های intermediate stream به disk).
+    </p>
+
+    <p>
+        یک برنامه هنوز هم می‌تواند files را به طور مستقیم بخواند و بنویسد، اگر به آن نیاز داشته باشد، اما approach Unix، بهتر عمل می‌کند اگر یک برنامه در مورد file paths خاص نگران نباشد و به سادگی از stdin و stdout استفاده کند. این به یک shell user اجازه می‌دهد تا input و output را به هر روشی که می‌خواهند، وصل کنند؛ the program نمی‌داند یا اهمیتی نمی‌دهد که input از کجا می‌آید و output به کجا می‌رود. (می‌توان گفت این یک form از loose coupling, late binding [15]، یا inversion of control [16] است.) جدا کردن input/output wiring از program logic، ترکیب ابزارهای کوچک به systemsهای بزرگتر را آسان‌تر می‌کند.
+    </p>
+
+    <p>
+        شما حتی می‌توانید برنامه‌های خودتان را بنویسید و آن‌ها را با ابزارهای ارائه شده توسط operating system ترکیب کنید. برنامه شما فقط نیاز دارد که input را از stdin بخواند و output را به stdout بنویسد، و می‌تواند در data processing pipelines شرکت کند. در مثال log analysis، شما می‌توانید یک ابزار بنویسید که user-agent strings را به browser identifiersهای منطقی‌تر ترجمه کند، یا یک ابزار که IP addresses را به country codes ترجمه می‌کند، و به سادگی آن را به pipeline متصل کنید. The sort program، اهمیتی نمی‌دهد که آیا با بخش دیگری از operating system یا با یک برنامه که توسط شما نوشته شده است، ارتباط برقرار می‌کند یا خیر.
+    </p>
+    <p>
+        396 | Chapter 10: Batch Processing
+    </p>
+ </div>
+
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
