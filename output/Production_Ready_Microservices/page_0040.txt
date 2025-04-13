@@ -1,0 +1,25 @@
+Partial staging
+The second type of staging environment is known as partial staging. As the name sug‐
+gests, it is not a complete mirror copy of the production environment. Rather, each
+microservice has its own staging environment, which is a pool of servers with (at the
+very least) staging-specific frontend and backend ports, and when new builds are
+introduced into the staging phase, they communicate with the upstream clients and
+downstream dependencies that are running in production (Figure 3-4).
+Figure 3-4. Partial staging
+Partial staging deployments should hit all production endpoints of a microservice’s
+clients and dependencies to mimic the state of the actual world as accurately as possi‐
+ble. Specific staging tests will need to be written and run to accomplish this, and
+every new feature added should probably be accompanied by at least one additional
+staging test to ensure that it is tested thoroughly.
+Risks of Partial Staging
+Because microservices with partial staging environments commu‐
+nicate with production microservices, extreme care must be taken.
+Even though partial staging is restricted to read-only requests, pro‐
+duction services can easily be taken down by bad staging deploys
+that send bad requests and/or overload production services with
+too many requests.
+These types of staging environments should also be restricted to read-only database
+access: a staging environment should never write to a production database. However,
+32 
+| 
+Chapter 3: Stability and Reliability

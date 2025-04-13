@@ -1,0 +1,41 @@
+Hotfixes Are an Anti-Pattern
+When a deployment pipeline is in place, there should never be any
+direct deployment to production unless there is an emergency, but
+even this should be discouraged. Bypassing the initial phases of the
+deployment pipeline often introduces new bugs into production, as
+emergency code fixes run the risk of not being properly tested.
+Rather than deploying a hotfix straight to production, developers
+should roll back to the latest stable build if possible.
+Stable and reliable deployment isn’t limited only to following the deployment pipe‐
+line, and there are several cases in which blocking a particular microservice from
+deploying can increase availability across the ecosystem.
+If a service isn’t meeting their SLAs (see ???), all deployment can be postponed if the
+downtime quota of the service has been used up. For example, if a service has an SLA
+promising 99.99% availability (allowing 4.38 minutes of downtime each month), but
+has been unavailable for 12 minutes in one month, then new deployments of that
+microservice can be blocked for the next three months, ensuring that it meets its SLA.
+If a service fails load testing (see ???), then deployment to production can be locked
+until the service is able to appropriately pass any necessary load tests. For business-
+critical services, whose outages would stop the company from functioning properly, it
+can at times be necessary to block deployment if they do not meet the production-
+readiness criteria established by the engineering organization.
+Dependencies
+The adoption of microservice architecture is sometimes driven by the idea that
+microservices can be built and run in isolation, as fully independent and replaceable
+components of a larger system. This is true in principle, but in the real world, every
+microservice has dependencies, both upstream and downstream. Every microservice
+will receive requests from clients (other microservices) that are counting on the ser‐
+vice to perform as expected and to live up to its SLAs, as well as downstream depen‐
+dencies (other services) that it will depend on to get the job done.
+Building and running production-ready microservices requires developers to plan for
+dependency failures, to mitigate them, and to protect against them. Understanding a
+service’s dependencies and planning for their failures is one of the most important
+aspects of building a stable and reliable microservice.
+To understand how important this is, let’s consider an example microservice called
+receipt-sender, whose SLA is four-nines (promising 99.99% availability to upstream
+clients). Now, receipt-sender depends on several other microservices, including one
+called customers (a microservice that handles all customer information), and one
+called orders (a microservice that handles information about the orders each cus‐
+Dependencies 
+| 
+37

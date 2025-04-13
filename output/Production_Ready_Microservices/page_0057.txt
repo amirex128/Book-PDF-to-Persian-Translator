@@ -1,0 +1,40 @@
+Resource Bottlenecks
+We can discover and quantify the performance and scalability limitations of our
+microservices by identifying resource bottlenecks. A resource bottleneck is anything
+inherent about the way the microservice utilizes its resources that limits the scalabil‐
+ity of the application. This could be an infrastructure bottleneck or something within
+the architecture of the service that prevents it from being scalable. For example, the
+number of open database connections a microservice needs can be a bottleneck if it
+nears the connection limit of the database. Another example of a common resource
+bottleneck is when microservices need to be vertically scaled (rather than horizontally
+scaled, where more instances/hardware is added) when they experience an increase in
+traffic: if the only way to scale a microservice is to increase the resources of each
+instance (more CPU, more memory), then the two principles of scalability (concur‐
+rency and partitioning) are abandoned.
+Some resource bottlenecks are easy to identify. If your microservice can only be
+scaled to meet growing traffic by deploying it to machines with more CPU and mem‐
+ory, then you have a scalability bottleneck and need to refactor the microservice so
+that it can be scaled horizontally rather than vertically, using concurrency and parti‐
+tioning as your guiding principles.
+The Pitfalls of Vertical Scaling
+Vertical scaling isn’t a sustainable or scalable way to architect
+microservices. It may appear to work out all right in situations
+where each microservice has dedicated hardware, but it will not
+work well with the new hardware abstraction and isolation tech‐
+nologies that are used in the tech world today, like Docker and
+Apache Mesos. Always optimize for concurrency and partitioning
+if you want to build a scalable application.
+Other resource bottlenecks are not as obvious, and the best way to discover them is to
+run extensive load testing on the service. We will cover load testing in much greater
+detail in ???.
+Capacity Planning
+One of the most important requirements of building a scalable microservice is ensur‐
+ing that it will have access to necessary and required hardware resources as it scales.
+Efficiently using resources, planning for growth, and designing a microservice for
+perfect efficiency and scalability from the ground up is all quickly made useless if no
+hardware resources are available when the microservice needs to host more produc‐
+tion traffic. This challenge is especially relevant for microservices that are optimized
+for horizontal scalability.
+Capacity Planning 
+| 
+49

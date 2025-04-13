@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 38</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   با Staging و Production به عنوان استقرارهای جداگانه از همان سرویس رفتار کنید
+   <br>
+   ممکن است وسوسه شوید که staging و production را به عنوان سرویس‌های جداگانه اجرا کنید و آن‌ها را در
+   repositoryهای جداگانه ذخیره کنید. این کار را می‌توان با موفقیت انجام داد، اما مستلزم این است که تغییرات در
+   سراسر هر دو سرویس و repositoryها، از جمله تغییرات پیکربندی (که اغلب فراموش می‌شوند)، همگام‌سازی
+   شوند. بسیار آسان‌تر است که با staging و production به عنوان "استقرارها" یا "فازها"ی جداگانه از همان
+   microservice رفتار شود.
+  </p>
+  <p>
+   حتی اگر محیط‌های staging، محیط‌های تست هستند، با فاز توسعه و محیط توسعه در این مورد متفاوت هستند که یک
+   release که به staging مستقر شده است، release است که کاندیدای production است. یک کاندیدای production
+   باید قبلاً تست‌های lint، unit، integration و بررسی کد را با موفقیت پشت سر گذاشته باشد قبل از اینکه در یک
+   محیط staging مستقر شود.
+  </p>
+  <p>
+   استقرار در یک محیط staging باید توسط توسعه‌دهندگان با همان جدیت و احتیاطی که استقرار در production انجام
+   می‌شود، رفتار شود. اگر یک release با موفقیت در staging مستقر شود، می‌تواند به طور خودکار در canaries مستقر
+   شود، که ترافیک production را اجرا می‌کنند.
+  </p>
+  <p>
+   راه‌اندازی محیط‌های staging در یک اکوسیستم microservice می‌تواند دشوار باشد، به دلیل پیچیدگی‌هایی که
+   توسط وابستگی‌ها معرفی می‌شوند. اگر microservice شما به نه microservice دیگر بستگی دارد، پس به آن
+   وابستگی‌ها متکی است تا در هنگام ارسال درخواست‌ها و خواندن یا نوشتن داده‌ها در پایگاه داده(های) مربوطه، پاسخ‌های
+   دقیقی ارائه دهد. در نتیجه این پیچیدگی‌ها، موفقیت یک محیط staging به روشی که staging در سراسر شرکت
+   استاندارد شده است، بستگی دارد.
+  </p>
+  <h3>Full staging</h3>
+  <p>
+   راه‌های مختلفی وجود دارد که می‌توان فاز staging از pipeline استقرار را پیکربندی کرد. اولین مورد، full staging (شکل
+   3-3) است، که در آن یک اکوسیستم staging جداگانه به عنوان یک کپی آینه‌ای کامل از کل اکوسیستم production در حال
+   اجرا است (اگرچه لزوماً با host parity نیست). Full staging همچنان بر روی همان زیرساخت اصلی production اجرا
+   می‌شود، اما چندین تفاوت کلیدی وجود دارد. محیط‌های staging سرویس‌ها، حداقل، برای سایر سرویس‌ها توسط
+   پورت‌های frontend و backend مخصوص staging در دسترس قرار می‌گیرند. مهم‌تر از آن، محیط‌های staging در یک
+   اکوسیستم full-staging فقط با محیط‌های staging سایر سرویس‌ها ارتباط برقرار می‌کنند، و هرگز هیچ درخواستی را
+   از سرویس‌هایی که در production اجرا می‌شوند، ارسال یا دریافت نمی‌کنند (که به معنی ارسال ترافیک به پورت‌های
+   production از staging ممنوع است).
+  </p>
+  <p>30 | فصل 3: پایداری و قابلیت اطمینان</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0038/image_1.png" alt="Image from page 38" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

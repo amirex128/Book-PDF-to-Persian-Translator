@@ -1,0 +1,41 @@
+Most microservices will store some type of data, whether in memory (perhaps using a
+cache) or an external database. If the relevant data is stored in memory, there’s no
+need to make an extra network call to an external database, and the microservice can
+easily return any relevant data to a client. If the data is stored in an external database,
+the microservice will need to make another request to the database, wait for a
+response, and then continue to process the task.
+This architecture is necessary if microservices are to work well together. The micro‐
+service architecture paradigm requires that a set of microservices work together to
+make up what would otherwise exist as one large application, and so there are certain
+elements of this architecture that need to be standardized across an entire organiza‐
+tion if a set of microservices is to interact successfully and efficiently.
+The API endpoints of microservices should be standardized across an organization.
+That is not to say that all microservices should have the same specific endpoints, but
+that the type of endpoint should be the same. Two very common types of API end‐
+points for microservices are REST or Apache Thrift, and I’ve seen some microservi‐
+ces that have both types of endpoints (though this is rare, makes monitoring rather
+complicated, and I don’t particularly recommend it). Choice of endpoint type is
+reflective of the internal workings of the microservice itself, and will also dictate its
+architecture: it’s difficult to build an asynchronous microservice that communicates
+via HTTP over REST endpoints, for example, which would necessitate adding a
+messaging-based endpoint to the services as well.
+Microservices interact with each other via remote procedure calls (RPCs), which are
+calls over the network designed to look and behave exactly like local procedure calls.
+The protocols used will be dependent on architectural choices and organizational
+support, as well as the endpoints used. A microservice with REST endpoints, for
+example, will likely interact with other microservices via HTTP, while a microservice
+with Thrift endpoints may communicate with other microservices over HTTP or a
+more customized, in-house solution.
+Avoid Versioning Microservices and Endpoints
+A microservice is not a library (it is not loaded into memory at
+compilation-time or during runtime) but an independent software
+application. Due to the fast-paced nature of microservice develop‐
+ment, versioning microservices can easily become an organiza‐
+tional nightmare, with developers on client services pinning
+specific (outdated, unmaintained) versions of a microservice in
+their own code. Microservices should be treated as living, changing
+things, not static releases or libraries. Versioning of API endpoints
+is another anti-pattern that should be avoided for the same reasons.
+10 
+| 
+Chapter 1: Microservices

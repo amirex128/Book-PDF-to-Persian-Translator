@@ -1,0 +1,38 @@
+Treat Staging and Production as Separate Deployments of the Same
+Service
+You may be tempted to run staging and production as separate
+services and store them in separate repositories. This can be done
+successfully, but it requires that changes be synchronized across
+both services and repositories, including configuration changes
+(which are often forgotten about). It’s much easier to treat staging
+and production as separate “deployments” or “phases” of the same
+microservice.
+Even though staging environments are testing environments, they differ from both
+the development phase and the development environment in that a release that has
+been deployed to staging is a release that is a candidate for production. A candidate for
+production must have already successfully passed lint tests, unit tests, integration
+tests, and code review before being deployed to a staging environment.
+Deploying to a staging environment should be treated by developers with the same
+seriousness and caution as deploying to production. If a release is successfully
+deployed to staging, it can be automatically deployed to canaries, which will be run‐
+ning production traffic.
+Setting up staging environments in a microservice ecosystem can be difficult, due to
+the complexities introduced by dependencies. If your microservice depends on nine
+other microservices, then it relies on those dependencies to give accurate responses
+when requests are sent and reads or writes to the relevant database(s) are made. As a
+consequence of these complexities, the success of a staging environment hinges on
+the way staging is standardized across the company.
+Full staging
+There are several ways that the staging phase of the deployment pipeline can be con‐
+figured. The first is full staging (Figure 3-3), where a separate staging ecosystem is
+running as a complete mirror copy of the entire production ecosystem (though not
+necessarily with host parity). Full staging still runs on the same core infrastructure as
+production, but there are several key differences. Staging environments of the serv‐
+ices are, at the very least, made accessible to other services by staging-specific front‐
+end and backend ports. Importantly, staging environments in a full-staging ecosystem
+communicate only with the staging environments of other services, and never send any
+requests or receive any responses from any services running in production (which
+means sending traffic to production ports from staging is off limits).
+30 
+| 
+Chapter 3: Stability and Reliability

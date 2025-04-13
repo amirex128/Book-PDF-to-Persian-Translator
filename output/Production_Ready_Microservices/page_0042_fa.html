@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 42</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   (در محیط‌های full staging مورد نیاز نیستند). تعیین زمان برای بازگشت به یک build قبلی باید توسط آستانه‌های
+   مختلف در معیارهای کلیدی microservice تعیین شود.
+  </p>
+  <p>
+   از آنجایی که partial staging مستلزم تعامل با microservicesهایی است که در production در حال اجرا هستند، باگ‌های
+   معرفی شده توسط releases جدید که در یک محیط partial staging مستقر می‌شوند، می‌توانند سایر microservicesها را
+   که در production در حال اجرا هستند، از کار بیندازند. اگر هیچ rollback خودکاری وجود نداشته باشد، کاهش و حل
+   این مشکلات باید به صورت دستی انجام شود. هر مرحله از process استقرار که نیاز به مداخله دستی دارد، نقطه شکست
+   نه تنها برای خود microservice، بلکه برای کل اکوسیستم microservice است.
+  </p>
+  <p>
+   آخرین سؤالی که یک تیم microservice باید هنگام راه‌اندازی یک محیط staging به آن پاسخ دهد این است که یک release
+   جدید باید چه مدت در staging اجرا شود قبل از اینکه بتواند به canary (و پس از آن، به production) مستقر شود. پاسخ
+   به این سوال توسط تست‌های خاص staging که در staging اجرا می‌شوند، تعیین می‌شود: یک build جدید به محض اینکه
+   همه تست‌ها بدون شکست پاس شدند، آماده است که به مرحله بعدی process استقرار برود.
+  </p>
+  <h3>Canary</h3>
+  <p>
+   هنگامی که یک release جدید با موفقیت در staging مستقر شد و تمام تست‌های مورد نیاز را پشت سر گذاشت، build
+   را می‌توان به مرحله بعدی در pipeline استقرار مستقر کرد: محیط canary. نام منحصربه‌فرد این محیط از یک تاکتیک
+   استفاده شده توسط معدنچیان زغال سنگ گرفته شده است: آن‌ها canaries را با خود به معادن زغال سنگ می‌بردند تا سطح
+   مونوکسید کربن را در هوا نظارت کنند؛ اگر canary می‌مرد، می‌دانستند که سطح گاز سمی در هوا زیاد است و معادن را
+   ترک می‌کردند. ارسال یک build جدید به یک محیط canary همان هدف را دنبال می‌کند: آن را در یک pool کوچک از سرورها
+   که ترافیک production را اجرا می‌کنند (حدود 5٪ تا 10٪ از ظرفیت production) مستقر کنید، و اگر زنده ماند،
+   در بقیه سرورهای production مستقر کنید.
+  </p>
+  <h3>توزیع ترافیک Canary</h3>
+  <p>
+   اگر سرویس production در چندین datacenter، منطقه یا ارائه دهنده cloud مختلف مستقر شده باشد، آنگاه pool
+   canary باید شامل سرورهایی در هر یک از این موارد باشد تا production را دقیقاً نمونه‌برداری کند.
+  </p>
+  <p>
+   از آنجایی که یک محیط canary به ترافیک production سرویس‌دهی می‌کند، باید بخشی از production در نظر گرفته
+   شود. باید پورت‌های backend و frontend یکسانی داشته باشد، و hostsهای canary باید به طور تصادفی از pool سرورهای
+   production انتخاب شوند تا نمونه‌برداری دقیقی از ترافیک production را تضمین کنند. Canaries می‌توانند (و باید)
+   دسترسی کامل به سرویس‌های production داشته باشند: آن‌ها باید به تمام endpointsهای production upstream و
+   downstream
+  </p>
+  <p>34 | فصل 3: پایداری و قابلیت اطمینان</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0042/image_1.png" alt="Image from page 42" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

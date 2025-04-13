@@ -1,0 +1,40 @@
+dependencies, and they should have both read and write access to any databases (if
+applicable).
+As with staging, the dashboards, monitoring, and logging should be the same for
+canaries as for production. Alerts and logs should be differentiated and labeled as
+coming from the canary deployment so that developers can easily mitigate, debug,
+and resolve any problems.
+Separate Ports for Canaries and Production
+Allocating separate frontend and backend ports for canaries and
+production so that traffic can be directed deliberately may seem
+like a good idea, but unfortunately separating out the traffic in this
+fashion defeats the purpose of canaries: to randomly sample pro‐
+duction traffic on a small pool of servers to test a new release.
+Automated rollbacks absolutely need to be in place for canaries: if any known errors
+occur, the deployment system needs to automatically revert to the last known stable
+version. Remember, canaries are serving production traffic, and any problems that
+happen are affecting the real world.
+How long should a new release sit in the canary pool until developers can be satisfied
+that it is ready for production? This can be minutes, hours, or even days, and the
+answer is determined by the microservice’s traffic patterns. The traffic of every micro‐
+service is going to have some sort of pattern, no matter how strange your microser‐
+vice or business may be. A new release should not leave the canary stage of
+deployment until a full traffic cycle has been completed. How a “traffic cycle” is
+defined needs to be standardized across the entire engineering organization, but the
+duration and requirements of the traffic cycle may need to be created on a service-by-
+service basis.
+Production
+Production is the real world. When a build has successfully made it through the devel‐
+opment cycle, survived staging, and lived through the coal mines of the canary phase,
+it is ready to be rolled out to the production deployment. At this point in the deploy‐
+ment pipeline—the very last step—the development team should be completely con‐
+fident in the new build. Any errors in the code should have been discovered,
+mitigated, and resolved before making it this far.
+Every build that makes it to production should be completely stable and reliable. A
+build being deployed to production should have already been thoroughly tested, and
+a build should never be deployed to production until it has made it through the stag‐
+ing and canary phases without any issues. Deploying to production can be done in
+one fell swoop after the build has lived through the canaries, or it can be gradually
+The Deployment Pipeline 
+| 
+35

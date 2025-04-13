@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 48</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>Deprecation و Decommissioning</h3>
+  <p>
+   یک علت اغلب فراموش شده و نادیده گرفته شده بی‌ثباتی و عدم قابلیت اطمینان در اکوسیستم‌های microservice،
+   deprecate کردن یا از رده خارج کردن یک microservice یا یکی از API endpointsهای آن است. هنگامی که یک
+   microservice دیگر مورد استفاده قرار نمی‌گیرد یا توسط یک تیم توسعه پشتیبانی نمی‌شود، باید با دقت از رده خارج
+   شود تا اطمینان حاصل شود که هیچ کلاینتی به خطر نمی‌افتد. Deprecation یک یا چند API endpoints از یک
+   microservice، حتی رایج‌تر است: هنگامی که ویژگی‌های جدیدی اضافه می‌شوند یا ویژگی‌های قدیمی حذف می‌شوند،
+   endpointsها اغلب تغییر می‌کنند و نیاز به به‌روزرسانی تیم‌های کلاینت و سوئیچ کردن هرگونه درخواست ارسال شده به
+   endpointsهای قدیمی به endpointsهای جدید (یا حذف کامل آن‌ها) دارد.
+  </p>
+  <p>
+   در اکثر اکوسیستم‌های microservice، deprecation و decommissioning بیشتر یک مشکل جامعه‌شناختی در داخل
+   سازمان مهندسی است تا یک مشکل فنی، که این امر، رسیدگی به آن را دشوارتر می‌کند. هنگامی که یک microservice
+   قصد دارد از رده خارج شود، تیم توسعه آن باید مراقب باشد که به همه سرویس‌های کلاینت هشدار دهد و به آن‌ها
+   در مورد نحوه تطبیق با از دست دادن وابستگی‌شان مشاوره دهد. اگر microservice که در حال decommissioning
+   است، با یک microservice جدید دیگر جایگزین می‌شود، یا اگر عملکرد microservice در یک microservice موجود
+   دیگر ساخته می‌شود، سپس تیم باید به تمام کلاینت‌ها کمک کند تا microservicesهای خود را به‌روزرسانی کنند تا
+   درخواست‌ها را به endpointsهای جدید ارسال کنند. Deprecation یک endpoint از یک process مشابه پیروی می‌کند:
+   باید به کلاینت‌ها هشدار داده شود، و یا endpoint جدید به آن‌ها داده شود یا در مورد چگونگی در نظر گرفتن از دست
+   دادن کامل endpoint به آن‌ها مشاوره داده شود. در هر دو مورد deprecation و decommissioning، نظارت نقش مهمی
+   ایفا می‌کند: endpointsها قبل از اینکه سرویس یا endpoint به‌طور کامل decommissioned و/یا deprecated شود،
+   باید از نزدیک نظارت شوند تا هرگونه درخواستی که ممکن است همچنان به سرویس یا endpoint منسوخ شده ارسال
+   شود، بررسی شود.
+  </p>
+  <p>
+   برعکس، عدم deprecate صحیح یک endpoint یا عدم decommissioning یک microservice می‌تواند اثرات فاجعه‌باری
+   بر اکوسیستم microservice داشته باشد. این اتفاق بیشتر از آن چیزی می‌افتد که توسعه‌دهندگان مایل به اعتراف
+   به آن هستند. در یک اکوسیستم که شامل صدها یا هزاران microservice می‌شود، توسعه‌دهندگان اغلب بین تیم‌ها
+   جابه‌جا می‌شوند، اولویت‌ها تغییر می‌کنند، و microservicesها و فناوری‌ها همگی به‌طور مداوم برای موارد جدیدتر و
+   بهتر تعویض می‌شوند. هنگامی که این microservicesها یا فناوری‌های قدیمی بدون هیچ‌گونه (یا خیلی کم) درگیر
+   بودن، نظارت یا بررسی رها می‌شوند، هرگونه شکست، مورد توجه قرار نمی‌گیرد، و هر شکستی که مورد توجه قرار
+   بگیرد ممکن است برای مدت طولانی حل نشود. اگر یک microservice قرار است به حال خود رها شود، در صورت قطعی،
+   خطر به خطر انداختن کلاینت‌های خود را دارد—باید به جای رها کردن، این microservicesها را از رده خارج کرد.
+  </p>
+  <p>
+   هیچ چیز مخرب‌تر از از دست دادن کامل یکی از وابستگی‌هایش برای یک microservice نیست. هیچ چیز باعث بی‌ثباتی و
+   عدم اطمینان بیشتر از شکست ناگهانی و غیرمنتظره یکی از وابستگی‌هایش نمی‌شود، حتی اگر شکست توسط تیم دیگری
+   برنامه‌ریزی شده باشد. اهمیت decommissioning و deprecation پایدار و قابل اعتماد، صادقانه نمی‌تواند به اندازه
+   کافی مورد تأکید قرار گیرد.
+  </p>
+  <p>40 | فصل 3: پایداری و قابلیت اطمینان</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

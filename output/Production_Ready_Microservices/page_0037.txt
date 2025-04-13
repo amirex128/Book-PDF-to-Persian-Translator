@@ -1,0 +1,29 @@
+I refer to the deployment process here as a “pipeline” because the most trustworthy
+deployments are those that have been required to pass a set of tests before reaching
+production servers. We can fit three separate stages or phases into this pipeline
+(Figure 3-2): first, we can test a new release in a staging environment; second, if it
+passes the staging phase, we can deploy it to a small canary environment, where it will
+serve 5%–10% of production traffic; and third, if it passes the canary phase, we can
+slowly roll it out to production servers until it has been deployed to every host.
+Figure 3-2. Stages of a stable and reliable deployment pipeline
+Staging
+Any new release can first be deployed to a staging environment. A staging environ‐
+ment should be an exact copy of the production environment: it is a reflection of the
+state of the real world, but without real traffic. Staging environments usually aren’t
+running at the same scale as production (i.e., they typically aren’t run with the same
+number of hosts as production, a phenomenon also known as host parity), because
+running what would amount to two separate ecosystems can present a large hardware
+cost to the company. However, some engineering organizations may determine that
+the only way to accurately copy the production environment in a stable and reliable
+way is to build an identical staging environment with host parity.
+For most engineering organizations, determining the hardware capacity and scale of
+the staging environment as a percentage of production is usually accurate enough.
+The necessary staging capacity can be determined by the method we will use to test
+the microservice within the staging phase. To test in the staging environment, we
+have several options: we can run mock (or recorded) traffic through the microservice;
+we can test it manually by hitting its endpoints and evaluating its responses; we can
+run automated unit, integration, and other specialized tests; or we can test each new
+release with any combination of these methods.
+The Deployment Pipeline 
+| 
+29

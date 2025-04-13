@@ -1,0 +1,42 @@
+application platform and microservices layers), because it is where all communication
+between services is handled; the boundaries between the communication layer and
+each other layer of the microservice ecosystem are poorly defined. While the bound‐
+aries may not be clear, the elements are clear: the second layer of a microservice eco‐
+system always contains the network, DNS, RPCs and API endpoints, service
+discovery, service registry, and load balancing.
+Discussing the network and DNS elements of the communication layer is beyond the
+scope of this book, so we will be focusing on RPCs, API endpoints, service discovery,
+service registry, and load balancing in this section.
+RPCs, endpoints, and messaging
+Microservices interact with one another over the network using remote procedure
+calls (RPCs) or messaging to the API endpoints of other microservices (or, as we will
+see in the case of messaging, to a message broker which will route the message appro‐
+priately). The basic idea is this: using a specified protocol, a microservice will send
+some data in a standardized format over the network to another service (perhaps to
+another microservice’s API endpoint) or to a message broker which will make sure
+that the data is send to another microservice’s API endpoint.
+There are several microservice communication paradigms. The first is the most com‐
+mon: HTTP+REST/THRIFT. In HTTP+REST/THRIFT, services communicate with
+each other over the network using the Hypertext Transfer Protocol (HTTP), and send‐
+ing requests and receiving responses to or from either specific representational state
+transfer (REST) endpoints (using various methods, like GET, POST, etc.) or specific
+Apache Thrift endpoints (or both). The data is usually formatted and sent as JSON (or
+protocol buffers) over HTTP. 
+HTTP+REST is the most convenient form of microservice communication. There
+aren’t any surprises, it’s easy to set up, and is the most stable and reliable—mostly
+because it’s difficult to implement incorrectly. The downside of adopting this para‐
+digm is that it is, by necessity, synchronous (blocking).
+The second communication paradigm is messaging. Messaging is asynchronous (non‐
+blocking), but it’s a bit more complicated. Messaging works the following way: a
+microservice will send data (a message) over the network (HTTP or other) to a mes‐
+sage broker, which will route the communication to other microservices.
+Messaging comes in several flavors, the two most popular being publish–subscribe
+(pubsub) messaging and request–response messaging. In pubsub models, clients will
+subscribe to a topic and will receive a message whenever a publisher publishes a mes‐
+sage to that topic. Request–response models are more straightforward, where a client
+will send a request to a service (or message broker), which will respond with the infor‐
+mation requested. There are some messaging technologies that are a unique blend of
+both models, like Apache Kafka. Celery and Redis (or Celery with RabbitMQ) can be
+14 
+| 
+Chapter 1: Microservices

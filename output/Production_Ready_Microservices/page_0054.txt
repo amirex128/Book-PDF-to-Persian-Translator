@@ -1,0 +1,43 @@
+When I ask microservice development teams if they know the growth scale of their
+service, the usual response is, “It can handle x requests per second.” My follow-up
+questions are always geared toward discovering where the service in question fits into
+the overall product: When are requests made? Is it one request per trip? One request
+each time someone opens the app? One request every time a new user signs up for
+our product? When these context-filling questions are answered, the growth scale
+becomes clear—and useful. If the number of requests made to the service is directly
+linked to the number of people who open a phone application, then the service scales
+with eyeballs, and we can plan for scaling the service by predicting how many people
+will be opening the application. If the number of requests made to the service is
+determined by the number of people who order delivery food, then the service scales
+with deliveries, and we can plan and predict for scaling our service by using higher-
+level business metrics about how many future deliveries are predicted.
+There are exceptions to the rules of qualitative growth scales, and determining an
+appropriate qualitative growth scale can become very complicated the further down
+the stack the service is found. Internal tools tend to suffer from these complications,
+and yet they tend to be so business-critical that if they aren’t scalable, the rest of the
+organization quickly hits scalability challenges. It’s not easy to put the growth scale of
+a service like a monitoring or alerting platform in terms of business metrics (users,
+eyeballs, etc.), so platform and/or infrastructure organizations need to determine
+accurate growth scales for their services in terms of their customers (developers, serv‐
+ices, etc.) and their customers’ specifications. Internal tools can scale with, for exam‐
+ple, number of deployments, number of services, number of logs aggregated, or
+gigabytes of data. These are more complicated because of the inherent difficulty in
+predicting these numbers, but they must be just as straightforward and predictable as
+the growth scales of microservices higher in the stack.
+The Quantitative Growth Scale
+The second part of knowing the growth scale is determining its quantitative aspects,
+which is where RPS/QPS and similar metrics come into play. To determine the quan‐
+titative growth scale, we need to approach our microservices with the qualitative
+growth scale in mind: the quantitative growth scale is defined by translating the quali‐
+tative growth scale into a measurable quantity. For example, if the qualitative growth
+scale of our microservice is measured in “eyeballs” (e.g., how many people open a
+phone application), and each “eyeball” results in two requests to our microservice and
+one database transaction, then our quantitative growth scale is measured in terms of
+requests and transactions, resulting in requests per second and transactions per sec‐
+ond as the two key quantities determining our scalability.
+The importance of choosing accurate qualitative and quantitative growth scales can‐
+not be overemphasized. As we will soon see, the growth scale will be used when mak‐
+ing predictions about the service’s operational costs, hardware needs, and limitations.
+46 
+| 
+Chapter 4: Scalability and Performance

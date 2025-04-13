@@ -1,0 +1,39 @@
+opment teams to choose, build, and maintain their own databases, while others will
+decide on at least one database option that works for the majority of the microservi‐
+ces at the company, and build a separate team to run and maintain the database(s) so
+that developers can focus solely on their own microservices.
+If we think about microservice architecture as being composed of four separate layers
+(see “Microservice Architecture” on page 9 for more details) and recognize that,
+thanks to the Inverse Conway’s Law, the engineering organizations of companies that
+adopt microservice architecture will mirror the architecture of its product, then we
+can see where the responsibility for choosing the appropriate databases, building
+them, running them, and maintaining them lies: either in the application platform
+layer, which would allow databases to be provided as a service to microservice teams,
+or the microservice layer, where the database used by a microservice is considered
+part of the service. I’ve seen both of these setups in practice at various companies, and
+some work better than others. I’ve also noticed that one approach to this works par‐
+ticularly well: offering databases as a service within the application platform layer,
+and then allowing individual microservice development teams to run their own data‐
+base if the databases offered as part of the application platform do not fit their specific
+needs.
+The most common types of databases are relational databases (SQL, MySQL) and
+NoSQL databases (Cassandra, Vertica, MongoDB, and key-value stores like Dynamo,
+Redis, and Riak). Choosing between a relational database and a NoSQL database, and
+then choosing the specific appropriate database for a microservice’s needs depends on
+the answers to several questions:
+• What are the needed transactions per second of each microservice?
+• What type of data does each microservice need to store?
+• What is the schema needed by each microservice? And how often will it need to
+be changed?
+• Do the microservices need strong consistency or eventual consistency?
+• Are the microservices read-heavy, write-heavy, or both?
+• Does the database need to be scaled horizontally or vertically?
+Regardless of whether the database is maintained as part of the application platform
+or by each individual microservice development team, database choice should be
+driven by the answers to those questions. For example, if the database in question
+needs to be scaled horizontally, or if reads and writes need to be made in parallel,
+then a NoSQL database should be chosen, since relational databases struggle with
+horizontal scaling and parallel reads and writes.
+56 
+| 
+Chapter 4: Scalability and Performance

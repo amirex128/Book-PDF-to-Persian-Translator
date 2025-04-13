@@ -1,0 +1,53 @@
+some microservices may be very write-heavy, and testing the write functionality of a
+new build will be essential. The most common way of doing this is to mark any data
+written by a staging environment as test data (this is known as test tenancy), but the
+safest way to do this is to write to a separate test database, since giving write access to
+a staging environment still runs the risk of altering real-world data. See Table 3-1 for
+a comparison of full and partial staging environments.
+Table 3-1. Full versus partial staging environments
+Full staging
+Partial staging
+Complete copy of production environment
+Yes
+No
+Separate staging frontend and backend ports Yes
+Yes
+Access to production services
+No
+Yes
+Read access to production databases
+No
+Yes
+Write access to production databases
+No
+Yes
+Requires automated rollbacks
+No
+Yes
+Staging environments (full or partial) should have dashboards, monitoring, and log‐
+ging just like production environments—all of which should be set up identically to
+the dashboards, monitoring, and logging of the production environment of the
+microservice (see ???). The graphs for all key metrics can be kept on the same dash‐
+board as all production metrics, though teams may opt to have separate dashboards
+for each part of the deployment process: a staging dashboard, a canary dashboard,
+and a production dashboard. Depending on how dashboards are configured, it may
+be best to keep all graphs for all deployments on one dashboard and to organize them
+by deployment (or by metric). Regardless of how a team decides to set up their dash‐
+boards, the goal of building good and useful production-ready dashboards should not
+be forgotten: the dashboard(s) of a production-ready microservice should make it
+easy for an outsider to quickly determine the health and status of the service.
+Monitoring and logging for the staging environment should be identical to the moni‐
+toring and logging of the staging and production deployments so that any failures of
+tests and errors in new releases that are deployed to staging will be caught before they
+move to the next phase of the deployment pipeline. It’s extremely helpful to set up
+alerts and logs so that they are differentiated and separated by deployment type,
+ensuring that any alerts triggered by failures or errors will specify which environment
+is experiencing the problem, making debugging, mitigation, and resolution of any
+bugs or failures rather easy and straightforward.
+The purpose of a staging environment is to catch any bugs introduced by code
+changes before they affect production traffic. When a bug is introduced by the code,
+it will usually be caught in the staging environment (if it is set up correctly). Automa‐
+ted rollbacks of bad deploys are a necessity for partial staging environments (though
+The Deployment Pipeline 
+| 
+33

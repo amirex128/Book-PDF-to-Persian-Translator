@@ -1,0 +1,32 @@
+Database Challenges in Microservice Architecture
+There are several challenges with databases that are specific to microservice architec‐
+ture. When databases are shared among microservices, competition for resources
+kicks in, and some microservices may utilize more than their fair share of the avail‐
+able storage. Engineers building and maintaining shared databases need to design
+their data storage solutions so that the database can be easily scaled if any of the ten‐
+ant microservices either require additional space or are running the risk of using up
+all available space.
+Watch Out for Database Connections
+Some databases have strict limitations on the number of database
+connections that can be open simultaneously. Make sure that all
+connections are closed appropriately to avoid compromising both a
+service’s availability and the availability of the database to all micro‐
+services that use it.
+Another challenge microservices often face, especially once they’ve built and standar‐
+dized stable and reliable development cycles and deployment pipelines, is the han‐
+dling of test data from end-to-end testing, load testing, and any test writes done in
+staging. As mentioned in “The Deployment Pipeline” on page 28, the staging phase of
+the deployment pipeline requires reading and/or writing to databases. If full staging
+has been implemented, then the staging phase will have its own separate test and
+staging database, but partial staging requires read and write access to production
+servers, so great care needs to be taken to ensure that test data is handled appropri‐
+ately: it needs to be clearly marked as test data (a process known as test tenancy), and
+then all test data must be deleted at regular intervals.
+Evaluate Your Microservice
+Now that you have a better understanding of scalability and performance, use the fol‐
+lowing list of questions to assess the production-readiness of your microservice(s)
+and microservice ecosystem. The questions are organized by topic, and correspond to
+the sections within this chapter.
+Evaluate Your Microservice 
+| 
+57

@@ -1,0 +1,43 @@
+tomer places). Both customers and orders depend on other microservices: customers
+depends on yet another microservice we’ll call customers-dependency, and orders on
+one we’ll refer to as orders-dependency. The chances that customers-dependency and
+orders-dependency have dependencies of their own are very high, so the dependency
+graph for receipt-sender quickly becomes very, very complicated.
+Since receipt-sender wants to protect its SLA and provide 99.99% uptime to all of its
+clients, its team needs to make sure that the SLAs of all downstream dependencies are
+strictly adhered to. If the SLA of receipt-sender depends on customers being available
+99.99% of the time, but the actual uptime of customers is only 89.99% of the time, the
+availability of receipt-sender is compromised and is now only 89.98%. Each one of the
+dependencies of receipt-sender can suffer the same hit to their availability if any of the
+dependencies in the dependency chain do not meet their SLAs.
+A stable and reliable microservice needs to mitigate dependency failures of this sort
+(and yes, not meeting an SLA is a failure!). This can be accomplished by having back‐
+ups, fallbacks, caching, and/or alternatives for each dependency just in case they fail.
+Before dependency failures can be planned for and mitigated, the dependencies of a
+microservice must be known, documented, and tracked. Any dependency that could
+harm a microservice’s SLA needs to be included in the architecture diagram and doc‐
+umentation of the microservice (see Chapter 7, Documentation and Understanding)
+and should be included on the service’s dashboard(s) (see ???). In addition, all depen‐
+dencies should be tracked by automatically creating dependency graphs for each ser‐
+vice, which can be accomplished by implementing a distributed tracking system
+across all microservices in the organization.
+Once all of the dependencies are known and tracked, the next step is to set up back‐
+ups, alternatives, fallbacks, or caching for each dependency. The right way to do this
+is completely dependent on the needs of the service. For example, if the functionality
+of a dependency can be filled by calling the endpoint of another service, then failure
+of the primary dependency should be handled by the microservice so that requests
+are sent to the alternative instead. If requests that need to be sent to the dependency
+can be held in a queue when the dependency is unavailable, then a queue should be
+implemented. Another way to handle dependency failures is to put caching for the
+dependency into place within the service: cache any relevant data so that any failures
+will be handled gracefully.
+The type of cache most often used in these cases is a Least Recently Used (LRU) cache,
+in which relevant data is kept in a queue, and where any unused data is deleted when
+the cache’s queue fills up. LRU caches are easy to implement (often a single line of
+code for each instantiation), efficient (no expensive network calls need to be made),
+performant (the data is immediately available), and do a decent job of mitigating any
+dependency failures. This is known as defensive caching, and it is useful for protecting
+a microservice against the failures of its dependencies: cache the information your
+38 
+| 
+Chapter 3: Stability and Reliability

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 57</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>موانع منابع</h3>
+  <p>
+   ما می‌توانیم محدودیت‌های عملکرد و مقیاس‌پذیری microservicesهای خود را با شناسایی موانع منابع کشف و اندازه‌گیری
+   کنیم. یک مانع منبع، هر چیزی است که ذاتاً در مورد نحوه استفاده microservice از منابع خود وجود دارد و مقیاس‌پذیری
+   برنامه را محدود می‌کند. این می‌تواند یک مانع زیرساختی یا چیزی در داخل معماری سرویس باشد که مانع از مقیاس‌پذیری
+   آن می‌شود. به عنوان مثال، تعداد اتصالات پایگاه داده باز که یک microservice نیاز دارد، می‌تواند یک مانع باشد، اگر
+   به حد اتصال پایگاه داده نزدیک شود. مثال دیگری از یک مانع منبع رایج زمانی است که microservicesها نیاز به
+   مقیاس‌پذیری عمودی (به جای مقیاس‌پذیری افقی، که در آن نمونه‌ها/سخت‌افزار بیشتری اضافه می‌شود) دارند، زمانی که
+   افزایش ترافیک را تجربه می‌کنند: اگر تنها راه برای مقیاس‌پذیری یک microservice افزایش منابع هر نمونه باشد (CPU
+   بیشتر، حافظه بیشتر)، پس دو اصل مقیاس‌پذیری (concurrenty و partitioning) کنار گذاشته می‌شوند.
+  </p>
+  <p>
+   برخی از موانع منابع به راحتی قابل شناسایی هستند. اگر microservice شما فقط می‌تواند برای برآورده کردن ترافیک
+   در حال رشد با استقرار آن در دستگاه‌هایی با CPU و حافظه بیشتر مقیاس‌پذیری داشته باشد، پس یک مانع
+   مقیاس‌پذیری دارید و باید microservice را refactor کنید تا بتواند به صورت افقی مقیاس‌پذیری داشته باشد، و از
+   concurrency و partitioning به عنوان اصول راهنمای خود استفاده کنید.
+  </p>
+  <h3>مشکلات مقیاس‌پذیری عمودی</h3>
+  <p>
+   مقیاس‌پذیری عمودی، یک روش پایدار یا مقیاس‌پذیر برای معماری microservices نیست. ممکن است در شرایطی که هر
+   microservice دارای سخت‌افزار اختصاصی است، درست عمل کند، اما با فناوری‌های انتزاع و جداسازی سخت‌افزاری
+   جدیدی که امروزه در دنیای فناوری استفاده می‌شود، مانند Docker و Apache Mesos، خوب عمل نخواهد کرد. اگر
+   می‌خواهید یک برنامه مقیاس‌پذیر بسازید، همیشه برای concurrency و partitioning بهینه کنید.
+  </p>
+  <p>
+   سایر موانع منابع به همان اندازه واضح نیستند، و بهترین راه برای کشف آن‌ها، اجرای load testing گسترده در سرویس
+   است. ما load testing را با جزئیات بیشتر در ??? پوشش خواهیم داد.
+  </p>
+  <h3>Capacity Planning</h3>
+  <p>
+   یکی از مهم‌ترین الزامات ساخت یک microservice مقیاس‌پذیر، اطمینان از این است که به منابع سخت‌افزاری لازم و
+   مورد نیاز در حین مقیاس‌پذیری، دسترسی داشته باشد. استفاده کارآمد از منابع، برنامه‌ریزی برای رشد، و طراحی یک
+   microservice برای کارایی و مقیاس‌پذیری عالی از ابتدا، اگر هیچ منبع سخت‌افزاری در دسترس نباشد، زمانی که
+   microservice نیاز به میزبانی ترافیک production بیشتری داشته باشد، به سرعت بی‌فایده می‌شود. این چالش به
+   ویژه برای microservicesهایی که برای مقیاس‌پذیری افقی بهینه شده‌اند، مرتبط است.
+  </p>
+  <p>Capacity Planning | 49</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0057/image_1.png" alt="Image from page 57" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

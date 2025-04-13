@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 41</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   برخی از microservicesها ممکن است بسیار write-heavy باشند، و تست کردن عملکرد نوشتن یک build جدید ضروری
+   خواهد بود. رایج‌ترین راه برای انجام این کار این است که هر داده‌ای را که توسط یک محیط staging نوشته شده است،
+   به عنوان داده‌های تست علامت‌گذاری کنید (این به عنوان test tenancy شناخته می‌شود)، اما ایمن‌ترین راه برای انجام این
+   کار، نوشتن در یک پایگاه داده تست جداگانه است، زیرا دادن دسترسی نوشتن به یک محیط staging همچنان خطر
+   تغییر داده‌های دنیای واقعی را به همراه دارد. برای مقایسه محیط‌های full و partial staging به جدول 3-1 مراجعه کنید.
+  </p>
+  <p>جدول 3-1. محیط‌های Full staging در مقابل partial staging</p>
+  <table>
+   <tr>
+    <td></td>
+    <td>Full staging</td>
+    <td>Partial staging</td>
+   </tr>
+   <tr>
+    <td>کپی کامل از محیط production</td>
+    <td>بله</td>
+    <td>خیر</td>
+   </tr>
+   <tr>
+    <td>پورت‌های frontend و backend جداگانه staging</td>
+    <td>بله</td>
+    <td>بله</td>
+   </tr>
+   <tr>
+    <td>دسترسی به سرویس‌های production</td>
+    <td>خیر</td>
+    <td>بله</td>
+   </tr>
+   <tr>
+    <td>دسترسی خواندن به پایگاه‌های داده production</td>
+    <td>خیر</td>
+    <td>بله</td>
+   </tr>
+   <tr>
+    <td>دسترسی نوشتن به پایگاه‌های داده production</td>
+    <td>خیر</td>
+    <td>خیر</td>
+   </tr>
+   <tr>
+    <td>نیازمند rollbacks خودکار</td>
+    <td>خیر</td>
+    <td>بله</td>
+   </tr>
+  </table>
+  <p>
+   محیط‌های Staging (full یا partial) باید مانند محیط‌های production، dashboardها، نظارت و logging داشته
+   باشند—که همگی باید دقیقاً مشابه dashboardها، نظارت و logging محیط production microservice تنظیم شوند
+   (به ??? مراجعه کنید). نمودارهای تمام معیارهای کلیدی را می‌توان در همان dashboard به‌عنوان تمام معیارهای
+   production نگه داشت، اگرچه تیم‌ها ممکن است انتخاب کنند که برای هر قسمت از process استقرار، dashboardهای
+   جداگانه داشته باشند: یک dashboard staging، یک dashboard canary و یک dashboard production. بسته به
+   نحوه پیکربندی dashboardها، ممکن است بهتر باشد که تمام نمودارها را برای تمام استقرارها در یک dashboard
+   نگه دارید و آن‌ها را بر اساس استقرار (یا بر اساس معیار) سازماندهی کنید. صرف نظر از اینکه یک تیم تصمیم می‌گیرد
+   dashboardهای خود را چگونه راه‌اندازی کند، نباید هدف ساختن dashboardهای خوب و مفید آماده برای تولید را فراموش
+   کرد: dashboard(ها) یک microservice آماده تولید باید تعیین سلامت و وضعیت سرویس را برای یک فرد بیرونی آسان
+   کند.
+  </p>
+  <p>
+   نظارت و logging برای محیط staging باید با نظارت و logging استقرارهای staging و production یکسان باشد تا هرگونه
+   شکست تست و خطاهای موجود در releases جدید که در staging مستقر می‌شوند قبل از اینکه به فاز بعدی pipeline
+   استقرار منتقل شوند، شناسایی شوند. راه‌اندازی هشدارها و logs به گونه‌ای که بر اساس نوع استقرار تمایز و جدا
+   شوند، بسیار مفید است، و اطمینان حاصل می‌شود که هر هشداری که توسط شکست‌ها یا خطاها ایجاد می‌شود، مشخص
+   می‌کند که کدام محیط با مشکل مواجه است، و اشکال‌زدایی، کاهش و حل هرگونه باگ یا شکست را نسبتاً آسان و
+   سرراست می‌کند.
+  </p>
+  <p>
+   هدف یک محیط staging، گرفتن هر گونه باگ معرفی شده توسط تغییرات کد قبل از تأثیرگذاری بر ترافیک production است.
+   هنگامی که یک باگ توسط کد معرفی می‌شود، معمولاً در محیط staging شناسایی می‌شود (اگر به درستی تنظیم شده
+   باشد). Rollbacksهای خودکار از استقرارهای بد، یک ضرورت برای محیط‌های partial staging هستند (اگرچه
+  </p>
+  <p>The Deployment Pipeline | 33</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 47</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   microservice از وابستگی‌های خود دریافت می‌کند، و اگر وابستگی‌ها از کار بیفتند، در دسترس بودن
+   microservice شما تحت تأثیر قرار نخواهد گرفت. پیاده‌سازی defensive caching برای هر وابستگی ضروری
+   نیست، اما اگر یک وابستگی یا مجموعه‌ای از وابستگی‌ها غیرقابل اعتماد هستند، defensive caching از آسیب
+   دیدن microservice شما جلوگیری می‌کند.
+  </p>
+  <h3>Routing و کشف</h3>
+  <p>
+   یکی دیگر از جنبه‌های ساخت microservices پایدار و قابل اعتماد، اطمینان از این است که ارتباط و تعامل بین
+   microservicesها نیز پایدار و قابل اعتماد است، به این معنی که لایه 2 (لایه ارتباطی) از اکوسیستم microservice (به
+   فصل 1، Microservices مراجعه کنید) باید به گونه‌ای ساخته شود که در برابر الگوهای ترافیکی مضر محافظت
+   کند و اعتماد را در سراسر اکوسیستم حفظ کند. بخش‌های مربوطه از لایه ارتباطی برای پایداری و قابلیت اطمینان (جدا
+   از خود شبکه) کشف سرویس، ثبت سرویس و load balancing هستند.
+  </p>
+  <p>
+   سلامت یک microservice هم در سطح host و هم در سطح سرویس به عنوان یک کل، همیشه باید مشخص باشد. این
+   به این معنی است که health checkها باید به‌طور مداوم اجرا شوند تا هرگز درخواستی به یک host یا سرویس ناسالم
+   ارسال نشود. اجرای health checkها در یک کانال جداگانه (که برای ارتباطات عمومی microservice استفاده نمی‌شود)
+   آسان‌ترین راه برای اطمینان از این است که health checkها هرگز توسط چیزی مانند یک شبکه مسدود شده به خطر
+   نیفتند. سخت‌کد کردن پاسخ‌های "200 OK" در یک endpoint /health برای health checkها نیز برای هر microservice
+   ایده‌آل نیست، اگرچه ممکن است برای اکثر آن‌ها کافی باشد. پاسخ‌های hardcoded، به شما چیز زیادی نمی‌گویند، به
+   جز اینکه microservice با موفقیت نیمه در host راه‌اندازی شده است: هر endpoint /health از یک microservice
+   باید یک پاسخ مفید و دقیق ارائه دهد.
+  </p>
+  <p>
+   اگر یک نمونه از یک سرویس در یک host ناسالم باشد، load balancerها دیگر نباید ترافیک را به آن هدایت کنند. اگر یک
+   microservice به عنوان یک کل ناسالم باشد (با شکست همه health checkها در درصد معینی از hostsها یا تمام
+   hostsها در production)، پس ترافیک دیگر نباید به آن microservice خاص هدایت شود تا زمانی که مشکلات باعث
+   شکست health checkها حل شوند.
+  </p>
+  <p>
+   با این حال، health checkها نباید تنها عامل تعیین‌کننده در مورد سالم بودن یا نبودن یک سرویس باشند. تعداد زیادی
+   استثناهای رسیدگی نشده نیز باید منجر به علامت‌گذاری یک سرویس ناسالم شوند، و circuit breakerها باید برای این
+   شکست‌ها اعمال شوند تا اگر یک سرویس مقدار غیرعادی خطاهایی را تجربه کرد، دیگر هیچ درخواستی به سرویس ارسال
+   نشود تا زمانی که مشکل حل شود. کلید در routing و کشف پایدار و قابل اعتماد این است: با جلوگیری از سرویس‌دهی
+   actorهای بد از ترافیک production و پذیرش درخواست‌ها از microservicesهای دیگر، از اکوسیستم microservice
+   محافظت کنید.
+  </p>
+  <p>Routing و کشف | 39</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

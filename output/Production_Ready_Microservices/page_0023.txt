@@ -1,0 +1,41 @@
+used for messaging (and task processing) for microservices written in Python: Celery
+processes the tasks and/or messages using Redis or RabbitMQ as the broker.
+Messaging comes with several significant downsides that must be mitigated. Messag‐
+ing can be just as scalable (if not more scalable) than HTTP+REST solutions, if it is
+architected for scalability from the get-go. Inherently, messaging is not as easy to
+change and update, and its centralized nature (while it may seem like a benefit) can
+lead to its queues and brokers becoming points of failure for the entire ecosystem.
+The asynchronous nature of messaging can lead to race conditions and endless loops
+if not prepared for. If a messaging system is implemented with protections against
+these problems, it can become as stable and efficient as a synchronous solution.
+Service discovery, service registry, and load balancing
+In monolithic architecture, traffic only needs to be sent to one application and dis‐
+tributed appropriately to the servers hosting the application. In microservice archi‐
+tecture, traffic needs to be routed appropriately to a large number of different
+applications, and then distributed appropriately to the servers hosting each specific
+microservice. In order for this to be done efficiently and effectively, microservice
+architecture requires three technologies be implemented in the communication layer:
+service discovery, service registry, and load balancing.
+In general, when a microservice A needs to make a request to another microservice B,
+microservice A needs to know the IP address and port of a specific instance where
+microservice B is hosted. More specifically, the communication layer between the
+microservices needs to know the IP addresses and ports of these microservices so that
+the requests between them can be routed appropriately. This is accomplished through
+service discovery (such as etcd, Consul, Hyperbahn, or ZooKeeper), which ensures
+that requests are routed to exactly where they are supposed to be sent and that (very
+importantly) they are only routed to healthy instances. Service discovery requires a
+service registry, which is a database that tracks all ports and IPs of all microservices
+across the ecosystem.
+Dynamic Scaling and Assigned Ports
+In microservice architecture, ports and IPs can (and do) change all
+of the time, especially as microservices are scaled and re-deployed
+(especially with a hardware abstraction layer like Apache Mesos).
+One way to approach the discovery and routing is to assign static
+ports (both frontend and backend) to each microservice.
+Unless you have each microservice hosted on only one instance (which is highly
+unlikely), you’ll need load balancing in place in various parts of the communication
+layer across the microservice ecosystem. Load balancing works, at a very high level,
+like this: if you have 10 different instances hosting a microservice, load-balancing
+The Microservice Ecosystem 
+| 
+15

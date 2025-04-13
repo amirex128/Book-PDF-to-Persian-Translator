@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 22</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   لایه application platform و لایه‌های microservices) است، زیرا جایی است که تمام ارتباطات بین سرویس‌ها مدیریت
+   می‌شود؛ مرزهای بین لایه ارتباطی و هر لایه دیگر از اکوسیستم microservice ضعیف تعریف شده‌اند. در حالی که
+   مرزها ممکن است واضح نباشند، عناصر مشخص هستند: لایه دوم یک اکوسیستم microservice همیشه شامل شبکه، DNS،
+   RPCها و API endpoints، کشف سرویس، ثبت سرویس و load balancing است.
+  </p>
+  <p>
+   بحث در مورد عناصر شبکه و DNS لایه ارتباطی فراتر از محدوده این کتاب است، بنابراین ما در این بخش بر RPCها، API
+   endpoints، کشف سرویس، ثبت سرویس و load balancing تمرکز خواهیم کرد.
+  </p>
+  <h3>RPCها، endpointsها و پیام‌رسانی</h3>
+  <p>
+   Microservices از طریق شبکه با استفاده از remote procedure calls (RPC) یا پیام‌رسانی به API endpointsهای
+   microservicesهای دیگر (یا، همانطور که در مورد پیام‌رسانی خواهیم دید، به یک message broker که پیام را به درستی
+   هدایت می‌کند) با یکدیگر تعامل دارند. ایده اصلی این است: با استفاده از یک پروتکل مشخص، یک microservice مقداری
+   داده را با یک فرمت استاندارد از طریق شبکه به یک سرویس دیگر (شاید به API endpoint یک microservice دیگر) یا به یک
+   message broker ارسال می‌کند که اطمینان حاصل می‌کند که داده‌ها به API endpoint یک microservice دیگر ارسال
+   می‌شود.
+  </p>
+  <p>
+   چندین پارادایم ارتباطی microservice وجود دارد. اولین مورد، رایج‌ترین است: HTTP+REST/THRIFT. در
+   HTTP+REST/THRIFT، سرویس‌ها با یکدیگر از طریق شبکه با استفاده از پروتکل انتقال ابرمتن (HTTP) ارتباط
+   برقرار می‌کنند، و درخواست‌ها را ارسال و پاسخ‌ها را از یا به نقاط پایانی خاص انتقال حالت نمایندگی (REST)
+   (با استفاده از روش‌های مختلف، مانند GET، POST و غیره) یا نقاط پایانی خاص Apache Thrift (یا هر دو) دریافت
+   می‌کنند. داده‌ها معمولاً به صورت JSON (یا protocol buffers) از طریق HTTP فرمت‌بندی و ارسال می‌شوند.
+  </p>
+  <p>
+   HTTP+REST راحت‌ترین شکل ارتباط microservice است. هیچ سورپرایزی وجود ندارد، راه‌اندازی آن آسان است و
+   پایدارترین و قابل اعتمادترین است—عمدتاً به این دلیل که پیاده‌سازی نادرست آن دشوار است. نقطه ضعف پذیرش این
+   پارادایم این است که به‌ناچار، synchronous (مسدودکننده) است.
+  </p>
+  <p>
+   پارادایم ارتباطی دوم، messaging است. Messaging ناهمزمان (non-blocking) است، اما کمی پیچیده‌تر است.
+   Messaging به روش زیر عمل می‌کند: یک microservice داده‌ها (یک پیام) را از طریق شبکه (HTTP یا غیره) به یک
+   message broker ارسال می‌کند، که ارتباط را به microservicesهای دیگر هدایت می‌کند.
+  </p>
+  <p>
+   Messaging در چندین نوع ارائه می‌شود، که دو مورد از محبوب‌ترین آن‌ها publish–subscribe (pubsub) messaging
+   و request–response messaging هستند. در مدل‌های pubsub، کلاینت‌ها در یک موضوع مشترک می‌شوند و هر زمان که
+   یک ناشر پیامی را به آن موضوع منتشر می‌کند، پیامی دریافت می‌کنند. مدل‌های request–response سرراست‌تر هستند،
+   جایی که یک کلاینت درخواستی را به یک سرویس (یا message broker) ارسال می‌کند، که با اطلاعات درخواستی پاسخ
+   می‌دهد. برخی از فناوری‌های پیام‌رسانی وجود دارند که ترکیبی منحصربه‌فرد از هر دو مدل هستند، مانند Apache Kafka.
+   Celery و Redis (یا Celery با RabbitMQ) می‌توانند باشند
+  </p>
+  <p>14 | فصل 1: Microservices</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

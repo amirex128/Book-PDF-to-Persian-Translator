@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 18</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   اکثر microservices نوعی داده را ذخیره می‌کنند، چه در حافظه (شاید با استفاده از یک cache) یا یک پایگاه داده خارجی. اگر
+   داده‌های مربوطه در حافظه ذخیره شوند، نیازی به برقراری یک تماس شبکه اضافی با یک پایگاه داده خارجی نیست و
+   microservice می‌تواند به راحتی هر داده مربوطه را به یک کلاینت برگرداند. اگر داده‌ها در یک پایگاه داده خارجی ذخیره
+   شوند، microservice باید یک درخواست دیگر به پایگاه داده ارسال کند، منتظر پاسخ بماند و سپس به پردازش task
+   ادامه دهد.
+  </p>
+  <p>
+   این معماری در صورتی ضروری است که microservices قرار باشد با هم خوب کار کنند. پارادایم معماری microservice
+   مستلزم این است که مجموعه‌ای از microservices با هم کار کنند تا آنچه در غیر این صورت به عنوان یک برنامه بزرگ واحد
+   وجود دارد را تشکیل دهند، بنابراین عناصر خاصی از این معماری وجود دارد که در سراسر یک سازمان باید استاندارد شوند تا
+   مجموعه‌ای از microservices با موفقیت و کارآمد تعامل داشته باشند.
+  </p>
+  <p>
+   API endpointsهای microservices باید در سراسر یک سازمان استاندارد شوند. این بدان معنا نیست که همه microservices
+   باید endpointsهای خاص یکسانی داشته باشند، بلکه نوع endpoint باید یکسان باشد. دو نوع بسیار رایج از API
+   endpoints برای microservices REST یا Apache Thrift هستند، و من برخی از microservicesها را دیده‌ام که هر دو
+   نوع endpoint را دارند (اگرچه این مورد نادر است، نظارت را نسبتاً پیچیده می‌کند، و من شخصاً آن را توصیه نمی‌کنم).
+   انتخاب نوع endpoint نشان‌دهنده عملکرد داخلی خود microservice است و همچنین معماری آن را دیکته می‌کند: به عنوان
+   مثال، ساختن یک microservice ناهمزمان که از طریق HTTP بر روی endpointsهای REST ارتباط برقرار می‌کند، دشوار
+   است، که مستلزم افزودن یک endpoint مبتنی بر پیام‌رسانی به سرویس‌ها نیز می‌شود.
+  </p>
+  <p>
+   Microservices از طریق remote procedure calls (RPC) با یکدیگر تعامل دارند، که تماس‌هایی بر روی شبکه هستند که
+   دقیقاً شبیه تماس‌های procedure محلی به نظر می‌رسند و رفتار می‌کنند. پروتکل‌های مورد استفاده به انتخاب‌های
+   معماری و پشتیبانی سازمانی، و همچنین endpointsهای مورد استفاده، بستگی دارد. به عنوان مثال، یک microservice
+   با endpointsهای REST احتمالاً با microservices دیگر از طریق HTTP تعامل دارد، در حالی که یک microservice با
+   Thrift endpoints ممکن است با microservices دیگر از طریق HTTP یا یک راه‌حل داخلی‌تر و سفارشی‌شده ارتباط
+   برقرار کند.
+  </p>
+  <p>
+   از نسخه سازی Microservices و Endpoints خودداری کنید
+   <br>
+   یک microservice یک library نیست (در زمان کامپایل یا در طول زمان اجرا در حافظه بارگذاری نمی‌شود) بلکه یک برنامه
+   نرم‌افزاری مستقل است. با توجه به ماهیت سریع توسعه microservice، نسخه سازی microservices می‌تواند به
+   راحتی به یک کابوس سازمانی تبدیل شود، با توسعه‌دهندگانی در سرویس‌های کلاینت که نسخه‌های خاص (منسوخ شده،
+   بدون نگهداری) یک microservice را در کد خود پین می‌کنند. باید با microservices به عنوان چیزهای زنده و در حال
+   تغییر رفتار کرد، نه releases یا librariesهای ثابت. نسخه سازی API endpoints یک anti-pattern دیگر است که به
+   همین دلایل باید از آن اجتناب شود.
+  </p>
+  <p>10 | فصل 1: Microservices</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0018/image_1.png" alt="Image from page 18" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

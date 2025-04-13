@@ -1,0 +1,39 @@
+are not required for full staging environments). Establishing when to revert to a pre‐
+vious build should be determined by various thresholds on the microservice’s key
+metrics.
+Since partial staging requires interacting with microservices running in production,
+bugs introduced by new releases deployed to a partial staging environment can bring
+down other microservices that are running in production. If there aren’t any automa‐
+ted rollbacks in place, mitigating and resolving these problems needs to be done
+manually. Any steps of the deployment process that need manual intervention are
+points of failure not only for the microservice itself, but for the entire microservice
+ecosystem.
+The last question a microservice team needs to answer when setting up a staging
+environment is how long a new release should run on staging before it can be
+deployed to canary (and, after that, to production). The answer to this question is
+determined by the staging-specific tests that are run on staging: a new build is ready
+to move to the next step of the deployment process as soon as all tests have passed 
+without failing.
+Canary
+Once a new release has successfully been deployed to staging and passed all required
+tests, the build can be deployed to the next stage in the deployment pipeline: the can‐
+ary environment. The unique name for this environment comes from a tactic used by
+coal miners: they’d bring canaries with them into the coal mines to monitor the levels
+of carbon monoxide in the air; if the canary died, they knew that the level of toxic gas
+in the air was high, and they’d leave the mines. Sending a new build into a canary
+environment serves the same purpose: deploy it to a small pool of servers running
+production traffic (around 5%–10% of production capacity), and if it survives, deploy
+to the rest of the production servers.
+Canary Traffic Distribution
+If the production service is deployed in multiple different
+datacenters, regions, or cloud providers, then the canary pool
+should contain servers in each of these in order to accurately sam‐
+ple production.
+Since a canary environment serves production traffic, it should be considered part of
+production. It should have the same backend and frontend ports, and canary hosts
+should be chosen at random from the pool of production servers to ensure accurate
+sampling of production traffic. Canaries can (and should) have full access to produc‐
+tion services: they should hit all production endpoints of upstream and downstream
+34 
+| 
+Chapter 3: Stability and Reliability

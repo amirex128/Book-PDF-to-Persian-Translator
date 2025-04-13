@@ -5,29 +5,29 @@
 ### طراحی برنامه‌های داده‌محور
 - عنوان انگلیسی: Designing Data-Intensive Applications
 - نویسنده: Martin Kleppmann
-- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Designing_Data-Intensive_Applications/Designing_Data-Intensive_Applications_Dual_View.html/)
-- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Designing_Data-Intensive_Applications/Designing_Data-Intensive_Applications_Farsi.html/)
+- [نسخه دو زبانه آنلاین](https://amir-shirdel-books.netlify.app/Designing_Data-Intensive_Applications/Designing_Data-Intensive_Applications_Dual_View.html/)
+- [نسخه آنلاین](https://amir-shirdel-books.netlify.app/Designing_Data-Intensive_Applications/Designing_Data-Intensive_Applications_Farsi.html/)
 - [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Designing_Data-Intensive_Applications.pdf)
 
 ### ساخت میکروسرویس‌ها
 - عنوان انگلیسی: Building Microservices
 - نویسنده: Sam Newman
-- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Building_Microservice/Building_Microservice_Dual_View.html/)
-- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Building_Microservice/Building_Microservice_Farsi.html/)
+- [نسخه دو زبانه آنلاین](https://amir-shirdel-books.netlify.app/Building_Microservice/Building_Microservice_Dual_View.html/)
+- [نسخه آنلاین](https://amir-shirdel-books.netlify.app/Building_Microservice/Building_Microservice_Farsi.html/)
 - [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Building_Microservice.pdf)
 
 ### الگوهای میکروسرویس با مثال‌های جاوا
 - عنوان انگلیسی: Microservices Patterns With examples in Java
 - نویسنده: Chris Richardson
-- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Microservices_Patterns_With_examples_in_Java/Microservices_Patterns_With_examples_in_Java_Dual_View.html/)
-- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/Microservices_Patterns_With_examples_in_Java/Microservices_Patterns_With_examples_in_Java_Farsi.html/)
+- [نسخه دو زبانه آنلاین](https://amir-shirdel-books.netlify.app/Microservices_Patterns_With_examples_in_Java/Microservices_Patterns_With_examples_in_Java_Dual_View.html/)
+- [نسخه آنلاین](https://amir-shirdel-books.netlify.app/Microservices_Patterns_With_examples_in_Java/Microservices_Patterns_With_examples_in_Java_Farsi.html/)
 - [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Microservices_Patterns_With_examples_in_Java.pdf)
 
 ### معماری برنامه‌های وب
 - عنوان انگلیسی: Web Application Architecture
 - نویسنده: Leon Shklar, Rich Rosen
-- [نسخه دو زبانه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/web-application-architecture/web-application-architecture_Dual_View.html/)
-- [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translator/output/web-application-architecture/web-application-architecture_Farsi.html/)
+- [نسخه دو زبانه آنلاین](https://amir-shirdel-books.netlify.app/web-application-architecture/web-application-architecture_Dual_View.html/)
+- [نسخه آنلاین](https://amir-shirdel-books.netlify.app/web-application-architecture/web-application-architecture_Farsi.html/)
 - [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/web-application-architecture.pdf)
 
 ### طراحی سیستم‌های توزیع‌شده
@@ -37,6 +37,12 @@
 - [نسخه آنلاین](https://amirex128.github.io/Book-PDF-to-Persian-Translatoroutput/Designing_distributed_systems_patterns/Designing_distributed_systems_patterns_Farsi.html/)
 - [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Designing_distributed_systems_patterns.pdf)
 
+### میکروسرویس‌های آماده تولید
+- عنوان انگلیسی: Production-Ready Microservices
+- نویسنده: Susan J. Fowler
+- [نسخه دو زبانه آنلاین](https://amir-shirdel-books.netlify.app/Production_Ready_Microservices/Production_Ready_Microservices_Dual_View.html/)
+- [نسخه آنلاین](https://amir-shirdel-books.netlify.app/Production_Ready_Microservices/Production_Ready_Microservices_Farsi.html/)
+- [نسخه PDF](https://amirex128.github.io/Book-PDF-to-Persian-Translator/translated/Production_Ready_Microservices.pdf)
 
 و به زودی کتاب های بیشتر
 

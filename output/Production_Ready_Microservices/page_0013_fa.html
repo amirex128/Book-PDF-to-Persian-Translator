@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 13</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <h3>مقیاس‌بندی یک برنامه</h3>
+  <p>بیایید این را کمی تجزیه کنیم.</p>
+  <p>
+   هدف هر برنامه نرم‌افزاری، پردازش وظایفی از نوعی است. صرف نظر از اینکه آن وظایف چه هستند، ما می‌توانیم یک فرض کلی
+   در مورد نحوه عملکرد برنامه خود در مورد آن‌ها داشته باشیم: باید آن‌ها را به طور موثر پردازش کند.
+  </p>
+  <p>
+   برای پردازش کارها به طور موثر، برنامه ما باید نوعی concurrency داشته باشد. این بدان معناست که ما نمی‌توانیم فقط یک
+   process داشته باشیم که تمام کارها را انجام دهد، زیرا در این صورت آن process یک کار را در یک زمان برمی‌دارد،
+   تمام قطعات لازم آن را کامل می‌کند (یا شکست می‌خورد!)، و سپس به سراغ کار بعدی می‌رود - این اصلا کارآمد نیست! برای
+   اینکه برنامه ما کارآمد باشد، می‌توانیم concurrency را معرفی کنیم تا هر کار به قطعات کوچکتر تقسیم شود.
+  </p>
+  <p>
+   دومین کاری که می‌توانیم برای پردازش کارها به طور موثر انجام دهیم، تقسیم و غلبه است با معرفی partitioning، جایی
+   که هر کار نه تنها به قطعات کوچک تقسیم می‌شود، بلکه می‌تواند به صورت موازی پردازش شود. اگر تعدادی کار داشته باشیم،
+   می‌توانیم همه آن‌ها را همزمان پردازش کنیم با ارسال آن‌ها به مجموعه‌ای از workers که می‌توانند آن‌ها را به موازات پردازش
+   کنند. اگر نیاز به پردازش کارهای بیشتری داشته باشیم، می‌توانیم به راحتی با افزودن workers اضافی برای پردازش
+   کارهای جدید، بدون تأثیر بر کارایی سیستم خود، با تقاضا مقیاس‌بندی کنیم.
+  </p>
+  <p>
+   هنگامی که یک برنامه بزرگ دارید که نیاز به استقرار در هر سرور دارد و باید هر نوع کاری را پردازش کند، concurrency و
+   partitioning پشتیبانی از آن دشوار است. اگر برنامه شما حتی کمی پیچیده باشد، تنها راهی که می‌توانید آن را با فهرستی
+   رشد یابنده از ویژگی‌ها و افزایش ترافیک مقیاس‌بندی کنید، مقیاس‌بندی سخت‌افزاری است که برنامه روی آن مستقر شده
+   است.
+  </p>
+  <p>
+   برای اینکه واقعاً کارآمد باشیم، بهترین راه برای مقیاس‌بندی یک برنامه این است که آن را به برنامه‌های کوچک و
+   مستقل زیادی تقسیم کنیم که هر کدام یک نوع کار را انجام می‌دهند. آیا نیاز به اضافه کردن گام دیگری به کل process
+   دارید؟ به اندازه کافی آسان است: فقط یک برنامه جدید بسازید که فقط آن گام را انجام دهد! آیا نیاز به رسیدگی به
+   ترافیک بیشتر دارید؟ ساده است: workers بیشتری به هر برنامه اضافه کنید!
+  </p>
+  <p>
+   Concurrency و partitioning در یک برنامه monolithic پشتیبانی از آن دشوار است، که مانع از این می‌شود که معماری
+   برنامه monolithic به همان اندازه که نیاز داریم کارآمد باشد.
+  </p>
+  <p>
+   ما شاهد ظهور این الگو در شرکت‌هایی مانند Amazon، Twitter، Netflix، eBay و Uber بوده‌ایم: شرکت‌هایی که
+   برنامه‌هایی را در سراسر نه صدها، بلکه هزاران، حتی صدها هزار سرور اجرا می‌کنند و برنامه‌های آن‌ها به
+   monoliths تبدیل شده و به چالش‌های مقیاس‌پذیری برخورد کرده‌اند. چالش‌هایی که آن‌ها با آن مواجه شدند با
+   کنار گذاشتن معماری برنامه monolithic به نفع microservices برطرف شد.
+  </p>
+  <p>
+   مفهوم اساسی یک microservice ساده است: این یک برنامه کوچک است که فقط یک کار را انجام می‌دهد و آن یک کار را
+   خوب انجام می‌دهد. یک microservice یک component کوچک است که
+  </p>
+  <p>از Monoliths به Microservices | 5</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 19</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   هر نوع endpoint و هر پروتکلی که برای برقراری ارتباط با سایر microservices استفاده می‌شود، مزایا و معایبی خواهد
+   داشت. تصمیمات معماری در اینجا نباید توسط توسعه‌دهنده فردی که در حال ساخت یک microservice است، گرفته شود،
+   بلکه باید بخشی از طراحی معماری کل اکوسیستم microservice باشد (در بخش بعدی به این موضوع خواهیم پرداخت).
+  </p>
+  <p>
+   نوشتن یک microservice به توسعه‌دهنده آزادی زیادی می‌دهد: جدا از هر انتخاب سازمانی در مورد API endpoints و
+   پروتکل‌های ارتباطی، توسعه‌دهندگان می‌توانند عملکرد داخلی microservice خود را به هر نحوی که می‌خواهند، بنویسند.
+   می‌توان آن را به هر زبانی نوشت—می‌توان آن را به زبان Go، Java، Erlang، Haskell نوشت—تا زمانی که به endpoints و
+   پروتکل‌های ارتباطی رسیدگی شود. توسعه یک microservice تفاوت چندانی با توسعه یک برنامه مستقل ندارد. برخی
+   از هشدارها در این مورد وجود دارد، همانطور که در بخش پایانی این فصل ("Organizational Challenges" در صفحه 20)
+   خواهیم دید، زیرا آزادی توسعه‌دهنده در مورد انتخاب زبان، هزینه سنگینی را برای سازمان مهندسی به همراه دارد.
+  </p>
+  <p>
+   به این ترتیب، یک microservice می‌تواند توسط دیگران به عنوان یک جعبه سیاه در نظر گرفته شود: شما مقداری
+   اطلاعات را با ارسال یک درخواست به یکی از endpointsهای آن وارد می‌کنید و چیزی را بیرون می‌آورید. اگر آنچه را
+   که می‌خواهید و نیاز دارید از microservice در زمان معقول و بدون هیچ خطای دیوانه‌واری دریافت کنید، کار خود را انجام
+   داده است و نیازی به درک چیزی فراتر از endpointsهایی که باید به آن‌ها ضربه بزنید و اینکه آیا سرویس به درستی
+   کار می‌کند یا خیر، وجود ندارد.
+  </p>
+  <p>
+   بحث ما در مورد جزئیات معماری microservice در اینجا به پایان می‌رسد—نه به این دلیل که همه چیز در مورد معماری
+   microservice همین است، بلکه به این دلیل که هر یک از فصل‌های زیر در این کتاب به اختصاص دادن microservices به این
+   حالت ideal black-box اختصاص دارد.
+  </p>
+  <h3>اکوسیستم Microservice</h3>
+  <p>
+   Microservices در انزوا زندگی نمی‌کنند. محیطی که microservices در آن ساخته می‌شوند، اجرا می‌شوند و با آن تعامل
+   دارند، جایی است که آن‌ها زندگی می‌کنند. پیچیدگی‌های محیط microservice در مقیاس بزرگ با پیچیدگی‌های زیست‌محیطی
+   یک جنگل بارانی، یک صحرا یا یک اقیانوس برابری می‌کند و در نظر گرفتن این محیط به عنوان یک اکوسیستم—یک
+   اکوسیستم microservice—در پذیرش معماری microservice مفید است.
+  </p>
+  <p>
+   در اکوسیستم‌های microservice که به خوبی طراحی شده‌اند و پایدار هستند، microservices از تمام زیرساخت‌ها
+   انتزاع شده‌اند. آن‌ها از سخت‌افزار، از شبکه‌ها، از build و pipeline استقرار، از کشف سرویس و load balancing
+   انتزاع شده‌اند. این همه بخشی از زیرساخت اکوسیستم microservice است و ساخت، استانداردسازی و نگهداری این
+   زیرساخت به روشی پایدار، مقیاس‌پذیر، تحمل‌کننده خطا و قابل اعتماد برای عملکرد موفق microservice ضروری است.
+  </p>
+  <p>اکوسیستم Microservice | 11</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

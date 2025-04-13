@@ -1,0 +1,25 @@
+Figure 3-3. Full staging
+Full staging requires every microservice to have a fully functional staging environ‐
+ment that other microservices can communicate with when new releases are
+deployed. Communicating with other microservices within the staging ecosystem can
+be accomplished either by writing specific tests that are kicked off when a new build
+is deployed to the staging environment, or as mentioned, by running old recorded
+production traffic or mock traffic through the service being deployed along with all
+upstream and downstream dependencies.
+Full staging also requires careful handling of test data: staging environments should
+never have write access to any production databases, and granting read access to pro‐
+duction databases is discouraged as well. Because full staging is designed to be a com‐
+plete mirror copy of production, every microservice staging environment should
+contain a separate test database that it can read from and write to.
+Risks of Full Staging
+Caution needs to be taken when implementing and deploying full
+staging environments, because new releases of services will almost
+always be communicating with other new releases of any upstream
+and downstream dependencies—this may not be an accurate
+reflection of the real world. Engineering organizations may need to
+require teams to coordinate and/or schedule deployments to stag‐
+ing to avoid the deployment of one service breaking the staging
+environment for all other related services.
+The Deployment Pipeline 
+| 
+31

@@ -1,0 +1,39 @@
+Scaling an Application
+Let’s break this down a bit.
+The goal of any software application is to process tasks of some sort. Regardless of
+what those tasks are, we can make a general assumption about how we want our
+application to handle them: it needs to process them efficiently.
+To process tasks efficiently, our application needs to have some kind of concurrency.
+This means that we can’t have just one process that does all the work, because then
+that process will pick up one task at a time, complete all the necessary pieces of it (or
+fail!), and then move onto the next—this isn’t efficient at all! To make our application
+efficient, we can introduce concurrency so that each task can be broken up into
+smaller pieces.
+The second thing we can do to process tasks efficiently is to divide and conquer by
+introducing partitioning, where each task is not only broken up into small pieces but
+can be processed in parallel. If we have a bunch of tasks, we can process them all at
+the same time by sending them to a set of workers that can process them in parallel. If
+we need to process more tasks, we can easily scale with the demand by adding addi‐
+tional workers to process the new tasks without affecting the efficiency of our system.
+Concurrency and partitioning are difficult to support when you have one large appli‐
+cation that needs to be deployed to every server, which needs to process any type of
+task. If your application is even the slightest bit complicated, the only way you can
+scale it with a growing list of features and increasing traffic is to scale up the hardware
+that the application is deployed to.
+To be truly efficient, the best way to scale an application is to break it into many small,
+independent applications that each do one type of task. Need to add another step to
+the overall process? Easy enough: just make a new application that only does that
+step! Need to handle more traffic? Simple: add more workers to each application!
+Concurrency and partitioning are difficult to support in a monolithic application,
+which prevents monolithic application architecture from being as efficient as we need
+it to be.
+We’ve seen this pattern emerge at companies like Amazon, Twitter, Netflix, eBay, and
+Uber: companies that run applications across not hundreds, but thousands, even
+hundreds of thousands of servers and whose applications have evolved into mono‐
+liths and hit scalability challenges. The challenges they faced were remedied by aban‐
+doning monolithic application architecture in favor of microservices.
+The basic concept of a microservice is simple: it’s a small application that does one
+thing only, and does that one thing well. A microservice is a small component that is
+From Monoliths to Microservices 
+| 
+5

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 17</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   که معمولاً هزینه‌های آن فقط توسط شرکت‌هایی که به چالش‌های مقیاس‌پذیری رسیده‌اند که انتقال به معماری
+   microservice را توجیه می‌کنند، قابل تحمل است. شرکت‌های کوچک به سادگی ظرفیت عملیاتی کافی برای حفظ یک
+   اکوسیستم microservice را نخواهند داشت. علاوه بر این، شناسایی حوزه‌ها و اجزای کلیدی برای ساختن در
+   microservices زمانی که یک شرکت در مراحل اولیه قرار دارد، بسیار دشوار است: برنامه‌ها در شرکت‌های جدید
+   ویژگی‌های زیادی نخواهند داشت، و نه بسیاری از حوزه‌های عملکردی جداگانه که می‌توانند به درستی به microservices
+   تقسیم شوند.
+  </p>
+  <h3>معماری Microservice</h3>
+  <p>
+   معماری یک microservice (شکل 1-6) تفاوت چندانی با معماری استاندارد برنامه که در بخش اول این فصل پوشش داده شد
+   (شکل 1-1) ندارد. هر microservice دارای سه component خواهد بود: یک قطعه frontend (سمت کلاینت)، برخی از
+   کدهای backend که کار سنگین را انجام می‌دهند، و راهی برای ذخیره یا بازیابی هر داده مربوطه.
+  </p>
+  <p>
+   قطعه frontend و سمت کلاینت یک microservice برنامه معمولی شما نیست، بلکه یک API (رابط برنامه‌نویسی
+   application programming interface) با endpoints استاتیک است. APIهای microservice که به خوبی طراحی شده‌اند به
+   microservices اجازه می‌دهند به راحتی و به طور موثر تعامل داشته باشند و درخواست‌ها را به endpoint(های)
+   API مربوطه ارسال کنند. به عنوان مثال، یک microservice که مسئول داده‌های مشتری است، ممکن است یک
+   get_customer_information endpoint داشته باشد که سرویس‌های دیگر می‌توانند درخواست‌ها را به آن ارسال کنند تا
+   اطلاعاتی درباره مشتریان بازیابی کنند، یک update_customer_information endpoint که سرویس‌های دیگر می‌توانند
+   درخواست‌ها را برای به‌روزرسانی اطلاعات یک مشتری خاص ارسال کنند و یک
+   delete_customer_information endpoint که سرویس‌ها می‌توانند برای حذف اطلاعات مشتری از آن استفاده کنند.
+  </p>
+  <p>
+   شکل 1-6. عناصر معماری microservice
+  </p>
+  <p>
+   این endpoints فقط در معماری و نظریه از هم جدا شده‌اند، نه در عمل، زیرا آن‌ها در کنار و به عنوان بخشی از تمام کد
+   backend که هر درخواست را پردازش می‌کند، وجود دارند. برای مثال microservice ما که مسئول داده‌های مشتری است،
+   درخواستی که به endpoint get_customer_information ارسال می‌شود، یک task را فعال می‌کند که درخواست
+   دریافتی را پردازش می‌کند، هر فیلتر یا گزینه‌های خاصی را که در درخواست اعمال شده است، تعیین می‌کند، اطلاعات را
+   از یک پایگاه داده بازیابی می‌کند، اطلاعات را قالب‌بندی می‌کند و آن را به کلاینت (microservice) که آن را درخواست
+   کرده است، برمی‌گرداند.
+  </p>
+  <p>معماری Microservice | 9</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0017/image_1.png" alt="Image from page 17" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>

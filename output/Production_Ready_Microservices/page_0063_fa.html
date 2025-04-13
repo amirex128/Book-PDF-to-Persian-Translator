@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه 63</title>
+    <link rel="stylesheet" href="fontiran.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: IRANSansX, Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .chapter-content {
+            margin-bottom: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+        .translated-content {
+            font-size: 14pt;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .page-images {
+            text-align: center;
+            margin: 20px 0;
+            page-break-before: always;
+        }
+        .page-image {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .page-image img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            direction: ltr;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .english-text {
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .heading {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        .paragraph {
+            margin-bottom: 15px;
+            text-align: right;
+            direction: rtl;
+        }
+        ul, ol {
+            padding-right: 20px;
+            padding-left: 0;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            text-align: right;
+            direction: rtl;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+            direction: rtl;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <div class="translated-content">
+             <div>
+  <p>
+   Microservices را به زبان‌های برنامه‌نویسی بنویسید که برای concurrency و partitioning بهینه شده‌اند
+   <br>
+   برخی از زبان‌ها برای مدیریت و پردازش کارآمد (همزمان و partitioned) وظایف، مناسب‌تر از بقیه هستند. هنگام نوشتن یک
+   microservice جدید، مطمئن شوید که زبانی که سرویس با آن نوشته می‌شود، محدودیت‌های مقیاس‌پذیری و عملکرد را به
+   microservicesها وارد نمی‌کند. microservicesهایی که قبلاً به زبان‌هایی با محدودیت‌های کارایی نوشته شده‌اند،
+   می‌توانند (و باید) به زبان‌های مناسب‌تری بازنویسی شوند، که یک task زمان‌بر اما فوق‌العاده ارزشمند است که می‌تواند
+   مقیاس‌پذیری و عملکرد را به‌طور چشمگیری بهبود بخشد. به عنوان مثال، اگر شما برای concurrency و partitioning بهینه
+   می‌کنید، و می‌خواهید از یک فریم‌ورک ناهمزمان برای کمک به انجام این کار استفاده کنید، نوشتن سرویس خود به زبان
+   Python (به جای C++، Java یا Go—سه زبان ساخته شده برای concurrency و partitioning) باعث ایجاد موانع
+   مقیاس‌پذیری و عملکرد زیادی می‌شود که کاهش آن‌ها دشوار خواهد بود.
+  </p>
+  <p>
+   با گرفتن قطعات کوچکتر از این وظایف، ما می‌توانیم آن‌ها را با استفاده از partitioning، که در آن هر task نه‌تنها به
+   قطعات کوچکتر تقسیم می‌شود بلکه می‌تواند به موازات هم پردازش شود، کارآمدتر پردازش کنیم. اگر ما تعداد زیادی
+   وظیفه کوچک داشته باشیم، می‌توانیم همه آن‌ها را همزمان با ارسال آن‌ها به مجموعه‌ای از workersها که می‌توانند
+   آن‌ها را به موازات پردازش کنند، پردازش کنیم. اگر ما نیاز به پردازش وظایف بیشتری داشته باشیم، می‌توانیم به
+   راحتی با افزودن workersهای اضافی برای پردازش وظایف جدید بدون تأثیر بر کارایی سیستم خود، با افزایش تقاضا
+   مقیاس‌پذیری داشته باشیم. با هم، concurrency و partitioning به اطمینان از اینکه microservice ما برای
+   مقیاس‌پذیری و partitioning بهینه شده است، کمک می‌کنند.
+  </p>
+  <h3>ذخیره‌سازی داده‌های مقیاس‌پذیر</h3>
+  <p>
+   Microservicesها باید داده‌ها را به روشی مقیاس‌پذیر و با عملکرد بالا مدیریت کنند. نحوه ذخیره و مدیریت داده‌ها توسط
+   یک microservice می‌تواند به راحتی به مهم‌ترین محدودیت یا مانعی تبدیل شود که از مقیاس‌پذیر و با عملکرد بالا
+   شدن آن جلوگیری می‌کند: انتخاب پایگاه داده اشتباه، schema اشتباه، یا یک پایگاه داده که از test tenancy پشتیبانی
+   نمی‌کند، می‌تواند در نهایت در دسترس بودن کلی یک microservice را به خطر بیندازد. انتخاب پایگاه داده مناسب
+   برای یک microservice، موضوعی است که، مانند تمام موضوعات دیگری که در این کتاب پوشش داده شده است،
+   فوق‌العاده پیچیده است، و ما فقط در این فصل به آن اشاره‌ای خواهیم کرد. در بخش‌های زیر، ما به چندین نکته برای
+   در نظر گرفتن هنگام انتخاب پایگاه‌های داده در اکوسیستم‌های microservice، و سپس به برخی از چالش‌های پایگاه
+   داده که مختص معماری microservice هستند، خواهیم پرداخت.
+  </p>
+  <h3>انتخاب پایگاه داده در اکوسیستم‌های Microservice</h3>
+  <p>
+   ساختن، اجرای و نگهداری پایگاه‌های داده در اکوسیستم‌های microservice بزرگ، یک کار آسان نیست. برخی از
+   شرکت‌هایی که معماری microservice را اتخاذ می‌کنند، انتخاب می‌کنند که به توسعه‌دهندگان اجازه دهند
+  </p>
+  <p>ذخیره‌سازی داده‌های مقیاس‌پذیر | 55</p>
+ </div>
+ 
+        </div>
+    </div>
+    <div class="page-images">
+        <div class="page-image"><img src="page_0063/image_1.png" alt="Image from page 63" /></div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
